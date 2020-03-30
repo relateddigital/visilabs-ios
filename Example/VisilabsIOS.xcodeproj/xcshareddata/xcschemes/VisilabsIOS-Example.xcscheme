@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "visilabs-ios_Example.app"
-               BlueprintName = "visilabs-ios_Example"
-               ReferencedContainer = "container:visilabs-ios.xcodeproj">
+               BuildableName = "VisilabsIOS_Example.app"
+               BlueprintName = "VisilabsIOS_Example"
+               ReferencedContainer = "container:VisilabsIOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "visilabs-ios_Tests.xctest"
-               BlueprintName = "visilabs-ios_Tests"
-               ReferencedContainer = "container:visilabs-ios.xcodeproj">
+               BuildableName = "VisilabsIOS_Tests.xctest"
+               BlueprintName = "VisilabsIOS_Tests"
+               ReferencedContainer = "container:VisilabsIOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,9 +48,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "visilabs-ios_Tests.xctest"
-               BlueprintName = "visilabs-ios_Tests"
-               ReferencedContainer = "container:visilabs-ios.xcodeproj">
+               BuildableName = "VisilabsIOS_Tests.xctest"
+               BlueprintName = "VisilabsIOS_Tests"
+               ReferencedContainer = "container:VisilabsIOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -58,9 +58,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "visilabs-ios_Example.app"
-            BlueprintName = "visilabs-ios_Example"
-            ReferencedContainer = "container:visilabs-ios.xcodeproj">
+            BuildableName = "VisilabsIOS_Example.app"
+            BlueprintName = "VisilabsIOS_Example"
+            ReferencedContainer = "container:VisilabsIOS.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -82,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "visilabs-ios_Example.app"
-            BlueprintName = "visilabs-ios_Example"
-            ReferencedContainer = "container:visilabs-ios.xcodeproj">
+            BuildableName = "VisilabsIOS_Example.app"
+            BlueprintName = "VisilabsIOS_Example"
+            ReferencedContainer = "container:VisilabsIOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -101,9 +101,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "visilabs-ios_Example.app"
-            BlueprintName = "visilabs-ios_Example"
-            ReferencedContainer = "container:visilabs-ios.xcodeproj">
+            BuildableName = "VisilabsIOS_Example.app"
+            BlueprintName = "VisilabsIOS_Example"
+            ReferencedContainer = "container:VisilabsIOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

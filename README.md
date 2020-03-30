@@ -1,9 +1,9 @@
-# visilabs-ios
+# VisilabsIOS
 
-[![CI Status](https://img.shields.io/travis/egemen.gulkilik@relateddigital.com/visilabs-ios.svg?style=flat)](https://travis-ci.org/egemen.gulkilik@relateddigital.com/visilabs-ios)
-[![Version](https://img.shields.io/cocoapods/v/visilabs-ios.svg?style=flat)](https://cocoapods.org/pods/visilabs-ios)
-[![License](https://img.shields.io/cocoapods/l/visilabs-ios.svg?style=flat)](https://cocoapods.org/pods/visilabs-ios)
-[![Platform](https://img.shields.io/cocoapods/p/visilabs-ios.svg?style=flat)](https://cocoapods.org/pods/visilabs-ios)
+[![CI Status](https://img.shields.io/travis/egemen@visilabs.com/VisilabsIOS.svg?style=flat)](https://travis-ci.org/egemen@visilabs.com/VisilabsIOS)
+[![Version](https://img.shields.io/cocoapods/v/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
+[![License](https://img.shields.io/cocoapods/l/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
+[![Platform](https://img.shields.io/cocoapods/p/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 
 ## Example
 
@@ -13,17 +13,17 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-visilabs-ios is available through [CocoaPods](https://cocoapods.org). To install
+VisilabsIOS is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'visilabs-ios'
+pod 'VisilabsIOS'
 ```
 
 ## Author
 
-egemen.gulkilik@relateddigital.com, egemen.gulkilik@relateddigital.com
+egemen@visilabs.com, egemengulkilik@gmail.com
 
 ## License
 
-visilabs-ios is available under the MIT license. See the LICENSE file for more info.
+VisilabsIOS is available under the MIT license. See the LICENSE file for more info.

@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  visilabs-ios
+//  VisilabsIOS
 //
-//  Created by egemen@visilabs.com on 03/17/2020.
+//  Created by egemen@visilabs.com on 03/30/2020.
 //  Copyright (c) 2020 egemen@visilabs.com. All rights reserved.
 //
 
