@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5FA21B729D728676F578FC1C /* Pods_visilabs_ios_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7661A4922BF3F8FEB27E5AF /* Pods_visilabs_ios_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		69441706D07DC36045BB957D /* Pods_visilabs_ios_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72EB6BE78D7E0F18E1407271 /* Pods_visilabs_ios_Tests.framework */; };
+		6A220CA01D7336837620AF88 /* Pods_VisilabsIOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD24D910F1E148C7F7197959 /* Pods_VisilabsIOS_Example.framework */; };
+		9F70E7C1280382305CC3FCE3 /* Pods_VisilabsIOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,30 +23,30 @@
 			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
-			remoteInfo = "visilabs-ios";
+			remoteInfo = VisilabsIOS;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		038D27A54010ACF4B6ED42BE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		607FACD01AFB9204008FA782 /* visilabs-ios_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "visilabs-ios_Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		05A0A12AA7D6185DEC095E67 /* Pods-VisilabsIOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Tests.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Tests/Pods-VisilabsIOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		06EBC49C43D294D27D4A4EA5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		1B2C536BEB23EF966114170B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		3A207F1AEB1DB0DC569D37CF /* Pods-VisilabsIOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Tests.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Tests/Pods-VisilabsIOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		607FACD01AFB9204008FA782 /* VisilabsIOS_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsIOS_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		607FACE51AFB9204008FA782 /* visilabs-ios_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "visilabs-ios_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACE51AFB9204008FA782 /* VisilabsIOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VisilabsIOS_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		656CC906D6FEA636499391C1 /* visilabs-ios.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "visilabs-ios.podspec"; path = "../visilabs-ios.podspec"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		72EB6BE78D7E0F18E1407271 /* Pods_visilabs_ios_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_visilabs_ios_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7629B2E6797B5B4015F10768 /* Pods-visilabs-ios_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-visilabs-ios_Tests.release.xcconfig"; path = "Target Support Files/Pods-visilabs-ios_Tests/Pods-visilabs-ios_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		8C6522DA2037391A9E11996D /* Pods-visilabs-ios_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-visilabs-ios_Tests.debug.xcconfig"; path = "Target Support Files/Pods-visilabs-ios_Tests/Pods-visilabs-ios_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		9F1E4AD7252901BC4247169D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		A7661A4922BF3F8FEB27E5AF /* Pods_visilabs_ios_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_visilabs_ios_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3F8E6B36F55D3025F2201CA /* Pods-visilabs-ios_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-visilabs-ios_Example.release.xcconfig"; path = "Target Support Files/Pods-visilabs-ios_Example/Pods-visilabs-ios_Example.release.xcconfig"; sourceTree = "<group>"; };
-		FFEC20568AE9B6EC5DDA32B2 /* Pods-visilabs-ios_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-visilabs-ios_Example.debug.xcconfig"; path = "Target Support Files/Pods-visilabs-ios_Example/Pods-visilabs-ios_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		7A945771F641BD121B160C85 /* VisilabsIOS.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = VisilabsIOS.podspec; path = ../VisilabsIOS.podspec; sourceTree = "<group>"; };
+		920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
+		B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsIOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD24D910F1E148C7F7197959 /* Pods_VisilabsIOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsIOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FA21B729D728676F578FC1C /* Pods_visilabs_ios_Example.framework in Frameworks */,
+				6A220CA01D7336837620AF88 /* Pods_VisilabsIOS_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,44 +62,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69441706D07DC36045BB957D /* Pods_visilabs_ios_Tests.framework in Frameworks */,
+				9F70E7C1280382305CC3FCE3 /* Pods_VisilabsIOS_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		30C126E8F6E4986143AFAC65 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A7661A4922BF3F8FEB27E5AF /* Pods_visilabs_ios_Example.framework */,
-				72EB6BE78D7E0F18E1407271 /* Pods_visilabs_ios_Tests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
-				607FACD21AFB9204008FA782 /* Example for visilabs-ios */,
+				607FACD21AFB9204008FA782 /* Example for VisilabsIOS */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
-				F63274CAEAC90FF6DBE8FA23 /* Pods */,
-				30C126E8F6E4986143AFAC65 /* Frameworks */,
+				C076CB6F01BD7D41A942D6F3 /* Pods */,
+				6A9ECCC10D2A16C5EDE02987 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD01AFB9204008FA782 /* visilabs-ios_Example.app */,
-				607FACE51AFB9204008FA782 /* visilabs-ios_Tests.xctest */,
+				607FACD01AFB9204008FA782 /* VisilabsIOS_Example.app */,
+				607FACE51AFB9204008FA782 /* VisilabsIOS_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		607FACD21AFB9204008FA782 /* Example for visilabs-ios */ = {
+		607FACD21AFB9204008FA782 /* Example for VisilabsIOS */ = {
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
@@ -109,8 +100,8 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
-			name = "Example for visilabs-ios";
-			path = "visilabs-ios";
+			name = "Example for VisilabsIOS";
+			path = VisilabsIOS;
 			sourceTree = "<group>";
 		};
 		607FACD31AFB9204008FA782 /* Supporting Files */ = {
@@ -141,64 +132,73 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				656CC906D6FEA636499391C1 /* visilabs-ios.podspec */,
-				038D27A54010ACF4B6ED42BE /* README.md */,
-				9F1E4AD7252901BC4247169D /* LICENSE */,
+				7A945771F641BD121B160C85 /* VisilabsIOS.podspec */,
+				1B2C536BEB23EF966114170B /* README.md */,
+				06EBC49C43D294D27D4A4EA5 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		F63274CAEAC90FF6DBE8FA23 /* Pods */ = {
+		6A9ECCC10D2A16C5EDE02987 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FFEC20568AE9B6EC5DDA32B2 /* Pods-visilabs-ios_Example.debug.xcconfig */,
-				E3F8E6B36F55D3025F2201CA /* Pods-visilabs-ios_Example.release.xcconfig */,
-				8C6522DA2037391A9E11996D /* Pods-visilabs-ios_Tests.debug.xcconfig */,
-				7629B2E6797B5B4015F10768 /* Pods-visilabs-ios_Tests.release.xcconfig */,
+				CD24D910F1E148C7F7197959 /* Pods_VisilabsIOS_Example.framework */,
+				B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */,
 			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C076CB6F01BD7D41A942D6F3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */,
+				A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */,
+				05A0A12AA7D6185DEC095E67 /* Pods-VisilabsIOS_Tests.debug.xcconfig */,
+				3A207F1AEB1DB0DC569D37CF /* Pods-VisilabsIOS_Tests.release.xcconfig */,
+			);
+			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		607FACCF1AFB9204008FA782 /* visilabs-ios_Example */ = {
+		607FACCF1AFB9204008FA782 /* VisilabsIOS_Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "visilabs-ios_Example" */;
+			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "VisilabsIOS_Example" */;
 			buildPhases = (
-				25C30D617E380D2A81701EEC /* [CP] Check Pods Manifest.lock */,
+				704C9071A5EA5D6998A8C57B /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				E11F01D07437F735BE4D537E /* [CP] Embed Pods Frameworks */,
+				C26DE9A8DFB0128017C5CD4D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "visilabs-ios_Example";
-			productName = "visilabs-ios";
-			productReference = 607FACD01AFB9204008FA782 /* visilabs-ios_Example.app */;
+			name = VisilabsIOS_Example;
+			productName = VisilabsIOS;
+			productReference = 607FACD01AFB9204008FA782 /* VisilabsIOS_Example.app */;
 			productType = "com.apple.product-type.application";
 		};
-		607FACE41AFB9204008FA782 /* visilabs-ios_Tests */ = {
+		607FACE41AFB9204008FA782 /* VisilabsIOS_Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "visilabs-ios_Tests" */;
+			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "VisilabsIOS_Tests" */;
 			buildPhases = (
-				FACCDD1C20920BF34FCBACB9 /* [CP] Check Pods Manifest.lock */,
+				C2ACC0461CB66D05A6B1E023 /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				22F631A03236944303F3D83E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
 			);
-			name = "visilabs-ios_Tests";
+			name = VisilabsIOS_Tests;
 			productName = Tests;
-			productReference = 607FACE51AFB9204008FA782 /* visilabs-ios_Tests.xctest */;
+			productReference = 607FACE51AFB9204008FA782 /* VisilabsIOS_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -213,7 +213,6 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 5M383PCDJZ;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -223,12 +222,11 @@
 					};
 				};
 			};
-			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "visilabs-ios" */;
+			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "VisilabsIOS" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -237,8 +235,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				607FACCF1AFB9204008FA782 /* visilabs-ios_Example */,
-				607FACE41AFB9204008FA782 /* visilabs-ios_Tests */,
+				607FACCF1AFB9204008FA782 /* VisilabsIOS_Example */,
+				607FACE41AFB9204008FA782 /* VisilabsIOS_Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -264,31 +262,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		22F631A03236944303F3D83E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-visilabs-ios_Tests/Pods-visilabs-ios_Tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/FBSnapshotTestCase/FBSnapshotTestCase.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework",
-				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble_Snapshots.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-visilabs-ios_Tests/Pods-visilabs-ios_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		25C30D617E380D2A81701EEC /* [CP] Check Pods Manifest.lock */ = {
+		704C9071A5EA5D6998A8C57B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -303,32 +277,32 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-visilabs-ios_Example-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-VisilabsIOS_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E11F01D07437F735BE4D537E /* [CP] Embed Pods Frameworks */ = {
+		C26DE9A8DFB0128017C5CD4D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-visilabs-ios_Example/Pods-visilabs-ios_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/visilabs-ios/visilabs_ios.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/VisilabsIOS/VisilabsIOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/visilabs_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VisilabsIOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-visilabs-ios_Example/Pods-visilabs-ios_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FACCDD1C20920BF34FCBACB9 /* [CP] Check Pods Manifest.lock */ = {
+		C2ACC0461CB66D05A6B1E023 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -343,7 +317,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-visilabs-ios_Tests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-VisilabsIOS_Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -375,7 +349,7 @@
 /* Begin PBXTargetDependency section */
 		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 607FACCF1AFB9204008FA782 /* visilabs-ios_Example */;
+			target = 607FACCF1AFB9204008FA782 /* VisilabsIOS_Example */;
 			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -501,11 +475,10 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FFEC20568AE9B6EC5DDA32B2 /* Pods-visilabs-ios_Example.debug.xcconfig */;
+			baseConfigurationReference = 920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5M383PCDJZ;
-				INFOPLIST_FILE = "visilabs-ios/Info.plist";
+				INFOPLIST_FILE = VisilabsIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -517,11 +490,10 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E3F8E6B36F55D3025F2201CA /* Pods-visilabs-ios_Example.release.xcconfig */;
+			baseConfigurationReference = A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 5M383PCDJZ;
-				INFOPLIST_FILE = "visilabs-ios/Info.plist";
+				INFOPLIST_FILE = VisilabsIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -533,7 +505,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8C6522DA2037391A9E11996D /* Pods-visilabs-ios_Tests.debug.xcconfig */;
+			baseConfigurationReference = 05A0A12AA7D6185DEC095E67 /* Pods-VisilabsIOS_Tests.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -549,13 +521,13 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/visilabs-ios_Example.app/visilabs-ios_Example";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VisilabsIOS_Example.app/VisilabsIOS_Example";
 			};
 			name = Debug;
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7629B2E6797B5B4015F10768 /* Pods-visilabs-ios_Tests.release.xcconfig */;
+			baseConfigurationReference = 3A207F1AEB1DB0DC569D37CF /* Pods-VisilabsIOS_Tests.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -567,14 +539,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/visilabs-ios_Example.app/visilabs-ios_Example";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VisilabsIOS_Example.app/VisilabsIOS_Example";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "visilabs-ios" */ = {
+		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "VisilabsIOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACED1AFB9204008FA782 /* Debug */,
@@ -583,7 +555,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "visilabs-ios_Example" */ = {
+		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "VisilabsIOS_Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF01AFB9204008FA782 /* Debug */,
@@ -592,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "visilabs-ios_Tests" */ = {
+		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "VisilabsIOS_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,
