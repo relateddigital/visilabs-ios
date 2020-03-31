@@ -1,7 +1,7 @@
 
 open class Visilabs{
     
-    static var visilabs: Visilabs?
+    static var API: Visilabs?
     
     private var organizationID : String
     private var siteID : String
@@ -33,6 +33,13 @@ open class Visilabs{
         self.geofenceURL = geofenceURL
         self.geofenceEnabled = geofenceEnabled
         self.maxGeofenceCount = maxGeofenceCount
+    }
+    
+    public func callAPI() -> Visilabs? {
+        if Visilabs.API == nil{
+            print("zort")
+        }
+        return Visilabs.API
     }
     
 }
