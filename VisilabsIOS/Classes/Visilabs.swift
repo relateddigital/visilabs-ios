@@ -296,6 +296,27 @@ open class Visilabs{
         }
         return API
     }
+
+    public func customEvent(pageName: String, properties: [String:String]){
+        
+    }
+
+    public func login(exVisitorID: String){
+        
+    }
+
+    public func signUp(exVisitorID: String){
+        
+    }
+    
+    public func login(exVisitorID: String, properties: [String:String]){
+        
+    }
+    
+    public func signUp(exVisitorID: String, properties: [String:String]){
+        
+    }
+    
 }
 
 extension String {
