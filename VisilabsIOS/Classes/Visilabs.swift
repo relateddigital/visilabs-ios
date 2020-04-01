@@ -3,8 +3,8 @@ import AdSupport
 
 open class Visilabs{
     
-    static var API: Visilabs?
-    static var visilabsReachability : VisilabsReachability?
+    private static var API: Visilabs?
+    private static var visilabsReachability : VisilabsReachability?
     
     private var organizationID : String
     private var siteID : String
