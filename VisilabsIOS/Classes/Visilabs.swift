@@ -217,7 +217,18 @@ open class Visilabs{
         return Visilabs.API
     }
     
-    class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int) -> Visilabs? {
+    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String) -> Visilabs? {
+        let lockQueue = DispatchQueue(label: "self")
+        lockQueue.sync {
+            if API == nil {
+                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: 30, restURL: nil, encryptedDataSource: nil, targetURL: nil, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
+            }
+        }
+        return API
+    }
+    
+    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
+    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int) -> Visilabs? {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
             if API == nil {
@@ -226,6 +237,8 @@ open class Visilabs{
         }
         return API
     }
+    
+
 }
 
 extension String {
