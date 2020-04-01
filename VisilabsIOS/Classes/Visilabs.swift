@@ -94,6 +94,26 @@ open class Visilabs{
         return false
     }
     
+    //TODO:
+    private func showNotification(pageName: String?) {
+    }
+    
+    private func showNotification(_ pageName: String?, properties: [AnyHashable : Any]?) {
+    }
+
+    private func showNotification(withObject notification: VisilabsNotification?) {
+    }
+
+    private func showMiniNotification(withObject notification: VisilabsNotification?) -> Bool {
+        return false
+    }
+
+    private func showFullNotification(withObject notification: VisilabsNotification?) -> Bool {
+        return false
+    }
+
+    
+    
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String, encryptedDataSource: String, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationID = organizationID
         self.siteID = siteID
