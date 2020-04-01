@@ -317,6 +317,10 @@ open class Visilabs{
         
     }
     
+    public func getPushURL(source: String, campaign: String, medium: String, content: String) -> String?{
+        return nil
+    }
+    
 }
 
 extension String {
