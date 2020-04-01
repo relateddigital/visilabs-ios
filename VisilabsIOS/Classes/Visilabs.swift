@@ -225,7 +225,7 @@ open class Visilabs{
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
             if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: 30, restURL: nil, encryptedDataSource: nil, targetURL: nil, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
+                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: 60, restURL: nil, encryptedDataSource: nil, targetURL: nil, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
             }
         }
         return API
