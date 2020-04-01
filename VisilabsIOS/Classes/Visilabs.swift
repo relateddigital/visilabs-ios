@@ -321,6 +321,9 @@ open class Visilabs{
         return nil
     }
     
+    public func setExVisitorIDToNull(){
+        
+    }
 }
 
 extension String {
