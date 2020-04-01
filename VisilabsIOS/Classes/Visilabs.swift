@@ -1,7 +1,10 @@
+import WebKit
+import AdSupport
 
 open class Visilabs{
     
     static var API: Visilabs?
+    static var visilabsReachability : VisilabsReachability?
     
     private var organizationID : String
     private var siteID : String
@@ -18,6 +21,79 @@ open class Visilabs{
     private var geofenceEnabled : Bool
     private var maxGeofenceCount : Int
     
+    private var sendQueue : [String]
+    private var timer: Timer?
+    private var segmentConnection: NSURLConnection?
+    private var failureStatus = 0
+    private var cookieIDArchiveKey: String?
+    private var exVisitorIDArchiveKey: String?
+    private var propertiesArchiveKey: String?
+    private var tokenIDArchiveKey: String?
+    private var appIDArchiveKey: String?
+    private var userAgentArchiveKey: String?
+    private var visitData: String?
+    private var visitorData: String?
+    private var identifierForAdvertising: String?
+    private var serialQueue: DispatchQueue?
+    private var currentlyShowingNotification: Any?
+    private var notificationViewController: UIViewController?
+    private var notificationResponseCached = false
+    private var loggerCookieKey: String?
+    private var loggerCookieValue: String?
+    private var realTimeCookieKey: String?
+    private var realTimeCookieValue: String?
+    private var loggerOM3rdCookieValue: String?
+    private var realTimeOM3rdCookieValue: String?
+    private var webView: WKWebView?
+    
+    /* TODO:
+    func dispatch_once_on_main_thread(_ predicate: UnsafeMutableRawPointer?, _ block: () -> ()) {
+        if Thread.isMainThread {
+            block
+        } else {
+            if DISPATCH_EXPECT(IntegerLiteralConvertible(predicate ?? 0) == 0, false) {
+                DispatchQueue.main.sync(execute: {
+                    block
+                })
+            }
+        }
+    }
+
+    func computeWebViewUserAgent() {
+        webView = WKWebView(frame: CGRect.zero)
+        webView?.loadHTMLString("<html></html>", baseURL: nil)
+        weak var weakSelf = self
+        dispatch_once_on_main_thread(&computeWebViewUserAgentOnceToken, {
+            let strongSelf = weakSelf
+            strongSelf.webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+                strongSelf.userAgent = userAgent
+                strongSelf.webView = nil
+                if !NSKeyedArchiver.archiveRootObject(strongSelf.userAgent, toFile: strongSelf.userAgentFilePath()) {
+                    DLog("Visilabs: WARNING - Unable to archive userAgent!!!")
+                }
+            })
+        })
+    }
+    */
+
+    //TODO:
+    private func trackNotificationClick(visilabsNotification: VisilabsNotification){
+    }
+    
+    //TODO:
+    private func checkForNotificationsResponse(withCompletion completion: @escaping (_ notifications: [AnyHashable]?) -> Void, pageName: String?, properties: inout [AnyHashable : Any]) {
+    }
+    
+    //TODO: class func vs static farkı nedir?
+    private class func topPresentedViewController() -> UIViewController?{
+        return nil
+    }
+    
+    //TODO: class func vs static farkı nedir?
+    private class func canPresentFromViewController(viewController: UIViewController?) -> Bool{
+        return false
+    }
+    
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String, encryptedDataSource: String, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationID = organizationID
         self.siteID = siteID
@@ -33,6 +109,7 @@ open class Visilabs{
         self.geofenceURL = geofenceURL
         self.geofenceEnabled = geofenceEnabled
         self.maxGeofenceCount = maxGeofenceCount
+        self.sendQueue = [String]()
     }
     
     public func callAPI() -> Visilabs? {
@@ -41,5 +118,31 @@ open class Visilabs{
         }
         return Visilabs.API
     }
-    
+}
+
+
+extension String {
+    func stringBetweenString(start: String?, end: String?) -> String? {
+        let startRange = (self as NSString).range(of: start ?? "")
+        if startRange.location != NSNotFound {
+            var targetRange: NSRange = NSRange()
+            targetRange.location = startRange.location + startRange.length
+            targetRange.length = count - targetRange.location
+            let endRange = (self as NSString).range(of: end ?? "", options: [], range: targetRange)
+            if endRange.location != NSNotFound {
+                targetRange.length = endRange.location - targetRange.location
+                return (self as NSString).substring(with: targetRange)
+            }
+        }
+        return nil
+    }
+
+    func contains(_ string: String?, options: String.CompareOptions) -> Bool {
+        let rng = (self as NSString).range(of: string ?? "", options: options)
+        return rng.location != NSNotFound
+    }
+
+    func contains(_ string: String) -> Bool {
+        return contains(string, options: [])
+    }
 }
