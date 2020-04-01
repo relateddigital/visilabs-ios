@@ -210,7 +210,7 @@ open class Visilabs{
     }
     
     //TODO: burada synchronized olacak
-    public func callAPI() -> Visilabs? {
+    public class func callAPI() -> Visilabs? {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
             if Visilabs.API == nil{
