@@ -146,6 +146,14 @@ open class Visilabs{
      unarchiveProperties
      */
     
+    private func getIDFA() -> String? {
+        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+            let IDFA = ASIdentifierManager.shared().advertisingIdentifier
+            return IDFA.uuidString
+        }
+        return ""
+    }
+    
     
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String, encryptedDataSource: String, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationID = organizationID
