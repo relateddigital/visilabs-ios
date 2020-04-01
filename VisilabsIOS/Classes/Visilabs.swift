@@ -13,11 +13,11 @@ open class Visilabs{
     private var realTimeURL : String
     private var channel : String
     private var requestTimeoutInSeconds : Int
-    private var restURL : String
-    private var encryptedDataSource : String
-    private var targetURL : String
-    private var actionURL : String
-    private var geofenceURL : String
+    private var restURL : String?
+    private var encryptedDataSource : String?
+    private var targetURL : String?
+    private var actionURL : String?
+    private var geofenceURL : String?
     private var geofenceEnabled : Bool
     private var maxGeofenceCount : Int
     
@@ -45,6 +45,18 @@ open class Visilabs{
     private var loggerOM3rdCookieValue: String?
     private var realTimeOM3rdCookieValue: String?
     private var webView: WKWebView?
+    
+    private var cookieID: String?
+    private var exVisitorID: String?
+    private var tokenID: String?
+    private var appID: String?
+    private var isOnline: Bool = true
+    private var userAgent: String?
+    private var loggingEnabled: Bool = true
+    private var checkForNotificationsOnLoggerRequest: Bool = true
+    private var miniNotificationPresentationTime: Float = 0.0
+    private var miniNotificationBackgroundColor: UIColor = .clear
+
     
     /* TODO:
     func dispatch_once_on_main_thread(_ predicate: UnsafeMutableRawPointer?, _ block: () -> ()) {
@@ -154,8 +166,10 @@ open class Visilabs{
         return ""
     }
     
+    //TODO: description'a gerek yok.
     
-    private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String, encryptedDataSource: String, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+    
+    private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationID = organizationID
         self.siteID = siteID
         self.loggerURL = loggerURL
@@ -173,14 +187,46 @@ open class Visilabs{
         self.sendQueue = [String]()
     }
     
+    // MARK: Public Methods
+    
+    //TODO
+    public func urlEncode(prior: String) -> String{
+        return "TODO"
+    }
+    
+    //TODO
+    func buildTargetRequest(zoneID: String?,productCode: String?) -> VisilabsTargetRequest? {
+        return nil
+    }
+
+    //TODO
+    func buildTargetRequest(zoneID: String?, productCode: String?, properties: inout [AnyHashable : Any], filters: inout [VisilabsTargetFilter]) -> VisilabsTargetRequest? {
+        return nil
+    }
+
+    //TODO
+    func buildGeofenceRequest(action: String?, actionID: String?, latitude: Double, longitude: Double, geofenceID: String?, isDwell: Bool, isEnter: Bool) -> VisilabsGeofenceRequest? {
+        return nil
+    }
+    
+    //TODO: burada synchronized olacak
     public func callAPI() -> Visilabs? {
         if Visilabs.API == nil{
             print("zort")
         }
         return Visilabs.API
     }
+    
+    class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int) -> Visilabs? {
+        let lockQueue = DispatchQueue(label: "self")
+        lockQueue.sync {
+            if API == nil {
+                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: nil, encryptedDataSource: nil, targetURL: nil, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
+            }
+        }
+        return API
+    }
 }
-
 
 extension String {
     func stringBetweenString(start: String?, end: String?) -> String? {
