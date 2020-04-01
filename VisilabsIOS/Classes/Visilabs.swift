@@ -120,6 +120,33 @@ open class Visilabs{
     private func notificationController(controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool) {
     }
     
+    
+    //TODO:
+    private func setupLifeCycyleListeners(){
+        //applicationWillTerminate
+        //applicationWillEnterForeground
+        //applicationDidBecomeActive
+        //applicationDidEnterBackground
+    }
+    
+    
+    //TODO:persistence metodlar
+    /*
+     filePathForData
+     cookieIDFilePath
+     exVisitorIDFilePath
+     tokenIDFilePath
+     appIDFilePath
+     userAgentFilePath
+     propertiesFilePath
+     archive
+     archiveProperties
+     unarchive
+     unarchiveFromFile
+     unarchiveProperties
+     */
+    
+    
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String, encryptedDataSource: String, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationID = organizationID
         self.siteID = siteID
