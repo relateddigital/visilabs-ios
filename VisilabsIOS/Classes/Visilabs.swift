@@ -211,12 +211,16 @@ open class Visilabs{
     
     //TODO: burada synchronized olacak
     public func callAPI() -> Visilabs? {
-        if Visilabs.API == nil{
-            print("zort")
+        let lockQueue = DispatchQueue(label: "self")
+        lockQueue.sync {
+            if Visilabs.API == nil{
+                print("zort")
+            }
         }
         return Visilabs.API
     }
     
+    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
     public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String) -> Visilabs? {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
