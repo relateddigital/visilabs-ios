@@ -221,73 +221,7 @@ open class Visilabs{
     }
     
     //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: 60, restURL: nil, encryptedDataSource: nil, targetURL: nil, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
-            }
-        }
-        return API
-    }
-    
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: nil, encryptedDataSource: nil, targetURL: nil, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
-            }
-        }
-        return API
-    }
-    
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, targetURL: String) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: nil, encryptedDataSource: nil, targetURL: targetURL, actionURL: nil, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
-            }
-        }
-        return API
-    }
-    
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, targetURL: String, actionURL: String) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: nil, encryptedDataSource: nil, targetURL: targetURL, actionURL: actionURL, geofenceURL: nil, geofenceEnabled: false, maxGeofenceCount: 20)
-            }
-        }
-        return API
-    }
-    
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: nil, encryptedDataSource: nil, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: 20)
-            }
-        }
-        return API
-    }
-
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: nil, encryptedDataSource: nil, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
-            }
-        }
-        return API
-    }
-    
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, targetURL: String, actionURL: String, geofenceURL: String, geofenceEnabled: Bool, maxGeofenceCount: Int, restURL: String, encryptedDataSource: String) -> Visilabs? {
+    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
             if API == nil {
