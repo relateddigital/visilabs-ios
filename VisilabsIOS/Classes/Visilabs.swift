@@ -56,10 +56,50 @@ open class Visilabs{
     private var checkForNotificationsOnLoggerRequest: Bool = true
     private var miniNotificationPresentationTime: Float = 0.0
     private var miniNotificationBackgroundColor: UIColor = .clear
+    
+    
+    //TODO: burada synchronized olacak
+    public class func callAPI() -> Visilabs? {
+        
+        if Visilabs.API == nil{
+            print("zort")
+        }
+        
+        return Visilabs.API
+    }
+    
+    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
+    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
+        let lockQueue = DispatchQueue(label: "self")
+        lockQueue.sync {
+            if API == nil {
+                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+            }
+        }
+        return API
+    }
 
+    private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+        self.organizationID = organizationID
+        self.siteID = siteID
+        self.loggerURL = loggerURL
+        self.dataSource = dataSource
+        self.realTimeURL = realTimeURL
+        self.channel = channel
+        self.requestTimeoutInSeconds = requestTimeoutInSeconds
+        self.restURL = restURL
+        self.encryptedDataSource = encryptedDataSource
+        self.targetURL = targetURL
+        self.actionURL = actionURL
+        self.geofenceURL = geofenceURL
+        self.geofenceEnabled = geofenceEnabled
+        self.maxGeofenceCount = maxGeofenceCount
+        self.sendQueue = [String]()
+    }
     
     /* TODO:
-    func dispatch_once_on_main_thread(_ predicate: UnsafeMutableRawPointer?, _ block: () -> ()) {
+    
+    func dispatch_once_on_main_thread(predicate: UnsafeMutableRawPointer?, block: () -> ()) {
         if Thread.isMainThread {
             block
         } else {
@@ -87,6 +127,30 @@ open class Visilabs{
         })
     }
     */
+    
+    //TODO: BUNU DENE
+    func computeWebViewUserAgent2() {
+        DispatchQueue.main.async {
+            var webView : WKWebView? = WKWebView(frame: CGRect.zero)
+            webView?.loadHTMLString("<html></html>", baseURL: nil)
+            webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+                if let uA = userAgent{
+                    if type(of: uA) == String.self{
+                        self.userAgent = String(describing: uA)
+                        if !NSKeyedArchiver.archiveRootObject(self.userAgent
+                            //, toFile: self.userAgentFilePath()
+                            , toFile: ""
+                            ) {
+                            print("Visilabs: WARNING - Unable to archive userAgent!!!")
+                        }
+                    }
+                }
+            })
+        }
+        
+    }
+    
+    
 
     //TODO:
     private func trackNotificationClick(visilabsNotification: VisilabsNotification){
@@ -169,23 +233,7 @@ open class Visilabs{
     //TODO: description'a gerek yok.
     
     
-    private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
-        self.organizationID = organizationID
-        self.siteID = siteID
-        self.loggerURL = loggerURL
-        self.dataSource = dataSource
-        self.realTimeURL = realTimeURL
-        self.channel = channel
-        self.requestTimeoutInSeconds = requestTimeoutInSeconds
-        self.restURL = restURL
-        self.encryptedDataSource = encryptedDataSource
-        self.targetURL = targetURL
-        self.actionURL = actionURL
-        self.geofenceURL = geofenceURL
-        self.geofenceEnabled = geofenceEnabled
-        self.maxGeofenceCount = maxGeofenceCount
-        self.sendQueue = [String]()
-    }
+    
     
     // MARK: Public Methods
     
@@ -209,27 +257,7 @@ open class Visilabs{
         return nil
     }
     
-    //TODO: burada synchronized olacak
-    public class func callAPI() -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if Visilabs.API == nil{
-                print("zort")
-            }
-        }
-        return Visilabs.API
-    }
     
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
-            }
-        }
-        return API
-    }
 
     public func customEvent(pageName: String, properties: [String:String]){
         
