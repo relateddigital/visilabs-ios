@@ -19,6 +19,9 @@ extension Data {
     }
 }
 
+/**
+JSON convenient categories on NSString
+*/
 extension String {
     
     func stringBetweenString(start: String?, end: String?) -> String? {
@@ -45,13 +48,20 @@ extension String {
         return contains(string, options: [])
     }
     
+    
+    /**
+    Returns a Foundation object from the given JSON string.
+     
+    - returns: A Foundation object from the JSON string, or nil if an error occurs.
+    */
+    
     func objectFromJSONString() -> Any? {
         let data = self.data(using: .utf8)
         return data?.objectFromJSON()
     }
 }
 
-extension [AnyHashable] {
+extension Array {
     func jsonString() -> String? {
         let data = jsonData()
         if data != nil {
@@ -69,7 +79,18 @@ extension [AnyHashable] {
     }
 }
 
-extension [AnyHashable : Any] {
+/**
+JSON convenient extensions on Dictionary
+*/
+
+extension Dictionary {
+    
+    /**
+    Returns JSON string from the given dictionary.
+    
+    - returns: returns a JSON String, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
+    */
+    
     func jsonString() -> String? {
         let data = jsonData()
         if data != nil {
@@ -81,6 +102,12 @@ extension [AnyHashable : Any] {
 
         return nil
     }
+    
+    /**
+    Returns JSON data from the given dictionary.
+    
+    - returns:returns a JSON data, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
+    */
 
     func jsonData() -> Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: [])
