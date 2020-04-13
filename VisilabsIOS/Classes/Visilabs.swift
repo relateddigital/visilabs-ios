@@ -320,28 +320,3 @@ open class Visilabs{
     }
 }
 
-extension String {
-    func stringBetweenString(start: String?, end: String?) -> String? {
-        let startRange = (self as NSString).range(of: start ?? "")
-        if startRange.location != NSNotFound {
-            var targetRange: NSRange = NSRange()
-            targetRange.location = startRange.location + startRange.length
-            targetRange.length = count - targetRange.location
-            let endRange = (self as NSString).range(of: end ?? "", options: [], range: targetRange)
-            if endRange.location != NSNotFound {
-                targetRange.length = endRange.location - targetRange.location
-                return (self as NSString).substring(with: targetRange)
-            }
-        }
-        return nil
-    }
-
-    func contains(_ string: String?, options: String.CompareOptions) -> Bool {
-        let rng = (self as NSString).range(of: string ?? "", options: options)
-        return rng.location != NSNotFound
-    }
-
-    func contains(_ string: String) -> Bool {
-        return contains(string, options: [])
-    }
-}
