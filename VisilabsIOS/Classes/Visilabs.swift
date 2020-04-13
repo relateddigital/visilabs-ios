@@ -97,6 +97,38 @@ open class Visilabs{
         self.sendQueue = [String]()
     }
     
+    // MARK: Persistence
+
+    func filePath(forData data: String?) -> String? {
+        let filename = "\(data ?? "")"
+        return URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).last ?? "").appendingPathComponent(filename).absoluteString
+    }
+    
+    func cookieIDFilePath() -> String? {
+        return filePath(forData: cookieIDArchiveKey)
+    }
+
+    func exVisitorIDFilePath() -> String? {
+        return filePath(forData: exVisitorIDArchiveKey)
+    }
+
+    func tokenIDFilePath() -> String? {
+        return filePath(forData: tokenIDArchiveKey)
+    }
+
+    func appIDFilePath() -> String? {
+        return filePath(forData: appIDArchiveKey)
+    }
+
+    func userAgentFilePath() -> String? {
+        return filePath(forData: userAgentArchiveKey)
+    }
+
+    func propertiesFilePath() -> String? {
+        return filePath(forData: propertiesArchiveKey)
+    }
+    
+    
     /* TODO:
     
     func dispatch_once_on_main_thread(predicate: UnsafeMutableRawPointer?, block: () -> ()) {
