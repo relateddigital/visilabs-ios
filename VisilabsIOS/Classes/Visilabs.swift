@@ -182,7 +182,7 @@ open class Visilabs{
         
     }
     
-    
+    // MARK: In-App Notification
 
     //TODO:
     private func trackNotificationClick(visilabsNotification: VisilabsNotification){
