@@ -24,6 +24,7 @@ JSON convenient categories on NSString
 */
 extension String {
     
+    //TODO:self as nsstring'e gerek var mı?
     func stringBetweenString(start: String?, end: String?) -> String? {
         let startRange = (self as NSString).range(of: start ?? "")
         if startRange.location != NSNotFound {
@@ -57,11 +58,22 @@ extension String {
     
     func objectFromJSONString() -> Any? {
         let data = self.data(using: .utf8)
-        return data?.objectFromJSON()
+        return data?.objectFromJSONData()
     }
 }
 
+/**
+JSON convenient extensions on NSArray
+*/
+
 extension Array {
+    
+    /**
+    Returns JSON string from the given array.
+    
+    - returns: returns  a JSON String, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
+    */
+    
     func jsonString() -> String? {
         let data = jsonData()
         if data != nil {
@@ -73,6 +85,12 @@ extension Array {
 
         return nil
     }
+    
+    /**
+    Returns JSON data from the given array.
+    
+    - returns: returns a JSON data, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
+    */
 
     func jsonData() -> Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: [])
