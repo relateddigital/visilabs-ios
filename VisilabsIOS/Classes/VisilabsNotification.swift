@@ -7,6 +7,6 @@
 
 import Foundation
 
-internal class VisilabsNotification{
+class VisilabsNotification{
     
 }
