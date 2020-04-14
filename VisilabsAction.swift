@@ -82,6 +82,7 @@ class VisilabsAction{
     /// - seealso: VisilabsResponseDelegate
 
     func exec(withSuccess sucornil: @escaping (_ success: VisilabsResponse?) -> Void, andFailure failornil: @escaping (_ failed: VisilabsResponse?) -> Void) {
+        exec(false, withSuccess: sucornil, andFailure: failornil)
     }
     
     /// Excute the API request asynchronously with the given success and failure
@@ -97,8 +98,14 @@ class VisilabsAction{
     /// - seealso: VisilabsResponseDelegate
 
     func execAsync(withSuccess sucornil: @escaping (_ success: VisilabsResponse?) -> Void, andFailure failornil: @escaping (_ failed: VisilabsResponse?) -> Void) {
+        exec(true, withSuccess: sucornil, andFailure: failornil)
     }
 
+    
+    private func exec(_ pAsync: Bool, withSuccess sucornil: @escaping (_ success: VisilabsResponse?) -> Void, andFailure failornil: @escaping (_ failed: VisilabsResponse?) -> Void) {
+        async = pAsync
+        httpClient.sendRequest(self, andSuccess: sucornil, andFailure: failornil)
+    }
     
     
 
