@@ -22,32 +22,27 @@ class VisilabsHttpClient {
         failureHandler = { (resp: VisilabsResponse?) in }
     }
     
-    private func request(_ visilabsAction: VisilabsAction, with url: URL?) -> NSMutableURLRequest? {
-        var request: NSMutableURLRequest?
+    private func request(_ visilabsAction: VisilabsAction, with url: URL) -> URLRequest {
+        var request: URLRequest
         if visilabsAction.cacheTimeout > 0 {
-            if let url = url {
-                request = NSMutableURLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: visilabsAction.cacheTimeout)
-            }
+            request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: visilabsAction.cacheTimeout)
         } else {
-            if let url = url {
-                request = NSMutableURLRequest(url: url)
-            }
+            request = URLRequest(url: url)
         }
-        request?.httpMethod = visilabsAction.requestMethod
+        request.httpMethod = visilabsAction.requestMethod
 
         if Visilabs.callAPI()?.userAgent != nil {
-            request?.setValue(Visilabs.callAPI()?.userAgent, forHTTPHeaderField: "User-Agent")
+            request.setValue(Visilabs.callAPI()?.userAgent, forHTTPHeaderField: "User-Agent")
         }
-
         return request
     }
     
-    func sendRequest(_ visilabsAction: VisilabsAction?, andSuccess sucornil: @escaping (_ success: VisilabsResponse?) -> Void, andFailure failornil: @escaping (_ failed: VisilabsResponse?) -> Void) {
+    func sendRequest(_ visilabsAction: VisilabsAction, andSuccess sucornil: @escaping (_ success: VisilabsResponse?) -> Void, andFailure failornil: @escaping (_ failed: VisilabsResponse?) -> Void) {
 
         successHandler = sucornil
         failureHandler = failornil
 
-        let apicall = visilabsAction?.buildURL()
+        let apicall = visilabsAction.buildURL()
 
         if Visilabs.callAPI() == nil || !Visilabs.callAPI()!.isOnline {
             let res = VisilabsResponse()
@@ -59,9 +54,23 @@ class VisilabsHttpClient {
             return
         }
         
-        /*
-        var brequest = request(visilabsAction, with: apicall)
-         */
+        var brequest = request(visilabsAction, with: apicall!)
+        brequest.timeoutInterval = visilabsAction.requestTimeout
+        
+        let task = session?.dataTask(with: brequest, completionHandler: { data, response, error in
+            let encodingName = response?.textEncodingName
+            var encodingType: String.Encoding = .utf8
+            if encodingName != nil {
+                encodingType = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding(encodingName as CFString?)))
+            }
+            
+            //TODO:
+            //let reponseAsRawString = String(bytes: data?.bytes, encoding: encodingType)
+            //let statusCode = Int((response as? HTTPURLResponse)?.statusCode ?? 0)
+            
+        
+        })
+        task?.resume()
         
     }
     
