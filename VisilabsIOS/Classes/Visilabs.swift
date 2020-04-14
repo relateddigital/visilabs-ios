@@ -15,7 +15,7 @@ open class Visilabs{
     private var requestTimeoutInSeconds : Int
     private var restURL : String?
     private var encryptedDataSource : String?
-    private var targetURL : String?
+    internal var targetURL : String?
     private var actionURL : String?
     private var geofenceURL : String?
     private var geofenceEnabled : Bool
@@ -50,8 +50,8 @@ open class Visilabs{
     private var exVisitorID: String?
     private var tokenID: String?
     private var appID: String?
-    private var isOnline: Bool = true
-    private var userAgent: String?
+    internal var isOnline: Bool//TODO: burada = true demek lazım mı?
+    internal var userAgent: String?
     private var loggingEnabled: Bool = true
     private var checkForNotificationsOnLoggerRequest: Bool = true
     private var miniNotificationPresentationTime: Float = 0.0
@@ -95,6 +95,7 @@ open class Visilabs{
         self.geofenceEnabled = geofenceEnabled
         self.maxGeofenceCount = maxGeofenceCount
         self.sendQueue = [String]()
+        self.isOnline = true //TODO: burada true'ya mı eşitlemek lazım
     }
     
     // MARK: Persistence
