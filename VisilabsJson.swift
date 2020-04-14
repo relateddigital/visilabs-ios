@@ -14,7 +14,7 @@ the actual json serialization/deserialization
 */
 
 extension Data {
-    func objectFromJSONData() -> Any? {
+    func objectFromJsonData() -> Any? {
         return try? JSONSerialization.jsonObject(with: self as Data, options: .allowFragments)
     }
 }
@@ -56,9 +56,9 @@ extension String {
     - returns: A Foundation object from the JSON string, or nil if an error occurs.
     */
     
-    func objectFromJSONString() -> Any? {
+    func objectFromJsonString() -> Any? {
         let data = self.data(using: .utf8)
-        return data?.objectFromJSONData()
+        return data?.objectFromJsonData()
     }
 }
 
