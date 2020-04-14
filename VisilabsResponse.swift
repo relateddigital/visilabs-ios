@@ -26,13 +26,13 @@ class VisilabsResponse {
     /// Parse the response string (JSON format)
     /// - Parameter res: The response string
     func parseResponseString(_ res: String?) {
-        parsedResponse = res?.objectFromJSONString() as! [AnyHashable : Any?]?
+        parsedResponse = res?.objectFromJsonString() as! [AnyHashable : Any?]?
     }
 
     /// Parse the response data (JSON format)
     /// - Parameter data: The response data
     func parseResponseData(_ data: Data?) {
-        parsedResponse = data?.objectFromJSONData() as! [AnyHashable: Any?]?
-        responseArray = data?.objectFromJSONData() as! [AnyHashable]?
+        parsedResponse = data?.objectFromJsonData() as! [AnyHashable: Any?]?
+        responseArray = data?.objectFromJsonData() as! [AnyHashable]?
     }
 }
