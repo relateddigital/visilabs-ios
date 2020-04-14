@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+/**
+Base class for all API request classes
+*/
+
+class VisilabsAction{
+    var args: [AnyHashable : Any]?
+    var headers: [AnyHashable : Any]?
+    var async = false
+    var httpClient: VisilabsHttpClient?
+}
