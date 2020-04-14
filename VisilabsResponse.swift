@@ -17,7 +17,7 @@ class VisilabsResponse {
     /// Get the raw response data as NSString
     var rawResponseAsString: String?
     /// Get the response data as NSDictionary
-    var parsedResponse: [AnyHashable : Any]?
+    var parsedResponse: [AnyHashable : Any?]?
     /// Get the response's status code
     var responseStatusCode:Int = 0
     /// Get the error of the response
@@ -26,13 +26,13 @@ class VisilabsResponse {
     /// Parse the response string (JSON format)
     /// - Parameter res: The response string
     func parseResponseString(_ res: String?) {
-        parsedResponse = res?.objectFromJSONString() as [AnyHashable : Any]?
+        parsedResponse = res?.objectFromJSONString() as! [AnyHashable : Any?]?
     }
 
     /// Parse the response data (JSON format)
     /// - Parameter data: The response data
     func parseResponseData(_ data: Data?) {
-        parsedResponse = data?.objectFromJSONData()
-        responseArray = data?.objectFromJSONData()
+        parsedResponse = data?.objectFromJSONData() as! [AnyHashable: Any?]?
+        responseArray = data?.objectFromJSONData() as! [AnyHashable]?
     }
 }

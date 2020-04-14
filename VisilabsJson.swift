@@ -82,7 +82,6 @@ extension Array {
             }
             return nil
         }
-
         return nil
     }
     
@@ -117,7 +116,6 @@ extension Dictionary {
             }
             return nil
         }
-
         return nil
     }
     
