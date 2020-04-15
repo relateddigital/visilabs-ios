@@ -5,7 +5,9 @@
 //  Created by Egemen on 16.04.2020.
 //
 
+import Foundation
 import UIKit
+
 
 extension UIView {
     
@@ -32,23 +34,19 @@ extension UIView {
 
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
         return image
-
-
     }
 
-    /*
+    
     func visilabs_snapshotForBlur() -> UIImage? {
-        let image = visilabs_snapshotImage()
         // hack, helps with colors when blurring
-        let imageData = image?.jpegData(compressionQuality: 1) // convert to jpeg
+        let imageData = visilabs_snapshotImage()!.jpegData(compressionQuality: 1.0)
         if let imageData = imageData {
             return UIImage(data: imageData)
         }
         return nil
     }
- */
+ 
     
     
 }
