@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 extension UIColor {
     
     class func visilabs_applicationPrimaryColor() -> UIColor? {
