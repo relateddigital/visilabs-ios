@@ -7,6 +7,6 @@
 
 import Foundation
 
-internal class VisilabsTargetRequest {
+class VisilabsTargetRequest {
     
 }
