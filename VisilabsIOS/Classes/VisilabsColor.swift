@@ -27,8 +27,8 @@ extension UIColor {
 
     func withSaturationComponent(_ saturation: CGFloat) -> UIColor? {
         var newColor: UIColor?
-        var h, s, b, a: CGFloat
-        if getHue(UnsafeMutablePointer<CGFloat>(mutating: &h), saturation: UnsafeMutablePointer<CGFloat>(mutating: &s), brightness: UnsafeMutablePointer<CGFloat>(mutating: &b), alpha: UnsafeMutablePointer<CGFloat>(mutating: &a)) {
+        var (h, s, b, a) = (CGFloat(0), CGFloat(0), CGFloat(0), CGFloat(0))
+        if getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
             newColor = UIColor(hue: h, saturation: saturation, brightness: b, alpha: a)
         }
         return newColor
