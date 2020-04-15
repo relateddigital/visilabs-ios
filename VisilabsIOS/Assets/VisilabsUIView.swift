@@ -37,7 +37,7 @@ extension UIView {
         return image
     }
 
-    
+    //TODO: buradaki forced unwrap doğru mu?
     func visilabs_snapshotForBlur() -> UIImage? {
         // hack, helps with colors when blurring
         let imageData = visilabs_snapshotImage()!.jpegData(compressionQuality: 1.0)
