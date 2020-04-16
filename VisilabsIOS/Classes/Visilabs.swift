@@ -275,15 +275,35 @@ open class Visilabs{
         return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
     
+    private func buildAction() -> VisilabsAction? {
+        if Visilabs.API == nil {
+            //Error is not handled because the enclosing function is not declared 'throws'
+            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
+        }
+        var action: VisilabsAction? = nil
+        action = VisilabsTargetRequest()
+        return action
+    }
+    
+    private func buildGeofenceAction() -> VisilabsAction? {
+        if Visilabs.API == nil {
+            //Error is not handled because the enclosing function is not declared 'throws'
+            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]))
+        }
+        var action: VisilabsAction? = nil
+        action = VisilabsGeofenceRequest()
+        return action
+    }
+    
     //TODO
-    func buildTargetRequest(zoneID: String?,productCode: String?) -> VisilabsTargetRequest? {
+    func buildTargetRequest(zoneID: String?,productCode: String?, properties: [AnyHashable : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
         return nil
     }
 
     //TODO
-    func buildTargetRequest(zoneID: String?, productCode: String?, properties: inout [AnyHashable : Any], filters: inout [VisilabsTargetFilter]) -> VisilabsTargetRequest? {
-        return nil
-    }
+    //func buildTargetRequest(zoneID: String?, productCode: String?, properties: inout [AnyHashable : Any], filters: inout //[VisilabsTargetFilter]) -> VisilabsTargetRequest? {
+        //return nil
+    //}
 
     //TODO
     func buildGeofenceRequest(action: String?, actionID: String?, latitude: Double, longitude: Double, geofenceID: String?, isDwell: Bool, isEnter: Bool) -> VisilabsGeofenceRequest? {
@@ -308,8 +328,18 @@ open class Visilabs{
         return nil
     }
     
+    private func setCookieID() {
+        cookieID = UUID().uuidString
+        //TODO:
+        if !NSKeyedArchiver.archiveRootObject(cookieID, toFile: "") {
+            //TODO:
+            //DLog("Visilabs: WARNING - Unable to archive identity!!!")
+        }
+    }
+
+    
     public func setExVisitorIDToNull(){
-        
+        self.exVisitorID = nil
     }
 }
 
