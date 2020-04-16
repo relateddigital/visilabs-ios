@@ -294,7 +294,7 @@ open class Visilabs{
     }
     
     //TODO
-    func buildTargetRequest(zoneID: String?,productCode: String?, properties: [AnyHashable : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
+    func buildTargetRequest(zoneID: String, productCode: String, properties: [AnyHashable : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
         return nil
     }
 
