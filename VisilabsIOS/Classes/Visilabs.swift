@@ -6,8 +6,8 @@ open class Visilabs{
     private static var API: Visilabs?
     private static var visilabsReachability : VisilabsReachability?
     
-    private var organizationID : String
-    private var siteID : String
+    var organizationID : String
+    var siteID : String
     private var loggerURL : String
     private var dataSource : String
     private var realTimeURL : String
@@ -46,8 +46,8 @@ open class Visilabs{
     private var realTimeOM3rdCookieValue: String?
     private var webView: WKWebView?
     
-    private var cookieID: String?
-    private var exVisitorID: String?
+    var cookieID: String?
+    var exVisitorID: String?
     private var tokenID: String?
     private var appID: String?
     internal var isOnline: Bool//TODO: burada = true demek lazım mı?
@@ -270,9 +270,9 @@ open class Visilabs{
     
     // MARK: Public Methods
     
-    //TODO
-    public func urlEncode(prior: String) -> String{
-        return "TODO"
+    //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
+    public func urlEncode(_ prior: String) -> String {
+        return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
     
     //TODO
