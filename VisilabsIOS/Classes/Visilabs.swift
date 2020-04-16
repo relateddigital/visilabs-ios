@@ -48,8 +48,8 @@ open class Visilabs{
     
     var cookieID: String?
     var exVisitorID: String?
-    private var tokenID: String?
-    private var appID: String?
+    var tokenID: String?
+    var appID: String?
     internal var isOnline: Bool//TODO: burada = true demek lazım mı?
     internal var userAgent: String?
     private var loggingEnabled: Bool = true

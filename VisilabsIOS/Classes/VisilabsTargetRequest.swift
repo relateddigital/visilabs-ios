@@ -90,6 +90,28 @@ class VisilabsTargetRequest: VisilabsAction {
             queryParameters = queryParameters + zoneIDParameter
         }
         
+        if productCode != nil && productCode!.count > 0 {
+            let encodedProductCodeValue = Visilabs.callAPI()!.urlEncode(productCode!)
+            let productCodeParameter = "&\(VisilabsConfig.BODY_KEY)=\(encodedProductCodeValue)"
+            queryParameters = queryParameters + productCodeParameter
+        }
+        
+        if Visilabs.callAPI()!.tokenID != nil && Visilabs.callAPI()!.tokenID!.count > 0 {
+            let encodedTokenValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.tokenID!)
+            let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
+            queryParameters = queryParameters + tokenParameter
+        }
+        
+        if Visilabs.callAPI()!.appID != nil && Visilabs.callAPI()!.appID!.count > 0 {
+            let encodedAppValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.appID!)
+            let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
+            queryParameters = queryParameters + appParameter
+        }
+        
+        cleanParameters()
+        
+        //TODO:burası devam edecek
+        
         return queryParameters
         
     }
