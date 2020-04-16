@@ -7,6 +7,9 @@
 
 import Foundation
 
-class VisilabsTargetRequest {
-    
+class VisilabsTargetRequest: VisilabsAction {
+    var zoneID: String?
+    var productCode: String?
+    var properties: [AnyHashable : Any]?
+    var filters: [VisilabsTargetFilter]?
 }
