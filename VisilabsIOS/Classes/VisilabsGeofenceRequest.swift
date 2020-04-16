@@ -7,6 +7,6 @@
 
 import Foundation
 
-internal class VisilabsGeofenceRequest{
+class VisilabsGeofenceRequest : VisilabsAction {
     
 }

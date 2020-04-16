@@ -275,24 +275,22 @@ open class Visilabs{
         return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
     
-    private func buildAction() -> VisilabsAction? {
+    private func buildAction() -> VisilabsAction {
         if Visilabs.API == nil {
+            //TODO: ne yapacağına karar ver.
             //Error is not handled because the enclosing function is not declared 'throws'
             //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
         }
-        var action: VisilabsAction? = nil
-        action = VisilabsTargetRequest()
-        return action
+        return VisilabsTargetRequest()
     }
     
-    private func buildGeofenceAction() -> VisilabsAction? {
+    private func buildGeofenceAction() -> VisilabsAction {
         if Visilabs.API == nil {
+            //TODO: ne yapacağına karar ver.
             //Error is not handled because the enclosing function is not declared 'throws'
             //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]))
         }
-        var action: VisilabsAction? = nil
-        action = VisilabsGeofenceRequest()
-        return action
+        return VisilabsGeofenceRequest()
     }
     
     //TODO
