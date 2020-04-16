@@ -295,20 +295,12 @@ open class Visilabs{
     public func customEvent(pageName: String, properties: [String:String]){
         
     }
-
-    public func login(exVisitorID: String){
-        
-    }
-
-    public func signUp(exVisitorID: String){
+    
+    public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
         
     }
     
-    public func login(exVisitorID: String, properties: [String:String]){
-        
-    }
-    
-    public func signUp(exVisitorID: String, properties: [String:String]){
+    public func signUp(exVisitorID: String, properties: [String:String] = [String:String]()){
         
     }
     
