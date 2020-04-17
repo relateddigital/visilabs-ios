@@ -13,12 +13,17 @@ Base class for all API request classes
 
 class VisilabsAction{
     
+    /// The HTTP request method
+    var requestMethod: String
+    
+    /// The HTTP headers of the request
+    var headers: [String : Any]
+    
     /// Set/Get the parameters for the API request.
     /// - Returns: Returns the parameters.
     var args: [String : Any]
     
-    /// The HTTP headers of the request
-    var headers: [String : Any]
+    
     
     var async : Bool = false
     
@@ -26,8 +31,7 @@ class VisilabsAction{
     
     var method: String?
     
-    /// The HTTP request method
-    var requestMethod: String
+    
     
     /// The timeout value of the request  Default to 30 seconds
     var requestTimeout: TimeInterval
@@ -43,11 +47,11 @@ class VisilabsAction{
     var path: String?
     
     
-    init() {
-        args = [String : Any]()
+    internal init(requestMethod: String = "GET", headers: [String : Any] = [ : ], args: [String : Any]  = [ : ]) {
+        self.requestMethod = requestMethod
+        self.headers = headers
+        self.args = [String : Any]()
         httpClient = VisilabsHttpClient()
-        headers = [String : Any]()
-        requestMethod = "GET"
         requestTimeout = 30
         cacheTimeout = 0
     }
