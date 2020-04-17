@@ -13,18 +13,20 @@ class VisilabsTargetRequest: VisilabsAction {
     var properties: [String : Any]
     var filters: [VisilabsTargetFilter]
     
-    init(zoneID: String, productCode: String, properties : [String : Any], filters: [VisilabsTargetFilter], requestMethod: String) {
+    internal init(zoneID: String, productCode: String, properties : [String : Any], filters: [VisilabsTargetFilter]) {
         self.zoneID = zoneID
         self.productCode = productCode
         self.properties = properties
         self.filters = filters
-        
-        super.init()
-        self.requestMethod = requestMethod
-        
+        super.init(requestMethod: "GET")
     }
     
     override func buildURL() -> URL? {
+        
+        if Visilabs.callAPI() == nil || Visilabs.callAPI()!.organizationID.count == 0 || Visilabs.callAPI()!.siteID.count == 0 {
+            return nil
+        }
+        
         var targetURL = Visilabs.callAPI()!.targetURL
         let queryParameters = getParametersAsQueryString()
         targetURL = targetURL! + queryParameters!
@@ -75,10 +77,6 @@ class VisilabsTargetRequest: VisilabsAction {
     }
     
     private func getParametersAsQueryString() -> String? {
-        if Visilabs.callAPI() == nil || Visilabs.callAPI()!.organizationID.count == 0 || Visilabs.callAPI()!.siteID.count == 0 {
-            return nil
-        }
-        
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(Visilabs.callAPI()!.organizationID)&\(VisilabsConfig.SITEID_KEY)=\(Visilabs.callAPI()!.siteID)"
 
         if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {

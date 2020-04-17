@@ -272,15 +272,6 @@ open class Visilabs{
         return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
     
-    private func buildGeofenceAction() -> VisilabsAction {
-        if Visilabs.API == nil {
-            //TODO: ne yapacağına karar ver.
-            //Error is not handled because the enclosing function is not declared 'throws'
-            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]))
-        }
-        return VisilabsGeofenceRequest()
-    }
-    
     //TODO
     func buildTargetRequest(zoneID: String, productCode: String, properties: [String : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
         if Visilabs.API == nil {
@@ -289,12 +280,18 @@ open class Visilabs{
             //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
             return nil
         }
-        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters, requestMethod: "GET")
+        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
     }
 
     //TODO
-    func buildGeofenceRequest(action: String?, actionID: String?, latitude: Double, longitude: Double, geofenceID: String?, isDwell: Bool, isEnter: Bool) -> VisilabsGeofenceRequest? {
-        return nil
+    func buildGeofenceRequest(action: String, actionID: String, latitude: Double, longitude: Double, geofenceID: String, isDwell: Bool, isEnter: Bool) -> VisilabsGeofenceRequest? {
+        if Visilabs.API == nil {
+            //TODO: ne yapacağına karar ver.
+            //Error is not handled because the enclosing function is not declared 'throws'
+            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
+            return nil
+        }
+        return VisilabsGeofenceRequest(action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
     }
     
     
