@@ -15,10 +15,10 @@ class VisilabsAction{
     
     /// Set/Get the parameters for the API request.
     /// - Returns: Returns the parameters.
-    var args: [AnyHashable : Any]
+    var args: [String : Any]
     
     /// The HTTP headers of the request
-    var headers: [AnyHashable : Any]
+    var headers: [String : Any]
     
     var async : Bool = false
     
@@ -44,9 +44,9 @@ class VisilabsAction{
     
     
     init() {
-        args = [AnyHashable : Any]()
+        args = [String : Any]()
         httpClient = VisilabsHttpClient()
-        headers = [AnyHashable : Any]()
+        headers = [String : Any]()
         requestMethod = "GET"
         requestTimeout = 30
         cacheTimeout = 0

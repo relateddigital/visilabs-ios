@@ -289,7 +289,7 @@ open class Visilabs{
             //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
             return nil
         }
-        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
+        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters, requestMethod: "GET")
     }
 
     //TODO
