@@ -265,23 +265,11 @@ open class Visilabs{
     
     //TODO: description'a gerek yok.
     
-    
-    
-    
     // MARK: Public Methods
     
     //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
     public func urlEncode(_ prior: String) -> String {
         return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-    }
-    
-    private func buildAction() -> VisilabsAction {
-        if Visilabs.API == nil {
-            //TODO: ne yapacağına karar ver.
-            //Error is not handled because the enclosing function is not declared 'throws'
-            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
-        }
-        return VisilabsTargetRequest()
     }
     
     private func buildGeofenceAction() -> VisilabsAction {
@@ -294,14 +282,15 @@ open class Visilabs{
     }
     
     //TODO
-    func buildTargetRequest(zoneID: String, productCode: String, properties: [AnyHashable : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
-        return nil
+    func buildTargetRequest(zoneID: String, productCode: String, properties: [String : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
+        if Visilabs.API == nil {
+            //TODO: ne yapacağına karar ver.
+            //Error is not handled because the enclosing function is not declared 'throws'
+            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
+            return nil
+        }
+        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
     }
-
-    //TODO
-    //func buildTargetRequest(zoneID: String?, productCode: String?, properties: inout [AnyHashable : Any], filters: inout //[VisilabsTargetFilter]) -> VisilabsTargetRequest? {
-        //return nil
-    //}
 
     //TODO
     func buildGeofenceRequest(action: String?, actionID: String?, latitude: Double, longitude: Double, geofenceID: String?, isDwell: Bool, isEnter: Bool) -> VisilabsGeofenceRequest? {
