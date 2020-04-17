@@ -13,12 +13,15 @@ class VisilabsTargetRequest: VisilabsAction {
     var properties: [String : Any]
     var filters: [VisilabsTargetFilter]
     
-    init(zoneID: String, productCode: String, properties : [String : Any], filters: [VisilabsTargetFilter]) {
+    init(zoneID: String, productCode: String, properties : [String : Any], filters: [VisilabsTargetFilter], requestMethod: String) {
         self.zoneID = zoneID
         self.productCode = productCode
         self.properties = properties
         self.filters = filters
+        
         super.init()
+        self.requestMethod = requestMethod
+        
     }
     
     override func buildURL() -> URL? {
