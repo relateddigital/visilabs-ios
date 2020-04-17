@@ -8,10 +8,18 @@
 import Foundation
 
 class VisilabsTargetRequest: VisilabsAction {
-    var zoneID: String?
-    var productCode: String?
-    var properties: [String : Any]?
-    var filters: [VisilabsTargetFilter]?
+    var zoneID: String
+    var productCode: String
+    var properties: [String : Any]
+    var filters: [VisilabsTargetFilter]
+    
+    init(zoneID: String, productCode: String, properties : [String : Any], filters: [VisilabsTargetFilter]) {
+        self.zoneID = zoneID
+        self.productCode = productCode
+        self.properties = properties
+        self.filters = filters
+        super.init()
+    }
     
     override func buildURL() -> URL? {
         var targetURL = Visilabs.callAPI()!.targetURL
@@ -22,13 +30,11 @@ class VisilabsTargetRequest: VisilabsAction {
     }
     
     private func cleanParameters() {
-        if properties != nil {
-            for propKey in properties!.keys {
-                if !propKey.isEqual(VisilabsConfig.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConfig.SITEID_KEY) && !propKey.isEqual(VisilabsConfig.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConfig.COOKIEID_KEY) && !propKey.isEqual(VisilabsConfig.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConfig.BODY_KEY) && !propKey.isEqual(VisilabsConfig.TOKENID_KEY) && !propKey.isEqual(VisilabsConfig.APPID_KEY) && !propKey.isEqual(VisilabsConfig.APIVER_KEY) && !propKey.isEqual(VisilabsConfig.FILTER_KEY) {
-                    continue
-                } else {
-                    properties?.removeValue(forKey: propKey)
-                }
+        for propKey in properties.keys {
+            if !propKey.isEqual(VisilabsConfig.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConfig.SITEID_KEY) && !propKey.isEqual(VisilabsConfig.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConfig.COOKIEID_KEY) && !propKey.isEqual(VisilabsConfig.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConfig.BODY_KEY) && !propKey.isEqual(VisilabsConfig.TOKENID_KEY) && !propKey.isEqual(VisilabsConfig.APPID_KEY) && !propKey.isEqual(VisilabsConfig.APIVER_KEY) && !propKey.isEqual(VisilabsConfig.FILTER_KEY) {
+                continue
+            } else {
+                properties.removeValue(forKey: propKey)
             }
         }
     }
@@ -84,14 +90,14 @@ class VisilabsTargetRequest: VisilabsAction {
             queryParameters = queryParameters + exVisitorIDParameter
         }
 
-        if zoneID != nil && zoneID!.count > 0 {
-            let encodedZoneIDValue = Visilabs.callAPI()!.urlEncode(zoneID!)
+        if zoneID.count > 0 {
+            let encodedZoneIDValue = Visilabs.callAPI()!.urlEncode(zoneID)
             let zoneIDParameter = "&\(VisilabsConfig.ZONE_ID_KEY)=\(encodedZoneIDValue)"
             queryParameters = queryParameters + zoneIDParameter
         }
         
-        if productCode != nil && productCode!.count > 0 {
-            let encodedProductCodeValue = Visilabs.callAPI()!.urlEncode(productCode!)
+        if productCode.count > 0 {
+            let encodedProductCodeValue = Visilabs.callAPI()!.urlEncode(productCode)
             let productCodeParameter = "&\(VisilabsConfig.BODY_KEY)=\(encodedProductCodeValue)"
             queryParameters = queryParameters + productCodeParameter
         }
