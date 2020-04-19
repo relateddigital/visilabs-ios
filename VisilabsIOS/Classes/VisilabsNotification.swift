@@ -14,7 +14,7 @@ enum VisilabsNotificationType : String {
 
 class VisilabsNotification {
     private(set) var ID: UInt
-    private(set) var type: String
+    private(set) var type: VisilabsNotificationType
     private(set) var title: String
     var body: String
     var imageURL: URL?
@@ -25,11 +25,25 @@ class VisilabsNotification {
     var queryString: String?
     var image: Data?
     
+    var errorMessage : String?
+    
     private func isValid() -> Bool {
         var valid = true
-        var errorMessage : String?
         
-        return true
+        if self.title.isEmptyOrWhitespace() {
+            valid = false
+            errorMessage = "Notification title is empty"
+        }
+        if self.body.isEmptyOrWhitespace() {
+            valid = false
+            errorMessage = "Notification body is empty"
+        }
+        if self.type != VisilabsNotificationType.mini  || type != VisilabsNotificationType.full {
+            valid = false
+            errorMessage = "Invalid notification type: \(self.type.rawValue), must be \(VisilabsNotificationType.mini.rawValue) or \(VisilabsNotificationType.full.rawValue)"
+        }
+        
+        return valid
     }
     
     func getImage() -> Data? {
@@ -49,37 +63,19 @@ class VisilabsNotification {
     
     
     //TODO: DLog'lar düzeltilecek
-    init(ID: UInt, type: String, title: String, body: String, buttonText: String?, buttonURL: URL?, imageURL: URL?, visitorData: String?, visitData: String?, queryString: String?) {
+    init(ID: UInt, type: VisilabsNotificationType, title: String, body: String, buttonText: String?, buttonURL: URL?, imageURL: URL?, visitorData: String?, visitData: String?, queryString: String?) {
         self.ID = ID
         self.type = type
         self.title = title
         self.body = body
-        var valid = true
 
-        if title.isEmpty {
-            valid = false
-            //DLog("Notification title nil or empty: %@", title)
-        }
 
-        if body.isEmpty {
-            valid = false
-            //DLog("Notification body nil or empty: %@", body)
-        }
 
-        if type != VisilabsNotificationType.mini.rawValue  || type != VisilabsNotificationType.full.rawValue {
-            valid = false
-            //DLog("Invalid notification type: %@, must be %@ or %@", type, VisilabsNotificationTypeMini, VisilabsNotificationTypeFull)
-        }
-
-        if type == VisilabsNotificationType.mini.rawValue && body.count  < 1 {
+        if type == VisilabsNotificationType.mini && body.count  < 1 {
             self.body = title
         }
 
-        if valid {
-            _ID = ID
-            self.type = type
-            self.title = title
-            self.body = body
+        if isValid() {
             self.imageURL = imageURL
             self.buttonText = buttonText
             self.buttonURL = buttonURL
@@ -87,8 +83,6 @@ class VisilabsNotification {
             self.visitorData = visitorData
             self.visitData = visitData
             self.queryString = queryString
-        } else {
-            self = nil
         }
     }
 
