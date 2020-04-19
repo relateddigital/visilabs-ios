@@ -296,16 +296,40 @@ open class Visilabs{
     
     
 
-    public func customEvent(pageName: String, properties: [String:String]){
+    public func customEvent(_ pageName: String, properties: [String:String]){
         
     }
     
     public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
-        
+        if exVisitorID.isEmptyOrWhitespace(){
+            print("Visilabs: WARNING - attempted to use nil or empty identity. Ignoring.")
+            return
+        }else {
+            if self.exVisitorID != nil && !(self.exVisitorID == exVisitorID) {
+                setCookieID()
+            }
+            var props = properties
+            props[VisilabsConfig.EXVISITORID_KEY] = exVisitorID
+            props["Login"] = exVisitorID
+            props["OM.b_login"] = "Login"
+            customEvent("LoginPage", properties: props)
+        }
     }
     
     public func signUp(exVisitorID: String, properties: [String:String] = [String:String]()){
-        
+        if exVisitorID.isEmptyOrWhitespace(){
+            print("Visilabs: WARNING - attempted to use nil or empty identity. Ignoring.")
+            return
+        }else {
+            if self.exVisitorID != nil && !(self.exVisitorID == exVisitorID) {
+                setCookieID()
+            }
+            var props = properties
+            props[VisilabsConfig.EXVISITORID_KEY] = exVisitorID
+            props["SignUp"] = exVisitorID
+            props["OM.b_sgnp"] = "SignUp"
+            customEvent("SignUpPage", properties: props)
+        }
     }
     
     public func getPushURL(source: String, campaign: String, medium: String, content: String) -> String?{
