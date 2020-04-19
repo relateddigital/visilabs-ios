@@ -26,12 +26,14 @@ class VisilabsNotification {
     var image: Data?
     
     private func isValid() -> Bool {
+        var valid = true
+        var errorMessage : String?
+        
         return true
     }
     
     func getImage() -> Data? {
         if image == nil && imageURL != nil {
-            let error: Error? = nil
             var imageData: Data? = nil
             do {
                 imageData = try Data(contentsOf: imageURL!, options: .mappedIfSafe)
@@ -69,8 +71,8 @@ class VisilabsNotification {
             //DLog("Invalid notification type: %@, must be %@ or %@", type, VisilabsNotificationTypeMini, VisilabsNotificationTypeFull)
         }
 
-        if (type == VisilabsNotificationTypeMini) && body.count  < 1 {
-            body = title ?? ""
+        if type == VisilabsNotificationType.mini.rawValue && body.count  < 1 {
+            self.body = title
         }
 
         if valid {

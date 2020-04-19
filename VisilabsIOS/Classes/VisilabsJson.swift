@@ -49,6 +49,10 @@ extension String {
         return contains(string, options: [])
     }
     
+    func isEmptyOrWhitespace() -> Bool {
+        return self.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+    
     
     /**
     Returns a Foundation object from the given JSON string.
