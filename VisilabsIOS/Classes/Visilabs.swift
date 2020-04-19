@@ -198,9 +198,14 @@ open class Visilabs{
         return nil
     }
     
-    //TODO: class func vs static farkı nedir?
-    private class func canPresentFromViewController(viewController: UIViewController?) -> Bool{
-        return false
+    //TODO: viewController is UIAlertController ne için gerekli bak
+    private class func canPresentFromViewController(viewController: UIViewController) -> Bool{
+        // This fixes the NSInternalInconsistencyException caused when we try present a
+        // survey on a viewcontroller that is itself being presented.
+        if viewController.isBeingPresented || viewController.isBeingDismissed || viewController is UIAlertController {
+            return false
+        }
+        return true
     }
     
     //TODO:
@@ -295,7 +300,7 @@ open class Visilabs{
     }
     
     
-
+    //TODO:
     public func customEvent(_ pageName: String, properties: [String:String]){
         
     }
@@ -332,6 +337,7 @@ open class Visilabs{
         }
     }
     
+    //TODO:
     public func getPushURL(source: String, campaign: String, medium: String, content: String) -> String?{
         return nil
     }
