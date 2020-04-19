@@ -7,8 +7,10 @@
 
 import Foundation
 
-let VisilabsNotificationTypeMini: String? = nil
-let VisilabsNotificationTypeFull: String? = nil
+enum VisilabsNotificationType : String {
+    case mini = "mini"
+    case full = "full"
+}
 
 class VisilabsNotification {
     private(set) var ID: UInt
@@ -23,7 +25,25 @@ class VisilabsNotification {
     var queryString: String?
     var image: Data?
     
+    private func isValid() -> Bool {
+        return true
+    }
     
+    func getImage() -> Data? {
+        if image == nil && imageURL != nil {
+            let error: Error? = nil
+            var imageData: Data? = nil
+            do {
+                imageData = try Data(contentsOf: imageURL!, options: .mappedIfSafe)
+            } catch {
+                //TODO:
+                print("image failed to load from URL: \(imageURL!)")
+                return nil
+            }
+            image = imageData
+        }
+        return image
+    }
     
     
     //TODO: DLog'lar düzeltilecek
@@ -44,7 +64,7 @@ class VisilabsNotification {
             //DLog("Notification body nil or empty: %@", body)
         }
 
-        if !((type == VisilabsNotificationTypeFull) || (type == VisilabsNotificationTypeMini)) {
+        if type != VisilabsNotificationType.mini.rawValue  || type != VisilabsNotificationType.full.rawValue {
             valid = false
             //DLog("Invalid notification type: %@, must be %@ or %@", type, VisilabsNotificationTypeMini, VisilabsNotificationTypeFull)
         }
