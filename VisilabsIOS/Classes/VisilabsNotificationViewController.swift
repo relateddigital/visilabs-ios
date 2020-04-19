@@ -52,7 +52,7 @@ class VisilabsGradientMaskLayer: CAGradientLayer {
         let bits = Int(abs(bounds.size.width)) * Int(abs(bounds.size.height))
         
         //TODO: BURADA KALDIM
-        
+        /*
         let rgba = UnsafePointer<Int8>(Int8(malloc(bits)))
         srand(124)
 
@@ -71,6 +71,7 @@ class VisilabsGradientMaskLayer: CAGradientLayer {
         CGImageRelease(image)
         CGContextRelease(noise)
         free(rgba)
+ */
     }
 
     
