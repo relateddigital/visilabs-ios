@@ -8,8 +8,8 @@
 import Foundation
 
 enum VisilabsNotificationType : String {
-    case mini = "mini"
-    case full = "full"
+    case mini
+    case full
 }
 
 class VisilabsNotification {
@@ -24,23 +24,22 @@ class VisilabsNotification {
     var visitData: String?
     var queryString: String?
     var image: Data?
-    
-    var errorMessage : String?
+    var errorMessages : [String] = []
     
     private func isValid() -> Bool {
         var valid = true
         
         if self.title.isEmptyOrWhitespace() {
             valid = false
-            errorMessage = "Notification title is empty"
+            errorMessages.append("Notification title is empty")
         }
         if self.body.isEmptyOrWhitespace() {
             valid = false
-            errorMessage = "Notification body is empty"
+            errorMessages.append("Notification body is empty")
         }
         if self.type != VisilabsNotificationType.mini  || type != VisilabsNotificationType.full {
             valid = false
-            errorMessage = "Invalid notification type: \(self.type.rawValue), must be \(VisilabsNotificationType.mini.rawValue) or \(VisilabsNotificationType.full.rawValue)"
+            errorMessages.append("Invalid notification type: \(self.type.rawValue), must be \(VisilabsNotificationType.mini.rawValue) or \(VisilabsNotificationType.full.rawValue)")
         }
         
         return valid
@@ -61,6 +60,34 @@ class VisilabsNotification {
         return image
     }
     
+    class func notification(withJSONObject object: [String : Any]) -> VisilabsNotification? {
+        guard let actID = object["actid"] as? Int, actID < 0 else {
+            //TODO:
+            print("Invalid notification id")
+            return nil
+        }
+        
+        guard let actionData = object["actiondata"] as? [String: Any] else {
+            //TODO:
+            print("Invalid notification actiondata")
+            return nil
+        }
+        
+        guard (actionData["msg_type"] as? String) != nil ,let messageType = VisilabsNotificationType(rawValue: actionData["msg_type"] as! String) else {
+            //TODO:
+            print("Invalid notification type \(String(describing: object["msg_type"]))")
+            return nil
+        }
+        
+        guard let messageTitle = actionData["msg_title"] as? String else {
+            //TODO:
+            print("Invalid notification title")
+            return nil
+        }
+
+        return nil
+    }
+    
     
     //TODO: DLog'lar düzeltilecek
     init(ID: UInt, type: VisilabsNotificationType, title: String, body: String, buttonText: String?, buttonURL: URL?, imageURL: URL?, visitorData: String?, visitData: String?, queryString: String?) {
@@ -68,8 +95,6 @@ class VisilabsNotification {
         self.type = type
         self.title = title
         self.body = body
-
-
 
         if type == VisilabsNotificationType.mini && body.count  < 1 {
             self.body = title
