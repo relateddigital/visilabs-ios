@@ -38,6 +38,41 @@ class VisilabsElasticEaseOutAnimation: CAKeyframeAnimation {
 }
 
 class VisilabsGradientMaskLayer: CAGradientLayer {
+    override func draw(in ctx: CGContext?) {
+
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let components: [CGFloat] = [1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 1.0, 0.0]
+
+        let locations: [CGFloat] = [0.0, 0.7, 0.8, 1.0]
+
+        let gradient = CGGradient(colorSpace: colorSpace, colorComponents: components, locations: locations, count: 7)
+        ctx?.drawLinearGradient(gradient!, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 5.0, y: bounds.size.height), options: CGGradientDrawingOptions(rawValue: 0))
+
+
+        let bits = Int(abs(bounds.size.width)) * Int(abs(bounds.size.height))
+        
+        //TODO: BURADA KALDIM
+        
+        let rgba = UnsafePointer<Int8>(Int8(malloc(bits)))
+        srand(124)
+
+        for i in 0..<bits {
+            rgba[i] = arc4random() % 8
+        }
+
+        let noise = CGContext(data: rgba, width: Int(fabs(bounds.size.width)), height: Int(fabs(bounds.size.height)), bitsPerComponent: 8, bytesPerRow: Int(fabs(bounds.size.width)), space: nil, bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.alphaOnly.rawValue))
+        let image = noise?.makeImage()
+
+        if let ctx = ctx {
+            ctx.setBlendMode(.sourceOut)
+        }
+        ctx?.draw(in: image, image: bounds)
+
+        CGImageRelease(image)
+        CGContextRelease(noise)
+        free(rgba)
+    }
+
     
 }
 
