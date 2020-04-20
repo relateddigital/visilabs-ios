@@ -38,12 +38,14 @@ open class Visilabs{
     private var currentlyShowingNotification: Any?
     private var notificationViewController: UIViewController?
     private var notificationResponseCached = false
+    
     private var loggerCookieKey: String?
     private var loggerCookieValue: String?
     private var realTimeCookieKey: String?
     private var realTimeCookieValue: String?
     private var loggerOM3rdCookieValue: String?
     private var realTimeOM3rdCookieValue: String?
+    
     private var webView: WKWebView?
     
     var cookieID: String?
@@ -307,7 +309,7 @@ open class Visilabs{
     
     public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
         if exVisitorID.isEmptyOrWhitespace(){
-            print("Visilabs: WARNING - attempted to use nil or empty identity. Ignoring.")
+            print("Visilabs: WARNING - attempted to use empty identity. Ignoring.")
             return
         }else {
             if self.exVisitorID != nil && !(self.exVisitorID == exVisitorID) {
@@ -323,7 +325,7 @@ open class Visilabs{
     
     public func signUp(exVisitorID: String, properties: [String:String] = [String:String]()){
         if exVisitorID.isEmptyOrWhitespace(){
-            print("Visilabs: WARNING - attempted to use nil or empty identity. Ignoring.")
+            print("Visilabs: WARNING - attempted to use empty identity. Ignoring.")
             return
         }else {
             if self.exVisitorID != nil && !(self.exVisitorID == exVisitorID) {
