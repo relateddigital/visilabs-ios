@@ -10,10 +10,10 @@ import Foundation
 class VisilabsTargetRequest: VisilabsAction {
     var zoneID: String
     var productCode: String
-    var properties: [String : Any]
+    var properties: [String : String]
     var filters: [VisilabsTargetFilter]
     
-    internal init(zoneID: String, productCode: String, properties : [String : Any], filters: [VisilabsTargetFilter]) {
+    internal init(zoneID: String, productCode: String, properties : [String : String], filters: [VisilabsTargetFilter]) {
         self.zoneID = zoneID
         self.productCode = productCode
         self.properties = properties
@@ -116,8 +116,16 @@ class VisilabsTargetRequest: VisilabsAction {
         }
         
         cleanParameters()
+                        
+        if let fs = getFiltersQueryString(filters), !fs.isEmptyOrWhitespace {
+            queryParameters = "\(queryParameters)&\(VisilabsConfig.FILTER_KEY)=\(Visilabs.callAPI()!.urlEncode(fs))"
+        }
+        
+        queryParameters = "\(queryParameters)&\(VisilabsConfig.APIVER_KEY)=\(VisilabsConfig.APIVER_VALUE)"
+        
         
         //TODO:burası devam edecek
+
         
         return queryParameters
         
