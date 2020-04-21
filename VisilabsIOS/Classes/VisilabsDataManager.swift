@@ -9,21 +9,18 @@ import Foundation
 
 class VisilabsDataManager {
     
-    class func save(_ key: String?, withObject value: Any?) {
-        let defaults = UserDefaults.standard
-        defaults.set(value, forKey: key ?? "")
-        defaults.synchronize()
+    static func save(_ key: String, withObject value: Any?) {
+        UserDefaults.standard.set(value, forKey: key)
+        UserDefaults.standard.synchronize()
     }
 
-    class func read(_ key: String?) -> Any? {
-        let defaults = UserDefaults.standard
-        return defaults.object(forKey: key ?? "")
+    static func read(_ key: String) -> Any? {
+        return UserDefaults.standard.object(forKey: key)
     }
 
-    class func remove(_ key: String?) {
-        let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: key ?? "")
-        defaults.synchronize()
+    static func remove(_ key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+        UserDefaults.standard.synchronize()
     }
     
 }

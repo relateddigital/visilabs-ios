@@ -100,6 +100,12 @@ open class Visilabs{
         self.maxGeofenceCount = maxGeofenceCount
         self.sendQueue = [String]()
         self.isOnline = true //TODO: burada true'ya mı eşitlemek lazım
+        
+        
+        if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
+            VisilabsGeofenceApp.sharedInstance()
+
+        }
     }
     
     // MARK: Persistence
