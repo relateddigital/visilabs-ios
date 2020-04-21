@@ -70,8 +70,8 @@ class VisilabsPersistentTargetManager {
         }
     }
     
-    class func getParameters() -> [AnyHashable : Any]? {
-        var parameters: [AnyHashable : Any] = [:]
+    class func getParameters() -> [String : String?] {
+        var parameters: [String : String?] = [:]
         for visilabsParameter in VisilabsConfig.visilabsParameters() {
             let storeKey = visilabsParameter.storeKey
             let value = VisilabsDataManager.read(storeKey) as? String

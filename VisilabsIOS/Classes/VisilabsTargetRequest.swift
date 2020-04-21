@@ -123,12 +123,19 @@ class VisilabsTargetRequest: VisilabsAction {
         
         queryParameters = "\(queryParameters)&\(VisilabsConfig.APIVER_KEY)=\(VisilabsConfig.APIVER_VALUE)"
         
+        for (key, value) in properties {
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace {
+                queryParameters = "\(queryParameters)&\(key)=\(Visilabs.callAPI()!.urlEncode(value))"
+            }
+        }
         
-        //TODO:burası devam edecek
+        for (key, value) in VisilabsPersistentTargetManager.getParameters() {
+            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace {
+                queryParameters = "\(queryParameters)&\(key)=\(Visilabs.callAPI()!.urlEncode(value!))"
+            }
+        }
 
-        
         return queryParameters
-        
     }
     
 }
