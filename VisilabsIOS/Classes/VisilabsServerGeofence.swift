@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 class VisilabsServerGeofence: NSObject {
     /// Id from server for this fence. It will be used as `identifier` in `CLCircularRegion` so it must be not duplicated.
@@ -16,6 +17,7 @@ class VisilabsServerGeofence: NSObject {
     var longitude = 0.0
     /// Radius of this fence. It will be adjust to not exceed `maximumRegionMonitoringDistance`.
     var radius = 0.0
+    
     var distanceFromCurrentLastKnownLocation = 0.0
     /// Internal unique id for object. Optional for leaf geofence, none for inner node.
     var suid: String?
