@@ -30,6 +30,14 @@ struct VisilabsConfig {
     static let GEO_ID_KEY = "OM.locationid"
     static let TRIGGER_EVENT_KEY = "OM.triggerevent"
     
+    static let CHANNEL_KEY = "OM.vchannel"
+    static let URI_KEY = "OM.vchannel"
+    
+    static let UTM_SOURCE_KEY = "utm_source"
+    static let UTM_CAMPAIGN_KEY = "utm_campaign"
+    static let UTM_MEDIUM_KEY = "utm_medium"
+    static let UTM_CONTENT_KEY = "utm_content"
+    
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
     private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
     private static let TARGET_PREF_VCMEDIUM_STORE_KEY = "OM.vcmedium"

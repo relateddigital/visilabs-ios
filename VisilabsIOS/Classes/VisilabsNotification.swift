@@ -29,11 +29,11 @@ class VisilabsNotification {
     private func isValid() -> Bool {
         var valid = true
         
-        if self.title.isEmptyOrWhitespace() {
+        if self.title.isEmptyOrWhitespace {
             valid = false
             errorMessages.append("Notification title is empty")
         }
-        if self.body.isEmptyOrWhitespace() {
+        if self.body.isEmptyOrWhitespace {
             valid = false
             errorMessages.append("Notification body is empty")
         }

@@ -46,6 +46,8 @@ open class Visilabs{
     private var loggerOM3rdCookieValue: String?
     private var realTimeOM3rdCookieValue: String?
     
+    private var visilabsCookie: VisilabsCookie?
+    
     private var webView: WKWebView?
     
     var cookieID: String?
@@ -308,7 +310,7 @@ open class Visilabs{
     }
     
     public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
-        if exVisitorID.isEmptyOrWhitespace(){
+        if exVisitorID.isEmptyOrWhitespace{
             print("Visilabs: WARNING - attempted to use empty identity. Ignoring.")
             return
         }else {
@@ -324,7 +326,7 @@ open class Visilabs{
     }
     
     public func signUp(exVisitorID: String, properties: [String:String] = [String:String]()){
-        if exVisitorID.isEmptyOrWhitespace(){
+        if exVisitorID.isEmptyOrWhitespace{
             print("Visilabs: WARNING - attempted to use empty identity. Ignoring.")
             return
         }else {
@@ -339,9 +341,34 @@ open class Visilabs{
         }
     }
     
-    //TODO:
-    public func getPushURL(source: String, campaign: String, medium: String, content: String) -> String?{
-        return nil
+    
+    public func getPushURL(source: String, campaign: String, medium: String, content: String) -> String? {
+        if self.restURL.isNilOrWhiteSpace {
+            print("Rest URL is not defined.")
+            return nil
+        }
+        
+        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+        let escapedPageName = urlEncode("/Push")
+
+        var pushURL = "\(restURL!)/\(encryptedDataSource!)/\(dataSource)/\(cookieID ?? "")?\(VisilabsConfig.CHANNEL_KEY)=\(channel)&\(VisilabsConfig.URI_KEY)=\(escapedPageName)&\(VisilabsConfig.SITEID_KEY)=\(siteID)&\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&dat=\(actualTimeOfevent)"
+        
+        if !self.exVisitorID.isNilOrWhiteSpace {
+            pushURL = "\(pushURL)&\(VisilabsConfig.EXVISITORID_KEY)=\(urlEncode(exVisitorID!))"
+        }
+        if !source.isEmptyOrWhitespace{
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_SOURCE_KEY)=\(urlEncode(source))"
+        }
+        if !campaign.isEmptyOrWhitespace{
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CAMPAIGN_KEY)=\(urlEncode(campaign))"
+        }
+        if !medium.isEmptyOrWhitespace{
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_MEDIUM_KEY)=\(urlEncode(medium))"
+        }
+        if !content.isEmptyOrWhitespace{
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CONTENT_KEY)=\(urlEncode(content))"
+        }
+        return pushURL
     }
     
     private func setCookieID() {

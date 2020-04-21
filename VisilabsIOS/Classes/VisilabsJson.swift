@@ -49,7 +49,7 @@ extension String {
         return contains(string, options: [])
     }
     
-    func isEmptyOrWhitespace() -> Bool {
+    var isEmptyOrWhitespace: Bool {
         return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
     
@@ -132,4 +132,12 @@ extension Dictionary {
     func jsonData() -> Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: [])
     }
+}
+
+extension Optional where Wrapped == String {
+
+    var isNilOrWhiteSpace: Bool {
+        return self?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
+    }
+
 }
