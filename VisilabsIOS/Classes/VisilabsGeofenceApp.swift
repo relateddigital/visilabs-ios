@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias VisilabsCallbackHandler = (Any?, Error?) -> Void
+
 class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
     private static var instance: VisilabsGeofenceApp?
     
@@ -14,7 +16,8 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
     private var isRegisterInstallForAppCalled = false
     private var isFinishLaunchOptionCalled = false
     private var isDebugMode = false
-
+    
+    var isDefaultLocationServiceEnabled = false
     
     public class func sharedInstance() -> VisilabsGeofenceApp? {
         if instance == nil{
@@ -37,6 +40,20 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         VisilabsDataManager.save("SH_GEOLOCATION_LNG", withObject: CGFloat(0))
         
     }
+    
+    var isLocationServiceEnabled: Bool{
+        get{
+            guard let locationServiceEnabled = VisilabsDataManager.read("ENABLE_LOCATION_SERVICE") as? Bool else{
+                return self.isDefaultLocationServiceEnabled
+            }
+            return locationServiceEnabled
+        }set{
+            if newValue == self.isLocationServiceEnabled{
+                //TODO:
+            }
+        }
+    }
+
 }
 
 
