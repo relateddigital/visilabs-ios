@@ -282,7 +282,7 @@ open class Visilabs{
     }
     
     //TODO
-    func buildTargetRequest(zoneID: String, productCode: String, properties: [String : Any] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
+    func buildTargetRequest(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
         if Visilabs.API == nil {
             //TODO: ne yapacağına karar ver.
             //Error is not handled because the enclosing function is not declared 'throws'
