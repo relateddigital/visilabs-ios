@@ -22,10 +22,10 @@ class VisilabsPersistentTargetManager {
                 let relatedKeys = visilabsParameter.relatedKeys
                 let count = visilabsParameter.count
 
-                let parameterValue = parameters[key!]
+                let parameterValue = parameters[key]
                 
                 if parameterValue != nil && parameterValue!.count > 0 {
-                    if count!.intValue == 1 {
+                    if count == 1 {
                         if relatedKeys != nil && relatedKeys!.count > 0 {
                             var parameterValueToStore = parameterValue!.copy() as! String
                             let relatedKey = relatedKeys![0] as? String
@@ -42,7 +42,7 @@ class VisilabsPersistentTargetManager {
                             VisilabsDataManager.save(storeKey, withObject: parameterValue)
                         }
                     }
-                    else if count!.intValue > 1 {
+                    else if count > 1 {
                         let previousParameterValue = VisilabsDataManager.read(storeKey) as? String
                         var parameterValueToStore = parameterValue!.copy() as! String + ("|")
                         parameterValueToStore = parameterValueToStore + (dateString)
