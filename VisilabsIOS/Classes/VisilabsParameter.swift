@@ -8,18 +8,15 @@
 import Foundation
 
 class VisilabsParameter{
-    var key: String?
-    var storeKey: String?
-    var count: NSNumber?
-    var relatedKeys: [AnyHashable]?
+    var key: String
+    var storeKey: String
+    var count: UInt8
+    var relatedKeys: [String]?
 
-    init(key: String?, storeKey: String?, count: NSNumber?, relatedKeys: [AnyHashable]?) {
-        self.relatedKeys = [AnyHashable]()
-        if relatedKeys != nil {
-            self.relatedKeys = relatedKeys
-        }
+    init(key: String, storeKey: String, count: UInt8, relatedKeys: [String]?) {
         self.key = key
         self.storeKey = storeKey
         self.count = count
+        self.relatedKeys = relatedKeys
     }
 }
