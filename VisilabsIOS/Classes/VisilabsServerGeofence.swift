@@ -1,0 +1,64 @@
+//
+//  VisilabsServerGeofence.swift
+//  VisilabsIOS
+//
+//  Created by Egemen on 22.04.2020.
+//
+
+import Foundation
+
+class VisilabsServerGeofence: NSObject {
+    /// Id from server for this fence. It will be used as `identifier` in `CLCircularRegion` so it must be not duplicated.
+    var serverId: String?
+    /// Latitude of this fence.
+    var latitude = 0.0
+    /// Longitude of this fence.
+    var longitude = 0.0
+    /// Radius of this fence. It will be adjust to not exceed `maximumRegionMonitoringDistance`.
+    var radius = 0.0
+    var distanceFromCurrentLastKnownLocation = 0.0
+    /// Internal unique id for object. Optional for leaf geofence, none for inner node.
+    var suid: String?
+    /// Web console input the title name for this latitude/longitude. Optional for leaf geofence, none for inner node.
+    var title: String?
+    /// Whether device is inside this geofence.
+    var isInside = false
+    /// A weak reference to its parent fence.
+    weak var parentFence: VisilabsServerGeofence?
+    /// Child nodes for parent fence. For child fence it's definity nil; for parent fence it would be nil.
+    var arrayNodes: [AnyHashable]?
+    /// Whether this is actual geofence. Only actual geofence should send logline to server. Inner nodes's `id` starts with "_", actual geofence's `id` is "<id>-<distance>".
+    private(set) var isLeaves = false
+    
+    var type: String?
+    var durationInSeconds = 0
+    
+    /// Use this geofence data to create monitoring region.
+
+    func getGeoRegion() -> CLCircularRegion? {
+    }
+
+    /// Serialize self into a dictionary. Vice verse against `+ (VisilabsServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;`.
+    func serializeGeofeneToDict() -> [AnyHashable : Any]? {
+    }
+
+    /// Compare function.
+    func isEqual(toCircleRegion geoRegion: CLCircularRegion?) -> Bool {
+    }
+
+    /// Parse an object from dictionary. If parse fail return nil.
+    /// - Parameter dict: The dictionary information.
+    /// - Returns: If successfully parse return the object; otherwise return nil.
+    class func parseGeofence(fromDict dict: [AnyHashable : Any]?) -> VisilabsServerGeofence? {
+    }
+
+    /// Make this object array to string array for store to NSUserDefaults.
+    class func serialize(toArrayDict parentFences: [AnyHashable]?) -> [AnyHashable]? {
+    }
+
+    /// When read from NSUserDefaults, parse back to object array.
+    class func deserialize(toArrayObj arrayDict: [AnyHashable]?) -> [AnyHashable]? {
+    }
+
+
+}
