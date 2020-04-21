@@ -26,4 +26,21 @@ class VisilabsGeofenceRequest: VisilabsAction {
         self.isEnter = isEnter
         super.init(requestMethod: "GET")
     }
+    
+    override func buildURL() -> URL? {
+        
+        if Visilabs.callAPI() == nil || Visilabs.callAPI()!.organizationID.count == 0 || Visilabs.callAPI()!.siteID.count == 0 {
+            return nil
+        }
+        
+        var geofenceURL = Visilabs.callAPI()!.geofenceURL
+        let queryParameters = getParametersAsQueryString()
+        geofenceURL = geofenceURL! + queryParameters!
+        return URL(string: geofenceURL!)
+    }
+    
+    private func getParametersAsQueryString() -> String? {
+    
+        return nil
+    }
 }

@@ -21,17 +21,14 @@ class VisilabsTargetRequest: VisilabsAction {
         super.init(requestMethod: "GET")
     }
     
-    override func buildURL() -> URL? {
-        
+    override func buildURL() -> URL? {        
         if Visilabs.callAPI() == nil || Visilabs.callAPI()!.organizationID.count == 0 || Visilabs.callAPI()!.siteID.count == 0 {
             return nil
         }
-        
         var targetURL = Visilabs.callAPI()!.targetURL
         let queryParameters = getParametersAsQueryString()
         targetURL = targetURL! + queryParameters!
-        let uri = URL(string: targetURL!)
-        return uri
+        return URL(string: targetURL!)
     }
     
     private func cleanParameters() {

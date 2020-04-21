@@ -17,7 +17,7 @@ open class Visilabs{
     private var encryptedDataSource : String?
     internal var targetURL : String?
     private var actionURL : String?
-    private var geofenceURL : String?
+    internal var geofenceURL : String?
     private var geofenceEnabled : Bool
     private var maxGeofenceCount : Int
     
