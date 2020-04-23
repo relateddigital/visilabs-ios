@@ -111,6 +111,7 @@ class VisilabsGeofenceStatus: NSObject {
                                 var sortDescriptors = [sortDescriptor]
                                 var sortedReturnedRegions = returnedRegions.sorted(by: { (vsg1, vsg2) -> Bool in
                                     //TODO:bunu ayarla, test et
+                                    return false
                                 })
                                 
                                 //TODO: burada kaldık
