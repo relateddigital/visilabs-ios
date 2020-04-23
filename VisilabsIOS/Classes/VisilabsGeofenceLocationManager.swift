@@ -128,6 +128,10 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
 
     }
     
+    //TODO: implement
+    class func locationServiceEnabled(forApp allowNotDetermined: Bool) -> Bool {
+        return false
+    }
     
     
     deinit {
