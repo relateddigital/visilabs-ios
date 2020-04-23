@@ -10,7 +10,21 @@ import CoreLocation
 
 class VisilabsServerGeofence: NSObject {
     /// Id from server for this fence. It will be used as `identifier` in `CLCircularRegion` so it must be not duplicated.
-    var serverId: String?
+    
+    
+    private var _serverId: String?
+    var serverId: String? {
+        get { return _serverId }
+        set {
+            assert(newValue.isNilOrWhiteSpace, "Invalid geofence server Id.")
+            self._serverId = newValue
+            guard let sid = self.serverId else{
+                isLeaves = false
+                return
+            }
+            isLeaves = !sid.hasPrefix("_")
+        }
+    }
     /// Latitude of this fence.
     var latitude = 0.0
     /// Longitude of this fence.
