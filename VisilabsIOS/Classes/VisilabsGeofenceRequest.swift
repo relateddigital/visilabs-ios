@@ -79,12 +79,35 @@ class VisilabsGeofenceRequest: VisilabsAction {
             queryParameters = queryParameters + appParameter
         }
         
-        //TODO:
+        //TODO: Burada büyüktür 0 kontrolü doğru mu sedat'a sor
+        if lastKnownLatitude > 0 {
+            let encodedLatitudeValue = String(format: "%.013f", lastKnownLatitude)
+            let latitudeParameter = "&\(VisilabsConfig.LATITUDE_KEY)=\(encodedLatitudeValue)"
+            queryParameters = queryParameters + latitudeParameter
+        }
+
+        if lastKnownLongitude > 0 {
+            let encodedLongitudeValue = String(format: "%.013f", lastKnownLongitude)
+            let longitudeParameter = "&\(VisilabsConfig.LONGITUDE_KEY)=\(encodedLongitudeValue)"
+            queryParameters = queryParameters + longitudeParameter
+        }
         
+        if geofenceID.count > 0 {
+            let encodedGeofenceID = Visilabs.callAPI()!.urlEncode(geofenceID)
+            let geofenceIDParameter = "&\(VisilabsConfig.GEO_ID_KEY)=\(encodedGeofenceID)"
+            queryParameters = queryParameters + geofenceIDParameter
+        }
         
-        
-        
-        
+        //TODO: OnEnter ve OnExit i VisilabsConfig e koy
+        if isDwell {
+            if isEnter {
+                let triggerEventParameter = "&\(VisilabsConfig.TRIGGER_EVENT_KEY)=\("OnEnter")"
+                queryParameters = queryParameters + triggerEventParameter
+            } else {
+                let triggerEventParameter = "&\(VisilabsConfig.TRIGGER_EVENT_KEY)=\("OnExit")"
+                queryParameters = queryParameters + triggerEventParameter
+            }
+        }
         
         for (key, value) in VisilabsPersistentTargetManager.getParameters() {
             if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace {
