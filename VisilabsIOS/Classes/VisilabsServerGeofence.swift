@@ -40,10 +40,23 @@ class VisilabsServerGeofence: NSObject {
     func getGeoRegion() -> CLCircularRegion? {
         return CLCircularRegion(center: CLLocationCoordinate2DMake(latitude, longitude), radius: radius, identifier: serverId!)
     }
+    
+    /// Compare function.
+    func isEqual(toCircleRegion geoRegion: CLCircularRegion?) -> Bool {
+        //TODO:print'leri düzelt
+        print("geoRegion.identifier: \(geoRegion?.identifier ?? "nil"), self.serverId: \(serverId ?? "nil")" )
+        if let sid = serverId, let gid = geoRegion?.identifier  {
+            //region only compares by `identifier`.
+            return sid.compare(gid) == .orderedSame
+        }else{
+            return false
+        }
+        
+    }
 
     //TODO: NSNumber'ları düzelt, isLeaves ve arrayNodes kullanılıyor mu kontrol et
     /// Serialize self into a dictionary. Vice verse against `+ (VisilabsServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;`.
-    func serializeGeofenceToDict() -> [String : Any]? {
+    func serializeGeofenceToDict() -> [String : Any] {
         var dict: [String : Any] = [:]
         dict["id"] = serverId
         dict["latitude"] = NSNumber(value: latitude)
@@ -75,18 +88,7 @@ class VisilabsServerGeofence: NSObject {
          */
     }
 
-    /// Compare function.
-    func isEqual(toCircleRegion geoRegion: CLCircularRegion?) -> Bool {
-        //TODO:print'leri düzelt
-        print("geoRegion.identifier: \(geoRegion?.identifier ?? "nil"), self.serverId: \(serverId ?? "nil")" )
-        if let sid = serverId, let gid = geoRegion?.identifier  {
-            //region only compares by `identifier`.
-            return sid.compare(gid) == .orderedSame
-        }else{
-            return false
-        }
-        
-    }
+    
 
     /// Parse an object from dictionary. If parse fail return nil.
     /// - Parameter dict: The dictionary information.
