@@ -54,19 +54,19 @@ class VisilabsServerGeofence: NSObject {
         
     }
 
-    //TODO: NSNumber'ları düzelt, isLeaves ve arrayNodes kullanılıyor mu kontrol et
+    //TODO: isLeaves ve arrayNodes kullanılıyor mu kontrol et
     /// Serialize self into a dictionary. Vice verse against `+ (VisilabsServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;`.
     func serializeGeofenceToDict() -> [String : Any] {
         var dict: [String : Any] = [:]
         dict["id"] = serverId
-        dict["latitude"] = NSNumber(value: latitude)
-        dict["longitude"] = NSNumber(value: longitude)
-        dict["radius"] = NSNumber(value: radius)
+        dict["latitude"] = latitude
+        dict["longitude"] = longitude
+        dict["radius"] = radius
         dict["suid"] = suid ?? ""
         dict["title"] = title ?? ""
-        dict["inside"] = NSNumber(value: isInside)
+        dict["inside"] = isInside
         dict["type"] = type ?? ""
-        dict["durationInSeconds"] = NSNumber(value: durationInSeconds)
+        dict["durationInSeconds"] = durationInSeconds
         
         return dict
 
@@ -93,7 +93,61 @@ class VisilabsServerGeofence: NSObject {
     /// Parse an object from dictionary. If parse fail return nil.
     /// - Parameter dict: The dictionary information.
     /// - Returns: If successfully parse return the object; otherwise return nil.
-    class func parseGeofence(fromDict dict: [AnyHashable : Any]?) -> VisilabsServerGeofence? {
+    class func parseGeofence(fromDict dict: [String : Any]) -> VisilabsServerGeofence? {
+        let isValidKey = dict.keys.count >= 4 && dict.keys.contains("id") && dict.keys.contains("latitude") && dict.keys.contains("longitude") && dict.keys.contains("radius")
+        assert(isValidKey, "Geofence key format invalid: \(dict).")
+        if isValidKey{
+            let isValidValue = dict["id"] is String && dict["latitude"] is Double && dict["longitude"] is Double && dict["radius"] is Double
+            assert(isValidValue, "Geofence value format invalid: \(dict).")
+            if isValidValue{
+                let geofence = VisilabsServerGeofence()
+                geofence.serverId = (dict["id"] as! String)
+                geofence.latitude = dict["latitude"] as! Double
+                geofence.longitude = dict["longitude"] as! Double
+                geofence.radius = dict["radius"] as! Double
+                if dict.keys.contains("suid") {
+                    geofence.suid = dict["suid"] as? String
+                }
+                if dict.keys.contains("title") {
+                    geofence.title = dict["title"] as? String
+                }
+                if dict.keys.contains("inside") {
+                    geofence.isInside = dict["inside"] as? Bool ?? false
+                }
+                if dict.keys.contains("type") {
+                    geofence.type = dict["type"] as? String
+                }
+                if dict.keys.contains("durationInSeconds") {
+                    geofence.durationInSeconds = dict["durationInSeconds"] as? Int ?? 0 //TODO: default value 0 olması sorun mu
+                }
+                
+                /*TODO: bu kısım gereksizse kaldır.
+                let hasGeofence = dict.keys.contains("geofences") && (dict["geofences"] is [AnyHashable]) && (((dict["geofences"] as? [AnyHashable])?.count ?? 0) > 0)
+                if geofence.isLeaves {
+                    assert(!hasGeofence, "Leave dict should not have child.")
+                    return geofence
+                } else {
+                    assert(hasGeofence, "Inner dict should have child.")
+                    if hasGeofence {
+                        for dictChild in dict["geofences"] {
+                            let childFence = VisilabsServerGeofence.parseGeofence(fromDict: dictChild)
+                            if childFence != nil {
+                                childFence?.parentFence = geofence
+                                if let childFence = childFence {
+                                    geofence.arrayNodes.append(childFence)
+                                }
+                            }
+                        }
+                    }
+                    assert(geofence.arrayNodes.count > 0, "Inner node have none child.")
+                    return geofence
+                }
+                */
+                
+                return geofence
+                
+            }
+        }
         return nil
     }
 
