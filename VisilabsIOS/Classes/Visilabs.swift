@@ -19,7 +19,7 @@ open class Visilabs{
     private var actionURL : String?
     internal var geofenceURL : String?
     private var geofenceEnabled : Bool
-    private var maxGeofenceCount : Int
+    var maxGeofenceCount : Int
     
     private var sendQueue : [String]
     private var timer: Timer?
