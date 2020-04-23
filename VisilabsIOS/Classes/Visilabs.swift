@@ -282,6 +282,58 @@ open class Visilabs{
     
     // MARK: Public Methods
     
+    //TODO
+    func urlizeProps(_ props: [AnyHashable : Any]?) -> String? {
+    var propsURLPart = ""
+
+        for propKey in props!.keys {
+        if !(propKey is String) {
+            print("Visilabs: WARNING - property keys must be NSString. Dropping property.")
+            continue
+        }
+        let stringKey = propKey as? String
+
+
+        if (stringKey?.count ?? 0) == 0 {
+            print("Visilabs: WARNING - property keys must not be empty strings. Dropping property.")
+            continue
+        }
+
+        var stringValue: String? = nil
+        if props?[stringKey ?? ""] == nil {
+            print("Visilabs: WARNING - property value cannot be nil. Dropping property.")
+            continue
+        } else if (props?[stringKey ?? ""] is NSNumber) {
+            let numberValue = props?[stringKey] as? NSNumber
+            stringValue = numberValue?.stringValue ?? ""
+        } else if (props?[stringKey ?? ""] is String) {
+            stringValue = props?[stringKey] as? String
+        }
+
+        if stringValue == nil {
+            print("Visilabs: WARNING - property value cannot be of type %@. Dropping property.", (type(of: props?[stringKey ?? ""])))
+            continue
+        }
+
+        if (stringValue?.count ?? 0) == 0 {
+            print("Visilabs: WARNING - property values must not be empty strings. Dropping property.")
+            continue
+        }
+
+
+            let escapedKey = urlEncode(stringKey!)
+        if escapedKey.count > 255 {
+            print("Visilabs: WARNING - property key cannot longer than 255 characters. When URL escaped, your key is %lu characters long (the submitted value is %@, the URL escaped value is %@). Dropping property.", UInt(escapedKey.count), stringKey!, escapedKey)
+            continue
+        }
+
+        let escapedValue = urlEncode(stringValue!)
+        propsURLPart += "&\(escapedKey)=\(escapedValue)"
+    }
+
+    return propsURLPart
+    }
+    
     //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
     public func urlEncode(_ prior: String) -> String {
         return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
@@ -312,7 +364,129 @@ open class Visilabs{
     
     //TODO:
     public func customEvent(_ pageName: String, properties: [String:String]){
+        var vlProperties = properties
+        if pageName == nil || pageName.count == 0 {
+            print("Visilabs: WARNING - Tried to record event with empty or nil name. Ignoring.")
+            return
+        }
+
+        if properties.keys.contains("OM.cookieID") {
+            let cookieid = properties["OM.cookieID"]
+
+            if !(cookieID == cookieid) {
+                VisilabsPersistentTargetManager.clearParameters()
+            }
+
+            cookieID = cookieid
+            if !NSKeyedArchiver.archiveRootObject(cookieID!, toFile: cookieIDFilePath()!) {
+                print("Visilabs: WARNING - Unable to archive identity!!!")
+            }
+            
+            vlProperties.removeValue(forKey: "OM.cookieID")
+        }
+
+        if properties.keys.contains("OM.exVisitorID") {
+            let exvisitorid = properties["OM.exVisitorID"]
+
+            if !(exVisitorID == exvisitorid) {
+                VisilabsPersistentTargetManager.clearParameters()
+            }
+
+            if exVisitorID != nil && !(exVisitorID == exvisitorid) {
+                setCookieID()
+            }
+
+
+            exVisitorID = exvisitorid
+            if !NSKeyedArchiver.archiveRootObject(exVisitorID!, toFile: exVisitorIDFilePath()!) {
+                print("Visilabs: WARNING - Unable to archive new identity!!!")
+            }
+            vlProperties.removeValue(forKey: "OM.exVisitorID")
+        }
+
+        if properties.keys.contains("OM.sys.TokenID") {
+            let tokenid = properties["OM.sys.TokenID"]
+            tokenID = tokenid
+
+            if !NSKeyedArchiver.archiveRootObject(tokenID!, toFile: tokenIDFilePath()!) {
+                print("Visilabs: WARNING - Unable to archive tokenID!!!")
+            }
+            vlProperties.removeValue(forKey: "OM.sys.TokenID")
+        }
+
+        if properties.keys.contains("OM.sys.AppID") {
+            let appid = properties["OM.sys.AppID"]
+            appID = appid
+
+            if !NSKeyedArchiver.archiveRootObject(appID!, toFile: appIDFilePath()!) {
+                print("Visilabs: WARNING - Unable to archive appID!!!")
+            }
+            vlProperties.removeValue(forKey: "OM.sys.AppID")
+        }
         
+        if properties.keys.contains("OM.m_adid") {
+            vlProperties.removeValue(forKey: "OM.m_adid")
+        }
+
+        if properties.keys.contains(VisilabsConfig.APIVER_KEY) {
+            vlProperties.removeValue(forKey: VisilabsConfig.APIVER_KEY)
+        }
+
+        var chan = channel
+        if properties.keys.contains("OM.vchannel") {
+            chan = urlEncode(properties["OM.vchannel"]!)
+            vlProperties.removeValue(forKey: "OM.vchannel")
+        }
+
+        let escapedPageName = urlEncode(pageName)
+
+        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+
+        var segURL: String? = nil
+        if let dataSource = dataSource {
+            segURL = String(format: "%@/%@/%@?%@=%@&%@=%@&%@=%@&%@=%@&%@=%i&%@=%@&%@=%@&%@=%@&%@=%@&", loggerURL, dataSource, "om.gif", "OM.cookieID", cookieID, "OM.vchannel", chan, "OM.siteID", siteID, "OM.oid", organizationID, "dat", actualTimeOfevent, "OM.uri", escapedPageName, "OM.mappl", "true", "OM.m_adid", identifierForAdvertising, VisilabsConfig.apiver_KEY(), "IOS")
+        }
+
+        if exVisitorID != nil && !(exVisitorID == "") {
+            let escapedIdentity = urlEncode(exVisitorID!)
+            segURL = "\(segURL ?? "")\("OM.exVisitorID")=\(escapedIdentity)"
+        }
+
+        if tokenID != nil && !(tokenID == "") {
+            let escapedToken = urlEncode(tokenID!)
+            segURL = "\(segURL ?? "")&\("OM.sys.TokenID")=\(escapedToken)"
+        }
+        if appID != nil && !(appID == "") {
+            let escapedAppID = urlEncode(appID!)
+            segURL = "\(segURL ?? "")&\("OM.sys.AppID")=\(escapedAppID)"
+        }
+        
+        if properties != nil {
+            VisilabsPersistentTargetManager.saveParameters(properties)
+            let additionalURL = urlizeProps(properties)
+            if additionalURL!.count > 0 {
+                segURL = "\(segURL ?? "")\(additionalURL ?? "")"
+            }
+        }
+        
+        var rtURL: String? = nil
+        if realTimeURL != nil && !(realTimeURL == "") {
+            rtURL = segURL!.replacingOccurrences(of: loggerURL, with: realTimeURL)
+        }
+
+        if checkForNotificationsOnLoggerRequest && actionURL != nil {
+            showNotification(pageName, properties: properties)
+        }
+
+
+        let lockQueue = DispatchQueue(label: "self")
+        lockQueue.sync {
+            sendQueue.append(segURL!)
+            if rtURL != nil {
+                sendQueue.append(rtURL ?? "")
+            }
+        }
+        send()
     }
     
     public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
