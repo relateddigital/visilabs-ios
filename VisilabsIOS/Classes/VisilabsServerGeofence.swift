@@ -28,7 +28,7 @@ class VisilabsServerGeofence: NSObject {
     /// A weak reference to its parent fence.
     weak var parentFence: VisilabsServerGeofence?
     /// Child nodes for parent fence. For child fence it's definity nil; for parent fence it would be nil.
-    var arrayNodes: [AnyHashable]?
+    var arrayNodes: [VisilabsServerGeofence]?
     /// Whether this is actual geofence. Only actual geofence should send logline to server. Inner nodes's `id` starts with "_", actual geofence's `id` is "<id>-<distance>".
     private(set) var isLeaves = false
     
@@ -41,9 +41,38 @@ class VisilabsServerGeofence: NSObject {
         return CLCircularRegion(center: CLLocationCoordinate2DMake(latitude, longitude), radius: radius, identifier: serverId!)
     }
 
+    //TODO: NSNumber'ları düzelt, isLeaves ve arrayNodes kullanılıyor mu kontrol et
     /// Serialize self into a dictionary. Vice verse against `+ (VisilabsServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;`.
-    func serializeGeofeneToDict() -> [AnyHashable : Any]? {
-        return nil
+    func serializeGeofenceToDict() -> [String : Any]? {
+        var dict: [String : Any] = [:]
+        dict["id"] = serverId
+        dict["latitude"] = NSNumber(value: latitude)
+        dict["longitude"] = NSNumber(value: longitude)
+        dict["radius"] = NSNumber(value: radius)
+        dict["suid"] = suid ?? ""
+        dict["title"] = title ?? ""
+        dict["inside"] = NSNumber(value: isInside)
+        dict["type"] = type ?? ""
+        dict["durationInSeconds"] = NSNumber(value: durationInSeconds)
+        
+        return dict
+
+        /*
+        if isLeaves {
+            assert(arrayNodes.count == 0, "Leave node should not have child.")
+            return dict
+        } else {
+            assert(arrayNodes.count > 0, "Inner node should have child.")
+            var arrayChild: [AnyHashable] = []
+            for childFence in arrayNodes {
+                if let serialize = childFence.serializeGeofeneToDict() {
+                    arrayChild.append(serialize)
+                }
+            }
+            dict["geofences"] = arrayChild
+            return dict
+        }
+         */
     }
 
     /// Compare function.
