@@ -38,28 +38,42 @@ class VisilabsServerGeofence: NSObject {
     /// Use this geofence data to create monitoring region.
 
     func getGeoRegion() -> CLCircularRegion? {
+        return CLCircularRegion(center: CLLocationCoordinate2DMake(latitude, longitude), radius: radius, identifier: serverId!)
     }
 
     /// Serialize self into a dictionary. Vice verse against `+ (VisilabsServerGeofence *)parseGeofenceFromDict:(NSDictionary *)dict;`.
     func serializeGeofeneToDict() -> [AnyHashable : Any]? {
+        return nil
     }
 
     /// Compare function.
     func isEqual(toCircleRegion geoRegion: CLCircularRegion?) -> Bool {
+        //TODO:print'leri düzelt
+        print("geoRegion.identifier: \(geoRegion?.identifier ?? "nil"), self.serverId: \(serverId ?? "nil")" )
+        if let sid = serverId, let gid = geoRegion?.identifier  {
+            //region only compares by `identifier`.
+            return sid.compare(gid) == .orderedSame
+        }else{
+            return false
+        }
+        
     }
 
     /// Parse an object from dictionary. If parse fail return nil.
     /// - Parameter dict: The dictionary information.
     /// - Returns: If successfully parse return the object; otherwise return nil.
     class func parseGeofence(fromDict dict: [AnyHashable : Any]?) -> VisilabsServerGeofence? {
+        return nil
     }
 
     /// Make this object array to string array for store to NSUserDefaults.
     class func serialize(toArrayDict parentFences: [AnyHashable]?) -> [AnyHashable]? {
+        return nil
     }
 
     /// When read from NSUserDefaults, parse back to object array.
     class func deserialize(toArrayObj arrayDict: [AnyHashable]?) -> [AnyHashable]? {
+        return nil
     }
 
 
