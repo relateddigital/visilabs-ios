@@ -49,9 +49,13 @@ class VisilabsServerGeofence: NSObject {
     var _radius = 0.0
     var radius : Double {
         get { return _radius }
-        //TODO: bunun set'ini implement et
+        //TODO: bu set doğru mu kontrol et
         set {
-            self._radius = newValue
+            if newValue > VisilabsGeofenceApp.sharedInstance()?.locationManager?.geofenceMaximumRadius ?? 0.0 {
+                _radius = VisilabsGeofenceApp.sharedInstance()?.locationManager?.geofenceMaximumRadius ?? 0.0
+            }else{
+                _radius = newValue
+            }
         }
     }
     
