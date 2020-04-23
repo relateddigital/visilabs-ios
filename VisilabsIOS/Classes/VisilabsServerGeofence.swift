@@ -8,10 +8,10 @@
 import Foundation
 import CoreLocation
 
+
+//TODO: NSObject e gerek var mı? assert leri kontrol et
 class VisilabsServerGeofence: NSObject {
     /// Id from server for this fence. It will be used as `identifier` in `CLCircularRegion` so it must be not duplicated.
-    
-    
     private var _serverId: String?
     var serverId: String? {
         get { return _serverId }
@@ -26,11 +26,34 @@ class VisilabsServerGeofence: NSObject {
         }
     }
     /// Latitude of this fence.
-    var latitude = 0.0
+    private var _latitude = 0.0
+    var latitude : Double {
+        get { return _latitude }
+        set {
+            assert(newValue >= -90 && newValue <= 90, String(format: "Invalid geofence latitude: %.f.", newValue))
+            self._latitude = newValue
+        }
+    }
+    
     /// Longitude of this fence.
-    var longitude = 0.0
+    private var _longitude = 0.0
+    var longitude : Double {
+        get { return _longitude }
+        set {
+            assert(newValue >= -90 && newValue <= 90, String(format: "Invalid geofence longitude: %.f.", newValue))
+            self._longitude = newValue
+        }
+    }
+    
     /// Radius of this fence. It will be adjust to not exceed `maximumRegionMonitoringDistance`.
-    var radius = 0.0
+    var _radius = 0.0
+    var radius : Double {
+        get { return _radius }
+        //TODO: bunun set'ini implement et
+        set {
+            self._radius = newValue
+        }
+    }
     
     var distanceFromCurrentLastKnownLocation = 0.0
     /// Internal unique id for object. Optional for leaf geofence, none for inner node.

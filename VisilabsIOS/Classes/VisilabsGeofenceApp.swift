@@ -23,11 +23,9 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         if instance == nil{
             instance = VisilabsGeofenceApp()
         }
-        
         if (!instance!.isBridgeInitCalled){
             instance!.isBridgeInitCalled = true
         }
-        
         return instance
     }
     
