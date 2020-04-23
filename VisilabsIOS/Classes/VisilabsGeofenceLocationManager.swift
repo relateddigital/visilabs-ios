@@ -34,7 +34,14 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     var fgMinDistanceBetweenEvents: Float = 0.0
     var bgMinDistanceBetweenEvents: Float = 0.0
     private(set) var monitoredRegions: [AnyHashable]? // TODO: burada weak vardı, gerek var mı?
-    private(set) var geofenceMaximumRadius: CLLocationDistance = 0
+    
+    
+    var geofenceMaximumRadius: CLLocationDistance {
+        get { return locationManager?.maximumRegionMonitoringDistance ?? CLLocationDistance()}
+    }
+    
+    
+    
     var currentGeoLocationValue: CLLocationCoordinate2D?
     
     //TODO: bu initialize'ı incele, override?, SH'leri uçur
@@ -120,6 +127,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     func createNetworkMonitor() {
 
     }
+    
+    
     
     deinit {
         locationManager?.delegate = nil
