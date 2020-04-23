@@ -12,6 +12,9 @@ Bridge for handle geofence module notifications.
 */
 class VisilabsGeofenceBridge {
     
+    private static var timer: Timer?
+
+    
     /**
     Static entry point for bridge init.
     */
@@ -30,14 +33,6 @@ class VisilabsGeofenceBridge {
     
     // MARK: - private functions
     
-    class func geofenceTimestampTimer() -> Timer? {
-        return nil
-    }
-
-    class func setGeofenceTimestampTimer(_ timer: Timer?) {
-        
-    }
-    
     //TODO: @objc kaldırılabiliyor mu kontrol et, private yapılabiliyor mu kontrol et
     @objc class func createLocationManagerHandler(_ notification: Notification?) {
         if VisilabsGeofenceApp.sharedInstance()!.locationManager == nil {
@@ -55,5 +50,26 @@ class VisilabsGeofenceBridge {
         //TODO: buradaki timeInterval i visilabsconfig e taşı
         self.setGeofenceTimestampTimer(Timer.scheduledTimer(timeInterval: 900, target: self, selector: #selector(setHandler), userInfo: nil, repeats: true))
         self.geofenceTimestampTimer()!.fire()
+    }
+    
+    @objc class func setHandler() {
+        print("setHandler called")
+        VisilabsGeofenceBridge.setGeofenceTimestampTimer(nil)
+        VisilabsGeofenceStatus.sharedInstance()?.geofenceTimestamp = "2016-01-01"
+    }
+    
+    //TODO: burada DispatchQueue suz çalışılabilir mi?
+    class func geofenceTimestampTimer() -> Timer? {
+        let lockQueue = DispatchQueue(label: "self")
+        return lockQueue.sync {
+            return timer
+        }
+    }
+
+    class func setGeofenceTimestampTimer(_ val: Timer?) {
+        let lockQueue = DispatchQueue(label: "self")
+        lockQueue.sync {
+            timer = val
+        }
     }
 }
