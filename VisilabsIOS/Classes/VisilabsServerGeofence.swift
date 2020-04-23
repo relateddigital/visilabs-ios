@@ -28,12 +28,24 @@ class VisilabsServerGeofence: NSObject {
     /// A weak reference to its parent fence.
     weak var parentFence: VisilabsServerGeofence?
     /// Child nodes for parent fence. For child fence it's definity nil; for parent fence it would be nil.
-    var arrayNodes: [VisilabsServerGeofence]?
+    var arrayNodes: [VisilabsServerGeofence] = []
     /// Whether this is actual geofence. Only actual geofence should send logline to server. Inner nodes's `id` starts with "_", actual geofence's `id` is "<id>-<distance>".
     private(set) var isLeaves = false
     
     var type: String?
     var durationInSeconds = 0
+    
+    
+    // MARK: - public functions
+    
+    func visilabsBoolToString(_ boolVal: Bool) -> String {
+        return boolVal ? "true" : "false"
+    }
+
+
+    func description() -> String {
+        return "\(title ?? ""): [\(serverId ?? "")](\(latitude),\(longitude))~\(radius). Is inside: \(visilabsBoolToString(isInside)). Nodes:\(arrayNodes)"
+    }
     
     /// Use this geofence data to create monitoring region.
 
