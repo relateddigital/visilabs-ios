@@ -152,10 +152,15 @@ class VisilabsServerGeofence: NSObject {
     }
 
     /// Make this object array to string array for store to NSUserDefaults.
-    class func serialize(toArrayDict parentFences: [AnyHashable]?) -> [AnyHashable]? {
-        return nil
+    class func serialize(toArrayDict parentFences: [VisilabsServerGeofence]) -> [[String : Any]] {
+        var array: [[String : Any]] = []
+        for parentFence in parentFences{
+            array.append(parentFence.serializeGeofenceToDict())
+        }
+        return array
     }
 
+    //TODO: bu kullanılmıyor sanırım. gereksizse kaldır.
     /// When read from NSUserDefaults, parse back to object array.
     class func deserialize(toArrayObj arrayDict: [AnyHashable]?) -> [AnyHashable]? {
         return nil
