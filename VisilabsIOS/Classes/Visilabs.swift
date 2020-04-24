@@ -443,9 +443,9 @@ open class Visilabs{
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
 
         var segURL: String? = nil
-        if let dataSource = dataSource {
-            segURL = String(format: "%@/%@/%@?%@=%@&%@=%@&%@=%@&%@=%@&%@=%i&%@=%@&%@=%@&%@=%@&%@=%@&", loggerURL, dataSource, "om.gif", "OM.cookieID", cookieID, "OM.vchannel", chan, "OM.siteID", siteID, "OM.oid", organizationID, "dat", actualTimeOfevent, "OM.uri", escapedPageName, "OM.mappl", "true", "OM.m_adid", identifierForAdvertising, VisilabsConfig.apiver_KEY(), "IOS")
-        }
+        
+        segURL = String(format: "%@/%@/%@?%@=%@&%@=%@&%@=%@&%@=%@&%@=%i&%@=%@&%@=%@&%@=%@&%@=%@&", loggerURL, dataSource, "om.gif", "OM.cookieID", cookieID!, "OM.vchannel", chan, "OM.siteID", siteID, "OM.oid", organizationID, "dat", actualTimeOfevent, "OM.uri", escapedPageName, "OM.mappl", "true", "OM.m_adid", identifierForAdvertising!, VisilabsConfig.APIVER_KEY, "IOS")
+    
 
         if exVisitorID != nil && !(exVisitorID == "") {
             let escapedIdentity = urlEncode(exVisitorID!)
