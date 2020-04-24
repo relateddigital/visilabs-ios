@@ -34,6 +34,7 @@ class VisilabsCircleLayer: CALayer {
 }
 
 
+
 class VisilabsElasticEaseOutAnimation: CAKeyframeAnimation {
     init(startValue start: CGRect, endValue end: CGRect, andDuration duration: Double) {
         super.init()
