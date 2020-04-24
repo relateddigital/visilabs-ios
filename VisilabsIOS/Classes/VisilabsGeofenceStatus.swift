@@ -226,7 +226,7 @@ class VisilabsGeofenceStatus: NSObject {
     }
     
     //monitor when a region state change.
-    func regionStateChangeNotificationHandler(_ notification: Notification?) {
+    @objc func regionStateChangeNotificationHandler(_ notification: Notification?) {
         //use state change instead of didEnterRegion/didExitRegion because when startMonitorRegion, state change delegate is called, didEnter/ExitRegion delegate not called until next enter/exit.
         //TODO: Region ve RegionState kısmını VisilabsConfig e aktar
         if let region = notification?.userInfo?["Region"] as? CLRegion {
@@ -345,6 +345,16 @@ class VisilabsGeofenceStatus: NSObject {
     class func sharedInstance() -> VisilabsGeofenceStatus? {
         // `dispatch_once()` call was converted to a static variable initializer
         return instance!
+    }
+    
+    override init() {
+        super.init()
+        //TODO: SHLMRegionStateChangeNotification ı VisilabsConfig e aktar
+        NotificationCenter.default.addObserver(self, selector: #selector(regionStateChangeNotificationHandler(_:)), name: NSNotification.Name(rawValue: "SHLMRegionStateChangeNotification"), object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
