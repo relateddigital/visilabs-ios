@@ -104,8 +104,7 @@ open class Visilabs{
         
         
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
-            VisilabsGeofenceApp.sharedInstance()
-
+            VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled = true
         }
     }
     
