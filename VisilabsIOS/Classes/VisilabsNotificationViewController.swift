@@ -16,20 +16,20 @@ class VisilabsCircleLayer: CALayer {
         return cl
     }
     
-    override func draw(in ctx: CGContext?) {
+    override func draw(in ctx: CGContext) {
         let edge: CGFloat = 1.5 //the distance from the edge so we don't get clipped.
-        ctx?.setAllowsAntialiasing(true)
-        ctx?.setShouldAntialias(true)
+        ctx.setAllowsAntialiasing(true)
+        ctx.setShouldAntialias(true)
 
         let thePath = CGMutablePath()
-        ctx?.setStrokeColor(UIColor.white.cgColor)
+        ctx.setStrokeColor(UIColor.white.cgColor)
         thePath.addArc(center: CGPoint(x: frame.size.width / 2.0, y: frame.size.height / 2.0), radius: min(frame.size.width, frame.size.height) / 2.0 - (2 * edge), startAngle: CGFloat(Float(-Float.pi)), endAngle: CGFloat(Float(Float.pi)), clockwise: true, transform: .identity)
 
-        ctx?.beginPath()
-        ctx?.addPath(thePath)
+        ctx.beginPath()
+        ctx.addPath(thePath)
 
-        ctx?.setLineWidth(1.5)
-        ctx?.strokePath()
+        ctx.setLineWidth(1.5)
+        ctx.strokePath()
     }
 }
 
