@@ -19,15 +19,22 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
     
     var isDefaultLocationServiceEnabled = false
     
+    private var _locationManager: VisilabsGeofenceLocationManager?
+    var locationManager : VisilabsGeofenceLocationManager? {
+        get { return _locationManager }
+        set {
+            //TODO: bunu kontrol et, bu init doğru mu?
+            _locationManager = VisilabsGeofenceLocationManager()
+        }
+    }
+    
     public class func sharedInstance() -> VisilabsGeofenceApp? {
         if instance == nil{
             instance = VisilabsGeofenceApp()
         }
-        
         if (!instance!.isBridgeInitCalled){
             instance!.isBridgeInitCalled = true
         }
-        
         return instance
     }
     
@@ -53,6 +60,7 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
             }
         }
     }
+
 
 }
 

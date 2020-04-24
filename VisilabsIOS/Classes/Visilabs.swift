@@ -351,7 +351,7 @@ open class Visilabs{
     }
 
     //TODO
-    func buildGeofenceRequest(action: String, actionID: String, latitude: Double, longitude: Double, geofenceID: String, isDwell: Bool, isEnter: Bool) -> VisilabsGeofenceRequest? {
+    func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
         if Visilabs.API == nil {
             //TODO: ne yapacağına karar ver.
             //Error is not handled because the enclosing function is not declared 'throws'
