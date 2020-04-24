@@ -31,7 +31,14 @@ class VisilabsNotification {
     var image: Data?
     var errorMessages : [String] = []
     
-    var msg_title_color : String?
+    var messageTitleColor : String?
+    var messageBodyColor : String?
+    var messageBodyTextSize : String?
+    var fontFamily : String?
+    var backGround : String?
+    var closeButtonColor : String?
+    var buttonTextColor : String?
+    var buttonColor : String?
     
     private func isValid() -> Bool {
         var valid = true
