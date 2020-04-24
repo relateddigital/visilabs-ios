@@ -70,11 +70,10 @@ class VisilabsGeofenceStatus: NSObject {
                                                 let currentLocation = VisilabsGeofenceLocationManager.sharedInstance().currentGeoLocationValue
                                                 let currentLatitude = currentLocation?.latitude ?? 0.0
                                                 let currentLongitude = currentLocation?.longitude ?? 0.0
-                                                
-                                                let distance = self.distanceSquared(forLat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
 
-                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = distance
+                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = self.distanceSquared(forLat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
                                                 
+                                                //TODO:burada ikinci targetEvent'e gerek var mı? kullanıldığı yeri bul gereksizse kaldır.
                                                 visilabsServerGeofence.serverId = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
                                                 visilabsServerGeofence.suid = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
                                                 visilabsServerGeofence.title = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
@@ -103,10 +102,11 @@ class VisilabsGeofenceStatus: NSObject {
                             }
 
                             if returnedRegions.count > maxGeofenceCount {
-                                var sortDescriptor = NSSortDescriptor(key: "distanceFromCurrentLastKnownLocation", ascending: true)
-                                var sortDescriptors = [sortDescriptor]
-                                var sortedReturnedRegions = returnedRegions.sorted(by: { (vsg1, vsg2) -> Bool in
+                                let sortDescriptor = NSSortDescriptor(key: "distanceFromCurrentLastKnownLocation", ascending: true)
+                                let sortDescriptors = [sortDescriptor]
+                                var sortedReturnedRegions = returnedRegions.sorted(by: { (g1, g2) -> Bool in
                                     //TODO:bunu ayarla, test et
+                                    //return g1.distanceFromCurrentLastKnownLocation < g2.distanceFromCurrentLastKnownLocation
                                     return false
                                 })
                                 
@@ -142,8 +142,9 @@ class VisilabsGeofenceStatus: NSObject {
         return Double(0.0)
     }
     
+    //DONE
     private func stopMonitorPreviousGeofencesOnly() {
-        if let v = VisilabsGeofenceApp.sharedInstance(), let lm = v.locationManager, let mrs = lm.monitoredRegions{
+        if let v = VisilabsGeofenceApp.sharedInstance(), let lm = v.locationManager, let mrs = lm.monitoredRegions {
             for mr in mrs {
                 //only stop if this region is previous geofence
                 if let mri = mr as? CLRegion, mri.identifier.contains("visilabs") {
@@ -228,3 +229,5 @@ class VisilabsGeofenceStatus: NSObject {
         return instance!
     }
 }
+
+
