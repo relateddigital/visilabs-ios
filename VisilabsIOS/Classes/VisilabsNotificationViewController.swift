@@ -68,34 +68,6 @@ class VisilabsElasticEaseOutAnimation: CAKeyframeAnimation {
     }
 }
 
-class VisilabsElasticEaseOutAnimation  {
-    init(startValue start: CGRect, endValue end: CGRect, andDuration duration: Double) {
-        super.init()
-            self.duration = duration
-            values = generateValues(from: start, to: end)
-    }
-
-    func generateValues(from start: CGRect, to end: CGRect) -> [AnyHashable]? {
-        let steps = Int(ceil(60 * duration)) + 2
-        var valueArray = [AnyHashable](repeating: 0, count: steps)
-        let increment = 1.0 / Double(steps - 1)
-        var t = 0.0
-        let range = CGRect(x: end.origin.x - start.origin.x, y: end.origin.y - start.origin.y, width: end.size.width - start.size.width, height: end.size.height - start.size.height)
-
-        var i: Int
-        for i in 0..<steps {
-            let v = Float(-(pow(M_E, -8 * t) * cos(12 * t))) + 1 // Cosine wave with exponential decay
-
-            let value = CGRect(x: start.origin.x + CGFloat(v) * range.origin.x, y: start.origin.y + CGFloat(v) * range.origin.y, width: start.size.width + CGFloat(v) * range.size.width, height: start.size.height + CGFloat(v) * range.size.height)
-
-            valueArray.append(NSValue(cgRect: value))
-            t += increment
-        }
-
-        return valueArray
-    }
-}
-
 class VisilabsGradientMaskLayer: CAGradientLayer {
     override func draw(in ctx: CGContext?) {
 
