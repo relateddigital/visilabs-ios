@@ -31,6 +31,8 @@ class VisilabsNotification {
     var image: Data?
     var errorMessages : [String] = []
     
+    var msg_title_color : String?
+    
     private func isValid() -> Bool {
         var valid = true
         
@@ -165,6 +167,18 @@ class VisilabsNotification {
             return nil
         }
         
+        //TODO: yeni properties
+        /*
+         msg_title_color = actionData.getString("msg_title_color");
+         msg_body_color = actionData.getString("msg_body_color");
+         msg_body_textsize = actionData.getString("msg_body_textsize");
+         font_family = actionData.getString("font_family");
+         background = actionData.getString("background");
+         close_button_color = actionData.getString("close_button_color");
+         button_text_color = actionData.getString("button_text_color");
+         button_color = actionData.getString("button_color");
+         
+         */
 
         return VisilabsNotification(ID: actID, type: messageType, title: messageTitle, body: messageBody, buttonText: buttonText, buttonURL: buttonURL, imageURL: imageURL, visitorData: visitorData, visitData: visitData, queryString: queryString)
     }
