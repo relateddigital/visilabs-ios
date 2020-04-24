@@ -19,7 +19,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
                 
-        //Visilabs.initialize()
+        let oid = "676D325830564761676D453D"
+        let sid = "356467332F6533766975593D"
+        let lurl = "http://lgr.visilabs.net"
+        let ds = "visistore"
+        let rturl = "http://rt.visilabs.net"
+        let c = "IOS"
+        let turl = "http://s.visilabs.net/json"
+        let aurl = "http://s.visilabs.net/actjson"
+        let gurl = "http://s.visilabs.net/geojson"
+        
+        Visilabs.createAPI(organizationID: oid, siteID: sid, loggerURL: lurl, dataSource: ds, realTimeURL: rturl, channel: c, targetURL: turl, actionURL: aurl, geofenceURL: gurl, geofenceEnabled: true)
         
         return true
     }
