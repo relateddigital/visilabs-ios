@@ -10,6 +10,12 @@ import Foundation
 enum VisilabsNotificationType : String {
     case mini
     case full
+    case image_text_button
+    case full_image
+    case nps
+    case image_button
+    case smile_rating
+    case unknown
 }
 
 class VisilabsNotification {
@@ -25,6 +31,15 @@ class VisilabsNotification {
     var queryString: String?
     var image: Data?
     var errorMessages : [String] = []
+    
+    var messageTitleColor : String?
+    var messageBodyColor : String?
+    var messageBodyTextSize : String?
+    var fontFamily : String?
+    var backGround : String?
+    var closeButtonColor : String?
+    var buttonTextColor : String?
+    var buttonColor : String?
     
     private func isValid() -> Bool {
         var valid = true
@@ -122,7 +137,7 @@ class VisilabsNotification {
             if messageType == VisilabsNotificationType.mini {
                 let imageName = URL(fileURLWithPath: imagePath ?? "").deletingPathExtension().absoluteString
                 let `extension` = URL(fileURLWithPath: imagePath ?? "").pathExtension
-                imagePath = URL(fileURLWithPath: imageName + ("@2x")).appendingPathExtension(`extension` ?? "").absoluteString
+                imagePath = URL(fileURLWithPath: imageName + ("@2x")).appendingPathExtension(`extension`).absoluteString
             }
 
 
@@ -160,6 +175,18 @@ class VisilabsNotification {
             return nil
         }
         
+        //TODO: yeni properties
+        /*
+         msg_title_color = actionData.getString("msg_title_color");
+         msg_body_color = actionData.getString("msg_body_color");
+         msg_body_textsize = actionData.getString("msg_body_textsize");
+         font_family = actionData.getString("font_family");
+         background = actionData.getString("background");
+         close_button_color = actionData.getString("close_button_color");
+         button_text_color = actionData.getString("button_text_color");
+         button_color = actionData.getString("button_color");
+         
+         */
 
         return VisilabsNotification(ID: actID, type: messageType, title: messageTitle, body: messageBody, buttonText: buttonText, buttonURL: buttonURL, imageURL: imageURL, visitorData: visitorData, visitData: visitData, queryString: queryString)
     }

@@ -90,6 +90,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
             }
         }
     }
+    func stopMonitorRegion(_ region: CLRegion?) {
+    }
     
     func createLocationManager() {
         locationManager = CLLocationManager()

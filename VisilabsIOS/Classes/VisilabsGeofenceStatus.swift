@@ -40,10 +40,10 @@ class VisilabsGeofenceStatus: NSObject {
                     let request = Visilabs.callAPI()!.buildGeofenceRequest(action: "getlist", latitude: lastKnownLocationLatitude, longitude: lastKnownLocationLongitude, isDwell: false, isEnter: false)
                     
                     let successBlock: ((VisilabsResponse?) -> Void) = { response in
-                        var returnedRegions: [AnyHashable]? = []
+                        var returnedRegions: [VisilabsServerGeofence] = []
                         print("Response: \(response?.rawResponseAsString ?? "nil")")
                         if let parsedArray = response?.responseArray {
-                            let i = 0
+                            var i = 0
                             
                             //TODO: burada try catch gerekli mi?
                             
@@ -66,6 +66,29 @@ class VisilabsGeofenceStatus: NSObject {
                                                 visilabsServerGeofence.radius = radius
                                                 visilabsServerGeofence.isInside = false
 
+                                                visilabsServerGeofence.type = targetEvent;
+                                                visilabsServerGeofence.durationInSeconds = durationInSeconds ?? 0
+                                                
+                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = .greatestFiniteMagnitude
+                                                
+                                                let currentLocation = VisilabsGeofenceLocationManager.sharedInstance().currentGeoLocationValue
+                                                let currentLatitude = currentLocation?.latitude ?? 0.0
+                                                let currentLongitude = currentLocation?.longitude ?? 0.0
+                                                
+                                                let distance = self.distanceSquared(forLat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
+
+                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = distance
+                                                
+                                                visilabsServerGeofence.serverId = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
+                                                visilabsServerGeofence.suid = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
+                                                visilabsServerGeofence.title = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
+                                                returnedRegions.append(visilabsServerGeofence)
+
+                                                if i == 0 {
+                                                    print("Current latitude: \(currentLatitude) longitude: \(currentLongitude)")
+                                                }
+
+                                                i = i + 1
                                             }
                                         }
                                         
@@ -74,6 +97,27 @@ class VisilabsGeofenceStatus: NSObject {
                                 }
                             }
                             
+                            //Geofence would monitor parent or child, and it's possible `id` not change but latitude/longitude/radius change. When timestamp change, stop monitor existing geofences and start to monitor from new list totally.
+                            self.stopMonitorPreviousGeofencesOnly() //server's geofence change, stop monitor all.
+                            //Update local cache and memory, start monitor parent.
+                            
+                            var maxGeofenceCount = Visilabs.callAPI()!.maxGeofenceCount
+                            if maxGeofenceCount > 20 || maxGeofenceCount < 0 {
+                                maxGeofenceCount = 20
+                            }
+
+                            if returnedRegions.count > maxGeofenceCount {
+                                var sortDescriptor = NSSortDescriptor(key: "distanceFromCurrentLastKnownLocation", ascending: true)
+                                var sortDescriptors = [sortDescriptor]
+                                var sortedReturnedRegions = returnedRegions.sorted(by: { (vsg1, vsg2) -> Bool in
+                                    //TODO:bunu ayarla, test et
+                                    return false
+                                })
+                                
+                                //TODO: burada kaldık
+                                //returnedRegions = (sortedReturnedRegions as NSArray).subarray(with: NSRange(location: 0, length: maxGeofenceCount))
+                            }
+
                             
                         }
                     }
@@ -100,6 +144,18 @@ class VisilabsGeofenceStatus: NSObject {
         //let xDistance = Float((cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo)
         //let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
         return Double(0.0)
+    }
+    
+    private func stopMonitorPreviousGeofencesOnly() {
+        if let v = VisilabsGeofenceApp.sharedInstance(), let lm = v.locationManager, let mrs = lm.monitoredRegions{
+            for mr in mrs {
+                //only stop if this region is previous geofence
+                if let mri = mr as? CLRegion, mri.identifier.contains("visilabs") {
+                    lm.stopMonitorRegion(mri)
+                    print("\(mri.identifier) stopped.")
+                }
+            }
+        }
     }
     
     
