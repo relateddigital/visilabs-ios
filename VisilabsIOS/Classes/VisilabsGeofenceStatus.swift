@@ -102,17 +102,24 @@ class VisilabsGeofenceStatus: NSObject {
                             }
 
                             if returnedRegions.count > maxGeofenceCount {
-                                let sortDescriptor = NSSortDescriptor(key: "distanceFromCurrentLastKnownLocation", ascending: true)
-                                let sortDescriptors = [sortDescriptor]
-                                var sortedReturnedRegions = returnedRegions.sorted(by: { (g1, g2) -> Bool in
-                                    //TODO:bunu ayarla, test et
-                                    //return g1.distanceFromCurrentLastKnownLocation < g2.distanceFromCurrentLastKnownLocation
-                                    return false
+                                //let sortDescriptor = NSSortDescriptor(key: "distanceFromCurrentLastKnownLocation", ascending: true)
+                                //let sortDescriptors = [sortDescriptor]
+                                let sortedReturnedRegions = returnedRegions.sorted(by: { (g1, g2) -> Bool in
+                                    //TODO:bunu kontrol et, test et, ascending mi?
+                                    return g1.distanceFromCurrentLastKnownLocation < g2.distanceFromCurrentLastKnownLocation
                                 })
                                 
-                                //TODO: burada kaldık
-                                //returnedRegions = (sortedReturnedRegions as NSArray).subarray(with: NSRange(location: 0, length: maxGeofenceCount))
+                                //TODO: bunu kontrol et doğru sayıda geliyor mu?
+                                returnedRegions = Array(sortedReturnedRegions[0...(maxGeofenceCount > sortedReturnedRegions.count ? sortedReturnedRegions.count - 1 : maxGeofenceCount - 1)])
                             }
+                            
+                            self.arrayGeofenceFetchList = returnedRegions
+                            
+                            //TODO: Key'i VisilabsConfig'e geç, serialize, deserialize doğru çalışıyor mu kontrol et
+                            UserDefaults.standard.set(VisilabsServerGeofence.serialize(toArrayDict: returnedRegions), forKey: "APPSTATUS_GEOFENCE_FETCH_LIST")
+                            UserDefaults.standard.synchronize()
+                            self.startMonitorGeofences(returnedRegions)
+
 
                             
                         }
@@ -123,6 +130,14 @@ class VisilabsGeofenceStatus: NSObject {
                     request?.execAsync(withSuccess: successBlock, andFailure: failBlock)
                 }
             }
+        
+            //when meet this, means server return nil or invalid timestamp. Clear local fetch list and stop monitor.
+            self.stopMonitorPreviousGeofencesOnly()
+            arrayGeofenceFetchList = [VisilabsServerGeofence]() //cannot set to nil, as nil will read from NSUserDefaults again.
+            //TODO: APPSTATUS_GEOFENCE_FETCH_LIST i VisilabsConfig'e taşı
+            UserDefaults.standard.set([VisilabsServerGeofence](), forKey: "APPSTATUS_GEOFENCE_FETCH_LIST") //clear local cache, not start when kill and launch App.
+            UserDefaults.standard.synchronize()
+        
         }
     }
     
@@ -132,17 +147,18 @@ class VisilabsGeofenceStatus: NSObject {
     private func distanceSquared(forLat1 lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
         let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
         let nauticalMilesPerLatitude = 60.00721
-        let nauticalMilesPerLongitude = 60.10793
+        //let nauticalMilesPerLongitude = 60.10793
         let metersPerNauticalMile = 1852.00
         let nauticalMilesPerLongitudeDividedByTwo = 30.053965
         // simple pythagorean formula - for efficiency
-        //let yDistance = Float((lat2 - lat1) * nauticalMilesPerLatitude)
-        //let xDistance = Float((cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo)
-        //let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
-        return Double(0.0)
+        let yDistance = (lat2 - lat1) * nauticalMilesPerLatitude
+        let xDistance = (cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo
+        let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
+        return res
     }
     
     //DONE
+    //Geofence monitor region need to change, stop previous monitor for server's geofence. If `onlyForOutside`=YES, only stop monitor those outside; otherwise stop all regardless inside or outside. `parentKeep`=YES take effect when `onlyForOutside`=YES, if it's parent fence is inside, child fence not stop although it's outside.
     private func stopMonitorPreviousGeofencesOnly() {
         if let v = VisilabsGeofenceApp.sharedInstance(), let lm = v.locationManager, let mrs = lm.monitoredRegions {
             for mr in mrs {
@@ -152,6 +168,13 @@ class VisilabsGeofenceStatus: NSObject {
                     print("\(mri.identifier) stopped.")
                 }
             }
+        }
+    }
+    
+    //Give an array of VisilabsServerGeofence and convert to be monitored. It doesn't create region for child nodes.
+    private func startMonitorGeofences(_ arrayGeofences: [VisilabsServerGeofence]) {
+        for geofence in arrayGeofences {
+            VisilabsGeofenceApp.sharedInstance()?.locationManager?.startMonitorRegion(geofence.getGeoRegion())
         }
     }
     
@@ -212,7 +235,7 @@ class VisilabsGeofenceStatus: NSObject {
     //stopMonitorSelfAndChildGeofence
     
     
-    var arrayGeofenceFetchList: [AnyHashable]?
+    var arrayGeofenceFetchList: [VisilabsServerGeofence] = []
     
     
     // MARK: - life cycle
