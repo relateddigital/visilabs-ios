@@ -19,7 +19,7 @@ open class Visilabs{
     private var actionURL : String?
     internal var geofenceURL : String?
     private var geofenceEnabled : Bool
-    private var maxGeofenceCount : Int
+    var maxGeofenceCount : Int
     
     private var sendQueue : [String]
     private var timer: Timer?
@@ -174,7 +174,7 @@ open class Visilabs{
     //TODO: BUNU DENE
     func computeWebViewUserAgent2() {
         DispatchQueue.main.async {
-            var webView : WKWebView? = WKWebView(frame: CGRect.zero)
+            let webView : WKWebView? = WKWebView(frame: CGRect.zero)
             webView?.loadHTMLString("<html></html>", baseURL: nil)
             webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
                 if let uA = userAgent{
