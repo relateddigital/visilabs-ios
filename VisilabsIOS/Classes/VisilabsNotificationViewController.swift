@@ -33,8 +33,6 @@ class VisilabsCircleLayer: CALayer {
     }
 }
 
-
-
 class VisilabsElasticEaseOutAnimation: CAKeyframeAnimation {
     init(startValue start: CGRect, endValue end: CGRect, andDuration duration: Double) {
         super.init()
@@ -70,7 +68,7 @@ class VisilabsElasticEaseOutAnimation: CAKeyframeAnimation {
 }
 
 class VisilabsGradientMaskLayer: CAGradientLayer {
-    override func draw(in ctx: CGContext?) {
+    override func draw(in ctx: CGContext) {
 
         let colorSpace = CGColorSpaceCreateDeviceGray()
         let components: [CGFloat] = [1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 1.0, 0.0]
@@ -78,32 +76,28 @@ class VisilabsGradientMaskLayer: CAGradientLayer {
         let locations: [CGFloat] = [0.0, 0.7, 0.8, 1.0]
 
         let gradient = CGGradient(colorSpace: colorSpace, colorComponents: components, locations: locations, count: 7)
-        ctx?.drawLinearGradient(gradient!, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 5.0, y: bounds.size.height), options: CGGradientDrawingOptions(rawValue: 0))
+        ctx.drawLinearGradient(gradient!, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: 5.0, y: bounds.size.height), options: CGGradientDrawingOptions(rawValue: 0))
 
 
         let bits = Int(abs(bounds.size.width)) * Int(abs(bounds.size.height))
         
-        //TODO: BURADA KALDIM
-        /*
-        let rgba = UnsafePointer<Int8>(Int8(malloc(bits)))
-        srand(124)
+        //TODO: rgba kullanılmıyor kaldırabilirsin
+        var rgba = [Int8].init(repeating: 0 , count: bits)
 
         for i in 0..<bits {
-            rgba[i] = arc4random() % 8
+            rgba[i] = Int8(arc4random() % 8)
         }
 
-        let noise = CGContext(data: rgba, width: Int(fabs(bounds.size.width)), height: Int(fabs(bounds.size.height)), bitsPerComponent: 8, bytesPerRow: Int(fabs(bounds.size.width)), space: nil, bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.alphaOnly.rawValue))
+        //TODO:
+        //data: rgba yerine nil geçtim, space: nil yerine de space: colorSpace geçtim.
+        let noise = CGContext(data: nil, width: Int(abs(bounds.size.width)), height: Int(abs(bounds.size.height)), bitsPerComponent: 8, bytesPerRow: Int(abs(bounds.size.width)), space: colorSpace, bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.alphaOnly.rawValue).rawValue)
         let image = noise?.makeImage()
 
-        if let ctx = ctx {
-            ctx.setBlendMode(.sourceOut)
+        ctx.setBlendMode(.sourceOut)
+        
+        if let i = image {
+            ctx.draw(i, in: bounds)
         }
-        ctx?.draw(in: image, image: bounds)
-
-        CGImageRelease(image)
-        CGContextRelease(noise)
-        free(rgba)
- */
     }
 
     
@@ -140,9 +134,7 @@ class VisilabsBgRadialGradientView: UIView {
         ctx?.setFillColor(colorRef)
         ctx?.fill(bounds)
 
-        if let ctx = ctx {
-            ctx.setBlendMode(.copy)
-        }
+        ctx?.setBlendMode(.copy)
 
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let comps : [CGFloat] = [96.0 / 255.0, 96.0 / 255.0, 124.0 / 255.0, 0.94, 72.0 / 255.0, 72.0 / 255.0, 93.0 / 255.0, 0.94, 24.0 / 255.0, 24.0 / 255.0, 31.0 / 255.0, 0.94, 24.0 / 255.0, 24.0 / 255.0, 31.0 / 255.0, 0.94]
@@ -152,8 +144,8 @@ class VisilabsBgRadialGradientView: UIView {
         ctx?.addEllipse(in: circleFrame)
         ctx?.clip()
 
-        if let ctx = ctx, let gradient = gradient {
-            ctx.drawRadialGradient(gradient, startCenter: center, startRadius: 0.0, endCenter: center, endRadius: circleSize.width / 2.0, options: .drawsAfterEndLocation)
+        if let gradient = gradient {
+            ctx?.drawRadialGradient(gradient, startCenter: center, startRadius: 0.0, endCenter: center, endRadius: circleSize.width / 2.0, options: .drawsAfterEndLocation)
         }
 
         ctx?.restoreGState()
@@ -169,6 +161,19 @@ class VisilabsActionButton: UIButton {
             layer.borderWidth = 2.0
     }
 
+    //TODO: kontrol et
+    override var isHighlighted: Bool{
+        willSet {
+            if newValue{
+                layer.borderColor = UIColor.gray.cgColor
+            } else {
+                layer.borderColor = UIColor.white.cgColor
+            }
+            super.isHighlighted = newValue
+        }
+    }
+    
+    /*
     func setHighlighted(_ highlighted: Bool) {
         if highlighted {
             layer.borderColor = UIColor.gray.cgColor
@@ -177,6 +182,7 @@ class VisilabsActionButton: UIButton {
         }
         super.isHighlighted = highlighted
     }
+    */
 }
 
 
@@ -185,6 +191,7 @@ class VisilabsNotificationViewController: UIViewController {
     var notification: VisilabsNotification?
     weak var delegate: VisilabsNotificationViewControllerDelegate?
 
+    
     func hide(withAnimation animated: Bool, completion: @escaping () -> Void) {
         return
     }
