@@ -49,10 +49,8 @@ class VisilabsGeofenceStatus: NSObject {
                             
                             for object in parsedArray {
                                 if let action = object as? [String : Any?] {
-                                    let actid = action["actid"] as? Int
-                                    let targetEvent = action["trgevt"] as? String
-                                    let durationInSeconds = action["dis"] as? Int
-                                    if let geoFencesArray = action["geo"] as? [Any?] {
+                                    let durationInSeconds = action["dis"] as? Int ?? 0
+                                    if let actid = action["actid"] as? Int, let targetEvent = action["trgevt"] as? String, let geoFencesArray = action["geo"] as? [Any?] {
                                         for geo in geoFencesArray {
                                             if let geofence = geo as? [String : Any?] {
                                                 let latitude = geofence["lat"] as? Double ?? 0.0 //TODO: default value set etmeli miyim?, yoksa atlamalı mıyım?
@@ -65,10 +63,8 @@ class VisilabsGeofenceStatus: NSObject {
                                                 visilabsServerGeofence.longitude = longitude
                                                 visilabsServerGeofence.radius = radius
                                                 visilabsServerGeofence.isInside = false
-
                                                 visilabsServerGeofence.type = targetEvent;
-                                                visilabsServerGeofence.durationInSeconds = durationInSeconds ?? 0
-                                                
+                                                visilabsServerGeofence.durationInSeconds = durationInSeconds
                                                 visilabsServerGeofence.distanceFromCurrentLastKnownLocation = .greatestFiniteMagnitude
                                                 
                                                 let currentLocation = VisilabsGeofenceLocationManager.sharedInstance().currentGeoLocationValue
