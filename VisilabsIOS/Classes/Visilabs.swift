@@ -180,7 +180,7 @@ open class Visilabs{
                 if let uA = userAgent{
                     if type(of: uA) == String.self{
                         self.userAgent = String(describing: uA)
-                        if !NSKeyedArchiver.archiveRootObject(self.userAgent
+                        if !NSKeyedArchiver.archiveRootObject(self.userAgent!
                             //, toFile: self.userAgentFilePath()
                             , toFile: ""
                             ) {
@@ -283,14 +283,11 @@ open class Visilabs{
     // MARK: Public Methods
     
     //TODO
-    func urlizeProps(_ props: [String : String]?) -> String? {
+    func urlizeProps(_ props: [String : String]) -> String {
     var propsURLPart = ""
 
-        for propKey in props!.keys {
-        if !(propKey is String) {
-            print("Visilabs: WARNING - property keys must be NSString. Dropping property.")
-            continue
-        }
+        for propKey in props.keys {
+        
         let stringKey = propKey
 
         if stringKey.count == 0 {
@@ -299,18 +296,15 @@ open class Visilabs{
         }
 
         var stringValue: String? = nil
-        if props?[stringKey] == nil {
+        if props[stringKey] == nil {
             print("Visilabs: WARNING - property value cannot be nil. Dropping property.")
             continue
-        } else if (props?[stringKey] is NSNumber) {
-            let numberValue = props?[stringKey] as? NSNumber
-            stringValue = numberValue?.stringValue ?? ""
         } else {
-            stringValue = props?[stringKey]
+            stringValue = props[stringKey]
         }
 
         if stringValue == nil {
-            print("Visilabs: WARNING - property value cannot be of type %@. Dropping property.", (type(of: props?[stringKey])))
+            print("Visilabs: WARNING - property value cannot be of type %@. Dropping property.", (type(of: props[stringKey])))
             continue
         }
 
@@ -495,8 +489,8 @@ open class Visilabs{
         
             VisilabsPersistentTargetManager.saveParameters(properties)
             let additionalURL = urlizeProps(properties)
-            if additionalURL!.count > 0 {
-                segURL = "\(segURL ?? "")\(additionalURL ?? "")"
+        if additionalURL.count > 0 {
+            segURL = "\(segURL ?? "")\(additionalURL)"
             }
         
         
@@ -585,7 +579,7 @@ open class Visilabs{
     private func setCookieID() {
         cookieID = UUID().uuidString
         //TODO:
-        if !NSKeyedArchiver.archiveRootObject(cookieID, toFile: "") {
+        if !NSKeyedArchiver.archiveRootObject(cookieID!, toFile: "") {
             //TODO:
             //DLog("Visilabs: WARNING - Unable to archive identity!!!")
         }
