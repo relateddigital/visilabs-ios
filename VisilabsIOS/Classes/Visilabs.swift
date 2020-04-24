@@ -283,7 +283,7 @@ open class Visilabs{
     // MARK: Public Methods
     
     //TODO
-    func urlizeProps(_ props: [AnyHashable : Any]?) -> String? {
+    func urlizeProps(_ props: [String : String]?) -> String? {
     var propsURLPart = ""
 
         for propKey in props!.keys {
@@ -291,27 +291,26 @@ open class Visilabs{
             print("Visilabs: WARNING - property keys must be NSString. Dropping property.")
             continue
         }
-        let stringKey = propKey as? String
+        let stringKey = propKey
 
-
-        if (stringKey?.count ?? 0) == 0 {
+        if stringKey.count == 0 {
             print("Visilabs: WARNING - property keys must not be empty strings. Dropping property.")
             continue
         }
 
         var stringValue: String? = nil
-        if props?[stringKey ?? ""] == nil {
+        if props?[stringKey] == nil {
             print("Visilabs: WARNING - property value cannot be nil. Dropping property.")
             continue
-        } else if (props?[stringKey ?? ""] is NSNumber) {
+        } else if (props?[stringKey] is NSNumber) {
             let numberValue = props?[stringKey] as? NSNumber
             stringValue = numberValue?.stringValue ?? ""
-        } else if (props?[stringKey ?? ""] is String) {
-            stringValue = props?[stringKey] as? String
+        } else {
+            stringValue = props?[stringKey]
         }
 
         if stringValue == nil {
-            print("Visilabs: WARNING - property value cannot be of type %@. Dropping property.", (type(of: props?[stringKey ?? ""])))
+            print("Visilabs: WARNING - property value cannot be of type %@. Dropping property.", (type(of: props?[stringKey])))
             continue
         }
 
@@ -321,9 +320,9 @@ open class Visilabs{
         }
 
 
-            let escapedKey = urlEncode(stringKey!)
+            let escapedKey = urlEncode(stringKey)
         if escapedKey.count > 255 {
-            print("Visilabs: WARNING - property key cannot longer than 255 characters. When URL escaped, your key is %lu characters long (the submitted value is %@, the URL escaped value is %@). Dropping property.", UInt(escapedKey.count), stringKey!, escapedKey)
+            print("Visilabs: WARNING - property key cannot longer than 255 characters. When URL escaped, your key is %lu characters long (the submitted value is %@, the URL escaped value is %@). Dropping property.", UInt(escapedKey.count), stringKey, escapedKey)
             continue
         }
 
@@ -361,11 +360,16 @@ open class Visilabs{
         return VisilabsGeofenceRequest(action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
     }
     
+    //Custom Event için NSKeyedArchiver içerisinde kullanılan path'i URL'e çevirme
+    func getDocumentsDirectory() -> URL {
+      let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+      return paths[0]
+    }
     
     //TODO:
     public func customEvent(_ pageName: String, properties: [String:String]){
         var vlProperties = properties
-        if pageName == nil || pageName.count == 0 {
+        if pageName.isEmptyOrWhitespace || pageName.count == 0 {
             print("Visilabs: WARNING - Tried to record event with empty or nil name. Ignoring.")
             return
         }
@@ -378,8 +382,15 @@ open class Visilabs{
             }
 
             cookieID = cookieid
-            if !NSKeyedArchiver.archiveRootObject(cookieID!, toFile: cookieIDFilePath()!) {
-                print("Visilabs: WARNING - Unable to archive identity!!!")
+//            if !NSKeyedArchiver.archiveRootObject(cookieID!, toFile: cookieIDFilePath()!) {
+//                print("Visilabs: WARNING - Unable to archive identity!!!")
+//            }
+            let cookieIDFullPath = getDocumentsDirectory().appendingPathComponent(cookieIDFilePath()!)
+            do {
+              let data = try NSKeyedArchiver.archivedData(withRootObject: cookieID!, requiringSecureCoding: true)
+              try data.write(to: cookieIDFullPath)
+            } catch {
+              print("Could’nt write file")
             }
             
             vlProperties.removeValue(forKey: "OM.cookieID")
@@ -397,8 +408,15 @@ open class Visilabs{
             }
 
             exVisitorID = exvisitorid
-            if !NSKeyedArchiver.archiveRootObject(exVisitorID!, toFile: exVisitorIDFilePath()!) {
-                print("Visilabs: WARNING - Unable to archive new identity!!!")
+//            if !NSKeyedArchiver.archiveRootObject(exVisitorID!, toFile: exVisitorIDFilePath()!) {
+//                print("Visilabs: WARNING - Unable to archive new identity!!!")
+//            }
+            let exVisitorIDFullPath = getDocumentsDirectory().appendingPathComponent(exVisitorIDFilePath()!)
+            do {
+              let data = try NSKeyedArchiver.archivedData(withRootObject: exVisitorID!, requiringSecureCoding: true)
+              try data.write(to: exVisitorIDFullPath)
+            } catch {
+              print("Could’nt write file")
             }
             vlProperties.removeValue(forKey: "OM.exVisitorID")
         }
@@ -407,8 +425,15 @@ open class Visilabs{
             let tokenid = properties["OM.sys.TokenID"]
             tokenID = tokenid
 
-            if !NSKeyedArchiver.archiveRootObject(tokenID!, toFile: tokenIDFilePath()!) {
-                print("Visilabs: WARNING - Unable to archive tokenID!!!")
+//            if !NSKeyedArchiver.archiveRootObject(tokenID!, toFile: tokenIDFilePath()!) {
+//                print("Visilabs: WARNING - Unable to archive tokenID!!!")
+//            }
+            let tokenIDFullPath = getDocumentsDirectory().appendingPathComponent(tokenIDFilePath()!)
+            do {
+              let data = try NSKeyedArchiver.archivedData(withRootObject: tokenID!, requiringSecureCoding: true)
+              try data.write(to: tokenIDFullPath)
+            } catch {
+              print("Could’nt write file")
             }
             vlProperties.removeValue(forKey: "OM.sys.TokenID")
         }
@@ -417,8 +442,15 @@ open class Visilabs{
             let appid = properties["OM.sys.AppID"]
             appID = appid
 
-            if !NSKeyedArchiver.archiveRootObject(appID!, toFile: appIDFilePath()!) {
-                print("Visilabs: WARNING - Unable to archive appID!!!")
+//            if !NSKeyedArchiver.archiveRootObject(appID!, toFile: appIDFilePath()!) {
+//                print("Visilabs: WARNING - Unable to archive appID!!!")
+//            }
+            let appIDFullPath = getDocumentsDirectory().appendingPathComponent(appIDFilePath()!)
+            do {
+              let data = try NSKeyedArchiver.archivedData(withRootObject: appID!, requiringSecureCoding: true)
+              try data.write(to: appIDFullPath)
+            } catch {
+              print("Could’nt write file")
             }
             vlProperties.removeValue(forKey: "OM.sys.AppID")
         }
@@ -460,16 +492,16 @@ open class Visilabs{
             segURL = "\(segURL ?? "")&\("OM.sys.AppID")=\(escapedAppID)"
         }
         
-        if properties != nil {
+        
             VisilabsPersistentTargetManager.saveParameters(properties)
             let additionalURL = urlizeProps(properties)
             if additionalURL!.count > 0 {
                 segURL = "\(segURL ?? "")\(additionalURL ?? "")"
             }
-        }
+        
         
         var rtURL: String? = nil
-        if realTimeURL != nil && !(realTimeURL == "") {
+        if realTimeURL.isEmptyOrWhitespace && !(realTimeURL == "") {
             rtURL = segURL!.replacingOccurrences(of: loggerURL, with: realTimeURL)
         }
 
