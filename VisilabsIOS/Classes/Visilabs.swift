@@ -396,7 +396,6 @@ open class Visilabs{
                 setCookieID()
             }
 
-
             exVisitorID = exvisitorid
             if !NSKeyedArchiver.archiveRootObject(exVisitorID!, toFile: exVisitorIDFilePath()!) {
                 print("Visilabs: WARNING - Unable to archive new identity!!!")
