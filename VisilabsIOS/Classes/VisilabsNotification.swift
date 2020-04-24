@@ -136,7 +136,7 @@ class VisilabsNotification {
             if messageType == VisilabsNotificationType.mini {
                 let imageName = URL(fileURLWithPath: imagePath ?? "").deletingPathExtension().absoluteString
                 let `extension` = URL(fileURLWithPath: imagePath ?? "").pathExtension
-                imagePath = URL(fileURLWithPath: imageName + ("@2x")).appendingPathExtension(`extension` ?? "").absoluteString
+                imagePath = URL(fileURLWithPath: imageName + ("@2x")).appendingPathExtension(`extension`).absoluteString
             }
 
 
