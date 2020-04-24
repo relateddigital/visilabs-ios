@@ -15,6 +15,7 @@ enum VisilabsNotificationType : String {
     case nps
     case image_button
     case smile_rating
+    case unknown
 }
 
 class VisilabsNotification {
