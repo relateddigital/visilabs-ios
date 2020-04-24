@@ -73,6 +73,7 @@ open class Visilabs{
     }
     
     //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
+    @discardableResult
     public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
@@ -511,7 +512,7 @@ open class Visilabs{
                 sendQueue.append(rtURL ?? "")
             }
         }
-        send()
+        //send()
     }
     
     public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
