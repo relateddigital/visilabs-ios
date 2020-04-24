@@ -56,7 +56,7 @@ class VisilabsGeofenceStatus: NSObject {
                                                 let latitude = geofence["lat"] as? Double ?? 0.0 //TODO: default value set etmeli miyim?, yoksa atlamalı mıyım?
                                                 let longitude = geofence["long"] as? Double ?? 0.0
                                                 let radius = geofence["rds"] as? Double ?? 0.0
-                                                let geoID = geofence["id"] as? String
+                                                let geoID = geofence["id"] as? String ?? "" //TODO: default value set etmeli miyim?, yoksa atlamalı mıyım?
                                                 
                                                 let visilabsServerGeofence = VisilabsServerGeofence()
                                                 visilabsServerGeofence.latitude = latitude
@@ -207,6 +207,8 @@ class VisilabsGeofenceStatus: NSObject {
         return dateFormatter
     }
     
+    //TODO: kullanılmıyor.
+    //stopMonitorSelfAndChildGeofence
     
     
     var arrayGeofenceFetchList: [AnyHashable]?
