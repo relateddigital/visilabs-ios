@@ -35,11 +35,11 @@ class VisilabsGeofenceRequest: VisilabsAction {
         
         var geofenceURL = Visilabs.callAPI()!.geofenceURL
         let queryParameters = getParametersAsQueryString()
-        geofenceURL = geofenceURL! + queryParameters!
+        geofenceURL = geofenceURL! + queryParameters
         return URL(string: geofenceURL!)
     }
     
-    private func getParametersAsQueryString() -> String? {
+    private func getParametersAsQueryString() -> String {
         
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(Visilabs.callAPI()!.organizationID)&\(VisilabsConfig.SITEID_KEY)=\(Visilabs.callAPI()!.siteID)"
 
