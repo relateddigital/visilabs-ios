@@ -106,7 +106,38 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     //TODO: implement
     func createNetworkMonitor() {
-
+        reachability = VisilabsReachability()
+        NotificationCenter.default.addObserver(self, selector: #selector(networkStatusChanged(_:)), name: kReachabilityChangedNotification, object: nil)
+        reachability.startNotifier()
+        updateRecoverTime() //notifier not trigger when start, update to correct value in initalize.
+    }
+    
+    deinit {
+        locationManager?.delegate = nil
+        NotificationCenter.default.removeObserver(self)
+        reachability?.stopNotifier()
+    }
+    
+    func updateRecoverTime() -> Bool {
+        var recoverTime: TimeInterval = 0
+        //TODO: "NETWORK_RECOVER_TIME" ı VisilabsConfig e taşı
+        if let recoverTimeValue = UserDefaults.standard.object(forKey: "NETWORK_RECOVER_TIME") as? Double{
+            recoverTime = TimeInterval(recoverTimeValue)
+        }
+        if let r = self.reachability, r.connection == VisilabsReachability.Connection.unavailable{
+            if recoverTime != 0 {
+                UserDefaults.standard.set(0, forKey: "NETWORK_RECOVER_TIME") //not connected
+                UserDefaults.standard.synchronize()
+                return true
+            }
+        } else {
+            if recoverTime == 0 {
+                UserDefaults.standard.set(Date().timeIntervalSinceReferenceDate, forKey: "NETWORK_RECOVER_TIME") //connected
+                UserDefaults.standard.synchronize()
+                return true
+            }
+        }
+        return false //not change
     }
     
     private func requestPermissionSinceiOS8() {
