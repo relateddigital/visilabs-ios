@@ -71,6 +71,7 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         createNetworkMonitor()
     }
     
+    //create internal operating iOS object.
     func createLocationManager() {
         locationManager = CLLocationManager()
         locationManager?.delegate = self
@@ -105,10 +106,16 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     //TODO: implement
+    //create Reachability to monitor network status change.
     func createNetworkMonitor() {
-        reachability = VisilabsReachability()
-        NotificationCenter.default.addObserver(self, selector: #selector(networkStatusChanged(_:)), name: kReachabilityChangedNotification, object: nil)
-        reachability.startNotifier()
+        do{
+            reachability = try VisilabsReachability()
+            //TODO ReachabilityChangedNotification ismini VisilabsReachabilityChangedNotification olarak değiştirmeme gerek var mı?
+            NotificationCenter.default.addObserver(self, selector: #selector(networkStatusChanged(_:)), name: Notification.Name.reachabilityChanged, object: nil)
+            try reachability?.startNotifier()
+        }catch {
+            print("createNetworkMonitor error: \(error.localizedDescription)")
+        }
         updateRecoverTime() //notifier not trigger when start, update to correct value in initalize.
     }
     
@@ -118,6 +125,16 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         reachability?.stopNotifier()
     }
     
+    //handle for notification for network status change.
+    @objc func networkStatusChanged(_ notification: Notification?) {
+        if updateRecoverTime() {
+            sendGeoLocationUpdate() //when network recover check whether need to send location update.
+        }
+    }
+    
+    //update NETWORK_RECOVER_TIME value. Return YES if connect and non-connect change.
+    //TODO: dönüş tipi kullanılmıyorsa void yap
+    @discardableResult
     func updateRecoverTime() -> Bool {
         var recoverTime: TimeInterval = 0
         //TODO: "NETWORK_RECOVER_TIME" ı VisilabsConfig e taşı
