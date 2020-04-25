@@ -27,7 +27,7 @@ class VisilabsTargetRequest: VisilabsAction {
         }
         var targetURL = Visilabs.callAPI()!.targetURL
         let queryParameters = getParametersAsQueryString()
-        targetURL = targetURL! + queryParameters!
+        targetURL = targetURL! + queryParameters
         return URL(string: targetURL!)
     }
     
@@ -73,7 +73,7 @@ class VisilabsTargetRequest: VisilabsAction {
         return nil
     }
     
-    private func getParametersAsQueryString() -> String? {
+    private func getParametersAsQueryString() -> String {
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(Visilabs.callAPI()!.organizationID)&\(VisilabsConfig.SITEID_KEY)=\(Visilabs.callAPI()!.siteID)"
 
         if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {
