@@ -44,7 +44,7 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     var currentGeoLocationValue: CLLocationCoordinate2D?
     
-    //TODO: bu initialize'ı incele, override?, SH'leri uçur
+    //TODO: bu initialize'ı incele, override?, SH'leri uçur, kullanılmıyorsa sil
     class func initialize2() {
         var initialDefaults: [String : Any] = [:]
         initialDefaults["SH_FG_INTERVAL"] = 1 //value for location update time interval in FG
@@ -69,6 +69,44 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         createLocationManager()
         createNetworkMonitor()
+    }
+    
+    func createLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        #if !TARGET_IPHONE_SIMULATOR
+        if locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
+            locationManager?.pausesLocationUpdatesAutomatically = false //since iOS 6.0, if error happen whether pause location update to save battery? Set to NO so that retrying and keeping report.
+        }
+        #endif
+        
+        requestPermissionSinceiOS8()
+
+        desiredAccuracy = kCLLocationAccuracyHundredMeters
+        distanceFilter = CLLocationDistance(10.0)
+
+        //initialize detecting location
+        currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
+
+        sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
+        sentGeoLocationTime = 0 //not update yet
+        geolocationMonitorState = SHGeoLocationMonitorState.Stopped
+        
+        //TODO: bu niye var,SH_LMBridge_StartMonitorGeoLocation ı VisilabsConfig e taşı
+        NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+
+        //bunu sonradan ekledim.
+        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
+            //TODO: print i kaldır
+            print("LocationManager Action: Start significant location update.")
+            locationManager?.startMonitoringSignificantLocationChanges()
+            geolocationMonitorState = SHGeoLocationMonitorState.MonitorSignificant
+        }
+    }
+    
+    //TODO: implement
+    func createNetworkMonitor() {
+
     }
     
     private func requestPermissionSinceiOS8() {
@@ -103,42 +141,9 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     func stopMonitorRegion(_ region: CLRegion?) {
     }
     
-    func createLocationManager() {
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        #if !TARGET_IPHONE_SIMULATOR
-        if locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
-            locationManager?.pausesLocationUpdatesAutomatically = false //since iOS 6.0, if error happen whether pause location update to save battery? Set to NO so that retrying and keeping report.
-        }
-        #endif
-        
-        requestPermissionSinceiOS8()
-
-        desiredAccuracy = kCLLocationAccuracyHundredMeters
-        distanceFilter = CLLocationDistance(10.0)
-
-        //initialize detecting location
-        currentGeoLocationValue = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
-
-        sentGeoLocationValue = CLLocationCoordinate2DMake(CLLocationDegrees(0), CLLocationDegrees(0))
-        sentGeoLocationTime = 0 //not update yet
-        geolocationMonitorState = SHGeoLocationMonitorState.Stopped
-        
-        //TODO: bu niye var
-        NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
-
-        //bunu sonradan ekledim.
-        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
-            print("LocationManager Action: Start significant location update.")
-            locationManager?.startMonitoringSignificantLocationChanges()
-            geolocationMonitorState = SHGeoLocationMonitorState.MonitorSignificant
-        }
-    }
     
-    //TODO: implement
-    func createNetworkMonitor() {
-
-    }
+    
+    
     
     //TODO: implement
     class func locationServiceEnabled(forApp allowNotDetermined: Bool) -> Bool {
