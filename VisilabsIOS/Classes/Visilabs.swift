@@ -58,7 +58,7 @@ open class Visilabs{
     internal var userAgent: String?
     private var loggingEnabled: Bool = true
     private var checkForNotificationsOnLoggerRequest: Bool = true
-    private var miniNotificationPresentationTime: Float = 0.0
+    private var miniNotificationPresentationTime: Float = 10.0
     private var miniNotificationBackgroundColor: UIColor = .clear
     
     
@@ -333,7 +333,7 @@ open class Visilabs{
     }
     
     //TODO
-    func buildTargetRequest(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
+    internal func buildTargetRequest(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
         if Visilabs.API == nil {
             //TODO: ne yapacağına karar ver.
             //Error is not handled because the enclosing function is not declared 'throws'
@@ -344,7 +344,7 @@ open class Visilabs{
     }
 
     //TODO
-    func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
+    internal func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
         if Visilabs.API == nil {
             //TODO: ne yapacağına karar ver.
             //Error is not handled because the enclosing function is not declared 'throws'
