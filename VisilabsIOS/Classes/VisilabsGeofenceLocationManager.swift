@@ -92,6 +92,11 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func startMonitorRegion(_ region: CLRegion?) -> Bool {
+        if let shared = VisilabsGeofenceApp.sharedInstance(), !shared.isLocationServiceEnabled{
+            return false //initialize  CLLocationManager but cannot call any function to avoid promote.
+        }
+        self.requestPermissionSinceiOS8() //request before action, it simply return if not suitable.
+        
         return true
     }
     
