@@ -26,7 +26,7 @@ class VisilabsPersistentTargetManager {
                     if count == 1 {
                         if relatedKeys != nil && relatedKeys!.count > 0 {
                             var parameterValueToStore = parameterValue.copy() as! String
-                            let relatedKey = relatedKeys![0] as? String
+                            let relatedKey = relatedKeys![0]
                             if parameters[relatedKey ?? ""] != nil {
                                 let relatedKeyValue = (parameters[relatedKey ?? ""])?.trimmingCharacters(in: CharacterSet.whitespaces)
                                 parameterValueToStore = parameterValueToStore + ("|")
