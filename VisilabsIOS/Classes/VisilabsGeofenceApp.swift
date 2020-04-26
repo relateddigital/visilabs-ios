@@ -28,7 +28,7 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         }
     }
     
-    
+    // hiçbir zaman set edilmiyor sanırım. kaldırılabilir.
     var reportWorkHomeLocationOnly: Bool {
         get {
             //TODO: "REPORT_WORKHOME_LOCATION_ONLY" ı VisilabsConfig e al
