@@ -325,8 +325,20 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         })
         
         if let sameIdRegion = sameIdRegion{
-             
+            if self.isRegionSame(sameIdRegion, with: region){
+                return false
+            }else{
+                print("Warning: same identifier region \(sameIdRegion) monitored. Add new \(region) will remove the already monitored one.")
+            }
         }
+        
+        print("LocationManager Action: Start monitor region %@.", region);
+        locationManager?.startMonitoring(for: region)
+        //TODO: "Region" ı VisilabsConfig e aktar
+        let userInfo = ["Region": region]
+        //TODO: "SHLMStartMonitorRegionNotification" ı VisilabsConfig e aktar
+        let notification = Notification( name: Notification.Name(rawValue: "SHLMStartMonitorRegionNotification"), object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
         
         
         //TODO:burada kaldım.
