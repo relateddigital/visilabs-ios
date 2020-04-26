@@ -383,16 +383,16 @@ class VisilabsGeofenceLocationManager: NSObject {
         let timeDelta = Date().timeIntervalSince1970 - sentGeoLocationTime
         
         if let cgl = self.currentGeoLocation, let sgl = self.sentGeoLocationValue{
+            //TODO: bu hesaplamalar ve kontroller doğru mu?
             let distSquared = VisilabsHelper.distanceSquared(forLat1: cgl.latitude, lng1: cgl.longitude, lat2: sgl.latitude, lng2: sgl.longitude)
-            let distanceDelta = sqrt(distSquared)
+            let distanceDelta = Float(sqrt(distSquared))
+            if (sgl.latitude == 0 || sgl.longitude == 0) /*if not send before, do it anyway */ || ((timeDelta >= minTimeBWEvents) && (distanceDelta >= minDistanceBWEvents)) {
+                print("LocationManager Delegate: FG (\(isFG ? "Yes" : "No")), new location (\(cgl.latitude), \(cgl.longitude)), old location (\(sgl.latitude), \(sgl.longitude)), distance (\(distanceDelta) >= \(minDistanceBWEvents)), last time (\(Date(timeIntervalSince1970: sentGeoLocationTime))), time delta (\(timeDelta) >= \(minTimeBWEvents)).")
+                self.sentGeoLocationValue = currentGeoLocation //do it early
+                self.sentGeoLocationTime = Date().timeIntervalSince1970
+                //Only send logline 20 when have location bridge. Above check must kept here because the internal variables cannot move to SHLocationBridge.
+            }
         }
-        
-        
-        
-        
-        
-        
-        
     }
     
     func isRegionSame(_ r1: CLRegion?, with r2: CLRegion?) -> Bool {
