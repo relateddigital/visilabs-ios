@@ -24,7 +24,7 @@ let SHLocation_FG_Distance = 100
 let SHLocation_BG_Interval = 5
 let SHLocation_BG_Distance = 500
 
-class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
+class VisilabsGeofenceLocationManager: NSObject {
     
     var locationManager: CLLocationManager? /*The internal operating iOS object. */
     var sentGeoLocationValue: CLLocationCoordinate2D? /*sent by log location 20 */
@@ -423,8 +423,12 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     
+
     
-    
+}
+
+
+extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
     
     // MARK: - CLLocationManagerDelegate implementation
     
@@ -459,6 +463,4 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus){
         
     }
-    
-    
 }
