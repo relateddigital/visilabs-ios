@@ -35,6 +35,7 @@ class VisilabsGeofenceLocationManager: NSObject {
     
     
     // MARK: - visit geo location detective result
+    var currentGeoLocationValue: CLLocationCoordinate2D?
     var currentGeoLocation : CLLocationCoordinate2D? {
         get {
             if VisilabsGeofenceLocationManager.locationServiceEnabled(forApp: false){ //If location service disabled, this local value is meaningless.
@@ -149,7 +150,7 @@ class VisilabsGeofenceLocationManager: NSObject {
     
     
     
-    var currentGeoLocationValue: CLLocationCoordinate2D?
+    
     
     // MARK: - life cycle
     
@@ -364,7 +365,7 @@ class VisilabsGeofenceLocationManager: NSObject {
     
     // MARK: - private functions
     
-    func sendGeoLocationUpdate(){
+    private func sendGeoLocationUpdate(){
         if let si = VisilabsGeofenceApp.sharedInstance(), si.reportWorkHomeLocationOnly{
             return; //not send logline 20.
         }
@@ -375,6 +376,23 @@ class VisilabsGeofenceLocationManager: NSObject {
         if reachability?.connection != VisilabsReachability.Connection.wifi && reachability?.connection != VisilabsReachability.Connection.cellular {
             return //only do location 20 when network available
         }
+        
+        let isFG = UIApplication.shared.applicationState != .background //When asking for permission it's InActive
+        let minTimeBWEvents: Double = isFG ? fgMinTimeBetweenEvents * 60 : bgMinTimeBetweenEvents * 60
+        let minDistanceBWEvents = isFG ? fgMinDistanceBetweenEvents : bgMinDistanceBetweenEvents
+        let timeDelta = Date().timeIntervalSince1970 - sentGeoLocationTime
+        
+        if let cgl = self.currentGeoLocation, let sgl = self.sentGeoLocationValue{
+            let distSquared = VisilabsHelper.distanceSquared(forLat1: cgl.latitude, lng1: cgl.longitude, lat2: sgl.latitude, lng2: sgl.longitude)
+            let distanceDelta = sqrt(distSquared)
+        }
+        
+        
+        
+        
+        
+        
+        
     }
     
     func isRegionSame(_ r1: CLRegion?, with r2: CLRegion?) -> Bool {
