@@ -332,6 +332,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         return true
     }
     
+    func stopMonitorRegion(_ region: CLRegion) {
+    }
     
     
     //handle for notification for network status change.
@@ -369,8 +371,7 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     
     
-    func stopMonitorRegion(_ region: CLRegion?) {
-    }
+    
     
     // MARK: - CLLocationManagerDelegate implementation
     
