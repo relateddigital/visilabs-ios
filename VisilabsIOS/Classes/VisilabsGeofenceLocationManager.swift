@@ -317,6 +317,18 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         //check whether this region is already monitored. if same region is monitored ignore this call; if not same region but with same identifier is monitored, print warning.
         var sameIdRegion: CLRegion? = nil
         
+        
+        self.locationManager?.monitoredRegions.forEach({ (monitoredRegion) in
+            if monitoredRegion.identifier.compare(region.identifier, options: .caseInsensitive, range: nil, locale: .current) == .orderedSame {
+                sameIdRegion = monitoredRegion //find one already monitored with same identifier
+            }
+        })
+        
+        if let sameIdRegion = sameIdRegion{
+             
+        }
+        
+        
         //TODO:burada kaldım.
         /*
         locationManager?.monitoredRegions.enumerateObjects(usingBlock: { obj, stop in
@@ -335,8 +347,25 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     func stopMonitorRegion(_ region: CLRegion) {
     }
     
+    
+    // MARK: - private functions
+    
     func sendGeoLocationUpdate(){
         
+    }
+    
+    func isRegionSame(_ r1: CLRegion?, with r2: CLRegion?) -> Bool {
+        if r1 == nil && r2 == nil {
+            return true
+        }
+
+        //CLCircularRegion compares identifier.
+        if r1 != nil && r2 != nil && (r1 is CLCircularRegion) && (r2 is CLCircularRegion) {
+            let gr1 = r1 as? CLCircularRegion
+            let gr2 = r2 as? CLCircularRegion
+            return gr1?.identifier == gr2?.identifier
+        }
+        return r1?.isEqual(r2) ?? false
     }
     
     
