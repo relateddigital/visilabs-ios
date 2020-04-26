@@ -365,14 +365,15 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     // MARK: - private functions
     
     func sendGeoLocationUpdate(){
-        if let si = VisilabsGeofenceApp.sharedInstance(), si.reportWorkHomeLocationOnly
-        {
+        if let si = VisilabsGeofenceApp.sharedInstance(), si.reportWorkHomeLocationOnly{
             return; //not send logline 20.
         }
         //TODO: geofence latitude veya longitude 0 olabilir. kontrol et.
-        if (self.currentGeoLocation?.latitude == 0 || self.currentGeoLocation?.longitude == 0)
-        {
+        if (self.currentGeoLocation?.latitude == 0 || self.currentGeoLocation?.longitude == 0){
             return; //if current location is not detected, not send log 20.
+        }
+        if reachability.currentReachabilityStatus != ReachableViaWiFi && reachability.currentReachabilityStatus != ReachableViaWWAN {
+            return //only do location 20 when network available
         }
     }
     
