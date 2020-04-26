@@ -339,20 +339,6 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         //TODO: "SHLMStartMonitorRegionNotification" ı VisilabsConfig e aktar
         let notification = Notification( name: Notification.Name(rawValue: "SHLMStartMonitorRegionNotification"), object: self, userInfo: userInfo)
         NotificationCenter.default.post(notification)
-        
-        
-        //TODO:burada kaldım.
-        /*
-        locationManager?.monitoredRegions.enumerateObjects(usingBlock: { obj, stop in
-            let monitoredRegion = obj as? CLRegion
-            if monitoredRegion?.identifier.compare(region?.identifier ?? "", options: .caseInsensitive, range: nil, locale: .current) == .orderedSame {
-                sameIdRegion = monitoredRegion //find one already monitored with same identifier
-                stop = UnsafeMutablePointer<ObjCBool>(mutating: &true)
-            }
-        })
- */
-        
-        
         return true
     }
     
