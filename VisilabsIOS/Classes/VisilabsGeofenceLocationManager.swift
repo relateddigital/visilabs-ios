@@ -421,10 +421,6 @@ class VisilabsGeofenceLocationManager: NSObject {
         }
         return false //not change
     }
-    
-    
-
-    
 }
 
 
