@@ -135,11 +135,12 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    
-    
-    
-    
-    private(set) var monitoredRegions: [AnyHashable]? // TODO: burada weak vardı, gerek var mı?
+    // TODO: burada weak vardı, gerek var mı?
+    var monitoredRegions: [CLRegion]? {
+        get {
+            return Array(self.locationManager?.monitoredRegions ?? [])
+        }
+    }
     
     
     var geofenceMaximumRadius: CLLocationDistance {
