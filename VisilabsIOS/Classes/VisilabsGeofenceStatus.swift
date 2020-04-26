@@ -71,7 +71,7 @@ class VisilabsGeofenceStatus: NSObject {
                                                 let currentLatitude = currentLocation?.latitude ?? 0.0
                                                 let currentLongitude = currentLocation?.longitude ?? 0.0
 
-                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = self.distanceSquared(forLat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
+                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(forLat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
                                                 
                                                 //TODO:burada ikinci targetEvent'e gerek var mı? kullanıldığı yeri bul gereksizse kaldır.
                                                 visilabsServerGeofence.serverId = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"
@@ -142,20 +142,6 @@ class VisilabsGeofenceStatus: NSObject {
     }
     
     // MARK: - private functions
-    
-    //TODO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
-    private func distanceSquared(forLat1 lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
-        let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
-        let nauticalMilesPerLatitude = 60.00721
-        //let nauticalMilesPerLongitude = 60.10793
-        let metersPerNauticalMile = 1852.00
-        let nauticalMilesPerLongitudeDividedByTwo = 30.053965
-        // simple pythagorean formula - for efficiency
-        let yDistance = (lat2 - lat1) * nauticalMilesPerLatitude
-        let xDistance = (cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo
-        let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
-        return res
-    }
     
     //DONE
     //Geofence monitor region need to change, stop previous monitor for server's geofence. If `onlyForOutside`=YES, only stop monitor those outside; otherwise stop all regardless inside or outside. `parentKeep`=YES take effect when `onlyForOutside`=YES, if it's parent fence is inside, child fence not stop although it's outside.
