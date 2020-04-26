@@ -228,20 +228,4 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     func stopMonitorRegion(_ region: CLRegion?) {
     }
     
-    
-    
-    
-    
-    //TODO: implement
-    class func locationServiceEnabled(forApp allowNotDetermined: Bool) -> Bool {
-        return false
-    }
-    
-    
-    deinit {
-        locationManager?.delegate = nil
-        NotificationCenter.default.removeObserver(self)
-        reachability?.stopNotifier()
-    }
-    
 }
