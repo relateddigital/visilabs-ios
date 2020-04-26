@@ -372,7 +372,7 @@ class VisilabsGeofenceLocationManager: NSObject {
         if (self.currentGeoLocation?.latitude == 0 || self.currentGeoLocation?.longitude == 0){
             return; //if current location is not detected, not send log 20.
         }
-        if reachability.currentReachabilityStatus != ReachableViaWiFi && reachability.currentReachabilityStatus != ReachableViaWWAN {
+        if reachability?.connection != VisilabsReachability.Connection.wifi && reachability?.connection != VisilabsReachability.Connection.cellular {
             return //only do location 20 when network available
         }
     }
