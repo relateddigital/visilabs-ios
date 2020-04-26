@@ -68,7 +68,7 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         set {
             if newValue >= 0 {
                 //TODO: "SH_FG_INTERVAL" ı VisilabsConfig e al
-                UserDefaults.standard.set(NSNumber(value: fgMinTimeBetweenEvents), forKey: "SH_FG_INTERVAL")
+                UserDefaults.standard.set(newValue, forKey: "SH_FG_INTERVAL")
                 UserDefaults.standard.synchronize()
             }
         }
@@ -95,8 +95,28 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     
+    var bgMinTimeBetweenEvents: TimeInterval {
+        get {
+            //TODO: "SH_FG_INTERVAL" ı VisilabsConfig e al
+            let value = TimeInterval(UserDefaults.standard.object(forKey: "SH_BG_INTERVAL") as? Double ?? 0.0)
+            assert(value >= 0, "Not find suitable value for SH_BG_INTERVAL")
+            if value >= 0 {
+                return value
+            } else {
+                //TODO:
+                return TimeInterval(SHLocation_BG_Interval)
+            }
+        }
+        set {
+            if newValue >= 0 {
+                //TODO: "SH_BG_INTERVAL" ı VisilabsConfig e al
+                UserDefaults.standard.set(NSNumber(value: newValue), forKey: "SH_BG_INTERVAL")
+                UserDefaults.standard.synchronize()
+            }
+        }
+    }
     
-    var bgMinTimeBetweenEvents: TimeInterval = 0.0
+    
     var bgMinDistanceBetweenEvents: Float = 0.0
     private(set) var monitoredRegions: [AnyHashable]? // TODO: burada weak vardı, gerek var mı?
     
