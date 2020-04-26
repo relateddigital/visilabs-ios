@@ -18,6 +18,12 @@ enum SHGeoLocationMonitorState : Int {
     case MonitorSignificant
 }
 
+//TODO:
+let SHLocation_FG_Interval = 1
+let SHLocation_FG_Distance = 100
+let SHLocation_BG_Interval = 5
+let SHLocation_BG_Distance = 500
+
 class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager? /*The internal operating iOS object. */
@@ -43,9 +49,32 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     var desiredAccuracy: CLLocationAccuracy = 0
     
-    //TODO: hiçbir yerde kullanılmıyor sanırım
+    //TODO: hiçbir yerde kullanılmıyor sanırım, kaldırılabilir
     var distanceFilter: CLLocationDistance = 0
-    var fgMinTimeBetweenEvents: TimeInterval = 0.0
+    
+    
+    var fgMinTimeBetweenEvents: TimeInterval {
+        get {
+            //TODO: "SH_FG_INTERVAL" ı VisilabsConfig e al
+            let value = TimeInterval(UserDefaults.standard.object(forKey: "SH_FG_INTERVAL") as? Double ?? 0.0)
+            assert(value >= 0, "Not find suitable value for SH_FG_INTERVAL")
+            if value >= 0 {
+                return value
+            } else {
+                //TODO:
+                return TimeInterval(SHLocation_FG_Interval)
+            }
+        }
+        set {
+            if newValue >= 0 {
+                //TODO: "SH_FG_INTERVAL" ı VisilabsConfig e al
+                UserDefaults.standard.set(NSNumber(value: fgMinTimeBetweenEvents), forKey: "SH_FG_INTERVAL")
+                UserDefaults.standard.synchronize()
+            }
+        }
+    }
+    
+    
     var bgMinTimeBetweenEvents: TimeInterval = 0.0
     var fgMinDistanceBetweenEvents: Float = 0.0
     var bgMinDistanceBetweenEvents: Float = 0.0
