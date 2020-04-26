@@ -343,6 +343,24 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func stopMonitorRegion(_ region: CLRegion) {
+        if VisilabsGeofenceApp.sharedInstance() == nil || !VisilabsGeofenceApp.sharedInstance()!.isLocationServiceEnabled {
+            return //initialize CLLocationManager but cannot call any function to avoid promote.
+        }
+        var isFound = false
+        self.locationManager?.monitoredRegions.forEach({ (monitoredRegion) in
+            if self.isRegionSame(monitoredRegion, with: region){
+                isFound = true
+            }
+        })
+        if isFound{
+            print("LocationManager Action: Stop monitor region \(region).")
+            self.locationManager?.stopMonitoring(for: region)
+            //TODO: "Region" VisilabsConfig e taşı
+            var userInfo: [String : CLRegion]? = ["Region": region]
+            //TODO: "SHLMStopMonitorRegionNotification" VisilabsConfig e taşı
+            let notification = Notification(name: Notification.Name(rawValue: "SHLMStopMonitorRegionNotification"), object: self, userInfo: userInfo)
+            NotificationCenter.default.post(notification)
+        }
     }
     
     
