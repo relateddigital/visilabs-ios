@@ -365,7 +365,7 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     // MARK: - private functions
     
     func sendGeoLocationUpdate(){
-        if (VisilabsGeofenceApp.sharedInstance()?.reportWorkHomeLocationOnly)
+        if let si = VisilabsGeofenceApp.sharedInstance(), si.reportWorkHomeLocationOnly
         {
             return; //not send logline 20.
         }
