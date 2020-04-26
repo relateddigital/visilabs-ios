@@ -270,9 +270,36 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         return isEnabled
     }
     
+    // MARK: - operation
     
+    private func requestPermissionSinceiOS8() {
+        let status = CLLocationManager.authorizationStatus()
+        let enabled = VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled ?? false
+        if enabled && status == .notDetermined {
+            let locationAlwaysStr = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription") as? String
+            if locationAlwaysStr != nil { //if customer added "Always" uses this permission, recommended. cannot check length != 0 because Info.plist can add empty string for these key and location is enabled.
+                if locationManager?.responds(to: #selector(CLLocationManager.requestAlwaysAuthorization)) ?? false {
+                    locationManager?.requestAlwaysAuthorization() //since iOS 8.0, must request for one authorization type, meanwhile, customer App must add `NSLocationAlwaysUsageDescription` in Info.plist.
+                }
+            }else{
+                let locationWhileInUseStr = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") as? String
+                if locationWhileInUseStr != nil {
+                    if locationManager?.responds(to: #selector(CLLocationManager.requestWhenInUseAuthorization)) ?? false {
+                        locationManager?.requestWhenInUseAuthorization() //since iOS 8.0, if Always not available, try WhenInUse as secondary option.
+                    }
+                }
+            }
+        }
+    }
     
-    
+    func startMonitorRegion(_ region: CLRegion?) -> Bool {
+        if let shared = VisilabsGeofenceApp.sharedInstance(), !shared.isLocationServiceEnabled{
+            return false //initialize  CLLocationManager but cannot call any function to avoid promote.
+        }
+        self.requestPermissionSinceiOS8() //request before action, it simply return if not suitable.
+        
+        return true
+    }
     
     
     
@@ -308,34 +335,7 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         return false //not change
     }
     
-    private func requestPermissionSinceiOS8() {
-        let status = CLLocationManager.authorizationStatus()
-        let enabled = VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled ?? false
-        if enabled && status == .notDetermined {
-            let locationAlwaysStr = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription") as? String
-            if locationAlwaysStr != nil { //if customer added "Always" uses this permission, recommended. cannot check length != 0 because Info.plist can add empty string for these key and location is enabled.
-                if locationManager?.responds(to: #selector(CLLocationManager.requestAlwaysAuthorization)) ?? false {
-                    locationManager?.requestAlwaysAuthorization() //since iOS 8.0, must request for one authorization type, meanwhile, customer App must add `NSLocationAlwaysUsageDescription` in Info.plist.
-                }
-            }else{
-                let locationWhileInUseStr = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") as? String
-                if locationWhileInUseStr != nil {
-                    if locationManager?.responds(to: #selector(CLLocationManager.requestWhenInUseAuthorization)) ?? false {
-                        locationManager?.requestWhenInUseAuthorization() //since iOS 8.0, if Always not available, try WhenInUse as secondary option.
-                    }
-                }
-            }
-        }
-    }
     
-    func startMonitorRegion(_ region: CLRegion?) -> Bool {
-        if let shared = VisilabsGeofenceApp.sharedInstance(), !shared.isLocationServiceEnabled{
-            return false //initialize  CLLocationManager but cannot call any function to avoid promote.
-        }
-        self.requestPermissionSinceiOS8() //request before action, it simply return if not suitable.
-        
-        return true
-    }
     
     func stopMonitorRegion(_ region: CLRegion?) {
     }
