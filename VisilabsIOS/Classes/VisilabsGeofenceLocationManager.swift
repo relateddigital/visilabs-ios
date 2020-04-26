@@ -309,7 +309,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
  */
             isMonitorRegionAvailable = CLLocationManager.isMonitoringAvailable(for: type(of: region))
         }else{
-            
+            //TODO:forced unwrap kaldırılmalı mı?, "SHErrorDomain" VisilabsConfig'e
+            self.locationManager(self.locationManager!, didFailWithError: NSError(domain: "SHErrorDomain", code: CLError.Code.denied.rawValue, userInfo: [NSLocalizedDescriptionKey: "Device not capable to monitor region: \(region)."]))
         }
  
         
@@ -355,6 +356,11 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     
     func stopMonitorRegion(_ region: CLRegion?) {
+    }
+    
+    // MARK: - CLLocationManagerDelegate implementation
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
+        
     }
     
 }
