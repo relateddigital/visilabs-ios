@@ -163,9 +163,9 @@ class VisilabsGeofenceStatus: NSObject {
         if let v = VisilabsGeofenceApp.sharedInstance(), let lm = v.locationManager, let mrs = lm.monitoredRegions {
             for mr in mrs {
                 //only stop if this region is previous geofence
-                if let mri = mr as? CLRegion, mri.identifier.contains("visilabs") {
-                    lm.stopMonitorRegion(mri)
-                    print("\(mri.identifier) stopped.")
+                if mr.identifier.contains("visilabs") {
+                    lm.stopMonitorRegion(mr)
+                    print("\(mr.identifier) stopped.")
                 }
             }
         }
@@ -174,7 +174,9 @@ class VisilabsGeofenceStatus: NSObject {
     //Give an array of VisilabsServerGeofence and convert to be monitored. It doesn't create region for child nodes.
     private func startMonitorGeofences(_ arrayGeofences: [VisilabsServerGeofence]) {
         for geofence in arrayGeofences {
-            VisilabsGeofenceApp.sharedInstance()?.locationManager?.startMonitorRegion(geofence.getGeoRegion())
+            if let g = geofence.getGeoRegion(){
+                VisilabsGeofenceApp.sharedInstance()?.locationManager?.startMonitorRegion(g)
+            }
         }
     }
     
