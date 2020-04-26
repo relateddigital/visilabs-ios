@@ -42,7 +42,7 @@ class VisilabsPersistentTargetManager {
                     }
                     else if count > 1 {
                         let previousParameterValue = VisilabsDataManager.read(storeKey) as? String
-                        var parameterValueToStore = parameterValue!.copy() as! String + ("|")
+                        var parameterValueToStore = parameterValue.copy() as! String + ("|")
                         parameterValueToStore = parameterValueToStore + (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
                             let previousParameterValueParts = previousParameterValue!.components(separatedBy: "~")
