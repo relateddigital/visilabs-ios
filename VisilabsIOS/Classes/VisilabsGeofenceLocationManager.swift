@@ -292,11 +292,27 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func startMonitorRegion(_ region: CLRegion?) -> Bool {
+    func startMonitorRegion(_ region: CLRegion) -> Bool {
         if let shared = VisilabsGeofenceApp.sharedInstance(), !shared.isLocationServiceEnabled{
             return false //initialize  CLLocationManager but cannot call any function to avoid promote.
         }
         self.requestPermissionSinceiOS8() //request before action, it simply return if not suitable.
+        var isMonitorRegionAvailable = VisilabsGeofenceLocationManager.locationServiceEnabled(forApp: false)
+        
+        if isMonitorRegionAvailable {
+            /*
+            if CLLocationManager.responds(to: #selector(CLLocationManager.isMonitoringAvailable(for:))) { //TODO: bu kontrole gerek var mı? derleme hatası oluyor.
+                isMonitorRegionAvailable = CLLocationManager.isMonitoringAvailable(for: type(of: region))
+            } else {
+                isMonitorRegionAvailable = false //[CLLocationManager regionMonitoringAvailable];
+            }
+ */
+            isMonitorRegionAvailable = CLLocationManager.isMonitoringAvailable(for: type(of: region))
+        }else{
+            
+        }
+ 
+        
         
         return true
     }
@@ -306,7 +322,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     //handle for notification for network status change.
     @objc func networkStatusChanged(_ notification: Notification?) {
         if updateRecoverTime() {
-            sendGeoLocationUpdate() //when network recover check whether need to send location update.
+            //TODO: uncomment
+            //sendGeoLocationUpdate() //when network recover check whether need to send location update.
         }
     }
     
