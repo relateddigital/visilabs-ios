@@ -28,6 +28,21 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         }
     }
     
+    
+    var reportWorkHomeLocationOnly: Bool {
+        get {
+            //TODO: "REPORT_WORKHOME_LOCATION_ONLY" ı VisilabsConfig e al
+            return UserDefaults.standard.object(forKey: "REPORT_WORKHOME_LOCATION_ONLY") as? Bool ?? false
+        }
+        set {
+            //TODO: "REPORT_WORKHOME_LOCATION_ONLY" ı VisilabsConfig e al
+            UserDefaults.standard.set(newValue, forKey: "REPORT_WORKHOME_LOCATION_ONLY")
+            UserDefaults.standard.synchronize()
+            //TODO: "SH_LMBridge_StartMonitorGeoLocation" ı VisilabsConfig e al
+            NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+        }
+    }
+    
     public class func sharedInstance() -> VisilabsGeofenceApp? {
         if instance == nil{
             instance = VisilabsGeofenceApp()
