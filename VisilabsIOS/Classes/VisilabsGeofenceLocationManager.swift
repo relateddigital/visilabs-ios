@@ -26,8 +26,24 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     var reachability: VisilabsReachability?
     
     private(set) var geolocationMonitorState: SHGeoLocationMonitorState?
-    private(set) var currentGeoLocation: CLLocationCoordinate2D?
+    
+    
+    // MARK: - visit geo location detective result
+    var currentGeoLocation : CLLocationCoordinate2D? {
+        get {
+            if VisilabsGeofenceLocationManager.locationServiceEnabled(forApp: false){ //If location service disabled, this local value is meaningless.
+                return self.currentGeoLocationValue
+            }else{
+                return CLLocationCoordinate2DMake(0, 0)
+            }
+        }
+    }
+    
+    
+    
     var desiredAccuracy: CLLocationAccuracy = 0
+    
+    //TODO: hiçbir yerde kullanılmıyor sanırım
     var distanceFilter: CLLocationDistance = 0
     var fgMinTimeBetweenEvents: TimeInterval = 0.0
     var bgMinTimeBetweenEvents: TimeInterval = 0.0
@@ -162,6 +178,11 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }
         return isEnabled
     }
+    
+    
+    
+    
+    
     
     
     //handle for notification for network status change.
