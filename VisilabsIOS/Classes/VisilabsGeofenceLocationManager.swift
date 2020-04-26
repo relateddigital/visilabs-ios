@@ -74,9 +74,29 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    var fgMinDistanceBetweenEvents: Float {
+        get {
+            //TODO: "SH_FG_DISTANCE" ı VisilabsConfig e al
+            let value = UserDefaults.standard.object(forKey: "SH_FG_DISTANCE") as? Float ?? 0.0
+            assert(value >= 0, "Not find suitable value for SH_FG_DISTANCE")
+            if value >= 0 {
+                return value
+            } else {
+                return Float(SHLocation_FG_Distance)
+            }
+        }
+        set {
+            if newValue >= 0 {
+                //TODO: "SH_FG_DISTANCE" ı VisilabsConfig e al
+                UserDefaults.standard.set(newValue, forKey: "SH_FG_DISTANCE")
+                UserDefaults.standard.synchronize()
+            }
+        }
+    }
+
+    
     
     var bgMinTimeBetweenEvents: TimeInterval = 0.0
-    var fgMinDistanceBetweenEvents: Float = 0.0
     var bgMinDistanceBetweenEvents: Float = 0.0
     private(set) var monitoredRegions: [AnyHashable]? // TODO: burada weak vardı, gerek var mı?
     
