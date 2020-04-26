@@ -44,6 +44,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     
     var currentGeoLocationValue: CLLocationCoordinate2D?
     
+    // MARK: - life cycle
+    
     //TODO: bu initialize'ı incele, override?, SH'leri uçur, kullanılmıyorsa sil
     class func initialize2() {
         var initialDefaults: [String : Any] = [:]
@@ -124,6 +126,43 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         NotificationCenter.default.removeObserver(self)
         reachability?.stopNotifier()
     }
+    
+    // MARK: - check system setup app's enable
+    
+    //TODO: çağırıldığı yerleri kontrol et
+    class func locationServiceEnabled(forApp allowNotDetermined: Bool) -> Bool {
+        //Since iOS 8 must add key in Info.plist otherwise location service won't start.
+        let locationAlwaysStr = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription") as? String
+        let locationWhileInUseStr = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") as? String
+        if locationAlwaysStr == nil && locationWhileInUseStr == nil {
+            return false //this iOS 8 App not configure location service key, it's not enabled. cannot avoid this check as it's [CLLocationManager authorizationStatus] is kCLAuthorizationStatusNotDetermined.
+        }
+        guard let va = VisilabsGeofenceApp.sharedInstance() else{
+            return false
+        }
+        if !va.isLocationServiceEnabled || !CLLocationManager.locationServicesEnabled() {
+            return false
+        }
+        
+        var isEnabled: Bool
+        //TODO: buradaki authorized'ları kontrol et.
+        if allowNotDetermined {
+            isEnabled = CLLocationManager.authorizationStatus() == .authorized //Individual App location service is enabled.*/ || CLLocationManager.authorizationStatus() == .authorizedAlways /*Sinc iOS 8, equal to kCLAuthorizationStatusAuthorized*/ || CLLocationManager.authorizationStatus() == .authorizedWhenInUse /*Since iOS 8, */ || CLLocationManager.authorizationStatus() == .notDetermined /*Need this also, otherwise not ask for permission at first launch.
+        } else {
+            isEnabled = CLLocationManager.authorizationStatus() == .authorized //Individual App location service is enabled.*/ || CLLocationManager.authorizationStatus() == .authorizedAlways /*Sinc iOS 8, equal to kCLAuthorizationStatusAuthorized*/ || CLLocationManager.authorizationStatus() == .authorizedWhenInUse /*Since iOS 8,
+        }
+        
+        if isEnabled {
+            //TODO: "LOCATION_DENIED_SENT" 'i VisilabsConfig e aktar
+            if let sentFlag = UserDefaults.standard.object(forKey: "LOCATION_DENIED_SENT") as? String, sentFlag.count > 0 {
+                //clear location denied flag
+                UserDefaults.standard.set("", forKey: "LOCATION_DENIED_SENT")
+                UserDefaults.standard.synchronize()
+            }
+        }
+        return isEnabled
+    }
+    
     
     //handle for notification for network status change.
     @objc func networkStatusChanged(_ notification: Notification?) {
