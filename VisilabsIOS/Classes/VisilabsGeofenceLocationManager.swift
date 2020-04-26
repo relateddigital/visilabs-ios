@@ -311,8 +311,10 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }else{
             //TODO:forced unwrap kaldırılmalı mı?, "SHErrorDomain" VisilabsConfig'e
             self.locationManager(self.locationManager!, didFailWithError: NSError(domain: "SHErrorDomain", code: CLError.Code.denied.rawValue, userInfo: [NSLocalizedDescriptionKey: "Device not capable to monitor region: \(region)."]))
+            return false
         }
  
+        //check whether this region is already monitored. if same region is monitored ignore this call; if not same region but with same identifier is monitored, print warning.
         
         
         return true
