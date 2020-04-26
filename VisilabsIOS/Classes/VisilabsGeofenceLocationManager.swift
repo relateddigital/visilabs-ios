@@ -315,6 +315,18 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }
  
         //check whether this region is already monitored. if same region is monitored ignore this call; if not same region but with same identifier is monitored, print warning.
+        var sameIdRegion: CLRegion? = nil
+        
+        //TODO:burada kaldım.
+        /*
+        locationManager?.monitoredRegions.enumerateObjects(usingBlock: { obj, stop in
+            let monitoredRegion = obj as? CLRegion
+            if monitoredRegion?.identifier.compare(region?.identifier ?? "", options: .caseInsensitive, range: nil, locale: .current) == .orderedSame {
+                sameIdRegion = monitoredRegion //find one already monitored with same identifier
+                stop = UnsafeMutablePointer<ObjCBool>(mutating: &true)
+            }
+        })
+ */
         
         
         return true
@@ -361,8 +373,38 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     // MARK: - CLLocationManagerDelegate implementation
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
         
     }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion){
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion){
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion){
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error){
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion){
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus){
+        
+    }
+    
     
 }
