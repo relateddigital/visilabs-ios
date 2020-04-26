@@ -335,12 +335,15 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     func stopMonitorRegion(_ region: CLRegion) {
     }
     
+    func sendGeoLocationUpdate(){
+        
+    }
+    
     
     //handle for notification for network status change.
     @objc func networkStatusChanged(_ notification: Notification?) {
         if updateRecoverTime() {
-            //TODO: uncomment
-            //sendGeoLocationUpdate() //when network recover check whether need to send location update.
+            sendGeoLocationUpdate() //when network recover check whether need to send location update.
         }
     }
     
