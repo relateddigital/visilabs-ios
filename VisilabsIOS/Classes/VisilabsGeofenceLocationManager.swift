@@ -367,7 +367,15 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
     // MARK: - private functions
     
     func sendGeoLocationUpdate(){
-        
+        if (VisilabsGeofenceApp.sharedInstance()?.reportWorkHomeLocationOnly)
+        {
+            return; //not send logline 20.
+        }
+        //TODO: geofence latitude veya longitude 0 olabilir. kontrol et.
+        if (self.currentGeoLocation?.latitude == 0 || self.currentGeoLocation?.longitude == 0)
+        {
+            return; //if current location is not detected, not send log 20.
+        }
     }
     
     func isRegionSame(_ r1: CLRegion?, with r2: CLRegion?) -> Bool {
@@ -376,10 +384,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         }
 
         //CLCircularRegion compares identifier.
-        if r1 != nil && r2 != nil && (r1 is CLCircularRegion) && (r2 is CLCircularRegion) {
-            let gr1 = r1 as? CLCircularRegion
-            let gr2 = r2 as? CLCircularRegion
-            return gr1?.identifier == gr2?.identifier
+        if let gr1 = r1 as? CLCircularRegion, let gr2 = r2 as? CLCircularRegion{
+            return gr1.identifier == gr2.identifier
         }
         return r1?.isEqual(r2) ?? false
     }
