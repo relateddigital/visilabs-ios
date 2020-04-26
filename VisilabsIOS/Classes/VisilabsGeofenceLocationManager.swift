@@ -355,10 +355,8 @@ class VisilabsGeofenceLocationManager: NSObject, CLLocationManagerDelegate {
         if isFound{
             print("LocationManager Action: Stop monitor region \(region).")
             self.locationManager?.stopMonitoring(for: region)
-            //TODO: "Region" VisilabsConfig e taşı
-            var userInfo: [String : CLRegion]? = ["Region": region]
-            //TODO: "SHLMStopMonitorRegionNotification" VisilabsConfig e taşı
-            let notification = Notification(name: Notification.Name(rawValue: "SHLMStopMonitorRegionNotification"), object: self, userInfo: userInfo)
+            //TODO: "SHLMStopMonitorRegionNotification", "Region" VisilabsConfig e taşı
+            let notification = Notification(name: Notification.Name(rawValue: "SHLMStopMonitorRegionNotification"), object: self, userInfo: ["Region": region])
             NotificationCenter.default.post(notification)
         }
     }
