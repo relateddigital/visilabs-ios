@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum VisilabsNotificationType : String {
+internal enum VisilabsNotificationType : String {
     case mini
     case full
     case image_text_button
