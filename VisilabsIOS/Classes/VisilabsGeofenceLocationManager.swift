@@ -490,8 +490,9 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
             for geofence in geofences {
                 if (geofence.suid == region.identifier) {
                     let elements = region.identifier.components(separatedBy: "_")
-                    if (geofence.type == "OnEnter") {
-                        if elements.count >= 6 {
+                    if elements.count >= 6 {
+                        if (geofence.type == "OnEnter") {
+                        
                             let geoID = elements[5]
                         }
                     }
