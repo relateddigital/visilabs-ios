@@ -9,6 +9,18 @@ import Foundation
 
 struct VisilabsConfig {
     
+    
+    static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieID"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
+    static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorID";
+    static let PROPERTIES_ARCHIVE_KEY = "Visilabs.properties";
+    
+    static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenID";
+    static let APPID_ARCHIVE_KEY = "Visilabs.appID";
+    static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
+    
+    
+    
+    
     static let IOS = "IOS"
     static let DAT_KEY = "dat"
     static let OM_GIF = "om.gif"
