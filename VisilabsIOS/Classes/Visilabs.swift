@@ -344,15 +344,6 @@ open class Visilabs{
         return controller
     }
     
-    
-    private func send(){
-        
-    }
-    
-    
-    
-    
-    
     //TODO: viewController is UIAlertController ne için gerekli bak
     private class func canPresentFromViewController(viewController: UIViewController) -> Bool{
         // This fixes the NSInternalInconsistencyException caused when we try present a
@@ -363,9 +354,28 @@ open class Visilabs{
         return true
     }
     
-    //TODO:
-    private func showNotification(pageName: String?) {
+    private func showNotification(pageName: String) {
+        checkForNotificationsResponse(
+        completion: { notifications in
+            if (notifications?.count ?? 0) > 0 {
+                self.showNotification(withObject: notifications?[0])
+            }
+        }
+        , pageName: pageName
+        , properties: [:])
     }
+    
+    private func send(){
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     //TODO:
     private func showNotification(_ pageName: String?, properties: [AnyHashable : Any]?) {
