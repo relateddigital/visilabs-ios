@@ -236,6 +236,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
     }
     
+    
+    
+    
     // MARK: In-App Notification
 
     private func trackNotificationClick(visilabsNotification: VisilabsNotification){
@@ -420,7 +423,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         properties: properties)
     }
     
-    
     private func showNotification(withObject notification: VisilabsNotification) {
         //TODO: burada neden nil kontrolü yapılmış? fonksiyonun devamında image kullanılmıyor.
         if notification.image == nil {
@@ -492,7 +494,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
     }
 
-
     //VisilabsNotificationViewControllerDelegate delege metodu
     func notificationController(_ controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool){
         //TODO: !== reference equality için kullanılıyor. aşağıdaki kontrol doğru mu?
@@ -527,6 +528,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         
     }
+    
+    
+    
     
     // MARK: Life-Cycle
     
@@ -565,6 +569,13 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             self.realTimeCookieKey = nil;
             self.realTimeCookieValue = nil;
         }
+    }
+    
+    func applicationDidEnterBackground(_ notification: Notification) {
+        print("\(self) did enter background")
+        self.serialQueue.async(execute: {
+            self.archive()
+        })
     }
     
     
