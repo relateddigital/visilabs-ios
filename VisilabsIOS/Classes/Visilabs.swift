@@ -518,6 +518,18 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
     }
     
+    func applicationDidBecomeActive(_ notification: Notification) {
+        Visilabs.visilabsLockingQueue.sync {
+            print("\(self) application did become active");
+            //TODO: bunlar VisilabsCookie objesine taşınacak
+            self.loggerCookieKey = nil;
+            self.loggerCookieValue = nil;
+            self.realTimeCookieKey = nil;
+            self.realTimeCookieValue = nil;
+        }
+    }
+    
+    
     private func send(){
         
     }
