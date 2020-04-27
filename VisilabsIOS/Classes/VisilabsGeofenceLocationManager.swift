@@ -543,8 +543,15 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
         if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
             return //initialize CLLocationManager but cannot call any function to avoid promote.
         }
-        
-        
+        print("LocationManager Delegate: Monitoring started for region: \(region)")
+        //TODO: "Region" ve "SHLMMonitorRegionSuccessNotification" ı VisilabsConfig e taşı
+        let userInfo = ["Region": region]
+        let notification = Notification(name: Notification.Name(rawValue: "SHLMMonitorRegionSuccessNotification"), object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
+
+        if self.locationManager != nil && self.locationManager!.responds(to: #selector(CLLocationManager.requestState(for:))) {
+            self.locationManager!.requestState(for: region)
+        }  
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error){
