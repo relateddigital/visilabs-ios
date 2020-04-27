@@ -84,6 +84,8 @@ open class Visilabs{
         return API
     }
 
+    
+    //TODO:init'te loggerURL ve realTimeURL'ın gerçekten url olup olmadığını kontrol et
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationID = organizationID
         self.siteID = siteID
@@ -210,7 +212,20 @@ open class Visilabs{
             , VisilabsConfig.URI_KEY : "/OM_evt.gif".urlEncode()
             , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
             , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
-
+        
+        if !self.exVisitorID.isNilOrWhiteSpace{
+            props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
+        }
+        
+        var queryString = ""
+        if !visilabsNotification.queryString.isNilOrWhiteSpace{
+            queryString = visilabsNotification.queryString!
+        }
+        
+        var lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
+        var rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
+        
+        
     }
     
     //TODO:
