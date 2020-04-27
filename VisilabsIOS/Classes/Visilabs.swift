@@ -6,7 +6,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private static var API: Visilabs?
     private static var visilabsReachability : VisilabsReachability?
     
-    private static let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")
+    private static let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")//TODO:eski SDK'da label'ın içinde profil id yazıyordu. gerekli mi?
     private let serialQueue: DispatchQueue = DispatchQueue(label:"VisilabsSerialQueue")
     
     var organizationID : String
@@ -24,7 +24,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var geofenceEnabled : Bool
     var maxGeofenceCount : Int
     
-    private var sendQueue : [String]
+    private var sendQueue = [String]()
     private var timer: Timer?
     private var segmentConnection: NSURLConnection?
     private var failureStatus = 0
@@ -51,12 +51,12 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     var exVisitorID: String?
     var tokenID: String?
     var appID: String?
-    internal var isOnline: Bool//TODO: burada = true demek lazım mı?
+    internal var isOnline : Bool = true //TODO: burada = true demek lazım mı?
     internal var userAgent: String?
     private var loggingEnabled: Bool = true
     private var checkForNotificationsOnLoggerRequest: Bool = true
     private var miniNotificationPresentationTime: Float = 10.0
-    private var miniNotificationBackgroundColor: UIColor = .clear
+    private var miniNotificationBackgroundColor: UIColor?
     
     
     //TODO: burada synchronized olacak
@@ -71,7 +71,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
     @discardableResult
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
+    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
         Visilabs.visilabsLockingQueue.sync {
             if Visilabs.API == nil {
                 Visilabs.API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
@@ -85,14 +85,13 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         
         
-        
+        //Input parameters are set here
         self.organizationID = organizationID
         self.siteID = siteID
         self.loggerURL = loggerURL
         self.dataSource = dataSource
         self.realTimeURL = realTimeURL
-        self.channel = channel
-        
+        self.channel = channel.urlEncode() // TODO: urlEncode'a gerek var mı? zaten request atarken encode ediliyor olabilir.
         self.requestTimeoutInSeconds = requestTimeoutInSeconds
         self.restURL = restURL
         self.encryptedDataSource = encryptedDataSource
@@ -100,13 +99,19 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.actionURL = actionURL
         self.geofenceURL = geofenceURL
         self.geofenceEnabled = geofenceEnabled
-        self.maxGeofenceCount = maxGeofenceCount
-        self.sendQueue = [String]()
-        self.isOnline = true //TODO: burada true'ya mı eşitlemek lazım
+        self.maxGeofenceCount = (maxGeofenceCount < 20 && maxGeofenceCount > 0) ? maxGeofenceCount :20
+        
         
         //TODO: super.init'ten kurtul
         super.init()
         self.registerForNetworkReachabilityNotifications()
+        
+        self.identifierForAdvertising = getIDFA()
+        if let cidfp = cookieIDFilePath(), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String{
+            self.cookieID = cid
+        }else{
+            self.setCookieID()
+        }
         
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
@@ -663,6 +668,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             let IDFA = ASIdentifierManager.shared().advertisingIdentifier
             return IDFA.uuidString
         }
+        //TODO: disabled ise ARCHIVE_KEY olarak okunmaya çalışılabilir.
         return ""
     }
     
@@ -947,11 +953,13 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     }
     
     private func setCookieID() {
-        cookieID = UUID().uuidString
-        //TODO:
-        if !NSKeyedArchiver.archiveRootObject(cookieID!, toFile: "") {
-            //TODO:
-            //DLog("Visilabs: WARNING - Unable to archive identity!!!")
+        self.cookieID = UUID().uuidString
+        if let cidfp = self.cookieIDFilePath(){
+            if !NSKeyedArchiver.archiveRootObject(self.cookieID!, toFile: cidfp) {
+                print("Visilabs: WARNING - Unable to archive cookieID!!!")
+            }
+        }else{
+            print("Visilabs: WARNING - Unable to get cookieID file path!!!")
         }
     }
 
