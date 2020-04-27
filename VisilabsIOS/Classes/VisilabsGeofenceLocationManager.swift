@@ -447,7 +447,21 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
     // MARK: - CLLocationManagerDelegate implementation
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        
+        if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
+            return //initialize CLLocationManager but cannot call any function to avoid promote.
+        }
+        if locations.count > 0 {
+            if let previousLocation = self.currentGeoLocation{
+                currentGeoLocationValue = (locations[0]).coordinate //no matter sent log or not, keep current geo location fresh.
+                sendGeoLocationUpdate()
+                //send out notification for location change
+                let oldLocation = CLLocation(latitude: previousLocation.latitude, longitude: previousLocation.longitude)
+                //TODO: "NewLocation", "OldLocation" ve "SHLMUpdateLocationSuccessNotification" ı VisilabsConfig e taşı
+                let userInfo = ["NewLocation": locations[0], "OldLocation": oldLocation]
+                let notification = Notification(name: Notification.Name(rawValue: "SHLMUpdateLocationSuccessNotification"), object: self, userInfo: userInfo)
+                NotificationCenter.default.post(notification)
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
