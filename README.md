@@ -14,8 +14,10 @@ Then go to the path of your project file from the terminal and run the ```pod in
 
 ### Visilabs SDK Setup
 Open ```AppDelegate.swift```<br />
+
 Add Visilabs using the line below <br />
 ```import Visilabs``` <br />
+
 Then write the following line in the didFinishLaunchingWithOptions function. Note: This code is for the standard Visilabs Setup. If you want to use features such as in-app and geofence, please check <a href="https://relateddigital.atlassian.net/wiki/spaces/KB/pages/428966373/iOS+-+Initialization" target="_blank">our document here.</a> <br />
 ```
 Visilabs.createAPI("YOUR_ORGANIZATION_ID", withSiteID:"YOUR_SITE_ID", 
