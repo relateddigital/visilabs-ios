@@ -623,7 +623,14 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
     }
     
-    
+    internal func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
+        if Visilabs.API == nil {
+            //TODO: print'leri kaldır
+            print("Visilabs: WARNING - Visilabs object is not created yet.")
+            return nil
+        }
+        return VisilabsGeofenceRequest(action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
+    }
     
     
     
@@ -704,16 +711,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
 
-    //TODO
-    internal func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
-        if Visilabs.API == nil {
-            //TODO: ne yapacağına karar ver.
-            //Error is not handled because the enclosing function is not declared 'throws'
-            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
-            return nil
-        }
-        return VisilabsGeofenceRequest(action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
-    }
+    
     
     //Custom Event için NSKeyedArchiver içerisinde kullanılan path'i URL'e çevirme
     func getDocumentsDirectory() -> URL {
