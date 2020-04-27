@@ -354,11 +354,15 @@ open class Visilabs{
         return true
     }
     
+    //TODO: bunlara shown kontrolü koyulacak.showNotificationWithID,showNotificationWithType,showNotification
+    
     private func showNotification(pageName: String) {
         checkForNotificationsResponse(
         completion: { notifications in
             if (notifications?.count ?? 0) > 0 {
-                self.showNotification(withObject: notifications?[0])
+                if let n = notifications?[0]{
+                    self.showNotification(withObject: n)
+                }
             }
         }
         , pageName: pageName
@@ -369,29 +373,47 @@ open class Visilabs{
         checkForNotificationsResponse(
         completion: { notifications in
             if (notifications?.count ?? 0) > 0 {
-                self.showNotification(withObject: notifications?[0])
+                if let n = notifications?[0]{
+                    self.showNotification(withObject: n)
+                }
             }
         },
         pageName: pageName,
         properties: properties)
     }
     
-    private func send(){
-        
-    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    private func showNotification(withObject notification: VisilabsNotification) {
+        //TODO: burada neden nil kontrolü yapılmış? fonksiyonun devamında image kullanılmıyor.
+        if notification.image == nil {
+            return
+        }
+        DispatchQueue.main.async(execute: {
+            if self.currentlyShowingNotification != nil {
+                print("\(self) already showing in-app notification: \(self.currentlyShowingNotification ?? "nil")")
+            } else {
+                self.currentlyShowingNotification = notification
+                var shown: Bool
+                if notification.visitData != nil && !(notification.visitData == "") {
+                    self.visitData = notification.visitData
+                }
+                if notification.visitorData != nil && !(notification.visitorData == "") {
+                    self.visitorData = notification.visitorData
+                }
+                if (notification.type == VisilabsNotificationType.mini) {
+                    shown = self.showMiniNotification(withObject: notification)
+                } else {
+                    shown = self.showFullNotification(withObject: notification)
+                }
 
-    //TODO:
-    private func showNotification(withObject notification: VisilabsNotification?) {
+                if !shown {
+                    self.currentlyShowingNotification = nil
+                }
+            }
+            
+            
+        })
+
     }
 
     //TODO:
@@ -407,6 +429,24 @@ open class Visilabs{
     //TODO:
     private func notificationController(controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool) {
     }
+    
+    
+    
+    private func send(){
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
     
     
     //TODO:
