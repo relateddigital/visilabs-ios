@@ -27,4 +27,10 @@ internal class VisilabsHelper{
         let request = Visilabs.callAPI()?.buildGeofenceRequest(action: "processV2", latitude: 0.0, longitude: 0.0, isDwell: isDwell, isEnter: isEnter, actionID: actionID, geofenceID: geofenceID)
         request?.execAsync(withSuccess: { response in }, andFailure: { response in })
     }
+    
+    static func buildLoggerUrl(loggerUrl: String) -> String {
+        
+        return ""
+    }
+    
 }
