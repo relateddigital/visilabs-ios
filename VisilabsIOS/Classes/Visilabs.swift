@@ -578,6 +578,48 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         })
     }
     
+    private func registerForNetworkReachabilityNotifications() {
+        if Visilabs.visilabsReachability == nil {
+            do{
+                Visilabs.visilabsReachability = try VisilabsReachability()
+                if let vr = Visilabs.visilabsReachability{
+                    if vr.connection == .wifi || vr.connection == .cellular{
+                        self.isOnline = true
+                    }else{
+                        self.isOnline = false
+                    }
+                    try vr.startNotifier()
+                }
+                //TODO ReachabilityChangedNotification ismini VisilabsReachabilityChangedNotification olarak değiştirmeme gerek var mı?
+                NotificationCenter.default.addObserver(self, selector: #selector(networkReachabilityChanged(_:)), name: Notification.Name.reachabilityChanged, object: nil)
+            }catch {
+                print("registerForNetworkReachabilityNotifications error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    @objc func networkReachabilityChanged(_ note: Notification?) {
+        if let vr = Visilabs.visilabsReachability{
+            if vr.connection == .wifi || vr.connection == .cellular{
+                self.isOnline = true
+            }else{
+                self.isOnline = false
+            }
+        }
+        print("Visilabs network status changed. Current status: \(isOnline)")
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     private func send(){
         
