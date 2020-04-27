@@ -149,16 +149,17 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     }
     
     private func archiveProperties() {
-
         let filePath = propertiesFilePath()
         var dic: [String : String?] = [:]
         dic["visitorData"] = self.visitorData
         if !NSKeyedArchiver.archiveRootObject(dic, toFile: filePath!) {
             print("\(self) unable to archive properties data")
         }
-
     }
     
+    private func unarchive() {
+        unarchiveProperties()
+    }
     
     /* TODO:
     
