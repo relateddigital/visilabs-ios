@@ -161,6 +161,19 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         unarchiveProperties()
     }
     
+    private func unarchive(fromFile filePath: String?) -> Any? {
+    
+    }
+    
+    private func unarchiveProperties() {
+
+        let dic = unarchive(fromFile: propertiesFilePath()) as? [AnyHashable : Any]
+        if dic != nil {
+            visitorData = dic?["visitorData"] != nil ? (dic?["visitorData"] as? StringLiteralConvertible) : ""
+        }
+
+    }
+    
     /* TODO:
     
     func dispatch_once_on_main_thread(predicate: UnsafeMutableRawPointer?, block: () -> ()) {
