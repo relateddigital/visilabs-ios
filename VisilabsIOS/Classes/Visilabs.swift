@@ -231,37 +231,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
     }
     
-    /* TODO:
-    
-    func dispatch_once_on_main_thread(predicate: UnsafeMutableRawPointer?, block: () -> ()) {
-        if Thread.isMainThread {
-            block
-        } else {
-            if DISPATCH_EXPECT(IntegerLiteralConvertible(predicate ?? 0) == 0, false) {
-                DispatchQueue.main.sync(execute: {
-                    block
-                })
-            }
-        }
-    }
-
-    func computeWebViewUserAgent() {
-        webView = WKWebView(frame: CGRect.zero)
-        webView?.loadHTMLString("<html></html>", baseURL: nil)
-        weak var weakSelf = self
-        dispatch_once_on_main_thread(&computeWebViewUserAgentOnceToken, {
-            let strongSelf = weakSelf
-            strongSelf.webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
-                strongSelf.userAgent = userAgent
-                strongSelf.webView = nil
-                if !NSKeyedArchiver.archiveRootObject(strongSelf.userAgent, toFile: strongSelf.userAgentFilePath()) {
-                    DLog("Visilabs: WARNING - Unable to archive userAgent!!!")
-                }
-            })
-        })
-    }
-    */
-    
     //TODO: BUNU DENE
     func computeWebViewUserAgent2() {
         DispatchQueue.main.async {
@@ -271,11 +240,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                 if let uA = userAgent{
                     if type(of: uA) == String.self{
                         self.userAgent = String(describing: uA)
-                        if !NSKeyedArchiver.archiveRootObject(self.userAgent
-                            //, toFile: self.userAgentFilePath()
-                            , toFile: ""
-                            ) {
-                            print("Visilabs: WARNING - Unable to archive userAgent!!!")
+                        if let uafp = self.userAgentFilePath(){
+                            if !NSKeyedArchiver.archiveRootObject(self.userAgent, toFile: uafp) {
+                                print("Visilabs: WARNING - Unable to archive userAgent!!!")
+                            }
                         }
                     }
                 }
@@ -631,7 +599,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
     
-    
+    // MARK: Network
     
     private func registerForNetworkReachabilityNotifications() {
         if Visilabs.visilabsReachability == nil {
