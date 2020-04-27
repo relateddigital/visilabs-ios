@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsTargetRequest: VisilabsAction {
+public class VisilabsTargetRequest: VisilabsAction {
     var zoneID: String
     var productCode: String
     var properties: [String : String]
