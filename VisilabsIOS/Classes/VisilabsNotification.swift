@@ -75,7 +75,7 @@ class VisilabsNotification {
         return image
     }
     
-    class func notification(jsonObject: [String : Any]) -> VisilabsNotification? {
+    class func notification(jsonObject: [String : Any?]) -> VisilabsNotification? {
         guard let actID = jsonObject["actid"] as? UInt else {
             //TODO:
             print("Invalid notification id")
