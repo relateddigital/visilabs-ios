@@ -199,7 +199,6 @@ open class Visilabs{
     
     // MARK: In-App Notification
 
-    //TODO:
     private func trackNotificationClick(visilabsNotification: VisilabsNotification){
         if visilabsNotification.ID == 0 {
             print("Visilabs: WARNING - Tried to record empty or nil notification. Ignoring.")
@@ -218,14 +217,9 @@ open class Visilabs{
         if !self.exVisitorID.isNilOrWhiteSpace{
             props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
         }
-        
-        var queryString = ""
-        if !visilabsNotification.queryString.isNilOrWhiteSpace{
-            queryString = visilabsNotification.queryString!
-        }
-        
-        let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
-        let rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
+
+        let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
+        let rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
         print("\(self) tracking notification click \(lUrl)")
         
         visilabsLockingQueue.sync {
