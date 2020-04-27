@@ -592,5 +592,25 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
         if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
             return //initialize CLLocationManager but cannot call any function to avoid promote.
         }
+        var authStatus = ""
+        switch status {
+            case .notDetermined:
+                authStatus = "Not determinded"
+            case .restricted:
+                authStatus = "Restricted"
+            case .denied:
+                authStatus = "Denied"
+            case .authorizedAlways /*equal kCLAuthorizationStatusAuthorized (3) */:
+                authStatus = "Always Authorized"
+            case .authorizedWhenInUse:
+                authStatus = "When in Use"
+            default:
+                break
+        }
+        print("LocationManager Delegate: Authorisation status changed: \(authStatus).")
+        //TODO: "AuthStatus" ve "SHLMChangeAuthorizationStatusNotification" ı VisilabsConfig e taşı, bu notification kullanılmıyor sanırım kaldırılabilir.
+        let userInfo = ["AuthStatus": status]
+        let notification = Notification(name: Notification.Name(rawValue: "SHLMChangeAuthorizationStatusNotification"), object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
     }
 }
