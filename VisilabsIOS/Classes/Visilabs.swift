@@ -197,6 +197,12 @@ open class Visilabs{
 
     //TODO:
     private func trackNotificationClick(visilabsNotification: VisilabsNotification){
+        if visilabsNotification.ID == 0 {
+            print("Visilabs: WARNING - Tried to record empty or nil notification. Ignoring.")
+            return
+        }
+        var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? "", VisilabsConfig.CHANNEL_KEY : self.channel, VisilabsConfig.SITEID_KEY : self.siteID]
+
     }
     
     //TODO:
