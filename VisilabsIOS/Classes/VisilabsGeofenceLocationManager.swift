@@ -293,6 +293,7 @@ class VisilabsGeofenceLocationManager: NSObject {
         }
     }
     
+    @discardableResult
     func startMonitorRegion(_ region: CLRegion) -> Bool {
         if let shared = VisilabsGeofenceApp.sharedInstance(), !shared.isLocationServiceEnabled{
             return false //initialize  CLLocationManager but cannot call any function to avoid promote.
@@ -551,7 +552,7 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
 
         if self.locationManager != nil && self.locationManager!.responds(to: #selector(CLLocationManager.requestState(for:))) {
             self.locationManager!.requestState(for: region)
-        }  
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error){
