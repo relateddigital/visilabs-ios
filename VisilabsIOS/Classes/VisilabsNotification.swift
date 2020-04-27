@@ -75,14 +75,14 @@ class VisilabsNotification {
         return image
     }
     
-    class func notification(withJSONObject object: [String : Any]) -> VisilabsNotification? {
-        guard let actID = object["actid"] as? UInt else {
+    class func notification(jsonObject: [String : Any]) -> VisilabsNotification? {
+        guard let actID = jsonObject["actid"] as? UInt else {
             //TODO:
             print("Invalid notification id")
             return nil
         }
         
-        guard let actionData = object["actiondata"] as? [String: Any] else {
+        guard let actionData = jsonObject["actiondata"] as? [String: Any] else {
             //TODO:
             print("Invalid notification actiondata")
             return nil
@@ -90,7 +90,7 @@ class VisilabsNotification {
         
         guard (actionData["msg_type"] as? String) != nil ,let messageType = VisilabsNotificationType(rawValue: actionData["msg_type"] as! String) else {
             //TODO:
-            print("Invalid notification type \(String(describing: object["msg_type"]))")
+            print("Invalid notification type \(String(describing: jsonObject["msg_type"]))")
             return nil
         }
         
