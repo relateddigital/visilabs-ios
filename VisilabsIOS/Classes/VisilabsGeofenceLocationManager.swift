@@ -556,7 +556,9 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error){
-        
+        if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
+            return //initialize CLLocationManager but cannot call any function to avoid promote.
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion){
