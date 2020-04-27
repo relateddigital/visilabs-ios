@@ -491,6 +491,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
     }
     
+    // MARK: Life-Cycle
     
     
     private func send(){
