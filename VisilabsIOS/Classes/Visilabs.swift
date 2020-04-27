@@ -590,31 +590,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
     
-    
-    
-
-    
-    
-    
-    
-    
-    
-    //TODO:persistence metodlar
-    /*
-     filePathForData
-     cookieIDFilePath
-     exVisitorIDFilePath
-     tokenIDFilePath
-     appIDFilePath
-     userAgentFilePath
-     propertiesFilePath
-     archive
-     archiveProperties
-     unarchive
-     unarchiveFromFile
-     unarchiveProperties
-     */
-    
     private func getIDFA() -> String? {
         if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
             let IDFA = ASIdentifierManager.shared().advertisingIdentifier
