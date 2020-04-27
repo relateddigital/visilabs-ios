@@ -492,6 +492,26 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     // MARK: Life-Cycle
     
+    //TODO:
+    private func setupLifeCycyleListeners(){
+        //applicationWillTerminate
+        //applicationWillEnterForeground
+        //applicationDidBecomeActive
+        //applicationDidEnterBackground
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        Visilabs.visilabsLockingQueue.sync {
+            if timer != nil {
+                timer!.invalidate()
+                timer = nil
+            }
+            if segmentConnection != nil {
+                segmentConnection!.cancel()
+            }
+        }
+    }
+    
     
     private func send(){
         
@@ -510,13 +530,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
     
-    //TODO:
-    private func setupLifeCycyleListeners(){
-        //applicationWillTerminate
-        //applicationWillEnterForeground
-        //applicationDidBecomeActive
-        //applicationDidEnterBackground
-    }
+    
     
     
     //TODO:persistence metodlar
