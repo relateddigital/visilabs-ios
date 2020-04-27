@@ -465,7 +465,23 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
-        
+        if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
+            return //initialize CLLocationManager but cannot call any function to avoid promote.
+        }
+        if let clErr = error as? CLError, clErr.code == CLError.Code.denied {
+            //TODO: "LOCATION_DENIED_SENT" i VisilabsConfig e taşı
+            let sentFlag = UserDefaults.standard.object(forKey: "LOCATION_DENIED_SENT") as? String
+            if (sentFlag == nil || (sentFlag?.count ?? 0) == 0) {
+                UserDefaults.standard.set("Sent", forKey: "LOCATION_DENIED_SENT")
+                UserDefaults.standard.synchronize()
+            }
+        } else {
+            print("LocationManager Delegate: Update Failed: \(error.localizedDescription)")
+        }
+        //TODO:"Error" ve "SHLMUpdateFailNotification" i VisilabsConfig e taşı
+        let userInfo = ["Error": error]
+        let notification = Notification(name: Notification.Name(rawValue: "SHLMUpdateFailNotification"), object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion){
