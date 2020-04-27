@@ -29,7 +29,7 @@ internal class VisilabsHelper{
     }
 
     //TODO: props un boş gelme ihtimalini de düşün
-    static func buildLoggerUrl(loggerUrl: String, props: [String : String] = [:], additionalQueryString: String = "") -> String {
+    static func buildUrl(url: String, props: [String : String] = [:], additionalQueryString: String = "") -> String {
         var qsKeyValues = [String]()
         props.forEach { (key, value) in
             qsKeyValues.append("\(key)=\(value)")
@@ -38,7 +38,7 @@ internal class VisilabsHelper{
         if additionalQueryString.count > 0 {
             queryString = "\(queryString)&\(additionalQueryString)"
         }
-        return "\(loggerUrl)?\(queryString)"
+        return "\(url)?\(queryString)"
     }
     
 }
