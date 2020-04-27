@@ -224,9 +224,19 @@ open class Visilabs{
             queryString = visilabsNotification.queryString!
         }
         
-        var lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
-        var rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
+        let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
+        let rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
         print("\(self) tracking notification click \(lUrl)")
+        
+        visilabsLockingQueue.sync {
+            self.sendQueue.append(lUrl)
+            self.sendQueue.append(rtUrl)
+            self.send()
+        }
+        
+    }
+    
+    private func send(){
         
     }
     
