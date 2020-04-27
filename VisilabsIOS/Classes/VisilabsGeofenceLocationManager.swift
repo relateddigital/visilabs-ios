@@ -582,14 +582,9 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
                 break
         }
         print("LocationManager Delegate: Determine State \(strState) for Region \(region)")
-        let userInfo = [
-            SHLMNotification_kRegion: region,
-            SHLMNotification_kRegionState: NSNumber(value: state.rawValue)
-        ]
-        let notification = Notification(
-            name: SHLMRegionStateChangeNotification,
-            object: self,
-            userInfo: userInfo)
+        //TODO: "Region", "RegionState" ve "SHLMRegionStateChangeNotification" ı VisilabsConfig e taşı
+        let userInfo : [String : Any] = ["Region": region, "RegionState": state]
+        let notification = Notification(name: Notification.Name(rawValue: "SHLMRegionStateChangeNotification"), object: self, userInfo: userInfo)
         NotificationCenter.default.post(notification)
     }
     
