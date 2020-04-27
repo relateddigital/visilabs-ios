@@ -201,7 +201,15 @@ open class Visilabs{
             print("Visilabs: WARNING - Tried to record empty or nil notification. Ignoring.")
             return
         }
-        var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? "", VisilabsConfig.CHANNEL_KEY : self.channel, VisilabsConfig.SITEID_KEY : self.siteID]
+        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+        var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
+            , VisilabsConfig.CHANNEL_KEY : self.channel
+            , VisilabsConfig.SITEID_KEY : self.siteID
+            , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
+            , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
+            , VisilabsConfig.URI_KEY : "/OM_evt.gif".urlEncode()
+            , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
+            , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
 
     }
     
