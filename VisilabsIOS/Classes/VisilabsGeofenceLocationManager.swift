@@ -512,7 +512,22 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion){
-        
+        print("LocationManager Delegate: Exit Region: \(region.identifier)")
+        if let geofences = VisilabsGeofenceStatus.sharedInstance()?.arrayGeofenceFetchList {
+            for geofence in geofences {
+                if (geofence.suid == region.identifier) {
+                    let elements = region.identifier.components(separatedBy: "_")
+                    if elements.count >= 6 {
+                        let geoID = elements[5]
+                        if (geofence.type == "OnExit") {
+                            VisilabsHelper.sendGeofencePushNotification(actionID: elements[1], geofenceID: geoID, isDwell: false, isEnter: false)
+                        }else if (geofence.type == "Dwell") {
+                            VisilabsHelper.sendGeofencePushNotification(actionID: elements[1], geofenceID: geoID, isDwell: true, isEnter: false)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion){
