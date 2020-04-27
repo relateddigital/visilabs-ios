@@ -18,8 +18,11 @@ public enum ReachabilityError: Error {
 }
 
 @available(*, unavailable, renamed: "Notification.Name.reachabilityChanged")
+
+//TODO:bunlara bak ismini değiştirmeye gerek var mı? çağırılan yerlere de bak
 public let ReachabilityChangedNotification = NSNotification.Name("ReachabilityChangedNotification")
 
+//TODO:bunlara bak ismini değiştirmeye gerek var mı? çağırılan yerlere de bak
 public extension Notification.Name {
     static let reachabilityChanged = Notification.Name("reachabilityChanged")
 }
