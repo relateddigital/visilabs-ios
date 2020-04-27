@@ -9,6 +9,8 @@ import Foundation
 
 struct VisilabsConfig {
     
+    static let DAT_KEY = "dat"
+    
     static let ORGANIZATIONID_KEY = "OM.oid"
     static let SITEID_KEY = "OM.siteID"
     static let COOKIEID_KEY = "OM.cookieID"
