@@ -160,8 +160,8 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     // MARK: Persistence
 
-    func filePath(forData data: String?) -> String? {
-        let filename = "\(data ?? "")"
+    func filePath(forData data: String) -> String? {
+        let filename = data
         return URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).last ?? "").appendingPathComponent(filename).absoluteString
     }
     
