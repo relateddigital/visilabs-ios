@@ -144,6 +144,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         return filePath(forData: propertiesArchiveKey)
     }
     
+    private func archive() {
+        archiveProperties()
+    }
+    
     
     /* TODO:
     
