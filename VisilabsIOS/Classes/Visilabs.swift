@@ -219,8 +219,8 @@ open class Visilabs{
             props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
         }
 
-        let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
-        let rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
+        let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
+        let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
         print("\(self) tracking notification click \(lUrl)")
         
         visilabsLockingQueue.sync {
@@ -231,11 +231,16 @@ open class Visilabs{
         
     }
     
-    private func checkForNotificationsResponse(completion: @escaping (_ notifications: [AnyHashable]?) -> Void, pageName: String, properties: inout [AnyHashable : Any]) {
+    private func checkForNotificationsResponse(completion: @escaping (_ notifications: [VisilabsNotification]?) -> Void, pageName: String, properties: [String : String?]) {
         self.notificationResponseCached = false
+        
+        //TODO: properties aşağıdakileri içeriyorsa uçur
+        //TODO: if ([key  isEqual: @"OM.cookieID"] || [key  isEqual: @"OM.siteID"] || [key  isEqual: @"OM.oid"] || [key  isEqual: [VisilabsConfig APIVER_KEY]] || [key  isEqual: @"OM.uri"] || [key  isEqual: @"OM.exVisitorID"]) {continue;}
+        
+        var externalProps = properties
         self.serialQueue.async(execute: {
 
-            var parsedNotifications: [AnyHashable] = []
+            var parsedNotifications: [VisilabsNotification] = []
 
             if !self.notificationResponseCached{
                 let actualTimeOfevent = Int(Date().timeIntervalSince1970)
@@ -261,11 +266,69 @@ open class Visilabs{
                 if !self.appID.isNilOrWhiteSpace{
                     props[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
                 }
+                
+                for (key, value) in VisilabsPersistentTargetManager.getParameters(){
+                    if value.isNilOrWhiteSpace{
+                        externalProps.removeValue(forKey: key)
+                    }else{
+                        props[key] = value!.urlEncode()
+                    }
+                }
+                
+                for (key, value) in properties{
+                    if value.isNilOrWhiteSpace{
+                        externalProps.removeValue(forKey: key)
+                    }else{
+                        props[key] = value!.urlEncode()
+                    }
+                }
+                let actionUrl = VisilabsHelper.buildUrl(url: "\(self.actionURL!)", props: props)
+                let anURL = URL(string: actionUrl)
+                var request: URLRequest? = nil
+                if let anURL = anURL {
+                    request = URLRequest(url: anURL)
+                }
+                if let ua = self.userAgent{
+                    request?.setValue(ua, forHTTPHeaderField: "User-Agent")
+                }
+                var urlResponse: URLResponse? = nil
+                var data: Data? = nil
+                do {
+                    if let request = request {
+                        data = try NSURLConnection.sendSynchronousRequest(request, returning: &urlResponse)
+                    }
+                } catch {
+                    print("\(self) notification check http error: \(error.localizedDescription)")
+                    return
+                }
 
-                let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.actionURL!)", props: props)
+                var rawNotifications: [Any]? = nil
+                do {
+                    rawNotifications = try JSONSerialization.jsonObject(with: data ?? Data(), options: JSONSerialization.ReadingOptions(rawValue: 0)) as? [Any]
+                } catch {
+                    print("\(self) notification check json error: \(error), data: \(String(data: data ?? Data(), encoding: .utf8) ?? "")")
+                    return
+                }
+                
+                if rawNotifications != nil{
+                    for obj in rawNotifications! {
+                        if let o = obj as? [String : Any?] {
+                            if let notification = VisilabsNotification.notification(jsonObject: o){
+                                parsedNotifications.append(notification)
+                            }
+                        }
+                    }
+                } else {
+                    if let rawNotifications = rawNotifications {
+                        print("\(self) in-app notifs check response format error: \(rawNotifications)")
+                    }
+                }
+                
+                self.notificationResponseCached = true
+                
+            }else{
+                print("\(self) notification cache found, skipping network request")
             }
-            
-
             completion(parsedNotifications)
 
         })
