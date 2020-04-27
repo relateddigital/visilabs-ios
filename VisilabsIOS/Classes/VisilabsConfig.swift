@@ -11,6 +11,7 @@ struct VisilabsConfig {
     
     static let IOS = "IOS"
     static let DAT_KEY = "dat"
+    static let OM_GIF = "om.gif"
     static let DOMAIN_KEY = "OM.domain"
     
     static let ORGANIZATIONID_KEY = "OM.oid"
