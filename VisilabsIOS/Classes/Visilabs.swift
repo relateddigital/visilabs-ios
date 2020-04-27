@@ -335,6 +335,15 @@ open class Visilabs{
     
     }
     
+    //TODO: kontrol et doğru mu?
+    private class func topPresentedViewController() -> UIViewController?{
+        var controller = UIApplication.shared.keyWindow?.rootViewController
+        while controller?.presentedViewController != nil {
+            controller = controller?.presentedViewController
+        }
+        return controller
+    }
+    
     
     private func send(){
         
@@ -342,10 +351,7 @@ open class Visilabs{
     
     
     
-    //TODO: class func vs static farkı nedir?
-    private class func topPresentedViewController() -> UIViewController?{
-        return nil
-    }
+    
     
     //TODO: viewController is UIAlertController ne için gerekli bak
     private class func canPresentFromViewController(viewController: UIViewController) -> Bool{
