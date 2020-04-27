@@ -28,12 +28,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var timer: Timer?
     private var segmentConnection: NSURLConnection?
     private var failureStatus = 0
-    private var cookieIDArchiveKey: String?
-    private var exVisitorIDArchiveKey: String?
-    private var propertiesArchiveKey: String?
-    private var tokenIDArchiveKey: String?
-    private var appIDArchiveKey: String?
-    private var userAgentArchiveKey: String?
     private var visitData: String?
     private var visitorData: String?
     private var identifierForAdvertising: String?
@@ -129,27 +123,27 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     }
     
     func cookieIDFilePath() -> String? {
-        return filePath(forData: cookieIDArchiveKey)
+        return filePath(forData: VisilabsConfig.COOKIEID_ARCHIVE_KEY)
     }
 
     func exVisitorIDFilePath() -> String? {
-        return filePath(forData: exVisitorIDArchiveKey)
+        return filePath(forData: VisilabsConfig.EXVISITORID_ARCHIVE_KEY)
     }
 
     func tokenIDFilePath() -> String? {
-        return filePath(forData: tokenIDArchiveKey)
+        return filePath(forData: VisilabsConfig.TOKENID_ARCHIVE_KEY)
     }
 
     func appIDFilePath() -> String? {
-        return filePath(forData: appIDArchiveKey)
+        return filePath(forData: VisilabsConfig.APPID_ARCHIVE_KEY)
     }
 
     func userAgentFilePath() -> String? {
-        return filePath(forData: userAgentArchiveKey)
+        return filePath(forData: VisilabsConfig.USERAGENT_ARCHIVE_KEY)
     }
 
     func propertiesFilePath() -> String? {
-        return filePath(forData: propertiesArchiveKey)
+        return filePath(forData: VisilabsConfig.PROPERTIES_ARCHIVE_KEY)
     }
     
     private func archive() {
