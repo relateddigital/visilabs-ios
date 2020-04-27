@@ -13,6 +13,8 @@ struct VisilabsConfig {
     static let DAT_KEY = "dat"
     static let OM_GIF = "om.gif"
     static let DOMAIN_KEY = "OM.domain"
+    static let VISIT_CAPPING_KEY = "OM.vcap"
+    static let VISITOR_CAPPING_KEY = "OM.viscap"
     
     static let ORGANIZATIONID_KEY = "OM.oid"
     static let SITEID_KEY = "OM.siteID"
