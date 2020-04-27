@@ -49,6 +49,10 @@ extension String {
         return contains(string, options: [])
     }
     
+    func urlEncode() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+    }
+    
     var isEmptyOrWhitespace: Bool {
         return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
