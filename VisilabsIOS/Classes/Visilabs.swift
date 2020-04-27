@@ -149,6 +149,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
         self.computeWebViewUserAgent2()
         self.setupLifeCycyleListeners()
+        self.unarchive()
         
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
