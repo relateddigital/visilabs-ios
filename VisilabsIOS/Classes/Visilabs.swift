@@ -7,6 +7,7 @@ open class Visilabs{
     private static var visilabsReachability : VisilabsReachability?
     
     private let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")
+    private let serialQueue: DispatchQueue = DispatchQueue(label:"VisilabsSerialQueue")
     
     var organizationID : String
     var siteID : String
@@ -36,7 +37,7 @@ open class Visilabs{
     private var visitData: String?
     private var visitorData: String?
     private var identifierForAdvertising: String?
-    private var serialQueue: DispatchQueue?
+    
     private var currentlyShowingNotification: Any?
     private var notificationViewController: UIViewController?
     private var notificationResponseCached = false
@@ -230,13 +231,27 @@ open class Visilabs{
         
     }
     
+    private func checkForNotificationsResponse(withCompletion completion: @escaping (_ notifications: [AnyHashable]?) -> Void, pageName: String?, properties: inout [AnyHashable : Any]) {
+        self.notificationResponseCached = false
+        self.serialQueue.async(execute: {
+
+            var parsedNotifications: [AnyHashable] = []
+
+
+            if completion != nil {
+                completion(parsedNotifications)
+            }
+
+        })
+    
+    }
+    
+    
     private func send(){
         
     }
     
-    //TODO:
-    private func checkForNotificationsResponse(withCompletion completion: @escaping (_ notifications: [AnyHashable]?) -> Void, pageName: String?, properties: inout [AnyHashable : Any]) {
-    }
+    
     
     //TODO: class func vs static farkı nedir?
     private class func topPresentedViewController() -> UIViewController?{
