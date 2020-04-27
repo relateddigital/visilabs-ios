@@ -31,8 +31,8 @@ class VisilabsHttpClient {
         }
         request.httpMethod = visilabsAction.requestMethod
 
-        if Visilabs.callAPI()?.userAgent != nil {
-            request.setValue(Visilabs.callAPI()?.userAgent, forHTTPHeaderField: "User-Agent")
+        if let userAgent = Visilabs.callAPI()?.userAgent {
+            request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         }
         return request
     }
