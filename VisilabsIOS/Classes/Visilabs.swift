@@ -147,6 +147,8 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             print("Visilabs: Error while unarchiving userAgent.")
         }
         
+        self.computeWebViewUserAgent2()
+        
         
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
