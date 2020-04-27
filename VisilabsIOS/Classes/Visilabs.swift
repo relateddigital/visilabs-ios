@@ -240,19 +240,29 @@ open class Visilabs{
             if !self.notificationResponseCached{
                 let actualTimeOfevent = Int(Date().timeIntervalSince1970)
                 var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
-                    , VisilabsConfig.CHANNEL_KEY : self.channel
                     , VisilabsConfig.SITEID_KEY : self.siteID
                     , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
                     , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
-                    , VisilabsConfig.URI_KEY : "/OM_evt.gif".urlEncode()
-                    , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
-                    , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
+                    , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS
+                    , VisilabsConfig.URI_KEY : pageName.urlEncode()]
                 
                 if !self.exVisitorID.isNilOrWhiteSpace{
                     props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
                 }
+                if !self.visitData.isNilOrWhiteSpace{
+                    props[VisilabsConfig.VISIT_CAPPING_KEY] = self.visitData!.urlEncode()
+                }
+                if !self.visitorData.isNilOrWhiteSpace{
+                    props[VisilabsConfig.VISITOR_CAPPING_KEY] = self.visitorData!.urlEncode()
+                }
+                if !self.tokenID.isNilOrWhiteSpace{
+                    props[VisilabsConfig.TOKENID_KEY] = self.tokenID!.urlEncode()
+                }
+                if !self.appID.isNilOrWhiteSpace{
+                    props[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
+                }
 
-                let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)", props: props)
+                let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.actionURL!)", props: props)
             }
             
 
