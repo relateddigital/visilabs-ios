@@ -580,13 +580,38 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     //TODO:
     private func setupLifeCycyleListeners(){
-        //applicationWillTerminate
-        //applicationWillEnterForeground
-        //applicationDidBecomeActive
-        //applicationDidEnterBackground
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(applicationDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationWillEnterForeground(_:)),name: UIApplication.willEnterForegroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationWillTerminate(_:)), name: UIApplication.willTerminateNotification, object: nil)
     }
     
-    func applicationWillTerminate(_ notification: Notification) {
+    @objc func applicationDidBecomeActive(_ notification: Notification) {
+        Visilabs.visilabsLockingQueue.sync {
+            print("\(self) application did become active");
+            //TODO: bunlar VisilabsCookie objesine taşınacak
+            self.loggerCookieKey = nil;
+            self.loggerCookieValue = nil;
+            self.realTimeCookieKey = nil;
+            self.realTimeCookieValue = nil;
+        }
+    }
+    
+    @objc func applicationDidEnterBackground(_ notification: Notification) {
+        print("\(self) did enter background")
+        self.serialQueue.async(execute: {
+            self.archive()
+        })
+    }
+    
+    @objc func applicationWillEnterForeground(_ notification: Notification) {
+        Visilabs.visilabsLockingQueue.sync {
+            //TODO: burada bir şey yapılmasına gerek yok sanırım
+        }
+    }
+    
+    @objc func applicationWillTerminate(_ notification: Notification) {
         Visilabs.visilabsLockingQueue.sync {
             if timer != nil {
                 timer!.invalidate()
@@ -598,29 +623,11 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
     }
     
-    func applicationWillEnterForeground(_ notification: Notification) {
-        Visilabs.visilabsLockingQueue.sync {
-            //TODO: burada bir şey yapılmasına gerek yok sanırım
-        }
-    }
     
-    func applicationDidBecomeActive(_ notification: Notification) {
-        Visilabs.visilabsLockingQueue.sync {
-            print("\(self) application did become active");
-            //TODO: bunlar VisilabsCookie objesine taşınacak
-            self.loggerCookieKey = nil;
-            self.loggerCookieValue = nil;
-            self.realTimeCookieKey = nil;
-            self.realTimeCookieValue = nil;
-        }
-    }
     
-    func applicationDidEnterBackground(_ notification: Notification) {
-        print("\(self) did enter background")
-        self.serialQueue.async(execute: {
-            self.archive()
-        })
-    }
+    
+    
+    
     
     private func registerForNetworkReachabilityNotifications() {
         if Visilabs.visilabsReachability == nil {
