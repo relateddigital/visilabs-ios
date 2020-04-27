@@ -493,6 +493,7 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
                     if elements.count >= 6 {
                         let geoID = elements[5]
                         if (geofence.type == "OnEnter") {
+                            //TODO: burada isEnter false geçmişim neden?
                             VisilabsHelper.sendGeofencePushNotification(actionID: elements[1], geofenceID: geoID, isDwell: false, isEnter: false)
                         }else if (geofence.type == "Dwell") {
                             VisilabsHelper.sendGeofencePushNotification(actionID: elements[1], geofenceID: geoID, isDwell: true, isEnter: true)
@@ -528,6 +529,14 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
                 }
             }
         }
+        if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
+            return //initialize CLLocationManager but cannot call any function to avoid promote.
+        }
+        print("LocationManager Delegate: Exit Region: \(region)")
+        //TODO: "Region" ve "SHLMExitRegionNotification" ı VisilabsConfig e taşı
+        let userInfo = ["Region": region]
+        let notification = Notification( name: Notification.Name(rawValue: "SHLMExitRegionNotification"), object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion){
