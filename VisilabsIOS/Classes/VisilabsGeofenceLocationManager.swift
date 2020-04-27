@@ -570,6 +570,27 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
         if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
             return //initialize CLLocationManager but cannot call any function to avoid promote.
         }
+        var strState = ""
+        switch state {
+            case .unknown:
+                strState = "\"unknown\""
+            case .inside:
+                strState = "\"inside\""
+            case .outside:
+                strState = "\"outside\""
+            default:
+                break
+        }
+        print("LocationManager Delegate: Determine State \(strState) for Region \(region)")
+        let userInfo = [
+            SHLMNotification_kRegion: region,
+            SHLMNotification_kRegionState: NSNumber(value: state.rawValue)
+        ]
+        let notification = Notification(
+            name: SHLMRegionStateChangeNotification,
+            object: self,
+            userInfo: userInfo)
+        NotificationCenter.default.post(notification)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus){
