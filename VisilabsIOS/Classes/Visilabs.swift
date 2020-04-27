@@ -38,7 +38,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var visitorData: String?
     private var identifierForAdvertising: String?
     
-    private var currentlyShowingNotification: Any?
+    private var currentlyShowingNotification: VisilabsNotification?
     private var notificationViewController: UIViewController?
     private var notificationResponseCached = false
     
@@ -391,7 +391,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         DispatchQueue.main.async(execute: {
             if self.currentlyShowingNotification != nil {
-                print("\(self) already showing in-app notification: \(self.currentlyShowingNotification ?? "nil")")
+                print("\(self) already showing in-app notification: \(self.currentlyShowingNotification)")
             } else {
                 self.currentlyShowingNotification = notification
                 var shown: Bool
@@ -456,7 +456,38 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     }
 
 
+    //VisilabsNotificationViewControllerDelegate delege metodu
     func notificationController(_ controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool){
+        //TODO: !== reference equality için kullanılıyor. aşağıdaki kontrol doğru mu?
+        if controller == nil || self.currentlyShowingNotification !== controller!.notification {
+            return
+        }
+
+        let completionBlock: (() -> Void) = {
+            self.currentlyShowingNotification = nil
+            self.notificationViewController = nil
+        }
+        
+        if status && controller!.notification != nil && controller!.notification!.buttonURL != nil {
+            if let buttonURL = controller!.notification!.buttonURL {
+                print("\(self) opening URL \(buttonURL)")
+            }
+            var success = false
+            if let buttonURL = controller!.notification!.buttonURL {
+                success = UIApplication.shared.openURL(buttonURL)
+            }
+
+            controller?.hide(withAnimation: !success, completion: completionBlock)
+
+            if !success {
+                print("Visilabs failed to open given URL: \(controller!.notification!.buttonURL)")
+            }
+
+            //TODO: Notification butonuna tıkladığında track etmek için
+            trackNotificationClick(visilabsNotification: controller!.notification!)
+        } else {
+            controller?.hide(withAnimation: true, completion: completionBlock)
+        }
         
     }
     
