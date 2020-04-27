@@ -151,11 +151,14 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.setupLifeCycyleListeners()
         self.unarchive()
         
-        /*
+        //TODO bu çağırım gereksiz gibi
+        //self.applicationWillEnterForeground()
+        
+        
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
             VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled = true
         }
- */
+ 
     }
     
     // MARK: Persistence
