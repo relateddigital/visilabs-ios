@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsTargetFilter: NSObject {
+public class VisilabsTargetFilter: NSObject {
     var attribute: String?
     var filterType: String?
     var value: String?
