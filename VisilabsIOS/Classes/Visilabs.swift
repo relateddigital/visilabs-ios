@@ -6,6 +6,8 @@ open class Visilabs{
     private static var API: Visilabs?
     private static var visilabsReachability : VisilabsReachability?
     
+    private let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")
+    
     var organizationID : String
     var siteID : String
     private var loggerURL : String
@@ -224,7 +226,7 @@ open class Visilabs{
         
         var lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
         var rtUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)")
-        
+        print("\(self) tracking notification click \(lUrl)")
         
     }
     
