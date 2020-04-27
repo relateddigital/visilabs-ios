@@ -560,7 +560,7 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
             return //initialize CLLocationManager but cannot call any function to avoid promote.
         }
         print("LocationManager Delegate: Monitoring Failed for Region(\(region)): \(error.localizedDescription)")
-        //TODO: "Region", "Error" ve "SHLMMonitorRegionFailNotification" ı VisilabsConfig e taşı
+        //TODO: "Region", "Error" ve "SHLMMonitorRegionFailNotification" ı VisilabsConfig e taşı, bu notification kullanılmıyor sanırım kaldırılabilir.
         let userInfo : [String : Any] = ["Region": region ?? CLRegion(), "Error": error]
         let notification = Notification(name: Notification.Name(rawValue: "SHLMMonitorRegionFailNotification"), object: self, userInfo: userInfo)
         NotificationCenter.default.post(notification)
