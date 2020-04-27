@@ -1,7 +1,7 @@
 import WebKit
 import AdSupport
 
-open class Visilabs{
+open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     private static var API: Visilabs?
     private static var visilabsReachability : VisilabsReachability?
@@ -416,9 +416,21 @@ open class Visilabs{
 
     }
 
-    //TODO:
     private func showMiniNotification(withObject notification: VisilabsNotification?) -> Bool {
-        return false
+        let controller = VisilabsMiniNotificationViewController()
+        controller.notification = notification
+        controller.delegate = self
+        controller.backgroundColor = miniNotificationBackgroundColor
+        notificationViewController = controller
+
+        controller.showWithAnimation()
+
+        //TODO: popTime hesaplaması doğru mu kontrol et
+        let popTime = DispatchTime.now() + Double(Int64(Double(miniNotificationPresentationTime) * Double(NSEC_PER_SEC)))
+        DispatchQueue.main.asyncAfter(deadline: popTime, execute: {
+            self.notificationController(controller, wasDismissedWithStatus: false)
+        })
+        return true
     }
 
     //TODO:
@@ -426,8 +438,9 @@ open class Visilabs{
         return false
     }
 
-    //TODO:
-    private func notificationController(controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool) {
+
+    func notificationController(_ controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool){
+        
     }
     
     
