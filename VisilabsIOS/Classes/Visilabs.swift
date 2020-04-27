@@ -107,10 +107,26 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.registerForNetworkReachabilityNotifications()
         
         self.identifierForAdvertising = getIDFA()
+        
         if let cidfp = cookieIDFilePath(), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String{
             self.cookieID = cid
         }else{
+            print("Visilabs: Error while unarchiving cookieID.")
+        }
+        
+        if self.cookieID == nil{
             self.setCookieID()
+        }
+        
+        if let exidfp = exVisitorIDFilePath(), let exid = NSKeyedUnarchiver.unarchiveObject(withFile: exidfp) as? String{
+            self.exVisitorID = exid
+        }else{
+            print("Visilabs: Error while unarchiving exVisitorID.")
+        }
+        
+        //TODO: neden clearExVisitorID çağırılıyor?
+        if(self.exVisitorID != nil){
+            self.clearExVisitorID()
         }
         
         /*
@@ -965,6 +981,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
 
     
     public func setExVisitorIDToNull(){
+        self.exVisitorID = nil
+    }
+    
+    private func clearExVisitorID() {
         self.exVisitorID = nil
     }
 }
