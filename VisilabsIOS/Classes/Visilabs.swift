@@ -161,12 +161,24 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         unarchiveProperties()
     }
     
-    private func unarchive(fromFile filePath: String?) -> Any? {
-    
+    private func unarchive(fromFile filePath: String) -> Any? {
+        if let unarchivedData = NSKeyedUnarchiver.unarchiveObject(withFile: filePath){
+            print("\(self) unarchived data from \(filePath): \(unarchivedData)")
+            if FileManager.default.fileExists(atPath: filePath) {
+                do {
+                    try FileManager.default.removeItem(atPath: filePath)
+                } catch {
+                    print("\(self) unable to remove archived file at \(filePath) - \(error)")
+                }
+            }
+            return unarchivedData
+        }else{
+            return nil
+        }
     }
     
     private func unarchiveProperties() {
-        if let dic = unarchive(fromFile: propertiesFilePath()) as? [String : String?] {
+        if let dic = unarchive(fromFile: propertiesFilePath()!) as? [String : String?] {
             self.visitorData = dic["visitorData"] ?? ""
         }
     }
