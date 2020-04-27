@@ -559,6 +559,11 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
         if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
             return //initialize CLLocationManager but cannot call any function to avoid promote.
         }
+        print("LocationManager Delegate: Monitoring Failed for Region(\(region)): \(error.localizedDescription)")
+        //TODO: "Region", "Error" ve "SHLMMonitorRegionFailNotification" ı VisilabsConfig e taşı
+        let userInfo : [String : Any] = ["Region": region ?? CLRegion(), "Error": error]
+        let notification = Notification(name: Notification.Name(rawValue: "SHLMMonitorRegionFailNotification"), object: self, userInfo: userInfo)
+        NotificationCenter.default.post(notification)
     }
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion){
