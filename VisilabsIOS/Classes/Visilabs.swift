@@ -512,6 +512,11 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
     }
     
+    func applicationWillEnterForeground(_ notification: Notification) {
+        Visilabs.visilabsLockingQueue.sync {
+            //TODO: burada bir şey yapılmasına gerek yok sanırım
+        }
+    }
     
     private func send(){
         
