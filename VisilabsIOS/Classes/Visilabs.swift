@@ -166,12 +166,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     }
     
     private func unarchiveProperties() {
-
-        let dic = unarchive(fromFile: propertiesFilePath()) as? [AnyHashable : Any]
-        if dic != nil {
-            visitorData = dic?["visitorData"] != nil ? (dic?["visitorData"] as? StringLiteralConvertible) : ""
+        if let dic = unarchive(fromFile: propertiesFilePath()) as? [String : String?] {
+            self.visitorData = dic["visitorData"] ?? ""
         }
-
     }
     
     /* TODO:
