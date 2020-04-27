@@ -107,10 +107,11 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.sendQueue = [String]()
         self.isOnline = true //TODO: burada true'ya mı eşitlemek lazım
         
-        
+        /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
             VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled = true
         }
+ */
     }
     
     // MARK: Persistence
@@ -433,9 +434,25 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         return true
     }
 
-    //TODO:
     private func showFullNotification(withObject notification: VisilabsNotification?) -> Bool {
-        return false
+        let presentingViewController = Visilabs.topPresentedViewController()
+        //TODO: buradaki forced-unwrap doğru mu?
+        if Visilabs.canPresentFromViewController(viewController: presentingViewController!) {
+            let storyboard = UIStoryboard(name: "VisilabsNotification", bundle: Bundle(for: Visilabs.self))
+            let controller = storyboard.instantiateViewController(withIdentifier: "VisilabsFullNotificationViewController") as? VisilabsFullNotificationViewController
+
+            controller?.backgroundImage = presentingViewController?.view.visilabs_snapshotImage()
+            controller?.notification = notification
+            controller?.delegate = self
+            notificationViewController = controller
+
+            if let controller = controller {
+                presentingViewController?.present(controller, animated: true)
+            }
+            return true
+        } else {
+            return false
+        }
     }
 
 
