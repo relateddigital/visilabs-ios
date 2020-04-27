@@ -365,6 +365,17 @@ open class Visilabs{
         , properties: [:])
     }
     
+    private func showNotification(_ pageName: String, properties: [String : String?]) {
+        checkForNotificationsResponse(
+        completion: { notifications in
+            if (notifications?.count ?? 0) > 0 {
+                self.showNotification(withObject: notifications?[0])
+            }
+        },
+        pageName: pageName,
+        properties: properties)
+    }
+    
     private func send(){
         
     }
@@ -377,9 +388,7 @@ open class Visilabs{
     
     
     
-    //TODO:
-    private func showNotification(_ pageName: String?, properties: [AnyHashable : Any]?) {
-    }
+    
 
     //TODO:
     private func showNotification(withObject notification: VisilabsNotification?) {
