@@ -485,7 +485,19 @@ extension VisilabsGeofenceLocationManager: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion){
-        
+        print("LocationManager Delegate: Enter Region: \(region.identifier)")
+        if let geofences = VisilabsGeofenceStatus.sharedInstance()?.arrayGeofenceFetchList {
+            for geofence in geofences {
+                if (geofence.suid == region.identifier) {
+                    let elements = region.identifier.components(separatedBy: "_")
+                    if (geofence.type == "OnEnter") {
+                        if elements.count >= 6 {
+                            let geoID = elements[5]
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion){
