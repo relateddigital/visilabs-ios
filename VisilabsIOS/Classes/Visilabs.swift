@@ -129,6 +129,14 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             self.clearExVisitorID()
         }
         
+        if let tidfp = tokenIDFilePath(), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String{
+            self.tokenID = tid
+        }else{
+            print("Visilabs: Error while unarchiving tokenID.")
+        }
+        
+        
+        
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
             VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled = true
