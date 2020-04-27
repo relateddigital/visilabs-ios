@@ -141,6 +141,13 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             print("Visilabs: Error while unarchiving appID.")
         }
         
+        if let uafp = userAgentFilePath(), let ua = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String{
+            self.userAgent = ua
+        }else{
+            print("Visilabs: Error while unarchiving userAgent.")
+        }
+        
+        
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
             VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled = true
