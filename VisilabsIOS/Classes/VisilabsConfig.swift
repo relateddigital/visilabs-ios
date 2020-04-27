@@ -9,6 +9,7 @@ import Foundation
 
 struct VisilabsConfig {
     
+    static let IOS = "IOS"
     static let DAT_KEY = "dat"
     static let DOMAIN_KEY = "OM.domain"
     
