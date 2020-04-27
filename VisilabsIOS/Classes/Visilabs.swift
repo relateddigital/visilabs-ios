@@ -611,9 +611,17 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
     
+    
     // MARK: Target
     
-    
+    public func buildTargetRequest(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
+        if Visilabs.API == nil{
+            //TODO: print'leri kaldır
+            print("Visilabs: WARNING - Visilabs object is not created yet.")
+            return nil
+        }
+        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
+    }
     
     
     
@@ -694,16 +702,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
     
-    //TODO
-    internal func buildTargetRequest(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
-        if Visilabs.API == nil {
-            //TODO: ne yapacağına karar ver.
-            //Error is not handled because the enclosing function is not declared 'throws'
-            //throw (NSException(name: NSExceptionName("Visilabs Not Ready"), reason: "Visilabs failed to initialize", userInfo: [:]) as! Error)
-            return nil
-        }
-        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
-    }
+    
 
     //TODO
     internal func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
