@@ -59,9 +59,8 @@ class VisilabsHttpClient {
         brequest.timeoutInterval = visilabsAction.requestTimeout
         
         let task = session.dataTask(with: brequest, completionHandler: { data, response, error in
-            let encodingName = response?.textEncodingName
             var encodingType: String.Encoding = .utf8
-            if encodingName != nil {
+            if let encodingName = response?.textEncodingName {
                 encodingType = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding(encodingName as CFString?)))
             }
             let reponseAsRawString = String(bytes: data!, encoding: encodingType)
