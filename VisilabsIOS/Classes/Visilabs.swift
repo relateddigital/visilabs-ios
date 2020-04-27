@@ -89,12 +89,16 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     //TODO:init'te loggerURL ve realTimeURL'ın gerçekten url olup olmadığını kontrol et
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+        
+        
+        
         self.organizationID = organizationID
         self.siteID = siteID
         self.loggerURL = loggerURL
         self.dataSource = dataSource
         self.realTimeURL = realTimeURL
         self.channel = channel
+        
         self.requestTimeoutInSeconds = requestTimeoutInSeconds
         self.restURL = restURL
         self.encryptedDataSource = encryptedDataSource
@@ -105,6 +109,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.maxGeofenceCount = maxGeofenceCount
         self.sendQueue = [String]()
         self.isOnline = true //TODO: burada true'ya mı eşitlemek lazım
+        
+        //TODO: super.init'ten kurtul
+        super.init()
+        self.registerForNetworkReachabilityNotifications()
         
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
@@ -631,6 +639,15 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         return VisilabsGeofenceRequest(action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
