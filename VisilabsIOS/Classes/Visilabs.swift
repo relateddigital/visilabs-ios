@@ -52,7 +52,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     var tokenID: String?
     var appID: String?
     internal var isOnline : Bool = true //TODO: burada = true demek lazım mı?
-    internal var userAgent: String?
+    internal var userAgent: String = VisilabsConfig.IOS
     private var loggingEnabled: Bool = true
     private var checkForNotificationsOnLoggerRequest: Bool = true
     private var miniNotificationPresentationTime: Float = 10.0
@@ -258,7 +258,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                 if let uA = userAgent{
                     if type(of: uA) == String.self{
                         self.userAgent = String(describing: uA)
-                        if !NSKeyedArchiver.archiveRootObject(self.userAgent!
+                        if !NSKeyedArchiver.archiveRootObject(self.userAgent
                             //, toFile: self.userAgentFilePath()
                             , toFile: ""
                             ) {
@@ -364,9 +364,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                 if let anURL = anURL {
                     request = URLRequest(url: anURL)
                 }
-                if let ua = self.userAgent{
-                    request?.setValue(ua, forHTTPHeaderField: "User-Agent")
-                }
+                
+                request?.setValue(self.userAgent, forHTTPHeaderField: "User-Agent")
+                
                 var urlResponse: URLResponse? = nil
                 var data: Data? = nil
                 do {
