@@ -6,7 +6,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private static var API: Visilabs?
     private static var visilabsReachability : VisilabsReachability?
     
-    private let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")
+    private static let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")
     private let serialQueue: DispatchQueue = DispatchQueue(label:"VisilabsSerialQueue")
     
     var organizationID : String
@@ -67,24 +67,23 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     //TODO: burada synchronized olacak
     public class func callAPI() -> Visilabs? {
-        
-        if Visilabs.API == nil{
-            print("zort")
+        Visilabs.visilabsLockingQueue.sync {
+            if Visilabs.API == nil{
+                print("Visilabs: WARNING - Visilabs object is not created yet.")
+            }
         }
-        
         return Visilabs.API
     }
     
     //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
     @discardableResult
     public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            if API == nil {
-                API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+        Visilabs.visilabsLockingQueue.sync {
+            if Visilabs.API == nil {
+                Visilabs.API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
             }
         }
-        return API
+        return Visilabs.API
     }
 
     
