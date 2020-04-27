@@ -71,7 +71,7 @@ class VisilabsGeofenceStatus: NSObject {
                                                 let currentLatitude = currentLocation?.latitude ?? 0.0
                                                 let currentLongitude = currentLocation?.longitude ?? 0.0
 
-                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(forLat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
+                                                visilabsServerGeofence.distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: visilabsServerGeofence.latitude, lng1: visilabsServerGeofence.longitude, lat2: currentLatitude, lng2: currentLongitude)
                                                 
                                                 //TODO:burada ikinci targetEvent'e gerek var mı? kullanıldığı yeri bul gereksizse kaldır.
                                                 visilabsServerGeofence.serverId = "visilabs_\(actid)_\(i)_\(targetEvent)_\(targetEvent)_\(geoID)"

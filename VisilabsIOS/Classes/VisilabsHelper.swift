@@ -10,7 +10,7 @@ import Foundation
 internal class VisilabsHelper{
     
     //TODO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
-    static func distanceSquared(forLat1 lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
+    static func distanceSquared(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
         let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
         let nauticalMilesPerLatitude = 60.00721
         //let nauticalMilesPerLongitude = 60.10793
