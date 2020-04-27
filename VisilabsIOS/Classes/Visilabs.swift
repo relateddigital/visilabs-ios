@@ -231,16 +231,32 @@ open class Visilabs{
         
     }
     
-    private func checkForNotificationsResponse(withCompletion completion: @escaping (_ notifications: [AnyHashable]?) -> Void, pageName: String?, properties: inout [AnyHashable : Any]) {
+    private func checkForNotificationsResponse(completion: @escaping (_ notifications: [AnyHashable]?) -> Void, pageName: String, properties: inout [AnyHashable : Any]) {
         self.notificationResponseCached = false
         self.serialQueue.async(execute: {
 
             var parsedNotifications: [AnyHashable] = []
 
+            if !self.notificationResponseCached{
+                let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+                var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
+                    , VisilabsConfig.CHANNEL_KEY : self.channel
+                    , VisilabsConfig.SITEID_KEY : self.siteID
+                    , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
+                    , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
+                    , VisilabsConfig.URI_KEY : "/OM_evt.gif".urlEncode()
+                    , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
+                    , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
+                
+                if !self.exVisitorID.isNilOrWhiteSpace{
+                    props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
+                }
 
-            if completion != nil {
-                completion(parsedNotifications)
+                let lUrl = VisilabsHelper.buildLoggerUrl(loggerUrl: "\(self.loggerURL)", props: props)
             }
+            
+
+            completion(parsedNotifications)
 
         })
     
