@@ -11,7 +11,7 @@ import Foundation
 Base class for all API request classes
 */
 
-class VisilabsAction{
+public class VisilabsAction{
     
     /// The HTTP request method
     var requestMethod: String
