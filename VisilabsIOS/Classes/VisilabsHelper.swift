@@ -27,10 +27,18 @@ internal class VisilabsHelper{
         let request = Visilabs.callAPI()?.buildGeofenceRequest(action: "processV2", latitude: 0.0, longitude: 0.0, isDwell: isDwell, isEnter: isEnter, actionID: actionID, geofenceID: geofenceID)
         request?.execAsync(withSuccess: { response in }, andFailure: { response in })
     }
-    
-    static func buildLoggerUrl(loggerUrl: String) -> String {
-        
-        return ""
+
+    //TODO: props un boş gelme ihtimalini de düşün
+    static func buildLoggerUrl(loggerUrl: String, props: [String : String] = [:], additionalQueryString: String = "") -> String {
+        var qsKeyValues = [String]()
+        props.forEach { (key, value) in
+            qsKeyValues.append("\(key)=\(value)")
+        }
+        var queryString = qsKeyValues.joined(separator: "&")
+        if additionalQueryString.count > 0 {
+            queryString = "\(queryString)&\(additionalQueryString)"
+        }
+        return "\(loggerUrl)?\(queryString)"
     }
     
 }
