@@ -135,7 +135,11 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             print("Visilabs: Error while unarchiving tokenID.")
         }
         
-        
+        if let appidfp = appIDFilePath(), let appid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String{
+            self.appID = appid
+        }else{
+            print("Visilabs: Error while unarchiving appID.")
+        }
         
         /*
         if(self.geofenceEnabled && !self.geofenceURL.isNilOrWhiteSpace){
