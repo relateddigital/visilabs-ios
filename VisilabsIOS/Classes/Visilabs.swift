@@ -59,7 +59,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var miniNotificationBackgroundColor: UIColor?
     
     
-    //TODO: burada synchronized olacak
     public class func callAPI() -> Visilabs? {
         Visilabs.visilabsLockingQueue.sync {
             if Visilabs.API == nil{
@@ -69,7 +68,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         return Visilabs.API
     }
     
-    //TODO: Buradaki DispatchQueue doğru yaklaşım mı?
     @discardableResult
     public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
         Visilabs.visilabsLockingQueue.sync {
@@ -825,13 +823,42 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             props.removeValue(forKey: VisilabsConfig.CHANNEL_KEY)
         }
         
+        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+        var eventProperties = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
+            , VisilabsConfig.CHANNEL_KEY : self.channel
+            , VisilabsConfig.SITEID_KEY : self.siteID
+            , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
+            , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
+            , VisilabsConfig.URI_KEY : pageName.urlEncode()
+            
+            
+            
+            
+            , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
+            , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
+        
+        if !self.exVisitorID.isNilOrWhiteSpace{
+            eventProperties[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
+        }
 
+        let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props)
+        let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props)
+        print("\(self) tracking notification click \(lUrl)")
+        
+        Visilabs.visilabsLockingQueue.sync {
+            self.sendQueue.append(lUrl)
+            self.sendQueue.append(rtUrl)
+            self.send()
+        }
+        
+
+        
+        
+        
         
         
         
         let escapedPageName = urlEncode(pageName)
-
-        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
 
         var segURL: String? = nil
         
