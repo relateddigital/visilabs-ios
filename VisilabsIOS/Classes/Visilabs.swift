@@ -854,7 +854,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
 
         let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
-        print("\(self) tracking notification click \(lUrl)")
+        
         
         Visilabs.visilabsLockingQueue.sync {
             self.sendQueue.append(lUrl)
