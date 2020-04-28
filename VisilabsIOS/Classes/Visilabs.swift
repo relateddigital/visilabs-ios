@@ -847,7 +847,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         
         for prop in props{
-            if !prop.key.isEmpty{
+            if !prop.key.isEmptyOrWhitespace{
                 eventProperties[prop.key] = eventProperties[prop.value]
             }
         }
