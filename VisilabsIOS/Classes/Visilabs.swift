@@ -764,7 +764,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             }
             self.cookieID = cookieID
             if let cidfp = self.cookieIDFilePath(){
-                if !NSKeyedArchiver.archiveRootObject(self.cookieID, toFile: cidfp) {
+                if !NSKeyedArchiver.archiveRootObject(self.cookieID!, toFile: cidfp) {
                     print("Visilabs: WARNING - Unable to archive userAgent!!!")
                 }
             }
@@ -780,7 +780,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             }
             self.exVisitorID = exVisitorID
             if let exvidfp = self.exVisitorIDFilePath(){
-                if !NSKeyedArchiver.archiveRootObject(self.exVisitorID, toFile: exvidfp) {
+                if !NSKeyedArchiver.archiveRootObject(self.exVisitorID!, toFile: exvidfp) {
                     print("Visilabs: WARNING - Unable to archive exVisitorID!!!")
                 }
             }
@@ -790,7 +790,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         if let tokenID = props[VisilabsConfig.TOKENID_KEY]{
             self.tokenID = tokenID
             if let tidfp = self.tokenIDFilePath(){
-                if !NSKeyedArchiver.archiveRootObject(self.tokenID, toFile: tidfp) {
+                if !NSKeyedArchiver.archiveRootObject(self.tokenID!, toFile: tidfp) {
                     print("Visilabs: WARNING - Unable to archive tokenID!!!")
                 }
             }
@@ -800,7 +800,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         if let appID = props[VisilabsConfig.APPID_KEY]{
             self.appID = appID
             if let appidfp = self.appIDFilePath(){
-                if !NSKeyedArchiver.archiveRootObject(self.appID, toFile: appidfp) {
+                if !NSKeyedArchiver.archiveRootObject(self.appID!, toFile: appidfp) {
                     print("Visilabs: WARNING - Unable to archive appID!!!")
                 }
             }
