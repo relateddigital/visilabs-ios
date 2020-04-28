@@ -831,10 +831,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
             , VisilabsConfig.URI_KEY : pageName.urlEncode()
             , VisilabsConfig.MOBILEAPPLICATION_KEY : VisilabsConfig.TRUE
-            
-            
-            
-            , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
+            , VisilabsConfig.MOBILEADID_KEY : self.identifierForAdvertising ?? ""
             , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
         
         if !self.exVisitorID.isNilOrWhiteSpace{
