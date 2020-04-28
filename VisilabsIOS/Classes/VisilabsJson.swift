@@ -49,6 +49,7 @@ extension String {
         return contains(string, options: [])
     }
     
+    //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
     func urlEncode() -> String {
         return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
