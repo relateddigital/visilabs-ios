@@ -848,7 +848,13 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
         for (key, value) in props{
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace{
-                eventProperties[key] = eventProperties[value]
+                let encodedKey = key.urlEncode()
+                let encodedValue = value.urlEncode()
+                if encodedKey.count > 255 {
+                    print("Visilabs: WARNING - property key cannot be longer than 255 characters. When URL escaped, your key is \(encodedKey.count) characters long (the submitted value is \(key), the URL escaped key is \(encodedKey). Dropping property.")
+                }else{
+                    eventProperties[encodedKey] = encodedValue
+                }
             }
         }
         
