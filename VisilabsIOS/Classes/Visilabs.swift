@@ -760,7 +760,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         var props = properties
         
-        if let cookieID = props[VisilabsConfig.COOKIEID_KEY]{
+        if let cookieID = props[VisilabsConfig.COOKIEID_KEY] {
             if self.cookieID != cookieID {
                 VisilabsPersistentTargetManager.clearParameters()
             }
@@ -773,7 +773,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             props.removeValue(forKey: VisilabsConfig.COOKIEID_KEY)
         }
         
-        if let exVisitorID = props[VisilabsConfig.EXVISITORID_KEY]{
+        if let exVisitorID = props[VisilabsConfig.EXVISITORID_KEY] {
             if self.exVisitorID != exVisitorID {
                 VisilabsPersistentTargetManager.clearParameters()
             }
@@ -818,34 +818,17 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             props.removeValue(forKey: VisilabsConfig.APIVER_KEY)
         }
         
-        
-        var channel = self.channel
-        if let appID = props[VisilabsConfig.APPID_KEY]{
-            self.appID = appID
-            if let appidfp = self.appIDFilePath(){
-                if !NSKeyedArchiver.archiveRootObject(self.appID, toFile: appidfp) {
-                    print("Visilabs: WARNING - Unable to archive appID!!!")
-                }
-            }
-            props.removeValue(forKey: VisilabsConfig.APPID_KEY)
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        var chan = channel
-        if properties.keys.contains("OM.vchannel") {
-            chan = urlEncode(properties["OM.vchannel"]!)
-            vlProperties.removeValue(forKey: "OM.vchannel")
-        }
 
+        var chan = self.channel
+        if props.keys.contains(VisilabsConfig.CHANNEL_KEY) {
+            chan = props[VisilabsConfig.CHANNEL_KEY]!
+            props.removeValue(forKey: VisilabsConfig.CHANNEL_KEY)
+        }
+        
+
+        
+        
+        
         let escapedPageName = urlEncode(pageName)
 
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
