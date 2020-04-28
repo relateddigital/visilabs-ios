@@ -690,51 +690,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     // MARK: Public Methods
     
-    //TODO
-    func urlizeProps(_ props: [String : String]) -> String {
-    var propsURLPart = ""
-
-        for propKey in props.keys {
-        
-        let stringKey = propKey
-
-        if stringKey.count == 0 {
-            print("Visilabs: WARNING - property keys must not be empty strings. Dropping property.")
-            continue
-        }
-
-        var stringValue: String? = nil
-        if props[stringKey] == nil {
-            print("Visilabs: WARNING - property value cannot be nil. Dropping property.")
-            continue
-        } else {
-            stringValue = props[stringKey]
-        }
-
-        if stringValue == nil {
-            print("Visilabs: WARNING - property value cannot be of type %@. Dropping property.", (type(of: props[stringKey])))
-            continue
-        }
-
-        if (stringValue?.count ?? 0) == 0 {
-            print("Visilabs: WARNING - property values must not be empty strings. Dropping property.")
-            continue
-        }
-
-
-            let escapedKey = urlEncode(stringKey)
-        if escapedKey.count > 255 {
-            print("Visilabs: WARNING - property key cannot longer than 255 characters. When URL escaped, your key is %lu characters long (the submitted value is %@, the URL escaped value is %@). Dropping property.", UInt(escapedKey.count), stringKey, escapedKey)
-            continue
-        }
-
-        let escapedValue = urlEncode(stringValue!)
-        propsURLPart += "&\(escapedKey)=\(escapedValue)"
-    }
-
-    return propsURLPart
-    }
-    
     //Custom Event için NSKeyedArchiver içerisinde kullanılan path'i URL'e çevirme
     func getDocumentsDirectory() -> URL {
       let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
