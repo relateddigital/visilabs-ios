@@ -675,8 +675,13 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             if sendQueue.count == 0 {
                 return
             }else{
-                var nextAPICall = self.sendQueue[0]
-                
+                let nextAPICall = self.sendQueue[0]
+                var referer: String? = nil
+                if !nextAPICall.contains("OM.uri=") {
+                    referer = ""
+                } else {
+                    referer = nextAPICall.stringBetweenString(start: "OM.uri=", end: "&")
+                }
                 
             }
             
