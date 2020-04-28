@@ -19,6 +19,7 @@ struct VisilabsConfig {
     static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
     
     static let MOBILEADID_KEY = "OM.m_adid"
+    static let MOBILEAPPLICATION_KEY = "OM.mappl"
     
     
     static let IOS = "IOS"
