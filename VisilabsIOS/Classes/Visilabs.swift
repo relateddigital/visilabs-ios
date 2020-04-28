@@ -857,9 +857,8 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         Visilabs.visilabsLockingQueue.sync {
             self.sendQueue.append(lUrl)
             self.sendQueue.append(rtUrl)
-            self.send()
         }
-        
+        self.send()
 
         
         
