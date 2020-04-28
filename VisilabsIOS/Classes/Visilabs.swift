@@ -860,24 +860,24 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
-        let escapedPageName = urlEncode("/Push")
+        let escapedPageName = "/Push".urlEncode()
 
         var pushURL = "\(restURL!)/\(encryptedDataSource!)/\(dataSource)/\(cookieID ?? "")?\(VisilabsConfig.CHANNEL_KEY)=\(channel)&\(VisilabsConfig.URI_KEY)=\(escapedPageName)&\(VisilabsConfig.SITEID_KEY)=\(siteID)&\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&dat=\(actualTimeOfevent)"
         
         if !self.exVisitorID.isNilOrWhiteSpace {
-            pushURL = "\(pushURL)&\(VisilabsConfig.EXVISITORID_KEY)=\(urlEncode(exVisitorID!))"
+            pushURL = "\(pushURL)&\(VisilabsConfig.EXVISITORID_KEY)=\(exVisitorID!.urlEncode())"
         }
         if !source.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_SOURCE_KEY)=\(urlEncode(source))"
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_SOURCE_KEY)=\(source.urlEncode())"
         }
         if !campaign.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CAMPAIGN_KEY)=\(urlEncode(campaign))"
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CAMPAIGN_KEY)=\(campaign.urlEncode())"
         }
         if !medium.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_MEDIUM_KEY)=\(urlEncode(medium))"
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_MEDIUM_KEY)=\(medium.urlEncode())"
         }
         if !content.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CONTENT_KEY)=\(urlEncode(content))"
+            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CONTENT_KEY)=\(content.urlEncode())"
         }
         return pushURL
     }
