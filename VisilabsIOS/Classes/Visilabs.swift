@@ -845,6 +845,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         if !self.appID.isNilOrWhiteSpace{
             eventProperties[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
         }
+        
+        for prop in props{
+            eventProperties[prop.key] = eventProperties[prop.value]
+        }
 
         let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
