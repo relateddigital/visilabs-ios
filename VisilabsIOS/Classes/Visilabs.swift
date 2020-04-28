@@ -118,8 +118,8 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             self.setCookieID()
         }
         
-        if let exidfp = exVisitorIDFilePath(), let exid = NSKeyedUnarchiver.unarchiveObject(withFile: exidfp) as? String{
-            self.exVisitorID = exid
+        if let exvidfp = exVisitorIDFilePath(), let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String{
+            self.exVisitorID = exvid
         }else{
             print("Visilabs: Error while unarchiving exVisitorID.")
         }
@@ -752,103 +752,94 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
       return paths[0]
     }
     
-    //TODO:
+    
     public func customEvent(_ pageName: String, properties: [String:String]){
-        var vlProperties = properties
-        if pageName.isEmptyOrWhitespace || pageName.count == 0 {
-            print("Visilabs: WARNING - Tried to record event with empty or nil name. Ignoring.")
+        if pageName.isEmptyOrWhitespace{
+            print("Visilabs: WARNING - Custom Event can not be called with empty page name. Ignoring.")
             return
         }
-
-        if properties.keys.contains("OM.cookieID") {
-            let cookieid = properties["OM.cookieID"]
-
-            if !(cookieID == cookieid) {
+        var props = properties
+        
+        if let cookieID = props[VisilabsConfig.COOKIEID_KEY]{
+            if self.cookieID != cookieID {
                 VisilabsPersistentTargetManager.clearParameters()
             }
-
-            cookieID = cookieid
-//            if !NSKeyedArchiver.archiveRootObject(cookieID!, toFile: cookieIDFilePath()!) {
-//                print("Visilabs: WARNING - Unable to archive identity!!!")
-//            }
-            let cookieIDFullPath = getDocumentsDirectory().appendingPathComponent(cookieIDFilePath()!)
-            do {
-              let data = try NSKeyedArchiver.archivedData(withRootObject: cookieID!, requiringSecureCoding: true)
-              try data.write(to: cookieIDFullPath)
-            } catch {
-              print("Could’nt write file")
+            self.cookieID = cookieID
+            if let cidfp = self.cookieIDFilePath(){
+                if !NSKeyedArchiver.archiveRootObject(self.cookieID, toFile: cidfp) {
+                    print("Visilabs: WARNING - Unable to archive userAgent!!!")
+                }
             }
-            
-            vlProperties.removeValue(forKey: "OM.cookieID")
-        }
-
-        if properties.keys.contains("OM.exVisitorID") {
-            let exvisitorid = properties["OM.exVisitorID"]
-
-            if !(exVisitorID == exvisitorid) {
-                VisilabsPersistentTargetManager.clearParameters()
-            }
-
-            if exVisitorID != nil && !(exVisitorID == exvisitorid) {
-                setCookieID()
-            }
-
-            exVisitorID = exvisitorid
-//            if !NSKeyedArchiver.archiveRootObject(exVisitorID!, toFile: exVisitorIDFilePath()!) {
-//                print("Visilabs: WARNING - Unable to archive new identity!!!")
-//            }
-            let exVisitorIDFullPath = getDocumentsDirectory().appendingPathComponent(exVisitorIDFilePath()!)
-            do {
-              let data = try NSKeyedArchiver.archivedData(withRootObject: exVisitorID!, requiringSecureCoding: true)
-              try data.write(to: exVisitorIDFullPath)
-            } catch {
-              print("Could’nt write file")
-            }
-            vlProperties.removeValue(forKey: "OM.exVisitorID")
-        }
-
-        if properties.keys.contains("OM.sys.TokenID") {
-            let tokenid = properties["OM.sys.TokenID"]
-            tokenID = tokenid
-
-//            if !NSKeyedArchiver.archiveRootObject(tokenID!, toFile: tokenIDFilePath()!) {
-//                print("Visilabs: WARNING - Unable to archive tokenID!!!")
-//            }
-            let tokenIDFullPath = getDocumentsDirectory().appendingPathComponent(tokenIDFilePath()!)
-            do {
-              let data = try NSKeyedArchiver.archivedData(withRootObject: tokenID!, requiringSecureCoding: true)
-              try data.write(to: tokenIDFullPath)
-            } catch {
-              print("Could’nt write file")
-            }
-            vlProperties.removeValue(forKey: "OM.sys.TokenID")
-        }
-
-        if properties.keys.contains("OM.sys.AppID") {
-            let appid = properties["OM.sys.AppID"]
-            appID = appid
-
-//            if !NSKeyedArchiver.archiveRootObject(appID!, toFile: appIDFilePath()!) {
-//                print("Visilabs: WARNING - Unable to archive appID!!!")
-//            }
-            let appIDFullPath = getDocumentsDirectory().appendingPathComponent(appIDFilePath()!)
-            do {
-              let data = try NSKeyedArchiver.archivedData(withRootObject: appID!, requiringSecureCoding: true)
-              try data.write(to: appIDFullPath)
-            } catch {
-              print("Could’nt write file")
-            }
-            vlProperties.removeValue(forKey: "OM.sys.AppID")
+            props.removeValue(forKey: VisilabsConfig.COOKIEID_KEY)
         }
         
-        if properties.keys.contains("OM.m_adid") {
-            vlProperties.removeValue(forKey: "OM.m_adid")
+        if let exVisitorID = props[VisilabsConfig.EXVISITORID_KEY]{
+            if self.exVisitorID != exVisitorID {
+                VisilabsPersistentTargetManager.clearParameters()
+            }
+            if self.exVisitorID != nil && self.exVisitorID != exVisitorID{
+                self.setCookieID()
+            }
+            self.exVisitorID = exVisitorID
+            if let exvidfp = self.exVisitorIDFilePath(){
+                if !NSKeyedArchiver.archiveRootObject(self.exVisitorID, toFile: exvidfp) {
+                    print("Visilabs: WARNING - Unable to archive exVisitorID!!!")
+                }
+            }
+            props.removeValue(forKey: VisilabsConfig.EXVISITORID_KEY)
         }
-
-        if properties.keys.contains(VisilabsConfig.APIVER_KEY) {
-            vlProperties.removeValue(forKey: VisilabsConfig.APIVER_KEY)
+ 
+        if let tokenID = props[VisilabsConfig.TOKENID_KEY]{
+            self.tokenID = tokenID
+            if let tidfp = self.tokenIDFilePath(){
+                if !NSKeyedArchiver.archiveRootObject(self.tokenID, toFile: tidfp) {
+                    print("Visilabs: WARNING - Unable to archive tokenID!!!")
+                }
+            }
+            props.removeValue(forKey: VisilabsConfig.TOKENID_KEY)
         }
-
+        
+        if let appID = props[VisilabsConfig.APPID_KEY]{
+            self.appID = appID
+            if let appidfp = self.appIDFilePath(){
+                if !NSKeyedArchiver.archiveRootObject(self.appID, toFile: appidfp) {
+                    print("Visilabs: WARNING - Unable to archive appID!!!")
+                }
+            }
+            props.removeValue(forKey: VisilabsConfig.APPID_KEY)
+        }
+        
+        //TODO: Dışarıdan mobile ad id gelince neden siliyoruz?
+        if props.keys.contains(VisilabsConfig.MOBILEADID_KEY) {
+            props.removeValue(forKey: VisilabsConfig.MOBILEADID_KEY)
+        }
+        
+        if props.keys.contains(VisilabsConfig.APIVER_KEY) {
+            props.removeValue(forKey: VisilabsConfig.APIVER_KEY)
+        }
+        
+        
+        var channel = self.channel
+        if let appID = props[VisilabsConfig.APPID_KEY]{
+            self.appID = appID
+            if let appidfp = self.appIDFilePath(){
+                if !NSKeyedArchiver.archiveRootObject(self.appID, toFile: appidfp) {
+                    print("Visilabs: WARNING - Unable to archive appID!!!")
+                }
+            }
+            props.removeValue(forKey: VisilabsConfig.APPID_KEY)
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         var chan = channel
         if properties.keys.contains("OM.vchannel") {
             chan = urlEncode(properties["OM.vchannel"]!)
