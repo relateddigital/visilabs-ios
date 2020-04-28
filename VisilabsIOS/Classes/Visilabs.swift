@@ -735,15 +735,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     return propsURLPart
     }
     
-    //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
-    public func urlEncode(_ prior: String) -> String {
-        return prior.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-    }
-    
-    
-
-    
-    
     //Custom Event için NSKeyedArchiver içerisinde kullanılan path'i URL'e çevirme
     func getDocumentsDirectory() -> URL {
       let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
