@@ -846,9 +846,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             eventProperties[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
         }
         
-        for prop in props{
-            if !prop.key.isEmptyOrWhitespace{
-                eventProperties[prop.key] = eventProperties[prop.value]
+        for (key, value) in props{
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace{
+                eventProperties[key] = eventProperties[value]
             }
         }
         
