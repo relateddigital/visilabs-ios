@@ -825,7 +825,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         var eventProperties = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
-            , VisilabsConfig.CHANNEL_KEY : self.channel
+            , VisilabsConfig.CHANNEL_KEY : chan
             , VisilabsConfig.SITEID_KEY : self.siteID
             , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
             , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
