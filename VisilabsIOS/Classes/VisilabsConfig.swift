@@ -78,6 +78,7 @@ struct VisilabsConfig {
     private static let TARGET_PREF_LPP_STORE_KEY = "OM.lpp"
     private static let TARGET_PREF_VQ_STORE_KEY = "OM.vq"
     private static let TARGET_PREF_VRDOMAIN_STORE_KEY = "OM.vrDomain"
+    
     private static let TARGET_PREF_VOSS_KEY = "OM.OSS"
     private static let TARGET_PREF_VCNAME_KEY = "OM.cname"
     private static let TARGET_PREF_VCMEDIUM_KEY = "OM.cmedium"
