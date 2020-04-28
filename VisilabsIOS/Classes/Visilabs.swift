@@ -864,60 +864,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             self.sendQueue.append(rtUrl)
         }
         self.send()
-
-        
-        
-        
-        
-        
-        
-        let escapedPageName = urlEncode(pageName)
-
-        var segURL: String? = nil
-        
-        segURL = String(format: "%@/%@/%@?%@=%@&%@=%@&%@=%@&%@=%@&%@=%i&%@=%@&%@=%@&%@=%@&%@=%@&", loggerURL, dataSource, "om.gif", "OM.cookieID", cookieID!, "OM.vchannel", chan, "OM.siteID", siteID, "OM.oid", organizationID, "dat", actualTimeOfevent, "OM.uri", escapedPageName, "OM.mappl", "true", "OM.m_adid", identifierForAdvertising!, VisilabsConfig.APIVER_KEY, "IOS")
-    
-
-        if exVisitorID != nil && !(exVisitorID == "") {
-            let escapedIdentity = urlEncode(exVisitorID!)
-            segURL = "\(segURL ?? "")\("OM.exVisitorID")=\(escapedIdentity)"
-        }
-
-        if tokenID != nil && !(tokenID == "") {
-            let escapedToken = urlEncode(tokenID!)
-            segURL = "\(segURL ?? "")&\("OM.sys.TokenID")=\(escapedToken)"
-        }
-        if appID != nil && !(appID == "") {
-            let escapedAppID = urlEncode(appID!)
-            segURL = "\(segURL ?? "")&\("OM.sys.AppID")=\(escapedAppID)"
-        }
-        
-        
-            VisilabsPersistentTargetManager.saveParameters(properties)
-            let additionalURL = urlizeProps(properties)
-        if additionalURL.count > 0 {
-            segURL = "\(segURL ?? "")\(additionalURL)"
-            }
-        
-        
-        var rtURL: String? = nil
-        if realTimeURL.isEmptyOrWhitespace && !(realTimeURL == "") {
-            rtURL = segURL!.replacingOccurrences(of: loggerURL, with: realTimeURL)
-        }
-
-        if checkForNotificationsOnLoggerRequest && actionURL != nil {
-            showNotification(pageName, properties: properties)
-        }
-
-
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
-            sendQueue.append(segURL!)
-            if rtURL != nil {
-                sendQueue.append(rtURL ?? "")
-            }
-        }
-        //send()
     }
     
     public func login(exVisitorID: String, properties: [String:String] = [String:String]()){
