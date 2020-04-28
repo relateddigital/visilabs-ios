@@ -21,6 +21,7 @@ struct VisilabsConfig {
     static let MOBILEADID_KEY = "OM.m_adid"
     static let MOBILEAPPLICATION_KEY = "OM.mappl"
     
+    static let TRUE = "true"
     
     static let IOS = "IOS"
     static let DAT_KEY = "dat"
