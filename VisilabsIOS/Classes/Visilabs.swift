@@ -281,9 +281,8 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         Visilabs.visilabsLockingQueue.sync {
             self.sendQueue.append(lUrl)
             self.sendQueue.append(rtUrl)
-            self.send()
         }
-        
+        self.send()
     }
     
     private func checkForNotificationsResponse(completion: @escaping (_ notifications: [VisilabsNotification]?) -> Void, pageName: String, properties: [String : String?]) {
