@@ -666,7 +666,23 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
     private func send(){
-        
+        Visilabs.visilabsLockingQueue.sync {
+            if self.timer != nil {
+                self.timer!.invalidate()
+                self.timer = nil
+            }
+            
+            if sendQueue.count == 0 {
+                return
+            }else{
+                var nextAPICall = self.sendQueue[0]
+                
+                
+            }
+            
+            
+            
+        }
     }
     
     
