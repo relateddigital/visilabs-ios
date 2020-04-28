@@ -830,7 +830,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
             , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
             , VisilabsConfig.URI_KEY : pageName.urlEncode()
-            
+            , VisilabsConfig.MOBILEAPPLICATION_KEY : VisilabsConfig.TRUE
             
             
             
