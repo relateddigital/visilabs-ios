@@ -847,7 +847,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         
         for prop in props{
-            eventProperties[prop.key] = eventProperties[prop.value]
+            if !prop.key.isEmpty{
+                eventProperties[prop.key] = eventProperties[prop.value]
+            }
         }
         
         VisilabsPersistentTargetManager.saveParameters(props)
