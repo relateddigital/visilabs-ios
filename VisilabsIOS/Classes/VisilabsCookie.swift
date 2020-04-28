@@ -7,13 +7,11 @@
 
 import Foundation
 
-class VisilabsCookie{
-    private var loggerCookieKey: String?
-    private var loggerCookieValue: String?
-    private var realTimeCookieKey: String?
-    private var realTimeCookieValue: String?
-    private var loggerOM3rdCookieValue: String?
-    private var realTimeOM3rdCookieValue: String?
-    
-    
+struct VisilabsCookie{
+    var loggerCookieKey: String?
+    var loggerCookieValue: String?
+    var realTimeCookieKey: String?
+    var realTimeCookieValue: String?
+    var loggerOM3rdCookieValue: String?
+    var realTimeOM3rdCookieValue: String?
 }
