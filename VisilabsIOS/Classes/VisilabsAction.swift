@@ -29,9 +29,6 @@ public class VisilabsAction{
     
     var httpClient: VisilabsHttpClient
     
-    var method: String?
-    
-    
     
     /// The timeout value of the request  Default to 30 seconds
     var requestTimeout: TimeInterval
