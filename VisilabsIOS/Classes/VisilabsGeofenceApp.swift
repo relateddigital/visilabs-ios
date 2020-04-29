@@ -121,6 +121,13 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
             print("Application will resignActive with info: \(userInfo).")
         }
     }
+    
+    @objc func applicationWillTerminateNotificationHandler(_ notification: Notification?) {
+        if let userInfo = notification?.userInfo {
+            print("Application will terminate with info: \(userInfo)")
+        }
+        NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+    }
 
     @objc func applicationDidReceiveMemoryWarningNotificationHandler(_ notification: Notification?) {
         print("Visilabs Received memory warning")
