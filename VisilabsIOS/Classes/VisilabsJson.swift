@@ -40,8 +40,8 @@ extension String {
         return nil
     }
 
-    func contains(_ string: String?, options: String.CompareOptions) -> Bool {
-        let rng = (self as NSString).range(of: string ?? "", options: options)
+    func contains(_ string: String, options: String.CompareOptions) -> Bool {
+        let rng = (self as NSString).range(of: string, options: options)
         return rng.location != NSNotFound
     }
 
