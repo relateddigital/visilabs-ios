@@ -18,7 +18,7 @@ class VisilabsGeofenceBridge {
     /**
     Static entry point for bridge init.
     */
-    class func bridgeHandler(_ notification: Notification?) {
+    @objc class func bridgeHandler(_ notification: Notification?) {
         
         VisilabsGeofenceApp.sharedInstance()?.isDefaultLocationServiceEnabled = true
 
