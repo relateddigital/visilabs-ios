@@ -52,12 +52,8 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
             let geofenceBridge: AnyClass? = NSClassFromString("VisilabsGeofenceBridge")
             if let geofenceBridge = geofenceBridge {
                 print("Bridge for geofence: \(geofenceBridge).")
-            }
-            if geofenceBridge != nil {
-                if let geofenceBridge = geofenceBridge {
-                    //TODO: "SH_InitBridge_Notification" VisilabsConfig'e taşı
-                    NotificationCenter.default.addObserver(geofenceBridge, selector: #selector(VisilabsGeofenceBridge.bridgeHandler(_:)), name: NSNotification.Name(rawValue: "SH_InitBridge_Notification"), object: nil)
-                }
+                //TODO: "SH_InitBridge_Notification" VisilabsConfig'e taşı
+                NotificationCenter.default.addObserver(geofenceBridge, selector: #selector(VisilabsGeofenceBridge.bridgeHandler(_:)), name: NSNotification.Name(rawValue: "SH_InitBridge_Notification"), object: nil)
             }
         }
         return instance
