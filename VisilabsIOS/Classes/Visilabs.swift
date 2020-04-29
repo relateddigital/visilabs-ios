@@ -746,11 +746,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                                             }
                                             
                                             let afterCookies = HTTPCookieStorage.shared
-                                            var existingCoookies: [HTTPCookie]? = nil
-                                            if let url = URL(string: url.absoluteString) {
-                                                existingCoookies = afterCookies.cookies(for: url)
-                                            }
-                                            for cookie in existingCoookies ?? [] {
+                                            for cookie in HTTPCookieStorage.shared.cookies(for: url) ?? [] {
                                                 afterCookies.deleteCookie(cookie)
                                             }
                                             
