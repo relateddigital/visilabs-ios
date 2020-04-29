@@ -706,6 +706,11 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                         //TODO: TimeInterval constructor saniye mi alıyor kontrol et
                         request.timeoutInterval = TimeInterval(self.requestTimeoutInSeconds)
                     }
+                    
+                    let task = URLSession(configuration: URLSessionConfiguration.default).dataTask(with: request, completionHandler: { data, response, error in
+                        
+                    })
+                    task.resume()
                 }
                 
 
