@@ -44,37 +44,37 @@ class VisilabsGeofenceRequest: VisilabsAction {
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(Visilabs.callAPI()!.organizationID)&\(VisilabsConfig.SITEID_KEY)=\(Visilabs.callAPI()!.siteID)"
 
         if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {
-            let encodedCookieIDValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.cookieID!)
+            let encodedCookieIDValue = Visilabs.callAPI()!.cookieID!.urlEncode()
             let cookieParameter = "&\(VisilabsConfig.COOKIEID_KEY)=\(encodedCookieIDValue)"
             queryParameters = queryParameters + cookieParameter
         }
         
         if Visilabs.callAPI()!.exVisitorID != nil && Visilabs.callAPI()!.exVisitorID!.count > 0 {
-            let encodedExVisitorIDValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.exVisitorID!)
+            let encodedExVisitorIDValue = Visilabs.callAPI()!.exVisitorID!.urlEncode()
             let exVisitorIDParameter = "&\(VisilabsConfig.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
             queryParameters = queryParameters + exVisitorIDParameter
         }
 
         if action.count > 0 {
-            let encodedActionValue = Visilabs.callAPI()!.urlEncode(action)
+            let encodedActionValue = action.urlEncode()
             let actionParameter = "&\(VisilabsConfig.ACT_KEY)=\(encodedActionValue)"
             queryParameters = queryParameters + actionParameter
         }
         
         if actionID.count > 0 {
-            let encodedActionIDValue = Visilabs.callAPI()!.urlEncode(actionID)
+            let encodedActionIDValue = actionID.urlEncode()
             let actionIDParameter = "&\(VisilabsConfig.ACT_ID_KEY)=\(encodedActionIDValue)"
             queryParameters = queryParameters + actionIDParameter
         }
         
         if Visilabs.callAPI()!.tokenID != nil && Visilabs.callAPI()!.tokenID!.count > 0 {
-            let encodedTokenValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.tokenID!)
+            let encodedTokenValue = Visilabs.callAPI()!.tokenID!.urlEncode()
             let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
             queryParameters = queryParameters + tokenParameter
         }
         
         if Visilabs.callAPI()!.appID != nil && Visilabs.callAPI()!.appID!.count > 0 {
-            let encodedAppValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.appID!)
+            let encodedAppValue = Visilabs.callAPI()!.appID!.urlEncode()
             let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
         }
@@ -93,7 +93,7 @@ class VisilabsGeofenceRequest: VisilabsAction {
         }
         
         if geofenceID.count > 0 {
-            let encodedGeofenceID = Visilabs.callAPI()!.urlEncode(geofenceID)
+            let encodedGeofenceID = geofenceID.urlEncode()
             let geofenceIDParameter = "&\(VisilabsConfig.GEO_ID_KEY)=\(encodedGeofenceID)"
             queryParameters = queryParameters + geofenceIDParameter
         }
@@ -111,7 +111,7 @@ class VisilabsGeofenceRequest: VisilabsAction {
         
         for (key, value) in VisilabsPersistentTargetManager.getParameters() {
             if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace {
-                queryParameters = "\(queryParameters)&\(key)=\(Visilabs.callAPI()!.urlEncode(value!))"
+                queryParameters = "\(queryParameters)&\(key)=\(value!.urlEncode())"
             }
         }
 
