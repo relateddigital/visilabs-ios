@@ -116,6 +116,50 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(appStatusChange(_:)), name: NSNotification.Name("SHAppStatusChangeNotification"), object: nil)
     }
     
+    @objc func applicationDidFinishLaunchingNotificationHandler(_ notification: Notification?) {
+        if self.isFinishLaunchOptionCalled {
+            return
+        }
+        self.isFinishLaunchOptionCalled = true
+        var isFromDelayLaunch = false
+        if let n = notification{
+            //TODO: rawValue == kontrolü doğru mu?
+            isFromDelayLaunch = n.name.rawValue == "VisilabsDelayLaunchOptionsNotification"
+        }
+        
+        let launchOptions = notification?.userInfo
+        
+        if isFromDelayLaunch {
+            if let notificationInfo = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable : Any]{
+                var dictUserInfo: [AnyHashable : Any] = [:]
+                dictUserInfo["payload"] = notificationInfo
+                dictUserInfo["needComplete"] = NSNumber(value: false)
+                NotificationCenter.default.post(name: NSNotification.Name("SH_PushBridge_ReceiveRemoteNotification"), object: nil, userInfo: dictUserInfo)
+            }
+        }
+        
+        if launchOptions?[UIApplication.LaunchOptionsKey.location] != nil {
+            NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+        }
+        
+        if UIApplication.shared.applicationState != .background {
+            var dictComment: [AnyHashable : Any] = [:]
+            dictComment["action"] = "App launch from not running."
+            NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_UpdateGeoLocation"), object: nil)
+            let lat = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LAT") as? NSNumber)?.doubleValue ?? 0.0
+            let lng = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LNG") as? NSNumber)?.doubleValue ?? 0.0
+            if lat != 0 && lng != 0 {
+                dictComment["lat"] = NSNumber(value: lat)
+                dictComment["lng"] = NSNumber(value: lng)
+            }
+        }
+    
+        if UIApplication.shared.responds(to: #selector(UIApplication.setMinimumBackgroundFetchInterval(_:))) {
+            UIApplication.shared.setMinimumBackgroundFetchInterval(30 * 60)
+        }
+        
+    }
+    
     @objc func applicationWillResignActiveNotificationHandler( _ notification: Notification?) {
         if let userInfo = notification?.userInfo {
             print("Application will resignActive with info: \(userInfo).")
