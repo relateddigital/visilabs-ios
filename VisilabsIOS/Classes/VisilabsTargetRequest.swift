@@ -77,37 +77,37 @@ public class VisilabsTargetRequest: VisilabsAction {
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(Visilabs.callAPI()!.organizationID)&\(VisilabsConfig.SITEID_KEY)=\(Visilabs.callAPI()!.siteID)"
 
         if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {
-            let encodedCookieIDValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.cookieID!)
+            let encodedCookieIDValue = Visilabs.callAPI()!.cookieID!.urlEncode()
             let cookieParameter = "&\(VisilabsConfig.COOKIEID_KEY)=\(encodedCookieIDValue)"
             queryParameters = queryParameters + cookieParameter
         }
         
         if Visilabs.callAPI()!.exVisitorID != nil && Visilabs.callAPI()!.exVisitorID!.count > 0 {
-            let encodedExVisitorIDValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.exVisitorID!)
+            let encodedExVisitorIDValue = Visilabs.callAPI()!.exVisitorID!.urlEncode()
             let exVisitorIDParameter = "&\(VisilabsConfig.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
             queryParameters = queryParameters + exVisitorIDParameter
         }
 
         if zoneID.count > 0 {
-            let encodedZoneIDValue = Visilabs.callAPI()!.urlEncode(zoneID)
+            let encodedZoneIDValue = zoneID.urlEncode()
             let zoneIDParameter = "&\(VisilabsConfig.ZONE_ID_KEY)=\(encodedZoneIDValue)"
             queryParameters = queryParameters + zoneIDParameter
         }
         
         if productCode.count > 0 {
-            let encodedProductCodeValue = Visilabs.callAPI()!.urlEncode(productCode)
+            let encodedProductCodeValue = productCode.urlEncode()
             let productCodeParameter = "&\(VisilabsConfig.BODY_KEY)=\(encodedProductCodeValue)"
             queryParameters = queryParameters + productCodeParameter
         }
         
         if Visilabs.callAPI()!.tokenID != nil && Visilabs.callAPI()!.tokenID!.count > 0 {
-            let encodedTokenValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.tokenID!)
+            let encodedTokenValue = Visilabs.callAPI()!.tokenID!.urlEncode()
             let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
             queryParameters = queryParameters + tokenParameter
         }
         
         if Visilabs.callAPI()!.appID != nil && Visilabs.callAPI()!.appID!.count > 0 {
-            let encodedAppValue = Visilabs.callAPI()!.urlEncode(Visilabs.callAPI()!.appID!)
+            let encodedAppValue = Visilabs.callAPI()!.appID!.urlEncode()
             let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
         }
@@ -115,20 +115,20 @@ public class VisilabsTargetRequest: VisilabsAction {
         cleanParameters()
                         
         if let fs = getFiltersQueryString(filters), !fs.isEmptyOrWhitespace {
-            queryParameters = "\(queryParameters)&\(VisilabsConfig.FILTER_KEY)=\(Visilabs.callAPI()!.urlEncode(fs))"
+            queryParameters = "\(queryParameters)&\(VisilabsConfig.FILTER_KEY)=\(fs.urlEncode())"
         }
         
         queryParameters = "\(queryParameters)&\(VisilabsConfig.APIVER_KEY)=\(VisilabsConfig.APIVER_VALUE)"
         
         for (key, value) in properties {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace {
-                queryParameters = "\(queryParameters)&\(key)=\(Visilabs.callAPI()!.urlEncode(value))"
+                queryParameters = "\(queryParameters)&\(key)=\(value.urlEncode())"
             }
         }
         
         for (key, value) in VisilabsPersistentTargetManager.getParameters() {
             if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace {
-                queryParameters = "\(queryParameters)&\(key)=\(Visilabs.callAPI()!.urlEncode(value!))"
+                queryParameters = "\(queryParameters)&\(key)=\(value!.urlEncode())"
             }
         }
 
