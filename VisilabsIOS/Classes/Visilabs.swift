@@ -35,15 +35,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var currentlyShowingNotification: VisilabsNotification?
     private var notificationViewController: UIViewController?
     private var notificationResponseCached = false
+
     
-    private var loggerCookieKey: String?
-    private var loggerCookieValue: String?
-    private var realTimeCookieKey: String?
-    private var realTimeCookieValue: String?
-    private var loggerOM3rdCookieValue: String?
-    private var realTimeOM3rdCookieValue: String?
-    
-    private var visilabsCookie: VisilabsCookie?
+    private var visilabsCookie: VisilabsCookie
     
     private var webView: WKWebView?
     
@@ -99,6 +93,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.geofenceEnabled = geofenceEnabled
         self.maxGeofenceCount = (maxGeofenceCount < 20 && maxGeofenceCount > 0) ? maxGeofenceCount :20
         
+        self.visilabsCookie = VisilabsCookie()
         
         //TODO: super.init'ten kurtul
         super.init()
@@ -682,6 +677,15 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                 } else {
                     referer = nextAPICall.stringBetweenString(start: "OM.uri=", end: "&")
                 }
+                
+                if nextAPICall.contains(VisilabsConfig.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
+                && !self.visilabsCookie.loggerCookieKey.isNilOrWhiteSpace && !self.visilabsCookie.loggerCookieValue.isNilOrWhiteSpace {
+                    var cookieString = "\(self.visilabsCookie.loggerCookieKey!)=\(self.visilabsCookie.loggerCookieValue!)"
+                    if !self.visilabsCookie.loggerOM3rdCookieValue.isNilOrWhiteSpace {
+                        cookieString = "\(cookieString);\(VisilabsConfig.OM_3_KEY)=\(self.visilabsCookie.loggerOM3rdCookieValue!)"
+                    }
+                }
+                
                 
             }
             
