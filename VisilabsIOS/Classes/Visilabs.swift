@@ -702,6 +702,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                     if !cookieString.isEmptyOrWhitespace{
                         request.setValue(cookieString, forHTTPHeaderField: "Cookie")
                     }
+                    if self.requestTimeoutInSeconds > 0{
+                        //TODO: TimeInterval constructor saniye mi alıyor kontrol et
+                        request.timeoutInterval = TimeInterval(self.requestTimeoutInSeconds)
+                    }
                 }
                 
 
