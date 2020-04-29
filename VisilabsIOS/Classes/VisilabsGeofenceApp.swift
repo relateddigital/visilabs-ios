@@ -68,12 +68,15 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         //NSUserDefaults value for passing value between modules. It's not used as local cache for location, and before use it must have notification "SH_LMBridge_UpdateGeoLocation" to update the value.
         //#define SH_GEOLOCATION_LAT      @"SH_GEOLOCATION_LAT"
         //#define SH_GEOLOCATION_LNG      @"SH_GEOLOCATION_LNG"
+       
         VisilabsDataManager.save("SH_GEOLOCATION_LAT", withObject: CGFloat(0))
         VisilabsDataManager.save("SH_GEOLOCATION_LNG", withObject: CGFloat(0))
         
         self.backgroundQueue = OperationQueue()
         self.backgroundQueue.maxConcurrentOperationCount = 1
         self.install_semaphore = DispatchSemaphore(value: 1)
+        
+        super.init()
         self.setupNotifications()
         
     }
