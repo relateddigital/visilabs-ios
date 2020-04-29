@@ -88,8 +88,15 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
             }
             return locationServiceEnabled
         }set{
-            if newValue == self.isLocationServiceEnabled{
-                //TODO:
+            if newValue != self.isLocationServiceEnabled {
+                VisilabsDataManager.save("ENABLE_LOCATION_SERVICE", withObject: newValue)
+                if newValue {
+                    self.locationManager?.requestPermissionSinceiOS8()
+                    NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+                }else{
+                    NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StopMonitorGeoLocation"), object: nil)
+                }
+                self.registerOrUpdateInstallWithHandler(handler: nil)
             }
         }
     }
@@ -97,7 +104,7 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
     var install_semaphore: DispatchSemaphore
     var backgroundQueue: OperationQueue
 
-    func registerOrUpdateInstall(with handler: VisilabsCallbackHandler) {
+    func registerOrUpdateInstallWithHandler(handler: VisilabsCallbackHandler?) {
         DispatchQueue.global(qos: .default).async(execute: {
             assert(!Thread.isMainThread, "registerOrUpdateInstallWithHandler wait in main thread.")
             if !Thread.isMainThread {
