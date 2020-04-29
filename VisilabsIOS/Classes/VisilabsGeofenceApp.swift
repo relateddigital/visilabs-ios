@@ -122,6 +122,38 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         }
     }
     
+    @objc func applicationDidEnterBackgroundNotificationHandler(_ notification: Notification?) {
+        if let userInfo = notification?.userInfo {
+            print("Application did enter background with info: \(userInfo)")
+        }
+        NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+        
+        //TODO:
+        /*
+        let backgroundTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+            self.endBackgroundTask(backgroundTask)
+        })
+         let op = BlockOperation(block: {
+             if !op.isCancelled {
+                 var dictComment: [AnyHashable : Any] = [:]
+                 dictComment["action"] = "App to BG."
+                 NotificationCenter.default.post(
+                     name: NSNotification.Name("SH_LMBridge_UpdateGeoLocation"),
+                     object: nil)
+                 let lat = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LAT") as? NSNumber)?.doubleValue ?? 0.0
+                 let lng = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LNG") as? NSNumber)?.doubleValue ?? 0.0
+                 if lat != 0 && lng != 0 {
+                     dictComment["lat"] = NSNumber(value: lat)
+                     dictComment["lng"] = NSNumber(value: lng)
+                 }
+             } else {
+                 self.endBackgroundTask(backgroundTask)
+             }
+         })
+         backgroundQueue.addOperation(op)
+         */
+    }
+    
     @objc func applicationWillEnterForegroundNotificationHandler(_ notification: Notification?) {
 
         if let userInfo = notification?.userInfo {
