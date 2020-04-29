@@ -170,6 +170,12 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
     @objc func appStatusChange( _ notification: Notification?) {
         return
     }
+    
+    func endBackgroundTask(_ backgroundTask: UIBackgroundTaskIdentifier) {
+        var backgroundTask = backgroundTask
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = .invalid
+    }
 }
 
 
