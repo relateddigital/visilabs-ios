@@ -713,6 +713,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                         }else{
                             if let res = response as? HTTPURLResponse {
                                 if res.statusCode == 200 || res.statusCode == 304{
+                                    Visilabs.visilabsLockingQueue.sync {
+                                    
+                                    }
                                     
                                 }
                             }
