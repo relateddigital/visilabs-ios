@@ -122,6 +122,10 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         }
     }
 
+    @objc func applicationDidReceiveMemoryWarningNotificationHandler(_ notification: Notification?) {
+        print("Visilabs Received memory warning")
+    }
+    
     @objc func appStatusChange( _ notification: Notification?) {
         return
     }
