@@ -708,9 +708,27 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                     }
                     
                     let task = URLSession(configuration: URLSessionConfiguration.default).dataTask(with: request, completionHandler: { data, response, error in
-                        
+                        if let e = error {
+                            
+                        }else{
+                            if let res = response as? HTTPURLResponse {
+                                
+                            }
+                        }
                     })
                     task.resume()
+                    
+                    /*TODO: bunu uçur gereksiz sanki
+                    if !Thread.isMainThread {
+                        while self.segmentConnection {
+                            RunLoop.current.run(
+                                mode: .default,
+                                before: Date.distantFuture)
+                        }
+                    }
+                    */
+                    
+                    
                 }
                 
 
