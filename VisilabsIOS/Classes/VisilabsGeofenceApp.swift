@@ -101,6 +101,19 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
             }
         })
     }
+    
+    func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidFinishLaunchingNotificationHandler(_:)), name: UIApplication.didFinishLaunchingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidFinishLaunchingNotificationHandler(_:)), name: NSNotification.Name("VisilabsDelayLaunchOptionsNotification"), object: nil) //handle both direct send and delay send
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActiveNotificationHandler(_:)), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackgroundNotificationHandler(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForegroundNotificationHandler(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActiveNotificationHandler(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminateNotificationHandler(_:)), name: UIApplication.willTerminateNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidReceiveMemoryWarningNotificationHandler(_:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(timeZoneChangeNotificationHandler(_:)), name: UIApplication.significantTimeChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appStatusChange(_:)), name: NSNotification.Name("SHAppStatusChangeNotification"), object: nil)
+    }
 
 }
 
