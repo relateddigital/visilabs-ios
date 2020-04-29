@@ -671,16 +671,18 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                 return
             }else{
                 let nextAPICall = self.sendQueue[0]
-                var referer: String? = nil
+                var referer = ""
                 if !nextAPICall.contains("OM.uri=") {
                     referer = ""
                 } else {
-                    referer = nextAPICall.stringBetweenString(start: "OM.uri=", end: "&")
+                    referer = nextAPICall.stringBetweenString(start: "OM.uri=", end: "&") ?? ""
                 }
+                
+                var cookieString = ""
                 
                 if nextAPICall.contains(VisilabsConfig.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
                 && !self.visilabsCookie.loggerCookieKey.isNilOrWhiteSpace && !self.visilabsCookie.loggerCookieValue.isNilOrWhiteSpace {
-                    var cookieString = "\(self.visilabsCookie.loggerCookieKey!)=\(self.visilabsCookie.loggerCookieValue!)"
+                    cookieString = "\(self.visilabsCookie.loggerCookieKey!)=\(self.visilabsCookie.loggerCookieValue!)"
                     if !self.visilabsCookie.loggerOM3rdCookieValue.isNilOrWhiteSpace {
                         cookieString = "\(cookieString);\(VisilabsConfig.OM_3_KEY)=\(self.visilabsCookie.loggerOM3rdCookieValue!)"
                     }
