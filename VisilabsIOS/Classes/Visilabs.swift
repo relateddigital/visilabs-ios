@@ -555,10 +555,10 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         Visilabs.visilabsLockingQueue.sync {
             print("\(self) application did become active");
             //TODO: bunlar VisilabsCookie objesine taşınacak
-            self.loggerCookieKey = nil;
-            self.loggerCookieValue = nil;
-            self.realTimeCookieKey = nil;
-            self.realTimeCookieValue = nil;
+            self.visilabsCookie.loggerCookieKey = nil;
+            self.visilabsCookie.loggerCookieValue = nil;
+            self.visilabsCookie.realTimeCookieKey = nil;
+            self.visilabsCookie.realTimeCookieValue = nil;
         }
     }
     
@@ -687,7 +687,21 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                         cookieString = "\(cookieString);\(VisilabsConfig.OM_3_KEY)=\(self.visilabsCookie.loggerOM3rdCookieValue!)"
                     }
                 }
+                else if nextAPICall.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive)
+                && !self.visilabsCookie.realTimeCookieKey.isNilOrWhiteSpace && !self.visilabsCookie.realTimeCookieValue.isNilOrWhiteSpace {
+                    cookieString = "\(self.visilabsCookie.realTimeCookieKey!)=\(self.visilabsCookie.realTimeCookieValue!)"
+                    if !self.visilabsCookie.realTimeOM3rdCookieValue.isNilOrWhiteSpace {
+                        cookieString = "\(cookieString);\(VisilabsConfig.OM_3_KEY)=\(self.visilabsCookie.realTimeOM3rdCookieValue!)"
+                    }
+                }
                 
+                let url = URL(string: nextAPICall)
+                var request: NSMutableURLRequest? = nil
+                if let url = url {
+                    request = NSMutableURLRequest(url: url)
+                }
+                request?.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+                request?.setValue(referer, forHTTPHeaderField: "Referer")
                 
             }
             
