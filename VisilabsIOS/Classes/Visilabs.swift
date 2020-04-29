@@ -140,7 +140,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             print("Visilabs: Error while unarchiving userAgent.")
         }
         
-        self.computeWebViewUserAgent2()
+        //TODO:
+        //self.computeWebViewUserAgent2()
+        
         self.setupLifeCycyleListeners()
         self.unarchive()
         
@@ -227,9 +229,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     //TODO: BUNU DENE
     func computeWebViewUserAgent2() {
         DispatchQueue.main.async {
-            let webView : WKWebView? = WKWebView(frame: CGRect.zero)
-            webView?.loadHTMLString("<html></html>", baseURL: nil)
-            webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+            let webView : WKWebView = WKWebView(frame: CGRect.zero)
+            webView.loadHTMLString("<html></html>", baseURL: nil)
+            webView.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
                 if let uA = userAgent{
                     if type(of: uA) == String.self{
                         self.userAgent = String(describing: uA)
@@ -708,12 +710,17 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                         request.timeoutInterval = TimeInterval(self.requestTimeoutInSeconds)
                     }
                     
+                    print("send url: \(url)")
+                    
                     let task = URLSession(configuration: URLSessionConfiguration.default).dataTask(with: request, completionHandler: { data, response, error in
                         
+                        
                         if let e = error {
-                            
+                            print("send url error : \(e)")
                         }else{
                             if let res = response as? HTTPURLResponse {
+                                print("send url response : \(res)")
+                                print("send url response statusCode : \(res.statusCode)")
                                 if res.statusCode == 200 || res.statusCode == 304{
                                     
                                     if let url = res.url{
