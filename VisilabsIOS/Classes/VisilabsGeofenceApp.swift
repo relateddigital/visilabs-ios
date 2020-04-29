@@ -61,6 +61,10 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         VisilabsDataManager.save("SH_GEOLOCATION_LAT", withObject: CGFloat(0))
         VisilabsDataManager.save("SH_GEOLOCATION_LNG", withObject: CGFloat(0))
         
+        self.backgroundQueue = OperationQueue()
+        self.backgroundQueue.maxConcurrentOperationCount = 1
+        self.install_semaphore = DispatchSemaphore(value: 1)
+        
     }
     
     var isLocationServiceEnabled: Bool{
@@ -75,7 +79,18 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
             }
         }
     }
+    
+    var install_semaphore: DispatchSemaphore
+    var backgroundQueue: OperationQueue
 
+    func registerOrUpdateInstall(with handler: VisilabsCallbackHandler) {
+        DispatchQueue.global(qos: .default).async(execute: {
+            assert(!Thread.isMainThread, "registerOrUpdateInstallWithHandler wait in main thread.")
+            if !Thread.isMainThread {
+                (self.install_semaphore.wait(timeout: DispatchTime.distantFuture) == .success ? 0 : -1)
+            }
+        })
+    }
 
 }
 
