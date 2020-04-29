@@ -74,6 +74,7 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         self.backgroundQueue = OperationQueue()
         self.backgroundQueue.maxConcurrentOperationCount = 1
         self.install_semaphore = DispatchSemaphore(value: 1)
+        self.setupNotifications()
         
     }
     
