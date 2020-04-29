@@ -122,6 +122,26 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         }
     }
     
+    @objc func applicationWillEnterForegroundNotificationHandler(_ notification: Notification?) {
+
+        if let userInfo = notification?.userInfo {
+            print("Application will enter foreground with info: \(userInfo)")
+        }
+
+        var dictComment: [AnyHashable : Any] = [:]
+        dictComment["action"] = "App opened from BG."
+        NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_UpdateGeoLocation"), object: nil)
+
+        let lat = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LAT") as? NSNumber)?.doubleValue ?? 0.0
+        let lng = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LNG") as? NSNumber)?.doubleValue ?? 0.0
+        if lat != 0 && lng != 0 {
+            dictComment["lat"] = NSNumber(value: lat)
+            dictComment["lng"] = NSNumber(value: lng)
+        }
+
+    }
+
+    
     @objc func applicationDidBecomeActiveNotificationHandler( _ notification: Notification?) {
         if let userInfo = notification?.userInfo {
             print("Application did become active with info: \(userInfo)")
