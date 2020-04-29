@@ -695,9 +695,9 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                     }
                 }
                 
-                var request: NSMutableURLRequest? = nil
+                var request: URLRequest? = nil
                 if let url = URL(string: nextAPICall) {
-                    request = NSMutableURLRequest(url: url)
+                    request = URLRequest(url: url)
                 }
                 request?.setValue(self.userAgent, forHTTPHeaderField: "User-Agent")
                 request?.setValue(referer, forHTTPHeaderField: "Referer")
