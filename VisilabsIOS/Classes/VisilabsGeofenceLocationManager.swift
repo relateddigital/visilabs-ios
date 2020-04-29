@@ -273,7 +273,7 @@ class VisilabsGeofenceLocationManager: NSObject {
     
     // MARK: - operation
     
-    private func requestPermissionSinceiOS8() {
+    func requestPermissionSinceiOS8() {
         let status = CLLocationManager.authorizationStatus()
         let enabled = VisilabsGeofenceApp.sharedInstance()?.isLocationServiceEnabled ?? false
         if enabled && status == .notDetermined {
