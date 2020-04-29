@@ -114,6 +114,12 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(timeZoneChangeNotificationHandler(_:)), name: UIApplication.significantTimeChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appStatusChange(_:)), name: NSNotification.Name("SHAppStatusChangeNotification"), object: nil)
     }
+    
+    @objc func applicationWillResignActiveNotificationHandler( _ notification: Notification?) {
+        if let userInfo = notification?.userInfo {
+            print("Application will resignActive with info: \(userInfo).")
+        }
+    }
 
 }
 
