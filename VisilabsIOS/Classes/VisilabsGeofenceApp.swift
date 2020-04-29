@@ -55,6 +55,10 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
                 //TODO: "SH_InitBridge_Notification" VisilabsConfig'e taşı
                 NotificationCenter.default.addObserver(geofenceBridge, selector: #selector(VisilabsGeofenceBridge.bridgeHandler(_:)), name: NSNotification.Name(rawValue: "SH_InitBridge_Notification"), object: nil)
             }
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SH_InitBridge_Notification"), object: nil)
+
+            //TODO: added by egemen. normally calls another methpd
+            NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_CreateLocationManager"), object: nil)
         }
         return instance
     }
