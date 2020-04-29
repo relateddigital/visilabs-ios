@@ -671,6 +671,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                 return
             }else{
                 let nextAPICall = self.sendQueue[0]
+                self.sendQueue.remove(at: 0)
                 var referer = ""
                 if !nextAPICall.contains("OM.uri=") {
                     referer = ""
@@ -708,15 +709,61 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                     }
                     
                     let task = URLSession(configuration: URLSessionConfiguration.default).dataTask(with: request, completionHandler: { data, response, error in
+                        
                         if let e = error {
                             
                         }else{
                             if let res = response as? HTTPURLResponse {
                                 if res.statusCode == 200 || res.statusCode == 304{
-                                    Visilabs.visilabsLockingQueue.sync {
                                     
+                                    if let url = res.url{
+                                        if url.absoluteString.contains(VisilabsConfig.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
+                                        || url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive){
+                                            
+                                            var cookies = HTTPCookie.cookies(withResponseHeaderFields: res.allHeaderFields as! [String: String], for: url) // send to URL, return NSArray
+                                            
+                                            for cookie in HTTPCookieStorage.shared.cookies ?? [] {
+                                                print("Cookie Key: \(cookie.name) Cookie Value: \(cookie.value)")
+
+                                                if cookie.name.contains(VisilabsConfig.LOAD_BALANCE_PREFIX, options: NSString.CompareOptions.caseInsensitive) {
+                                                    if url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive) {
+                                                        self.visilabsCookie.realTimeCookieKey = cookie.name
+                                                        self.visilabsCookie.realTimeCookieValue = cookie.value
+                                                    } else {
+                                                        self.visilabsCookie.loggerCookieKey = cookie.name
+                                                        self.visilabsCookie.loggerCookieValue = cookie.value
+                                                    }
+                                                }
+                                                
+                                                if cookie.name.contains(VisilabsConfig.OM_3_KEY, options: NSString.CompareOptions.caseInsensitive) {
+                                                    if url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive) {
+                                                        self.visilabsCookie.realTimeOM3rdCookieValue = cookie.value
+                                                    } else {
+                                                        self.visilabsCookie.loggerOM3rdCookieValue = cookie.value
+                                                    }
+                                                }
+                                                
+                                            }
+                                            
+                                            let afterCookies = HTTPCookieStorage.shared
+                                            var existingCoookies: [HTTPCookie]? = nil
+                                            if let url = URL(string: url.absoluteString) {
+                                                existingCoookies = afterCookies.cookies(for: url)
+                                            }
+                                            for cookie in existingCoookies ?? [] {
+                                                afterCookies.deleteCookie(cookie)
+                                            }
+                                            
+                                            
+                                        }
                                     }
                                     
+                                    
+                                    Visilabs.visilabsLockingQueue.sync {
+                                        self.failureStatus = 0
+                                    }
+                                }else{
+                                    self.failureStatus = res.statusCode
                                 }
                             }
                         }
