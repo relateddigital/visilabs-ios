@@ -126,6 +126,11 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         print("Visilabs Received memory warning")
     }
     
+    @objc func timeZoneChangeNotificationHandler(_ notification: Notification?) {
+        //TODO:
+        //checkUtcOffsetUpdate()
+    }
+    
     @objc func appStatusChange( _ notification: Notification?) {
         return
     }
