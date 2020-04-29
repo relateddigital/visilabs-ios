@@ -720,7 +720,8 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                                         if url.absoluteString.contains(VisilabsConfig.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
                                         || url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive){
                                             
-                                            var cookies = HTTPCookie.cookies(withResponseHeaderFields: res.allHeaderFields as! [String: String], for: url) // send to URL, return NSArray
+                                            //TODO: kullanılmıyor 
+                                            //var cookies = HTTPCookie.cookies(withResponseHeaderFields: res.allHeaderFields as! [String: String], for: url) // send to URL, return NSArray
                                             
                                             for cookie in HTTPCookieStorage.shared.cookies ?? [] {
                                                 print("Cookie Key: \(cookie.name) Cookie Value: \(cookie.value)")
