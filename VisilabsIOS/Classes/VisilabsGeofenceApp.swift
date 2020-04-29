@@ -137,9 +137,7 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
              if !op.isCancelled {
                  var dictComment: [AnyHashable : Any] = [:]
                  dictComment["action"] = "App to BG."
-                 NotificationCenter.default.post(
-                     name: NSNotification.Name("SH_LMBridge_UpdateGeoLocation"),
-                     object: nil)
+                 NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_UpdateGeoLocation"), object: nil)
                  let lat = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LAT") as? NSNumber)?.doubleValue ?? 0.0
                  let lng = (UserDefaults.standard.object(forKey: "SH_GEOLOCATION_LNG") as? NSNumber)?.doubleValue ?? 0.0
                  if lat != 0 && lng != 0 {
