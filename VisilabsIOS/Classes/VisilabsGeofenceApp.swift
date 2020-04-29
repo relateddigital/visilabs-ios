@@ -122,6 +122,15 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         }
     }
     
+    @objc func applicationDidBecomeActiveNotificationHandler( _ notification: Notification?) {
+        if let userInfo = notification?.userInfo {
+            print("Application did become active with info: \(userInfo)")
+        }
+        NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)
+        //TODO:
+        //shRegularTask(nil, needComplete: false)
+    }
+    
     @objc func applicationWillTerminateNotificationHandler(_ notification: Notification?) {
         if let userInfo = notification?.userInfo {
             print("Application will terminate with info: \(userInfo)")
