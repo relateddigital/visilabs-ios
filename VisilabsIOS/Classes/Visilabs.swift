@@ -719,7 +719,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     
     
-    private func getIDFA() -> String? {
+    private func getIDFA() -> String {
         if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
             let IDFA = ASIdentifierManager.shared().advertisingIdentifier
             return IDFA.uuidString
