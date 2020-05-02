@@ -50,6 +50,21 @@ protocol VisilabsLogging {
     func addMessage(message: VisilabsLogMessage)
 }
 
+/// Simply formats and prints the object by calling `print`
+class VisilabsPrintLogging: VisilabsLogging {
+    func addMessage(message: VisilabsLogMessage) {
+        print("[Mixpanel - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
+    }
+}
+
+/// Simply formats and prints the object by calling `debugPrint`, this makes things a bit easier if you
+/// need to print data that may be quoted for instance.
+class VisilabsPrintDebugLogging: VisilabsLogging {
+    func addMessage(message: VisilabsLogMessage) {
+        debugPrint("[Mixpanel - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
+    }
+}
+
 class VisilabsLogger{
     private static var enabledLevels = Set<VisilabsLogLevel>()
     
