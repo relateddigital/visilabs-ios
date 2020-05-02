@@ -65,7 +65,7 @@ class VisilabsPrintDebugLogging: VisilabsLogging {
     }
 }
 
-class VisilabsLogger{
+class VisilabsLogger {
     private static let readWriteLock: VisilabsReadWriteLock = VisilabsReadWriteLock(label: "visilabsLoggerLock")
     private static var enabledLevels = Set<VisilabsLogLevel>()
     private static var loggers = [VisilabsLogging]()
@@ -87,6 +87,43 @@ class VisilabsLogger{
             enabledLevels.remove(level)
         }
     }
+    
+    class func debug(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+       var enabledLevels = Set<VisilabsLogLevel>()
+       readWriteLock.read {
+           enabledLevels = self.enabledLevels
+       }
+       guard enabledLevels.contains(.debug) else { return }
+       forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .debug))
+   }
+
+    class func info(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+       var enabledLevels = Set<VisilabsLogLevel>()
+       readWriteLock.read {
+           enabledLevels = self.enabledLevels
+       }
+       guard enabledLevels.contains(.info) else { return }
+       forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .info))
+   }
+
+    class func warn(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+       var enabledLevels = Set<VisilabsLogLevel>()
+       readWriteLock.read {
+           enabledLevels = self.enabledLevels
+       }
+       guard enabledLevels.contains(.warning) else { return }
+       forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .warning))
+   }
+
+   class func error(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+       var enabledLevels = Set<VisilabsLogLevel>()
+       readWriteLock.read {
+           enabledLevels = self.enabledLevels
+       }
+       guard enabledLevels.contains(.error) else { return }
+       forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .error))
+   }
+    
     
     class private func forwardLogMessage(_ message: VisilabsLogMessage) {
         var loggers = [VisilabsLogging]()
