@@ -75,4 +75,16 @@ class VisilabsLogger{
             loggers.append(logging)
         }
     }
+    
+    class func enableLevel(_ level: VisilabsLogLevel) {
+        readWriteLock.write {
+            enabledLevels.insert(level)
+        }
+    }
+
+    class func disableLevel(_ level: VisilabsLogLevel) {
+        readWriteLock.write {
+            enabledLevels.remove(level)
+        }
+    }
 }
