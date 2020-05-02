@@ -46,6 +46,10 @@ struct VisilabsLogMessage {
     }
 }
 
+protocol VisilabsLogging {
+    func addMessage(message: VisilabsLogMessage)
+}
+
 class VisilabsLogger{
     private static var enabledLevels = Set<VisilabsLogLevel>()
     
