@@ -22,6 +22,6 @@ enum VisilabsLogLevel: String {
 }
 
 class VisilabsLogger{
-    
+    private static var enabledLevels = Set<VisilabsLogLevel>()
     
 }
