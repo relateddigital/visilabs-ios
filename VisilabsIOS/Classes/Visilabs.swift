@@ -76,6 +76,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     //TODO:init'te loggerURL ve realTimeURL'ın gerçekten url olup olmadığını kontrol et
     private init(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         
+        VisilabsLogger.addLogging(VisilabsPrintLogging())
         
         //Input parameters are set here
         self.organizationID = organizationID
