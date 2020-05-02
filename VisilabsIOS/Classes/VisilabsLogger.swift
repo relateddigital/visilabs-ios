@@ -69,4 +69,10 @@ class VisilabsLogger{
     private static let readWriteLock: VisilabsReadWriteLock = VisilabsReadWriteLock(label: "visilabsLoggerLock")
     private static var enabledLevels = Set<VisilabsLogLevel>()
     private static var loggers = [VisilabsLogging]()
+    
+    class func addLogging(_ logging: VisilabsLogging) {
+        readWriteLock.write {
+            loggers.append(logging)
+        }
+    }
 }
