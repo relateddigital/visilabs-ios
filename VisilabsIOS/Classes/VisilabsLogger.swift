@@ -87,4 +87,13 @@ class VisilabsLogger{
             enabledLevels.remove(level)
         }
     }
+    
+    class private func forwardLogMessage(_ message: VisilabsLogMessage) {
+        var loggers = [VisilabsLogging]()
+        readWriteLock.read {
+            loggers = self.loggers
+        }
+        loggers.forEach() { $0.addMessage(message: message) }
+    }
+    
 }
