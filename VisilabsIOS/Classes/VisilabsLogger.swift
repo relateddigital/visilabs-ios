@@ -53,7 +53,7 @@ protocol VisilabsLogging {
 /// Simply formats and prints the object by calling `print`
 class VisilabsPrintLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        print("[Mixpanel - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
+        print("[Visilabs - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
     }
 }
 
@@ -61,7 +61,7 @@ class VisilabsPrintLogging: VisilabsLogging {
 /// need to print data that may be quoted for instance.
 class VisilabsPrintDebugLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        debugPrint("[Mixpanel - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
+        debugPrint("[Visilabs - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
     }
 }
 
