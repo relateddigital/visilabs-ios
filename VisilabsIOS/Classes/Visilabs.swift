@@ -158,10 +158,23 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     
     // MARK: Persistence
 
+    /*
     func filePath(forData data: String) -> String? {
         let filename = data
         return URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).last ?? "").appendingPathComponent(filename).absoluteString
     }
+   */
+    
+    func filePath(forData filename: String) -> String? {
+        let manager = FileManager.default
+        let url = manager.urls(for: .libraryDirectory, in: .userDomainMask).last
+        guard let urlUnwrapped = url?.appendingPathComponent(filename).path else {
+            return nil
+        }
+        return urlUnwrapped
+    }
+    
+    
     
     func cookieIDFilePath() -> String? {
         return filePath(forData: VisilabsConfig.COOKIEID_ARCHIVE_KEY)
