@@ -47,10 +47,28 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     var appID: String?
     internal var isOnline : Bool = true //TODO: burada = true demek lazım mı?
     internal var userAgent: String = VisilabsConfig.IOS
-    private var loggingEnabled: Bool = true
     private var checkForNotificationsOnLoggerRequest: Bool = true
     private var miniNotificationPresentationTime: Float = 10.0
     private var miniNotificationBackgroundColor: UIColor?
+    
+    
+    public var loggingEnabled: Bool = false {
+        didSet {
+            if loggingEnabled {
+                VisilabsLogger.enableLevel(.debug)
+                VisilabsLogger.enableLevel(.info)
+                VisilabsLogger.enableLevel(.warning)
+                VisilabsLogger.enableLevel(.error)
+                VisilabsLogger.info(message: "Visilabs Logging Enabled")
+            } else {
+                VisilabsLogger.info(message: "Visilabs Logging Disabled")
+                VisilabsLogger.disableLevel(.debug)
+                VisilabsLogger.disableLevel(.info)
+                VisilabsLogger.disableLevel(.warning)
+                VisilabsLogger.disableLevel(.error)
+            }
+        }
+    }
     
     
     public class func callAPI() -> Visilabs? {
