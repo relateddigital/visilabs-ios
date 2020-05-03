@@ -74,7 +74,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     public class func callAPI() -> Visilabs? {
         Visilabs.visilabsLockingQueue.sync {
             if Visilabs.API == nil{
-                print("Visilabs: WARNING - Visilabs object is not created yet.")
+                VisilabsLogger.warn(message:"Visilabs object is not created yet.")
             }
         }
         return Visilabs.API
