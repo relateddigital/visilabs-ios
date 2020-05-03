@@ -37,7 +37,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var notificationResponseCached = false
 
     
-    private var visilabsCookie: VisilabsCookie
+    private var visilabsCookie: VisilabsCookie = VisilabsCookie()
     
     private var webView: WKWebView?
     
@@ -111,9 +111,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         self.geofenceURL = geofenceURL
         self.geofenceEnabled = geofenceEnabled
         self.maxGeofenceCount = (maxGeofenceCount < 20 && maxGeofenceCount > 0) ? maxGeofenceCount :20
-        
-        self.visilabsCookie = VisilabsCookie()
-        
+
         //TODO: super.init'ten kurtul
         super.init()
         self.registerForNetworkReachabilityNotifications()
