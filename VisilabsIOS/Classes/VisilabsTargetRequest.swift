@@ -24,9 +24,6 @@ public class VisilabsTargetRequest: VisilabsAction {
     }
     
     override func buildURL() -> URL? {        
-        if Visilabs.callAPI() == nil || organizationID.count == 0 || siteID.count == 0 {
-            return nil
-        }
         let queryParameters = getParametersAsQueryString()
         targetUrl = targetUrl + queryParameters
         return URL(string: targetUrl)
