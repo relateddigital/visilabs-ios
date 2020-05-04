@@ -8,12 +8,14 @@
 import Foundation
 
 public class VisilabsTargetRequest: VisilabsAction {
+    var targetUrl: String
     var zoneID: String
     var productCode: String
     var properties: [String : String]
     var filters: [VisilabsTargetFilter]
     
-    internal init(siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, zoneID: String, productCode: String, properties : [String : String], filters: [VisilabsTargetFilter]) {
+    internal init(targetUrl: String, siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, zoneID: String, productCode: String, properties : [String : String], filters: [VisilabsTargetFilter]) {
+        self.targetUrl = targetUrl
         self.zoneID = zoneID
         self.productCode = productCode
         self.properties = properties
@@ -25,10 +27,9 @@ public class VisilabsTargetRequest: VisilabsAction {
         if Visilabs.callAPI() == nil || organizationID.count == 0 || siteID.count == 0 {
             return nil
         }
-        var targetURL = Visilabs.callAPI()!.targetURL
         let queryParameters = getParametersAsQueryString()
-        targetURL = targetURL! + queryParameters
-        return URL(string: targetURL!)
+        targetUrl = targetUrl + queryParameters
+        return URL(string: targetUrl)
     }
     
     private func cleanParameters() {
