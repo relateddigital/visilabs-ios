@@ -667,7 +667,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             print("Visilabs: WARNING - Visilabs object is not created yet.")
             return nil
         }
-        return VisilabsTargetRequest(zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
+        return VisilabsTargetRequest(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
     }
     
     internal func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
@@ -676,7 +676,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             print("Visilabs: WARNING - Visilabs object is not created yet.")
             return nil
         }
-        return VisilabsGeofenceRequest(action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
+        return VisilabsGeofenceRequest(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
     }
     
     
