@@ -52,25 +52,6 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     private var miniNotificationBackgroundColor: UIColor?
     
     
-    public var loggingEnabled: Bool = false {
-        didSet {
-            if loggingEnabled {
-                VisilabsLogger.enableLevel(.debug)
-                VisilabsLogger.enableLevel(.info)
-                VisilabsLogger.enableLevel(.warning)
-                VisilabsLogger.enableLevel(.error)
-                VisilabsLogger.info(message: "Visilabs Logging Enabled")
-            } else {
-                VisilabsLogger.info(message: "Visilabs Logging Disabled")
-                VisilabsLogger.disableLevel(.debug)
-                VisilabsLogger.disableLevel(.info)
-                VisilabsLogger.disableLevel(.warning)
-                VisilabsLogger.disableLevel(.error)
-            }
-        }
-    }
-    
-    
     public class func callAPI() -> Visilabs? {
         Visilabs.visilabsLockingQueue.sync {
             if Visilabs.API == nil{
