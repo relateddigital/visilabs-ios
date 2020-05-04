@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum VisilabsRequestMethod: String {
+    case get = "get"
+    case post = "post"
+}
+
 class VisilabsNetwork {
     
 }
