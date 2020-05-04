@@ -13,12 +13,12 @@ public class VisilabsTargetRequest: VisilabsAction {
     var properties: [String : String]
     var filters: [VisilabsTargetFilter]
     
-    internal init(zoneID: String, productCode: String, properties : [String : String], filters: [VisilabsTargetFilter]) {
+    internal init(siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, zoneID: String, productCode: String, properties : [String : String], filters: [VisilabsTargetFilter]) {
         self.zoneID = zoneID
         self.productCode = productCode
         self.properties = properties
         self.filters = filters
-        super.init(requestMethod: "GET")
+        super.init(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, requestMethod: "GET")
     }
     
     override func buildURL() -> URL? {        
