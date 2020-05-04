@@ -105,7 +105,7 @@ public class VisilabsTargetRequest: VisilabsAction {
         }
         
         if !appID.isNilOrWhiteSpace {
-            let encodedAppValue = Visilabs.callAPI()!.appID!.urlEncode()
+            let encodedAppValue = appID!.urlEncode()
             let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
         }
