@@ -28,11 +28,6 @@ class VisilabsGeofenceRequest: VisilabsAction {
     }
     
     override func buildURL() -> URL? {
-        
-        if Visilabs.callAPI() == nil || organizationID.count == 0 || siteID.count == 0 {
-            return nil
-        }
-        
         var geofenceURL = Visilabs.callAPI()!.geofenceURL
         let queryParameters = getParametersAsQueryString()
         geofenceURL = geofenceURL! + queryParameters
