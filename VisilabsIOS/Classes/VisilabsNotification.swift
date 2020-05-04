@@ -7,15 +7,15 @@
 
 import Foundation
 
-internal enum VisilabsNotificationType : String {
-    case mini
-    case full
-    case image_text_button
-    case full_image
-    case nps
-    case image_button
-    case smile_rating
-    case unknown
+enum VisilabsNotificationType : String {
+    case mini = "mini"
+    case full = "full"
+    case image_text_button = "image_text_button"
+    case full_image = "full_image"
+    case nps = "nps"
+    case image_button = "image_button"
+    case smile_rating = "smile_rating"
+    case unknown = "unknown"
 }
 
 class VisilabsNotification {
