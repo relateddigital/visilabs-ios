@@ -35,8 +35,13 @@ class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     init(organizationId: String, siteId: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
-        self.organizationId = organizationId;
-        self.siteId = siteId;
+        self.organizationId = organizationId
+        self.siteId = siteId
+        VisilabsBasePath.endpoints[.logger] = loggerURL
+        VisilabsBasePath.endpoints[.realtime] = realTimeURL
+        VisilabsBasePath.endpoints[.target] = targetURL
+        VisilabsBasePath.endpoints[.action] = actionURL
+        VisilabsBasePath.endpoints[.geofence] = geofenceURL
     }
     
 }
