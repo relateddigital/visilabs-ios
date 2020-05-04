@@ -12,6 +12,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var organizationId = ""
     var siteId = ""
     var dataSource = ""
+    var channel = ""
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -39,6 +40,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.organizationId = organizationId
         self.siteId = siteId
         self.dataSource = dataSource
+        self.channel = channel
         VisilabsBasePath.endpoints[.logger] = loggerURL
         VisilabsBasePath.endpoints[.realtime] = realTimeURL
         VisilabsBasePath.endpoints[.target] = targetURL
