@@ -16,7 +16,7 @@ class VisilabsGeofenceRequest: VisilabsAction {
     var isDwell: Bool
     var isEnter: Bool
     
-    internal init(action: String, actionID: String, lastKnownLatitude: Double = 0.0, lastKnownLongitude: Double = 0.0, geofenceID: String, isDwell: Bool = false, isEnter: Bool = false) {
+    internal init(siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, action: String, actionID: String, lastKnownLatitude: Double = 0.0, lastKnownLongitude: Double = 0.0, geofenceID: String, isDwell: Bool = false, isEnter: Bool = false) {
         self.action = action
         self.actionID = actionID
         self.lastKnownLatitude = lastKnownLatitude
@@ -24,7 +24,7 @@ class VisilabsGeofenceRequest: VisilabsAction {
         self.geofenceID = geofenceID
         self.isDwell = isDwell
         self.isEnter = isEnter
-        super.init(requestMethod: "GET")
+        super.init(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, requestMethod: "GET")
     }
     
     override func buildURL() -> URL? {
