@@ -11,6 +11,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     
     var organizationId = ""
     var siteId = ""
+    var dataSource = ""
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -37,6 +38,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     init(organizationId: String, siteId: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         self.organizationId = organizationId
         self.siteId = siteId
+        self.dataSource = dataSource
         VisilabsBasePath.endpoints[.logger] = loggerURL
         VisilabsBasePath.endpoints[.realtime] = realTimeURL
         VisilabsBasePath.endpoints[.target] = targetURL
