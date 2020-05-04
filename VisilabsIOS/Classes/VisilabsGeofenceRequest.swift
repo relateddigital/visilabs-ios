@@ -8,6 +8,7 @@
 import Foundation
 
 class VisilabsGeofenceRequest: VisilabsAction {
+    var geofenceUrl: String
     var action: String
     var actionID: String
     var lastKnownLatitude: Double
@@ -16,7 +17,8 @@ class VisilabsGeofenceRequest: VisilabsAction {
     var isDwell: Bool
     var isEnter: Bool
     
-    internal init(siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, action: String, actionID: String, lastKnownLatitude: Double = 0.0, lastKnownLongitude: Double = 0.0, geofenceID: String, isDwell: Bool = false, isEnter: Bool = false) {
+    internal init(geofenceUrl: String, siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, action: String, actionID: String, lastKnownLatitude: Double = 0.0, lastKnownLongitude: Double = 0.0, geofenceID: String, isDwell: Bool = false, isEnter: Bool = false) {
+        self.geofenceUrl = geofenceUrl
         self.action = action
         self.actionID = actionID
         self.lastKnownLatitude = lastKnownLatitude
@@ -28,10 +30,9 @@ class VisilabsGeofenceRequest: VisilabsAction {
     }
     
     override func buildURL() -> URL? {
-        var geofenceURL = Visilabs.callAPI()!.geofenceURL
         let queryParameters = getParametersAsQueryString()
-        geofenceURL = geofenceURL! + queryParameters
-        return URL(string: geofenceURL!)
+        geofenceUrl = geofenceUrl + queryParameters
+        return URL(string: geofenceUrl)
     }
     
     private func getParametersAsQueryString() -> String {
