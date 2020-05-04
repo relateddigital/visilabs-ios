@@ -39,14 +39,14 @@ class VisilabsGeofenceRequest: VisilabsAction {
         
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConfig.SITEID_KEY)=\(siteID)"
 
-        if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {
-            let encodedCookieIDValue = Visilabs.callAPI()!.cookieID!.urlEncode()
+        if !cookieID.isNilOrWhiteSpace {
+            let encodedCookieIDValue = cookieID!.urlEncode()
             let cookieParameter = "&\(VisilabsConfig.COOKIEID_KEY)=\(encodedCookieIDValue)"
             queryParameters = queryParameters + cookieParameter
         }
         
-        if Visilabs.callAPI()!.exVisitorID != nil && Visilabs.callAPI()!.exVisitorID!.count > 0 {
-            let encodedExVisitorIDValue = Visilabs.callAPI()!.exVisitorID!.urlEncode()
+        if !exVisitorID.isNilOrWhiteSpace {
+            let encodedExVisitorIDValue = exVisitorID!.urlEncode()
             let exVisitorIDParameter = "&\(VisilabsConfig.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
             queryParameters = queryParameters + exVisitorIDParameter
         }
@@ -63,14 +63,14 @@ class VisilabsGeofenceRequest: VisilabsAction {
             queryParameters = queryParameters + actionIDParameter
         }
         
-        if Visilabs.callAPI()!.tokenID != nil && Visilabs.callAPI()!.tokenID!.count > 0 {
-            let encodedTokenValue = Visilabs.callAPI()!.tokenID!.urlEncode()
+        if !tokenID.isNilOrWhiteSpace {
+            let encodedTokenValue = tokenID!.urlEncode()
             let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
             queryParameters = queryParameters + tokenParameter
         }
         
-        if Visilabs.callAPI()!.appID != nil && Visilabs.callAPI()!.appID!.count > 0 {
-            let encodedAppValue = Visilabs.callAPI()!.appID!.urlEncode()
+        if !appID.isNilOrWhiteSpace {
+            let encodedAppValue = appID!.urlEncode()
             let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
         }
