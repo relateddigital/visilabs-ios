@@ -20,6 +20,10 @@ enum VisilabsEndpoint {
     case geofence
 }
 
+struct VisilabsBasePath {
+    static var endpoints = [VisilabsEndpoint : String]()
+}
+
 class VisilabsNetwork {
     
 }
