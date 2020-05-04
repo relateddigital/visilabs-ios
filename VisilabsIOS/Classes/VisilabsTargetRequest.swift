@@ -98,13 +98,13 @@ public class VisilabsTargetRequest: VisilabsAction {
             queryParameters = queryParameters + productCodeParameter
         }
         
-        if Visilabs.callAPI()!.tokenID != nil && Visilabs.callAPI()!.tokenID!.count > 0 {
-            let encodedTokenValue = Visilabs.callAPI()!.tokenID!.urlEncode()
+        if !tokenID.isNilOrWhiteSpace {
+            let encodedTokenValue = tokenID!.urlEncode()
             let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
             queryParameters = queryParameters + tokenParameter
         }
         
-        if Visilabs.callAPI()!.appID != nil && Visilabs.callAPI()!.appID!.count > 0 {
+        if !appID.isNilOrWhiteSpace {
             let encodedAppValue = Visilabs.callAPI()!.appID!.urlEncode()
             let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
