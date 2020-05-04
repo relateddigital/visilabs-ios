@@ -13,6 +13,15 @@ Base class for all API request classes
 
 public class VisilabsAction{
     
+    
+    var siteID : String
+    var organizationID : String
+    var cookieID : String?
+    var exVisitorID : String?
+    var tokenID : String?
+    var appID : String?
+    
+    
     /// The HTTP request method
     var requestMethod: String
     
@@ -44,7 +53,13 @@ public class VisilabsAction{
     var path: String?
     
     
-    internal init(requestMethod: String = "GET", headers: [String : Any] = [ : ], args: [String : Any]  = [ : ]) {
+    internal init(siteID: String, organizationID: String, cookieID: String?, exVisitorID: String?, tokenID: String?, appID: String?, requestMethod: String = "GET", headers: [String : Any] = [ : ], args: [String : Any]  = [ : ]) {
+        self.siteID = siteID
+        self.organizationID = organizationID
+        self.cookieID = cookieID
+        self.exVisitorID = exVisitorID
+        self.tokenID = tokenID
+        self.appID = appID
         self.requestMethod = requestMethod
         self.headers = headers
         self.args = [String : Any]()
