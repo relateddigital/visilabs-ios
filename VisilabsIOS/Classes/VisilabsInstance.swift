@@ -16,5 +16,8 @@ class VisilabsInstance: CustomDebugStringConvertible {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
     }
     
+}
+
+class VisilabsManager {
     
 }
