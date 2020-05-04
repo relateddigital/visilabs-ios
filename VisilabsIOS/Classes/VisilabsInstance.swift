@@ -20,4 +20,10 @@ class VisilabsInstance: CustomDebugStringConvertible {
 
 class VisilabsManager {
     
+    static let sharedInstance = VisilabsManager()
+    private var instance: VisilabsInstance?
+    
+    init() {
+        VisilabsLogger.addLogging(VisilabsPrintLogging())
+    }
 }
