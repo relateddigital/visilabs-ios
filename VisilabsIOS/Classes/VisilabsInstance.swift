@@ -7,6 +7,14 @@
 
 import Foundation
 
-class VisilabsInstance {
+class VisilabsInstance: CustomDebugStringConvertible {
+    
+    var organizationId = ""
+    var siteId = ""
+    
+    var debugDescription: String {
+        return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
+    }
+    
     
 }
