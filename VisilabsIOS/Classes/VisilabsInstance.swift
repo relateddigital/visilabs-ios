@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SystemConfiguration
 
 class VisilabsInstance: CustomDebugStringConvertible {
     
@@ -13,6 +14,8 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var siteId = ""
     var dataSource = ""
     var channel = ""
+    
+    static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
