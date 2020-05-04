@@ -26,4 +26,12 @@ class VisilabsManager {
     init() {
         VisilabsLogger.addLogging(VisilabsPrintLogging())
     }
+    
+    func initialize(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> VisilabsInstance?{
+        return nil
+    }
+    
+    func getInstance() -> VisilabsInstance? {
+        return instance
+    }
 }
