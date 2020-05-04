@@ -80,9 +80,12 @@ public class VisilabsAction{
     /// - Returns: Returns the URL
 
     func buildURL() -> URL? {
+        return nil
+        /*
         let url = Visilabs.callAPI()?.targetURL
         let uri = URL(string: url!)
         return uri
+         */
     }
     
     /// Excute the API request synchronously with the given success and failure
