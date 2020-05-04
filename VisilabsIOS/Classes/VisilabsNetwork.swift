@@ -12,6 +12,14 @@ enum VisilabsRequestMethod: String {
     case post = "post"
 }
 
+enum VisilabsEndpoint {
+    case logger
+    case realtime
+    case target
+    case action
+    case geofence
+}
+
 class VisilabsNetwork {
     
 }
