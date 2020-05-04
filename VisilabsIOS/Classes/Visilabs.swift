@@ -662,21 +662,17 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     // MARK: Target
     
     public func buildTargetRequest(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) -> VisilabsTargetRequest? {
-        if Visilabs.API == nil{
-            //TODO: print'leri kaldır
-            print("Visilabs: WARNING - Visilabs object is not created yet.")
+        if targetURL.isNilOrWhiteSpace{
             return nil
         }
-        return VisilabsTargetRequest(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
+        return VisilabsTargetRequest(targetUrl: targetURL!, siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, zoneID: zoneID, productCode: productCode, properties: properties, filters: filters)
     }
     
     internal func buildGeofenceRequest(action: String, latitude: Double, longitude: Double, isDwell: Bool, isEnter: Bool, actionID: String = "", geofenceID: String = "") -> VisilabsGeofenceRequest? {
-        if Visilabs.API == nil {
-            //TODO: print'leri kaldır
-            print("Visilabs: WARNING - Visilabs object is not created yet.")
+        if geofenceURL.isNilOrWhiteSpace{
             return nil
         }
-        return VisilabsGeofenceRequest(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
+        return VisilabsGeofenceRequest(geofenceUrl: geofenceURL!, siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, action: action, actionID: actionID, lastKnownLatitude: latitude, lastKnownLongitude: longitude, geofenceID: geofenceID, isDwell: isDwell, isEnter: isEnter)
     }
     
     
