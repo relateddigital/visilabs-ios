@@ -12,8 +12,26 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var organizationId = ""
     var siteId = ""
     
-    var debugDescription: String {
+    public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
+    }
+    
+    public var loggingEnabled: Bool = false {
+        didSet {
+            if loggingEnabled {
+                VisilabsLogger.enableLevel(.debug)
+                VisilabsLogger.enableLevel(.info)
+                VisilabsLogger.enableLevel(.warning)
+                VisilabsLogger.enableLevel(.error)
+                VisilabsLogger.info(message: "Visilabs Logging Enabled")
+            } else {
+                VisilabsLogger.info(message: "Visilabs Logging Disabled")
+                VisilabsLogger.disableLevel(.debug)
+                VisilabsLogger.disableLevel(.info)
+                VisilabsLogger.disableLevel(.warning)
+                VisilabsLogger.disableLevel(.error)
+            }
+        }
     }
     
 }
