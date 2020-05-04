@@ -22,7 +22,7 @@ public class VisilabsTargetRequest: VisilabsAction {
     }
     
     override func buildURL() -> URL? {        
-        if Visilabs.callAPI() == nil || Visilabs.callAPI()!.organizationID.count == 0 || Visilabs.callAPI()!.siteID.count == 0 {
+        if Visilabs.callAPI() == nil || organizationID.count == 0 || siteID.count == 0 {
             return nil
         }
         var targetURL = Visilabs.callAPI()!.targetURL
@@ -74,7 +74,7 @@ public class VisilabsTargetRequest: VisilabsAction {
     }
     
     private func getParametersAsQueryString() -> String {
-        var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(Visilabs.callAPI()!.organizationID)&\(VisilabsConfig.SITEID_KEY)=\(Visilabs.callAPI()!.siteID)"
+        var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConfig.SITEID_KEY)=\(siteID)"
 
         if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {
             let encodedCookieIDValue = Visilabs.callAPI()!.cookieID!.urlEncode()
