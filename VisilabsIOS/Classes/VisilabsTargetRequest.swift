@@ -23,7 +23,7 @@ public class VisilabsTargetRequest: VisilabsAction {
         super.init(siteID: siteID, organizationID: organizationID, cookieID: cookieID, exVisitorID: exVisitorID, tokenID: tokenID, appID: appID, requestMethod: "GET")
     }
     
-    override func buildURL() -> URL? {        
+    override func buildURL() -> URL? {
         let queryParameters = getParametersAsQueryString()
         targetUrl = targetUrl + queryParameters
         return URL(string: targetUrl)
@@ -74,14 +74,14 @@ public class VisilabsTargetRequest: VisilabsAction {
     private func getParametersAsQueryString() -> String {
         var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConfig.SITEID_KEY)=\(siteID)"
 
-        if Visilabs.callAPI()!.cookieID != nil && Visilabs.callAPI()!.cookieID!.count > 0 {
-            let encodedCookieIDValue = Visilabs.callAPI()!.cookieID!.urlEncode()
+        if !cookieID.isNilOrWhiteSpace {
+            let encodedCookieIDValue = cookieID!.urlEncode()
             let cookieParameter = "&\(VisilabsConfig.COOKIEID_KEY)=\(encodedCookieIDValue)"
             queryParameters = queryParameters + cookieParameter
         }
         
-        if Visilabs.callAPI()!.exVisitorID != nil && Visilabs.callAPI()!.exVisitorID!.count > 0 {
-            let encodedExVisitorIDValue = Visilabs.callAPI()!.exVisitorID!.urlEncode()
+        if !exVisitorID.isNilOrWhiteSpace {
+            let encodedExVisitorIDValue = exVisitorID!.urlEncode()
             let exVisitorIDParameter = "&\(VisilabsConfig.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
             queryParameters = queryParameters + exVisitorIDParameter
         }
