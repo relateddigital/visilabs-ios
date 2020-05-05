@@ -32,6 +32,11 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var siteId = ""
     var dataSource = ""
     var channel = ""
+    var requestTimeoutInSeconds : Int
+    var geofenceEnabled = false
+    var maxGeofenceCount : Int
+    var restUrl : String?
+    var encryptedDataSource : String?
     
     //TODO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
@@ -63,6 +68,11 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.siteId = siteId
         self.dataSource = dataSource
         self.channel = channel
+        self.requestTimeoutInSeconds = requestTimeoutInSeconds
+        self.geofenceEnabled = geofenceEnabled
+        self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
+        self.restUrl = restUrl
+        self.encryptedDataSource = encryptedDataSource
         VisilabsBasePath.endpoints[.logger] = loggerUrl
         VisilabsBasePath.endpoints[.realtime] = realTimeUrl
         VisilabsBasePath.endpoints[.target] = targetUrl
