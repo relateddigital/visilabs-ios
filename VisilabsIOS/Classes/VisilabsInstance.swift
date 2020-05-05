@@ -26,6 +26,10 @@ class Visilabs2 {
     }
 }
 
+
+typealias InternalProperties = [String: String]
+typealias Queue = [InternalProperties]
+
 class VisilabsInstance: CustomDebugStringConvertible {
     
     var organizationId = ""
@@ -37,6 +41,8 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var maxGeofenceCount : Int
     var restUrl : String?
     var encryptedDataSource : String?
+    
+    var eventsQueue = Queue()
     
     //TODO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
