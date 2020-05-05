@@ -15,6 +15,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var dataSource = ""
     var channel = ""
     
+    //TODO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
     
     public var debugDescription: String {
