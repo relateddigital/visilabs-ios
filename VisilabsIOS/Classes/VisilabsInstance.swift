@@ -8,6 +8,24 @@
 import Foundation
 import SystemConfiguration
 
+class Visilabs2 {
+    
+    public class func callAPI() -> VisilabsInstance {
+        if let instance = VisilabsManager.sharedInstance.getInstance() {
+            return instance
+        } else {
+            assert(false, "You have to call createAPI before calling the callAPI.")
+            return Visilabs2.createAPI(organizationId: "", siteId: "", loggerUrl: "", dataSource: "", realTimeUrl: "")
+        }
+    }
+    
+    @discardableResult
+    public class func createAPI(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetUrl: String? = nil, actionUrl: String? = nil, geofenceUrl: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restUrl: String? = nil, encryptedDataSource: String? = nil) -> VisilabsInstance {
+        VisilabsManager.sharedInstance.initialize(organizationId: organizationId, siteId: siteId, loggerUrl: loggerUrl, dataSource: dataSource, realTimeUrl: realTimeUrl, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, targetUrl: targetUrl
+        , actionUrl: actionUrl, geofenceUrl: geofenceUrl, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
+    }
+}
+
 class VisilabsInstance: CustomDebugStringConvertible {
     
     var organizationId = ""
@@ -40,16 +58,16 @@ class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
     
-    init(organizationId: String, siteId: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String, requestTimeoutInSeconds: Int, restURL: String?, encryptedDataSource: String?, targetURL: String?, actionURL: String?, geofenceURL: String?, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+    init(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String, requestTimeoutInSeconds: Int, targetUrl: String?, actionUrl: String?, geofenceUrl: String?, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
         self.organizationId = organizationId
         self.siteId = siteId
         self.dataSource = dataSource
         self.channel = channel
-        VisilabsBasePath.endpoints[.logger] = loggerURL
-        VisilabsBasePath.endpoints[.realtime] = realTimeURL
-        VisilabsBasePath.endpoints[.target] = targetURL
-        VisilabsBasePath.endpoints[.action] = actionURL
-        VisilabsBasePath.endpoints[.geofence] = geofenceURL
+        VisilabsBasePath.endpoints[.logger] = loggerUrl
+        VisilabsBasePath.endpoints[.realtime] = realTimeUrl
+        VisilabsBasePath.endpoints[.target] = targetUrl
+        VisilabsBasePath.endpoints[.action] = actionUrl
+        VisilabsBasePath.endpoints[.geofence] = geofenceUrl
     }
     
 }
@@ -63,8 +81,9 @@ class VisilabsManager {
         VisilabsLogger.addLogging(VisilabsPrintLogging())
     }
     
-    func initialize(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> VisilabsInstance?{
-        return nil
+    func initialize(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetUrl: String? = nil, actionUrl: String? = nil, geofenceUrl: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restUrl: String? = nil, encryptedDataSource: String? = nil) -> VisilabsInstance {
+        return VisilabsInstance(organizationId: organizationId, siteId: siteId, loggerUrl: loggerUrl, dataSource: dataSource, realTimeUrl: realTimeUrl, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, targetUrl: targetUrl
+        , actionUrl: actionUrl, geofenceUrl: geofenceUrl, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
     }
     
     func getInstance() -> VisilabsInstance? {
