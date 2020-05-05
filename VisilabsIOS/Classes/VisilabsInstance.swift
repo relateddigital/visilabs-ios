@@ -88,6 +88,32 @@ class VisilabsInstance: CustomDebugStringConvertible {
     
 }
 
+extension VisilabsInstance {
+    
+    public func customEvent(_ pageName: String, properties: [String:String]){
+        if pageName.isEmptyOrWhitespace {
+            VisilabsLogger.error(message: "Visilabs: customEvent can not be called with empty page name.")
+            return
+        }
+    }
+    
+    public func login(exVisitorId: String, properties: [String:String] = [String:String]()){
+        if exVisitorId.isEmptyOrWhitespace {
+            VisilabsLogger.error(message: "Visilabs: login can not be called with empty exVisitorId.")
+            return
+        }
+    }
+    
+    public func signUp(exVisitorId: String, properties: [String:String] = [String:String]()){
+        if exVisitorId.isEmptyOrWhitespace {
+            VisilabsLogger.error(message: "Visilabs: signUp can not be called with empty exVisitorId.")
+            return
+        }
+    }
+    
+}
+
+
 class VisilabsManager {
     
     static let sharedInstance = VisilabsManager()
