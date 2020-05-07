@@ -72,6 +72,8 @@ class VisilabsNetwork {
                 }
                 return
             }
+            
+            //TODO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201 de dönebiliyor.
             guard httpResponse.statusCode == 200 else {
                 failure(.notOKStatusCode(statusCode: httpResponse.statusCode), data, response)
                 return
