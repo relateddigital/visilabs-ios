@@ -30,6 +30,14 @@ public typealias Properties = [String: String]
 typealias InternalProperties = [String: Any]
 typealias Queue = [InternalProperties]
 
+
+struct VisilabsUser {
+    var cookieId: String?
+    var exVisitorId: String?
+    var tokenId: String?
+    var appId: String?
+}
+
 class VisilabsInstance: CustomDebugStringConvertible {
     
     var organizationId = ""
@@ -42,11 +50,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var restUrl : String?
     var encryptedDataSource : String?
     
-    var cookieId: String?
-    var exVisitorId: String?
-    var tokenId: String?
-    var appId: String?
-    
+    var visilabsUser = VisilabsUser()
     var eventsQueue = Queue()
     var flushEventsQueue = Queue()
     var trackingQueue: DispatchQueue!
@@ -174,9 +178,6 @@ extension VisilabsInstance {
             VisilabsLogger.error(message: "Visilabs: login can not be called with empty exVisitorId.")
             return
         }
-        if self.exVisitorId != nil && !(self.exVisitorId == exVisitorId) {
-            setCookieID()
-        }
         var props = properties
         props[VisilabsConfig.EXVISITORID_KEY] = exVisitorId
         props["Login"] = exVisitorId
@@ -189,9 +190,6 @@ extension VisilabsInstance {
             VisilabsLogger.error(message: "Visilabs: signUp can not be called with empty exVisitorId.")
             return
         }
-        if self.exVisitorId != nil && !(self.exVisitorId == exVisitorId) {
-            setCookieID()
-        }
         var props = properties
         props[VisilabsConfig.EXVISITORID_KEY] = exVisitorId
         props["SignUp"] = exVisitorId
@@ -199,6 +197,11 @@ extension VisilabsInstance {
         customEvent("SignUpPage", properties: props)
     }
     
+}
+
+extension VisilabsInstance {
+
+    //MARK: - Persistence
 }
 
 
