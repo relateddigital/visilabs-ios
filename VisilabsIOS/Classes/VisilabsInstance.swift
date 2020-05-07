@@ -7,6 +7,7 @@
 
 import Foundation
 import SystemConfiguration
+import AdSupport
 
 class Visilabs2 {
     
@@ -127,6 +128,8 @@ class VisilabsInstance: CustomDebugStringConvertible {
         VisilabsBasePath.endpoints[.geofence] = geofenceUrl
         
         
+        self.visilabsUser.identifierForAdvertising = getIDFA()
+        
     }
     
 }
@@ -206,12 +209,21 @@ extension VisilabsInstance {
 
     //MARK: - Persistence
     
-    func archive() {
+    private func archive() {
         
     }
     
-    func unarchive() {
+    private func unarchive() {
         
+    }
+    
+    private func getIDFA() -> String {
+        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+            let IDFA = ASIdentifierManager.shared().advertisingIdentifier
+            return IDFA.uuidString
+        }
+        //TODO: disabled ise ARCHIVE_KEY olarak okunmaya çalışılabilir.
+        return ""
     }
 }
 
