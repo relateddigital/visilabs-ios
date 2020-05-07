@@ -202,6 +202,14 @@ extension VisilabsInstance {
 extension VisilabsInstance {
 
     //MARK: - Persistence
+    
+    func archive() {
+        
+    }
+    
+    func unarchive() {
+        
+    }
 }
 
 
