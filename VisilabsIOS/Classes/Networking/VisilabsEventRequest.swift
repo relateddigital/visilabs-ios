@@ -12,10 +12,7 @@ class VisilabsEventRequest: VisilabsNetwork {
     var networkRequestsAllowedAfterTime = 0.0
     var networkConsecutiveFailures = 0
 
-    func sendRequest(_ requestData: String,
-                     type: FlushType,
-                     useIP: Bool,
-                     completion: @escaping (Bool) -> Void) {
+    func sendRequest(_ requestData: String , completion: @escaping (Bool) -> Void) {
 
         let responseParser: (Data) -> Int? = { data in
             let response = String(data: data, encoding: String.Encoding.utf8)
@@ -25,16 +22,14 @@ class VisilabsEventRequest: VisilabsNetwork {
             return nil
         }
 
-        let requestBody = "ip=\(useIP ? 1 : 0)&data=\(requestData)"
-            .data(using: String.Encoding.utf8)
+        let requestBody = "data=\(requestData)".data(using: String.Encoding.utf8)
 
-        let resource = Network.buildResource(path: type.rawValue,
-                                             method: .post,
+        let resource = VisilabsNetwork.buildResource(path: type.rawValue, method: .post,
                                              requestBody: requestBody,
                                              headers: ["Accept-Encoding": "gzip"],
                                              parse: responseParser)
 
-        flushRequestHandler(BasePath.getServerURL(identifier: basePathIdentifier),
+        flushRequestHandler(VisilabsBasePath.getServerURL(identifier: basePathIdentifier),
                             resource: resource,
                             completion: { success in
                                 completion(success)
@@ -49,7 +44,7 @@ class VisilabsEventRequest: VisilabsNetwork {
             failure: { (reason, data, response) in
                 self.networkConsecutiveFailures += 1
                 self.updateRetryDelay(response)
-                Logger.warn(message: "API request to \(resource.path) has failed with reason \(reason)")
+                VisilabsLogger.warn(message: "API request to \(resource.path) has failed with reason \(reason)")
                 completion(false)
             }, success: { (result, response) in
                 self.networkConsecutiveFailures = 0
