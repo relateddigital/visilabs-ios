@@ -26,8 +26,8 @@ class Visilabs2 {
     }
 }
 
-
-typealias InternalProperties = [String: String]
+public typealias Properties = [String: String]
+typealias InternalProperties = [String: Any]
 typealias Queue = [InternalProperties]
 
 class VisilabsInstance: CustomDebugStringConvertible {
@@ -42,10 +42,22 @@ class VisilabsInstance: CustomDebugStringConvertible {
     var restUrl : String?
     var encryptedDataSource : String?
     
+    var cookieId: String?
+    var exVisitorId: String?
+    var tokenId: String?
+    var appId: String?
+    
     var eventsQueue = Queue()
+    var flushEventsQueue = Queue()
+    var trackingQueue: DispatchQueue!
+    var networkQueue: DispatchQueue!
+    let readWriteLock: VisilabsReadWriteLock
     
     //TODO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
+    
+    
+    let visilabsEventInstance: VisilabsEvent
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -70,6 +82,28 @@ class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     init(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String, requestTimeoutInSeconds: Int, targetUrl: String?, actionUrl: String?, geofenceUrl: String?, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
+        self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
+        let label = "com.relateddigital.\(siteId)"
+        self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
+        self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
+        self.visilabsEventInstance = VisilabsEvent(apiToken: self.siteId, lock: self.readWriteLock)
+        
+        if let reachability = VisilabsInstance.reachability {
+            var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
+            func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) -> Void {
+                let wifi = flags.contains(SCNetworkReachabilityFlags.reachable) && !flags.contains(SCNetworkReachabilityFlags.isWWAN)
+                VisilabsLogger.info(message: "reachability changed, wifi=\(wifi)")
+            }
+            if SCNetworkReachabilitySetCallback(reachability, reachabilityCallback, &context) {
+                if !SCNetworkReachabilitySetDispatchQueue(reachability, trackingQueue) {
+                    // cleanup callback if setting dispatch queue failed
+                    SCNetworkReachabilitySetCallback(reachability, nil, nil)
+                }
+            }
+        }
+        
+        
+        
         self.organizationId = organizationId
         self.siteId = siteId
         self.dataSource = dataSource
@@ -84,17 +118,55 @@ class VisilabsInstance: CustomDebugStringConvertible {
         VisilabsBasePath.endpoints[.target] = targetUrl
         VisilabsBasePath.endpoints[.action] = actionUrl
         VisilabsBasePath.endpoints[.geofence] = geofenceUrl
+        
+        
     }
     
 }
 
 extension VisilabsInstance {
     
+    //MARK: - Event
+    
     public func customEvent(_ pageName: String, properties: [String:String]){
         if pageName.isEmptyOrWhitespace {
             VisilabsLogger.error(message: "Visilabs: customEvent can not be called with empty page name.")
             return
         }
+        
+        let epochInterval = Date().timeIntervalSince1970
+        
+        trackingQueue.async { [weak self, pageName, properties, epochInterval] in
+            guard let self = self else { return }
+            var shadowEventsQueue = Queue()
+            var shadowTimedEvents = InternalProperties()
+            var shadowSuperProperties = InternalProperties()
+            
+            self.readWriteLock.read {
+                shadowEventsQueue = self.eventsQueue
+                //shadowTimedEvents = self.timedEvents
+                //shadowSuperProperties = self.superProperties
+            }
+            let (eventsQueue, timedEvents, mergedProperties) = self.visilabsEventInstance.track(event: pageName, properties: properties, eventsQueue: shadowEventsQueue,
+                                                                                        superProperties: shadowSuperProperties,
+                                                                                        distinctId: self.distinctId,
+                                                                                        anonymousId: self.anonymousId,
+                                                                                        userId: self.userId,
+                                                                                        hadPersistedDistinctId: self.hadPersistedDistinctId,
+                                                                                        epochInterval: epochInterval)
+            self.readWriteLock.write {
+                self.eventsQueue = eventsQueue
+                self.timedEvents = timedEvents
+            }
+
+            self.readWriteLock.read {
+                Persistence.archiveEvents(self.flushEventsQueue + self.eventsQueue, token: self.apiToken)
+            }
+            
+            self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
+            
+        }
+        
     }
     
     public func login(exVisitorId: String, properties: [String:String] = [String:String]()){
@@ -102,6 +174,14 @@ extension VisilabsInstance {
             VisilabsLogger.error(message: "Visilabs: login can not be called with empty exVisitorId.")
             return
         }
+        if self.exVisitorId != nil && !(self.exVisitorId == exVisitorId) {
+            setCookieID()
+        }
+        var props = properties
+        props[VisilabsConfig.EXVISITORID_KEY] = exVisitorId
+        props["Login"] = exVisitorId
+        props["OM.b_login"] = "Login"
+        customEvent("LoginPage", properties: props)
     }
     
     public func signUp(exVisitorId: String, properties: [String:String] = [String:String]()){
@@ -109,6 +189,14 @@ extension VisilabsInstance {
             VisilabsLogger.error(message: "Visilabs: signUp can not be called with empty exVisitorId.")
             return
         }
+        if self.exVisitorId != nil && !(self.exVisitorId == exVisitorId) {
+            setCookieID()
+        }
+        var props = properties
+        props[VisilabsConfig.EXVISITORID_KEY] = exVisitorId
+        props["SignUp"] = exVisitorId
+        props["OM.b_sgnp"] = "SignUp"
+        customEvent("SignUpPage", properties: props)
     }
     
 }
