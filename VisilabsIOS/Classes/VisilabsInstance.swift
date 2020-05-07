@@ -36,6 +36,9 @@ struct VisilabsUser {
     var exVisitorId: String?
     var tokenId: String?
     var appId: String?
+    var visitData: String?
+    var visitorData: String?
+    var identifierForAdvertising: String?
 }
 
 class VisilabsInstance: CustomDebugStringConvertible {
