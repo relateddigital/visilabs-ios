@@ -13,7 +13,7 @@ func += <K, V> (left: inout [K:V], right: [K:V]) {
     }
 }
 
-class VisilabsEvent {
+class VisilabsEventInstance {
     let organizationId: String
     let siteId: String
     let dataSource: String
