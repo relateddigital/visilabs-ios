@@ -14,11 +14,18 @@ func += <K, V> (left: inout [K:V], right: [K:V]) {
 }
 
 class VisilabsEvent {
-    let apiToken: String
+    let organizationId: String
+    let siteId: String
+    let dataSource: String
+    let visilabsUser: VisilabsUser
+    
     let lock: VisilabsReadWriteLock
 
-    init(apiToken: String, lock: VisilabsReadWriteLock) {
-        self.apiToken = apiToken
+    init(organizationId: String, siteId: String, dataSource: String, visilabsUser: VisilabsUser, lock: VisilabsReadWriteLock) {
+        self.organizationId = organizationId
+        self.siteId = siteId
+        self.dataSource = dataSource
+        self.visilabsUser = visilabsUser
         self.lock = lock
     }
     
