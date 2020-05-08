@@ -17,15 +17,13 @@ class VisilabsEventInstance {
     let organizationId: String
     let siteId: String
     let dataSource: String
-    let visilabsUser: VisilabsUser
     
     let lock: VisilabsReadWriteLock
 
-    init(organizationId: String, siteId: String, dataSource: String, visilabsUser: VisilabsUser, lock: VisilabsReadWriteLock) {
+    init(organizationId: String, siteId: String, dataSource: String, lock: VisilabsReadWriteLock) {
         self.organizationId = organizationId
         self.siteId = siteId
         self.dataSource = dataSource
-        self.visilabsUser = visilabsUser
         self.lock = lock
     }
     
