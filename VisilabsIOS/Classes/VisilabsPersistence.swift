@@ -21,13 +21,22 @@ class VisilabsPersistence {
     }
 
     
-    class func unarchive() -> (String?, String?, String?, String?, String?){
-        var properties: [String : String?]
+    //TODO: bunu ExceptionWrapper içine al
+    class func unarchive() -> (cookieId: String?, exVisitorId: String?, appId: String?, tokenId: String?, userAgent: String?, visitorData: String?, mobileAdId: String?){
         var cookieId: String?
         var exVisitorId: String?
-        var tokenId: String?
         var appId: String?
+        var tokenId: String?
         var userAgent: String?
+        var visitorData: String?
+        var mobileAdId: String?
+        
+        //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library we added this control.
+        if let cidfp = filePath(filename: VisilabsConfig.IDENTITY_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
+            cookieId = cid
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving cookieId.")
+        }
         
         if let cidfp = filePath(filename: VisilabsConfig.COOKIEID_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             cookieId = cid
@@ -47,7 +56,7 @@ class VisilabsPersistence {
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving appId.")
         }
         
-        if let tidfp = filePath(filename: VisilabsConfig.APPID_ARCHIVE_KEY), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
+        if let tidfp = filePath(filename: VisilabsConfig.TOKENID_ARCHIVE_KEY), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
             tokenId = tid
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving tokenID.")
@@ -60,15 +69,51 @@ class VisilabsPersistence {
         }
         
         if let propsfp = filePath(filename: VisilabsConfig.PROPERTIES_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
-            properties = props
+            
+            if let cid = props[VisilabsConfig.COOKIEID_KEY], !cid.isNilOrWhiteSpace {
+                cookieId = cid
+            }
+            
+            if let exvid = props[VisilabsConfig.EXVISITORID_KEY], !exvid.isNilOrWhiteSpace {
+                exVisitorId = exvid
+            }
+            
+            if let aid = props[VisilabsConfig.APPID_KEY], !aid.isNilOrWhiteSpace {
+                appId = aid
+            }
+            
+            if let tid = props[VisilabsConfig.TOKENID_KEY], !tid.isNilOrWhiteSpace {
+                tokenId = tid
+            }
+            
+            if let ua = props[VisilabsConfig.USERAGENT_KEY], !ua.isNilOrWhiteSpace {
+                userAgent = ua
+            }
+            
+            if let vd = props[VisilabsConfig.VISITORDATA], !vd.isNilOrWhiteSpace {
+                visitorData = vd
+            }
+            
+            if let vd = props[VisilabsConfig.VISITOR_CAPPING_KEY], !vd.isNilOrWhiteSpace {
+                visitorData = vd
+            }
+            
+            if let madid = props[VisilabsConfig.MOBILEADID_KEY], !madid.isNilOrWhiteSpace {
+                mobileAdId = madid
+            }
+            
+            
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving userAgent.")
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving properties.")
         }
         
-        return (cookieId, exVisitorId, appId, tokenId, userAgent)
+        
+        
+        return (cookieId, exVisitorId, appId, tokenId, userAgent, visitorData, mobileAdId)
     }
     
     
+    //TODO: buradaki encode işlemleri doğru mu kontrol et
     class func saveParameters(_ parameters: [String : String]) {
         archiveQueue.sync {
             let dateFormatter = DateFormatter()
