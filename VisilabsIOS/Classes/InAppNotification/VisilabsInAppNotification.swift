@@ -32,6 +32,23 @@ class VisilabsInAppNotification {
     
     let actId: Int
     let messageType: String
+    let messageTitle: String?
+    let messageBody: String?
+    let buttonText: String?
+    let iosLink: String?
+    let imageURLString: String?
+    let visitorData: String?
+    let visitData: String?
+    let queryString: String?
+    let messageTitleColor: String?
+    let messageBodyColor: String?
+    let messageBodyTextSize: String?
+    let fontFamily: String?
+    let backGround: String?
+    let closeButtonColor: String?
+    let buttonTextColor: String?
+    let buttonColor: String?
+    
     
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
@@ -53,10 +70,23 @@ class VisilabsInAppNotification {
             return nil
         }
         
-        
-        
-        
         self.actId = actId
         self.messageType = messageType
+        self.messageTitle = actionData[PayloadKey.messageTitle] as? String
+        self.messageBody = actionData[PayloadKey.messageBody] as? String
+        self.buttonText = actionData[PayloadKey.buttonText] as? String
+        self.iosLink = actionData[PayloadKey.iosLink] as? String
+        self.imageURLString = actionData[PayloadKey.imageURLString] as? String
+        self.visitorData = actionData[PayloadKey.visitorData] as? String
+        self.visitData = actionData[PayloadKey.visitData] as? String
+        self.queryString = actionData[PayloadKey.queryString] as? String
+        self.messageTitleColor = actionData[PayloadKey.messageTitleColor] as? String
+        self.messageBodyColor = actionData[PayloadKey.messageBodyColor] as? String
+        self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
+        self.fontFamily = actionData[PayloadKey.fontFamily] as? String
+        self.backGround = actionData[PayloadKey.backGround] as? String
+        self.closeButtonColor = actionData[PayloadKey.closeButtonColor] as? String
+        self.buttonTextColor = actionData[PayloadKey.buttonTextColor] as? String
+        self.buttonColor = actionData[PayloadKey.buttonColor] as? String
     }
 }
