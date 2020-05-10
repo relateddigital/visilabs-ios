@@ -215,12 +215,15 @@ extension VisilabsInstance {
         
     }
     
+    //TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() {
         (self.visilabsUser.cookieId
         ,self.visilabsUser.exVisitorId
         ,self.visilabsUser.appId
         ,self.visilabsUser.tokenId
-        ,self.visilabsUser.userAgent) = VisilabsPersistence.unarchive()
+        ,self.visilabsUser.userAgent
+        ,self.visilabsUser.visitorData
+        ,self.visilabsUser.identifierForAdvertising) = VisilabsPersistence.unarchive()
     }
     
     private func getIDFA() -> String {
