@@ -118,7 +118,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
-        let label = "com.relateddigital.\(siteId)"
+        let label = "com.relateddigital.\(self.siteId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
