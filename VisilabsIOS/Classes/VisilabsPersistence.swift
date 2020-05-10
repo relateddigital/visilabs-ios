@@ -1,5 +1,5 @@
 //
-//  VisilabsPersistentTargetManager.swift
+//  VisilabsPersistence.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 15.04.2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsPersistentTargetManager {
+class VisilabsPersistence {
     
     private class func filePath(filename: String) -> String? {
         let manager = FileManager.default
