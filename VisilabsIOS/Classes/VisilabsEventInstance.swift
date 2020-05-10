@@ -1,5 +1,5 @@
 //
-//  VisilabsEvent.swift
+//  VisilabsEventInstance.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 7.05.2020.
@@ -7,112 +7,104 @@
 
 import Foundation
 
-func += <K, V> (left: inout [K:V], right: [K:V]) {
-    for (k, v) in right {
-        left.updateValue(v, forKey: k)
-    }
-}
-
 class VisilabsEventInstance {
     let organizationId: String
     let siteId: String
-    let dataSource: String
     
+    //TODO: lock kullanılmıyor kaldırılabilir
     let lock: VisilabsReadWriteLock
 
-    init(organizationId: String, siteId: String, dataSource: String, lock: VisilabsReadWriteLock) {
+    init(organizationId: String, siteId: String, lock: VisilabsReadWriteLock) {
         self.organizationId = organizationId
         self.siteId = siteId
-        self.dataSource = dataSource
         self.lock = lock
     }
     
-    func track(event: String, properties: Properties, eventsQueue: Queue,
-               superProperties: InternalProperties,
-               distinctId: String,
-               anonymousId: String?,
-               userId: String?,
-               hadPersistedDistinctId: Bool?,
-               epochInterval: Double) -> (eventsQueque: Queue, timedEvents: InternalProperties, properties: InternalProperties) {
-        var ev = event
-        let epochSeconds = Int(round(epochInterval))
-        var p = InternalProperties()
-
-        p["token"] = apiToken
-
-        p["distinct_id"] = distinctId
-        if anonymousId != nil {
-            p["$device_id"] = anonymousId
-        }
-        if userId != nil {
-            p["$user_id"] = userId
-        }
-
+    func customEvent(pageName: String, properties: [String:String], eventsQueue: Queue, visilabsUser: VisilabsUser, channel: String) -> (eventsQueque: Queue, visilabsUser: VisilabsUser, clearUserParameters: Bool, channel: String) {
+        var props = properties
+        var vUser = visilabsUser
+        var chan = channel
+        var clearUserParameters = false
+        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         
-        p += superProperties
-        p += properties
-
-        var trackEvent: InternalProperties = ["event": ev, "properties": p]
-        var shadowEventsQueue = eventsQueue
-        
-        shadowEventsQueue.append(trackEvent)
-        if shadowEventsQueue.count > QueueConstants.queueSize {
-            shadowEventsQueue.remove(at: 0)
-        }
-        
-        return (shadowEventsQueue, shadowTimedEvents, p)
-    }
-
-    func registerSuperProperties(_ properties: Properties,
-                                 superProperties: InternalProperties) -> InternalProperties {
-        var updatedSuperProperties = superProperties
-        updatedSuperProperties += properties
-        return updatedSuperProperties
-    }
-
-    func registerSuperPropertiesOnce(_ properties: Properties, superProperties: InternalProperties, defaultValue: MixpanelType?) -> InternalProperties {
-
-        var updatedSuperProperties = superProperties
-        _ = properties.map() {
-            let val = updatedSuperProperties[$0.key]
-            if val == nil ||
-                (defaultValue != nil && (val as? NSObject == defaultValue as? NSObject)) {
-                updatedSuperProperties[$0.key] = $0.value
+        if let cookieId = props[VisilabsConfig.COOKIEID_KEY] {
+            if vUser.cookieId != cookieId {
+                clearUserParameters = true
             }
+            vUser.cookieId = cookieId
+            props.removeValue(forKey: VisilabsConfig.COOKIEID_KEY)
         }
         
-        return updatedSuperProperties
-    }
-
-    func unregisterSuperProperty(_ propertyName: String,
-                                 superProperties: InternalProperties) -> InternalProperties {
+        if let exVisitorId = props[VisilabsConfig.EXVISITORID_KEY] {
+            if vUser.exVisitorId != exVisitorId {
+                clearUserParameters = true
+            }
+            if vUser.exVisitorId != nil && vUser.exVisitorId != exVisitorId {
+                //TODO: burada cookieId generate etmek doğru mu tekrar kontrol et
+                vUser.cookieId = VisilabsHelper.generateCookieId()
+            }
+            vUser.exVisitorId = exVisitorId
+            props.removeValue(forKey: VisilabsConfig.EXVISITORID_KEY)
+        }
         
-        var updatedSuperProperties = superProperties
-        updatedSuperProperties.removeValue(forKey: propertyName)
-        return updatedSuperProperties
+        if let tokenId = props[VisilabsConfig.TOKENID_KEY] {
+            vUser.tokenId = tokenId
+            props.removeValue(forKey: VisilabsConfig.TOKENID_KEY)
+        }
+        
+        if let appId = props[VisilabsConfig.APPID_KEY]{
+            vUser.appId = appId
+            props.removeValue(forKey: VisilabsConfig.APPID_KEY)
+        }
+        
+        //TODO: Dışarıdan mobile ad id gelince neden siliyoruz?
+        if props.keys.contains(VisilabsConfig.MOBILEADID_KEY) {
+            props.removeValue(forKey: VisilabsConfig.MOBILEADID_KEY)
+        }
+        
+        if props.keys.contains(VisilabsConfig.APIVER_KEY) {
+            props.removeValue(forKey: VisilabsConfig.APIVER_KEY)
+        }
+        
+        if props.keys.contains(VisilabsConfig.CHANNEL_KEY) {
+            chan = props[VisilabsConfig.CHANNEL_KEY]!
+            props.removeValue(forKey: VisilabsConfig.CHANNEL_KEY)
+        }
+        
+        props[VisilabsConfig.ORGANIZATIONID_KEY] = self.organizationId
+        props[VisilabsConfig.SITEID_KEY] = self.siteId
+        props[VisilabsConfig.COOKIEID_KEY] = vUser.cookieId ?? ""
+        props[VisilabsConfig.CHANNEL_KEY] = chan
+        props[VisilabsConfig.URI_KEY] = pageName
+        props[VisilabsConfig.MOBILEAPPLICATION_KEY] = VisilabsConfig.TRUE
+        props[VisilabsConfig.MOBILEADID_KEY] = vUser.identifierForAdvertising ?? ""
+        props[VisilabsConfig.APIVER_KEY] = VisilabsConfig.IOS
+        
+        if !vUser.exVisitorId.isNilOrWhiteSpace {
+            props[VisilabsConfig.EXVISITORID_KEY] = vUser.exVisitorId
+        }
+        
+        if !vUser.tokenId.isNilOrWhiteSpace{
+            props[VisilabsConfig.TOKENID_KEY] = vUser.tokenId
+        }
+        
+        if !vUser.appId.isNilOrWhiteSpace{
+            props[VisilabsConfig.APPID_KEY] = vUser.appId
+        }
+        
+        props[VisilabsConfig.DAT_KEY] = String(actualTimeOfevent)
+        
+
+        var eQueue = eventsQueue
+        
+        eQueue.append(props)
+        if eQueue.count > VisilabsConfig.QUEUE_SIZE {
+            eQueue.remove(at: 0)
+        }
+        
+        //TODO: VisilabsPersistentTargetManager.saveParameters dışarıda yapılacak
+        
+        return (eQueue, vUser, clearUserParameters, chan)
     }
 
-    func clearSuperProperties(_ superProperties: InternalProperties) -> InternalProperties {
-        var updatedSuperProperties = superProperties
-        updatedSuperProperties.removeAll()
-        return updatedSuperProperties
-    }
-    
-    func updateSuperProperty(_ update: (_ superProperties: inout InternalProperties) -> Void, superProperties: inout InternalProperties) {
-        update(&superProperties)
-    }
-
-    func time(event: String, timedEvents: InternalProperties, startTime: Double) -> InternalProperties {
-
-        var updatedTimedEvents = timedEvents
-
-        //updatedTimedEvents[event] = startTime
-        return updatedTimedEvents
-    }
-
-    func clearTimedEvents(_ timedEvents: InternalProperties) -> InternalProperties {
-        var updatedTimedEvents = timedEvents
-        updatedTimedEvents.removeAll()
-        return updatedTimedEvents
-    }
 }
