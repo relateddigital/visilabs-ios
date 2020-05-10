@@ -113,7 +113,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
         self.restUrl = restUrl
         self.encryptedDataSource = encryptedDataSource
-        setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
+        
         
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.siteId)"
@@ -122,6 +122,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsUser.identifierForAdvertising = getIDFA()
         
+        setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
     }
     
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
@@ -134,12 +135,6 @@ class VisilabsInstance: CustomDebugStringConvertible {
     
     
 }
-
-extension VisilabsInstance {
-
-    //MARK: - Persistence
-}
-
 
 extension VisilabsInstance {
     
@@ -173,7 +168,7 @@ extension VisilabsInstance {
 
             self.readWriteLock.read {
                 
-                //TODO: 
+                //TODO:
                 //VisilabsPersistence.archive()
                 
                 //Persistence.archiveEvents(self.flushEventsQueue + self.eventsQueue, token: self.apiToken)
