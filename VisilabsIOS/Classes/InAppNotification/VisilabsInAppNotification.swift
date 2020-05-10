@@ -31,6 +31,7 @@ class VisilabsInAppNotification {
     }
     
     let actId: Int
+    let messageType: String
     
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
@@ -39,11 +40,23 @@ class VisilabsInAppNotification {
         }
         
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
-            VisilabsLogger.error(message: "invalid notification id")
+            VisilabsLogger.error(message: "invalid actid")
+            return nil
+        }
+        
+        guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
+            VisilabsLogger.error(message: "invalid actionData")
+            return nil
+        }
+        guard let messageType = actionData[PayloadKey.messageType] as? String else {
+            VisilabsLogger.error(message: "invalid msg_type")
             return nil
         }
         
         
+        
+        
         self.actId = actId
+        self.messageType = messageType
     }
 }
