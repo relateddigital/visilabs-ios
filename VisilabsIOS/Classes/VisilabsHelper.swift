@@ -41,4 +41,8 @@ internal class VisilabsHelper{
         return "\(url)?\(queryString)"
     }
     
+    static func generateCookieId() -> String {
+        return UUID().uuidString
+    }
+    
 }
