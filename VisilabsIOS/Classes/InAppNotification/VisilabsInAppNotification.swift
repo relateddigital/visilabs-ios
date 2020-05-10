@@ -29,4 +29,21 @@ class VisilabsInAppNotification {
         static let buttonTextColor = "button_text_color"
         static let buttonColor = "button_color"
     }
+    
+    let actId: Int
+    
+    init?(JSONObject: [String: Any]?) {
+        guard let object = JSONObject else {
+            VisilabsLogger.error(message: "notification json object should not be nil")
+            return nil
+        }
+        
+        guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
+            VisilabsLogger.error(message: "invalid notification id")
+            return nil
+        }
+        
+        
+        self.actId = actId
+    }
 }
