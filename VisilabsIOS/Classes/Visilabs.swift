@@ -329,7 +329,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
                     props[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
                 }
                 
-                for (key, value) in VisilabsPersistentTargetManager.getParameters(){
+                for (key, value) in VisilabsPersistence.getParameters(){
                     if value.isNilOrWhiteSpace{
                         externalProps.removeValue(forKey: key)
                     }else{
@@ -838,7 +838,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
         if let cookieID = props[VisilabsConfig.COOKIEID_KEY] {
             if self.cookieID != cookieID {
-                VisilabsPersistentTargetManager.clearParameters()
+                VisilabsPersistence.clearParameters()
             }
             self.cookieID = cookieID
             if let cidfp = self.cookieIDFilePath(){
@@ -851,7 +851,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         
         if let exVisitorID = props[VisilabsConfig.EXVISITORID_KEY] {
             if self.exVisitorID != exVisitorID {
-                VisilabsPersistentTargetManager.clearParameters()
+                VisilabsPersistence.clearParameters()
             }
             if self.exVisitorID != nil && self.exVisitorID != exVisitorID{
                 self.setCookieID()
@@ -936,7 +936,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
             }
         }
         
-        VisilabsPersistentTargetManager.saveParameters(props)
+        VisilabsPersistence.saveParameters(props)
 
         let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
