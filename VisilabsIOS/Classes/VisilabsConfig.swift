@@ -9,6 +9,8 @@ import Foundation
 
 struct VisilabsConfig {
     
+    static var QUEUE_SIZE = 5000
+    
     
     static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieID"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
     static let IDENTITY_KEY = "Visilabs.identity";
