@@ -39,6 +39,7 @@ struct VisilabsUser {
     var appId: String?
     var visitData: String?
     var visitorData: String?
+    var userAgent: String?
     var identifierForAdvertising: String?
 }
 
@@ -65,7 +66,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
     
     
-    let visilabsEventInstance: VisilabsEvent
+    let visilabsEventInstance: VisilabsEventInstance
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -94,7 +95,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
         let label = "com.relateddigital.\(siteId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
-        self.visilabsEventInstance = VisilabsEvent(apiToken: self.siteId, lock: self.readWriteLock)
+        self.visilabsEventInstance = VisilabsEventInstance(organizationId: organizationId, siteId: siteId, lock: self.readWriteLock)
         
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
@@ -121,16 +122,21 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
         self.restUrl = restUrl
         self.encryptedDataSource = encryptedDataSource
-        VisilabsBasePath.endpoints[.logger] = loggerUrl
-        VisilabsBasePath.endpoints[.realtime] = realTimeUrl
-        VisilabsBasePath.endpoints[.target] = targetUrl
-        VisilabsBasePath.endpoints[.action] = actionUrl
-        VisilabsBasePath.endpoints[.geofence] = geofenceUrl
+        setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         
         
         self.visilabsUser.identifierForAdvertising = getIDFA()
         
     }
+    
+    private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
+        VisilabsBasePath.endpoints[.logger] = loggerUrl
+        VisilabsBasePath.endpoints[.realtime] = realTimeUrl
+        VisilabsBasePath.endpoints[.target] = targetUrl
+        VisilabsBasePath.endpoints[.action] = actionUrl
+        VisilabsBasePath.endpoints[.geofence] = geofenceUrl
+    }
+    
     
 }
 
@@ -157,7 +163,7 @@ extension VisilabsInstance {
                 //shadowTimedEvents = self.timedEvents
                 //shadowSuperProperties = self.superProperties
             }
-            let (eventsQueue, timedEvents, mergedProperties) = self.visilabsEventInstance.track(event: pageName, properties: properties, eventsQueue: shadowEventsQueue,
+            let (eventsQueue, timedEvents, mergedProperties) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: shadowEventsQueue,
                                                                                         superProperties: shadowSuperProperties,
                                                                                         distinctId: self.distinctId,
                                                                                         anonymousId: self.anonymousId,
@@ -214,7 +220,11 @@ extension VisilabsInstance {
     }
     
     private func unarchive() {
-        
+        (self.visilabsUser.cookieId
+        ,self.visilabsUser.exVisitorId
+        ,self.visilabsUser.appId
+        ,self.visilabsUser.tokenId
+        ,self.visilabsUser.userAgent) = VisilabsPersistentTargetManager.unarchive()
     }
     
     private func getIDFA() -> String {
