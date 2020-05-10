@@ -236,6 +236,12 @@ extension VisilabsInstance {
     }
 }
 
+extension VisilabsInstance {
+
+    //MARK: - Send
+
+}
+
 
 class VisilabsManager {
     
