@@ -9,6 +9,8 @@ import Foundation
 
 class VisilabsPersistence {
     
+    private static let archiveQueue: DispatchQueue = DispatchQueue(label: "com.relateddigital.archiveQueue", qos: .utility)
+    
     private class func filePath(filename: String) -> String? {
         let manager = FileManager.default
         let url = manager.urls(for: .libraryDirectory, in: .userDomainMask).last
@@ -68,8 +70,7 @@ class VisilabsPersistence {
     
     
     class func saveParameters(_ parameters: [String : String]) {
-        let lockQueue = DispatchQueue(label: "self")
-        lockQueue.sync {
+        archiveQueue.sync {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dateString = dateFormatter.string(from: Date())
