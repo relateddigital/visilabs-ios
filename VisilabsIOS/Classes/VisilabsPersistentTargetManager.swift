@@ -9,6 +9,64 @@ import Foundation
 
 class VisilabsPersistentTargetManager {
     
+    private class func filePath(filename: String) -> String? {
+        let manager = FileManager.default
+        let url = manager.urls(for: .libraryDirectory, in: .userDomainMask).last
+        guard let urlUnwrapped = url?.appendingPathComponent(filename).path else {
+            return nil
+        }
+        return urlUnwrapped
+    }
+
+    
+    class func unarchive() -> (String?, String?, String?, String?, String?){
+        var properties: [String : String?]
+        var cookieId: String?
+        var exVisitorId: String?
+        var tokenId: String?
+        var appId: String?
+        var userAgent: String?
+        
+        if let cidfp = filePath(filename: VisilabsConfig.COOKIEID_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
+            cookieId = cid
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving cookieId.")
+        }
+        
+        if let exvidfp = filePath(filename: VisilabsConfig.EXVISITORID_ARCHIVE_KEY), let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
+            exVisitorId = exvid
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving exVisitorId.")
+        }
+        
+        if let appidfp = filePath(filename: VisilabsConfig.APPID_ARCHIVE_KEY), let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
+            appId = aid
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving appId.")
+        }
+        
+        if let tidfp = filePath(filename: VisilabsConfig.APPID_ARCHIVE_KEY), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
+            tokenId = tid
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving tokenID.")
+        }
+        
+        if let uafp = filePath(filename: VisilabsConfig.USERAGENT_ARCHIVE_KEY), let ua = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
+            userAgent = ua
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving userAgent.")
+        }
+        
+        if let propsfp = filePath(filename: VisilabsConfig.PROPERTIES_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
+            properties = props
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving userAgent.")
+        }
+        
+        return (cookieId, exVisitorId, appId, tokenId, userAgent)
+    }
+    
+    
     class func saveParameters(_ parameters: [String : String]) {
         let lockQueue = DispatchQueue(label: "self")
         lockQueue.sync {
