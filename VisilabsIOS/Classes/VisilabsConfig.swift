@@ -13,14 +13,15 @@ struct VisilabsConfig {
     
     
     static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieID"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
-    static let IDENTITY_KEY = "Visilabs.identity";
+    static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity";
     static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorID";
     static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenID";
     static let APPID_ARCHIVE_KEY = "Visilabs.appID";
     static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
     static let PROPERTIES_ARCHIVE_KEY = "Visilabs.properties";
     
-    
+    static let USERAGENT_KEY = "OM.userAgent";
+    static let VISITORDATA = "visitorData";
     
     static let MOBILEADID_KEY = "OM.m_adid"
     static let MOBILEAPPLICATION_KEY = "OM.mappl"
