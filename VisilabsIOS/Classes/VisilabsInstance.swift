@@ -91,12 +91,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     init(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String, requestTimeoutInSeconds: Int, targetUrl: String?, actionUrl: String?, geofenceUrl: String?, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
-        self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
-        let label = "com.relateddigital.\(siteId)"
-        self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
-        self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
-        self.visilabsEventInstance = VisilabsEventInstance(organizationId: organizationId, siteId: siteId, lock: self.readWriteLock)
-        
+
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) -> Void {
@@ -111,8 +106,6 @@ class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
         
-        
-        
         self.organizationId = organizationId
         self.siteId = siteId
         self.dataSource = dataSource
@@ -124,7 +117,11 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.encryptedDataSource = encryptedDataSource
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         
-        
+        self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
+        let label = "com.relateddigital.\(siteId)"
+        self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
+        self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
+        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsUser.identifierForAdvertising = getIDFA()
         
     }
