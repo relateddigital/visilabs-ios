@@ -27,9 +27,7 @@ class Visilabs2 {
     }
 }
 
-public typealias Properties = [String: String]
-typealias InternalProperties = [String: Any]
-typealias Queue = [InternalProperties]
+typealias Queue = [[String:String]]
 
 
 struct VisilabsUser {
@@ -138,6 +136,12 @@ class VisilabsInstance: CustomDebugStringConvertible {
 }
 
 extension VisilabsInstance {
+
+    //MARK: - Persistence
+}
+
+
+extension VisilabsInstance {
     
     //MARK: - Event
     
@@ -151,32 +155,32 @@ extension VisilabsInstance {
         
         trackingQueue.async { [weak self, pageName, properties, epochInterval] in
             guard let self = self else { return }
-            var shadowEventsQueue = Queue()
-            var shadowTimedEvents = InternalProperties()
-            var shadowSuperProperties = InternalProperties()
+            var eQueue = Queue()
+            var vUser = VisilabsUser()
             
             self.readWriteLock.read {
-                shadowEventsQueue = self.eventsQueue
-                //shadowTimedEvents = self.timedEvents
-                //shadowSuperProperties = self.superProperties
+                eQueue = self.eventsQueue
+                vUser = self.visilabsUser
             }
-            let (eventsQueue, timedEvents, mergedProperties) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: shadowEventsQueue,
-                                                                                        superProperties: shadowSuperProperties,
-                                                                                        distinctId: self.distinctId,
-                                                                                        anonymousId: self.anonymousId,
-                                                                                        userId: self.userId,
-                                                                                        hadPersistedDistinctId: self.hadPersistedDistinctId,
-                                                                                        epochInterval: epochInterval)
+            
+            let (eventsQueue, visilabsUser, clearUserParameters, channel) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: eQueue, visilabsUser: vUser, channel: self.channel)
+            
             self.readWriteLock.write {
                 self.eventsQueue = eventsQueue
-                self.timedEvents = timedEvents
+                self.visilabsUser = visilabsUser
+                self.channel = channel
             }
 
             self.readWriteLock.read {
-                Persistence.archiveEvents(self.flushEventsQueue + self.eventsQueue, token: self.apiToken)
+                
+                //TODO: 
+                //VisilabsPersistence.archive()
+                
+                //Persistence.archiveEvents(self.flushEventsQueue + self.eventsQueue, token: self.apiToken)
             }
             
-            self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
+            //TODO:
+            //self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
             
         }
         
@@ -221,7 +225,7 @@ extension VisilabsInstance {
         ,self.visilabsUser.exVisitorId
         ,self.visilabsUser.appId
         ,self.visilabsUser.tokenId
-        ,self.visilabsUser.userAgent) = VisilabsPersistentTargetManager.unarchive()
+        ,self.visilabsUser.userAgent) = VisilabsPersistence.unarchive()
     }
     
     private func getIDFA() -> String {
