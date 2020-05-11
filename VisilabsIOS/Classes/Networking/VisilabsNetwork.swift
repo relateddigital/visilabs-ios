@@ -57,12 +57,6 @@ struct VisilabsBasePath {
 
 class VisilabsNetwork {
     
-    let visilabsEndpoint: VisilabsEndpoint
-
-    required init(visilabsEndpoint: VisilabsEndpoint) {
-        self.visilabsEndpoint = visilabsEndpoint
-    }
-    
     class func apiRequest<A>(resource: VisilabsResource<A>, failure: @escaping (VisilabsReason, Data?, URLResponse?) -> (), success: @escaping (A, URLResponse?) -> ()) {
         guard let request = buildURLRequest(resource: resource) else {
             return
