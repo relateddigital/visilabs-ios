@@ -12,35 +12,21 @@ class VisilabsEventRequest: VisilabsNetwork {
     var networkRequestsAllowedAfterTime = 0.0
     var networkConsecutiveFailures = 0
 
-    func sendRequest(_ requestData: String , completion: @escaping (Bool) -> Void) {
+    class func sendRequest(visilabsEndpoint: VisilabsEndpoint, properties: [String : String], headers: [String : String], completion: @escaping ([String: String]) -> Void) {
 
-        let responseParser: (Data) -> Int? = { data in
-            let response = String(data: data, encoding: String.Encoding.utf8)
-            if let response = response {
-                return Int(response) ?? 0
-            }
-            return nil
+        var queryItems = [URLQueryItem]()
+        for property in properties{
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
 
-        let requestBody = "data=\(requestData)".data(using: String.Encoding.utf8)
+        let resource = VisilabsNetwork.buildResource(endPoint:visilabsEndpoint, method: .get, requestBody: nil, queryItems: queryItems, headers: headers, parse: {data in return 0} )
 
-        let resource = VisilabsNetwork.buildResource(path: type.rawValue, method: .post,
-                                             requestBody: requestBody,
-                                             headers: ["Accept-Encoding": "gzip"],
-                                             parse: responseParser)
-
-        flushRequestHandler(VisilabsBasePath.getServerURL(identifier: basePathIdentifier),
-                            resource: resource,
-                            completion: { success in
-                                completion(success)
-        })
+        flushRequestHandler(resource: resource, completion: { success in completion(success) })
     }
 
-    private func flushRequestHandler(_ base: String,
-                                     resource: Resource<Int>,
-                                     completion: @escaping (Bool) -> Void) {
+    private class func flushRequestHandler(resource: VisilabsResource<[String: String]>, completion: @escaping (Bool) -> Void) {
 
-        VisilabsNetwork.apiRequest(base: base, resource: resource,
+        VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
                 self.networkConsecutiveFailures += 1
                 self.updateRetryDelay(response)
@@ -56,7 +42,7 @@ class VisilabsEventRequest: VisilabsNetwork {
             })
     }
 
-    private func updateRetryDelay(_ response: URLResponse?) {
+    private class func updateRetryDelay(_ response: URLResponse?) {
         var retryTime = 0.0
         let retryHeader = (response as? HTTPURLResponse)?.allHeaderFields["Retry-After"] as? String
         if let retryHeader = retryHeader, let retryHeaderParsed = (Double(retryHeader)) {
@@ -80,5 +66,7 @@ class VisilabsEventRequest: VisilabsNetwork {
     func requestNotAllowed() -> Bool {
         return Date().timeIntervalSince1970 < networkRequestsAllowedAfterTime
     }
+ 
+ 
 
 }
