@@ -21,7 +21,7 @@ enum VisilabsEndpoint {
 }
 
 struct VisilabsResource<A> {
-    let path: String
+    let endPoint: VisilabsEndpoint
     let method: VisilabsRequestMethod
     let requestBody: Data?
     let queryItems: [URLQueryItem]?
@@ -40,7 +40,7 @@ struct VisilabsBasePath {
     static var endpoints = [VisilabsEndpoint : String]()
     
     //TODO: path parametresini kaldır
-    static func buildURL(base: String, path: String, queryItems: [URLQueryItem]?) -> URL? {
+    static func buildURL(base: String, queryItems: [URLQueryItem]?) -> URL? {
         guard let url = URL(string: base) else {
             return nil
         }
@@ -98,7 +98,7 @@ class VisilabsNetwork {
     }
     
     private class func buildURLRequest<A>(_ base: String, resource: VisilabsResource<A>) -> URLRequest? {
-        guard let url = VisilabsBasePath.buildURL(base: base, path: resource.path, queryItems: resource.queryItems) else {
+        guard let url = VisilabsBasePath.buildURL(base: base, queryItems: resource.queryItems) else {
             return nil
         }
 
@@ -114,8 +114,8 @@ class VisilabsNetwork {
         return request as URLRequest
     }
     
-    class func buildResource<A>(path: String, method: VisilabsRequestMethod, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?) -> VisilabsResource<A> {
-        return VisilabsResource(path: path, method: method, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse)
+    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?) -> VisilabsResource<A> {
+        return VisilabsResource(endPoint: endPoint, method: method, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse)
     }
     
 }
