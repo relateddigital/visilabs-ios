@@ -29,6 +29,11 @@ class Visilabs2 {
 
 typealias Queue = [[String:String]]
 
+protocol AppLifecycle {
+    func applicationDidBecomeActive()
+    func applicationWillResignActive()
+}
+
 
 struct VisilabsUser {
     var cookieId: String?
