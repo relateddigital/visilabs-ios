@@ -21,10 +21,10 @@ class VisilabsEventRequest: VisilabsNetwork {
 
         let resource = VisilabsNetwork.buildResource(endPoint:visilabsEndpoint, method: .get, requestBody: nil, queryItems: queryItems, headers: headers, parse: {data in return true} )
 
-        flushRequestHandler(resource: resource, completion: { success in completion(success) })
+        sendRequestHandler(resource: resource, completion: { success in completion(success) })
     }
 
-    private class func flushRequestHandler(resource: VisilabsResource<Bool>, completion: @escaping ([String : String]?) -> Void) {
+    private class func sendRequestHandler(resource: VisilabsResource<Bool>, completion: @escaping ([String : String]?) -> Void) {
 
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
@@ -42,7 +42,7 @@ class VisilabsEventRequest: VisilabsNetwork {
                 
                 if let httpResponse = response as? HTTPURLResponse, let url = httpResponse.url {
                     VisilabsLogger.info(message: "\(url.absoluteString) request sent successfully")
-                    var cookies = getCookies(httpResponse.allHeaderFields["Set-Cookie"])
+                    let cookies = getCookies(httpResponse.allHeaderFields["Set-Cookie"])
                     completion(cookies)
                 }else{
                     VisilabsLogger.warn(message: "\(VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)) can not convert to HTTPURLResponse")
@@ -59,11 +59,18 @@ class VisilabsEventRequest: VisilabsNetwork {
     private class func getCookies(_ cookieValue: Any?) -> [String : String]{
         var cookieKeyValues = [String : String]()
         if let cookieString = cookieValue as? String {
-            let cookies = cookieString.split(separator: ";")
+            let cookies = cookieString.split{$0 == ";"}.map(String.init)
             for cookie in cookies{
-                let cookieParts = cookie.split(separator: "=")
+                let cookieParts = cookie.split{$0 == "="}.map(String.init)
                 if cookieParts.count == 2 {
-                    
+                    let key = cookieParts[0]
+                    let value = cookieParts[1]
+                    if key.contains(VisilabsConfig.LOAD_BALANCE_PREFIX, options: .caseInsensitive){
+                        cookieKeyValues[key] = value
+                    }
+                    if key.contains(VisilabsConfig.OM_3_KEY, options: .caseInsensitive){
+                        cookieKeyValues[key] = value
+                    }
                 }
             }
         }
