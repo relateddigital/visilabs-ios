@@ -40,8 +40,8 @@ struct VisilabsBasePath {
     static var endpoints = [VisilabsEndpoint : String]()
     
     //TODO: path parametresini kaldır
-    static func buildURL(base: String, queryItems: [URLQueryItem]?) -> URL? {
-        guard let url = URL(string: base) else {
+    static func buildURL(visilabsEndpoint: VisilabsEndpoint, queryItems: [URLQueryItem]?) -> URL? {
+        guard let endpoint = endpoints[visilabsEndpoint], let url = URL(string: endpoint) else {
             return nil
         }
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
@@ -50,8 +50,8 @@ struct VisilabsBasePath {
         return components?.url
     }
 
-    static func getServerURL(identifier: VisilabsEndpoint) -> String {
-        return endpoints[identifier] ?? ""
+    static func getEndpoint(visilabsEndpoint: VisilabsEndpoint) -> String {
+        return endpoints[visilabsEndpoint] ?? ""
     }
 }
 
@@ -63,8 +63,8 @@ class VisilabsNetwork {
         self.visilabsEndpoint = visilabsEndpoint
     }
     
-    class func apiRequest<A>(base: String, resource: VisilabsResource<A>, failure: @escaping (VisilabsReason, Data?, URLResponse?) -> (), success: @escaping (A, URLResponse?) -> ()) {
-        guard let request = buildURLRequest(base, resource: resource) else {
+    class func apiRequest<A>(resource: VisilabsResource<A>, failure: @escaping (VisilabsReason, Data?, URLResponse?) -> (), success: @escaping (A, URLResponse?) -> ()) {
+        guard let request = buildURLRequest(resource: resource) else {
             return
         }
 
@@ -97,8 +97,8 @@ class VisilabsNetwork {
         }.resume()
     }
     
-    private class func buildURLRequest<A>(_ base: String, resource: VisilabsResource<A>) -> URLRequest? {
-        guard let url = VisilabsBasePath.buildURL(base: base, queryItems: resource.queryItems) else {
+    private class func buildURLRequest<A>(resource: VisilabsResource<A>) -> URLRequest? {
+        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint, queryItems: resource.queryItems) else {
             return nil
         }
 
