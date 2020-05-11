@@ -131,8 +131,8 @@ class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
-        VisilabsBasePath.endpoints[.logger] = loggerUrl
-        VisilabsBasePath.endpoints[.realtime] = realTimeUrl
+        VisilabsBasePath.endpoints[.logger] = loggerUrl + "/om.gif/" + self.dataSource
+        VisilabsBasePath.endpoints[.realtime] = realTimeUrl + "/om.gif/" + self.dataSource
         VisilabsBasePath.endpoints[.target] = targetUrl
         VisilabsBasePath.endpoints[.action] = actionUrl
         VisilabsBasePath.endpoints[.geofence] = geofenceUrl
@@ -151,9 +151,9 @@ extension VisilabsInstance {
             return
         }
         
-        let epochInterval = Date().timeIntervalSince1970
+        //let epochInterval = Date().timeIntervalSince1970
         
-        trackingQueue.async { [weak self, pageName, properties, epochInterval] in
+        trackingQueue.async { [weak self, pageName, properties] in
             guard let self = self else { return }
             var eQueue = Queue()
             var vUser = VisilabsUser()
