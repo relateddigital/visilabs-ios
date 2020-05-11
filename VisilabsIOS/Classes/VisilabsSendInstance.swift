@@ -35,9 +35,25 @@ class VisilabsSendInstance: AppLifecycle {
             VisilabsLogger.debug(message: event)
             let headers = prepareHeaders()
             
-            let semaphore = DispatchSemaphore(value: 0)
+            let loggerSemaphore = DispatchSemaphore(value: 0)
+            let realTimeSemaphore = DispatchSemaphore(value: 0)
             delegate?.updateNetworkActivityIndicator(true)
-            VisilabsEventRequest.sendRequest(properties: event, headers: headers, completion: <#T##(Bool) -> Void#>)
+            VisilabsEventRequest.sendRequest(visilabsEndpoint : .logger, properties: event, headers: headers, completion: { [weak self, loggerSemaphore] success in
+                                        guard let self = self else { return }
+                                        self.delegate?.updateNetworkActivityIndicator(false)
+                                        if success {
+                                            if let lastIndex = range.last, shadowQueue.count - 1 > lastIndex {
+                                                shadowQueue.removeSubrange(range)
+                                            } else {
+                                                shadowQueue.removeAll()
+                                            }
+                                        }
+                                        shouldContinue = success
+                                        loggerSemaphore.signal()
+            })
+            
+            _ = loggerSemaphore.wait(timeout: DispatchTime.distantFuture)
+            _ = realTimeSemaphore.wait(timeout: DispatchTime.distantFuture)
     
             
         }
