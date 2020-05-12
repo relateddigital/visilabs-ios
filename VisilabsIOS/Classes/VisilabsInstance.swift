@@ -131,7 +131,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsSendInstance = VisilabsSendInstance()
         
         unarchive()
-        self.visilabsUser.identifierForAdvertising = getIDFA()
+        self.visilabsUser.identifierForAdvertising = getIDFA() ?? self.visilabsUser.identifierForAdvertising
         
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         
