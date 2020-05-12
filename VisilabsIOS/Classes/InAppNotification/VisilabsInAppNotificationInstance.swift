@@ -37,4 +37,9 @@ class VisilabsInAppNotificationInstance {
         self.notificationsInstance = VisilabsInAppNotifications(lock: self.lock)
     }
     
+    
+    func checkInAppNotification(properties: [String:String], completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)){
+        
+    }
+    
 }
