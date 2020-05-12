@@ -152,8 +152,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
-        VisilabsBasePath.endpoints[.logger] = loggerUrl + "/om.gif/" + self.dataSource
-        VisilabsBasePath.endpoints[.realtime] = realTimeUrl + "/om.gif/" + self.dataSource
+        VisilabsBasePath.endpoints[.logger] = "\(loggerUrl)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(realTimeUrl)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)"
         VisilabsBasePath.endpoints[.target] = targetUrl
         VisilabsBasePath.endpoints[.action] = actionUrl
         VisilabsBasePath.endpoints[.geofence] = geofenceUrl
