@@ -39,6 +39,8 @@ class VisilabsInAppNotificationInstance {
     
     
     func checkInAppNotification(properties: [String:String], completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)){
+        var visilabsInAppNotificationResponse = VisilabsInAppNotificationResponse()
+        let semaphore = DispatchSemaphore(value: 0)
         
     }
     
