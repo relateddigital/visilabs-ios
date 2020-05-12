@@ -329,20 +329,17 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
 
     //MARK: - InAppNotifications
     
-    func checkDecide(forceFetch: Bool = false, completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)) {
-        trackingQueue.async { [weak self, completion, forceFetch] in
+    func checkDecide(properties: [String:String], completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)) {
+        trackingQueue.async { [weak self, properties, completion] in
             guard let self = self else { return }
 
-            self.networkQueue.async { [weak self, completion, forceFetch] in
+            self.networkQueue.async { [weak self, properties, completion] in
 
                 guard let self = self else {
                     return
                 }
 
-                self.in.checkDecide(forceFetch: forceFetch,
-                                                   distinctId: self.people.distinctId ?? self.distinctId,
-                                                   token: self.apiToken,
-                                                   completion: completion)
+                self.visilabsInAppNotificationInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), completion: completion)
             }
         }
     
