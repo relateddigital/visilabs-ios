@@ -31,7 +31,7 @@ class VisilabsInAppNotificationInstance {
         }
     }
     
-    required init(basePathIdentifier: String, lock: VisilabsReadWriteLock) {
+    required init(lock: VisilabsReadWriteLock) {
         self.visilabsInAppNotificationRequest = VisilabsInAppNotificationRequest()
         self.lock = lock
         self.notificationsInstance = VisilabsInAppNotifications(lock: self.lock)
