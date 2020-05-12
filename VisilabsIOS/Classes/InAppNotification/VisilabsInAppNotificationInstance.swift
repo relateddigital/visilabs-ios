@@ -19,7 +19,17 @@ struct VisilabsInAppNotificationResponse {
 class VisilabsInAppNotificationInstance {
     let visilabsInAppNotificationRequest: VisilabsInAppNotificationRequest
     let lock: VisilabsReadWriteLock
+    var decideFetched = false
     var notificationsInstance: VisilabsInAppNotifications
+    
+    var inAppDelegate: VisilabsInAppNotificationsDelegate? {
+        set {
+            notificationsInstance.delegate = newValue
+        }
+        get {
+            return notificationsInstance.delegate
+        }
+    }
     
     required init(basePathIdentifier: String, lock: VisilabsReadWriteLock) {
         self.visilabsInAppNotificationRequest = VisilabsInAppNotificationRequest()
