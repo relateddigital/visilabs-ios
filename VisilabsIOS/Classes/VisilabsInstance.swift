@@ -60,6 +60,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var encryptedDataSource : String?
     
     var visilabsUser = VisilabsUser()
+    var visilabsCookie = VisilabsCookie()
     var eventsQueue = Queue()
     //var flushEventsQueue = Queue()
     var trackingQueue: DispatchQueue!
@@ -71,6 +72,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     
     
     let visilabsEventInstance: VisilabsEventInstance
+    let visilabsSendInstance: VisilabsSendInstance
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -126,6 +128,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
+        self.visilabsSendInstance = VisilabsSendInstance()
+        
         self.visilabsUser.identifierForAdvertising = getIDFA()
         
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
@@ -174,13 +178,15 @@ extension VisilabsInstance {
             guard let self = self else { return }
             var eQueue = Queue()
             var vUser = VisilabsUser()
+            var chan = ""
             
             self.readWriteLock.read {
                 eQueue = self.eventsQueue
                 vUser = self.visilabsUser
+                chan = self.channel
             }
             
-            let (eventsQueue, visilabsUser, clearUserParameters, channel) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: eQueue, visilabsUser: vUser, channel: self.channel)
+            let (eventsQueue, visilabsUser, clearUserParameters, channel) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: eQueue, visilabsUser: vUser, channel: chan)
             
             self.readWriteLock.write {
                 self.eventsQueue = eventsQueue
@@ -267,6 +273,26 @@ extension VisilabsInstance {
                 guard let self = self else {
                     return
                 }
+                
+                var eQueue = Queue()
+                var vUser = VisilabsUser()
+                var vCookie = VisilabsCookie()
+                
+                self.readWriteLock.read {
+                    eQueue = self.eventsQueue
+                    vUser = self.visilabsUser
+                    vCookie = self.visilabsCookie
+                }
+                
+                self.readWriteLock.write {
+                    self.eventsQueue.removeAll()
+                }
+                
+                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds))
+                
+                self.readWriteLock.write {
+                    self.visilabsCookie = cookie
+                }
             }
         }
     }
@@ -275,6 +301,9 @@ extension VisilabsInstance {
 
 
 class VisilabsManager {
+    
+    
+    
     
     static let sharedInstance = VisilabsManager()
     private var instance: VisilabsInstance?
