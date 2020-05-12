@@ -247,22 +247,38 @@ extension VisilabsInstance {
     
     //TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() {
-        (self.visilabsUser.cookieId
-        ,self.visilabsUser.exVisitorId
-        ,self.visilabsUser.appId
-        ,self.visilabsUser.tokenId
-        ,self.visilabsUser.userAgent
-        ,self.visilabsUser.visitorData
-        ,self.visilabsUser.identifierForAdvertising) = VisilabsPersistence.unarchive()
+        let (cookieId, exVisitorId, appId, tokenId, userAgent, visitorData, identifierForAdvertising) = VisilabsPersistence.unarchive()
+        if let cid = cookieId{
+            self.visilabsUser.cookieId = cid
+        }else{
+            //TODO: set cookieid
+        }
+        if let exvid = exVisitorId{
+            self.visilabsUser.exVisitorId = exvid
+        }
+        if let aid = appId{
+            self.visilabsUser.appId = aid
+        }
+        if let tid = tokenId{
+            self.visilabsUser.tokenId = tid
+        }
+        if let ua = userAgent{
+            self.visilabsUser.userAgent = ua
+        }
+        if let vd = visitorData{
+            self.visilabsUser.visitorData = vd
+        }
+        if let ifa = identifierForAdvertising{
+            self.visilabsUser.identifierForAdvertising = ifa
+        }
     }
     
-    private func getIDFA() -> String {
+    private func getIDFA() -> String? {
         if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
             let IDFA = ASIdentifierManager.shared().advertisingIdentifier
             return IDFA.uuidString
         }
-        //TODO: disabled ise ARCHIVE_KEY olarak okunmaya çalışılabilir.
-        return ""
+        return nil
     }
 }
 
