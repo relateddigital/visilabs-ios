@@ -17,7 +17,6 @@ struct VisilabsInAppNotificationResponse {
 
 
 class VisilabsInAppNotificationInstance {
-    let visilabsInAppNotificationRequest: VisilabsInAppNotificationRequest
     let lock: VisilabsReadWriteLock
     var decideFetched = false
     var notificationsInstance: VisilabsInAppNotifications
@@ -32,16 +31,19 @@ class VisilabsInAppNotificationInstance {
     }
     
     required init(lock: VisilabsReadWriteLock) {
-        self.visilabsInAppNotificationRequest = VisilabsInAppNotificationRequest()
         self.lock = lock
         self.notificationsInstance = VisilabsInAppNotifications(lock: self.lock)
     }
     
     
-    func checkInAppNotification(properties: [String:String], visilabsUser: VisilabsUser, completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)){
+    func checkInAppNotification(properties: [String:String], visilabsUser: VisilabsUser, timeoutInterval: TimeInterval, completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)){
         var visilabsInAppNotificationResponse = VisilabsInAppNotificationResponse()
         let semaphore = DispatchSemaphore(value: 0)
+        var headers = [String:String]()
         
+        VisilabsInAppNotificationRequest.sendRequest(properties: properties, headers: headers, timeoutInterval: timeoutInterval, completion: { [weak self] visilabsInAppNotificationResponse in
+            return
+        })
     }
     
 }
