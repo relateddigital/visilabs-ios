@@ -73,6 +73,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     
     let visilabsEventInstance: VisilabsEventInstance
     let visilabsSendInstance: VisilabsSendInstance
+    let visilabsInAppNotificationInstance: VisilabsInAppNotificationInstance
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -129,6 +130,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
+        self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
         
         unarchive()
         self.visilabsUser.identifierForAdvertising = getIDFA() ?? self.visilabsUser.identifierForAdvertising
@@ -320,7 +322,40 @@ extension VisilabsInstance {
             }
         }
     }
+    
+}
 
+extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
+
+    //MARK: - InAppNotifications
+    
+    func checkDecide(forceFetch: Bool = false, completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)) {
+        trackingQueue.async { [weak self, completion, forceFetch] in
+            guard let self = self else { return }
+
+            self.networkQueue.async { [weak self, completion, forceFetch] in
+
+                guard let self = self else {
+                    return
+                }
+
+                self.in.checkDecide(forceFetch: forceFetch,
+                                                   distinctId: self.people.distinctId ?? self.distinctId,
+                                                   token: self.apiToken,
+                                                   completion: completion)
+            }
+        }
+    
+    }
+
+    func notificationDidShow(_ notification: VisilabsInAppNotification) {
+        
+    }
+    
+    func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]?) {
+        
+    }
+    
 }
 
 
