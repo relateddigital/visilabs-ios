@@ -24,7 +24,20 @@ enum VisilabsInAppNotificationType : String {
     case unknown = "unknown"
 }
 
-
+class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
+    let lock: VisilabsReadWriteLock
+    
+    init(lock: VisilabsReadWriteLock) {
+        self.lock = lock
+    }
+    
+    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
+                                      callToActionURL: URL?,
+                                      shouldTrack: Bool,
+                                      additionalTrackingProperties: [String:String]?) -> Bool{
+        return true
+    }
+}
 
 
 
