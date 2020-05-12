@@ -137,19 +137,19 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         computeWebViewUserAgent2()
     }
     
+    var webView : WKWebView?
+    
     func computeWebViewUserAgent2() {
-           DispatchQueue.main.async {
-               let webView : WKWebView = WKWebView(frame: CGRect.zero)
-               webView.loadHTMLString("<html></html>", baseURL: nil)
-               webView.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
-                   if let uA = userAgent{
-                       if type(of: uA) == String.self{
-                           self.visilabsUser.userAgent = String(describing: uA)
-                       }
-                   }
-               })
-           }
+       DispatchQueue.main.async {
+        self.webView = WKWebView(frame: CGRect.zero)
+           self.webView?.loadHTMLString("<html></html>", baseURL: nil)
+           self.webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+               if let userAgentString = userAgent as? String{
+                    self.visilabsUser.userAgent = userAgentString
+               }
+           })
        }
+    }
     
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
         VisilabsBasePath.endpoints[.logger] = loggerUrl + "/om.gif/" + self.dataSource
