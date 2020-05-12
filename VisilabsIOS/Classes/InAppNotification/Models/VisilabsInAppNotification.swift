@@ -49,6 +49,19 @@ class VisilabsInAppNotification {
     let buttonTextColor: String?
     let buttonColor: String?
     
+    var imageURL: URL?
+    lazy var image: Data? = {
+        var data: Data?
+        if let iUrl = self.imageURL {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error(message: "image failed to load from url \(iUrl)")
+            }
+        }
+        return data
+    }()
+    
     
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
@@ -88,5 +101,12 @@ class VisilabsInAppNotification {
         self.closeButtonColor = actionData[PayloadKey.closeButtonColor] as? String
         self.buttonTextColor = actionData[PayloadKey.buttonTextColor] as? String
         self.buttonColor = actionData[PayloadKey.buttonColor] as? String
+        
+        if let imageURLString = imageURLString
+            , let escapedImageURLString = imageURLString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+            , let imageURLComponents = URLComponents(string: escapedImageURLString)
+            , let imageURLParsed = imageURLComponents.url{
+            self.imageURL = imageURLParsed
+        }
     }
 }
