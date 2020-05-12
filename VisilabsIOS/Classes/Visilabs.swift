@@ -1,7 +1,7 @@
 import WebKit
 import AdSupport
 
-open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
+open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ {
     
     private static var API: Visilabs?
     private static var visilabsReachability : VisilabsReachability?
@@ -417,7 +417,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
     }
     
     //TODO: bunlara shown kontrolü koyulacak.showNotificationWithID,showNotificationWithType,showNotification
-    
+    /*
     private func showNotification(pageName: String) {
         checkForNotificationsResponse(
         completion: { notifications in
@@ -549,6 +549,7 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         }
         
     }
+    */
     
     
     
@@ -941,9 +942,11 @@ open class Visilabs : NSObject, VisilabsNotificationViewControllerDelegate {
         let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
         
+        /*
         if self.checkForNotificationsOnLoggerRequest && !self.actionURL.isNilOrWhiteSpace{
             self.showNotification(pageName, properties: props)
         }
+         */
         
         Visilabs.visilabsLockingQueue.sync {
             self.sendQueue.append(lUrl)
