@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 class VisilabsCircleLayer: CALayer {
     var circlePadding: CGFloat = 0.0
     
@@ -215,3 +216,4 @@ class VisilabsMiniNotificationViewController: VisilabsNotificationViewController
 protocol VisilabsNotificationViewControllerDelegate: NSObjectProtocol {
     func notificationController(_ controller: VisilabsNotificationViewController?, wasDismissedWithStatus status: Bool)
 }
+*/
