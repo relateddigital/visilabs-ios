@@ -133,6 +133,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         unarchive()
         self.visilabsUser.identifierForAdvertising = getIDFA() ?? self.visilabsUser.identifierForAdvertising
         
+        if visilabsUser.cookieId.isNilOrWhiteSpace{
+            visilabsUser.cookieId = VisilabsHelper.generateCookieId()
+            VisilabsPersistence.archive(visilabsUser: visilabsUser)
+        }
+        
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         
         computeWebViewUserAgent2()
