@@ -61,7 +61,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     
     var visilabsUser = VisilabsUser()
     var eventsQueue = Queue()
-    var flushEventsQueue = Queue()
+    //var flushEventsQueue = Queue()
     var trackingQueue: DispatchQueue!
     var networkQueue: DispatchQueue!
     let readWriteLock: VisilabsReadWriteLock
@@ -284,8 +284,10 @@ class VisilabsManager {
     }
     
     func initialize(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String, requestTimeoutInSeconds: Int, targetUrl: String?, actionUrl: String?, geofenceUrl: String?, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) -> VisilabsInstance {
-        return VisilabsInstance(organizationId: organizationId, siteId: siteId, loggerUrl: loggerUrl, dataSource: dataSource, realTimeUrl: realTimeUrl, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, targetUrl: targetUrl
+        let instance = VisilabsInstance(organizationId: organizationId, siteId: siteId, loggerUrl: loggerUrl, dataSource: dataSource, realTimeUrl: realTimeUrl, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, targetUrl: targetUrl
         , actionUrl: actionUrl, geofenceUrl: geofenceUrl, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
+        self.instance = instance
+        return instance
     }
     
     func getInstance() -> VisilabsInstance? {
