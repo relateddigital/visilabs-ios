@@ -19,7 +19,7 @@ class VisilabsSendInstance: AppLifecycle {
     
     
     //TODO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
-    func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> (queue: Queue, cookie: VisilabsCookie) {
+    func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> VisilabsCookie {
         var mutableCookie = visilabsCookie
         
         for i in 0..<eventsQueue.count {
@@ -68,7 +68,7 @@ class VisilabsSendInstance: AppLifecycle {
             _ = realTimeSemaphore.wait(timeout: DispatchTime.distantFuture)
         }
         
-        return (Queue(), mutableCookie)
+        return mutableCookie
     }
     
     private func prepareHeaders(_ visilabsEndpoint: VisilabsEndpoint, event: [String:String], visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie) -> [String:String] {
