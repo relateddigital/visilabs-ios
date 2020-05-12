@@ -10,7 +10,7 @@ import Foundation
 class VisilabsInAppNotificationRequest: VisilabsNetwork {
     
     //TODO: completion Any mi olmalı, yoksa AnyObject mi?
-    func sendRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([Any?]?) -> Void) {
+    class func sendRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([Any?]?) -> Void) {
         
     }
 }
