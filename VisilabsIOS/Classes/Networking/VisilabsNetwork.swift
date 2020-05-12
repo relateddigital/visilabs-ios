@@ -63,6 +63,8 @@ class VisilabsNetwork {
             return
         }
 
+        
+        //TODO: burada cookie'leri düzgün handle edecek bir yöntem bul.
         URLSession.shared.dataTask(with: request) { (data, response, error) -> Void in
             guard let httpResponse = response as? HTTPURLResponse else {
 
