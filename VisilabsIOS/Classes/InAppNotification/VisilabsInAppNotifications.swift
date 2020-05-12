@@ -27,6 +27,10 @@ enum VisilabsInAppNotificationType : String {
 class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
     let lock: VisilabsReadWriteLock
     
+    
+    
+    var delegate: VisilabsInAppNotificationsDelegate?
+    
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
     }
