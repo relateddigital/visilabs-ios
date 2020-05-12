@@ -201,6 +201,8 @@ extension VisilabsInstance {
                 }
             }
             
+            self.send()
+            
             //TODO:
             //self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
             
