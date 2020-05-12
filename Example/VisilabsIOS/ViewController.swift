@@ -14,9 +14,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let props = [String : String]()
+        //let props = [String : String]()
         
-        Visilabs.callAPI()!.customEvent("test", properties: props)
+        //Visilabs2.callAPI().customEvent("test", properties: props)
         // Do any additional setup after loading the view, typically from a nib.
     }
 
