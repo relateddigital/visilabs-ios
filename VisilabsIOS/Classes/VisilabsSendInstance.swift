@@ -95,7 +95,7 @@ class VisilabsSendInstance: AppLifecycle {
             }
         }
         if visilabsEndpoint == .realtime{
-            if let key = visilabsCookie.loggerCookieKey, let value = visilabsCookie.loggerCookieValue{
+            if let key = visilabsCookie.realTimeCookieKey, let value = visilabsCookie.realTimeCookieValue{
                 cookieString = "\(key)=\(value)"
             }
             if let om3rdValue = visilabsCookie.realTimeOM3rdCookieValue{
