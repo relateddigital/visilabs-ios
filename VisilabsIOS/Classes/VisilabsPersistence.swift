@@ -21,6 +21,38 @@ class VisilabsPersistence {
     }
 
     
+    class func archive(visilabsUser: VisilabsUser) {
+        archiveQueue.sync { [visilabsUser] in
+            let propertiesFilePath = filePath(filename: VisilabsConfig.PROPERTIES_ARCHIVE_KEY)
+            guard let path = propertiesFilePath else {
+                VisilabsLogger.error(message: "bad file path, cant fetch file")
+                return
+            }
+            var userDic = [String : String?]()
+            userDic[VisilabsConfig.COOKIEID_KEY] = visilabsUser.cookieId
+            userDic[VisilabsConfig.EXVISITORID_KEY] = visilabsUser.exVisitorId
+            userDic[VisilabsConfig.APPID_KEY] = visilabsUser.appId
+            userDic[VisilabsConfig.TOKENID_KEY] = visilabsUser.tokenId
+            userDic[VisilabsConfig.USERAGENT_KEY] = visilabsUser.userAgent
+            userDic[VisilabsConfig.VISITOR_CAPPING_KEY] = visilabsUser.visitorData
+            userDic[VisilabsConfig.MOBILEADID_KEY] = visilabsUser.identifierForAdvertising
+            
+            VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
+                if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
+                    VisilabsLogger.error(message: "failed to archive properties")
+                    return
+                }
+            }, catch: { (error) in
+                VisilabsLogger.error(message: "failed to archive properties due to an uncaught exception")
+                return
+            }, finally: {})
+        }
+        
+        //TODO: buna gerek var mı incele?
+        //addSkipBackupAttributeToItem(at: path)
+    }
+    
+    
     //TODO: bunu ExceptionWrapper içine al
     class func unarchive() -> (cookieId: String?, exVisitorId: String?, appId: String?, tokenId: String?, userAgent: String?, visitorData: String?, mobileAdId: String?){
         var cookieId: String?
@@ -102,13 +134,10 @@ class VisilabsPersistence {
                 mobileAdId = madid
             }
             
-            
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving properties.")
         }
-        
-        
-        
+
         return (cookieId, exVisitorId, appId, tokenId, userAgent, visitorData, mobileAdId)
     }
     
