@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let aurl = "http://s.visilabs.net/actjson"
         let gurl = "http://s.visilabs.net/geojson"
         
-        Visilabs.createAPI(organizationID: oid, siteID: sid, loggerURL: lurl, dataSource: ds, realTimeURL: rturl, channel: c, targetURL: turl, actionURL: aurl, geofenceURL: gurl, geofenceEnabled: true)
+        Visilabs2.createAPI(organizationId: oid, siteId: sid, loggerUrl: lurl, dataSource: ds, realTimeUrl: rturl, channel: c, targetUrl: turl, actionUrl: aurl, geofenceUrl: gurl, geofenceEnabled: true)
         
         return true
     }
