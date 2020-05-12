@@ -128,6 +128,7 @@ class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsUser.identifierForAdvertising = getIDFA()
         
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
+        unarchive()
     }
     
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
