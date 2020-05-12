@@ -104,6 +104,7 @@ class VisilabsNetwork {
         var request = URLRequest(url: url)
         request.httpMethod = resource.method.rawValue
         request.httpBody = resource.requestBody
+        //TODO: timeoutInterval dışarıdan alınacak
         request.timeoutInterval = 60
 
         for (k, v) in resource.headers {
