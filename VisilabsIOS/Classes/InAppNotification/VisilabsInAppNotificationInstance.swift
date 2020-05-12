@@ -7,7 +7,13 @@
 
 import Foundation
 
+struct VisilabsInAppNotificationResponse {
+    var notifications: [VisilabsInAppNotification]
 
+    init() {
+        notifications = []
+    }
+}
 
 
 class VisilabsInAppNotificationInstance {
