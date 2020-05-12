@@ -23,6 +23,7 @@ enum VisilabsEndpoint {
 struct VisilabsResource<A> {
     let endPoint: VisilabsEndpoint
     let method: VisilabsRequestMethod
+    let timeoutInterval: TimeInterval
     let requestBody: Data?
     let queryItems: [URLQueryItem]?
     let headers: [String:String]
@@ -73,8 +74,8 @@ class VisilabsNetwork {
                 return
             }
             
-            //TODO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201 de dönebiliyor.
-            guard httpResponse.statusCode == 200 else {
+            //TODO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201(created) de dönebiliyor. 304(Not modified)
+            guard httpResponse.statusCode == 200/*OK*/ else {
                 failure(.notOKStatusCode(statusCode: httpResponse.statusCode), data, response)
                 return
             }
@@ -101,6 +102,7 @@ class VisilabsNetwork {
         var request = URLRequest(url: url)
         request.httpMethod = resource.method.rawValue
         request.httpBody = resource.requestBody
+        request.timeoutInterval = 60
 
         for (k, v) in resource.headers {
             request.setValue(v, forHTTPHeaderField: k)
@@ -108,8 +110,8 @@ class VisilabsNetwork {
         return request as URLRequest
     }
     
-    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?) -> VisilabsResource<A> {
-        return VisilabsResource(endPoint: endPoint, method: method, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse)
+    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, timeoutInterval:TimeInterval, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?) -> VisilabsResource<A> {
+        return VisilabsResource(endPoint: endPoint, method: method, timeoutInterval: timeoutInterval, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse)
     }
     
 }
