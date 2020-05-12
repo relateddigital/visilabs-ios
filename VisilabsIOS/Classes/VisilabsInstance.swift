@@ -172,11 +172,10 @@ extension VisilabsInstance {
             }
 
             self.readWriteLock.read {
-                
-                //TODO:
-                //VisilabsPersistence.archive()
-                
-                //Persistence.archiveEvents(self.flushEventsQueue + self.eventsQueue, token: self.apiToken)
+                VisilabsPersistence.archive(visilabsUser: self.visilabsUser)
+                if clearUserParameters{
+                    VisilabsPersistence.clearParameters()
+                }
             }
             
             //TODO:
@@ -244,6 +243,16 @@ extension VisilabsInstance {
 extension VisilabsInstance {
 
     //MARK: - Send
+    
+    private func send() {
+        self.trackingQueue.async { [weak self] in
+            self?.networkQueue.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+            }
+        }
+    }
 
 }
 
