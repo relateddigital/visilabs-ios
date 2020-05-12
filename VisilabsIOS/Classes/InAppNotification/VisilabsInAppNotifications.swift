@@ -8,6 +8,11 @@
 import Foundation
 import UIKit
 
+protocol VisilabsInAppNotificationsDelegate {
+    func notificationDidShow(_ notification: VisilabsInAppNotification)
+    func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String:String]?)
+}
+
 enum VisilabsInAppNotificationType : String {
     case mini = "mini"
     case full = "full"
