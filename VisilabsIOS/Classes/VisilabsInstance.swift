@@ -8,8 +8,9 @@
 import Foundation
 import SystemConfiguration
 import AdSupport
+import WebKit
 
-class Visilabs2 {
+public class Visilabs2 {
     
     public class func callAPI() -> VisilabsInstance {
         if let instance = VisilabsManager.sharedInstance.getInstance() {
@@ -46,7 +47,7 @@ struct VisilabsUser {
     var identifierForAdvertising: String?
 }
 
-class VisilabsInstance: CustomDebugStringConvertible {
+public class VisilabsInstance: CustomDebugStringConvertible {
     
     var organizationId = ""
     var siteId = ""
@@ -129,7 +130,22 @@ class VisilabsInstance: CustomDebugStringConvertible {
         
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         unarchive()
+        computeWebViewUserAgent2()
     }
+    
+    func computeWebViewUserAgent2() {
+           DispatchQueue.main.async {
+               let webView : WKWebView = WKWebView(frame: CGRect.zero)
+               webView.loadHTMLString("<html></html>", baseURL: nil)
+               webView.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+                   if let uA = userAgent{
+                       if type(of: uA) == String.self{
+                           self.visilabsUser.userAgent = String(describing: uA)
+                       }
+                   }
+               })
+           }
+       }
     
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?){
         VisilabsBasePath.endpoints[.logger] = loggerUrl + "/om.gif/" + self.dataSource
