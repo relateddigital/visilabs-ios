@@ -12,14 +12,14 @@ class VisilabsEventRequest: VisilabsNetwork {
     var networkRequestsAllowedAfterTime = 0.0
     var networkConsecutiveFailures = 0
 
-    class func sendRequest(visilabsEndpoint: VisilabsEndpoint, properties: [String : String], headers: [String : String], completion: @escaping ([String : String]?) -> Void) {
+    class func sendRequest(visilabsEndpoint: VisilabsEndpoint, properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String : String]?) -> Void) {
 
         var queryItems = [URLQueryItem]()
         for property in properties{
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
 
-        let resource = VisilabsNetwork.buildResource(endPoint:visilabsEndpoint, method: .get, requestBody: nil, queryItems: queryItems, headers: headers, parse: {data in return true} )
+        let resource = VisilabsNetwork.buildResource(endPoint:visilabsEndpoint, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: {data in return true} )
 
         sendRequestHandler(resource: resource, completion: { success in completion(success) })
     }
