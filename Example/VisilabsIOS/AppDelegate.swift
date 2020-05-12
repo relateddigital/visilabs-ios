@@ -30,7 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let gurl = "http://s.visilabs.net/geojson"
         
         Visilabs2.createAPI(organizationId: oid, siteId: sid, loggerUrl: lurl, dataSource: ds, realTimeUrl: rturl, channel: c, targetUrl: turl, actionUrl: aurl, geofenceUrl: gurl, geofenceEnabled: true)
-        
+        Visilabs2.callAPI().loggingEnabled = true
+        var props = [String : String]()
+        props["OM.pv"] = "asd"
+        props["OM.pn"] = "asd"
+        Visilabs2.callAPI().customEvent("test", properties: props)
         return true
     }
 
