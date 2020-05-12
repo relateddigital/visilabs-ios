@@ -130,10 +130,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         
+        unarchive()
         self.visilabsUser.identifierForAdvertising = getIDFA()
         
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
-        unarchive()
+        
         computeWebViewUserAgent2()
     }
     
