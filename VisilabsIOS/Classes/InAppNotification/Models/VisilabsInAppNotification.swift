@@ -62,6 +62,7 @@ class VisilabsInAppNotification {
         return data
     }()
     
+    let callToActionURL: URL?
     
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
@@ -108,5 +109,12 @@ class VisilabsInAppNotification {
             , let imageURLParsed = imageURLComponents.url{
             self.imageURL = imageURLParsed
         }
+        
+        var callToActionURL: URL?
+        if let URLString = self.iosLink {
+            callToActionURL = URL(string: URLString)
+        }
+
+        self.callToActionURL = callToActionURL
     }
 }
