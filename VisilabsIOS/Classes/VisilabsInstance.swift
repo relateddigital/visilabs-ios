@@ -220,9 +220,11 @@ extension VisilabsInstance {
             
             //TODO:
             //self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
-            
         }
+        var props = properties
+        props[VisilabsConfig.URI_KEY] = pageName
         
+        self.checkInAppNotification(properties: props, completion: { visilabsInAppNotificationResponse in return} )
     }
     
     public func login(exVisitorId: String, properties: [String:String] = [String:String]()){
@@ -336,7 +338,7 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
 
     //MARK: - InAppNotifications
     
-    func checkDecide(properties: [String:String], completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)) {
+    func checkInAppNotification(properties: [String:String], completion: @escaping (_ response: VisilabsInAppNotificationResponse?) -> Void) {
         trackingQueue.async { [weak self, properties, completion] in
             guard let self = self else { return }
 
