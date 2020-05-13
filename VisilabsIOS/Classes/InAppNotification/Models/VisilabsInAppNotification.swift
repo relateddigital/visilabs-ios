@@ -32,6 +32,7 @@ class VisilabsInAppNotification {
     
     let actId: Int
     let messageType: String
+    let type: VisilabsInAppNotificationType
     let messageTitle: String?
     let messageBody: String?
     let buttonText: String?
@@ -79,13 +80,14 @@ class VisilabsInAppNotification {
             VisilabsLogger.error(message: "invalid actionData")
             return nil
         }
-        guard let messageType = actionData[PayloadKey.messageType] as? String else {
+        guard let messageType = actionData[PayloadKey.messageType] as? String, let type = actionData[PayloadKey.messageType] as? VisilabsInAppNotificationType else {
             VisilabsLogger.error(message: "invalid msg_type")
             return nil
         }
         
         self.actId = actId
         self.messageType = messageType
+        self.type = type
         self.messageTitle = actionData[PayloadKey.messageTitle] as? String
         self.messageBody = actionData[PayloadKey.messageBody] as? String
         self.buttonText = actionData[PayloadKey.buttonText] as? String
