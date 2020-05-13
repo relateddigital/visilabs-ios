@@ -131,6 +131,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
+        self.visilabsInAppNotificationInstance.inAppDelegate = self
         
         unarchive()
         self.visilabsUser.identifierForAdvertising = getIDFA() ?? self.visilabsUser.identifierForAdvertising
