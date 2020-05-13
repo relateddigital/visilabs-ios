@@ -71,7 +71,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone {
             frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
                            y: bounds.size.height,
-                           width: bounds.size.width - (InAppNotificationsConstants.miniSidePadding * 2),
+                           width: bounds.size.width - (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
                            height: VisilabsInAppNotificationsConstants.miniInAppHeight)
         } else { // Is iPad or Landscape mode
             frame = CGRect(x: bounds.size.width / 4,
@@ -97,7 +97,10 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             window.clipsToBounds = true
             window.rootViewController = self
             window.layer.cornerRadius = 6
-            window.layer.borderColor = UIColor(MPHex: miniNotification.borderColor).cgColor
+            
+            //TODO: bunları default set ediyorum doğru mudur?
+            window.layer.borderColor = UIColor(MPHex: 4294967295).cgColor
+            //window.layer.borderColor = UIColor(MPHex: miniNotification.borderColor).cgColor
             window.layer.borderWidth = 1
             window.isHidden = false
         }
