@@ -129,3 +129,10 @@ struct VisilabsConfig {
     }
     
 }
+
+
+struct VisilabsInAppNotificationsConstants {
+    static let miniInAppHeight: CGFloat = 65
+    static let miniBottomPadding: CGFloat = 10 + (UIDevice.current.iPhoneX ? 34 : 0)
+    static let miniSidePadding: CGFloat = 15
+}
