@@ -10,20 +10,20 @@ import Foundation
 class VisilabsInAppNotificationRequest: VisilabsNetwork {
     
     //TODO: completion Any mi olmalı, yoksa AnyObject mi?
-    class func sendRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([Any]?) -> Void) {
+    class func sendRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([AnyObject]?) -> Void) {
         var queryItems = [URLQueryItem]()
         for property in properties{
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
         
-        let responseParser: (Data) -> [Any]? = { data in
+        let responseParser: (Data) -> [AnyObject]? = { data in
             var response: Any? = nil
             do {
                 response = try JSONSerialization.jsonObject(with: data, options: [])
             } catch {
                 VisilabsLogger.warn(message: "exception decoding api data")
             }
-            return response as? [Any]
+            return response as? [AnyObject]
         }
         
         let resource = VisilabsNetwork.buildResource(endPoint: .action, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
@@ -32,7 +32,7 @@ class VisilabsInAppNotificationRequest: VisilabsNetwork {
         
     }
     
-    private class func sendRequestHandler(resource: VisilabsResource<[Any]>, completion: @escaping ([Any]?) -> Void) {
+    private class func sendRequestHandler(resource: VisilabsResource<[AnyObject]>, completion: @escaping ([AnyObject]?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
                 VisilabsLogger.warn(message: "API request to \(resource.endPoint) has failed with reason \(reason)")
