@@ -8,10 +8,10 @@
 import Foundation
 
 struct VisilabsInAppNotificationResponse {
-    var notifications: [VisilabsInAppNotification]
+    var inAppNotifications: [VisilabsInAppNotification]
 
     init() {
-        notifications = []
+        inAppNotifications = []
     }
 }
 
@@ -39,11 +39,38 @@ class VisilabsInAppNotificationInstance {
     func checkInAppNotification(properties: [String:String], visilabsUser: VisilabsUser, timeoutInterval: TimeInterval, completion: @escaping ((_ response: VisilabsInAppNotificationResponse?) -> Void)){
         var visilabsInAppNotificationResponse = VisilabsInAppNotificationResponse()
         let semaphore = DispatchSemaphore(value: 0)
-        var headers = [String:String]()
+        let headers = prepareHeaders(visilabsUser)
         
-        VisilabsInAppNotificationRequest.sendRequest(properties: properties, headers: headers, timeoutInterval: timeoutInterval, completion: { [weak self] visilabsInAppNotificationResponse in
-            return
+        VisilabsInAppNotificationRequest.sendRequest(properties: properties, headers: headers, timeoutInterval: timeoutInterval, completion: { [weak self] visilabsInAppNotificationResult in
+            guard let self = self else {
+                return
+            }
+            guard let result = visilabsInAppNotificationResult else {
+                semaphore.signal()
+                completion(nil)
+                return
+            }
+            
+            var parsedNotifications = [VisilabsInAppNotification]()
+            for rawNotif in result{
+                if let actionData = rawNotif["actiondata"] as? [String : Any] {
+                    if let _ = actionData["msg_type"] as? VisilabsInAppNotificationType, let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
+                        parsedNotifications.append(notification)
+                    }
+                }
+            }
+            
+            self.notificationsInstance.inAppNotifications = parsedNotifications
+            visilabsInAppNotificationResponse.inAppNotifications = parsedNotifications
+            semaphore.signal()
         })
+        _ = semaphore.wait(timeout: DispatchTime.distantFuture)
+    }
+    
+    private func prepareHeaders(_ visilabsUser: VisilabsUser) -> [String:String] {
+        var headers = [String:String]()
+        headers["User-Agent"] = visilabsUser.userAgent
+        return headers
     }
     
 }
