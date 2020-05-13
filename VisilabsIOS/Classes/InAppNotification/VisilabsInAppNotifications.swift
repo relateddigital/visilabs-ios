@@ -26,7 +26,9 @@ enum VisilabsInAppNotificationType : String {
 
 class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
     let lock: VisilabsReadWriteLock
-    
+    var checkForNotificationOnActive = true
+    var showNotificationOnActive = true
+    var miniNotificationPresentationTime = 6.0
     
     
     var delegate: VisilabsInAppNotificationsDelegate?
