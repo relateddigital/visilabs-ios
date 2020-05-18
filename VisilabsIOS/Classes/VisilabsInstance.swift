@@ -217,15 +217,19 @@ extension VisilabsInstance {
                 }
             }
             
+            if let event = self.eventsQueue.last, let _ = VisilabsBasePath.endpoints[.action] {
+                self.checkInAppNotification(properties: event, completion: { visilabsInAppNotificationResponse in return} )
+            }
+            
+            
+            
             self.send()
             
             //TODO:
             //self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
         }
-        var props = properties
-        props[VisilabsConfig.URI_KEY] = pageName
         
-        self.checkInAppNotification(properties: props, completion: { visilabsInAppNotificationResponse in return} )
+        
     }
     
     public func login(exVisitorId: String, properties: [String:String] = [String:String]()){
