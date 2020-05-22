@@ -51,4 +51,11 @@ internal class VisilabsHelper{
         return cookies
     }
     
+    static func deleteCookie(_ url: URL) {
+        let cookieStorage = HTTPCookieStorage.shared
+        for cookie in readCookie(url) {
+            cookieStorage.deleteCookie(cookie)
+        }
+    }
+    
 }
