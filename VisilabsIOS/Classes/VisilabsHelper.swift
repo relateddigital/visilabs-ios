@@ -45,4 +45,10 @@ internal class VisilabsHelper{
         return UUID().uuidString
     }
     
+    static func readCookie(_ url: URL) -> [HTTPCookie] {
+        let cookieStorage = HTTPCookieStorage.shared
+        let cookies = cookieStorage.cookies(for: url) ?? []
+        return cookies
+    }
+    
 }
