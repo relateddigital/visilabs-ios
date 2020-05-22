@@ -16,11 +16,6 @@ class EventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //let props = [String : String]()
-        
-        //Visilabs2.callAPI().customEvent("test", properties: props)
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
