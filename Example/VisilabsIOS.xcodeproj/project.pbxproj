@@ -14,6 +14,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		6A220CA01D7336837620AF88 /* Pods_VisilabsIOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD24D910F1E148C7F7197959 /* Pods_VisilabsIOS_Example.framework */; };
+		8839423A24785858009247E6 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8839423924785858009247E6 /* EventViewController.swift */; };
 		9F70E7C1280382305CC3FCE3 /* Pods_VisilabsIOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7A945771F641BD121B160C85 /* VisilabsIOS.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = VisilabsIOS.podspec; path = ../VisilabsIOS.podspec; sourceTree = "<group>"; };
+		8839423924785858009247E6 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		8863DF3B24319A15003021B9 /* VisilabsIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisilabsIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8887EEE4243191CE003BE2E7 /* VisilabsIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisilabsIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				8839423924785858009247E6 /* EventViewController.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -338,6 +341,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				8839423A24785858009247E6 /* EventViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
