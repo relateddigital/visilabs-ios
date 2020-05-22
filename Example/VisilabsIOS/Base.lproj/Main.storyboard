@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="INAPP SİL SONRA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DLR-nr-Uej">
-                                <rect key="frame" x="166" y="129" width="139" height="21"/>
+                                <rect key="frame" x="89" y="142" width="139" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -29,7 +29,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="In App" image="bell" catalog="system" id="psb-aS-5c5"/>
+                    <tabBarItem key="tabBarItem" title="In App" image="InApp" id="psb-aS-5c5"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60P-61-meT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -57,16 +57,16 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Event" image="list.dash" catalog="system" id="KQy-rB-DLV"/>
+                    <tabBarItem key="tabBarItem" title="Event" image="Event" id="KQy-rB-DLV"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6EO-Kk-Kt7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-595" y="-221"/>
         </scene>
-        <!--InApp-->
+        <!--Tab Bar Controller-->
         <scene sceneID="h0r-5Y-zac">
             <objects>
-                <tabBarController title="InApp" id="1aN-6y-aOa" sceneMemberID="viewController">
+                <tabBarController title="Tab Bar Controller" id="1aN-6y-aOa" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h7Q-lq-jhM">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -83,7 +83,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bell" catalog="system" width="128" height="124"/>
-        <image name="list.dash" catalog="system" width="128" height="85"/>
+        <image name="Event" width="25" height="25"/>
+        <image name="InApp" width="25" height="25"/>
     </resources>
 </document>
