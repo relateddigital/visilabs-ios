@@ -28,6 +28,7 @@ class VisilabsEventRequest: VisilabsNetwork {
 
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
+                
                 //self.networkConsecutiveFailures += 1
                 //self.updateRetryDelay(response)
                 var requestUrl = VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)
@@ -42,36 +43,24 @@ class VisilabsEventRequest: VisilabsNetwork {
                 
                 if let httpResponse = response as? HTTPURLResponse, let url = httpResponse.url {
                     VisilabsLogger.info(message: "\(url.absoluteString) request sent successfully")
-                    let cookies = getCookies(httpResponse.allHeaderFields["Set-Cookie"])
+                    let cookies = getCookies(url)
                     completion(cookies)
                 }else{
                     VisilabsLogger.warn(message: "\(VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)) can not convert to HTTPURLResponse")
                     completion(nil)
                 }
                 
-                //self.networkConsecutiveFailures = 0
-                //self.updateRetryDelay(response)
-               
-                
             })
     }
     
-    private class func getCookies(_ cookieValue: Any?) -> [String : String]{
+    private class func getCookies(_ url: URL) -> [String : String]{
         var cookieKeyValues = [String : String]()
-        if let cookieString = cookieValue as? String {
-            let cookies = cookieString.split{$0 == ";"}.map(String.init)
-            for cookie in cookies{
-                let cookieParts = cookie.split{$0 == "="}.map(String.init)
-                if cookieParts.count == 2 {
-                    let key = cookieParts[0]
-                    let value = cookieParts[1]
-                    if key.contains(VisilabsConfig.LOAD_BALANCE_PREFIX, options: .caseInsensitive){
-                        cookieKeyValues[key] = value
-                    }
-                    if key.contains(VisilabsConfig.OM_3_KEY, options: .caseInsensitive){
-                        cookieKeyValues[key] = value
-                    }
-                }
+        for cookie in VisilabsHelper.readCookie(url){
+            if cookie.name.contains(VisilabsConfig.LOAD_BALANCE_PREFIX, options: .caseInsensitive){
+                cookieKeyValues[cookie.name] = cookie.value
+            }
+            if cookie.name.contains(VisilabsConfig.OM_3_KEY, options: .caseInsensitive){
+                cookieKeyValues[cookie.name] = cookie.value
             }
         }
         return cookieKeyValues
