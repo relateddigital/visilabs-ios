@@ -51,10 +51,11 @@ class VisilabsInAppNotificationInstance {
                 return
             }
             
+            //TODO: burada actiontype kontrolü de yapılabilir.
             var parsedNotifications = [VisilabsInAppNotification]()
             for rawNotif in result{
                 if let actionData = rawNotif["actiondata"] as? [String : Any] {
-                    if let _ = actionData["msg_type"] as? VisilabsInAppNotificationType, let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
+                    if let typeString = actionData["msg_type"] as? String, let type = VisilabsInAppNotificationType(rawValue: typeString), let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
                         parsedNotifications.append(notification)
                     }
                 }
