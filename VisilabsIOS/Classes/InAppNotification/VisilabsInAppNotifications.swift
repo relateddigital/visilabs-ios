@@ -30,8 +30,9 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
     var showNotificationOnActive = true
     var miniNotificationPresentationTime = 6.0
     var shownNotifications = Set<Int>()
-    var triggeredNotifications = [VisilabsInAppNotification]()
-    var inAppNotifications = [VisilabsInAppNotification]()
+    //var triggeredNotifications = [VisilabsInAppNotification]()
+    //var inAppNotifications = [VisilabsInAppNotification]()
+    var inAppNotification :VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
     var delegate: VisilabsInAppNotificationsDelegate?
     
