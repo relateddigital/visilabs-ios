@@ -343,7 +343,7 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
 
     //MARK: - InAppNotifications
     
-    func checkInAppNotification(properties: [String:String], completion: @escaping (_ response: VisilabsInAppNotificationResponse?) -> Void) {
+    func checkInAppNotification(properties: [String:String], completion: @escaping (_ response: VisilabsInAppNotification?) -> Void) {
         trackingQueue.async { [weak self, properties, completion] in
             guard let self = self else { return }
 
