@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1aN-6y-aOa">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MG0-Qd-noS">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -63,6 +63,24 @@
             </objects>
             <point key="canvasLocation" x="-595" y="-221"/>
         </scene>
+        <!--Home View Controller-->
+        <scene sceneID="9Fx-GK-1bn">
+            <objects>
+                <viewController title="Home View Controller" id="MG0-Qd-noS" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dUi-CX-tEq"/>
+                        <viewControllerLayoutGuide type="bottom" id="9h4-F6-VHL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="sHs-zK-Cu7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kt2-r1-Irj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2345" y="-466"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="h0r-5Y-zac">
             <objects>
@@ -79,7 +97,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vam-ZM-pWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1906" y="-68"/>
+            <point key="canvasLocation" x="-1545" y="15"/>
         </scene>
     </scenes>
     <resources>
