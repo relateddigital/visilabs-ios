@@ -360,7 +360,9 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
     }
 
     func notificationDidShow(_ notification: VisilabsInAppNotification) {
-        
+        self.visilabsUser.visitData = notification.visitData
+        self.visilabsUser.visitorData = notification.visitorData
+        //TODO: burada archive da yapılacak.
     }
     
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]?) {
