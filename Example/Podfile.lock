@@ -1,16 +1,23 @@
 PODS:
+  - Eureka (5.2.1)
   - VisilabsIOS (0.1.0)
 
 DEPENDENCIES:
+  - Eureka
   - VisilabsIOS (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Eureka
 
 EXTERNAL SOURCES:
   VisilabsIOS:
     :path: "../"
 
 SPEC CHECKSUMS:
-  VisilabsIOS: 79032414ba35f99c6c9ad92ebc835e8480ba68f7
+  Eureka: c883105488e05bc65539f583246ecf9657cabbfe
+  VisilabsIOS: ce3903dc91f850309a5c76f841d36654eeaa690c
 
-PODFILE CHECKSUM: 14e2befb0b657bdf37cd63abc8d024960ed7cee2
+PODFILE CHECKSUM: 234fbcc6d3e9b6c3d45d4349d9c02c769fd0dbcc
 
 COCOAPODS: 1.9.1

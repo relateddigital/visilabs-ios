@@ -2,6 +2,7 @@ use_frameworks!
 
 target 'VisilabsIOS_Example' do
   pod 'VisilabsIOS', :path => '../'
+  pod 'Eureka'
 
   target 'VisilabsIOS_Tests' do
     inherit! :search_paths
