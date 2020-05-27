@@ -13,7 +13,6 @@ Base class for all API request classes
 
 public class VisilabsAction{
     
-    
     var siteID : String
     var organizationID : String
     var cookieID : String?
