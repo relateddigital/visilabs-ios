@@ -1,5 +1,5 @@
 //
-//  VisilabsJson.swift
+//  VisilabsExtensions.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 14.04.2020.
