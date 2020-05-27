@@ -72,16 +72,17 @@ class VisilabsInAppNotification {
         }
         
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
-            VisilabsLogger.error(message: "invalid actid")
+            VisilabsLogger.error(message: "invalid \(PayloadKey.actId)")
             return nil
         }
         
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
-            VisilabsLogger.error(message: "invalid actionData")
+            VisilabsLogger.error(message: "invalid \(PayloadKey.actionData)")
             return nil
         }
-        guard let messageType = actionData[PayloadKey.messageType] as? String, let type = actionData[PayloadKey.messageType] as? VisilabsInAppNotificationType else {
-            VisilabsLogger.error(message: "invalid msg_type")
+        
+        guard let messageType = actionData[PayloadKey.messageType] as? String, let type = VisilabsInAppNotificationType(rawValue: messageType) else {
+            VisilabsLogger.error(message: "invalid \(PayloadKey.messageType)")
             return nil
         }
         
