@@ -7,7 +7,6 @@
 
 import Foundation
 import SystemConfiguration
-import AdSupport
 import WebKit
 
 public class Visilabs2 {
@@ -134,7 +133,10 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsInAppNotificationInstance.inAppDelegate = self
         
         unarchive()
-        self.visilabsUser.identifierForAdvertising = getIDFA() ?? self.visilabsUser.identifierForAdvertising
+        
+        if  let idfa = VisilabsHelper.getIDFA(){
+            self.visilabsUser.identifierForAdvertising = idfa
+        }
         
         if visilabsUser.cookieId.isNilOrWhiteSpace{
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
@@ -292,14 +294,6 @@ extension VisilabsInstance {
         if let ifa = identifierForAdvertising{
             self.visilabsUser.identifierForAdvertising = ifa
         }
-    }
-    
-    private func getIDFA() -> String? {
-        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
-            let IDFA = ASIdentifierManager.shared().advertisingIdentifier
-            return IDFA.uuidString
-        }
-        return nil
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AdSupport
 
 internal class VisilabsHelper{
     
@@ -56,6 +57,14 @@ internal class VisilabsHelper{
         for cookie in readCookie(url) {
             cookieStorage.deleteCookie(cookie)
         }
+    }
+    
+    static func getIDFA() -> String? {
+        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+            let IDFA = ASIdentifierManager.shared().advertisingIdentifier
+            return IDFA.uuidString
+        }
+        return nil
     }
     
 }
