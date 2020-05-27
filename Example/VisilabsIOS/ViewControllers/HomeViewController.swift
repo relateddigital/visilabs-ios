@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  VisilabsIOS
 //
 //  Created by egemen@visilabs.com on 03/30/2020.
@@ -8,16 +8,13 @@
 
 import UIKit
 import VisilabsIOS
+import Eureka
 
-class ViewController: UIViewController {
+
+class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //let props = [String : String]()
-        
-        //Visilabs2.callAPI().customEvent("test", properties: props)
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
