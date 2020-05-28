@@ -7,7 +7,10 @@
 
 import Foundation
 
-class VisilabsInAppNotification {
+public class VisilabsInAppNotification {
+    
+    
+    
     enum PayloadKey {
         static let actId = "actid"
         static let actionData = "actiondata"
@@ -64,6 +67,42 @@ class VisilabsInAppNotification {
     }()
     
     let callToActionURL: URL?
+    
+    public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageURLString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?) {
+        self.actId = actId
+        self.messageType = type.rawValue
+        self.type = type
+        self.messageTitle = messageTitle
+        self.messageBody = messageBody
+        self.buttonText = buttonText
+        self.iosLink = iosLink
+        self.imageURLString = imageURLString
+        self.visitorData = visitorData
+        self.visitData = visitData
+        self.queryString = queryString
+        self.messageTitleColor = messageTitleColor
+        self.messageBodyColor = messageBodyColor
+        self.messageBodyTextSize = messageBodyTextSize
+        self.fontFamily = fontFamily
+        self.backGround = backGround
+        self.closeButtonColor = closeButtonColor
+        self.buttonTextColor = buttonTextColor
+        self.buttonColor = buttonColor
+        
+        if let imageURLString = imageURLString
+            , let escapedImageURLString = imageURLString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+            , let imageURLComponents = URLComponents(string: escapedImageURLString)
+            , let imageURLParsed = imageURLComponents.url{
+            self.imageURL = imageURLParsed
+        }
+        
+        var callToActionURL: URL?
+        if let URLString = self.iosLink {
+            callToActionURL = URL(string: URLString)
+        }
+
+        self.callToActionURL = callToActionURL
+    }
     
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
