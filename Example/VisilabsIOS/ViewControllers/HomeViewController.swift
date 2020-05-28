@@ -116,13 +116,13 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.channel
             }
             
-            <<< PickerInputRow<String>("requestTimeoutInSeconds"){
+            <<< PickerInputRow<Int>("requestTimeoutInSeconds"){
                 $0.title = "requestTimeoutInSeconds"
                 $0.options = []
                 for i in 1...60{
-                    $0.options.append("\(i)")
+                    $0.options.append(i)
                 }
-                $0.value = "\(visilabsProfile.requestTimeoutInSeconds)"
+                $0.value = visilabsProfile.requestTimeoutInSeconds
             }
             
             <<< URLRow() {
@@ -157,13 +157,13 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.geofenceEnabled
             }
                 
-            <<< PickerInputRow<String>("maxGeofenceCount"){
+            <<< PickerInputRow<Int>("maxGeofenceCount"){
                 $0.title = "maxGeofenceCount"
                 $0.options = []
                 for i in 0...20{
-                    $0.options.append("\(i)")
+                    $0.options.append(i)
                 }
-                $0.value = "\(visilabsProfile.maxGeofenceCount)"
+                $0.value = visilabsProfile.maxGeofenceCount
             }
             
             <<< URLRow() {
@@ -205,14 +205,18 @@ class HomeViewController: FormViewController {
                 $0.title = "createAPI"
             }
             .onCellSelection { cell, row in
-                row.section?.form?.validate()
+                self.goToTabBarController()
+                //row.section?.form?.validate()
             }
         
         
             +++ Section("Clear All User Data")
-                
-      
-
+    }
+    
+    func goToTabBarController() {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "tabbarcontroller") {
+           self.view.window?.rootViewController = vc
+        }
     }
 
     
