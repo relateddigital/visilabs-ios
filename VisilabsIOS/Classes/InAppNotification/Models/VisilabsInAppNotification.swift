@@ -11,26 +11,26 @@ public class VisilabsInAppNotification {
     
     
     
-    enum PayloadKey {
-        static let actId = "actid"
-        static let actionData = "actiondata"
-        static let messageType = "msg_type"
-        static let messageTitle = "msg_title"
-        static let messageBody = "msg_body"
-        static let buttonText = "btn_text"
-        static let iosLink = "ios_lnk"
-        static let imageURLString = "img"
-        static let visitorData = "visitor_data"
-        static let visitData = "visit_data"
-        static let queryString = "qs"
-        static let messageTitleColor = "msg_title_color"
-        static let messageBodyColor = "msg_body_color"
-        static let messageBodyTextSize = "msg_body_textsize"
-        static let fontFamily = "font_family"
-        static let backGround = "background"
-        static let closeButtonColor = "close_button_color"
-        static let buttonTextColor = "button_text_color"
-        static let buttonColor = "button_color"
+    public enum PayloadKey {
+        public static let actId = "actid"
+        public static let actionData = "actiondata"
+        public static let messageType = "msg_type"
+        public static let messageTitle = "msg_title"
+        public static let messageBody = "msg_body"
+        public static let buttonText = "btn_text"
+        public static let iosLink = "ios_lnk"
+        public static let imageURLString = "img"
+        public static let visitorData = "visitor_data"
+        public static let visitData = "visit_data"
+        public static let queryString = "qs"
+        public static let messageTitleColor = "msg_title_color"
+        public static let messageBodyColor = "msg_body_color"
+        public static let messageBodyTextSize = "msg_body_textsize"
+        public static let fontFamily = "font_family"
+        public static let backGround = "background"
+        public static let closeButtonColor = "close_button_color"
+        public static let buttonTextColor = "button_text_color"
+        public static let buttonColor = "button_color"
     }
     
     let actId: Int
