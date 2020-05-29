@@ -55,18 +55,45 @@ class InAppViewController: FormViewController {
             $0.value = "Test Body"
         }
         
-            <<< TextRow(VisilabsInAppNotification.PayloadKey.buttonText) {
-            $0.title = "Button Text"
-            $0.placeholder = "Button Text"
-            $0.value = "Test Button Text"
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.buttonText) {
+        $0.title = "Button Text"
+        $0.placeholder = "Button Text"
+        $0.value = "Test Button Text"
         }
 
-        <<< URLRow("ios_lnk") {
-            $0.title = "ioslink"
-            $0.add(rule: RuleURL())
-            $0.placeholder = "ioslink"
-            $0.validationOptions = .validatesOnChange
-            $0.value = URL(string: "https://www.google.com")
+        <<< URLRow(VisilabsInAppNotification.PayloadKey.iosLink) {
+        $0.title = "IOS Link"
+        $0.add(rule: RuleURL())
+        $0.placeholder = "IOS Link"
+        $0.validationOptions = .validatesOnChange
+        $0.value = URL(string: "https://www.google.com")
+        }.cellUpdate { cell, row in
+                if !row.isValid {
+                    cell.titleLabel?.textColor = .red
+                }
+        }.onRowValidationChanged { cell, row in
+                let rowIndex = row.indexPath!.row
+                while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
+                    row.section?.remove(at: rowIndex + 1)
+                }
+                if !row.isValid {
+                    for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
+                        let labelRow = LabelRow() {
+                            $0.title = validationMsg
+                            $0.cell.height = { 30 }
+                        }
+                        let indexPath = row.indexPath!.row + index + 1
+                        row.section?.insert(labelRow, at: indexPath)
+                    }
+                }
+        }
+        
+        <<< URLRow(VisilabsInAppNotification.PayloadKey.imageURLString) {
+        $0.title = "Image URL"
+        $0.add(rule: RuleURL())
+        $0.placeholder = "Image URL"
+        $0.validationOptions = .validatesOnChange
+        $0.value = URL(string: "https://www.google.com/ex.gif")
         }.cellUpdate { cell, row in
                 if !row.isValid {
                     cell.titleLabel?.textColor = .red
