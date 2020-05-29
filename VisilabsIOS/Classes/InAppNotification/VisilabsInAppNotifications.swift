@@ -13,7 +13,7 @@ protocol VisilabsInAppNotificationsDelegate {
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String:String]?)
 }
 
-enum VisilabsInAppNotificationType : String {
+public enum VisilabsInAppNotificationType : String, CaseIterable {
     case mini = "mini"
     case full = "full"
     case image_text_button = "image_text_button"
