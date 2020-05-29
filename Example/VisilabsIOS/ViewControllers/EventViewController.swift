@@ -16,6 +16,11 @@ class EventViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        var properties = [String:String]()
+        properties["OM.clist"] = "123"
+        properties["OM.exVisitorID"] = "umut@visilabs.com"
+        properties["OM.sys.AppID"] = "EuromsgTest"
+        Visilabs.callAPI()?.customEvent("Event", properties: properties)
     }
 
     override func didReceiveMemoryWarning() {
