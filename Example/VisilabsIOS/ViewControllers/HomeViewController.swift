@@ -212,12 +212,11 @@ class HomeViewController: FormViewController {
                 let orgId: String? = orgIdRow?.value
                 let siteId: String? = siteIdRow?.value
                 let dataSource: String? = dataSourceRow?.value
-                
+                Visilabs2.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: self.visilabsProfile.loggerUrl, dataSource: dataSource!, realTimeUrl: self.visilabsProfile.realTimeUrl)
                 
                 self.goToTabBarController()
                 //row.section?.form?.validate()
             }
-        
         
             +++ Section("Clear All User Data")
     }
@@ -227,7 +226,4 @@ class HomeViewController: FormViewController {
            self.view.window?.rootViewController = vc
         }
     }
-
-    
 }
-
