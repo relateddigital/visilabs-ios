@@ -54,7 +54,7 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.dataSource
             }
             
-            <<< URLRow() {
+            <<< URLRow("loggerUrl") {
                 $0.title = "loggerUrl"
                 $0.add(rule: RuleRequired())
                 $0.add(rule: RuleURL())
@@ -82,7 +82,7 @@ class HomeViewController: FormViewController {
                     }
             }
             
-            <<< URLRow() {
+            <<< URLRow("realTimeUrl") {
                 $0.title = "realTimeUrl"
                 $0.add(rule: RuleRequired())
                 $0.add(rule: RuleURL())
@@ -110,7 +110,7 @@ class HomeViewController: FormViewController {
                     }
             }
             
-            <<< TextRow() {
+            <<< TextRow("channel") {
                 $0.title = "channel"
                 $0.placeholder = "channel"
                 $0.value = visilabsProfile.channel
@@ -125,7 +125,7 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.requestTimeoutInSeconds
             }
             
-            <<< URLRow() {
+            <<< URLRow("targetUrl") {
                 $0.title = "targetUrl"
                 $0.add(rule: RuleURL())
                 $0.placeholder = "targetUrl"
@@ -134,7 +134,7 @@ class HomeViewController: FormViewController {
                 }
             }
             
-            <<< URLRow() {
+            <<< URLRow("actionUrl") {
                 $0.title = "actionUrl"
                 $0.add(rule: RuleURL())
                 $0.placeholder = "actionUrl"
@@ -143,7 +143,7 @@ class HomeViewController: FormViewController {
                 }
             }
             
-            <<< URLRow() {
+            <<< URLRow("geofenceUrl") {
                 $0.title = "geofenceUrl"
                 $0.add(rule: RuleURL())
                 $0.placeholder = "geofenceUrl"
@@ -152,7 +152,7 @@ class HomeViewController: FormViewController {
                 }
             }
             
-            <<< SwitchRow() {
+            <<< SwitchRow("geofenceEnabled") {
                 $0.title = "geofenceEnabled"
                 $0.value = visilabsProfile.geofenceEnabled
             }
@@ -166,7 +166,7 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.maxGeofenceCount
             }
             
-            <<< URLRow() {
+            <<< URLRow("restUrl") {
                 $0.title = "restUrl"
                 $0.add(rule: RuleURL())
                 $0.placeholder = "restUrl"
@@ -194,7 +194,7 @@ class HomeViewController: FormViewController {
                     }
             }
             
-            <<< TextRow() {
+            <<< TextRow("encryptedDataSource") {
                 $0.title = "encryptedDataSource"
                 $0.placeholder = "encryptedDataSource"
                 $0.value = visilabsProfile.encryptedDataSource
@@ -208,11 +208,34 @@ class HomeViewController: FormViewController {
                 
                 let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
                 let siteIdRow: TextRow? = self.form.rowBy(tag: "siteId")
+                let loggerUrlRow: URLRow? = self.form.rowBy(tag: "loggerUrl")
                 let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
+                let realTimeUrlRow: URLRow? = self.form.rowBy(tag: "realTimeUrl")
+                let channelRow: TextRow? = self.form.rowBy(tag: "channel")
+                let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
+                let targetUrlRow: URLRow? = self.form.rowBy(tag: "targetUrl")
+                let actionUrlRow: URLRow? = self.form.rowBy(tag: "actionUrl")
+                let geofenceUrlRow: URLRow? = self.form.rowBy(tag: "geofenceUrl")
+                let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
+                let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
+                let restUrlRow: URLRow? = self.form.rowBy(tag: "restUrl")
+                let encryptedDataSourceRow: TextRow? = self.form.rowBy(tag: "encryptedDataSource")
+                
                 let orgId: String? = orgIdRow?.value
                 let siteId: String? = siteIdRow?.value
+                let loggerUrl: String? = loggerUrlRow?.value?.absoluteString
                 let dataSource: String? = dataSourceRow?.value
-                Visilabs2.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: self.visilabsProfile.loggerUrl, dataSource: dataSource!, realTimeUrl: self.visilabsProfile.realTimeUrl)
+                let realTimeUrl: String? = realTimeUrlRow?.value?.absoluteString
+                let channel: String? = channelRow?.value
+                let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
+                let targetUrl: String? = targetUrlRow?.value?.absoluteString
+                let actionUrl: String? = actionUrlRow?.value?.absoluteString
+                let geofenceUrl: String? = geofenceUrlRow?.value?.absoluteString
+                let geofenceEnabled: Bool? = geofenceEnabledRow?.value
+                let maxGeofenceCount: Int? = maxGeofenceCountRow?.value
+                let restUrl: String? = restUrlRow?.value?.absoluteString
+                let encryptedDataSource: String? = encryptedDataSourceRow?.value
+                Visilabs2.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: loggerUrl!, dataSource: dataSource!, realTimeUrl: realTimeUrl!, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, targetUrl: targetUrl!, actionUrl: actionUrl!, geofenceUrl: geofenceUrl!, geofenceEnabled: geofenceEnabled!, maxGeofenceCount: maxGeofenceCount!, restUrl: restUrl ?? "", encryptedDataSource: encryptedDataSource ?? "")
                 
                 self.goToTabBarController()
                 //row.section?.form?.validate()

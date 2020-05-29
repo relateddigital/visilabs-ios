@@ -20,12 +20,18 @@ class EventViewController: UIViewController {
         properties["OM.clist"] = "123"
         properties["OM.exVisitorID"] = "umut@visilabs.com"
         properties["OM.sys.AppID"] = "EuromsgTest"
-        Visilabs.callAPI()?.customEvent("Event", properties: properties)
+        Visilabs2.callAPI().customEvent("Test", properties: properties)
+        print(properties)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    @IBAction func geri(_ sender: Any) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "homeview") {
+           self.view.window?.rootViewController = vc
+        }
+    }
+    
 }

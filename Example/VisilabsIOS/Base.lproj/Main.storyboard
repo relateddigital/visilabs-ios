@@ -54,19 +54,38 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="76F-gs-HUx">
+                                <rect key="frame" x="105" y="318" width="144" height="30"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="144" id="nhm-eA-a02"/>
+                                    <constraint firstAttribute="height" constant="30" id="teA-jk-8hp"/>
+                                </constraints>
+                                <state key="normal" title="Geri">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="geri:" destination="mdL-Fq-e14" eventType="touchUpInside" id="ZNR-Db-LgN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="76F-gs-HUx" firstAttribute="leading" secondItem="1kO-9e-nw0" secondAttribute="leading" constant="105" id="2jH-IE-EdU"/>
+                            <constraint firstAttribute="trailing" secondItem="76F-gs-HUx" secondAttribute="trailing" constant="126" id="fC8-dP-PzS"/>
+                            <constraint firstItem="Rqc-JL-tQu" firstAttribute="top" secondItem="76F-gs-HUx" secondAttribute="bottom" constant="270" id="kQk-6z-gc1"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Event" image="Event" id="KQy-rB-DLV"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6EO-Kk-Kt7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-595" y="-221"/>
+            <point key="canvasLocation" x="-596" y="-221.73913043478262"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="9Fx-GK-1bn">
             <objects>
-                <viewController title="Home View Controller" id="MG0-Qd-noS" customClass="HomeViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homeview" title="Home View Controller" id="MG0-Qd-noS" customClass="HomeViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dUi-CX-tEq"/>
                         <viewControllerLayoutGuide type="bottom" id="9h4-F6-VHL"/>

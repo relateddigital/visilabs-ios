@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import VisilabsIOS
 
 
 @UIApplicationMain
@@ -19,22 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
                 
-        let oid = "676D325830564761676D453D"
-        let sid = "356467332F6533766975593D"
-        let lurl = "http://lgr.visilabs.net"
-        let ds = "visistore"
-        let rturl = "http://rt.visilabs.net"
-        let c = "IOS"
-        let turl = "http://s.visilabs.net/json"
-        let aurl = "http://s.visilabs.net/actjson"
-        let gurl = "http://s.visilabs.net/geojson"
-        
-        Visilabs2.createAPI(organizationId: oid, siteId: sid, loggerUrl: lurl, dataSource: ds, realTimeUrl: rturl, channel: c, targetUrl: turl, actionUrl: aurl, geofenceUrl: gurl, geofenceEnabled: true)
-        Visilabs2.callAPI().loggingEnabled = true
-        var props = [String : String]()
-        props["OM.pv"] = "asd"
-        props["OM.pn"] = "asd"
-        Visilabs2.callAPI().customEvent("test", properties: props)
         return true
     }
 
