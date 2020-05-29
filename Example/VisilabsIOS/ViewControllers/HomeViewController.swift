@@ -33,21 +33,21 @@ class HomeViewController: FormViewController {
             
             Section("createAPI")
 
-            <<< TextRow() {
+            <<< TextRow("orgId") {
                 $0.title = "orgId"
                 $0.add(rule: RuleRequired())
                 $0.placeholder = "orgId"
                 $0.value = visilabsProfile.organizationId
             }
 
-            <<< TextRow() {
+            <<< TextRow("siteId") {
                 $0.title = "siteId"
                 $0.add(rule: RuleRequired())
                 $0.placeholder = "siteId"
                 $0.value = visilabsProfile.siteId
             }
             
-            <<< TextRow() {
+            <<< TextRow("dataSource") {
                 $0.title = "dataSource"
                 $0.add(rule: RuleRequired())
                 $0.placeholder = "dataSource"
@@ -205,6 +205,15 @@ class HomeViewController: FormViewController {
                 $0.title = "createAPI"
             }
             .onCellSelection { cell, row in
+                
+                let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
+                let siteIdRow: TextRow? = self.form.rowBy(tag: "siteId")
+                let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
+                let orgId: String? = orgIdRow?.value
+                let siteId: String? = siteIdRow?.value
+                let dataSource: String? = dataSourceRow?.value
+                
+                
                 self.goToTabBarController()
                 //row.section?.form?.validate()
             }
