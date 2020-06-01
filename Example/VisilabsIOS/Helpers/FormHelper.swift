@@ -13,6 +13,7 @@ enum RowType {
     case urlRow
     case pickerInputRow
     case switchRow
+    case buttonRow
 }
 
 class FormRow <Element> {
@@ -35,14 +36,19 @@ class FormRow <Element> {
 
 class FormSection {
     var header: String?
-    var formRows = [FormRow<Any>]()
+    var formRows: [FormRow<Any>]
+    init(header: String?, formRows: [FormRow<Any>]){
+        self.header = header
+        self.formRows = formRows
+    }
+    
 }
 
 
 
 class FormHelper{
 
-    func createForm(formSections: [FormSection]) -> Form {
+    func createForm(_ formSections: [FormSection]) -> Form {
         LabelRow.defaultCellUpdate = { cell, row in
             cell.contentView.backgroundColor = .red
             cell.textLabel?.textColor = .white
@@ -78,6 +84,7 @@ class FormHelper{
                 
             }
             form.append(section)
+            
         }
         
         
