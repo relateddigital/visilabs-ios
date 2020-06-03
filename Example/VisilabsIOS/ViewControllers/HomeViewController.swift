@@ -235,7 +235,9 @@ class HomeViewController: FormViewController {
                 let maxGeofenceCount: Int? = maxGeofenceCountRow?.value
                 let restUrl: String? = restUrlRow?.value?.absoluteString
                 let encryptedDataSource: String? = encryptedDataSourceRow?.value
-                Visilabs2.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: loggerUrl!, dataSource: dataSource!, realTimeUrl: realTimeUrl!, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, targetUrl: targetUrl!, actionUrl: actionUrl!, geofenceUrl: geofenceUrl!, geofenceEnabled: geofenceEnabled!, maxGeofenceCount: maxGeofenceCount!, restUrl: restUrl ?? "", encryptedDataSource: encryptedDataSource ?? "")
+                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: loggerUrl!, dataSource: dataSource!, realTimeUrl: realTimeUrl!, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, targetUrl: targetUrl!, actionUrl: actionUrl!, geofenceUrl: geofenceUrl!, geofenceEnabled: geofenceEnabled!, maxGeofenceCount: maxGeofenceCount!, restUrl: restUrl ?? "", encryptedDataSource: encryptedDataSource ?? "")
+                Visilabs.callAPI().loggingEnabled = true
+                
                 
                 self.goToTabBarController()
                 //row.section?.form?.validate()
