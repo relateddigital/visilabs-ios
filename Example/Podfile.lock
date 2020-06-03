@@ -1,13 +1,16 @@
 PODS:
+  - Colorful (3.0.0)
   - Eureka (5.2.1)
   - VisilabsIOS (0.1.0)
 
 DEPENDENCIES:
+  - Colorful
   - Eureka
   - VisilabsIOS (from `../`)
 
 SPEC REPOS:
   trunk:
+    - Colorful
     - Eureka
 
 EXTERNAL SOURCES:
@@ -15,9 +18,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  Colorful: 9e093edacaa9fb73512ad9da157f0707b82d2542
   Eureka: c883105488e05bc65539f583246ecf9657cabbfe
   VisilabsIOS: ce3903dc91f850309a5c76f841d36654eeaa690c
 
-PODFILE CHECKSUM: 234fbcc6d3e9b6c3d45d4349d9c02c769fd0dbcc
+PODFILE CHECKSUM: e3a35bb1e35cce38facd7458c0be6526961867bf
 
 COCOAPODS: 1.9.1
