@@ -9,14 +9,14 @@ import Foundation
 import SystemConfiguration
 import WebKit
 
-public class Visilabs2 {
+public class Visilabs {
     
     public class func callAPI() -> VisilabsInstance {
         if let instance = VisilabsManager.sharedInstance.getInstance() {
             return instance
         } else {
             assert(false, "You have to call createAPI before calling the callAPI.")
-            return Visilabs2.createAPI(organizationId: "", siteId: "", loggerUrl: "", dataSource: "", realTimeUrl: "")
+            return Visilabs.createAPI(organizationId: "", siteId: "", loggerUrl: "", dataSource: "", realTimeUrl: "")
         }
     }
     
@@ -220,7 +220,7 @@ extension VisilabsInstance {
             }
             
             if let event = self.eventsQueue.last, let _ = VisilabsBasePath.endpoints[.action] {
-                self.checkInAppNotification(properties: event, completion: { visilabsInAppNotificationResponse in return} )
+                self.checkInAppNotification(properties: event)
             }
             
             
@@ -337,17 +337,21 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
 
     //MARK: - InAppNotifications
     
-    func checkInAppNotification(properties: [String:String], completion: @escaping (_ response: VisilabsInAppNotification?) -> Void) {
-        trackingQueue.async { [weak self, properties, completion] in
+    func checkInAppNotification(properties: [String:String]) {
+        trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
 
-            self.networkQueue.async { [weak self, properties, completion] in
+            self.networkQueue.async { [weak self, properties] in
 
                 guard let self = self else {
                     return
                 }
 
-                self.visilabsInAppNotificationInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), completion: completion)
+                self.visilabsInAppNotificationInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
+                    if let notification = visilabsInAppNotification{
+                        self.visilabsInAppNotificationInstance.notificationsInstance.showNotification(notification)
+                    }
+                } )
             }
         }
     
