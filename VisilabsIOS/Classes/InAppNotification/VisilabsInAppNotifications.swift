@@ -48,9 +48,15 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
                 VisilabsLogger.warn(message: "already showing an in-app notification")
             } else {
                 var shownNotification = false
-                if notification.type == .mini {
+                switch notification.type {
+                case .mini:
                     shownNotification = self.showMiniNotification(notification)
+                case .full:
+                    shownNotification = self.showMiniNotification(notification)
+                default:
+                    return
                 }
+
                 if shownNotification {
                     self.markNotificationShown(notification: notification)
                     self.delegate?.notificationDidShow(notification)
