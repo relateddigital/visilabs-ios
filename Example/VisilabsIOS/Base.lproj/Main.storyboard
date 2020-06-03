@@ -18,15 +18,6 @@
                     <view key="view" contentMode="scaleToFill" id="1v5-5e-Slk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="INAPP SİL SONRA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DLR-nr-Uej">
-                                <rect key="frame" x="89" y="142" width="139" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="In App" image="InApp" id="psb-aS-5c5"/>
@@ -46,35 +37,7 @@
                     <view key="view" contentMode="scaleToFill" id="1kO-9e-nw0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="EVENT SİL SONRA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fLO-tR-51s">
-                                <rect key="frame" x="105" y="104" width="144" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="76F-gs-HUx">
-                                <rect key="frame" x="105" y="318" width="144" height="30"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="144" id="nhm-eA-a02"/>
-                                    <constraint firstAttribute="height" constant="30" id="teA-jk-8hp"/>
-                                </constraints>
-                                <state key="normal" title="Geri">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="geri:" destination="mdL-Fq-e14" eventType="touchUpInside" id="ZNR-Db-LgN"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="76F-gs-HUx" firstAttribute="leading" secondItem="1kO-9e-nw0" secondAttribute="leading" constant="105" id="2jH-IE-EdU"/>
-                            <constraint firstAttribute="trailing" secondItem="76F-gs-HUx" secondAttribute="trailing" constant="126" id="fC8-dP-PzS"/>
-                            <constraint firstItem="Rqc-JL-tQu" firstAttribute="top" secondItem="76F-gs-HUx" secondAttribute="bottom" constant="270" id="kQk-6z-gc1"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Event" image="Event" id="KQy-rB-DLV"/>
                 </viewController>
