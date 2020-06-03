@@ -1,9 +1,9 @@
 import WebKit
 import AdSupport
 
-open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ {
+open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/ {
     
-    private static var API: Visilabs?
+    private static var API: Visilabs2?
     private static var visilabsReachability : VisilabsReachability?
     
     private static let visilabsLockingQueue: DispatchQueue = DispatchQueue(label:"VisilabsLockingQueue")//TODO:eski SDK'da label'ın içinde profil id yazıyordu. gerekli mi?
@@ -52,23 +52,23 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
     private var miniNotificationBackgroundColor: UIColor?
     
     
-    public class func callAPI() -> Visilabs? {
-        Visilabs.visilabsLockingQueue.sync {
-            if Visilabs.API == nil{
+    public class func callAPI() -> Visilabs2? {
+        Visilabs2.visilabsLockingQueue.sync {
+            if Visilabs2.API == nil{
                 VisilabsLogger.warn(message:"Visilabs object is not created yet.")
             }
         }
-        return Visilabs.API
+        return Visilabs2.API
     }
     
     @discardableResult
-    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs? {
-        Visilabs.visilabsLockingQueue.sync {
-            if Visilabs.API == nil {
-                Visilabs.API = Visilabs(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+    public class func createAPI(organizationID: String, siteID: String, loggerURL: String, dataSource: String, realTimeURL: String, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, targetURL: String? = nil, actionURL: String? = nil, geofenceURL: String? = nil, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20, restURL: String? = nil, encryptedDataSource: String? = nil) -> Visilabs2? {
+        Visilabs2.visilabsLockingQueue.sync {
+            if Visilabs2.API == nil {
+                Visilabs2.API = Visilabs2(organizationID: organizationID, siteID: siteID, loggerURL: loggerURL, dataSource: dataSource, realTimeURL: realTimeURL, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, restURL: restURL, encryptedDataSource: encryptedDataSource, targetURL: targetURL, actionURL: actionURL, geofenceURL: geofenceURL, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
             }
         }
-        return Visilabs.API
+        return Visilabs2.API
     }
 
     
@@ -286,7 +286,7 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
         print("\(self) tracking notification click \(lUrl)")
         
-        Visilabs.visilabsLockingQueue.sync {
+        Visilabs2.visilabsLockingQueue.sync {
             self.sendQueue.append(lUrl)
             self.sendQueue.append(rtUrl)
         }
@@ -566,7 +566,7 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
     }
     
     @objc func applicationDidBecomeActive(_ notification: Notification) {
-        Visilabs.visilabsLockingQueue.sync {
+        Visilabs2.visilabsLockingQueue.sync {
             print("\(self) application did become active");
             //TODO: bunlar VisilabsCookie objesine taşınacak
             self.visilabsCookie.loggerCookieKey = nil;
@@ -584,13 +584,13 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
     }
     
     @objc func applicationWillEnterForeground(_ notification: Notification) {
-        Visilabs.visilabsLockingQueue.sync {
+        Visilabs2.visilabsLockingQueue.sync {
             //TODO: burada bir şey yapılmasına gerek yok sanırım
         }
     }
     
     @objc func applicationWillTerminate(_ notification: Notification) {
-        Visilabs.visilabsLockingQueue.sync {
+        Visilabs2.visilabsLockingQueue.sync {
             if timer != nil {
                 timer!.invalidate()
                 timer = nil
@@ -608,10 +608,10 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
     // MARK: Network
     
     private func registerForNetworkReachabilityNotifications() {
-        if Visilabs.visilabsReachability == nil {
+        if Visilabs2.visilabsReachability == nil {
             do{
-                Visilabs.visilabsReachability = try VisilabsReachability()
-                if let vr = Visilabs.visilabsReachability{
+                Visilabs2.visilabsReachability = try VisilabsReachability()
+                if let vr = Visilabs2.visilabsReachability{
                     if vr.connection == .wifi || vr.connection == .cellular{
                         self.isOnline = true
                     }else{
@@ -628,7 +628,7 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
     }
     
     @objc func networkReachabilityChanged(_ note: Notification?) {
-        if let vr = Visilabs.visilabsReachability{
+        if let vr = Visilabs2.visilabsReachability{
             if vr.connection == .wifi || vr.connection == .cellular{
                 self.isOnline = true
             }else{
@@ -671,7 +671,7 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
     
     
     private func send(){
-        Visilabs.visilabsLockingQueue.sync {
+        Visilabs2.visilabsLockingQueue.sync {
             if self.timer != nil {
                 self.timer!.invalidate()
                 self.timer = nil
@@ -771,7 +771,7 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
                                     }
                                     
                                     
-                                    Visilabs.visilabsLockingQueue.sync {
+                                    Visilabs2.visilabsLockingQueue.sync {
                                         self.failureStatus = 0
                                     }
                                 }else{
@@ -948,7 +948,7 @@ open class Visilabs : NSObject /*, VisilabsNotificationViewControllerDelegate*/ 
         }
          */
         
-        Visilabs.visilabsLockingQueue.sync {
+        Visilabs2.visilabsLockingQueue.sync {
             self.sendQueue.append(lUrl)
             self.sendQueue.append(rtUrl)
         }
