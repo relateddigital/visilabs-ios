@@ -25,7 +25,7 @@ internal class VisilabsHelper{
     }
     
     static func sendGeofencePushNotification(actionID: String, geofenceID: String, isDwell: Bool, isEnter: Bool) {
-        let request = Visilabs.callAPI()?.buildGeofenceRequest(action: "processV2", latitude: 0.0, longitude: 0.0, isDwell: isDwell, isEnter: isEnter, actionID: actionID, geofenceID: geofenceID)
+        let request = Visilabs2.callAPI()?.buildGeofenceRequest(action: "processV2", latitude: 0.0, longitude: 0.0, isDwell: isDwell, isEnter: isEnter, actionID: actionID, geofenceID: geofenceID)
         request?.execAsync(withSuccess: { response in }, andFailure: { response in })
     }
 
