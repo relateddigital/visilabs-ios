@@ -90,6 +90,8 @@ class VisilabsSendInstance: AppLifecycle {
             if let om3rdValue = visilabsCookie.loggerOM3rdCookieValue{
                 if !cookieString.isNilOrWhiteSpace {
                     cookieString = cookieString! + ";"
+                }else{ //TODO: bu kısmı güzelleştir
+                    cookieString = ""
                 }
                 cookieString = cookieString! + "\(VisilabsConfig.OM_3_KEY)=\(om3rdValue)"
             }
@@ -101,6 +103,8 @@ class VisilabsSendInstance: AppLifecycle {
             if let om3rdValue = visilabsCookie.realTimeOM3rdCookieValue{
                 if !cookieString.isNilOrWhiteSpace {
                     cookieString = cookieString! + ";"
+                }else{ //TODO: bu kısmı güzelleştir
+                    cookieString = ""
                 }
                 cookieString = cookieString! + "\(VisilabsConfig.OM_3_KEY)=\(om3rdValue)"
             }
