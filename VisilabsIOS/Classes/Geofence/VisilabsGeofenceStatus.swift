@@ -37,7 +37,7 @@ class VisilabsGeofenceStatus: NSObject {
                     let lastKnownLocationLatitude = lastKnownLocation!.latitude
                     let lastKnownLocationLongitude = lastKnownLocation!.longitude
                     
-                    let request = Visilabs.callAPI()!.buildGeofenceRequest(action: "getlist", latitude: lastKnownLocationLatitude, longitude: lastKnownLocationLongitude, isDwell: false, isEnter: false)
+                    let request = Visilabs2.callAPI()!.buildGeofenceRequest(action: "getlist", latitude: lastKnownLocationLatitude, longitude: lastKnownLocationLongitude, isDwell: false, isEnter: false)
                     
                     let successBlock: ((VisilabsResponse?) -> Void) = { response in
                         var returnedRegions: [VisilabsServerGeofence] = []
@@ -96,7 +96,7 @@ class VisilabsGeofenceStatus: NSObject {
                             self.stopMonitorPreviousGeofencesOnly() //server's geofence change, stop monitor all.
                             //Update local cache and memory, start monitor parent.
                             
-                            var maxGeofenceCount = Visilabs.callAPI()!.maxGeofenceCount
+                            var maxGeofenceCount = Visilabs2.callAPI()!.maxGeofenceCount
                             if maxGeofenceCount > 20 || maxGeofenceCount < 0 {
                                 maxGeofenceCount = 20
                             }
