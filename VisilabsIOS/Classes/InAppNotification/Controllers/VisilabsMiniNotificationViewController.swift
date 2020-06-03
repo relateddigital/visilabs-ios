@@ -14,8 +14,10 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             return super.notification
         }
     }
+    
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var bodyLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    
     var isDismissing = false
     var canPan = true
     var position: CGPoint!
@@ -27,14 +29,14 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        bodyLabel.text = notification.messageTitle
+        titleLabel.text = notification.messageTitle
         if let image = notification.image {
             imageView.image = UIImage(data: image)
         }
 
         //TODO: bunları default set ediyorum doğru mudur?
         view.backgroundColor = UIColor(MPHex: 3858759680)
-        bodyLabel.textColor = UIColor(MPHex: 4294967295)
+        titleLabel.textColor = UIColor(MPHex: 4294967295)
         imageView.tintColor = UIColor(MPHex: 4294967295)
         
         //view.backgroundColor = UIColor(MPHex: miniNotification.backgroundColor)
