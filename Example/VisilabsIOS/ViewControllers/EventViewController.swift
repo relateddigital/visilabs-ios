@@ -13,11 +13,11 @@ import Eureka
 import UIKit
 import VisilabsIOS
 
-enum VisilabsEventType : String {
-    case login
-    case signUp
-    case pageView
-    case productView
+enum VisilabsEventType : String, CaseIterable {
+    case login = "Login"
+    case signUp  = "Sign Up"
+    case pageView = "Page View"
+    case productView = "Product View"
 }
 
 class EventViewController: FormViewController {
@@ -32,6 +32,7 @@ class EventViewController: FormViewController {
     
     private func initializeForm() {
     
+        /*
         LabelRow.defaultCellUpdate = { cell, row in
             cell.contentView.backgroundColor = .red
             cell.textLabel?.textColor = .white
@@ -39,41 +40,27 @@ class EventViewController: FormViewController {
             cell.textLabel?.textAlignment = .right
 
         }
-
-        form +++
+*/
+        form
         
-        Section("Common Events")
-            
-            <<< ButtonRow() {
-                $0.title = "Login"
-            }
-            .onCellSelection { cell, row in
-                self.customEvent(.login)
-            }
-            
-            <<< ButtonRow() {
-                $0.title = "SignUp"
-            }
-            .onCellSelection { cell, row in
-                self.customEvent(.signUp)
-            }
-
-            <<< ButtonRow() {
-                $0.title = "Page View"
-            }
-            .onCellSelection { cell, row in
-                self.customEvent(.pageView)
-            }
-            
-            <<< ButtonRow() {
-                $0.title = "Product View"
-            }
-            .onCellSelection { cell, row in
-                self.customEvent(.productView)
-            }
+        +++ getCommonEventsSection()
         
         +++ getInAppSection()
         
+    }
+    
+    
+    private func getCommonEventsSection() -> Section{
+        let section = Section("Common Events")
+        for eventType in VisilabsEventType.allCases {
+            section.append(ButtonRow() {
+                $0.title = eventType.rawValue
+            }
+            .onCellSelection { cell, row in
+                self.customEvent(eventType)
+            })
+        }
+        return section
     }
     
     private func  getInAppSection() -> Section{
@@ -103,6 +90,12 @@ class EventViewController: FormViewController {
             properties["OM.sys.TokenID"] = "Token ID to use for push messages"
             properties["OM.sys.AppID"] = "App ID to use for push messages"
             Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
+            return
+        case .signUp:
+            var properties = [String:String]()
+            properties["OM.sys.TokenID"] = "Token ID to use for push messages"
+            properties["OM.sys.AppID"] = "App ID to use for push messages"
+            Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
             return
         case .pageView:
             Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
