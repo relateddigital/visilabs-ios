@@ -13,13 +13,11 @@ import Eureka
 import UIKit
 import VisilabsIOS
 
-enum VisilabsEventType {
+enum VisilabsEventType : String {
     case login
+    case signUp
     case pageView
     case productView
-
-    case mini
-    case full
 }
 
 class EventViewController: FormViewController {
@@ -28,6 +26,9 @@ class EventViewController: FormViewController {
         super.viewDidLoad()
         initializeForm()
     }
+    
+    
+    
     
     private func initializeForm() {
     
@@ -49,6 +50,13 @@ class EventViewController: FormViewController {
             .onCellSelection { cell, row in
                 self.customEvent(.login)
             }
+            
+            <<< ButtonRow() {
+                $0.title = "SignUp"
+            }
+            .onCellSelection { cell, row in
+                self.customEvent(.signUp)
+            }
 
             <<< ButtonRow() {
                 $0.title = "Page View"
@@ -64,52 +72,53 @@ class EventViewController: FormViewController {
                 self.customEvent(.productView)
             }
         
-        +++ Section("In App Notification Events")
-            
-            <<< ButtonRow() {
-                $0.title = "Mini"
+        +++ getInAppSection()
+        
+    }
+    
+    private func  getInAppSection() -> Section{
+        let section = Section("In App Notification Types")
+        for visilabsInAppNotificationType in VisilabsInAppNotificationType.allCases {
+            section.append(ButtonRow() {
+                $0.title = visilabsInAppNotificationType.rawValue
             }
             .onCellSelection { cell, row in
-                self.customEvent(.mini)
-            }
+                self.inAppEvent(visilabsInAppNotificationType)
+            })
+        }
+        return section
     }
+    
+    private func inAppEvent(_ visilabsInAppNotificationType: VisilabsInAppNotificationType){
+        var properties = [String:String]()
+        properties["OM.inapptype"] = visilabsInAppNotificationType.rawValue
+        Visilabs.callAPI().customEvent("InAppTest", properties: properties)
+    }
+    
     
     private func customEvent(_ eventType: VisilabsEventType){
         switch eventType {
-            case .login:
-                var properties = [String:String]()
-                properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-                properties["OM.sys.AppID"] = "App ID to use for push messages"
-                Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
-                return
-            case .pageView:
-                Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
-                return
-            case .productView:
-                var properties = [String:String]()
-                properties["OM.pv"] = "Product Code"
-                properties["OM.pn"] = "Product Name"
-                properties["OM.ppr"] = "Product Price"
-                properties["OM.pv.1"] = "Product Brand"
-                properties["OM.ppr"] = "Product Price"
-                properties["OM.inv"] = "Number of items in stock"
-                Visilabs.callAPI().customEvent("Product View", properties: properties)
-                return
-            
-            
-            case .mini:
-                var properties = [String:String]()
-                properties["OM.inapptype"] = "mini"
-                Visilabs.callAPI().customEvent("InAppTest", properties: properties)
-                return
-            case .full:
-                var properties = [String:String]()
-                properties["OM.inapptype"] = "full"
-                Visilabs.callAPI().customEvent("InAppTest", properties: properties)
-                return
-            
-            default:
-                return
+        case .login:
+            var properties = [String:String]()
+            properties["OM.sys.TokenID"] = "Token ID to use for push messages"
+            properties["OM.sys.AppID"] = "App ID to use for push messages"
+            Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
+            return
+        case .pageView:
+            Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
+            return
+        case .productView:
+            var properties = [String:String]()
+            properties["OM.pv"] = "Product Code"
+            properties["OM.pn"] = "Product Name"
+            properties["OM.ppr"] = "Product Price"
+            properties["OM.pv.1"] = "Product Brand"
+            properties["OM.ppr"] = "Product Price"
+            properties["OM.inv"] = "Number of items in stock"
+            Visilabs.callAPI().customEvent("Product View", properties: properties)
+            return
+        default:
+            return
         }
     }
     
