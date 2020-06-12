@@ -35,9 +35,15 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         }
 
         //TODO: bunları default set ediyorum doğru mudur?
+        view.backgroundColor = UIColor(hex: "", alpha: 0.9019607843137255)
+        titleLabel.textColor = UIColor(hex: "", alpha: 1)
+        imageView.tintColor = UIColor(hex: "", alpha: 1)
+        
+        /*
         view.backgroundColor = UIColor(MPHex: 3858759680)
         titleLabel.textColor = UIColor(MPHex: 4294967295)
         imageView.tintColor = UIColor(MPHex: 4294967295)
+         */
         
         //view.backgroundColor = UIColor(MPHex: miniNotification.backgroundColor)
         //bodyLabel.textColor = UIColor(MPHex: miniNotification.bodyColor)
