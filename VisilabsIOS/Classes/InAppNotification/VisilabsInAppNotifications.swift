@@ -83,6 +83,16 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
         return true
     }
     
+    func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
+        
+        if notification.type == .image_text_button {
+            
+        }
+        
+        
+        return true
+    }
+    
     func markNotificationShown(notification: VisilabsInAppNotification) {
         self.lock.write {
             VisilabsLogger.info(message: "marking notification as seen: \(notification.actId)")
