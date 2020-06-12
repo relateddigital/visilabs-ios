@@ -48,7 +48,7 @@ public class VisilabsInAppNotification {
     let messageBodyColor: String?
     let messageBodyTextSize: String?
     let fontFamily: String?
-    let backGround: String?
+    let backGroundColor: String?
     let closeButtonColor: String?
     let buttonTextColor: String?
     let buttonColor: String?
@@ -84,7 +84,7 @@ public class VisilabsInAppNotification {
         self.messageBodyColor = messageBodyColor
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
-        self.backGround = backGround
+        self.backGroundColor = backGround
         self.closeButtonColor = closeButtonColor
         self.buttonTextColor = buttonTextColor
         self.buttonColor = buttonColor
@@ -136,7 +136,7 @@ public class VisilabsInAppNotification {
         self.messageBodyColor = actionData[PayloadKey.messageBodyColor] as? String
         self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
-        self.backGround = actionData[PayloadKey.backGround] as? String
+        self.backGroundColor = actionData[PayloadKey.backGround] as? String
         self.closeButtonColor = actionData[PayloadKey.closeButtonColor] as? String
         self.buttonTextColor = actionData[PayloadKey.buttonTextColor] as? String
         self.buttonColor = actionData[PayloadKey.buttonColor] as? String
