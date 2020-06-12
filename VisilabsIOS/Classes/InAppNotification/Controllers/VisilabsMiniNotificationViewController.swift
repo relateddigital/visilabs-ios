@@ -35,9 +35,9 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         }
 
         //TODO: bunları default set ediyorum doğru mudur?
-        view.backgroundColor = UIColor(hex: "", alpha: 0.9019607843137255)
-        titleLabel.textColor = UIColor(hex: "", alpha: 1)
-        imageView.tintColor = UIColor(hex: "", alpha: 1)
+        view.backgroundColor = UIColor(hex: "#000000", alpha: 0.9019607843137255)
+        titleLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
+        imageView.tintColor = UIColor(hex: "#FFFFFF", alpha: 1)
         
         /*
         view.backgroundColor = UIColor(MPHex: 3858759680)
@@ -141,7 +141,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
     @objc func didTap(gesture: UITapGestureRecognizer) {
         if !isDismissing && gesture.state == UIGestureRecognizer.State.ended {
             delegate?.notificationShouldDismiss(controller: self,
-                                                callToActionURL: miniNotification.callToActionURL,
+                                                callToActionURL: miniNotification.callToActionUrl,
                                                 shouldTrack: true,
                                                 additionalTrackingProperties: nil)
         }
@@ -160,7 +160,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             case UIGestureRecognizer.State.ended, UIGestureRecognizer.State.cancelled:
                 if window.layer.position.y > position.y + (VisilabsInAppNotificationsConstants.miniInAppHeight / 2) {
                     delegate?.notificationShouldDismiss(controller: self,
-                                                        callToActionURL: miniNotification.callToActionURL,
+                                                        callToActionURL: miniNotification.callToActionUrl,
                                                         shouldTrack: false,
                                                         additionalTrackingProperties: nil)
                 } else {
