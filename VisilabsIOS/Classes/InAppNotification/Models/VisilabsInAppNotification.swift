@@ -19,7 +19,7 @@ public class VisilabsInAppNotification {
         public static let messageBody = "msg_body"
         public static let buttonText = "btn_text"
         public static let iosLink = "ios_lnk"
-        public static let imageURLString = "img"
+        public static let imageUrlString = "img"
         public static let visitorData = "visitor_data"
         public static let visitData = "visit_data"
         public static let queryString = "qs"
@@ -40,7 +40,7 @@ public class VisilabsInAppNotification {
     let messageBody: String?
     let buttonText: String?
     let iosLink: String?
-    let imageURLString: String?
+    let imageUrlString: String?
     let visitorData: String?
     let visitData: String?
     let queryString: String?
@@ -53,10 +53,10 @@ public class VisilabsInAppNotification {
     let buttonTextColor: String?
     let buttonColor: String?
     
-    var imageURL: URL?
+    var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
-        if let iUrl = self.imageURL {
+        if let iUrl = self.imageUrl {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
@@ -66,9 +66,9 @@ public class VisilabsInAppNotification {
         return data
     }()
     
-    let callToActionURL: URL?
+    let callToActionUrl: URL?
     
-    public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageURLString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?) {
+    public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageUrlString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -76,7 +76,7 @@ public class VisilabsInAppNotification {
         self.messageBody = messageBody
         self.buttonText = buttonText
         self.iosLink = iosLink
-        self.imageURLString = imageURLString
+        self.imageUrlString = imageUrlString
         self.visitorData = visitorData
         self.visitData = visitData
         self.queryString = queryString
@@ -89,19 +89,15 @@ public class VisilabsInAppNotification {
         self.buttonTextColor = buttonTextColor
         self.buttonColor = buttonColor
         
-        if let imageURLString = imageURLString
-            , let escapedImageURLString = imageURLString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
-            , let imageURLComponents = URLComponents(string: escapedImageURLString)
-            , let imageURLParsed = imageURLComponents.url{
-            self.imageURL = imageURLParsed
+        if !imageUrlString.isNilOrWhiteSpace {
+            self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
         
-        var callToActionURL: URL?
-        if let URLString = self.iosLink {
-            callToActionURL = URL(string: URLString)
+        var callToActionUrl: URL?
+        if let urlString = self.iosLink {
+            callToActionUrl = URL(string: urlString)
         }
-
-        self.callToActionURL = callToActionURL
+        self.callToActionUrl = callToActionUrl
     }
     
     init?(JSONObject: [String: Any]?) {
@@ -132,7 +128,7 @@ public class VisilabsInAppNotification {
         self.messageBody = actionData[PayloadKey.messageBody] as? String
         self.buttonText = actionData[PayloadKey.buttonText] as? String
         self.iosLink = actionData[PayloadKey.iosLink] as? String
-        self.imageURLString = actionData[PayloadKey.imageURLString] as? String
+        self.imageUrlString = actionData[PayloadKey.imageUrlString] as? String
         self.visitorData = actionData[PayloadKey.visitorData] as? String
         self.visitData = actionData[PayloadKey.visitData] as? String
         self.queryString = actionData[PayloadKey.queryString] as? String
@@ -145,18 +141,28 @@ public class VisilabsInAppNotification {
         self.buttonTextColor = actionData[PayloadKey.buttonTextColor] as? String
         self.buttonColor = actionData[PayloadKey.buttonColor] as? String
         
-        if let imageURLString = imageURLString
-            , let escapedImageURLString = imageURLString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
-            , let imageURLComponents = URLComponents(string: escapedImageURLString)
-            , let imageURLParsed = imageURLComponents.url{
-            self.imageURL = imageURLParsed
+        if !imageUrlString.isNilOrWhiteSpace {
+            self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
         
-        var callToActionURL: URL?
-        if let URLString = self.iosLink {
-            callToActionURL = URL(string: URLString)
+        var callToActionUrl: URL?
+        if let urlString = self.iosLink {
+            callToActionUrl = URL(string: urlString)
         }
-
-        self.callToActionURL = callToActionURL
+        self.callToActionUrl = callToActionUrl
+    }
+    
+    private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
+        var imageUrl : URL?
+        var urlString = imageUrlString
+        if type == .mini{
+            urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
+        }
+        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+            , let imageUrlComponents = URLComponents(string: escapedImageUrlString)
+            , let imageUrlParsed = imageUrlComponents.url{
+            imageUrl = imageUrlParsed
+        }
+        return imageUrl
     }
 }
