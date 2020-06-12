@@ -68,14 +68,14 @@
                             <size key="shadowOffset" width="0.0" height="1"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faI-kr-vfs">
-                            <rect key="frame" x="82" y="801" width="250" height="45"/>
+                            <rect key="frame" x="124" y="801" width="166" height="45"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1LO-WG-GYz" customClass="InAppButtonView" customModule="VisilabsIOS" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="250" height="45"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="166" height="45"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                     <inset key="contentEdgeInsets" minX="15" minY="8" maxX="15" maxY="9"/>
-                                    <state key="normal" title="Ok">
+                                    <state key="normal" title="Button">
                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
@@ -91,7 +91,7 @@
                                 <constraint firstItem="1LO-WG-GYz" firstAttribute="top" secondItem="faI-kr-vfs" secondAttribute="top" id="Zb1-uY-dAz"/>
                                 <constraint firstAttribute="bottom" secondItem="1LO-WG-GYz" secondAttribute="bottom" id="bAv-w0-aqb"/>
                                 <constraint firstAttribute="height" constant="45" id="lQK-tN-2HH"/>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="yLR-7A-bWT"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="yLR-7A-bWT"/>
                             </constraints>
                         </view>
                     </subviews>
