@@ -52,7 +52,7 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
                 case .mini:
                     shownNotification = self.showMiniNotification(notification)
                 case .full:
-                    shownNotification = self.showMiniNotification(notification)
+                    shownNotification = self.showFullNotification(notification)
                 default:
                     return
                 }
@@ -73,6 +73,13 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + miniNotificationPresentationTime) {
             self.notificationShouldDismiss(controller: miniNotificationVC, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
         }
+        return true
+    }
+    
+    func showFullNotification(_ notification: VisilabsInAppNotification) -> Bool {
+        let fullNotificationVC = VisilabsFullNotificationViewController(notification: notification)
+        fullNotificationVC.delegate = self
+        fullNotificationVC.show(animated: true)
         return true
     }
     
