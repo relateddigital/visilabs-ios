@@ -103,7 +103,7 @@ class InAppViewController: FormViewController {
             $0.value = URL(string: "https://www.google.com")
         }
         
-        <<< URLRow(VisilabsInAppNotification.PayloadKey.imageURLString) {
+        <<< URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
         $0.title = "Image URL"
         $0.add(rule: RuleURL())
         $0.placeholder = "Image URL"
