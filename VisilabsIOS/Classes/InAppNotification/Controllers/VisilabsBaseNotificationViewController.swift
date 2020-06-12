@@ -63,13 +63,13 @@ extension UIColor {
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
     
-    public convenience init(_ hex: String, alpha: CGFloat = 1.0) {
+    public convenience init(hex: String, alpha: CGFloat = 1.0) {
       var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
 
       if (cString.hasPrefix("#")) { cString.removeFirst() }
 
       if ((cString.count) != 6) {
-        self.init("000000") // return black color for wrong hex input
+        self.init(hex: "000000") // return black color for wrong hex input
         return
       }
 
