@@ -69,6 +69,14 @@ extension String {
         let data = self.data(using: .utf8)
         return data?.objectFromJsonData()
     }
+    
+    func getUrlWithoutExtension() -> String {
+        return URL(fileURLWithPath: self).deletingPathExtension().absoluteString
+    }
+    
+    func getUrlExtension() -> String {
+        return URL(fileURLWithPath: self).pathExtension
+    }
 }
 
 /**
