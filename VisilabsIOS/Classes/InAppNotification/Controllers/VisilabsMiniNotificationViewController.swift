@@ -15,6 +15,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         }
     }
     
+    @IBOutlet weak var circleLabel: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -39,10 +40,11 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         titleLabel.textColor = UIColor.white
         imageView.tintColor = UIColor.white
         
-        imageView.layer.cornerRadius = self.imageView.frame.size.width / 2
-        imageView.clipsToBounds = true
-        imageView.layer.borderWidth = 3.0
-        imageView.layer.borderColor = UIColor.white.cgColor
+        circleLabel.backgroundColor = UIColor(hex: "#000000", alpha: 0)
+        circleLabel.layer.cornerRadius = self.circleLabel.frame.size.width / 2
+        circleLabel.clipsToBounds = false
+        circleLabel.layer.borderWidth = 2.0
+        circleLabel.layer.borderColor = UIColor.white.cgColor
         
         /*
         view.backgroundColor = UIColor(MPHex: 3858759680)
