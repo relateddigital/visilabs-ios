@@ -67,6 +67,9 @@ public class VisilabsInAppNotification {
     }()
     
     let callToActionUrl: URL?
+    var messageTitleFont: UIFont = .systemFont(ofSize: 14)
+    var messageBodyFont: UIFont = .systemFont(ofSize: 14)
+    var buttonTextFont: UIFont = .systemFont(ofSize: 14)
     
     public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageUrlString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?) {
         self.actId = actId
@@ -98,6 +101,10 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
+        
+        self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: nil, style: .title2)
+        self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
+        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
     }
     
     init?(JSONObject: [String: Any]?) {
@@ -150,6 +157,31 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
+        
+        self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
+        self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
+        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
+    }
+    
+    private static func getFont(font_family: String?, font_size: String?, style: UIFont.TextStyle) -> UIFont{
+        var size = style == .title2 ? 12 : 8
+        if let fSize = font_size, let s = Int(fSize), s > 0 {
+            size = size + s
+        }
+        if let font = font_family {
+            if #available(iOS 13.0, *) {
+                var systemDesign :UIFontDescriptor.SystemDesign  = .default
+                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
+                    systemDesign = .serif
+                } else if font.lowercased() == "monospace" {
+                    systemDesign = .monospaced
+                }
+                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style).withDesign(systemDesign) {
+                    return UIFont(descriptor: fontDescriptor, size: CGFloat(size))
+                }
+            }
+        }
+        return UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style), size: CGFloat(size))
     }
     
     private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
