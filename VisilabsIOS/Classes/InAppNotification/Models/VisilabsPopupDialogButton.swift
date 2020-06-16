@@ -91,13 +91,15 @@ open class VisilabsPopupDialogButton: UIButton {
 
      - returns: PopupDialogButton
      */
-    @objc public init(title: String, height: Int = 45, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
+    @objc public init(title: String, height: Int = 45, font: UIFont, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
 
         // Assign the button height
         buttonHeight = height
         
         // Assign the button action
         buttonAction = action
+        
+        defaultTitleFont = font
 
         super.init(frame: .zero)
 
