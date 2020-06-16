@@ -28,7 +28,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 protocol SliderStepDelegate {
-    func didSelectedValue(sliderStep: SliderStep , value:Float)
+    func didSelectedValue(sliderStep: VisilabsSliderStep , value:Float)
 }
 
 
@@ -93,12 +93,12 @@ class VisilabsSliderStep: UISlider {
         self.contentMode = .redraw //enable redraw on rotation (calls setNeedsDisplay)
         
         if enableTap {
-            let tap = UITapGestureRecognizer(target: self, action: #selector(SliderStep.sliderTapped(_:)))
+            let tap = UITapGestureRecognizer(target: self, action: #selector(VisilabsSliderStep.sliderTapped(_:)))
             self.addGestureRecognizer(tap)
         }
         
-        self.addTarget(self, action: #selector(SliderStep.movingSliderStepValue), for: .valueChanged)
-        self.addTarget(self, action: #selector(SliderStep.didMoveSliderStepValue), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        self.addTarget(self, action: #selector(VisilabsSliderStep.movingSliderStepValue), for: .valueChanged)
+        self.addTarget(self, action: #selector(VisilabsSliderStep.didMoveSliderStepValue), for: [.touchUpInside, .touchUpOutside, .touchCancel])
     }
     
     @objc internal func sliderTapped(_ gestureRecognizer: UIGestureRecognizer) {
