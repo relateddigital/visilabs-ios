@@ -52,7 +52,85 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public var keyboardShiftsView = true
     
     // MARK: - Initializers
+    
+    
+    override func hide(animated: Bool, completion: @escaping () -> Void) {
+        completion()
+    }
+ 
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer){
+        self.dismiss(animated: true) {
+            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: self.notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: nil)
+        }
+    }
 
+    public convenience init(notification: VisilabsInAppNotification) {
+        
+        let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
+        self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
+        super.notification = notification
+        if notification.type != .full_image {
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, action: {self.delegate?.notificationShouldDismiss(controller: self,
+                callToActionURL: notification.callToActionUrl,
+                shouldTrack: true,
+                additionalTrackingProperties: nil)})
+            addButton(button)
+        }else {
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+            self.popupContainerView.stackView.addGestureRecognizer(tapGestureRecognizer)
+        }
+        
+        /*
+        if notification.type == .image_button {
+            let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotificationType: notification.type)
+            if let image = notification.image {
+                viewController.image = UIImage(data: image)
+            }
+            self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!, action: nil)
+            addButton(button)
+            
+        }else if notification.type == .image_text_button {
+            let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotificationType: notification.type)
+            if let image = notification.image {
+                viewController.image = UIImage(data: image)
+            }
+            self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!, action: nil)
+            addButton(button)
+            
+        }
+        
+        else{
+            self.init(viewController: VisilabsDefaultPopupNotificationViewController(),
+            buttonAlignment: .vertical,
+            transitionStyle: .zoomIn,
+            preferredWidth: 580,
+            tapGestureDismissal: false,
+            panGestureDismissal: false,
+            hideStatusBar: false)
+        }
+ */
+        
+        /*
+        if notification.type == .nps {
+            viewController
+        }
+        
+        
+        else{
+            var viewController = VisilabsDefaultPopupNotificationViewController()
+            viewController.titleText   = notification.messageTitle
+            viewController.messageText = notification.messageTitle
+            viewController.image       = image
+        }
+         */
+        
+        
+    }
+    
+    
     /*!
      Creates a standard popup dialog with title, message and image field
 
@@ -69,6 +147,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
      - returns: Popup dialog default style
      */
+    /*
     @objc public convenience init(
                 title: String?,
                 message: String?,
@@ -97,6 +176,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                   hideStatusBar: hideStatusBar,
                   completion: completion)
     }
+    */
 
     /*!
      Creates a popup dialog containing a custom view
