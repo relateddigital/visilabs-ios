@@ -110,8 +110,6 @@ class EventViewController: FormViewController {
             properties["OM.inv"] = "Number of items in stock"
             Visilabs.callAPI().customEvent("Product View", properties: properties)
             return
-        default:
-            return
         }
     }
     
