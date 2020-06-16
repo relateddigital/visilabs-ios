@@ -9,13 +9,23 @@ import UIKit
 
 final public class VisilabsDefaultPopupNotificationViewController: UIViewController {
 
+    weak var visilabsInAppNotification : VisilabsInAppNotification?
+    
+    convenience init(visilabsInAppNotification: VisilabsInAppNotification) {
+        self.init()
+        self.visilabsInAppNotification = visilabsInAppNotification
+        if let image = visilabsInAppNotification.image {
+            self.image = UIImage(data: image)
+        }
+    }
+    
     public var standardView: VisilabsPopupDialogDefaultView {
        return view as! VisilabsPopupDialogDefaultView // swiftlint:disable:this force_cast
     }
 
     override public func loadView() {
         super.loadView()
-        view = VisilabsPopupDialogDefaultView(frame: .zero)
+        view = VisilabsPopupDialogDefaultView(frame: .zero, visilabsInAppNotification: visilabsInAppNotification!)
     }
 }
 
@@ -32,6 +42,15 @@ public extension VisilabsDefaultPopupNotificationViewController {
             standardView.imageView.image = newValue
             standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
         }
+    }
+    
+    //TODO: hideTitle ve hideMessage kaldırılabilir sanırım.
+    func hideTitle() {
+        standardView.titleLabel.isHidden = true
+    }
+    
+    func hideMessage() {
+        standardView.messageLabel.isHidden = true
     }
 
     /// The title text of the dialog
