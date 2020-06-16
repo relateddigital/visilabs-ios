@@ -54,7 +54,7 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
                 case .full:
                     shownNotification = self.showFullNotification(notification)
                 default:
-                    return
+                    shownNotification = self.showPopUp(notification)
                 }
 
                 if shownNotification {
@@ -83,14 +83,46 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
         return true
     }
     
-    func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
-        
-        if notification.type == .image_text_button {
-            
+    //TODO: bu gerekmeyecek sanırım
+    func getTopView() -> UIView? {
+        var topView: UIView? = nil
+        let window = UIApplication.shared.keyWindow
+        if window != nil {
+            for subview in window?.subviews ?? [] {
+                if !subview.isHidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0 {
+                    topView = subview
+                }
+            }
+        }
+        return topView
+    }
+    
+    
+    func getRootViewController() -> UIViewController? {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
+            return nil
+        }
+        for window in sharedUIApplication.windows {
+            if window.isKeyWindow {
+                return window.rootViewController
+            }
         }
         
+        return nil
+    }
+    
+    func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         
-        return true
+        let controller = VisilabsPopupNotificationViewController(notification: notification)
+        controller.delegate = self
+        
+        if let rootViewController = getRootViewController() {
+            rootViewController.present(controller, animated: false, completion: nil)
+            return true
+        } else {
+            return false
+        }
+        
     }
     
     func markNotificationShown(notification: VisilabsInAppNotification) {
