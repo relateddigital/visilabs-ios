@@ -38,6 +38,19 @@ public class VisilabsPopupDialogDefaultView: UIView {
         return messageLabel
     }()
     
+    internal lazy var npsView: CosmosView = {
+        var settings = CosmosSettings()
+        settings.filledColor = UIColor.systemYellow
+        settings.emptyColor = UIColor.white
+        settings.filledBorderColor = UIColor.white
+        settings.emptyBorderColor = UIColor.systemYellow
+        settings.fillMode = .half
+        settings.starSize = 40.0
+        let npsView = CosmosView(settings: settings)
+        npsView.translatesAutoresizingMaskIntoConstraints = false
+        return npsView
+    }()
+    
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
         set { titleLabel.font = newValue }
@@ -121,6 +134,19 @@ public class VisilabsPopupDialogDefaultView: UIView {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
+        } else if notification.type == .nps {
+            addSubview(titleLabel)
+            addSubview(messageLabel)
+            addSubview(npsView)
+            
+            
+            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "npsView" : npsView ] as [String: Any]
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
+            // TODO: burada sabit 60 vermek yerine hesaplanabilir.
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==60@900)-[npsView]-(==60@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[npsView]-(==30@900)-|", options: [], metrics: nil, views: views)
         }
         
         else {
