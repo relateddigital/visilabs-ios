@@ -58,7 +58,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Geofence" id="L0b-Dd-bdu"/>
+                    <tabBarItem key="tabBarItem" title="Geofence" image="Geofence" id="L0b-Dd-bdu"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sPH-z7-f1k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -104,6 +104,7 @@
     </scenes>
     <resources>
         <image name="Event" width="25" height="25"/>
+        <image name="Geofence" width="25" height="25"/>
         <image name="InApp" width="25" height="25"/>
     </resources>
 </document>
