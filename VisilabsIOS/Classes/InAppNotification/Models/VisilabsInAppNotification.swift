@@ -67,9 +67,9 @@ public class VisilabsInAppNotification {
     }()
     
     let callToActionUrl: URL?
-    var messageTitleFont: UIFont = .systemFont(ofSize: 14)
-    var messageBodyFont: UIFont = .systemFont(ofSize: 14)
-    var buttonTextFont: UIFont = .systemFont(ofSize: 14)
+    var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
+    var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
+    var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     
     public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageUrlString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?) {
         self.actId = actId
@@ -102,9 +102,7 @@ public class VisilabsInAppNotification {
         }
         self.callToActionUrl = callToActionUrl
         
-        self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: nil, style: .title2)
-        self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
+        setFonts()
     }
     
     init?(JSONObject: [String: Any]?) {
@@ -158,10 +156,15 @@ public class VisilabsInAppNotification {
         }
         self.callToActionUrl = callToActionUrl
         
+        setFonts()
+    }
+    
+    private func setFonts(){
         self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
         self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
         self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
     }
+    
     
     private static func getFont(font_family: String?, font_size: String?, style: UIFont.TextStyle) -> UIFont{
         var size = style == .title2 ? 12 : 8
