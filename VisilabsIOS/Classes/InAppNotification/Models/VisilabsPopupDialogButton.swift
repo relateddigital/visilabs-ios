@@ -91,7 +91,7 @@ open class VisilabsPopupDialogButton: UIButton {
 
      - returns: PopupDialogButton
      */
-    @objc public init(title: String, height: Int = 45, font: UIFont, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
+    @objc public init(title: String, height: Int = 45, font: UIFont, buttonTextColor: UIColor?, buttonColor: UIColor?, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
 
         // Assign the button height
         buttonHeight = height
@@ -100,8 +100,17 @@ open class VisilabsPopupDialogButton: UIButton {
         buttonAction = action
         
         defaultTitleFont = font
+        
+        
 
         super.init(frame: .zero)
+        
+        if let bTextColor = buttonTextColor {
+            self.titleColor = bTextColor
+        }
+        if let bColor = buttonColor {
+            self.buttonColor = bColor
+        }
 
         // Set the button title
         setTitle(title, for: UIControl.State())
