@@ -87,19 +87,19 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         bodyLabel.text = fullNotification.messageBody
         
         if let bgColor = fullNotification.backGroundColor {
-            viewMask.backgroundColor = UIColor(hex: bgColor, alpha: 0.8)
+            viewMask.backgroundColor = bgColor.withAlphaComponent(0.8)
         }else{
             viewMask.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
         }
         
         if let tColor = fullNotification.messageTitleColor {
-            titleLabel.textColor = UIColor(hex: tColor, alpha: 1)
+            titleLabel.textColor = tColor
         }else{
             titleLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
         }
         
         if let bColor = fullNotification.messageBodyColor {
-            bodyLabel.textColor = UIColor(hex: bColor, alpha: 1)
+            bodyLabel.textColor = bColor
         }else{
             bodyLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
         }
@@ -141,7 +141,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
             
             if let bgColor = fullNotification.backGroundColor {
-                self.view.backgroundColor = UIColor(hex: bgColor, alpha: 0.6)
+                self.view.backgroundColor = bgColor.withAlphaComponent(0.6)
             }else{
                 self.view.backgroundColor = UIColor(hex: "#000000", alpha: 0.6)
             }
@@ -162,12 +162,12 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         
         var buttonColor = UIColor.black
         if let bColor = fullNotification.buttonColor{
-            buttonColor = UIColor(hex: bColor)
+            buttonColor = bColor
         }
         
         var buttonTextColor = UIColor.white
-        if let bColor = fullNotification.buttonTextColor{
-            buttonTextColor = UIColor(hex: bColor)
+        if let bTextColor = fullNotification.buttonTextColor{
+            buttonTextColor = bTextColor
         }
         
         buttonView.setTitleColor(buttonTextColor, for: UIControl.State.normal)
