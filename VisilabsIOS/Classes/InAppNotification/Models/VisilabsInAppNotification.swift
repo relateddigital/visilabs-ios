@@ -44,14 +44,14 @@ public class VisilabsInAppNotification {
     let visitorData: String?
     let visitData: String?
     let queryString: String?
-    let messageTitleColor: String?
-    let messageBodyColor: String?
+    let messageTitleColor: UIColor?
+    let messageBodyColor: UIColor?
     let messageBodyTextSize: String?
     let fontFamily: String?
-    let backGroundColor: String?
-    let closeButtonColor: String?
-    let buttonTextColor: String?
-    let buttonColor: String?
+    let backGroundColor: UIColor?
+    let closeButtonColor: UIColor?
+    let buttonTextColor: UIColor?
+    let buttonColor: UIColor?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -83,14 +83,14 @@ public class VisilabsInAppNotification {
         self.visitorData = visitorData
         self.visitData = visitData
         self.queryString = queryString
-        self.messageTitleColor = messageTitleColor
-        self.messageBodyColor = messageBodyColor
+        self.messageTitleColor =  UIColor(hex: messageTitleColor)
+        self.messageBodyColor = UIColor(hex: messageBodyColor)
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
-        self.backGroundColor = backGround
-        self.closeButtonColor = closeButtonColor
-        self.buttonTextColor = buttonTextColor
-        self.buttonColor = buttonColor
+        self.backGroundColor = UIColor(hex: backGround)
+        self.closeButtonColor = UIColor(hex: closeButtonColor)
+        self.buttonTextColor = UIColor(hex: buttonTextColor)
+        self.buttonColor = UIColor(hex: buttonColor)
         
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
@@ -137,14 +137,14 @@ public class VisilabsInAppNotification {
         self.visitorData = actionData[PayloadKey.visitorData] as? String
         self.visitData = actionData[PayloadKey.visitData] as? String
         self.queryString = actionData[PayloadKey.queryString] as? String
-        self.messageTitleColor = actionData[PayloadKey.messageTitleColor] as? String
-        self.messageBodyColor = actionData[PayloadKey.messageBodyColor] as? String
+        self.messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
+        self.messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
         self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
-        self.backGroundColor = actionData[PayloadKey.backGround] as? String
-        self.closeButtonColor = actionData[PayloadKey.closeButtonColor] as? String
-        self.buttonTextColor = actionData[PayloadKey.buttonTextColor] as? String
-        self.buttonColor = actionData[PayloadKey.buttonColor] as? String
+        self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
+        self.closeButtonColor = UIColor(hex: actionData[PayloadKey.closeButtonColor] as? String)
+        self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
+        self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
         
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
