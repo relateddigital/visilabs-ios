@@ -51,6 +51,47 @@ public class VisilabsPopupDialogDefaultView: UIView {
         return npsView
     }()
     
+    let bundle = Bundle(identifier: "org.cocoapods.VisilabsIOS")
+    private func getUIImage(named: String) -> UIImage?{
+        return UIImage(named: named, in : bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
+    }
+    
+    
+    internal lazy var sliderStepRating: VisilabsSliderStep = {
+        var sliderStepRating = VisilabsSliderStep()
+        
+
+        sliderStepRating.stepImages =   [getUIImage(named:"terrible")!, getUIImage(named:"bad")!, getUIImage(named:"okay")!, getUIImage(named:"good")!,getUIImage(named:"great")!, ]
+        sliderStepRating.tickImages = [getUIImage(named:"unTerrible")!, getUIImage(named:"unBad")!, getUIImage(named:"unOkay")!, getUIImage(named:"unGood")!,getUIImage(named:"unGreat")!, ]
+        
+        
+        sliderStepRating.tickTitles = ["Berbat", "Kötü", "Normal", "İyi", "Harika"]
+        
+        
+        sliderStepRating.minimumValue = 1
+        sliderStepRating.maximumValue = Float(sliderStepRating.stepImages!.count) + sliderStepRating.minimumValue - 1.0
+        sliderStepRating.stepTickColor = UIColor.clear
+        sliderStepRating.stepTickWidth = 20
+        sliderStepRating.stepTickHeight = 20
+        sliderStepRating.trackHeight = 2
+        sliderStepRating.value = 5
+        sliderStepRating.trackColor = #colorLiteral(red: 0.9371728301, green: 0.9373074174, blue: 0.9371433258, alpha: 1)
+        sliderStepRating.enableTap = true
+        sliderStepRating.sliderStepDelegate = self
+        sliderStepRating.translatesAutoresizingMaskIntoConstraints = false
+        
+        sliderStepRating.contentMode = .redraw //enable redraw on rotation (calls setNeedsDisplay)
+        
+        if sliderStepRating.enableTap {
+            let tap = UITapGestureRecognizer(target: sliderStepRating, action: #selector(VisilabsSliderStep.sliderTapped(_:)))
+            self.addGestureRecognizer(tap)
+        }
+        
+        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.movingSliderStepValue), for: .valueChanged)
+        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.didMoveSliderStepValue), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        return sliderStepRating
+    }()
+    
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
         set { titleLabel.font = newValue }
@@ -108,6 +149,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
             return
         }
         
+        if let bgColor = notification.backGroundColor {
+            self.backgroundColor = bgColor
+        }
+        
+        
         titleLabel.text = notification.messageTitle
         titleLabel.font = notification.messageTitleFont
         messageLabel.text = notification.messageBody
@@ -123,17 +169,18 @@ public class VisilabsPopupDialogDefaultView: UIView {
         
         if notification.type == .image_button || notification.type == .full_image {
             views = ["imageView": imageView]
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
             
         }else if notification.type == .image_text_button {
             addSubview(titleLabel)
             addSubview(messageLabel)
             views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel] as [String: Any]
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+            //constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@950)-[imageView]-(==40@950)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
         } else if notification.type == .nps {
             addSubview(titleLabel)
             addSubview(messageLabel)
@@ -147,6 +194,30 @@ public class VisilabsPopupDialogDefaultView: UIView {
             // TODO: burada sabit 60 vermek yerine hesaplanabilir.
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==60@900)-[npsView]-(==60@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[npsView]-(==30@900)-|", options: [], metrics: nil, views: views)
+        } else if notification.type == .smile_rating {
+                addSubview(titleLabel)
+                addSubview(messageLabel)
+                addSubview(sliderStepRating)
+                
+                
+                views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "sliderStepRating" : sliderStepRating ] as [String: Any]
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
+                // TODO: burada sabit 60 vermek yerine hesaplanabilir.
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[sliderStepRating]-(==20@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[sliderStepRating]-(==30@900)-|", options: [], metrics: nil, views: views)
+            
+            /*
+            NSLayoutConstraint.activate([
+                //sliderStepRating
+                //sliderStepRating.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
+                //sliderStepRating.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+                //sliderStepRating.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+                sliderStepRating.heightAnchor.constraint(equalToConstant: 35)
+            ])
+ */
+ 
         }
         
         else {
@@ -169,5 +240,12 @@ public class VisilabsPopupDialogDefaultView: UIView {
         }
 
         NSLayoutConstraint.activate(constraints)
+    }
+}
+
+//MARK:- SliderStepDelegate
+extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
+    func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float) {
+        print(Int(value))
     }
 }
