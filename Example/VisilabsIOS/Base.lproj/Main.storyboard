@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60P-61-meT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-595" y="445"/>
+            <point key="canvasLocation" x="153" y="86"/>
         </scene>
         <!--Event-->
         <scene sceneID="N2M-ks-SOm">
@@ -43,7 +43,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6EO-Kk-Kt7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-596" y="-221.73913043478262"/>
+            <point key="canvasLocation" x="-810" y="-330"/>
+        </scene>
+        <!--Geofence-->
+        <scene sceneID="v2z-cA-gvT">
+            <objects>
+                <viewController title="Geofence" id="uRA-XH-yfi" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rqc-Ie-tNM"/>
+                        <viewControllerLayoutGuide type="bottom" id="aVI-eY-rph"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mQU-Yb-VmJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Geofence" id="L0b-Dd-bdu"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sPH-z7-f1k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-550" y="636"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="9Fx-GK-1bn">
@@ -75,11 +94,12 @@
                     <connections>
                         <segue destination="mdL-Fq-e14" kind="relationship" relationship="viewControllers" id="4cF-Q9-uvY"/>
                         <segue destination="wh7-fN-UuX" kind="relationship" relationship="viewControllers" id="8CX-iy-9gh"/>
+                        <segue destination="uRA-XH-yfi" kind="relationship" relationship="viewControllers" id="6at-ew-ZuQ"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vam-ZM-pWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1545" y="15"/>
+            <point key="canvasLocation" x="-1644" y="62"/>
         </scene>
     </scenes>
     <resources>
