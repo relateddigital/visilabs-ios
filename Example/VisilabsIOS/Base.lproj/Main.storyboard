@@ -101,6 +101,34 @@
             </objects>
             <point key="canvasLocation" x="-1644" y="62"/>
         </scene>
+        <!--Modal View Controller-->
+        <scene sceneID="BFe-dD-VEE">
+            <objects>
+                <viewController storyboardIdentifier="modalview" id="KA9-NP-RUo" customClass="ModalViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HxN-II-vAL"/>
+                        <viewControllerLayoutGuide type="bottom" id="eTM-eb-ay6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZU1-0B-OSt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MY8-n1-sSL" customClass="ColorPicker" customModule="Colorful">
+                                <rect key="frame" x="30" y="285.5" width="315" height="96"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    </view>
+                    <connections>
+                        <outlet property="popupView" destination="MY8-n1-sSL" id="ESb-xR-CPY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pn7-qS-6lS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2656.8000000000002" y="323.38830584707648"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Event" width="25" height="25"/>

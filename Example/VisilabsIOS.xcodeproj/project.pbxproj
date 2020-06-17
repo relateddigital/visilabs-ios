@@ -18,6 +18,7 @@
 		8862E463247ED6D000C230DD /* InAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E460247ED6D000C230DD /* InAppViewController.swift */; };
 		8862E468247EDF5500C230DD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E467247EDF5500C230DD /* HomeViewController.swift */; };
 		8862E46A247EE3FF00C230DD /* VisilabsProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E469247EE3FF00C230DD /* VisilabsProfile.swift */; };
+		88749180249A8FCD008816B9 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874917F249A8FCD008816B9 /* ModalViewController.swift */; };
 		9F70E7C1280382305CC3FCE3 /* Pods_VisilabsIOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,13 +46,14 @@
 		607FACE51AFB9204008FA782 /* VisilabsIOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VisilabsIOS_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		7A945771F641BD121B160C85 /* VisilabsIOS.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = VisilabsIOS.podspec; path = ../VisilabsIOS.podspec; sourceTree = "<group>"; };
+		7A945771F641BD121B160C85 /* VisilabsIOS.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = VisilabsIOS.podspec; path = ../VisilabsIOS.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		88370C9324853675005645F5 /* FormHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormHelper.swift; sourceTree = "<group>"; };
 		8862E45F247ED6D000C230DD /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		8862E460247ED6D000C230DD /* InAppViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppViewController.swift; sourceTree = "<group>"; };
 		8862E467247EDF5500C230DD /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		8862E469247EE3FF00C230DD /* VisilabsProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisilabsProfile.swift; sourceTree = "<group>"; };
 		8863DF3B24319A15003021B9 /* VisilabsIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisilabsIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8874917F249A8FCD008816B9 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		8887EEE4243191CE003BE2E7 /* VisilabsIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisilabsIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				8862E45F247ED6D000C230DD /* EventViewController.swift */,
 				8862E467247EDF5500C230DD /* HomeViewController.swift */,
 				8862E460247ED6D000C230DD /* InAppViewController.swift */,
+				8874917F249A8FCD008816B9 /* ModalViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				88370C9424853675005645F5 /* FormHelper.swift in Sources */,
 				8862E463247ED6D000C230DD /* InAppViewController.swift in Sources */,
 				8862E468247EDF5500C230DD /* HomeViewController.swift in Sources */,
+				88749180249A8FCD008816B9 /* ModalViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
