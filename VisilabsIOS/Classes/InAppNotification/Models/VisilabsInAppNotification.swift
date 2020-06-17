@@ -88,7 +88,18 @@ public class VisilabsInAppNotification {
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
         self.backGroundColor = UIColor(hex: backGround)
-        self.closeButtonColor = UIColor(hex: closeButtonColor)
+        if let cBColor = closeButtonColor {
+            if cBColor.lowercased() == "white" {
+                self.closeButtonColor = UIColor.white
+            }
+            else if cBColor.lowercased() == "black" {
+                self.closeButtonColor = UIColor.black
+            } else {
+                self.closeButtonColor = UIColor(hex: cBColor)
+            }
+        }else{
+            self.closeButtonColor = nil
+        }
         self.buttonTextColor = UIColor(hex: buttonTextColor)
         self.buttonColor = UIColor(hex: buttonColor)
         
@@ -142,7 +153,19 @@ public class VisilabsInAppNotification {
         self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
         self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
-        self.closeButtonColor = UIColor(hex: actionData[PayloadKey.closeButtonColor] as? String)
+        if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
+            if cBColor.lowercased() == "white" {
+                self.closeButtonColor = UIColor.white
+            }
+            else if cBColor.lowercased() == "black" {
+                self.closeButtonColor = UIColor.black
+            } else {
+                self.closeButtonColor = UIColor(hex: cBColor)
+            }
+        }else{
+            self.closeButtonColor = nil
+        }
+        
         self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
         self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
         
