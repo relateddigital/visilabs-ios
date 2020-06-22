@@ -130,11 +130,11 @@ open class VisilabsPopupDialogButton: UIButton {
     open func setupView() {
 
         // Default appearance
-        setTitleColor(defaultTitleColor, for: UIControl.State())
+        setTitleColor(self.titleColor, for: UIControl.State())
         titleLabel?.font              = defaultTitleFont
-        backgroundColor               = defaultButtonColor
-        separator.backgroundColor     = defaultSeparatorColor
-        leftSeparator.backgroundColor = defaultSeparatorColor
+        backgroundColor               = self.buttonColor
+        separator.backgroundColor     = self.buttonColor
+        leftSeparator.backgroundColor = self.buttonColor
 
         // Add and layout views
         addSubview(separator)
