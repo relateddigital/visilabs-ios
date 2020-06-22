@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MG0-Qd-noS">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -16,7 +16,7 @@
                         <viewControllerLayoutGuide type="bottom" id="nzV-gv-bV8"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1v5-5e-Slk">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
@@ -35,7 +35,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Rqc-JL-tQu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1kO-9e-nw0">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
@@ -54,7 +54,7 @@
                         <viewControllerLayoutGuide type="bottom" id="aVI-eY-rph"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="mQU-Yb-VmJ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
@@ -73,7 +73,7 @@
                         <viewControllerLayoutGuide type="bottom" id="9h4-F6-VHL"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="sHs-zK-Cu7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>
@@ -110,27 +110,36 @@
                         <viewControllerLayoutGuide type="bottom" id="eTM-eb-ay6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ZU1-0B-OSt">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MY8-n1-sSL">
-                                <rect key="frame" x="34" y="285.66666666666669" width="346" height="265.00000000000006"/>
+                                <rect key="frame" x="30" y="200" width="315" height="316"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Header" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mix-5W-zqR">
-                                        <rect key="frame" x="15" y="15.000000000000002" width="316" height="21.666666666666671"/>
+                                        <rect key="frame" x="15" y="15" width="285" height="21.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Di4-pe-VQs" customClass="ColorPicker" customModule="Colorful">
-                                        <rect key="frame" x="15" y="66.666666666666643" width="316" height="183.33333333333337"/>
+                                        <rect key="frame" x="15" y="66.5" width="285" height="199.5"/>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="stx-gS-Chl">
+                                        <rect key="frame" x="135.5" y="276" width="44" height="30"/>
+                                        <state key="normal" title="Select"/>
+                                        <connections>
+                                            <action selector="handleSelect:" destination="KA9-NP-RUo" eventType="touchUpInside" id="ihd-XS-yKV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="mix-5W-zqR" firstAttribute="leading" secondItem="MY8-n1-sSL" secondAttribute="leading" constant="15" id="3qu-tC-4EI"/>
+                                    <constraint firstItem="stx-gS-Chl" firstAttribute="centerX" secondItem="Di4-pe-VQs" secondAttribute="centerX" id="Asv-lA-6uB"/>
+                                    <constraint firstItem="stx-gS-Chl" firstAttribute="top" secondItem="Di4-pe-VQs" secondAttribute="bottom" constant="10" id="Llm-lL-Icb"/>
                                     <constraint firstItem="Di4-pe-VQs" firstAttribute="top" secondItem="mix-5W-zqR" secondAttribute="bottom" constant="30" id="bTd-pM-9Ht"/>
-                                    <constraint firstAttribute="bottom" secondItem="Di4-pe-VQs" secondAttribute="bottom" constant="15" id="d5i-hk-b4g"/>
+                                    <constraint firstAttribute="bottom" secondItem="stx-gS-Chl" secondAttribute="bottom" constant="10" id="d5i-hk-b4g"/>
                                     <constraint firstItem="mix-5W-zqR" firstAttribute="trailing" secondItem="Di4-pe-VQs" secondAttribute="trailing" id="ifl-0U-YhB"/>
                                     <constraint firstItem="mix-5W-zqR" firstAttribute="leading" secondItem="Di4-pe-VQs" secondAttribute="leading" id="jNn-wZ-tcs"/>
                                     <constraint firstItem="mix-5W-zqR" firstAttribute="top" secondItem="MY8-n1-sSL" secondAttribute="top" constant="15" id="jQt-bA-rog"/>
@@ -142,14 +151,15 @@
                         <constraints>
                             <constraint firstItem="MY8-n1-sSL" firstAttribute="centerX" secondItem="ZU1-0B-OSt" secondAttribute="centerX" id="3Z5-BL-U4W"/>
                             <constraint firstItem="MY8-n1-sSL" firstAttribute="leading" secondItem="ZU1-0B-OSt" secondAttribute="leadingMargin" constant="14" id="PkK-lU-Ok1"/>
-                            <constraint firstItem="MY8-n1-sSL" firstAttribute="top" secondItem="HxN-II-vAL" secondAttribute="bottom" constant="285.5" id="aRg-Fo-bhe"/>
-                            <constraint firstItem="eTM-eb-ay6" firstAttribute="top" secondItem="MY8-n1-sSL" secondAttribute="bottom" constant="185.5" id="syr-49-WS1"/>
+                            <constraint firstItem="MY8-n1-sSL" firstAttribute="top" secondItem="HxN-II-vAL" secondAttribute="bottom" constant="200" id="aRg-Fo-bhe"/>
+                            <constraint firstItem="eTM-eb-ay6" firstAttribute="top" secondItem="MY8-n1-sSL" secondAttribute="bottom" constant="151" id="syr-49-WS1"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="colorPickerView" destination="Di4-pe-VQs" id="Ocw-gl-9yr"/>
                         <outlet property="headerLabel" destination="mix-5W-zqR" id="C6N-JF-kst"/>
                         <outlet property="popupView" destination="MY8-n1-sSL" id="cqQ-In-WRp"/>
+                        <outlet property="selectButton" destination="stx-gS-Chl" id="CrK-Yr-aOH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pn7-qS-6lS" userLabel="First Responder" sceneMemberID="firstResponder"/>
