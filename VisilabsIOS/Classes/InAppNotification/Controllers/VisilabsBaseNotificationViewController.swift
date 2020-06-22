@@ -48,21 +48,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
 
 extension UIColor {
-    /**
-     The shorthand four-digit hexadecimal representation of color with alpha.
-     #RGBA defines to the color #AARRGGBB.
 
-     - parameter MPHex: hexadecimal value.
-     */
-    public convenience init(MPHex: UInt) {
-        let divisor = CGFloat(255)
-        let alpha   = CGFloat((MPHex & 0xFF000000) >> 24) / divisor
-        let red     = CGFloat((MPHex & 0x00FF0000) >> 16) / divisor
-        let green   = CGFloat((MPHex & 0x0000FF00) >>  8) / divisor
-        let blue    = CGFloat( MPHex & 0x000000FF       ) / divisor
-        self.init(red: red, green: green, blue: blue, alpha: alpha)
-    }
-    
     public convenience init?(hex: String?, alpha: CGFloat = 1.0) {
         
         guard let hexString = hex else {
