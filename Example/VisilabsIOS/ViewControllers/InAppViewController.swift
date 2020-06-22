@@ -104,13 +104,47 @@ class InAppViewController: FormViewController {
         }
         
         <<< URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
-        $0.title = "Image URL"
-        $0.add(rule: RuleURL())
-        $0.placeholder = "Image URL"
-        $0.validationOptions = .validatesOnDemand
-        $0.value = URL(string: "https://www.google.com/ex.gif")
+            $0.title = "Image URL"
+            $0.add(rule: RuleURL())
+            $0.placeholder = "Image URL"
+            $0.validationOptions = .validatesOnDemand
+            $0.value = URL(string: "https://www.google.com/ex.gif")
         }
          
+            
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.messageTitleColor) {
+            $0.title = "Message Title Color"
+            $0.placeholder = ""
+            $0.value = "#000000"
+            $0.disabled = true
+        }.onCellSelection { cell, row in
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "modalview") as! ModalViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            vc.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value){
+                vc.selectedColor = selectedColor
+            }
+            vc.headerText = row.title!
+            vc.textRow = row
+            self.present(vc, animated: true, completion: nil)
+        }
+            
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.messageBodyColor) {
+            $0.title = "Message Body Color"
+            $0.placeholder = ""
+            $0.value = "#000000"
+            $0.disabled = true
+        }.onCellSelection { cell, row in
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "modalview") as! ModalViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            vc.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value){
+                vc.selectedColor = selectedColor
+            }
+            vc.headerText = row.title!
+            vc.textRow = row
+            self.present(vc, animated: true, completion: nil)
+        }
     
         +++ Section()
         <<< ButtonRow() {
