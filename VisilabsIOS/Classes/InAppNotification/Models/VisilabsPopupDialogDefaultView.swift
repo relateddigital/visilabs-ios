@@ -183,6 +183,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
             messageLabel.textColor = bodyColor
         }
         
+        if let closeButtonColor = notification.closeButtonColor{
+            closeButton.setTitleColor(closeButtonColor, for: .normal)
+        }
+        
+        
 
         var views: [String: Any] = [:]
         var constraints = [NSLayoutConstraint]()
