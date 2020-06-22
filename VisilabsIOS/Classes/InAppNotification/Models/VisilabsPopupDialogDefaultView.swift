@@ -60,6 +60,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         settings.starSize = 40.0
         let npsView = CosmosView(settings: settings)
         npsView.translatesAutoresizingMaskIntoConstraints = false
+        npsView.rating = 0.0
         return npsView
     }()
     
