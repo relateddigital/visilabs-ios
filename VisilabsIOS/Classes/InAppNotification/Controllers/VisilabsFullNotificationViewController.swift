@@ -252,22 +252,26 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
 }
 
 class FadingView: UIView {
-    var gradientMask: CAGradientLayer!
+    //var gradientMask: CAGradientLayer!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.backgroundColor = UIColor.clear
+        /*
         gradientMask = CAGradientLayer()
         layer.mask = gradientMask
         gradientMask.colors = [UIColor.black.cgColor, UIColor.black.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]
         gradientMask.locations = [0, 0.4, 0.9, 1]
         gradientMask.startPoint = CGPoint(x: 0, y: 0)
         gradientMask.endPoint = CGPoint(x: 0, y: 1)
+ */
     }
-
+/*
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientMask.frame = bounds
     }
+  */
 }
 
 class InAppButtonView: UIButton {
