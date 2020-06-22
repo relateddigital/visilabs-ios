@@ -11,15 +11,13 @@ import UIKit
 public class VisilabsPopupDialogDefaultView: UIView {
     
     internal lazy var closeButton: UIButton = {
-        let closeButton = UIButton()
+        let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.contentHorizontalAlignment = .right
         closeButton.clipsToBounds = true
-        if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
-            closeButton.setImage(closeImage, for: .normal)
-            closeButton.tintColor = UIColor.white
-            closeButton.setTitleColor(UIColor.white, for: .normal)
-        }
+        closeButton.setTitleColor(UIColor.white, for: .normal)
+        closeButton.setTitle("╳", for: .normal)
+        closeButton.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .bold)
         return closeButton
     }()
     
@@ -138,8 +136,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
     
     
     @objc public dynamic var closeButtonColor: UIColor? {
-        get { return closeButton.tintColor }
-        set { closeButton.tintColor = newValue }
+        get { return closeButton.currentTitleColor }
+        set { closeButton.setTitleColor(newValue, for: .normal) }
     }
     
     internal var imageHeightConstraint: NSLayoutConstraint?
