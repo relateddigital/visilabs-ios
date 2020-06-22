@@ -49,7 +49,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
 extension UIColor {
 
-    public convenience init?(hex: String?, alpha: CGFloat = 1.0) {
+    convenience init?(hex: String?, alpha: CGFloat = 1.0) {
         
         guard let hexString = hex else {
             return nil
