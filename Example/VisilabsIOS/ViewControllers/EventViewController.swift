@@ -21,7 +21,9 @@ enum VisilabsEventType : String, CaseIterable {
 }
 
 class EventViewController: FormViewController {
-
+    
+    let inAppNotificationIds = ["mini": 139, "full": 140, "image_text_button": 153, "full_image": 154, "nps": 155, "image_button": 156, "smile_rating": 157]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
@@ -67,7 +69,7 @@ class EventViewController: FormViewController {
         let section = Section("In App Notification Types")
         for visilabsInAppNotificationType in VisilabsInAppNotificationType.allCases {
             section.append(ButtonRow() {
-                $0.title = visilabsInAppNotificationType.rawValue
+                $0.title = visilabsInAppNotificationType.rawValue + " ID: " + String(inAppNotificationIds[visilabsInAppNotificationType.rawValue]!)
             }
             .onCellSelection { cell, row in
                 self.inAppEvent(visilabsInAppNotificationType)
