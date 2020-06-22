@@ -273,7 +273,7 @@ class FadingView: UIView {
 class InAppButtonView: UIButton {
     var origColor: UIColor?
     var wasCalled = false
-    let overlayColor = UIColor(MPHex: 0x33868686)
+    let overlayColor = UIColor(hex: "#868686", alpha: 0.2) ?? UIColor(red: 0.525, green: 0.525, blue: 0.525, alpha: 0.2)
     override var isHighlighted: Bool {
         didSet {
             switch isHighlighted {
