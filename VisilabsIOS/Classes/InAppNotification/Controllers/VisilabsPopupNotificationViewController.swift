@@ -39,20 +39,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     
     fileprivate var closeButton : UIButton!
 
-    /// Whether keyboard has shifted view
-    internal var keyboardShown = false
-
-    /// Keyboard height
-    internal var keyboardHeight: CGFloat?
 
     // MARK: Public
 
     /// The content view of the popup dialog
     public var viewController: UIViewController
 
-    /// Whether or not to shift view for keyboard display
-    public var keyboardShiftsView = true
-    
     // MARK: - Initializers
     
     
@@ -70,8 +62,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public convenience init(notification: VisilabsInAppNotification) {
         
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
-        self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
-        super.notification = notification
+        self.init(notification: notification, viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
         if notification.type != .full_image {
             let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: {self.delegate?.notificationShouldDismiss(controller: self,
                 callToActionURL: notification.callToActionUrl,
@@ -82,107 +73,14 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
             viewController.standardView.imageView.isUserInteractionEnabled = true
             viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
-            print(viewController.standardView.imageView)
-        }
-        addCloseButton()
-        
-        /*
-        if notification.type == .image_button {
-            let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotificationType: notification.type)
-            if let image = notification.image {
-                viewController.image = UIImage(data: image)
-            }
-            self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
-            let button = VisilabsPopupDialogButton(title: notification.buttonText!, action: nil)
-            addButton(button)
-            
-        }else if notification.type == .image_text_button {
-            let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotificationType: notification.type)
-            if let image = notification.image {
-                viewController.image = UIImage(data: image)
-            }
-            self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
-            let button = VisilabsPopupDialogButton(title: notification.buttonText!, action: nil)
-            addButton(button)
-            
         }
         
-        else{
-            self.init(viewController: VisilabsDefaultPopupNotificationViewController(),
-            buttonAlignment: .vertical,
-            transitionStyle: .zoomIn,
-            preferredWidth: 580,
-            tapGestureDismissal: false,
-            panGestureDismissal: false,
-            hideStatusBar: false)
-        }
- */
-        
-        /*
-        if notification.type == .nps {
-            viewController
-        }
-        
-        
-        else{
-            var viewController = VisilabsDefaultPopupNotificationViewController()
-            viewController.titleText   = notification.messageTitle
-            viewController.messageText = notification.messageTitle
-            viewController.image       = image
-        }
-         */
-        
-        
+        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        viewController.standardView.closeButton.isUserInteractionEnabled = true
+        viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
     }
     
     
-    /*!
-     Creates a standard popup dialog with title, message and image field
-
-     - parameter title:            The dialog title
-     - parameter message:          The dialog message
-     - parameter image:            The dialog image
-     - parameter buttonAlignment:  The dialog button alignment
-     - parameter transitionStyle:  The dialog transition style
-     - parameter preferredWidth:   The preferred width for iPad screens
-     - parameter tapGestureDismissal: Indicates if dialog can be dismissed via tap gesture
-     - parameter panGestureDismissal: Indicates if dialog can be dismissed via pan gesture
-     - parameter hideStatusBar:    Whether to hide the status bar on PopupDialog presentation
-     - parameter completion:       Completion block invoked when dialog was dismissed
-
-     - returns: Popup dialog default style
-     */
-    /*
-    @objc public convenience init(
-                title: String?,
-                message: String?,
-                image: UIImage? = nil,
-                buttonAlignment: NSLayoutConstraint.Axis = .vertical,
-                transitionStyle: PopupDialogTransitionStyle = .bounceUp,
-                preferredWidth: CGFloat = 340,
-                tapGestureDismissal: Bool = true,
-                panGestureDismissal: Bool = true,
-                hideStatusBar: Bool = false,
-                completion: (() -> Void)? = nil) {
-
-        // Create and configure the standard popup dialog view
-        let viewController = VisilabsDefaultPopupNotificationViewController()
-        viewController.titleText   = title
-        viewController.messageText = message
-        viewController.image       = image
-
-        // Call designated initializer
-        self.init(viewController: viewController,
-                  buttonAlignment: buttonAlignment,
-                  transitionStyle: transitionStyle,
-                  preferredWidth: preferredWidth,
-                  tapGestureDismissal: tapGestureDismissal,
-                  panGestureDismissal: panGestureDismissal,
-                  hideStatusBar: hideStatusBar,
-                  completion: completion)
-    }
-    */
-
     /*!
      Creates a popup dialog containing a custom view
 
@@ -197,7 +95,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
      - returns: Popup dialog with a custom view controller
      */
-    @objc public init(
+     public init(
+        notification: VisilabsInAppNotification,
         viewController: UIViewController,
         buttonAlignment: NSLayoutConstraint.Axis = .vertical,
         transitionStyle: PopupDialogTransitionStyle = .bounceUp,
@@ -207,12 +106,13 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         hideStatusBar: Bool = false,
         completion: (() -> Void)? = nil) {
 
+        
         self.viewController = viewController
         self.preferredWidth = preferredWidth
         self.hideStatusBar = hideStatusBar
         self.completion = completion
         super.init(nibName: nil, bundle: nil)
-
+        self.notification = notification
         // Init the presentation manager
         presentationManager = VisilabsPresentationManager(transitionStyle: transitionStyle, interactor: interactor)
 
@@ -244,6 +144,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             panRecognizer.cancelsTouchesInView = false
             popupContainerView.stackView.addGestureRecognizer(panRecognizer)
         }
+        
+        //addCloseButton()
     }
 
     // Init with coder not implemented
@@ -307,33 +209,31 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     // MARK: - Button related
     
-    
+    /*
     fileprivate func addCloseButton() {
         if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
             //TODO:buradaki x değişecek
             if let c = viewController as? VisilabsDefaultPopupNotificationViewController {
                 print(c.standardView.frame.height)
                 print(c.standardView.frame.width)
-                print(popupContainerView.stackView.frame.height)
-                print(popupContainerView.frame.width)
-                print(popupContainerView.frame.height)
-                print(popupContainerView.buttonStackView.frame.width)
-                print(popupContainerView.buttonStackView.frame.height)
+                print(self.notification)
+                self.closeButton = UIButton()
+                self.closeButton.setImage(closeImage, for: .normal)
+                self.closeButton.tintColor = notification.closeButtonColor
                 
-                print(view.frame.width)
-                print(view.frame.height)
+                var views: [String: Any] = [:]
+                views = ["closeButton": self.closeButton!]
+                var constraints = [NSLayoutConstraint]()
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==40@950)-|", options: [], metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@950)-[closeButton]|", options: [], metrics: nil, views: views)
+                c.standardView.addSubview(self.closeButton)
+                c.standardView.addConstraints(constraints)
+                NSLayoutConstraint.activate(constraints)
+
             }
-            
-            
-            
-            
-            self.closeButton = UIButton()
-            self.closeButton.setImage(closeImage, for: .normal)
-            self.closeButton.tintColor = notification.closeButtonColor
-            
-            popupContainerView.stackView.addSubview(self.closeButton)
         }
     }
+ */
 
     /*!
      Appends the buttons added to the popup dialog
@@ -353,6 +253,24 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             buttonStackView.addArrangedSubview(button)
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         }
+        
+        /*
+        if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
+            self.closeButton = UIButton()
+            self.closeButton.setImage(closeImage, for: .normal)
+            self.closeButton.tintColor = notification.closeButtonColor
+            var views: [String: Any] = [:]
+            views = ["closeButton": self.closeButton!]
+            var constraints = [NSLayoutConstraint]()
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==40@950)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@950)-[closeButton]|", options: [], metrics: nil, views: views)
+            //NSLayoutConstraint.activate(constraints)
+            
+            stackView.addSubview(self.closeButton)
+            stackView.addConstraints(constraints)
+            stackView.updateConstraints()
+        }
+ */
     }
 
     /*!
@@ -454,20 +372,6 @@ internal extension VisilabsPopupNotificationViewController {
                                                          name: UIDevice.orientationDidChangeNotification,
                                                          object: nil)
 
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(keyboardWillShow),
-                                                         name: UIResponder.keyboardWillShowNotification,
-                                                         object: nil)
-
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(keyboardWillHide),
-                                                         name: UIResponder.keyboardWillHideNotification,
-                                                         object: nil)
-
-        NotificationCenter.default.addObserver(self,
-                                                         selector: #selector(keyboardWillChangeFrame),
-                                                         name: UIResponder.keyboardWillChangeFrameNotification,
-                                                         object: nil)
     }
 
     /*! Remove observers */
@@ -476,60 +380,22 @@ internal extension VisilabsPopupNotificationViewController {
                                                             name: UIDevice.orientationDidChangeNotification,
                                                             object: nil)
 
-        NotificationCenter.default.removeObserver(self,
-                                                            name: UIResponder.keyboardWillShowNotification,
-                                                            object: nil)
-
-        NotificationCenter.default.removeObserver(self,
-                                                            name: UIResponder.keyboardWillHideNotification,
-                                                            object: nil)
-
-        NotificationCenter.default.removeObserver(self,
-                                                            name: UIResponder.keyboardWillChangeFrameNotification,
-                                                            object: nil)
     }
 
     // MARK: - Actions
 
-    /*!
-     Keyboard will show notification listener
-     - parameter notification: NSNotification
-     */
-    @objc fileprivate func keyboardWillShow(_ notification: Notification) {
-        guard isTopAndVisible else { return }
-        keyboardShown = true
-        centerPopup()
-    }
 
-    /*!
-     Keyboard will hide notification listener
-     - parameter notification: NSNotification
-     */
-    @objc fileprivate func keyboardWillHide(_ notification: Notification) {
-        guard isTopAndVisible else { return }
-        keyboardShown = false
-        centerPopup()
-    }
-
-    /*!
-     Keyboard will change frame notification listener
-     - parameter notification: NSNotification
-     */
-    @objc fileprivate func keyboardWillChangeFrame(_ notification: Notification) {
-        guard let keyboardRect = (notification as NSNotification).userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
-            return
-        }
-        keyboardHeight = keyboardRect.cgRectValue.height
-    }
 
     /*!
      Listen to orientation changes
      - parameter notification: NSNotification
      */
     @objc fileprivate func orientationChanged(_ notification: Notification) {
-        if keyboardShown { centerPopup() }
+        //if keyboardShown { centerPopup() }
+        //centerPopup()
     }
 
+    /*
     fileprivate func centerPopup() {
 
         // Make sure keyboard should reposition on keayboard notifications
@@ -545,4 +411,6 @@ internal extension VisilabsPopupNotificationViewController {
         popupContainerView.centerYConstraint?.constant = popupCenter
         popupContainerView.pv_layoutIfNeededAnimated()
     }
+   */
+    
 }

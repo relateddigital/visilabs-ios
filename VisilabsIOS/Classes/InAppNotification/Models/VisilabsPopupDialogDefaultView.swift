@@ -10,6 +10,19 @@ import UIKit
 
 public class VisilabsPopupDialogDefaultView: UIView {
     
+    internal lazy var closeButton: UIButton = {
+        let closeButton = UIButton()
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.contentHorizontalAlignment = .right
+        closeButton.clipsToBounds = true
+        if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
+            closeButton.setImage(closeImage, for: .normal)
+            closeButton.tintColor = UIColor.white
+            closeButton.setTitleColor(UIColor.white, for: .normal)
+        }
+        return closeButton
+    }()
+    
 
     internal lazy var imageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
@@ -52,7 +65,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         return npsView
     }()
     
-    let bundle = Bundle(identifier: "org.cocoapods.VisilabsIOS")
+    let bundle = Bundle(identifier: "com.relateddigital.visilabs")
     private func getUIImage(named: String) -> UIImage?{
         return UIImage(named: named, in : bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
     }
@@ -123,6 +136,12 @@ public class VisilabsPopupDialogDefaultView: UIView {
         set { messageLabel.textAlignment = newValue }
     }
     
+    
+    @objc public dynamic var closeButtonColor: UIColor? {
+        get { return closeButton.tintColor }
+        set { closeButton.tintColor = newValue }
+    }
+    
     internal var imageHeightConstraint: NSLayoutConstraint?
     
     /*
@@ -173,62 +192,66 @@ public class VisilabsPopupDialogDefaultView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(imageView)
-        
-        
+        addSubview(closeButton)
+
         
         if notification.type == .image_button || notification.type == .full_image {
-            views = ["imageView": imageView]
+            views = ["imageView": imageView, "closeButton": closeButton]
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
             
         }else if notification.type == .image_text_button {
             addSubview(titleLabel)
             addSubview(messageLabel)
-            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel] as [String: Any]
+            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel,"closeButton": closeButton] as [String: Any]
             //constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@950)-[imageView]-(==40@950)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
         } else if notification.type == .nps {
             addSubview(titleLabel)
             addSubview(messageLabel)
             addSubview(npsView)
             
             
-            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "npsView" : npsView ] as [String: Any]
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "npsView" : npsView, "closeButton": closeButton] as [String: Any]
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             // TODO: burada sabit 60 vermek yerine hesaplanabilir.
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==60@900)-[npsView]-(==60@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[npsView]-(==30@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[npsView]-(==30@900)-|", options: [], metrics: nil, views: views)
         } else if notification.type == .smile_rating {
                 addSubview(titleLabel)
                 addSubview(messageLabel)
                 addSubview(sliderStepRating)
                 
                 
-                views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "sliderStepRating" : sliderStepRating ] as [String: Any]
-                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+                views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "sliderStepRating" : sliderStepRating, "closeButton": closeButton] as [String: Any]
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
                 // TODO: burada sabit 60 vermek yerine hesaplanabilir.
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[sliderStepRating]-(==20@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
-                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[sliderStepRating]-(==30@900)-|", options: [], metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[sliderStepRating]-(==30@900)-|", options: [], metrics: nil, views: views)
  
         }
         
         else {
             addSubview(titleLabel)
             addSubview(messageLabel)
-            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel] as [String: Any]
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+            views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "closeButton": closeButton] as [String: Any]
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==40@900)-[imageView]-(==40@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-|", options: [], metrics: nil, views: views)
         }
-        
         
         
         imageHeightConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
