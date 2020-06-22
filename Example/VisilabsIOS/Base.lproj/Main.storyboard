@@ -45,10 +45,10 @@
             </objects>
             <point key="canvasLocation" x="-810" y="-330"/>
         </scene>
-        <!--Geofence-->
+        <!--Geofence View Controller-->
         <scene sceneID="v2z-cA-gvT">
             <objects>
-                <viewController title="Geofence" id="uRA-XH-yfi" sceneMemberID="viewController">
+                <viewController title="Geofence View Controller" id="uRA-XH-yfi" customClass="GeofenceViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Rqc-Ie-tNM"/>
                         <viewControllerLayoutGuide type="bottom" id="aVI-eY-rph"/>
