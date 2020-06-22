@@ -17,8 +17,8 @@ class InAppViewController: FormViewController {
     }
     
     var notificationTypes = [String]()
-    var fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
-    
+    let fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
+    let closeButtonColors = ["black", "white"]
     
     private func showHideRows(){
         let messageTypeRow: PickerInputRow<String>? = self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType)
@@ -115,7 +115,6 @@ class InAppViewController: FormViewController {
             
         <<< TextRow(VisilabsInAppNotification.PayloadKey.messageTitleColor) {
             $0.title = "Message Title Color"
-            $0.placeholder = ""
             $0.value = "#000000"
             $0.disabled = true
         }.onCellSelection { cell, row in
@@ -132,7 +131,6 @@ class InAppViewController: FormViewController {
             
         <<< TextRow(VisilabsInAppNotification.PayloadKey.messageBodyColor) {
             $0.title = "Message Body Color"
-            $0.placeholder = ""
             $0.value = "#000000"
             $0.disabled = true
         }.onCellSelection { cell, row in
@@ -160,6 +158,60 @@ class InAppViewController: FormViewController {
             $0.title = "Font Family"
             $0.options = fonts
             $0.value = "DefaultFont"
+        }
+            
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.backGround) {
+            $0.title = "Background Color"
+            $0.value = "#A7A7A7"
+            $0.disabled = true
+        }.onCellSelection { cell, row in
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "modalview") as! ModalViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            vc.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value){
+                vc.selectedColor = selectedColor
+            }
+            vc.headerText = row.title!
+            vc.textRow = row
+            self.present(vc, animated: true, completion: nil)
+        }
+            
+        <<< PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.closeButtonColor){
+            $0.title = "Close Button Color"
+            $0.options = closeButtonColors
+            $0.value = "white"
+        }
+        
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.buttonTextColor) {
+            $0.title = "Button Text Color"
+            $0.value = "#FFFFFF"
+            $0.disabled = true
+        }.onCellSelection { cell, row in
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "modalview") as! ModalViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            vc.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value){
+                vc.selectedColor = selectedColor
+            }
+            vc.headerText = row.title!
+            vc.textRow = row
+            self.present(vc, animated: true, completion: nil)
+        }
+            
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.buttonColor) {
+            $0.title = "Button Color"
+            $0.value = "#000000"
+            $0.disabled = true
+        }.onCellSelection { cell, row in
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "modalview") as! ModalViewController
+            vc.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            vc.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value){
+                vc.selectedColor = selectedColor
+            }
+            vc.headerText = row.title!
+            vc.textRow = row
+            self.present(vc, animated: true, completion: nil)
         }
             
 
