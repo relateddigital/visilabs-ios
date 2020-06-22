@@ -60,8 +60,8 @@ class ModalViewController: UIViewController {
  */
     
     @IBAction func handleSelect(_ sender: Any) {
-        let selectedColor = colorPickerView.color
-        self.textRow.value = ""
+        self.textRow.value = colorPickerView.color.toHexString()
+        self.textRow.updateCell()
         self.dismiss(animated: true, completion: nil)
     }
     
