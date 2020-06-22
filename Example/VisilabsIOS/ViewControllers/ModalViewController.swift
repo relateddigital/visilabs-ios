@@ -8,12 +8,19 @@
 
 import UIKit
 import Colorful
-
+import Eureka
 
 class ModalViewController: UIViewController {
-    @IBOutlet weak var popupView: ColorPicker!
+    
+    var selectedColor = UIColor.black
+    var headerText = "Header"
+    var textRow : TextRow!
 
 
+    @IBOutlet weak var popupView: UIView!
+    @IBOutlet weak var headerLabel: UILabel!
+    @IBOutlet weak var colorPickerView: ColorPicker!
+    @IBOutlet weak var selectButton: UIButton!
     
     var colorSpace: HRColorSpace = .sRGB
 
@@ -23,13 +30,15 @@ class ModalViewController: UIViewController {
         popupView.clipsToBounds = true
         popupView.layer.cornerRadius = 6
 
+        /*
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tap)
-
+*/
     
         super.viewDidLoad()
-        popupView.addTarget(self, action: #selector(self.handleColorChanged(picker:)), for: .valueChanged)
-        popupView.set(color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 0, alpha: 1), colorSpace: colorSpace)
+        colorPickerView.addTarget(self, action: #selector(self.handleColorChanged(picker:)), for: .valueChanged)
+        colorPickerView.set(color: selectedColor, colorSpace: colorSpace)
+        headerLabel.text = headerText
         //updateColorSpaceText()
         //handleColorChanged(picker: popupView)
     }
@@ -37,17 +46,27 @@ class ModalViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        /*
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.dismiss(animated: true, completion: nil)
         }
+ */
     }
 
+    /*
     @objc func handleTap(gesture: UITapGestureRecognizer) {
         dismiss(animated: true, completion: nil)
     }
+ */
     
+    @IBAction func handleSelect(_ sender: Any) {
+        let selectedColor = colorPickerView.color
+        self.textRow.value = ""
+        self.dismiss(animated: true, completion: nil)
+    }
     
     @objc func handleColorChanged(picker: ColorPicker) {
+        let color = picker.color
         //label.text = picker.color.description
     }
     
