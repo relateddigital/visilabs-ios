@@ -215,32 +215,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     // MARK: - Button related
     
-    /*
-    fileprivate func addCloseButton() {
-        if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
-            //TODO:buradaki x değişecek
-            if let c = viewController as? VisilabsDefaultPopupNotificationViewController {
-                print(c.standardView.frame.height)
-                print(c.standardView.frame.width)
-                print(self.notification)
-                self.closeButton = UIButton()
-                self.closeButton.setImage(closeImage, for: .normal)
-                self.closeButton.tintColor = notification.closeButtonColor
-                
-                var views: [String: Any] = [:]
-                views = ["closeButton": self.closeButton!]
-                var constraints = [NSLayoutConstraint]()
-                constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==40@950)-|", options: [], metrics: nil, views: views)
-                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@950)-[closeButton]|", options: [], metrics: nil, views: views)
-                c.standardView.addSubview(self.closeButton)
-                c.standardView.addConstraints(constraints)
-                NSLayoutConstraint.activate(constraints)
-
-            }
-        }
-    }
- */
-
     /*!
      Appends the buttons added to the popup dialog
      to the placeholder stack view
