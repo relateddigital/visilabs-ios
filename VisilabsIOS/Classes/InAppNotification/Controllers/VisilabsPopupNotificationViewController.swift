@@ -36,6 +36,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     
     /// The set of buttons
     fileprivate var buttons = [VisilabsPopupDialogButton]()
+    
+    fileprivate var closeButton : UIButton!
 
     /// Whether keyboard has shifted view
     internal var keyboardShown = false
@@ -71,15 +73,18 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         self.init(viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
         super.notification = notification
         if notification.type != .full_image {
-            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, action: {self.delegate?.notificationShouldDismiss(controller: self,
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: {self.delegate?.notificationShouldDismiss(controller: self,
                 callToActionURL: notification.callToActionUrl,
                 shouldTrack: true,
                 additionalTrackingProperties: nil)})
             addButton(button)
         }else {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-            self.popupContainerView.stackView.addGestureRecognizer(tapGestureRecognizer)
+            viewController.standardView.imageView.isUserInteractionEnabled = true
+            viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
+            print(viewController.standardView.imageView)
         }
+        addCloseButton()
         
         /*
         if notification.type == .image_button {
@@ -301,6 +306,34 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     }
 
     // MARK: - Button related
+    
+    
+    fileprivate func addCloseButton() {
+        if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
+            //TODO:buradaki x değişecek
+            if let c = viewController as? VisilabsDefaultPopupNotificationViewController {
+                print(c.standardView.frame.height)
+                print(c.standardView.frame.width)
+                print(popupContainerView.stackView.frame.height)
+                print(popupContainerView.frame.width)
+                print(popupContainerView.frame.height)
+                print(popupContainerView.buttonStackView.frame.width)
+                print(popupContainerView.buttonStackView.frame.height)
+                
+                print(view.frame.width)
+                print(view.frame.height)
+            }
+            
+            
+            
+            
+            self.closeButton = UIButton()
+            self.closeButton.setImage(closeImage, for: .normal)
+            self.closeButton.tintColor = notification.closeButtonColor
+            
+            popupContainerView.stackView.addSubview(self.closeButton)
+        }
+    }
 
     /*!
      Appends the buttons added to the popup dialog
