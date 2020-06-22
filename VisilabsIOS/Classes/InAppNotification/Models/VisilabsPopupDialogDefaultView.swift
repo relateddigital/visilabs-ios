@@ -10,6 +10,7 @@ import UIKit
 
 public class VisilabsPopupDialogDefaultView: UIView {
     
+
     internal lazy var imageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,8 +157,14 @@ public class VisilabsPopupDialogDefaultView: UIView {
         
         titleLabel.text = notification.messageTitle
         titleLabel.font = notification.messageTitleFont
+        if let titleColor = notification.messageTitleColor {
+            titleLabel.textColor = titleColor
+        }
         messageLabel.text = notification.messageBody
         messageLabel.font = notification.messageBodyFont
+        if let bodyColor = notification.messageBodyColor {
+            messageLabel.textColor = bodyColor
+        }
         
 
         var views: [String: Any] = [:]
@@ -166,6 +173,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(imageView)
+        
+        
         
         if notification.type == .image_button || notification.type == .full_image {
             views = ["imageView": imageView]
@@ -207,16 +216,6 @@ public class VisilabsPopupDialogDefaultView: UIView {
                 // TODO: burada sabit 60 vermek yerine hesaplanabilir.
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[sliderStepRating]-(==20@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[sliderStepRating]-(==30@900)-|", options: [], metrics: nil, views: views)
-            
-            /*
-            NSLayoutConstraint.activate([
-                //sliderStepRating
-                //sliderStepRating.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
-                //sliderStepRating.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-                //sliderStepRating.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-                sliderStepRating.heightAnchor.constraint(equalToConstant: 35)
-            ])
- */
  
         }
         
@@ -232,7 +231,6 @@ public class VisilabsPopupDialogDefaultView: UIView {
         
         
         
-        
         imageHeightConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
         
         if let imageHeightConstraint = imageHeightConstraint {
@@ -240,6 +238,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         }
 
         NSLayoutConstraint.activate(constraints)
+
     }
 }
 
