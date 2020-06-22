@@ -17,6 +17,7 @@ class InAppViewController: FormViewController {
     }
     
     var notificationTypes = [String]()
+    var fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
     
     
     private func showHideRows(){
@@ -145,6 +146,23 @@ class InAppViewController: FormViewController {
             vc.textRow = row
             self.present(vc, animated: true, completion: nil)
         }
+            
+        <<< PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.messageBodyTextSize){
+            $0.title = "Text Size"
+            $0.options = []
+            for i in 1...10{
+                $0.options.append(i)
+            }
+            $0.value = 1
+        }
+        
+        <<< PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.fontFamily){
+            $0.title = "Font Family"
+            $0.options = fonts
+            $0.value = "DefaultFont"
+        }
+            
+
     
         +++ Section()
         <<< ButtonRow() {
