@@ -19,6 +19,7 @@
 		8862E468247EDF5500C230DD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E467247EDF5500C230DD /* HomeViewController.swift */; };
 		8862E46A247EE3FF00C230DD /* VisilabsProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E469247EE3FF00C230DD /* VisilabsProfile.swift */; };
 		88749180249A8FCD008816B9 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874917F249A8FCD008816B9 /* ModalViewController.swift */; };
+		88B2A47924A0D0FA00C153DC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B2A47824A0D0FA00C153DC /* Extensions.swift */; };
 		9F70E7C1280382305CC3FCE3 /* Pods_VisilabsIOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		8863DF3B24319A15003021B9 /* VisilabsIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisilabsIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8874917F249A8FCD008816B9 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		8887EEE4243191CE003BE2E7 /* VisilabsIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisilabsIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88B2A47824A0D0FA00C153DC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
 		B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsIOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				88370C9324853675005645F5 /* FormHelper.swift */,
+				88B2A47824A0D0FA00C153DC /* Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				8862E46A247EE3FF00C230DD /* VisilabsProfile.swift in Sources */,
 				8862E462247ED6D000C230DD /* EventViewController.swift in Sources */,
+				88B2A47924A0D0FA00C153DC /* Extensions.swift in Sources */,
 				88370C9424853675005645F5 /* FormHelper.swift in Sources */,
 				8862E463247ED6D000C230DD /* InAppViewController.swift in Sources */,
 				8862E468247EDF5500C230DD /* HomeViewController.swift in Sources */,
