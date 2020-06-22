@@ -58,6 +58,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: self.notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: nil)
         }
     }
+    
+    @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer){
+        self.dismiss(animated: true) {
+            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+        }
+    }
 
     public convenience init(notification: VisilabsInAppNotification) {
         
@@ -75,7 +81,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
         }
         
-        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
     }
