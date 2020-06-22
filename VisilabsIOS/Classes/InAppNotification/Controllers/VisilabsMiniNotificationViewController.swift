@@ -46,16 +46,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         circleLabel.layer.borderWidth = 2.0
         circleLabel.layer.borderColor = UIColor.white.cgColor
         
-        /*
-        view.backgroundColor = UIColor(MPHex: 3858759680)
-        titleLabel.textColor = UIColor(MPHex: 4294967295)
-        imageView.tintColor = UIColor(MPHex: 4294967295)
-         */
-        
-        //view.backgroundColor = UIColor(MPHex: miniNotification.backgroundColor)
-        //bodyLabel.textColor = UIColor(MPHex: miniNotification.bodyColor)
         imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
-        //imageView.tintColor = UIColor(MPHex: miniNotification.imageTintColor)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap(gesture:)))
         tapGesture.numberOfTapsRequired = 1
@@ -114,8 +105,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             window.layer.cornerRadius = 6
             
             //TODO: bunları default set ediyorum doğru mudur?
-            window.layer.borderColor = UIColor(MPHex: 4294967295).cgColor
-            //window.layer.borderColor = UIColor(MPHex: miniNotification.borderColor).cgColor
+            window.layer.borderColor = UIColor.white.cgColor
             window.layer.borderWidth = 1
             window.isHidden = false
         }
