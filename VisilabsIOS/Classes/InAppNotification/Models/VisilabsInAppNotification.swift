@@ -185,7 +185,7 @@ public class VisilabsInAppNotification {
     private func setFonts(){
         self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
         self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
+        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
     }
     
     
@@ -194,6 +194,7 @@ public class VisilabsInAppNotification {
         if let fSize = font_size, let s = Int(fSize), s > 0 {
             size = size + s
         }
+        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style), size: CGFloat(size))
         if let font = font_family {
             if #available(iOS 13.0, *) {
                 var systemDesign :UIFontDescriptor.SystemDesign  = .default
@@ -203,11 +204,18 @@ public class VisilabsInAppNotification {
                     systemDesign = .monospaced
                 }
                 if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style).withDesign(systemDesign) {
-                    return UIFont(descriptor: fontDescriptor, size: CGFloat(size))
+                    finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
+                }
+            }
+            else{
+                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
+                    finalFont = UIFont(name: "GillSans", size: CGFloat(size))!
+                } else if font.lowercased() == "monospace" {
+                    finalFont = UIFont(name: "CourierNewPSMT", size: CGFloat(size))!
                 }
             }
         }
-        return UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style), size: CGFloat(size))
+        return finalFont
     }
     
     private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
