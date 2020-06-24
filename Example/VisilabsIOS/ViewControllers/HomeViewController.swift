@@ -119,7 +119,7 @@ class HomeViewController: FormViewController {
             <<< PickerInputRow<Int>("requestTimeoutInSeconds"){
                 $0.title = "requestTimeoutInSeconds"
                 $0.options = []
-                for i in 1...60{
+                for i in 10...60{
                     $0.options.append(i)
                 }
                 $0.value = visilabsProfile.requestTimeoutInSeconds
