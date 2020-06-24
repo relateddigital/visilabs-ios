@@ -23,6 +23,32 @@ class RecommendationViewController: FormViewController {
     private func initializeForm() {
         form +++
         Section("Recommendation")
+            
+        <<< IntRow("zoneId") {
+            $0.title = "Zone ID"
+            $0.add(rule: RuleRequired())
+            $0.add(rule: RuleGreaterThan(min: 0))
+            $0.value = 1
+        }
+        
+        <<< TextRow("productCode") {
+            $0.title = "Product Code"
+            $0.add(rule: RuleRequired())
+            $0.placeholder = "Product Code"
+            $0.value = "asd-123"
+        }
+        
+        +++ Section()
+            
+        <<< LabelRow() {
+            $0.title = "not implemented yet"
+            $0.disabled = true
+        }
+            
+        <<< ButtonRow() {
+            $0.title = "recommend"
+            $0.disabled = true
+        }
     }
 
 }
