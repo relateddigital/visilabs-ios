@@ -45,6 +45,25 @@
             </objects>
             <point key="canvasLocation" x="-810" y="-330"/>
         </scene>
+        <!--Recommendation View Controller-->
+        <scene sceneID="Zmr-Sr-bc6">
+            <objects>
+                <viewController title="Recommendation View Controller" id="dvx-e3-EjW" customClass="RecommendationViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wJz-Ds-1nZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="WfJ-ZJ-6aI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qGn-Z5-aj3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Recommendation" image="Recommendation" id="ar5-kL-6k9"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r2M-fO-Xqr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1289" y="828"/>
+        </scene>
         <!--Geofence View Controller-->
         <scene sceneID="v2z-cA-gvT">
             <objects>
@@ -62,7 +81,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sPH-z7-f1k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-550" y="636"/>
+            <point key="canvasLocation" x="-538" y="537"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="9Fx-GK-1bn">
@@ -95,11 +114,12 @@
                         <segue destination="mdL-Fq-e14" kind="relationship" relationship="viewControllers" id="4cF-Q9-uvY"/>
                         <segue destination="wh7-fN-UuX" kind="relationship" relationship="viewControllers" id="8CX-iy-9gh"/>
                         <segue destination="uRA-XH-yfi" kind="relationship" relationship="viewControllers" id="6at-ew-ZuQ"/>
+                        <segue destination="dvx-e3-EjW" kind="relationship" relationship="viewControllers" id="jKA-Y3-u95"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vam-ZM-pWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1644" y="62"/>
+            <point key="canvasLocation" x="-1665" y="-70"/>
         </scene>
         <!--Modal View Controller-->
         <scene sceneID="BFe-dD-VEE">
@@ -171,5 +191,6 @@
         <image name="Event" width="25" height="25"/>
         <image name="Geofence" width="25" height="25"/>
         <image name="InApp" width="25" height="25"/>
+        <image name="Recommendation" width="25" height="25"/>
     </resources>
 </document>
