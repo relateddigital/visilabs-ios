@@ -14,15 +14,18 @@ class InAppHelper {
     
     static let miniIconUrlFormat = "https://img.visilabs.net/in-app-message/icons/icon_#.png"
     static let miniIcons = ["alert", "bell", "chat", "checkmark", "coin", "download", "flag", "gear", "heart", "megaphone", "phone", "pricetag", "refresh", "rocket", "star", "trophy", "vip"]
+    static var miniIconImages = [String: UIImage]()
     
     static func downloadMiniIconImagesAndSave() {
         for miniIcon in miniIcons {
-            var miniIconUrl = URL(fileURLWithPath: miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon))
+            if let miniIconUrl = URL(string: miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon)){
+                downloadImage(miniIconUrl ,iconName: miniIcon)
+            }
         }
     }
     
     
-    static func downloadImage(url: URL, completion: imageHandler = { _ in }){
+    static func downloadImage(_ url: URL, iconName: String? = nil, completion: imageHandler = { _ in }){
         let dataTask = URLSession.shared.dataTask(with: url) {(data, response, error) in
             if let data = data {
                 if let image = UIImage(data: data) {
@@ -30,6 +33,10 @@ class InAppHelper {
                     let heightInPixels = heightInPoints * image.scale
                     let widthInPoints = image.size.width
                     let widthInPixels = widthInPoints * image.scale
+                    if let iName = iconName {
+                        miniIconImages[iName] = image
+                    }
+                    print("Download Image: \(url.absoluteString) heightInPoints:\(heightInPoints), heightInPixels:\(heightInPixels), widthInPoints:\(widthInPoints), widthInPixels:\(widthInPixels)")
                 }
             }
         }
