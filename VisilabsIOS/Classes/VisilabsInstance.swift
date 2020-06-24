@@ -337,6 +337,11 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
 
     //MARK: - InAppNotifications
     
+    //TODO: this method added for test purposes
+    public func showNotification(visilabsInAppNotification: VisilabsInAppNotification){
+        self.visilabsInAppNotificationInstance.notificationsInstance.showNotification(visilabsInAppNotification)
+    }
+    
     func checkInAppNotification(properties: [String:String]) {
         trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
