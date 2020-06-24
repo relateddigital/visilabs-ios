@@ -27,7 +27,7 @@ class GeofenceViewController: FormViewController {
 
         form +++
             
-        Section("Geofence Server Checks")
+        Section("Geofence Server Checks".uppercased(with: Locale(identifier: "en_US")))
         
     }
 
