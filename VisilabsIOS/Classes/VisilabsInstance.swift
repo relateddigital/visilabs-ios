@@ -338,7 +338,7 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
     //MARK: - InAppNotifications
     
     //TODO: this method added for test purposes
-    public func showNotification(visilabsInAppNotification: VisilabsInAppNotification){
+    public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification){
         self.visilabsInAppNotificationInstance.notificationsInstance.showNotification(visilabsInAppNotification)
     }
     
