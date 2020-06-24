@@ -164,16 +164,31 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("targetUrl") {
                 $0.title = "targetUrl"
-                $0.add(rule: RuleURL())
+                $0.add(rule: RuleURL(msg: "targetUrl is not a valid url"))
                 $0.placeholder = "targetUrl"
                 if let turl = visilabsProfile.targetUrl {
                     $0.value = URL(string: turl)
                 }
+            }.onRowValidationChanged { cell, row in
+                    let rowIndex = row.indexPath!.row
+                    while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
+                        row.section?.remove(at: rowIndex + 1)
+                    }
+                    if !row.isValid {
+                        for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
+                            let labelRow = LabelRow() {
+                                $0.title = validationMsg
+                                $0.cell.height = { 30 }
+                            }
+                            let indexPath = row.indexPath!.row + index + 1
+                            row.section?.insert(labelRow, at: indexPath)
+                        }
+                    }
             }
             
             <<< URLRow("actionUrl") {
                 $0.title = "actionUrl"
-                $0.add(rule: RuleURL())
+                $0.add(rule: RuleURL(msg: "actionUrl is not a valid url"))
                 $0.placeholder = "actionUrl"
                 if let aurl = visilabsProfile.actionUrl {
                     $0.value = URL(string: aurl)
@@ -182,11 +197,26 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("geofenceUrl") {
                 $0.title = "geofenceUrl"
-                $0.add(rule: RuleURL())
+                $0.add(rule: RuleURL(msg: "geofenceUrl is not a valid url"))
                 $0.placeholder = "geofenceUrl"
                 if let gurl = visilabsProfile.geofenceUrl {
                     $0.value = URL(string: gurl)
                 }
+            }.onRowValidationChanged { cell, row in
+                    let rowIndex = row.indexPath!.row
+                    while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
+                        row.section?.remove(at: rowIndex + 1)
+                    }
+                    if !row.isValid {
+                        for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
+                            let labelRow = LabelRow() {
+                                $0.title = validationMsg
+                                $0.cell.height = { 30 }
+                            }
+                            let indexPath = row.indexPath!.row + index + 1
+                            row.section?.insert(labelRow, at: indexPath)
+                        }
+                    }
             }
             
             <<< SwitchRow("geofenceEnabled") {
@@ -205,15 +235,11 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("restUrl") {
                 $0.title = "restUrl"
-                $0.add(rule: RuleURL())
+                $0.add(rule: RuleURL(msg: "restUrl is not a valid url"))
                 $0.placeholder = "restUrl"
                 if let rurl = visilabsProfile.restUrl {
                     $0.value = URL(string: rurl)
                 }
-            }.cellUpdate { cell, row in
-                    if !row.isValid {
-                        cell.titleLabel?.textColor = .red
-                    }
             }.onRowValidationChanged { cell, row in
                     let rowIndex = row.indexPath!.row
                     while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
@@ -278,11 +304,11 @@ class HomeViewController: FormViewController {
                 let targetUrl: String? = targetUrlRow?.value?.absoluteString
                 let actionUrl: String? = actionUrlRow?.value?.absoluteString
                 let geofenceUrl: String? = geofenceUrlRow?.value?.absoluteString
-                let geofenceEnabled: Bool? = geofenceEnabledRow?.value
-                let maxGeofenceCount: Int? = maxGeofenceCountRow?.value
+                let geofenceEnabled: Bool = geofenceEnabledRow?.value ?? false
+                let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
                 let restUrl: String? = restUrlRow?.value?.absoluteString
                 let encryptedDataSource: String? = encryptedDataSourceRow?.value
-                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: loggerUrl!, dataSource: dataSource!, realTimeUrl: realTimeUrl!, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, targetUrl: targetUrl!, actionUrl: actionUrl!, geofenceUrl: geofenceUrl!, geofenceEnabled: geofenceEnabled!, maxGeofenceCount: maxGeofenceCount!, restUrl: restUrl ?? "", encryptedDataSource: encryptedDataSource ?? "")
+                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, loggerUrl: loggerUrl!, dataSource: dataSource!, realTimeUrl: realTimeUrl!, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
                 Visilabs.callAPI().loggingEnabled = true
                 
                 
