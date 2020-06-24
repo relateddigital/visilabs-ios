@@ -22,7 +22,7 @@ class RecommendationViewController: FormViewController {
     
     private func initializeForm() {
         form +++
-        Section("Recommendation")
+        Section("Recommendation".uppercased(with: Locale(identifier: "en_US")))
             
         <<< IntRow("zoneId") {
             $0.title = "Zone ID"
