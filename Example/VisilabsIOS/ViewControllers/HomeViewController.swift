@@ -35,36 +35,77 @@ class HomeViewController: FormViewController {
 
             <<< TextRow("orgId") {
                 $0.title = "orgId"
-                $0.add(rule: RuleRequired())
+                $0.add(rule: RuleRequired(msg: "orgId required"))
                 $0.placeholder = "orgId"
                 $0.value = visilabsProfile.organizationId
+            }.onRowValidationChanged { cell, row in
+                    let rowIndex = row.indexPath!.row
+                    while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
+                        row.section?.remove(at: rowIndex + 1)
+                    }
+                    if !row.isValid {
+                        for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
+                            let labelRow = LabelRow() {
+                                $0.title = validationMsg
+                                $0.cell.height = { 30 }
+                            }
+                            let indexPath = row.indexPath!.row + index + 1
+                            row.section?.insert(labelRow, at: indexPath)
+                        }
+                    }
             }
 
             <<< TextRow("siteId") {
                 $0.title = "siteId"
-                $0.add(rule: RuleRequired())
+                $0.add(rule: RuleRequired(msg: "siteId required"))
                 $0.placeholder = "siteId"
                 $0.value = visilabsProfile.siteId
+            }.onRowValidationChanged { cell, row in
+                    let rowIndex = row.indexPath!.row
+                    while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
+                        row.section?.remove(at: rowIndex + 1)
+                    }
+                    if !row.isValid {
+                        for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
+                            let labelRow = LabelRow() {
+                                $0.title = validationMsg
+                                $0.cell.height = { 30 }
+                            }
+                            let indexPath = row.indexPath!.row + index + 1
+                            row.section?.insert(labelRow, at: indexPath)
+                        }
+                    }
             }
             
             <<< TextRow("dataSource") {
                 $0.title = "dataSource"
-                $0.add(rule: RuleRequired())
+                $0.add(rule: RuleRequired(msg: "dataSource required"))
                 $0.placeholder = "dataSource"
                 $0.value = visilabsProfile.dataSource
+            }.onRowValidationChanged { cell, row in
+                    let rowIndex = row.indexPath!.row
+                    while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
+                        row.section?.remove(at: rowIndex + 1)
+                    }
+                    if !row.isValid {
+                        for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
+                            let labelRow = LabelRow() {
+                                $0.title = validationMsg
+                                $0.cell.height = { 30 }
+                            }
+                            let indexPath = row.indexPath!.row + index + 1
+                            row.section?.insert(labelRow, at: indexPath)
+                        }
+                    }
             }
             
             <<< URLRow("loggerUrl") {
                 $0.title = "loggerUrl"
-                $0.add(rule: RuleRequired())
-                $0.add(rule: RuleURL())
+                $0.add(rule: RuleRequired(msg: "loggerUrl required"))
+                $0.add(rule: RuleURL(msg: "loggerUrl is not a valid url"))
                 $0.placeholder = "loggerUrl"
                 $0.validationOptions = .validatesOnChange
                 $0.value = URL(string: visilabsProfile.loggerUrl)
-            }.cellUpdate { cell, row in
-                    if !row.isValid {
-                        cell.titleLabel?.textColor = .red
-                    }
             }.onRowValidationChanged { cell, row in
                     let rowIndex = row.indexPath!.row
                     while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
@@ -84,15 +125,11 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("realTimeUrl") {
                 $0.title = "realTimeUrl"
-                $0.add(rule: RuleRequired())
-                $0.add(rule: RuleURL())
+                $0.add(rule: RuleRequired(msg: "realTimeUrl required"))
+                $0.add(rule: RuleURL(msg: "realTimeUrl is not a valid url"))
                 $0.placeholder = "realTimeUrl"
                 $0.validationOptions = .validatesOnChange
                 $0.value = URL(string: visilabsProfile.realTimeUrl)
-            }.cellUpdate { cell, row in
-                    if !row.isValid {
-                        cell.titleLabel?.textColor = .red
-                    }
             }.onRowValidationChanged { cell, row in
                     let rowIndex = row.indexPath!.row
                     while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
@@ -206,6 +243,16 @@ class HomeViewController: FormViewController {
             }
             .onCellSelection { cell, row in
                 
+                
+                let errors = self.form.validate()
+                print("Form erros count: \(errors.count)")
+                for error in errors {
+                    print(error.msg)
+                }
+                if errors.count > 0 {
+                    return
+                }
+                
                 let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
                 let siteIdRow: TextRow? = self.form.rowBy(tag: "siteId")
                 let loggerUrlRow: URLRow? = self.form.rowBy(tag: "loggerUrl")
@@ -253,6 +300,10 @@ class HomeViewController: FormViewController {
                 $0.disabled = true
             }
             .onCellSelection { cell, row in }
+    }
+    
+    func checkInputValues(){
+        
     }
     
     func goToTabBarController() {
