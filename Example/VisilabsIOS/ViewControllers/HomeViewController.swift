@@ -244,6 +244,15 @@ class HomeViewController: FormViewController {
             }
         
             +++ Section("Clear All User Data")
+            <<< LabelRow() {
+                $0.title = "not implemented yet"
+                $0.disabled = true
+            }
+            <<< ButtonRow() {
+                $0.title = "clear"
+                $0.disabled = true
+            }
+            .onCellSelection { cell, row in }
     }
     
     func goToTabBarController() {
