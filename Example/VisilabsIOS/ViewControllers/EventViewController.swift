@@ -62,7 +62,7 @@ class EventViewController: FormViewController {
     
     
     private func getCommonEventsSection() -> Section{
-        let section = Section("Common Events")
+        let section = Section("Common Events".uppercased(with: Locale(identifier: "en_US")))
         for eventType in VisilabsEventType.allCases {
             section.append(ButtonRow() {
                 $0.title = eventType.rawValue
@@ -75,7 +75,7 @@ class EventViewController: FormViewController {
     }
     
     private func  getInAppSection() -> Section{
-        let section = Section("In App Notification Types")
+        let section = Section("In App Notification Types".uppercased(with: Locale(identifier: "en_US")))
         for visilabsInAppNotificationType in VisilabsInAppNotificationType.allCases {
             section.append(ButtonRow() {
                 $0.title = visilabsInAppNotificationType.rawValue + " ID: " + String(inAppNotificationIds[visilabsInAppNotificationType.rawValue]!)
