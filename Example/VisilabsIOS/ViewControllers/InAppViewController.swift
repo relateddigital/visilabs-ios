@@ -117,7 +117,7 @@ class InAppViewController: FormViewController {
         }
         
         <<< TextRow(VisilabsInAppNotification.PayloadKey.messageTitle) {
-            $0.add(rule: RuleRequired())
+            $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
             $0.title = "Title"
             $0.placeholder = "Title"
             $0.value = "Test Title"
@@ -153,7 +153,7 @@ class InAppViewController: FormViewController {
 
         <<< URLRow(VisilabsInAppNotification.PayloadKey.iosLink) {
             $0.title = "IOS Link"
-            $0.add(rule: RuleURL())
+            $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "IOS Link"
             $0.validationOptions = .validatesOnDemand
             $0.value = URL(string: "https://www.google.com")
@@ -161,7 +161,7 @@ class InAppViewController: FormViewController {
         
         <<< URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
             $0.title = "Image URL"
-            $0.add(rule: RuleURL())
+            $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "Image URL"
             $0.validationOptions = .validatesOnDemand
             $0.value = URL(string: "https://img.visilabs.net/in-app-message/uploaded_images/163_1100_133_20200428125252927.jpg")
@@ -290,10 +290,19 @@ class InAppViewController: FormViewController {
         }
         .onCellSelection { cell, row in
             
+            let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
+            print("Form erros count: \(errors.count)")
+            for error in errors {
+                print(error.msg)
+            }
+            if errors.count > 0 {
+                return
+            }
+            
             let messageType = VisilabsInAppNotificationType.init(rawValue: (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?)!.value! as String)!
-            let messageTitle = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle) as TextRow?)!.value!  as String
-            let messageBody = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody) as TextRow?)!.value!  as String
-            let buttonText = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText) as TextRow?)!.value!  as String
+            let messageTitle: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle) as TextRow?)!.value ?? ""
+            let messageBody: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody) as TextRow?)!.value ?? ""
+            let buttonText = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText) as TextRow?)!.value ?? ""
             let iosLink = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.iosLink) as URLRow?)?.value?.absoluteString
             let messageTitleColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor) as TextRow?)!.value!  as String
             let messageBodyColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor) as TextRow?)!.value!  as String
@@ -318,14 +327,7 @@ class InAppViewController: FormViewController {
             let visilabsInAppNotification = VisilabsInAppNotification(actId: 0, type: messageType, messageTitle: messageTitle, messageBody: messageBody, buttonText: buttonText, iosLink: iosLink, imageUrlString: imageUrlString, visitorData: nil, visitData: nil, queryString: nil, messageTitleColor: messageTitleColor, messageBodyColor: messageBodyColor, messageBodyTextSize: messageBodyTextSize, fontFamily: fontFamily, backGround: backGround, closeButtonColor: closeButtonColor, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
             
             
-            let errors = self.form.validate()
-            print("Form erros count: \(errors.count)")
-            for error in errors {
-                print(error.msg)
-            }
-            if errors.count > 0 {
-                return
-            }
+            
             
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
             
