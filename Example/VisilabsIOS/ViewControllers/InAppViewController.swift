@@ -20,17 +20,24 @@ class InAppViewController: FormViewController {
     let fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
     let closeButtonColors = ["black", "white"]
     
+    
+    
+    
     private func showHideRows(){
-        let messageTypeRow: PickerInputRow<String>? = self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType)
-        if let messageType: String = messageTypeRow?.value{
-            if let visilabsInAppNotificationType = VisilabsInAppNotificationType.init(rawValue: messageType){
-                switch visilabsInAppNotificationType {
-                case .mini:
-                    return
-                default:
-                    return
-                }
-            }
+        let messageType = VisilabsInAppNotificationType.init(rawValue: (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?)!.value! as String)!
+        switch messageType {
+        case .mini:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = true
+            
+            
+            self.form.rowBy(tag: "miniIcon")?.hidden = false
+            return
+        default:
+            self.form.rowBy(tag: "miniIcon")?.hidden = true
+            return
         }
     }
     
@@ -51,7 +58,7 @@ class InAppViewController: FormViewController {
 
         form +++
             
-        Section("Test In App Notification")
+            Section("Test In App Notification".uppercased(with: Locale(identifier: "en_US")))
             
         <<< PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.messageType){
             $0.title = "Type"
@@ -109,8 +116,20 @@ class InAppViewController: FormViewController {
             $0.add(rule: RuleURL())
             $0.placeholder = "Image URL"
             $0.validationOptions = .validatesOnDemand
-            $0.value = URL(string: "https://www.google.com/ex.gif")
+            $0.value = URL(string: "https://img.visilabs.net/in-app-message/uploaded_images/163_1100_133_20200428125252927.jpg")
         }
+            
+        <<< PickerInputRow<String>("miniIcon"){
+            $0.title = "Mini Icon"
+            $0.options = InAppHelper.miniIcons
+            $0.value = InAppHelper.miniIcons.first!
+        }.cellSetup { cell, row in
+            cell.imageView?.image = InAppHelper.miniIconImages.first!.value
+        }.cellUpdate { cell, row in
+            cell.imageView?.image = InAppHelper.miniIconImages[row.value!]
+        }
+            
+            
          
             
         <<< TextRow(VisilabsInAppNotification.PayloadKey.messageTitleColor) {
@@ -151,7 +170,7 @@ class InAppViewController: FormViewController {
             for i in 1...10{
                 $0.options.append(i)
             }
-            $0.value = 1
+            $0.value = 2
         }
         
         <<< PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.fontFamily){
@@ -217,46 +236,48 @@ class InAppViewController: FormViewController {
 
     
         +++ Section()
+            
         <<< ButtonRow() {
             $0.title = "showNotification"
         }
         .onCellSelection { cell, row in
             
-            var errors = self.form.validate()
-
-            /*
-            let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
-            let siteIdRow: TextRow? = self.form.rowBy(tag: "siteId")
-            let loggerUrlRow: URLRow? = self.form.rowBy(tag: "loggerUrl")
-            let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
-            let realTimeUrlRow: URLRow? = self.form.rowBy(tag: "realTimeUrl")
-            let channelRow: TextRow? = self.form.rowBy(tag: "channel")
-            let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
-            let targetUrlRow: URLRow? = self.form.rowBy(tag: "targetUrl")
-            let actionUrlRow: URLRow? = self.form.rowBy(tag: "actionUrl")
-            let geofenceUrlRow: URLRow? = self.form.rowBy(tag: "geofenceUrl")
-            let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
-            let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
-            let restUrlRow: URLRow? = self.form.rowBy(tag: "restUrl")
-            let encryptedDataSourceRow: TextRow? = self.form.rowBy(tag: "encryptedDataSource")
+            let messageType = VisilabsInAppNotificationType.init(rawValue: (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?)!.value! as String)!
+            let messageTitle = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle) as TextRow?)!.value!  as String
+            let messageBody = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody) as TextRow?)!.value!  as String
+            let buttonText = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText) as TextRow?)!.value!  as String
+            let iosLink = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.iosLink) as URLRow?)?.value?.absoluteString
+            let imageUrlString = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString) as URLRow?)?.value?.absoluteString
             
-            let orgId: String? = orgIdRow?.value
-            let siteId: String? = siteIdRow?.value
-            let loggerUrl: String? = loggerUrlRow?.value?.absoluteString
-            let dataSource: String? = dataSourceRow?.value
-            let realTimeUrl: String? = realTimeUrlRow?.value?.absoluteString
-            let channel: String? = channelRow?.value
-            let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
-            let targetUrl: String? = targetUrlRow?.value?.absoluteString
-            let actionUrl: String? = actionUrlRow?.value?.absoluteString
-            let geofenceUrl: String? = geofenceUrlRow?.value?.absoluteString
-            let geofenceEnabled: Bool? = geofenceEnabledRow?.value
-            let maxGeofenceCount: Int? = maxGeofenceCountRow?.value
-            let restUrl: String? = restUrlRow?.value?.absoluteString
-            let encryptedDataSource: String? = encryptedDataSourceRow?.value
-            */
+            
+            let messageTitleColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor) as TextRow?)!.value!  as String
+            let messageBodyColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor) as TextRow?)!.value!  as String
+            let messageBodyTextSize = "\((self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize) as PickerInputRow<Int>?)!.value!)"
+            let fontFamily: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily) as! PickerInputRow<String>).value! as String
+            let backGround = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround) as TextRow?)!.value!  as String
+            let closeButtonColor: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor) as! PickerInputRow<String>).value! as String
+            let buttonTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor) as TextRow?)!.value!  as String
+            let buttonColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor) as TextRow?)!.value!  as String
+
+   
+            
+            
+            let visilabsInAppNotification = VisilabsInAppNotification(actId: 0, type: messageType, messageTitle: messageTitle, messageBody: messageBody, buttonText: buttonText, iosLink: iosLink, imageUrlString: imageUrlString, visitorData: nil, visitData: nil, queryString: nil, messageTitleColor: messageTitleColor, messageBodyColor: messageBodyColor, messageBodyTextSize: messageBodyTextSize, fontFamily: fontFamily, backGround: backGround, closeButtonColor: closeButtonColor, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
+            
+            
+            let errors = self.form.validate()
+            print("Form erros count: \(errors.count)")
+            for error in errors {
+                print(error.msg)
+            }
+            
+            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+            
+            
             
         }
+        
+        showHideRows()
         
     }
     
