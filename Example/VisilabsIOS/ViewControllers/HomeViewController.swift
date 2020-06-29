@@ -35,7 +35,7 @@ class HomeViewController: FormViewController {
 
             <<< TextRow("orgId") {
                 $0.title = "orgId"
-                $0.add(rule: RuleRequired(msg: "orgId required"))
+                $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
                 $0.placeholder = "orgId"
                 $0.value = visilabsProfile.organizationId
             }.onRowValidationChanged { cell, row in
@@ -57,7 +57,7 @@ class HomeViewController: FormViewController {
 
             <<< TextRow("siteId") {
                 $0.title = "siteId"
-                $0.add(rule: RuleRequired(msg: "siteId required"))
+                $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
                 $0.placeholder = "siteId"
                 $0.value = visilabsProfile.siteId
             }.onRowValidationChanged { cell, row in
@@ -79,7 +79,7 @@ class HomeViewController: FormViewController {
             
             <<< TextRow("dataSource") {
                 $0.title = "dataSource"
-                $0.add(rule: RuleRequired(msg: "dataSource required"))
+                $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
                 $0.placeholder = "dataSource"
                 $0.value = visilabsProfile.dataSource
             }.onRowValidationChanged { cell, row in
@@ -101,8 +101,8 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("loggerUrl") {
                 $0.title = "loggerUrl"
-                $0.add(rule: RuleRequired(msg: "loggerUrl required"))
-                $0.add(rule: RuleURL(msg: "loggerUrl is not a valid url"))
+                $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
+                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
                 $0.placeholder = "loggerUrl"
                 $0.validationOptions = .validatesOnChange
                 $0.value = URL(string: visilabsProfile.loggerUrl)
@@ -125,8 +125,8 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("realTimeUrl") {
                 $0.title = "realTimeUrl"
-                $0.add(rule: RuleRequired(msg: "realTimeUrl required"))
-                $0.add(rule: RuleURL(msg: "realTimeUrl is not a valid url"))
+                $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
+                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
                 $0.placeholder = "realTimeUrl"
                 $0.validationOptions = .validatesOnChange
                 $0.value = URL(string: visilabsProfile.realTimeUrl)
@@ -164,7 +164,7 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("targetUrl") {
                 $0.title = "targetUrl"
-                $0.add(rule: RuleURL(msg: "targetUrl is not a valid url"))
+                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
                 $0.placeholder = "targetUrl"
                 if let turl = visilabsProfile.targetUrl {
                     $0.value = URL(string: turl)
@@ -188,7 +188,7 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("actionUrl") {
                 $0.title = "actionUrl"
-                $0.add(rule: RuleURL(msg: "actionUrl is not a valid url"))
+                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
                 $0.placeholder = "actionUrl"
                 if let aurl = visilabsProfile.actionUrl {
                     $0.value = URL(string: aurl)
@@ -197,7 +197,7 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("geofenceUrl") {
                 $0.title = "geofenceUrl"
-                $0.add(rule: RuleURL(msg: "geofenceUrl is not a valid url"))
+                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
                 $0.placeholder = "geofenceUrl"
                 if let gurl = visilabsProfile.geofenceUrl {
                     $0.value = URL(string: gurl)
@@ -235,7 +235,7 @@ class HomeViewController: FormViewController {
             
             <<< URLRow("restUrl") {
                 $0.title = "restUrl"
-                $0.add(rule: RuleURL(msg: "restUrl is not a valid url"))
+                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
                 $0.placeholder = "restUrl"
                 if let rurl = visilabsProfile.restUrl {
                     $0.value = URL(string: rurl)
