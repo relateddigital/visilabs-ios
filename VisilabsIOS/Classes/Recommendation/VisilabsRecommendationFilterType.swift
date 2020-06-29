@@ -5,15 +5,18 @@
 //  Created by Egemen on 29.06.2020.
 //
 
-public class VisilabsRecommendationFilterType {
-    static let equals = 0
-    static let notEquals = 1
-    static let like = 2, include = 2
-    static let notLike = 3, exclude = 3
-    static let greaterThan = 4
-    static let lessThan = 5
-    static let greaterOrEquals = 6
-    static let lessOrEquals = 7
+public enum VisilabsRecommendationFilterType: Int {
+    case equals = 0
+    case notEquals = 1
+    case like = 2
+    case notLike = 3
+    case greaterThan = 4
+    case lessThan = 5
+    case greaterOrEquals = 6
+    case lessOrEquals = 7
+    
+    static let include = like
+    static let exclude = notLike
 }
 
 public enum VisilabsProductAttribute: String {
@@ -35,4 +38,16 @@ public enum VisilabsProductAttribute: String {
     case attr3
     case attr4
     case attr5
+}
+
+public class VisilabsRecommendationFilter {
+    var attribute: VisilabsProductAttribute
+    var filterType: VisilabsRecommendationFilterType
+    var value: String
+    
+    init(attribute: VisilabsProductAttribute, filterType: VisilabsRecommendationFilterType, value: String){
+        self.attribute = attribute
+        self.filterType = filterType
+        self.value = value
+    }
 }
