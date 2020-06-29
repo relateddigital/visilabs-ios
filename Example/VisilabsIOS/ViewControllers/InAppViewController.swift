@@ -31,7 +31,13 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = true
-            
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
             
             self.form.rowBy(tag: "miniIcon")?.hidden = false
             return
