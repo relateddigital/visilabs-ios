@@ -63,6 +63,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var eventsQueue = Queue()
     //var flushEventsQueue = Queue()
     var trackingQueue: DispatchQueue!
+    var recommendationQueue: DispatchQueue!
     var networkQueue: DispatchQueue!
     let readWriteLock: VisilabsReadWriteLock
     
@@ -126,6 +127,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.siteId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
+        self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
@@ -374,12 +376,45 @@ extension VisilabsInstance : VisilabsInAppNotificationsDelegate {
     
 }
 
+extension VisilabsInstance {
+
+    //MARK: - Recommendation
+    
+    public func rec(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) {
+        self.trackingQueue.async { [weak self] in
+            self?.networkQueue.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                
+                var eQueue = Queue()
+                var vUser = VisilabsUser()
+                var vCookie = VisilabsCookie()
+                
+                self.readWriteLock.read {
+                    eQueue = self.eventsQueue
+                    vUser = self.visilabsUser
+                    vCookie = self.visilabsCookie
+                }
+                
+                self.readWriteLock.write {
+                    self.eventsQueue.removeAll()
+                }
+                
+                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds))
+                
+                self.readWriteLock.write {
+                    self.visilabsCookie = cookie
+                }
+            }
+        }
+    }
+    
+}
+
 
 class VisilabsManager {
-    
-    
-    
-    
+
     static let sharedInstance = VisilabsManager()
     private var instance: VisilabsInstance?
     
