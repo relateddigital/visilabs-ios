@@ -38,11 +38,51 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
-            
             self.form.rowBy(tag: "miniIcon")?.hidden = false
             return
-        default:
+        case .full, .image_text_button, .smile_rating, .nps:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
             self.form.rowBy(tag: "miniIcon")?.hidden = true
+            return
+        case.full_image:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: "miniIcon")?.hidden = true
+            return
+        case.image_button:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: "miniIcon")?.hidden = true
+            return
+        default:
             return
         }
     }
