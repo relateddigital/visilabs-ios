@@ -295,9 +295,6 @@ class InAppViewController: FormViewController {
             let messageBody = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody) as TextRow?)!.value!  as String
             let buttonText = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText) as TextRow?)!.value!  as String
             let iosLink = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.iosLink) as URLRow?)?.value?.absoluteString
-            let imageUrlString = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString) as URLRow?)?.value?.absoluteString
-            
-            
             let messageTitleColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor) as TextRow?)!.value!  as String
             let messageBodyColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor) as TextRow?)!.value!  as String
             let messageBodyTextSize = "\((self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize) as PickerInputRow<Int>?)!.value!)"
@@ -306,7 +303,15 @@ class InAppViewController: FormViewController {
             let closeButtonColor: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor) as! PickerInputRow<String>).value! as String
             let buttonTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor) as TextRow?)!.value!  as String
             let buttonColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor) as TextRow?)!.value!  as String
+            let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
 
+            var imageUrlString :String? = ""
+            
+            if messageType == .mini {
+                imageUrlString = InAppHelper.miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon)
+            }else {
+                imageUrlString = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString) as URLRow?)?.value?.absoluteString
+            }
    
             
             
