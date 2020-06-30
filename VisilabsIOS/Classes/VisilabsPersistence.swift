@@ -44,7 +44,7 @@ class VisilabsPersistence {
                 }
             }, catch: { (error) in
                 VisilabsLogger.error(message: "failed to archive properties due to an uncaught exception")
-                VisilabsLogger.error(message: error)//TODO: sil sonra
+                VisilabsLogger.error(message: error.debugDescription)
                 return
             }, finally: {})
         }
