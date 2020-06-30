@@ -11,14 +11,62 @@ class VisilabsRecommendationInstance {
     let organizationId: String
     let siteId: String
     
-    //TODO: lock kullanılmıyor kaldırılabilir
-    let lock: VisilabsReadWriteLock
 
-    init(organizationId: String, siteId: String, lock: VisilabsReadWriteLock) {
+    init(organizationId: String, siteId: String) {
         self.organizationId = organizationId
         self.siteId = siteId
-        self.lock = lock
     }
+    
+    func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
+        var props = cleanProperties(properties)
+        var vUser = visilabsUser
+        var chan = channel
+        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+        
+        if filters.count > 0 {
+            props[VisilabsConfig.FILTER_KEY] = getFiltersQueryStringValue(filters)
+        }
+        
+        
+        
+        
+    }
+    
+    
+    private func getFiltersQueryStringValue(_ filters: [VisilabsRecommendationFilter]) -> String?{
+        var queryStringValue: String?
+        var abbrevatedFilters: [[String:String]] = []
+        for filter in filters {
+            if filter.value.count > 0 {
+                var abbrevatedFilter = [String : String]()
+                abbrevatedFilter["attr"] = filter.attribute.rawValue
+                abbrevatedFilter["ft"] = String(filter.filterType.rawValue)
+                abbrevatedFilter["fv"] = filter.value
+                abbrevatedFilters.append(abbrevatedFilter)
+            }
+        }
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: abbrevatedFilters, options: [])
+            queryStringValue = String(data: jsonData, encoding: .utf8)
+        } catch {
+            VisilabsLogger.warn(message: "exception serializing recommendation filters: \(error.localizedDescription)")
+        }
+        return queryStringValue
+    }
+    
+    private func cleanProperties(_ properties: [String : String]) -> [String : String] {
+        var props = properties
+        for propKey in props.keys {
+            if !propKey.isEqual(VisilabsConfig.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConfig.SITEID_KEY) && !propKey.isEqual(VisilabsConfig.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConfig.COOKIEID_KEY) && !propKey.isEqual(VisilabsConfig.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConfig.BODY_KEY) && !propKey.isEqual(VisilabsConfig.TOKENID_KEY) && !propKey.isEqual(VisilabsConfig.APPID_KEY) && !propKey.isEqual(VisilabsConfig.APIVER_KEY) && !propKey.isEqual(VisilabsConfig.FILTER_KEY) {
+                continue
+            } else {
+                props.removeValue(forKey: propKey)
+            }
+        }
+        return props
+    }
+    
+    
     
     func customEvent(pageName: String, properties: [String:String], eventsQueue: Queue, visilabsUser: VisilabsUser, channel: String) -> (eventsQueque: Queue, visilabsUser: VisilabsUser, clearUserParameters: Bool, channel: String) {
         var props = properties
