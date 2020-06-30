@@ -380,8 +380,13 @@ extension VisilabsInstance {
 
     //MARK: - Recommendation
     
-    public func rec(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) {
-        self.trackingQueue.async { [weak self] in
+    public func recommend(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) {
+        
+        if VisilabsBasePath.endpoints[.target] == nil {
+            return
+        }
+        
+        self.recommendationQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
                 guard let self = self else {
                     return
