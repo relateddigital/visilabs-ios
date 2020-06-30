@@ -216,13 +216,17 @@ extension VisilabsInstance {
 
             self.readWriteLock.read {
                 VisilabsPersistence.archive(visilabsUser: self.visilabsUser)
-                if clearUserParameters{
+                
+                if clearUserParameters {
                     VisilabsPersistence.clearParameters()
                 }
             }
             
-            if let event = self.eventsQueue.last, let _ = VisilabsBasePath.endpoints[.action] {
-                self.checkInAppNotification(properties: event)
+            if let event = self.eventsQueue.last {
+                VisilabsPersistence.saveParameters(event)
+                if let _ = VisilabsBasePath.endpoints[.action] {
+                    self.checkInAppNotification(properties: event)
+                }
             }
             
             
