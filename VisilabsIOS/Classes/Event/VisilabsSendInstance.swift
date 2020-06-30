@@ -15,6 +15,8 @@ protocol VisilabsSendDelegate {
 
 //TODO: lock kullanılımıyor sanki, kaldırılabilir
 class VisilabsSendInstance: AppLifecycle {
+    
+    //TODO: bu delegate kullanılmıyor. kaldır.
     var delegate: VisilabsSendDelegate?
     
     
