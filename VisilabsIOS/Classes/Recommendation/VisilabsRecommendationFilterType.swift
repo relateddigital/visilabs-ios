@@ -94,3 +94,13 @@ public class VisilabsProduct {
         self.attr5 = attr5
     }
 }
+
+public class VisilabsRecommendationResponse {
+    var products: [VisilabsProduct]
+    var error: Error?
+    
+    internal init(products: [VisilabsProduct], error: Error? = nil) {
+        self.products = products
+        self.error = error
+    }
+}
