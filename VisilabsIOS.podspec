@@ -31,6 +31,7 @@ TODO: Add long description of the pod here.
   s.ios.deployment_target = '11.0'
 
   s.source_files = 'VisilabsIOS/Classes/**/*'
+  s.resources     = 'VisilabsIOS/Assets/Images/**/*'
   
   # s.resource_bundles = {
   #   'VisilabsIOS' => ['VisilabsIOS/Assets/*.png']
