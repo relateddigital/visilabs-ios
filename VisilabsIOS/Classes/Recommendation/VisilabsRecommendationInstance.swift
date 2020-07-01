@@ -17,18 +17,58 @@ class VisilabsRecommendationInstance {
         self.siteId = siteId
     }
     
-    func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
+    func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, timeoutInterval: TimeInterval, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
+        
         var props = cleanProperties(properties)
-        var vUser = visilabsUser
-        var chan = channel
-        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         
         if filters.count > 0 {
             props[VisilabsConfig.FILTER_KEY] = getFiltersQueryStringValue(filters)
         }
         
+        props[VisilabsConfig.ORGANIZATIONID_KEY] = self.organizationId
+        props[VisilabsConfig.SITEID_KEY] = self.siteId
+        props[VisilabsConfig.COOKIEID_KEY] = visilabsUser.cookieId
+        props[VisilabsConfig.EXVISITORID_KEY] = visilabsUser.exVisitorId
+        props[VisilabsConfig.TOKENID_KEY] = visilabsUser.tokenId
+        props[VisilabsConfig.APPID_KEY] = visilabsUser.appId
+        props[VisilabsConfig.APIVER_KEY] = VisilabsConfig.APIVER_VALUE
         
+        if zoneID.count > 0 {
+            props[VisilabsConfig.ZONE_ID_KEY] = zoneID
+        }
+        if productCode.count > 0 {
+            props[VisilabsConfig.BODY_KEY] = productCode
+        }
         
+        for (key, value) in VisilabsPersistence.getParameters() {
+            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
+                props[key] = value
+            }
+        }
+        
+        VisilabsRecommendationRequest.sendRequest(properties: props, headers: [String : String](), timeoutInterval: timeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
+            
+            if reason != nil {
+                var visilabsRecommendationResponse = VisilabsRecommendationResponse(products: [VisilabsProduct](), rawResponseString: nil, error: reason)
+            }
+            
+            /*
+            guard let result = visilabsInAppNotificationResult else  {
+                semaphore.signal()
+                completion(nil)
+                return
+            }
+
+            for rawNotif in result{
+                if let actionData = rawNotif["actiondata"] as? [String : Any] {
+                    if let typeString = actionData["msg_type"] as? String, let _ = VisilabsInAppNotificationType(rawValue: typeString), let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
+                        notifications.append(notification)
+                    }
+                }
+            }
+            semaphore.signal()
+ */
+        })
         
     }
     
@@ -64,94 +104,6 @@ class VisilabsRecommendationInstance {
             }
         }
         return props
-    }
-    
-    
-    
-    func customEvent(pageName: String, properties: [String:String], eventsQueue: Queue, visilabsUser: VisilabsUser, channel: String) -> (eventsQueque: Queue, visilabsUser: VisilabsUser, clearUserParameters: Bool, channel: String) {
-        var props = properties
-        var vUser = visilabsUser
-        var chan = channel
-        var clearUserParameters = false
-        let actualTimeOfevent = Int(Date().timeIntervalSince1970)
-        
-        if let cookieId = props[VisilabsConfig.COOKIEID_KEY] {
-            if vUser.cookieId != cookieId {
-                clearUserParameters = true
-            }
-            vUser.cookieId = cookieId
-            props.removeValue(forKey: VisilabsConfig.COOKIEID_KEY)
-        }
-        
-        if let exVisitorId = props[VisilabsConfig.EXVISITORID_KEY] {
-            if vUser.exVisitorId != exVisitorId {
-                clearUserParameters = true
-            }
-            if vUser.exVisitorId != nil && vUser.exVisitorId != exVisitorId {
-                //TODO: burada cookieId generate etmek doğru mu tekrar kontrol et
-                vUser.cookieId = VisilabsHelper.generateCookieId()
-            }
-            vUser.exVisitorId = exVisitorId
-            props.removeValue(forKey: VisilabsConfig.EXVISITORID_KEY)
-        }
-        
-        if let tokenId = props[VisilabsConfig.TOKENID_KEY] {
-            vUser.tokenId = tokenId
-            props.removeValue(forKey: VisilabsConfig.TOKENID_KEY)
-        }
-        
-        if let appId = props[VisilabsConfig.APPID_KEY]{
-            vUser.appId = appId
-            props.removeValue(forKey: VisilabsConfig.APPID_KEY)
-        }
-        
-        //TODO: Dışarıdan mobile ad id gelince neden siliyoruz?
-        if props.keys.contains(VisilabsConfig.MOBILEADID_KEY) {
-            props.removeValue(forKey: VisilabsConfig.MOBILEADID_KEY)
-        }
-        
-        if props.keys.contains(VisilabsConfig.APIVER_KEY) {
-            props.removeValue(forKey: VisilabsConfig.APIVER_KEY)
-        }
-        
-        if props.keys.contains(VisilabsConfig.CHANNEL_KEY) {
-            chan = props[VisilabsConfig.CHANNEL_KEY]!
-            props.removeValue(forKey: VisilabsConfig.CHANNEL_KEY)
-        }
-        
-        props[VisilabsConfig.ORGANIZATIONID_KEY] = self.organizationId
-        props[VisilabsConfig.SITEID_KEY] = self.siteId
-        props[VisilabsConfig.COOKIEID_KEY] = vUser.cookieId ?? ""
-        props[VisilabsConfig.CHANNEL_KEY] = chan
-        props[VisilabsConfig.URI_KEY] = pageName
-        props[VisilabsConfig.MOBILEAPPLICATION_KEY] = VisilabsConfig.TRUE
-        props[VisilabsConfig.MOBILEADID_KEY] = vUser.identifierForAdvertising ?? ""
-        props[VisilabsConfig.APIVER_KEY] = VisilabsConfig.IOS
-        
-        if !vUser.exVisitorId.isNilOrWhiteSpace {
-            props[VisilabsConfig.EXVISITORID_KEY] = vUser.exVisitorId
-        }
-        
-        if !vUser.tokenId.isNilOrWhiteSpace{
-            props[VisilabsConfig.TOKENID_KEY] = vUser.tokenId
-        }
-        
-        if !vUser.appId.isNilOrWhiteSpace{
-            props[VisilabsConfig.APPID_KEY] = vUser.appId
-        }
-        
-        props[VisilabsConfig.DAT_KEY] = String(actualTimeOfevent)
-        
-
-        var eQueue = eventsQueue
-        
-        eQueue.append(props)
-        if eQueue.count > VisilabsConfig.QUEUE_SIZE {
-            eQueue.remove(at: 0)
-        }
-        //TODO: VisilabsPersistentTargetManager.saveParameters dışarıda yapılacak
-        
-        return (eQueue, vUser, clearUserParameters, chan)
     }
 
 }
