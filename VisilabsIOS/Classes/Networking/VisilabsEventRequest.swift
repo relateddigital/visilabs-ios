@@ -65,34 +65,4 @@ class VisilabsEventRequest: VisilabsNetwork {
         }
         return cookieKeyValues
     }
-
-    /*
-    private class func updateRetryDelay(_ response: URLResponse?) {
-        var retryTime = 0.0
-        let retryHeader = (response as? HTTPURLResponse)?.allHeaderFields["Retry-After"] as? String
-        if let retryHeader = retryHeader, let retryHeaderParsed = (Double(retryHeader)) {
-            retryTime = retryHeaderParsed
-        }
-
-        if networkConsecutiveFailures >= APIConstants.failuresTillBackoff {
-            retryTime = max(retryTime,
-                            retryBackOffTimeWithConsecutiveFailures(networkConsecutiveFailures))
-        }
-        let retryDate = Date(timeIntervalSinceNow: retryTime)
-        networkRequestsAllowedAfterTime = retryDate.timeIntervalSince1970
-    }
-
-    private func retryBackOffTimeWithConsecutiveFailures(_ failureCount: Int) -> TimeInterval {
-        let time = pow(2.0, Double(failureCount) - 1) * 60 + Double(arc4random_uniform(30))
-        return min(max(APIConstants.minRetryBackoff, time),
-                   APIConstants.maxRetryBackoff)
-    }
-
-    func requestNotAllowed() -> Bool {
-        return Date().timeIntervalSince1970 < networkRequestsAllowedAfterTime
-    }
- */
- 
- 
-
 }
