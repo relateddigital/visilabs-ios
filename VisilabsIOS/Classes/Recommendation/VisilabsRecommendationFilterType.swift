@@ -97,13 +97,11 @@ public class VisilabsProduct {
 
 public class VisilabsRecommendationResponse {
     var products: [VisilabsProduct]
-    var error: Error?
+    var error: VisilabsReason?
     var rawResponseString: String?
-    var responseStatusCode: Int
     
-    internal init(products: [VisilabsProduct], responseStatusCode: Int, rawResponseString: String? = nil, error: Error? = nil) {
+    internal init(products: [VisilabsProduct], rawResponseString: String? = nil, error: VisilabsReason? = nil) {
         self.products = products
-        self.responseStatusCode = responseStatusCode
         self.rawResponseString = rawResponseString
         self.error = error
     }
