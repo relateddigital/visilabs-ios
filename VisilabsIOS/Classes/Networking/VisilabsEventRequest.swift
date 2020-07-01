@@ -9,9 +9,6 @@ import Foundation
 
 class VisilabsEventRequest: VisilabsNetwork {
 
-    var networkRequestsAllowedAfterTime = 0.0
-    var networkConsecutiveFailures = 0
-
     class func sendRequest(visilabsEndpoint: VisilabsEndpoint, properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String : String]?) -> Void) {
 
         var queryItems = [URLQueryItem]()
@@ -28,9 +25,7 @@ class VisilabsEventRequest: VisilabsNetwork {
 
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
-                
-                //self.networkConsecutiveFailures += 1
-                //self.updateRetryDelay(response)
+
                 var requestUrl = VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)
                 if let httpResponse = response as? HTTPURLResponse {
                     if let url = httpResponse.url{
