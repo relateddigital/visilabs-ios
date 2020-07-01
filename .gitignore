@@ -13,7 +13,7 @@ Pods/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
-*.xccheckout
+#*.xccheckout
 profile
 *.moved-aside
 DerivedData
