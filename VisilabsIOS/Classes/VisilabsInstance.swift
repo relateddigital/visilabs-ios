@@ -74,6 +74,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsEventInstance: VisilabsEventInstance
     let visilabsSendInstance: VisilabsSendInstance
     let visilabsInAppNotificationInstance: VisilabsInAppNotificationInstance
+    let visilabsRecommendationInstance: VisilabsRecommendationInstance
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
@@ -132,6 +133,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
+        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.organizationId, siteId: self.siteId)
         self.visilabsInAppNotificationInstance.inAppDelegate = self
         
         unarchive()
@@ -396,25 +398,16 @@ extension VisilabsInstance {
                     return
                 }
                 
-                var eQueue = Queue()
                 var vUser = VisilabsUser()
-                var vCookie = VisilabsCookie()
                 
                 self.readWriteLock.read {
-                    eQueue = self.eventsQueue
                     vUser = self.visilabsUser
-                    vCookie = self.visilabsCookie
                 }
                 
-                self.readWriteLock.write {
-                    self.eventsQueue.removeAll()
+                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: self.channel, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds)) { (response) in
+                    
                 }
                 
-                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds))
-                
-                self.readWriteLock.write {
-                    self.visilabsCookie = cookie
-                }
             }
         }
     }
