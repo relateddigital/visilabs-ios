@@ -52,6 +52,29 @@ public class VisilabsRecommendationFilter {
 }
 
 public class VisilabsProduct {
+    
+    public enum PayloadKey {
+        public static let code = "code"
+        public static let title = "title"
+        public static let img = "img"
+        public static let dest_url = "dest_url"
+        public static let brand = "brand"
+        public static let price = "price"
+        public static let dprice = "dprice"
+        public static let cur = "cur"
+        public static let dcur = "dcur"
+        public static let freeshipping = "freeshipping"
+        public static let samedayshipping = "samedayshipping"
+        public static let rating = "rating"
+        public static let comment = "comment"
+        public static let discount = "discount"
+        public static let attr1 = "attr1"
+        public static let attr2 = "attr2"
+        public static let attr3 = "attr3"
+        public static let attr4 = "attr4"
+        public static let attr5 = "attr5"
+    }
+    
     public var code: String
     public var title: String
     public var img: String
@@ -93,6 +116,9 @@ public class VisilabsProduct {
         self.attr4 = attr4
         self.attr5 = attr5
     }
+    
+    
+    
 }
 
 public class VisilabsRecommendationResponse {
