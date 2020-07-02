@@ -98,11 +98,9 @@ public class VisilabsProduct {
 public class VisilabsRecommendationResponse {
     var products: [VisilabsProduct]
     var error: VisilabsReason?
-    var rawResponseString: String?
     
-    internal init(products: [VisilabsProduct], rawResponseString: String? = nil, error: VisilabsReason? = nil) {
+    internal init(products: [VisilabsProduct], error: VisilabsReason? = nil) {
         self.products = products
-        self.rawResponseString = rawResponseString
         self.error = error
     }
 }
