@@ -386,26 +386,28 @@ extension VisilabsInstance {
 
     //MARK: - Recommendation
     
-    public func recommend(zoneID: String, productCode: String, properties: [String : String] = [:], filters: [VisilabsTargetFilter] = []) {
+    public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
         
         if VisilabsBasePath.endpoints[.target] == nil {
             return
         }
         
-        self.recommendationQueue.async { [weak self] in
-            self?.networkQueue.async { [weak self] in
+        self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
+            self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else {
                     return
                 }
                 
                 var vUser = VisilabsUser()
+                var channel = "IOS"
                 
                 self.readWriteLock.read {
                     vUser = self.visilabsUser
+                    channel = self.channel
                 }
                 
-                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: self.channel, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds)) { (response) in
-                    
+                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), properties: properties, filters: filters) { (response) in
+                    completion(response)
                 }
                 
             }
