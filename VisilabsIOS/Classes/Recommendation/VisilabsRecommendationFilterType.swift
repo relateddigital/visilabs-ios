@@ -52,25 +52,25 @@ public class VisilabsRecommendationFilter {
 }
 
 public class VisilabsProduct {
-    var code: String
-    var title: String
-    var img: String
-    var dest_url: String
-    var brand: String
-    var price: Double
-    var dprice: Double
-    var cur: String
-    var dcur: String
-    var freeshipping: Bool
-    var samedayshipping: Bool
-    var rating: Int
-    var comment: Int
-    var discount: Double
-    var attr1: String
-    var attr2: String
-    var attr3: String
-    var attr4: String
-    var attr5: String
+    public var code: String
+    public var title: String
+    public var img: String
+    public var dest_url: String
+    public var brand: String
+    public var price: Double
+    public var dprice: Double
+    public var cur: String
+    public var dcur: String
+    public var freeshipping: Bool
+    public var samedayshipping: Bool
+    public var rating: Int
+    public var comment: Int
+    public var discount: Double
+    public var attr1: String
+    public var attr2: String
+    public var attr3: String
+    public var attr4: String
+    public var attr5: String
     
     internal init(code: String, title: String, img: String, dest_url: String, brand: String, price: Double, dprice: Double, cur: String, dcur: String, freeshipping: Bool, samedayshipping: Bool, rating: Int, comment: Int, discount: Double, attr1: String, attr2: String, attr3: String, attr4: String, attr5: String) {
         self.code = code
