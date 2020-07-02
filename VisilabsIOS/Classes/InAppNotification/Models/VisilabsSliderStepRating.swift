@@ -45,7 +45,7 @@ class VisilabsSliderStep: UISlider {
     @IBInspectable var unselectedFont: UIFont = UIFont.systemFont(ofSize: 13)
     @IBInspectable var selectedFont: UIFont = UIFont.systemFont(ofSize: 13)
     @IBInspectable var stepTitlesOffset: CGFloat = 1
-    @IBInspectable var highlightedImageSize: CGFloat = 55
+    @IBInspectable var highlightedImageSize: CGFloat = 50
     @IBInspectable var selectedColor: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     @IBInspectable var unselectedColor: UIColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
     
@@ -271,7 +271,7 @@ class VisilabsSliderStep: UISlider {
                 let x = offset + CGFloat(Double(index) * stepWidth) - (lbl.frame.size.width / 2)
                 var rect = lbl.frame
                 rect.origin.x = x
-                rect.origin.y = bounds.midY - (bounds.size.height / 2) - rect.size.height + highlightedImageSize + 10
+                rect.origin.y = bounds.midY - (bounds.size.height / 2) - rect.size.height + highlightedImageSize + 20
                 lbl.frame = rect
                 self.addSubview(lbl)
                 _stepTickLabels?.append(lbl)

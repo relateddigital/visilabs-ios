@@ -87,8 +87,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
         sliderStepRating.stepTickWidth = 20
         sliderStepRating.stepTickHeight = 20
         sliderStepRating.trackHeight = 2
-        sliderStepRating.value = 5
-        sliderStepRating.trackColor = #colorLiteral(red: 0.9371728301, green: 0.9373074174, blue: 0.9371433258, alpha: 1)
+        sliderStepRating.value = 1
+        sliderStepRating.trackColor = .clear
         sliderStepRating.enableTap = true
         sliderStepRating.sliderStepDelegate = self
         sliderStepRating.translatesAutoresizingMaskIntoConstraints = false
@@ -242,7 +242,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
                 // TODO: burada sabit 60 vermek yerine hesaplanabilir.
                 constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[sliderStepRating]-(==20@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
-                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[sliderStepRating]-(==30@900)-|", options: [], metrics: nil, views: views)
+                constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==20@900)-[sliderStepRating]-(==30@900)-|", options: [], metrics: nil, views: views)
  
         }
         
