@@ -96,8 +96,8 @@ public class VisilabsProduct {
 }
 
 public class VisilabsRecommendationResponse {
-    var products: [VisilabsProduct]
-    var error: VisilabsReason?
+    public var products: [VisilabsProduct]
+    public var error: VisilabsReason?
     
     internal init(products: [VisilabsProduct], error: VisilabsReason? = nil) {
         self.products = products
