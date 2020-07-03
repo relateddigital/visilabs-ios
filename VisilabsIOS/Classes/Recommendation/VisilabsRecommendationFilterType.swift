@@ -14,7 +14,6 @@ public enum VisilabsRecommendationFilterType: Int {
     case lessThan = 5
     case greaterOrEquals = 6
     case lessOrEquals = 7
-    
     static let include = like
     static let exclude = notLike
 }
