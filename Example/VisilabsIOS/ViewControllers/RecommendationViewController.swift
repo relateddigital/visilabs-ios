@@ -26,6 +26,27 @@ class RecommendationViewController: FormViewController {
         form +++
         Section("Recommendation".uppercased(with: Locale(identifier: "en_US")))
             
+            
+        <<< ButtonRow() {
+            $0.title = "Test"
+        }.onCellSelection { cell, row in
+            var properties = [String: String]()
+            properties["prop1"] = "prop1val"
+            properties["prop1"] = "prop2val"
+            var filters = [VisilabsRecommendationFilter]()
+            
+            Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, properties: properties){ response in
+                if let error = response.error{
+                    
+                }else{
+                    for product in response.products{
+                        print(product)
+                    }
+                }
+            }
+        }
+            
+            
         <<< IntRow("zoneId") {
             $0.title = "Zone ID"
             $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
