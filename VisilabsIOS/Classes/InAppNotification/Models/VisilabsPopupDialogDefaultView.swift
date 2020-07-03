@@ -58,6 +58,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         settings.emptyBorderColor = UIColor.systemYellow
         settings.fillMode = .half
         settings.starSize = 40.0
+        settings.disablePanGestures = true
         let npsView = CosmosView(settings: settings)
         npsView.translatesAutoresizingMaskIntoConstraints = false
         npsView.rating = 0.0
@@ -272,6 +273,6 @@ public class VisilabsPopupDialogDefaultView: UIView {
 //MARK:- SliderStepDelegate
 extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
     func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float) {
-        print(Int(value))
+        sliderStep.value = value
     }
 }
