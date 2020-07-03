@@ -51,6 +51,10 @@ class VisilabsRecommendationInstance {
             if reason != nil {
                 completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))
             }else {
+                for r in result!{
+                    var rr = r as? VisilabsProduct
+                }
+                
                 completion(VisilabsRecommendationResponse(products: (result as? [VisilabsProduct]) ?? [VisilabsProduct](), error: nil))
             }
         })
