@@ -46,7 +46,6 @@ class RecommendationViewController: FormViewController {
             }
         }
             
-            
         <<< IntRow("zoneId") {
             $0.title = "Zone ID"
             $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
