@@ -80,15 +80,15 @@ public class VisilabsProduct {
     public var img: String
     public var dest_url: String
     public var brand: String
-    public var price: Double
-    public var dprice: Double
+    public var price: Double = 0.0
+    public var dprice: Double = 0.0
     public var cur: String
     public var dcur: String
-    public var freeshipping: Bool
-    public var samedayshipping: Bool
-    public var rating: Int
-    public var comment: Int
-    public var discount: Double
+    public var freeshipping: Bool = false
+    public var samedayshipping: Bool  = false
+    public var rating: Int = 0
+    public var comment: Int = 0
+    public var discount: Double = 0.0
     public var attr1: String
     public var attr2: String
     public var attr3: String
@@ -117,8 +117,38 @@ public class VisilabsProduct {
         self.attr5 = attr5
     }
     
-    
-    
+    internal init?(JSONObject: [String: Any]?) {
+        
+        guard let object = JSONObject else {
+            VisilabsLogger.error(message: "product json object should not be nil")
+            return nil
+        }
+        
+        guard let code = object[PayloadKey.code] as? String else {
+            VisilabsLogger.error(message: "invalid \(PayloadKey.code)")
+            return nil
+        }
+
+        self.code = code
+        self.title = object[PayloadKey.title] as? String ?? ""
+        self.img = object[PayloadKey.img] as? String ?? ""
+        self.dest_url = object[PayloadKey.dest_url] as? String ?? ""
+        self.brand = object[PayloadKey.brand] as? String ?? ""
+        self.price = object[PayloadKey.price] as? Double ?? 0.0
+        self.dprice = object[PayloadKey.dprice] as? Double ?? 0.0
+        self.cur = object[PayloadKey.cur] as? String ?? ""
+        self.dcur = object[PayloadKey.dcur] as? String ?? ""
+        self.freeshipping = object[PayloadKey.freeshipping] as? Bool ?? false
+        self.samedayshipping = object[PayloadKey.samedayshipping] as? Bool ?? false
+        self.rating = object[PayloadKey.rating] as? Int ?? 0
+        self.comment = object[PayloadKey.comment] as? Int ?? 0
+        self.discount = object[PayloadKey.discount] as? Double ?? 0.0
+        self.attr1 = object[PayloadKey.attr1] as? String ?? ""
+        self.attr2 = object[PayloadKey.attr2] as? String ?? ""
+        self.attr3 = object[PayloadKey.attr3] as? String ?? ""
+        self.attr4 = object[PayloadKey.attr4] as? String ?? ""
+        self.attr5 = object[PayloadKey.attr5] as? String ?? ""
+    }
 }
 
 public class VisilabsRecommendationResponse {
