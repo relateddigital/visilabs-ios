@@ -368,6 +368,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             VisilabsLogger.info(message: "Notification or query string is nil or empty")
             return
         }
+        
         let qs = notification.queryString
         let qsArr = qs!.components(separatedBy: "&")
         var properties = properties
