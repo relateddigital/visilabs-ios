@@ -49,27 +49,15 @@ class VisilabsRecommendationInstance {
         VisilabsRecommendationRequest.sendRequest(properties: props, headers: [String : String](), timeoutInterval: timeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
             
             if reason != nil {
-                var visilabsRecommendationResponse = VisilabsRecommendationResponse(products: [VisilabsProduct](), rawResponseString: nil, error: reason)
-            }
-            
-            /*
-            guard let result = visilabsInAppNotificationResult else  {
-                semaphore.signal()
-                completion(nil)
-                return
-            }
-
-            for rawNotif in result{
-                if let actionData = rawNotif["actiondata"] as? [String : Any] {
-                    if let typeString = actionData["msg_type"] as? String, let _ = VisilabsInAppNotificationType(rawValue: typeString), let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
-                        notifications.append(notification)
-                    }
+                completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))
+            }else {
+                for r in result!{
+                    var rr = r as? VisilabsProduct
                 }
+                
+                completion(VisilabsRecommendationResponse(products: (result as? [VisilabsProduct]) ?? [VisilabsProduct](), error: nil))
             }
-            semaphore.signal()
- */
         })
-        
     }
     
     

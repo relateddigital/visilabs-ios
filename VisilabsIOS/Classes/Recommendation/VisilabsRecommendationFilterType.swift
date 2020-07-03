@@ -14,7 +14,6 @@ public enum VisilabsRecommendationFilterType: Int {
     case lessThan = 5
     case greaterOrEquals = 6
     case lessOrEquals = 7
-    
     static let include = like
     static let exclude = notLike
 }
@@ -52,25 +51,48 @@ public class VisilabsRecommendationFilter {
 }
 
 public class VisilabsProduct {
-    var code: String
-    var title: String
-    var img: String
-    var dest_url: String
-    var brand: String
-    var price: Double
-    var dprice: Double
-    var cur: String
-    var dcur: String
-    var freeshipping: Bool
-    var samedayshipping: Bool
-    var rating: Int
-    var comment: Int
-    var discount: Double
-    var attr1: String
-    var attr2: String
-    var attr3: String
-    var attr4: String
-    var attr5: String
+    
+    public enum PayloadKey {
+        public static let code = "code"
+        public static let title = "title"
+        public static let img = "img"
+        public static let dest_url = "dest_url"
+        public static let brand = "brand"
+        public static let price = "price"
+        public static let dprice = "dprice"
+        public static let cur = "cur"
+        public static let dcur = "dcur"
+        public static let freeshipping = "freeshipping"
+        public static let samedayshipping = "samedayshipping"
+        public static let rating = "rating"
+        public static let comment = "comment"
+        public static let discount = "discount"
+        public static let attr1 = "attr1"
+        public static let attr2 = "attr2"
+        public static let attr3 = "attr3"
+        public static let attr4 = "attr4"
+        public static let attr5 = "attr5"
+    }
+    
+    public var code: String
+    public var title: String
+    public var img: String
+    public var dest_url: String
+    public var brand: String
+    public var price: Double = 0.0
+    public var dprice: Double = 0.0
+    public var cur: String
+    public var dcur: String
+    public var freeshipping: Bool = false
+    public var samedayshipping: Bool  = false
+    public var rating: Int = 0
+    public var comment: Int = 0
+    public var discount: Double = 0.0
+    public var attr1: String
+    public var attr2: String
+    public var attr3: String
+    public var attr4: String
+    public var attr5: String
     
     internal init(code: String, title: String, img: String, dest_url: String, brand: String, price: Double, dprice: Double, cur: String, dcur: String, freeshipping: Bool, samedayshipping: Bool, rating: Int, comment: Int, discount: Double, attr1: String, attr2: String, attr3: String, attr4: String, attr5: String) {
         self.code = code
@@ -93,16 +115,47 @@ public class VisilabsProduct {
         self.attr4 = attr4
         self.attr5 = attr5
     }
+    
+    internal init?(JSONObject: [String: Any?]?) {
+        
+        guard let object = JSONObject else {
+            VisilabsLogger.error(message: "product json object should not be nil")
+            return nil
+        }
+        
+        guard let code = object[PayloadKey.code] as? String else {
+            VisilabsLogger.error(message: "invalid \(PayloadKey.code)")
+            return nil
+        }
+
+        self.code = code
+        self.title = object[PayloadKey.title] as? String ?? ""
+        self.img = object[PayloadKey.img] as? String ?? ""
+        self.dest_url = object[PayloadKey.dest_url] as? String ?? ""
+        self.brand = object[PayloadKey.brand] as? String ?? ""
+        self.price = object[PayloadKey.price] as? Double ?? 0.0
+        self.dprice = object[PayloadKey.dprice] as? Double ?? 0.0
+        self.cur = object[PayloadKey.cur] as? String ?? ""
+        self.dcur = object[PayloadKey.dcur] as? String ?? ""
+        self.freeshipping = object[PayloadKey.freeshipping] as? Bool ?? false
+        self.samedayshipping = object[PayloadKey.samedayshipping] as? Bool ?? false
+        self.rating = object[PayloadKey.rating] as? Int ?? 0
+        self.comment = object[PayloadKey.comment] as? Int ?? 0
+        self.discount = object[PayloadKey.discount] as? Double ?? 0.0
+        self.attr1 = object[PayloadKey.attr1] as? String ?? ""
+        self.attr2 = object[PayloadKey.attr2] as? String ?? ""
+        self.attr3 = object[PayloadKey.attr3] as? String ?? ""
+        self.attr4 = object[PayloadKey.attr4] as? String ?? ""
+        self.attr5 = object[PayloadKey.attr5] as? String ?? ""
+    }
 }
 
 public class VisilabsRecommendationResponse {
-    var products: [VisilabsProduct]
-    var error: VisilabsReason?
-    var rawResponseString: String?
+    public var products: [VisilabsProduct]
+    public var error: VisilabsReason?
     
-    internal init(products: [VisilabsProduct], rawResponseString: String? = nil, error: VisilabsReason? = nil) {
+    internal init(products: [VisilabsProduct], error: VisilabsReason? = nil) {
         self.products = products
-        self.rawResponseString = rawResponseString
         self.error = error
     }
 }
