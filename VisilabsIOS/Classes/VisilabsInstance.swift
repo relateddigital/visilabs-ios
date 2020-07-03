@@ -72,7 +72,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsEventInstance: VisilabsEventInstance
     let visilabsSendInstance: VisilabsSendInstance
     let visilabsInAppNotificationInstance: VisilabsInAppNotificationInstance
-
+    let visilabsRecommendationInstance: VisilabsRecommendationInstance
+    
     public var debugDescription: String {
         return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
     }
@@ -124,14 +125,15 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.siteId)"
-        trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
-        recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
-        networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
-        visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: readWriteLock)
-        visilabsSendInstance = VisilabsSendInstance()
-        visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: readWriteLock)
-        visilabsInAppNotificationInstance.inAppDelegate = self
-
+        self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
+        self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
+        self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
+        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
+        self.visilabsSendInstance = VisilabsSendInstance()
+        self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
+        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.organizationId, siteId: self.siteId)
+        self.visilabsInAppNotificationInstance.inAppDelegate = self
+        
         unarchive()
 
         if let idfa = VisilabsHelper.getIDFA() {
@@ -380,36 +382,32 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 extension VisilabsInstance {
     // MARK: - Recommendation
 
-    public func recommend(zoneID: String, productCode: String, properties: [String: String] = [:], filters: [VisilabsTargetFilter] = []) {
+    //MARK: - Recommendation
+    
+    public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+        
         if VisilabsBasePath.endpoints[.target] == nil {
             return
         }
-
-        recommendationQueue.async { [weak self] in
-            self?.networkQueue.async { [weak self] in
+        
+        self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
+            self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else {
                     return
                 }
-
-                var eQueue = Queue()
+                
                 var vUser = VisilabsUser()
-                var vCookie = VisilabsCookie()
-
+                var channel = "IOS"
+                
                 self.readWriteLock.read {
-                    eQueue = self.eventsQueue
                     vUser = self.visilabsUser
-                    vCookie = self.visilabsCookie
+                    channel = self.channel
                 }
-
-                self.readWriteLock.write {
-                    self.eventsQueue.removeAll()
+                
+                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), properties: properties, filters: filters) { (response) in
+                    completion(response)
                 }
-
-                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds))
-
-                self.readWriteLock.write {
-                    self.visilabsCookie = cookie
-                }
+                
             }
         }
     }
