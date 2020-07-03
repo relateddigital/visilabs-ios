@@ -116,7 +116,7 @@ public class VisilabsProduct {
         self.attr5 = attr5
     }
     
-    internal init?(JSONObject: [String: Any]?) {
+    internal init?(JSONObject: [String: Any?]?) {
         
         guard let object = JSONObject else {
             VisilabsLogger.error(message: "product json object should not be nil")
