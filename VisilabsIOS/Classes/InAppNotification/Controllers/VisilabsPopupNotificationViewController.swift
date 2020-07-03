@@ -65,17 +65,21 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
         self.init(notification: notification, viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
         if notification.type != .full_image {
-            var additionalTrackingProperties = [String: String]()
-            if notification.type == .smile_rating {
-                additionalTrackingProperties["OM.s_point"] = String(Int(viewController.standardView.sliderStepRating.value))
-                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-            } else if notification.type == .nps {
-                additionalTrackingProperties["OM.s_point"] = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",", with: ".")
-                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-            }
-            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: { self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: additionalTrackingProperties) })
+           
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: {
+                
+                var additionalTrackingProperties = [String: String]()
+                           if notification.type == .smile_rating {
+                               additionalTrackingProperties["OM.s_point"] = String(Int(viewController.standardView.sliderStepRating.value))
+                               additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                               additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                           } else if notification.type == .nps {
+                               additionalTrackingProperties["OM.s_point"] = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",", with: ".")
+                               additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                               additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                           }
+                
+                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: additionalTrackingProperties) })
             addButton(button)
         } else {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
