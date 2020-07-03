@@ -17,6 +17,7 @@ class RecommendationViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
+        
     }
     
     var filtersSection = Section("FILTERS")
@@ -39,9 +40,6 @@ class RecommendationViewController: FormViewController {
             $0.placeholder = "Product Code"
             $0.value = "asd-123"
         }
-            
-        
-        
         +++ filtersSection
             
             
@@ -80,24 +78,23 @@ class RecommendationViewController: FormViewController {
                     view.textAlignment = .right
                     view.font = .systemFont(ofSize: 20.0, weight: .bold)
                     view.textColor = .red
+                    let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self.filtersSection, action: #selector(self.removeSection))
+                    view.addGestureRecognizer(tap)
                     return view
+                    
                   }))
                   header.height = { 50 }
                   return header
                 }()
         }
-        
-        
-        
         filterSections.append(filterSection)
         print(filtersSection.index)
         form.insert(filterSection, at: filtersSection.index! + filterSections.count)
-        
-        
     }
     
-    private func removeSection(){
-        
+    @objc func removeSection(){
+//        filterSections.remove(at: filtersSection.index! + filtersSection.count)
+        filtersSection.remove(at: filtersSection.index! + filtersSection.count)
     }
     
 

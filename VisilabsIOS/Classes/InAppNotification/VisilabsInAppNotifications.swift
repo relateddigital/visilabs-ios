@@ -10,39 +10,39 @@ import UIKit
 
 protocol VisilabsInAppNotificationsDelegate {
     func notificationDidShow(_ notification: VisilabsInAppNotification)
-    func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String:String]?)
+    func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String])
 }
 
-public enum VisilabsInAppNotificationType : String, CaseIterable {
-    case mini = "mini"
-    case full = "full"
-    case image_text_button = "image_text_button"
-    case full_image = "full_image"
-    case nps = "nps"
-    case image_button = "image_button"
-    case smile_rating = "smile_rating"
-    //case unknown = "unknown"
+public enum VisilabsInAppNotificationType: String, CaseIterable {
+    case mini
+    case full
+    case image_text_button
+    case full_image
+    case nps
+    case image_button
+    case smile_rating
+    // case unknown = "unknown"
 }
 
-class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
+class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     let lock: VisilabsReadWriteLock
     var checkForNotificationOnActive = true
     var showNotificationOnActive = true
     var miniNotificationPresentationTime = 6.0
     var shownNotifications = Set<Int>()
-    //var triggeredNotifications = [VisilabsInAppNotification]()
-    //var inAppNotifications = [VisilabsInAppNotification]()
-    var inAppNotification :VisilabsInAppNotification?
+    // var triggeredNotifications = [VisilabsInAppNotification]()
+    // var inAppNotifications = [VisilabsInAppNotification]()
+    var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
     var delegate: VisilabsInAppNotificationsDelegate?
-    
+
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
     }
-    
-    func showNotification( _ notification: VisilabsInAppNotification) {
+
+    func showNotification(_ notification: VisilabsInAppNotification) {
         let notification = notification
-        
+
         DispatchQueue.main.async {
             if self.currentlyShowingNotification != nil {
                 VisilabsLogger.warn(message: "already showing an in-app notification")
@@ -64,7 +64,7 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
             }
         }
     }
-    
+
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
         miniNotificationVC.delegate = self
@@ -75,17 +75,17 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
         }
         return true
     }
-    
+
     func showFullNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let fullNotificationVC = VisilabsFullNotificationViewController(notification: notification)
         fullNotificationVC.delegate = self
         fullNotificationVC.show(animated: true)
         return true
     }
-    
-    //TODO: bu gerekmeyecek sanırım
+
+    // TODO: bu gerekmeyecek sanırım
     func getTopView() -> UIView? {
-        var topView: UIView? = nil
+        var topView: UIView?
         let window = UIApplication.shared.keyWindow
         if window != nil {
             for subview in window?.subviews ?? [] {
@@ -96,8 +96,7 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
         }
         return topView
     }
-    
-    
+
     func getRootViewController() -> UIViewController? {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return nil
@@ -107,52 +106,54 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
                 return window.rootViewController
             }
         }
-        
+
         return nil
     }
-    
+
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
-        
         let controller = VisilabsPopupNotificationViewController(notification: notification)
         controller.delegate = self
-        
+
         if let rootViewController = getRootViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
             return true
         } else {
             return false
         }
-        
     }
-    
+
     func markNotificationShown(notification: VisilabsInAppNotification) {
-        self.lock.write {
+        lock.write {
             VisilabsLogger.info(message: "marking notification as seen: \(notification.actId)")
             currentlyShowingNotification = notification
-            //TODO: burada customEvent request'i atılmalı
+            // TODO: burada customEvent request'i atılmalı
         }
     }
-    
+
     @discardableResult
-    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController, callToActionURL: URL?, shouldTrack: Bool, additionalTrackingProperties: [String:String]?) -> Bool{
+    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController, callToActionURL: URL?, shouldTrack: Bool, additionalTrackingProperties: [String: String]?) -> Bool {
         if currentlyShowingNotification?.actId != controller.notification.actId {
             return false
         }
-        
+
         let completionBlock = {
             if shouldTrack {
                 var properties = additionalTrackingProperties
-                if let urlString = callToActionURL?.absoluteString {
+                if (callToActionURL?.absoluteString) != nil {
                     if properties == nil {
                         properties = [:]
                     }
-                    properties!["url"] = urlString
                 }
-                self.delegate?.trackNotification(controller.notification, event: "$campaign_open", properties: properties)
+                if (additionalTrackingProperties != nil) {
+                    properties!["OM.s_point"] = additionalTrackingProperties!["OM.s_point"]
+                    properties!["OM.s_cat"] = additionalTrackingProperties!["OM.s_cat"]
+                    properties!["OM.s_page"] = additionalTrackingProperties!["OM.s_page"]
+                }
+                self.delegate?.trackNotification(controller.notification, event: "event", properties: properties!)
             }
             self.currentlyShowingNotification = nil
         }
-        
+
         if let callToActionURL = callToActionURL {
             controller.hide(animated: true) {
                 VisilabsLogger.info(message: "opening CTA URL: \(callToActionURL)")
@@ -162,12 +163,7 @@ class VisilabsInAppNotifications : VisilabsNotificationViewControllerDelegate {
         } else {
             controller.hide(animated: true, completion: completionBlock)
         }
-        
+
         return true
     }
 }
-
-
-
-
-
