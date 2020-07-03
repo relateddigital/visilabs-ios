@@ -271,7 +271,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
 //MARK:- SliderStepDelegate
 extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
-    func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float) {
-        print(Int(value))
-    }
+  func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float) {
+    sliderStep.value = value
+  }
 }
