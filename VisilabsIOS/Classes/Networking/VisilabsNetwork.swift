@@ -30,7 +30,7 @@ struct VisilabsResource<A> {
     let parse: (Data) -> A?
 }
 
-enum VisilabsReason {
+public enum VisilabsReason {
     case parseError
     case noData
     case notOKStatusCode(statusCode: Int)
