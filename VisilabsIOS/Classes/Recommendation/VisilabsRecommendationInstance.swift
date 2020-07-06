@@ -47,15 +47,17 @@ class VisilabsRecommendationInstance {
         }
         
         VisilabsRecommendationRequest.sendRequest(properties: props, headers: [String : String](), timeoutInterval: timeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
-            
+            var products = [VisilabsProduct]()
             if reason != nil {
                 completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))
             }else {
                 for r in result!{
-                    var rr = r as? VisilabsProduct
+                    if let product = VisilabsProduct(JSONObject: r as? [String: Any?]) {
+                        products.append(product)
+                    }
                 }
                 
-                completion(VisilabsRecommendationResponse(products: (result as? [VisilabsProduct]) ?? [VisilabsProduct](), error: nil))
+                completion(VisilabsRecommendationResponse(products: products, error: nil))
             }
         })
     }
