@@ -24,6 +24,7 @@
 		8891608224B4927C00752F03 /* VisilabsBaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8891608124B4927C00752F03 /* VisilabsBaseTests.swift */; };
 		8891608424B49EA200752F03 /* VisilabsInAppNotificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8891608324B49EA200752F03 /* VisilabsInAppNotificationTest.swift */; };
 		8891608624B4A1E600752F03 /* VisilabsEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8891608524B4A1E600752F03 /* VisilabsEventTests.swift */; };
+		8891608824B4AE3900752F03 /* VisilabsEventRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8891608724B4AE3900752F03 /* VisilabsEventRequestTests.swift */; };
 		88B2A47924A0D0FA00C153DC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B2A47824A0D0FA00C153DC /* Extensions.swift */; };
 		88B2A47B24A0DF7300C153DC /* GeofenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B2A47A24A0DF7300C153DC /* GeofenceViewController.swift */; };
 		9F70E7C1280382305CC3FCE3 /* Pods_VisilabsIOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */; };
@@ -67,6 +68,7 @@
 		8891608124B4927C00752F03 /* VisilabsBaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisilabsBaseTests.swift; sourceTree = "<group>"; };
 		8891608324B49EA200752F03 /* VisilabsInAppNotificationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisilabsInAppNotificationTest.swift; sourceTree = "<group>"; };
 		8891608524B4A1E600752F03 /* VisilabsEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisilabsEventTests.swift; sourceTree = "<group>"; };
+		8891608724B4AE3900752F03 /* VisilabsEventRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisilabsEventRequestTests.swift; sourceTree = "<group>"; };
 		88B2A47824A0D0FA00C153DC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		88B2A47A24A0DF7300C153DC /* GeofenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceViewController.swift; sourceTree = "<group>"; };
 		920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				8891608524B4A1E600752F03 /* VisilabsEventTests.swift */,
 				8891608324B49EA200752F03 /* VisilabsInAppNotificationTest.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				8891608724B4AE3900752F03 /* VisilabsEventRequestTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8891608824B4AE3900752F03 /* VisilabsEventRequestTests.swift in Sources */,
 				8891608424B49EA200752F03 /* VisilabsInAppNotificationTest.swift in Sources */,
 				8891608624B4A1E600752F03 /* VisilabsEventTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
