@@ -1,5 +1,6 @@
 import XCTest
-import VisilabsIOS
+@testable import VisilabsIOS
+import VisilabsIOS_Example
 
 class Tests: XCTestCase {
     
