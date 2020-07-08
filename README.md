@@ -51,6 +51,30 @@ Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID
 , realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json")
 ```
 
+If you want to use target module and use in-app-messages you need to add actionUrl parameter and use createAPI method as shown below:
+
+```swift
+Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
+, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
+, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", actionUrl: "http://s.visilabs.net/actjson")
+```
+
+If you want to use geofence module  you need to add geofenceUrl, geofenceEnabled and maxGeofenceCount parameter. maxGeofenceCount parameter indicates the maximum number of geographic areas which SDK can track. By default IOS is able track 20 geofences, but if you need to restrict maximum number of geofences you can define a number less than 20 to maxGeofenceCount parameter.
+
+```swift
+Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
+, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
+, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", geofenceUrl: "http://s.visilabs.net/geojson"
+, geofenceEnabled: true, maxGeofenceCount: 20)
+```
+
+
+
+
+
+
+
+
 
 
 Then write the following line in the didFinishLaunchingWithOptions function. Note: This code is for the standard Visilabs Setup. If you want to use features such as in-app and geofence, please check <a href="https://relateddigital.atlassian.net/wiki/spaces/KB/pages/428966373/iOS+-+Initialization" target="_blank">our document here.</a> <br />
