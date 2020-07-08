@@ -234,6 +234,26 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 
 Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
 
+**completion** parameter is a closure expression which takes an **VisilabsRecommendationResponse** instance as input and returns nothing. The structure of **VisilabsRecommendationResponse** is shown below:
+
+```swift
+public class VisilabsRecommendationResponse {
+    public var products: [VisilabsProduct]
+    public var error: VisilabsReason?
+    
+    internal init(products: [VisilabsProduct], error: VisilabsReason? = nil) {
+        self.products = products
+        self.error = error
+    }
+}
+```
+**VisilabsProduct** class has the following properties:
+
+| Property      | Type |
+| ----------- | ----------- |
+| code      | String       |
+| title   | String        |
+
 If recommended products exist for given arguments in **completion** method you need to handle the array of products. 
 
 ```swift
