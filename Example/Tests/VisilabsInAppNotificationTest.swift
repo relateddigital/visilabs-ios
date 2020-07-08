@@ -36,10 +36,15 @@ public enum PayloadKey {
 class VisilabsInAppNotificationTest: XCTestCase {
     
     func testInAppNotificationInitReturnNilIfActIdEqualsZero(){
+        // 1. given
         var jsonObject = [String: Any]()
         jsonObject[VisilabsInAppNotification.PayloadKey.actId] = 0
+        
+        // 2. when
         let visilabsInAppNotification = VisilabsInAppNotification(JSONObject: jsonObject)
-        XCTAssertNil(visilabsInAppNotification)
+        
+        // 3. then
+        XCTAssertNil(visilabsInAppNotification, "VisilabsInAppNotification init invalid act id returns non-nil.")
     }
     
     
@@ -47,6 +52,6 @@ class VisilabsInAppNotificationTest: XCTestCase {
         var jsonObject = [String: Any]()
         jsonObject[VisilabsInAppNotification.PayloadKey.messageType] = "InvalidType"
         let visilabsInAppNotification = VisilabsInAppNotification(JSONObject: jsonObject)
-        XCTAssertNil(visilabsInAppNotification)
+        XCTAssertNil(visilabsInAppNotification, "VisilabsInAppNotification init invalid act id returns non-nil.")
     }
 }
