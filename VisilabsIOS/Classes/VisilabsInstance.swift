@@ -146,6 +146,10 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
 
         setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
+        
+        if(self.geofenceEnabled && VisilabsBasePath.endpoints[.geofence] != nil){
+            
+        }
 
         computeWebViewUserAgent2()
     }
@@ -381,8 +385,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
 
 extension VisilabsInstance {
-    // MARK: - Recommendation
-
+    
     //MARK: - Recommendation
     
     public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
