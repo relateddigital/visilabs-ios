@@ -98,7 +98,7 @@ When an user signs up your application you need to call **signUp** method of SDK
 Visilabs.callAPI().signUp(exVisitorId: "userId")
 ```
 
-Moreoves, you can pass additional information to the optional parameter **properties**  when user signs up. The following example shows the call of **signUp** method with properties which includes **OM.sys.TokenID** and **OM.sys.AppID** parameters. **OM.sys.TokenID** and **OM.sys.AppID** are required to send push notifications and **OM.sys.AppID** parameter can be obtained by RMC web panel. 
+Moreover, you can pass additional information to the optional parameter **properties**  when user signs up. The following example shows the call of **signUp** method with properties which includes **OM.sys.TokenID** and **OM.sys.AppID** parameters. **OM.sys.TokenID** and **OM.sys.AppID** are required to send push notifications and **OM.sys.AppID** parameter can be obtained by RMC web panel. 
 //TODO: burada OM.sys.AppID'nin nasıl alınabileceğini daha detaylı açıkla.
 
 ```swift
@@ -120,6 +120,11 @@ Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 ```
 
 ### Custom Event
+
+**customEvent** is an universal method to record all events except login and sign up. **customEvent** receives 2 arguments: **pageName** and **properties**.  **pageName** indicates the page of application the user is visiting. **properties** should include additional information about the event. Below there are some example usages of **customEvent** method.
+
+
+
 
 
 
