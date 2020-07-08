@@ -80,7 +80,7 @@ Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID
 
 Initialization method  createAPI should be called in the **didFinishLaunchingWithOptions** method of **AppDelegate** class. Required parameters **organizationId**, **siteId** and **dataSource** is obtained by RMC web panel. 
 
-## Debug
+## Debugging
 
 By default console debugging is disabled. To enable debugging after the call of createAPI you need to set the **loggingEnabled** property of SDK to true.
 
@@ -90,8 +90,36 @@ Visilabs.callAPI().loggingEnabled = true
 
 ## Event Logging
 
+### Sign Up
 
+When an user signs up your application you need to call **signUp** method of SDK. At its simplest you can call **signUp** method by passing the unique identifier of the user to the method.
 
+```swift
+Visilabs.callAPI().signUp(exVisitorId: "userId")
+```
+
+Moreoves, you can pass additional information to the optional parameter **properties**  when user signs up. The following example shows the call of **signUp** method with properties which includes **OM.sys.TokenID** and **OM.sys.AppID** parameters. **OM.sys.TokenID** and **OM.sys.AppID** are required to send push notifications and **OM.sys.AppID** parameter can be obtained by RMC web panel. 
+//TODO: burada OM.sys.AppID'nin nasıl alınabileceğini daha detaylı açıkla.
+
+```swift
+var properties = [String:String]()
+properties["OM.sys.TokenID"] = "Token ID to use for push messages"
+properties["OM.sys.AppID"] = "App ID to use for push messages"
+Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
+```
+
+### Login
+
+Like **signUp** method  **login** method can be called with or without optional parameter properties.
+
+```swift
+var properties = [String:String]()
+properties["OM.sys.TokenID"] = "Token ID to use for push messages"
+properties["OM.sys.AppID"] = "App ID to use for push messages"
+Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
+```
+
+### Custom Event
 
 
 
