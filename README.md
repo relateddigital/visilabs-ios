@@ -230,13 +230,23 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
 
+## Recommendation
 
+Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
 
+If recommended products exist for given arguments in **completion** method you need to handle the array of products. 
 
-
-
-
-
+```swift
+Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, properties: properties, completion: { response in
+    if let error = response.error{
+        
+    }else{
+        for product in response.products{
+            print(product)
+        }
+    }
+})
+```swift
 
 
 
