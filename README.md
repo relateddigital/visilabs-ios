@@ -68,8 +68,15 @@ Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID
 , geofenceEnabled: true, maxGeofenceCount: 20)
 ```
 
+If you are using all of the modules described above you can call createAPI method with all parameters mentioned above.
 
-
+```swift
+Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
+, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
+, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json"
+, actionUrl: "http://s.visilabs.net/actjson", geofenceUrl: "http://s.visilabs.net/geojson"
+, geofenceEnabled: true, maxGeofenceCount: 20)
+```
 
 
 
