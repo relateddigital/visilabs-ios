@@ -123,6 +123,28 @@ Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 
 **customEvent** is an universal method to record all events except login and sign up. **customEvent** receives 2 arguments: **pageName** and **properties**.  **pageName** indicates the page of application the user is visiting. **properties** should include additional information about the event. Below there are some example usages of **customEvent** method.
 
+#### Page View
+
+```swift
+Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
+```
+
+#### Product View
+
+```swift
+var properties = [String:String]()
+properties["OM.pv"] = "Product Code"
+properties["OM.pn"] = "Product Name"
+properties["OM.ppr"] = "Product Price"
+properties["OM.pv.1"] = "Product Brand"
+properties["OM.ppr"] = "Product Price"
+properties["OM.inv"] = "Number of items in stock"
+Visilabs.callAPI().customEvent("Product View", properties: properties)
+```
+
+
+
+
 
 
 
