@@ -78,23 +78,14 @@ Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID
 , geofenceEnabled: true, maxGeofenceCount: 20)
 ```
 
+Initialization method  createAPI should be called in the didFinishLaunchingWithOptions method of AppDelegate class. Required parameters organizationId, siteId and dataSource is obtained by RMC web panel. 
 
 
 
 
 
 
-Then write the following line in the didFinishLaunchingWithOptions function. Note: This code is for the standard Visilabs Setup. If you want to use features such as in-app and geofence, please check <a href="https://relateddigital.atlassian.net/wiki/spaces/KB/pages/428966373/iOS+-+Initialization" target="_blank">our document here.</a> <br />
 
-```swift
-Visilabs.createAPI("YOUR_ORGANIZATION_ID", withSiteID:"YOUR_SITE_ID", 
-withSegmentURL: "http://lgr.visilabs.net", withDataSource: "YOUR_DATASOURCE", 
-withRealTimeURL: "http://rt.visilabs.net", withChannel: "IOS", withRequestTimeout:30,
-withTargetURL:"http://s.visilabs.net/json",withActionURL: "http://s.visilabs.net/actjson")
-```
-
-You need to get the three paramaters from RMC web panel.
-organizationID siteID datasource
 
 ## Author
 
