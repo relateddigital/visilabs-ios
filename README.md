@@ -253,6 +253,25 @@ public class VisilabsRecommendationResponse {
 | ----------- | ----------- |
 | code      | String       |
 | title   | String        |
+| img   | String        |
+| dest_url   | String        |
+| brand   | String        |
+| price   | Double        |
+| dprice   | Double        |
+| cur   | String        |
+| dcur   | String        |
+| freeshipping   | Bool        |
+| samedayshipping   | Bool        |
+| rating   | Int        |
+| comment   | Int        |
+| discount   | Double        |
+| attr1   | String        |
+| attr2   | String        |
+| attr3   | String        |
+| attr4   | String        |
+| attr5   | String        |
+
+
 
 If recommended products exist for given arguments in **completion** method you need to handle the array of products. 
 
