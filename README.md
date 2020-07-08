@@ -35,11 +35,22 @@ Add Visilabs using the line below <br />
 
 Depending on your needs you can initialize Visilabs with various number of parameters. 
 
-In simplest form Visilabs IOS SDK could be initialized with 6 mandatory parameters. If you initialize Visilabs IOS SDK this way, only event logging functionalities would be available.  The following example shows this initialization. 
+In simplest form Visilabs IOS SDK could be initialized with 6 mandatory parameters. If you initialize Visilabs IOS SDK this way, only event logging functionalities would be available. The following example shows this initialization. 
 
 ```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID", loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE", realTimeUrl: "http://rt.visilabs.net", channel: "IOS")
+Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
+, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
+, realTimeUrl: "http://rt.visilabs.net", channel: "IOS")
 ```
+
+If you want to use recommendation module you need to add targetUrl parameter and use createAPI method as shown below:
+
+```swift
+Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
+, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
+, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json")
+```
+
 
 
 Then write the following line in the didFinishLaunchingWithOptions function. Note: This code is for the standard Visilabs Setup. If you want to use features such as in-app and geofence, please check <a href="https://relateddigital.atlassian.net/wiki/spaces/KB/pages/428966373/iOS+-+Initialization" target="_blank">our document here.</a> <br />
