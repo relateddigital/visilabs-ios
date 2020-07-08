@@ -121,7 +121,7 @@ Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 
 ### Custom Event
 
-**customEvent** is an universal method to record all events except login and sign up. **customEvent** receives 2 arguments: **pageName** and **properties**.  **pageName** indicates the page of application the user is visiting. **properties** should include additional information about the event. Below there are some example usages of **customEvent** method.
+**customEvent** is an universal method to record all events except login and sign up. **customEvent** receives 2 arguments: **pageName** and **properties**.  **pageName** indicates the page of application the user is visiting. **properties** should include additional information about the event. Below there are some common example usages of **customEvent** method.
 
 #### Page View
 
@@ -141,6 +141,100 @@ properties["OM.ppr"] = "Product Price"
 properties["OM.inv"] = "Number of items in stock"
 Visilabs.callAPI().customEvent("Product View", properties: properties)
 ```
+
+#### Add to Cart
+
+```swift
+var properties = [String:String]()
+properties["OM.pbid"] = "Basket ID"
+properties["OM.pb"] = "Product1 Code;Product2 Code"
+properties["OM.pu"] = "Product1 Quantity;Product2 Quantity"
+properties["OM.ppr"] = "Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity"
+Visilabs.callAPI().customEvent("Cart", properties: properties)
+```
+
+#### Product Purchase
+
+```swift
+var properties = [String:String]()
+properties["OM.tid"] = "Order ID"
+properties["OM.pp"] = "Product1 Code;Product2 Code"
+properties["OM.pu"] = "Product1 Quantity;Product2 Quantity"
+properties["OM.ppr"] = "Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity"
+Visilabs.callAPI().customEvent("Purchase", properties: properties)
+```
+
+#### Product Category Page View
+
+```swift
+var properties = [String:String]()
+properties["OM.clist"] = "Category Code/Category ID"
+Visilabs.callAPI().customEvent("Category View", properties: properties)
+```
+
+#### In App Search
+
+```swift
+var properties = [String:String]()
+properties["OM.oss"] = "Search Keyword"
+properties["OM.ossr"] = "Number of Search Results"
+Visilabs.callAPI().customEvent("In App Search", properties: properties)
+```
+
+#### Banner Click
+
+```swift
+var properties = [String:String]()
+properties["OM.OSB"] = "Banner Name/Banner Code"
+Visilabs.callAPI().customEvent("Banner Click", properties: properties)
+```
+
+#### Add To Favourites
+
+```swift
+var properties = [String:String]()
+properties["OM.pf"] = "Product Code"
+properties["OM.pfu"] = "1"
+properties["OM.ppr"] = "Product Price"
+Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
+```
+
+#### Remove from Favourites
+
+```swift
+var properties = [String:String]()
+properties["OM.pf"] = "Product Code"
+properties["OM.pfu"] = "-1"
+properties["OM.ppr"] = "Product Price"
+Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
+```
+
+#### Sending Campaign Parameters
+
+```swift
+var properties = [String:String]()
+properties["utm_source"] = "euromsg"
+properties["utm_medium"] = "push"
+properties["utm_campaign"] = "euromsg campaign"
+Visilabs.callAPI().customEvent("Login Page", properties: properties)
+```
+
+
+#### Push Message Token Registration
+
+```swift
+var properties = [String:String]()
+properties["OM.sys.TokenID"] = "Token ID to use for push messages"
+properties["OM.sys.AppID"] = "App ID to use for push messages"
+Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
+```
+
+
+
+
+
+
+
 
 
 
