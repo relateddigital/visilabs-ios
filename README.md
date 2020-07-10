@@ -82,9 +82,14 @@ Initialization method  createAPI should be called in the **didFinishLaunchingWit
 
 ## Debugging
 
-By default console debugging is disabled. To enable debugging after the call of createAPI you need to set the **loggingEnabled** property of SDK to true.
+By default console debugging is disabled. To enable debugging you need to set the **loggingEnabled** property of SDK to true after the call of **createAPI**.
 
 ```swift
+Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
+, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
+, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json"
+, actionUrl: "http://s.visilabs.net/actjson", geofenceUrl: "http://s.visilabs.net/geojson"
+, geofenceEnabled: true, maxGeofenceCount: 20)
 Visilabs.callAPI().loggingEnabled = true
 ```
 
@@ -285,7 +290,7 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, p
         }
     }
 })
-```swift
+```
 
 
 
