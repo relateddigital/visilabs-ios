@@ -9,4 +9,12 @@ import Foundation
 
 class VisilabsGeofenceInstance {
     
+    let organizationId: String
+    let siteId: String
+
+    init(organizationId: String, siteId: String) {
+        self.organizationId = organizationId
+        self.siteId = siteId
+    }
+    
 }
