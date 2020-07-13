@@ -14,6 +14,30 @@ class InAppViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
+        
+        Visilabs.callAPI().getFavorites(actionId: "1") { (visilabsFavoritesResponse) in
+            if visilabsFavoritesResponse.error != nil {
+                
+                return
+            }else{
+                if let brands = visilabsFavoritesResponse.favorites[.brand]{
+                    for brand in brands{
+                        print(brand)
+                    }
+                }
+                if let attr1s = visilabsFavoritesResponse.favorites[.attr1]{
+                    for attr in attr1s{
+                        print(attr)
+                    }
+                }
+                if let categories = visilabsFavoritesResponse.favorites[.category]{
+                    for category in categories{
+                        print(category)
+                    }
+                }
+            }
+        }
+        
     }
     
     var notificationTypes = [String]()
