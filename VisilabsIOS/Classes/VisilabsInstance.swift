@@ -331,10 +331,48 @@ extension VisilabsInstance {
     }
 }
 
+
+public enum VisilabsFavoriteAttribute: String {
+    case ageGroup
+    case attr1
+    case attr2
+    case attr3
+    case attr4
+    case attr5
+    case attr6
+    case attr7
+    case attr8
+    case attr9
+    case attr10
+    case brand
+    case category
+    case color
+    case gender
+    case material
+    case title
+}
+
+public class VisilabsFavoritesResponse {
+    public var favorites: [VisilabsFavoriteAttribute: [String]]
+    public var error: VisilabsReason?
+    
+    internal init(favorites: [VisilabsFavoriteAttribute: [String]], error: VisilabsReason? = nil) {
+        self.favorites = favorites
+        self.error = error
+    }
+}
+
+
+
 extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     
-    // MARK: - InAppNotifications
+    // MARK: - TargetingActions
 
+    
+    public func getFavorites(actionId: String, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
+        
+    }
+    
     // TODO: this method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
         visilabsInAppNotificationInstance.notificationsInstance.showNotification(visilabsInAppNotification)
