@@ -31,7 +31,7 @@ public class VisilabsTargetRequest: VisilabsAction {
     
     private func cleanParameters() {
         for propKey in properties.keys {
-            if !propKey.isEqual(VisilabsConfig.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConfig.SITEID_KEY) && !propKey.isEqual(VisilabsConfig.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConfig.COOKIEID_KEY) && !propKey.isEqual(VisilabsConfig.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConfig.BODY_KEY) && !propKey.isEqual(VisilabsConfig.TOKENID_KEY) && !propKey.isEqual(VisilabsConfig.APPID_KEY) && !propKey.isEqual(VisilabsConfig.APIVER_KEY) && !propKey.isEqual(VisilabsConfig.FILTER_KEY) {
+            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.SITEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
                 continue
             } else {
                 properties.removeValue(forKey: propKey)
@@ -72,51 +72,51 @@ public class VisilabsTargetRequest: VisilabsAction {
     }
     
     private func getParametersAsQueryString() -> String {
-        var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConfig.SITEID_KEY)=\(siteID)"
+        var queryParameters = "?\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConstants.SITEID_KEY)=\(siteID)"
 
         if !cookieID.isNilOrWhiteSpace {
             let encodedCookieIDValue = cookieID!.urlEncode()
-            let cookieParameter = "&\(VisilabsConfig.COOKIEID_KEY)=\(encodedCookieIDValue)"
+            let cookieParameter = "&\(VisilabsConstants.COOKIEID_KEY)=\(encodedCookieIDValue)"
             queryParameters = queryParameters + cookieParameter
         }
         
         if !exVisitorID.isNilOrWhiteSpace {
             let encodedExVisitorIDValue = exVisitorID!.urlEncode()
-            let exVisitorIDParameter = "&\(VisilabsConfig.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
+            let exVisitorIDParameter = "&\(VisilabsConstants.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
             queryParameters = queryParameters + exVisitorIDParameter
         }
 
         if zoneID.count > 0 {
             let encodedZoneIDValue = zoneID.urlEncode()
-            let zoneIDParameter = "&\(VisilabsConfig.ZONE_ID_KEY)=\(encodedZoneIDValue)"
+            let zoneIDParameter = "&\(VisilabsConstants.ZONE_ID_KEY)=\(encodedZoneIDValue)"
             queryParameters = queryParameters + zoneIDParameter
         }
         
         if productCode.count > 0 {
             let encodedProductCodeValue = productCode.urlEncode()
-            let productCodeParameter = "&\(VisilabsConfig.BODY_KEY)=\(encodedProductCodeValue)"
+            let productCodeParameter = "&\(VisilabsConstants.BODY_KEY)=\(encodedProductCodeValue)"
             queryParameters = queryParameters + productCodeParameter
         }
         
         if !tokenID.isNilOrWhiteSpace {
             let encodedTokenValue = tokenID!.urlEncode()
-            let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
+            let tokenParameter = "&\(VisilabsConstants.TOKENID_KEY)=\(encodedTokenValue)"
             queryParameters = queryParameters + tokenParameter
         }
         
         if !appID.isNilOrWhiteSpace {
             let encodedAppValue = appID!.urlEncode()
-            let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
+            let appParameter = "&\(VisilabsConstants.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
         }
         
         cleanParameters()
                         
         if let fs = getFiltersQueryString(filters), !fs.isEmptyOrWhitespace {
-            queryParameters = "\(queryParameters)&\(VisilabsConfig.FILTER_KEY)=\(fs.urlEncode())"
+            queryParameters = "\(queryParameters)&\(VisilabsConstants.FILTER_KEY)=\(fs.urlEncode())"
         }
         
-        queryParameters = "\(queryParameters)&\(VisilabsConfig.APIVER_KEY)=\(VisilabsConfig.APIVER_VALUE)"
+        queryParameters = "\(queryParameters)&\(VisilabsConstants.APIVER_KEY)=\(VisilabsConstants.APIVER_VALUE)"
         
         for (key, value) in properties {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace {

@@ -46,7 +46,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
     var tokenID: String?
     var appID: String?
     internal var isOnline : Bool = true //TODO: burada = true demek lazım mı?
-    internal var userAgent: String = VisilabsConfig.IOS
+    internal var userAgent: String = VisilabsConstants.IOS
     private var checkForNotificationsOnLoggerRequest: Bool = true
     private var miniNotificationPresentationTime: Float = 10.0
     private var miniNotificationBackgroundColor: UIColor?
@@ -175,27 +175,27 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
     
     
     func cookieIDFilePath() -> String? {
-        return filePath(forData: VisilabsConfig.COOKIEID_ARCHIVE_KEY)
+        return filePath(forData: VisilabsConstants.COOKIEID_ARCHIVE_KEY)
     }
 
     func exVisitorIDFilePath() -> String? {
-        return filePath(forData: VisilabsConfig.EXVISITORID_ARCHIVE_KEY)
+        return filePath(forData: VisilabsConstants.EXVISITORID_ARCHIVE_KEY)
     }
 
     func tokenIDFilePath() -> String? {
-        return filePath(forData: VisilabsConfig.TOKENID_ARCHIVE_KEY)
+        return filePath(forData: VisilabsConstants.TOKENID_ARCHIVE_KEY)
     }
 
     func appIDFilePath() -> String? {
-        return filePath(forData: VisilabsConfig.APPID_ARCHIVE_KEY)
+        return filePath(forData: VisilabsConstants.APPID_ARCHIVE_KEY)
     }
 
     func userAgentFilePath() -> String? {
-        return filePath(forData: VisilabsConfig.USERAGENT_ARCHIVE_KEY)
+        return filePath(forData: VisilabsConstants.USERAGENT_ARCHIVE_KEY)
     }
 
     func propertiesFilePath() -> String? {
-        return filePath(forData: VisilabsConfig.PROPERTIES_ARCHIVE_KEY)
+        return filePath(forData: VisilabsConstants.PROPERTIES_ARCHIVE_KEY)
     }
     
     private func archive() {
@@ -269,21 +269,21 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
             return
         }
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
-        var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
-            , VisilabsConfig.CHANNEL_KEY : self.channel
-            , VisilabsConfig.SITEID_KEY : self.siteID
-            , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
-            , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
-            , VisilabsConfig.URI_KEY : "/OM_evt.gif".urlEncode()
-            , VisilabsConfig.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConfig.IOS)"
-            , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
+        var props = [VisilabsConstants.COOKIEID_KEY : self.cookieID ?? ""
+            , VisilabsConstants.CHANNEL_KEY : self.channel
+            , VisilabsConstants.SITEID_KEY : self.siteID
+            , VisilabsConstants.ORGANIZATIONID_KEY : self.organizationID
+            , VisilabsConstants.DAT_KEY : String(actualTimeOfevent)
+            , VisilabsConstants.URI_KEY : "/OM_evt.gif".urlEncode()
+            , VisilabsConstants.DOMAIN_KEY : "\(self.dataSource)_\(VisilabsConstants.IOS)"
+            , VisilabsConstants.APIVER_KEY : VisilabsConstants.IOS]
         
         if !self.exVisitorID.isNilOrWhiteSpace{
-            props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
+            props[VisilabsConstants.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
         }
 
-        let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
-        let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
+        let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
+        let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: props, additionalQueryString: visilabsNotification.queryString ?? "")
         print("\(self) tracking notification click \(lUrl)")
         
         Visilabs2.visilabsLockingQueue.sync {
@@ -306,27 +306,27 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
 
             if !self.notificationResponseCached{
                 let actualTimeOfevent = Int(Date().timeIntervalSince1970)
-                var props = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
-                    , VisilabsConfig.SITEID_KEY : self.siteID
-                    , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
-                    , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
-                    , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS
-                    , VisilabsConfig.URI_KEY : pageName.urlEncode()]
+                var props = [VisilabsConstants.COOKIEID_KEY : self.cookieID ?? ""
+                    , VisilabsConstants.SITEID_KEY : self.siteID
+                    , VisilabsConstants.ORGANIZATIONID_KEY : self.organizationID
+                    , VisilabsConstants.DAT_KEY : String(actualTimeOfevent)
+                    , VisilabsConstants.APIVER_KEY : VisilabsConstants.IOS
+                    , VisilabsConstants.URI_KEY : pageName.urlEncode()]
                 
                 if !self.exVisitorID.isNilOrWhiteSpace{
-                    props[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
+                    props[VisilabsConstants.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
                 }
                 if !self.visitData.isNilOrWhiteSpace{
-                    props[VisilabsConfig.VISIT_CAPPING_KEY] = self.visitData!.urlEncode()
+                    props[VisilabsConstants.VISIT_CAPPING_KEY] = self.visitData!.urlEncode()
                 }
                 if !self.visitorData.isNilOrWhiteSpace{
-                    props[VisilabsConfig.VISITOR_CAPPING_KEY] = self.visitorData!.urlEncode()
+                    props[VisilabsConstants.VISITOR_CAPPING_KEY] = self.visitorData!.urlEncode()
                 }
                 if !self.tokenID.isNilOrWhiteSpace{
-                    props[VisilabsConfig.TOKENID_KEY] = self.tokenID!.urlEncode()
+                    props[VisilabsConstants.TOKENID_KEY] = self.tokenID!.urlEncode()
                 }
                 if !self.appID.isNilOrWhiteSpace{
-                    props[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
+                    props[VisilabsConstants.APPID_KEY] = self.appID!.urlEncode()
                 }
                 
                 for (key, value) in VisilabsPersistence.getParameters(){
@@ -691,18 +691,18 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                 
                 var cookieString = ""
                 
-                if nextAPICall.contains(VisilabsConfig.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
+                if nextAPICall.contains(VisilabsConstants.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
                 && !self.visilabsCookie.loggerCookieKey.isNilOrWhiteSpace && !self.visilabsCookie.loggerCookieValue.isNilOrWhiteSpace {
                     cookieString = "\(self.visilabsCookie.loggerCookieKey!)=\(self.visilabsCookie.loggerCookieValue!)"
                     if !self.visilabsCookie.loggerOM3rdCookieValue.isNilOrWhiteSpace {
-                        cookieString = "\(cookieString);\(VisilabsConfig.OM_3_KEY)=\(self.visilabsCookie.loggerOM3rdCookieValue!)"
+                        cookieString = "\(cookieString);\(VisilabsConstants.OM_3_KEY)=\(self.visilabsCookie.loggerOM3rdCookieValue!)"
                     }
                 }
-                else if nextAPICall.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive)
+                else if nextAPICall.contains(VisilabsConstants.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive)
                 && !self.visilabsCookie.realTimeCookieKey.isNilOrWhiteSpace && !self.visilabsCookie.realTimeCookieValue.isNilOrWhiteSpace {
                     cookieString = "\(self.visilabsCookie.realTimeCookieKey!)=\(self.visilabsCookie.realTimeCookieValue!)"
                     if !self.visilabsCookie.realTimeOM3rdCookieValue.isNilOrWhiteSpace {
-                        cookieString = "\(cookieString);\(VisilabsConfig.OM_3_KEY)=\(self.visilabsCookie.realTimeOM3rdCookieValue!)"
+                        cookieString = "\(cookieString);\(VisilabsConstants.OM_3_KEY)=\(self.visilabsCookie.realTimeOM3rdCookieValue!)"
                     }
                 }
                 
@@ -732,8 +732,8 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                                 if res.statusCode == 200 || res.statusCode == 304{
                                     
                                     if let url = res.url{
-                                        if url.absoluteString.contains(VisilabsConfig.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
-                                        || url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive){
+                                        if url.absoluteString.contains(VisilabsConstants.LOGGER_URL, options: NSString.CompareOptions.caseInsensitive)
+                                        || url.absoluteString.contains(VisilabsConstants.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive){
                                             
                                             //TODO: kullanılmıyor 
                                             //var cookies = HTTPCookie.cookies(withResponseHeaderFields: res.allHeaderFields as! [String: String], for: url) // send to URL, return NSArray
@@ -741,8 +741,8 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                                             for cookie in HTTPCookieStorage.shared.cookies ?? [] {
                                                 print("Cookie Key: \(cookie.name) Cookie Value: \(cookie.value)")
 
-                                                if cookie.name.contains(VisilabsConfig.LOAD_BALANCE_PREFIX, options: NSString.CompareOptions.caseInsensitive) {
-                                                    if url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive) {
+                                                if cookie.name.contains(VisilabsConstants.LOAD_BALANCE_PREFIX, options: NSString.CompareOptions.caseInsensitive) {
+                                                    if url.absoluteString.contains(VisilabsConstants.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive) {
                                                         self.visilabsCookie.realTimeCookieKey = cookie.name
                                                         self.visilabsCookie.realTimeCookieValue = cookie.value
                                                     } else {
@@ -751,8 +751,8 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                                                     }
                                                 }
                                                 
-                                                if cookie.name.contains(VisilabsConfig.OM_3_KEY, options: NSString.CompareOptions.caseInsensitive) {
-                                                    if url.absoluteString.contains(VisilabsConfig.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive) {
+                                                if cookie.name.contains(VisilabsConstants.OM_3_KEY, options: NSString.CompareOptions.caseInsensitive) {
+                                                    if url.absoluteString.contains(VisilabsConstants.REAL_TIME_URL, options: NSString.CompareOptions.caseInsensitive) {
                                                         self.visilabsCookie.realTimeOM3rdCookieValue = cookie.value
                                                     } else {
                                                         self.visilabsCookie.loggerOM3rdCookieValue = cookie.value
@@ -837,7 +837,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         }
         var props = properties
         
-        if let cookieID = props[VisilabsConfig.COOKIEID_KEY] {
+        if let cookieID = props[VisilabsConstants.COOKIEID_KEY] {
             if self.cookieID != cookieID {
                 VisilabsPersistence.clearParameters()
             }
@@ -847,10 +847,10 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                     print("Visilabs: WARNING - Unable to archive userAgent!!!")
                 }
             }
-            props.removeValue(forKey: VisilabsConfig.COOKIEID_KEY)
+            props.removeValue(forKey: VisilabsConstants.COOKIEID_KEY)
         }
         
-        if let exVisitorID = props[VisilabsConfig.EXVISITORID_KEY] {
+        if let exVisitorID = props[VisilabsConstants.EXVISITORID_KEY] {
             if self.exVisitorID != exVisitorID {
                 VisilabsPersistence.clearParameters()
             }
@@ -863,66 +863,66 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                     print("Visilabs: WARNING - Unable to archive exVisitorID!!!")
                 }
             }
-            props.removeValue(forKey: VisilabsConfig.EXVISITORID_KEY)
+            props.removeValue(forKey: VisilabsConstants.EXVISITORID_KEY)
         }
  
-        if let tokenID = props[VisilabsConfig.TOKENID_KEY]{
+        if let tokenID = props[VisilabsConstants.TOKENID_KEY]{
             self.tokenID = tokenID
             if let tidfp = self.tokenIDFilePath(){
                 if !NSKeyedArchiver.archiveRootObject(self.tokenID!, toFile: tidfp) {
                     print("Visilabs: WARNING - Unable to archive tokenID!!!")
                 }
             }
-            props.removeValue(forKey: VisilabsConfig.TOKENID_KEY)
+            props.removeValue(forKey: VisilabsConstants.TOKENID_KEY)
         }
         
-        if let appID = props[VisilabsConfig.APPID_KEY]{
+        if let appID = props[VisilabsConstants.APPID_KEY]{
             self.appID = appID
             if let appidfp = self.appIDFilePath(){
                 if !NSKeyedArchiver.archiveRootObject(self.appID!, toFile: appidfp) {
                     print("Visilabs: WARNING - Unable to archive appID!!!")
                 }
             }
-            props.removeValue(forKey: VisilabsConfig.APPID_KEY)
+            props.removeValue(forKey: VisilabsConstants.APPID_KEY)
         }
         
         //TODO: Dışarıdan mobile ad id gelince neden siliyoruz?
-        if props.keys.contains(VisilabsConfig.MOBILEADID_KEY) {
-            props.removeValue(forKey: VisilabsConfig.MOBILEADID_KEY)
+        if props.keys.contains(VisilabsConstants.MOBILEADID_KEY) {
+            props.removeValue(forKey: VisilabsConstants.MOBILEADID_KEY)
         }
         
-        if props.keys.contains(VisilabsConfig.APIVER_KEY) {
-            props.removeValue(forKey: VisilabsConfig.APIVER_KEY)
+        if props.keys.contains(VisilabsConstants.APIVER_KEY) {
+            props.removeValue(forKey: VisilabsConstants.APIVER_KEY)
         }
         
 
         var chan = self.channel
-        if props.keys.contains(VisilabsConfig.CHANNEL_KEY) {
-            chan = props[VisilabsConfig.CHANNEL_KEY]!
-            props.removeValue(forKey: VisilabsConfig.CHANNEL_KEY)
+        if props.keys.contains(VisilabsConstants.CHANNEL_KEY) {
+            chan = props[VisilabsConstants.CHANNEL_KEY]!
+            props.removeValue(forKey: VisilabsConstants.CHANNEL_KEY)
         }
         
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
-        var eventProperties = [VisilabsConfig.COOKIEID_KEY : self.cookieID ?? ""
-            , VisilabsConfig.CHANNEL_KEY : chan
-            , VisilabsConfig.SITEID_KEY : self.siteID
-            , VisilabsConfig.ORGANIZATIONID_KEY : self.organizationID
-            , VisilabsConfig.DAT_KEY : String(actualTimeOfevent)
-            , VisilabsConfig.URI_KEY : pageName.urlEncode()
-            , VisilabsConfig.MOBILEAPPLICATION_KEY : VisilabsConfig.TRUE
-            , VisilabsConfig.MOBILEADID_KEY : self.identifierForAdvertising ?? ""
-            , VisilabsConfig.APIVER_KEY : VisilabsConfig.IOS]
+        var eventProperties = [VisilabsConstants.COOKIEID_KEY : self.cookieID ?? ""
+            , VisilabsConstants.CHANNEL_KEY : chan
+            , VisilabsConstants.SITEID_KEY : self.siteID
+            , VisilabsConstants.ORGANIZATIONID_KEY : self.organizationID
+            , VisilabsConstants.DAT_KEY : String(actualTimeOfevent)
+            , VisilabsConstants.URI_KEY : pageName.urlEncode()
+            , VisilabsConstants.MOBILEAPPLICATION_KEY : VisilabsConstants.TRUE
+            , VisilabsConstants.MOBILEADID_KEY : self.identifierForAdvertising ?? ""
+            , VisilabsConstants.APIVER_KEY : VisilabsConstants.IOS]
         
         if !self.exVisitorID.isNilOrWhiteSpace{
-            eventProperties[VisilabsConfig.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
+            eventProperties[VisilabsConstants.EXVISITORID_KEY] = self.exVisitorID!.urlEncode()
         }
         
         if !self.tokenID.isNilOrWhiteSpace{
-            eventProperties[VisilabsConfig.TOKENID_KEY] = self.tokenID!.urlEncode()
+            eventProperties[VisilabsConstants.TOKENID_KEY] = self.tokenID!.urlEncode()
         }
         
         if !self.appID.isNilOrWhiteSpace{
-            eventProperties[VisilabsConfig.APPID_KEY] = self.appID!.urlEncode()
+            eventProperties[VisilabsConstants.APPID_KEY] = self.appID!.urlEncode()
         }
         
         for (key, value) in props{
@@ -939,8 +939,8 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         
         VisilabsPersistence.saveParameters(props)
 
-        let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
-        let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConfig.OM_GIF)", props: eventProperties)
+        let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: eventProperties)
+        let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: eventProperties)
         
         /*
         if self.checkForNotificationsOnLoggerRequest && !self.actionURL.isNilOrWhiteSpace{
@@ -964,7 +964,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                 setCookieID()
             }
             var props = properties
-            props[VisilabsConfig.EXVISITORID_KEY] = exVisitorID
+            props[VisilabsConstants.EXVISITORID_KEY] = exVisitorID
             props["Login"] = exVisitorID
             props["OM.b_login"] = "Login"
             customEvent("LoginPage", properties: props)
@@ -980,7 +980,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                 setCookieID()
             }
             var props = properties
-            props[VisilabsConfig.EXVISITORID_KEY] = exVisitorID
+            props[VisilabsConstants.EXVISITORID_KEY] = exVisitorID
             props["SignUp"] = exVisitorID
             props["OM.b_sgnp"] = "SignUp"
             customEvent("SignUpPage", properties: props)
@@ -997,22 +997,22 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         let escapedPageName = "/Push".urlEncode()
 
-        var pushURL = "\(restURL!)/\(encryptedDataSource!)/\(dataSource)/\(cookieID ?? "")?\(VisilabsConfig.CHANNEL_KEY)=\(channel)&\(VisilabsConfig.URI_KEY)=\(escapedPageName)&\(VisilabsConfig.SITEID_KEY)=\(siteID)&\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&dat=\(actualTimeOfevent)"
+        var pushURL = "\(restURL!)/\(encryptedDataSource!)/\(dataSource)/\(cookieID ?? "")?\(VisilabsConstants.CHANNEL_KEY)=\(channel)&\(VisilabsConstants.URI_KEY)=\(escapedPageName)&\(VisilabsConstants.SITEID_KEY)=\(siteID)&\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&dat=\(actualTimeOfevent)"
         
         if !self.exVisitorID.isNilOrWhiteSpace {
-            pushURL = "\(pushURL)&\(VisilabsConfig.EXVISITORID_KEY)=\(exVisitorID!.urlEncode())"
+            pushURL = "\(pushURL)&\(VisilabsConstants.EXVISITORID_KEY)=\(exVisitorID!.urlEncode())"
         }
         if !source.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_SOURCE_KEY)=\(source.urlEncode())"
+            pushURL = "\(pushURL)&\(VisilabsConstants.UTM_SOURCE_KEY)=\(source.urlEncode())"
         }
         if !campaign.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CAMPAIGN_KEY)=\(campaign.urlEncode())"
+            pushURL = "\(pushURL)&\(VisilabsConstants.UTM_CAMPAIGN_KEY)=\(campaign.urlEncode())"
         }
         if !medium.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_MEDIUM_KEY)=\(medium.urlEncode())"
+            pushURL = "\(pushURL)&\(VisilabsConstants.UTM_MEDIUM_KEY)=\(medium.urlEncode())"
         }
         if !content.isEmptyOrWhitespace{
-            pushURL = "\(pushURL)&\(VisilabsConfig.UTM_CONTENT_KEY)=\(content.urlEncode())"
+            pushURL = "\(pushURL)&\(VisilabsConstants.UTM_CONTENT_KEY)=\(content.urlEncode())"
         }
         return pushURL
     }

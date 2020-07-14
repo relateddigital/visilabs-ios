@@ -51,10 +51,10 @@ class VisilabsEventRequest: VisilabsNetwork {
     private class func getCookies(_ url: URL) -> [String : String]{
         var cookieKeyValues = [String : String]()
         for cookie in VisilabsHelper.readCookie(url){
-            if cookie.name.contains(VisilabsConfig.LOAD_BALANCE_PREFIX, options: .caseInsensitive){
+            if cookie.name.contains(VisilabsConstants.LOAD_BALANCE_PREFIX, options: .caseInsensitive){
                 cookieKeyValues[cookie.name] = cookie.value
             }
-            if cookie.name.contains(VisilabsConfig.OM_3_KEY, options: .caseInsensitive){
+            if cookie.name.contains(VisilabsConstants.OM_3_KEY, options: .caseInsensitive){
                 cookieKeyValues[cookie.name] = cookie.value
             }
         }

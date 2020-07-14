@@ -22,22 +22,22 @@ class VisilabsRecommendationInstance {
         var props = cleanProperties(properties)
         
         if filters.count > 0 {
-            props[VisilabsConfig.FILTER_KEY] = getFiltersQueryStringValue(filters)
+            props[VisilabsConstants.FILTER_KEY] = getFiltersQueryStringValue(filters)
         }
         
-        props[VisilabsConfig.ORGANIZATIONID_KEY] = self.organizationId
-        props[VisilabsConfig.SITEID_KEY] = self.siteId
-        props[VisilabsConfig.COOKIEID_KEY] = visilabsUser.cookieId
-        props[VisilabsConfig.EXVISITORID_KEY] = visilabsUser.exVisitorId
-        props[VisilabsConfig.TOKENID_KEY] = visilabsUser.tokenId
-        props[VisilabsConfig.APPID_KEY] = visilabsUser.appId
-        props[VisilabsConfig.APIVER_KEY] = VisilabsConfig.APIVER_VALUE
+        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.organizationId
+        props[VisilabsConstants.SITEID_KEY] = self.siteId
+        props[VisilabsConstants.COOKIEID_KEY] = visilabsUser.cookieId
+        props[VisilabsConstants.EXVISITORID_KEY] = visilabsUser.exVisitorId
+        props[VisilabsConstants.TOKENID_KEY] = visilabsUser.tokenId
+        props[VisilabsConstants.APPID_KEY] = visilabsUser.appId
+        props[VisilabsConstants.APIVER_KEY] = VisilabsConstants.APIVER_VALUE
         
         if zoneID.count > 0 {
-            props[VisilabsConfig.ZONE_ID_KEY] = zoneID
+            props[VisilabsConstants.ZONE_ID_KEY] = zoneID
         }
         if productCode.count > 0 {
-            props[VisilabsConfig.BODY_KEY] = productCode
+            props[VisilabsConstants.BODY_KEY] = productCode
         }
         
         for (key, value) in VisilabsPersistence.getParameters() {
@@ -87,7 +87,7 @@ class VisilabsRecommendationInstance {
     private func cleanProperties(_ properties: [String : String]) -> [String : String] {
         var props = properties
         for propKey in props.keys {
-            if !propKey.isEqual(VisilabsConfig.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConfig.SITEID_KEY) && !propKey.isEqual(VisilabsConfig.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConfig.COOKIEID_KEY) && !propKey.isEqual(VisilabsConfig.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConfig.BODY_KEY) && !propKey.isEqual(VisilabsConfig.TOKENID_KEY) && !propKey.isEqual(VisilabsConfig.APPID_KEY) && !propKey.isEqual(VisilabsConfig.APIVER_KEY) && !propKey.isEqual(VisilabsConfig.FILTER_KEY) {
+            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.SITEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
                 continue
             } else {
                 props.removeValue(forKey: propKey)
