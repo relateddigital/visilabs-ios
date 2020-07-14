@@ -9,8 +9,6 @@ import Foundation
 
 public class VisilabsInAppNotification {
     
-    
-    
     public enum PayloadKey {
         public static let actId = "actid"
         public static let actionData = "actiondata"
