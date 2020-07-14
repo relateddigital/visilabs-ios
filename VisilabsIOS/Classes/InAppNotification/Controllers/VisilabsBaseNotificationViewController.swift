@@ -16,8 +16,6 @@ protocol VisilabsNotificationViewControllerDelegate {
                                    additionalTrackingProperties: [String:String]?) -> Bool
 }
 
-
-
 class VisilabsBaseNotificationViewController: UIViewController {
 
     var notification: VisilabsInAppNotification!
