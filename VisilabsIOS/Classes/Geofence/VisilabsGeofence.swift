@@ -39,8 +39,6 @@ class VisilabsGeofence : NSObject, CLLocationManagerDelegate {
         return manager
     }()
     
-    
-
     init(organizationId: String, siteId: String) {
         self.organizationId = organizationId
         self.siteId = siteId
