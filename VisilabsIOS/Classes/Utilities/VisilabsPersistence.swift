@@ -20,7 +20,6 @@ class VisilabsPersistence {
         return urlUnwrapped
     }
 
-    
     class func archive(visilabsUser: VisilabsUser) {
         archiveQueue.sync { [visilabsUser] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.PROPERTIES_ARCHIVE_KEY)
