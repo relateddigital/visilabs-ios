@@ -13,17 +13,6 @@ protocol VisilabsInAppNotificationsDelegate {
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String])
 }
 
-public enum VisilabsInAppNotificationType: String, CaseIterable {
-    case mini
-    case full
-    case image_text_button
-    case full_image
-    case nps
-    case image_button
-    case smile_rating
-    // case unknown = "unknown"
-}
-
 class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     let lock: VisilabsReadWriteLock
     var checkForNotificationOnActive = true
