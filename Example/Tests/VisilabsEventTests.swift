@@ -14,7 +14,7 @@ class VisilabsEventTests: VisilabsBaseTests {
     
     func testExVisitorId() {
         var properties = [String: String]()
-        properties[VisilabsConfig.EXVISITORID_KEY] = "TestVisitor"
+        properties[VisilabsConstants.EXVISITORID_KEY] = "TestVisitor"
         visilabs.customEvent("TestEvent", properties: properties)
         
         

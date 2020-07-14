@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct VisilabsConfig {
+struct VisilabsConstants {
     
     static var QUEUE_SIZE = 5000
     

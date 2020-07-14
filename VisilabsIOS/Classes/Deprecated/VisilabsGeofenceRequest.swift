@@ -37,70 +37,70 @@ class VisilabsGeofenceRequest: VisilabsAction {
     
     private func getParametersAsQueryString() -> String {
         
-        var queryParameters = "?\(VisilabsConfig.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConfig.SITEID_KEY)=\(siteID)"
+        var queryParameters = "?\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConstants.SITEID_KEY)=\(siteID)"
 
         if !cookieID.isNilOrWhiteSpace {
             let encodedCookieIDValue = cookieID!.urlEncode()
-            let cookieParameter = "&\(VisilabsConfig.COOKIEID_KEY)=\(encodedCookieIDValue)"
+            let cookieParameter = "&\(VisilabsConstants.COOKIEID_KEY)=\(encodedCookieIDValue)"
             queryParameters = queryParameters + cookieParameter
         }
         
         if !exVisitorID.isNilOrWhiteSpace {
             let encodedExVisitorIDValue = exVisitorID!.urlEncode()
-            let exVisitorIDParameter = "&\(VisilabsConfig.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
+            let exVisitorIDParameter = "&\(VisilabsConstants.EXVISITORID_KEY)=\(encodedExVisitorIDValue)"
             queryParameters = queryParameters + exVisitorIDParameter
         }
 
         if action.count > 0 {
             let encodedActionValue = action.urlEncode()
-            let actionParameter = "&\(VisilabsConfig.ACT_KEY)=\(encodedActionValue)"
+            let actionParameter = "&\(VisilabsConstants.ACT_KEY)=\(encodedActionValue)"
             queryParameters = queryParameters + actionParameter
         }
         
         if actionID.count > 0 {
             let encodedActionIDValue = actionID.urlEncode()
-            let actionIDParameter = "&\(VisilabsConfig.ACT_ID_KEY)=\(encodedActionIDValue)"
+            let actionIDParameter = "&\(VisilabsConstants.ACT_ID_KEY)=\(encodedActionIDValue)"
             queryParameters = queryParameters + actionIDParameter
         }
         
         if !tokenID.isNilOrWhiteSpace {
             let encodedTokenValue = tokenID!.urlEncode()
-            let tokenParameter = "&\(VisilabsConfig.TOKENID_KEY)=\(encodedTokenValue)"
+            let tokenParameter = "&\(VisilabsConstants.TOKENID_KEY)=\(encodedTokenValue)"
             queryParameters = queryParameters + tokenParameter
         }
         
         if !appID.isNilOrWhiteSpace {
             let encodedAppValue = appID!.urlEncode()
-            let appParameter = "&\(VisilabsConfig.APPID_KEY)=\(encodedAppValue)"
+            let appParameter = "&\(VisilabsConstants.APPID_KEY)=\(encodedAppValue)"
             queryParameters = queryParameters + appParameter
         }
         
         //TODO: Burada büyüktür 0 kontrolü doğru mu sedat'a sor
         if lastKnownLatitude > 0 {
             let encodedLatitudeValue = String(format: "%.013f", lastKnownLatitude)
-            let latitudeParameter = "&\(VisilabsConfig.LATITUDE_KEY)=\(encodedLatitudeValue)"
+            let latitudeParameter = "&\(VisilabsConstants.LATITUDE_KEY)=\(encodedLatitudeValue)"
             queryParameters = queryParameters + latitudeParameter
         }
 
         if lastKnownLongitude > 0 {
             let encodedLongitudeValue = String(format: "%.013f", lastKnownLongitude)
-            let longitudeParameter = "&\(VisilabsConfig.LONGITUDE_KEY)=\(encodedLongitudeValue)"
+            let longitudeParameter = "&\(VisilabsConstants.LONGITUDE_KEY)=\(encodedLongitudeValue)"
             queryParameters = queryParameters + longitudeParameter
         }
         
         if geofenceID.count > 0 {
             let encodedGeofenceID = geofenceID.urlEncode()
-            let geofenceIDParameter = "&\(VisilabsConfig.GEO_ID_KEY)=\(encodedGeofenceID)"
+            let geofenceIDParameter = "&\(VisilabsConstants.GEO_ID_KEY)=\(encodedGeofenceID)"
             queryParameters = queryParameters + geofenceIDParameter
         }
         
         //TODO: OnEnter ve OnExit i VisilabsConfig e koy
         if isDwell {
             if isEnter {
-                let triggerEventParameter = "&\(VisilabsConfig.TRIGGER_EVENT_KEY)=\("OnEnter")"
+                let triggerEventParameter = "&\(VisilabsConstants.TRIGGER_EVENT_KEY)=\("OnEnter")"
                 queryParameters = queryParameters + triggerEventParameter
             } else {
-                let triggerEventParameter = "&\(VisilabsConfig.TRIGGER_EVENT_KEY)=\("OnExit")"
+                let triggerEventParameter = "&\(VisilabsConstants.TRIGGER_EVENT_KEY)=\("OnExit")"
                 queryParameters = queryParameters + triggerEventParameter
             }
         }

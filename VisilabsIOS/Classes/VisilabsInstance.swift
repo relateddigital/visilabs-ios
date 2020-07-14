@@ -152,8 +152,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 
     private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?) {
-        VisilabsBasePath.endpoints[.logger] = "\(loggerUrl)/\(dataSource)/\(VisilabsConfig.OM_GIF)"
-        VisilabsBasePath.endpoints[.realtime] = "\(realTimeUrl)/\(dataSource)/\(VisilabsConfig.OM_GIF)"
+        VisilabsBasePath.endpoints[.logger] = "\(loggerUrl)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(realTimeUrl)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
         VisilabsBasePath.endpoints[.target] = targetUrl
         VisilabsBasePath.endpoints[.action] = actionUrl
         VisilabsBasePath.endpoints[.geofence] = geofenceUrl
@@ -226,7 +226,7 @@ extension VisilabsInstance {
             return
         }
         var props = properties
-        props[VisilabsConfig.EXVISITORID_KEY] = exVisitorId
+        props[VisilabsConstants.EXVISITORID_KEY] = exVisitorId
         props["Login"] = exVisitorId
         props["OM.b_login"] = "Login"
         customEvent("LoginPage", properties: props)
@@ -238,7 +238,7 @@ extension VisilabsInstance {
             return
         }
         var props = properties
-        props[VisilabsConfig.EXVISITORID_KEY] = exVisitorId
+        props[VisilabsConstants.EXVISITORID_KEY] = exVisitorId
         props["SignUp"] = exVisitorId
         props["OM.b_sgnp"] = "SignUp"
         customEvent("SignUpPage", properties: props)
