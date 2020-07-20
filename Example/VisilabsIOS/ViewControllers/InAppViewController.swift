@@ -189,6 +189,11 @@ class InAppViewController: FormViewController {
             $0.placeholder = "Image URL"
             $0.validationOptions = .validatesOnDemand
             $0.value = URL(string: "https://img.visilabs.net/in-app-message/uploaded_images/163_1100_133_20200428125252927.jpg")
+            
+            //$0.value = URL(string: "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/69721f2e7c934d909168a80e00818569_9366/Stan_Smith_Shoes_White_M20324_01_standard.jpg")
+            
+            //$0.value = URL(string: "https://img-morhipo.mncdn.com/Content/Banners/ps2aecd8d1feca1453c97623fde44dc9434.jpg")
+            
         }
             
         <<< PickerInputRow<String>("miniIcon"){
