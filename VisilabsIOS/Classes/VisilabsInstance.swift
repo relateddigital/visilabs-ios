@@ -157,6 +157,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         VisilabsBasePath.endpoints[.target] = targetUrl
         VisilabsBasePath.endpoints[.action] = actionUrl
         VisilabsBasePath.endpoints[.geofence] = geofenceUrl
+        VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
     }
 
     static func sharedUIApplication() -> UIApplication? {
