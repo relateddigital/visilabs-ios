@@ -18,6 +18,7 @@ enum VisilabsEndpoint {
     case target
     case action
     case geofence
+    case mobile
 }
 
 struct VisilabsResource<A> {
