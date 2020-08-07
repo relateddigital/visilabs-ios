@@ -10,6 +10,7 @@ import Foundation
 struct VisilabsConstants {
     
     static var QUEUE_SIZE = 5000
+    static var MOBILE_END_POINT = "https://s.visilabs.net/mobile"
     
     
     static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieID"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
