@@ -58,6 +58,7 @@
 		88007E2024A38CEE002A9132 /* RecommendationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationViewController.swift; sourceTree = "<group>"; };
 		88007E2324A3CED4002A9132 /* InAppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppHelper.swift; sourceTree = "<group>"; };
 		88370C9324853675005645F5 /* FormHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormHelper.swift; sourceTree = "<group>"; };
+		885BBDDC24E2DDA600F05769 /* VisilabsIOS_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VisilabsIOS_Example.entitlements; sourceTree = "<group>"; };
 		8862E45F247ED6D000C230DD /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		8862E460247ED6D000C230DD /* InAppViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppViewController.swift; sourceTree = "<group>"; };
 		8862E467247EDF5500C230DD /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +101,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				885BBDDC24E2DDA600F05769 /* VisilabsIOS_Example.entitlements */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for VisilabsIOS */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -571,6 +573,7 @@
 			baseConfigurationReference = 920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VisilabsIOS_Example.entitlements;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsIOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -589,6 +592,7 @@
 			baseConfigurationReference = A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VisilabsIOS_Example.entitlements;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsIOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
