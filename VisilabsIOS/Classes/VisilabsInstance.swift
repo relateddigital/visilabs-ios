@@ -34,6 +34,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var channel = ""
     var requestTimeoutInSeconds: Int
     var geofenceEnabled = false
+    var inAppNotificationsEnabled = false
     var maxGeofenceCount: Int
     var restUrl: String?
     var encryptedDataSource: String?
@@ -77,7 +78,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
 
-    init(organizationId: String, siteId: String, dataSource: String, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
+    init(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
@@ -98,6 +99,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.channel = channel
         self.requestTimeoutInSeconds = requestTimeoutInSeconds
         self.geofenceEnabled = geofenceEnabled
+        self.inAppNotificationsEnabled = inAppNotificationsEnabled
         self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
         self.restUrl = restUrl
         self.encryptedDataSource = encryptedDataSource
