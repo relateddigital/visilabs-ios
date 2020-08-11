@@ -45,5 +45,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We will use your location always!</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We will use your location when app is open!</string>
 </dict>
 </plist>
