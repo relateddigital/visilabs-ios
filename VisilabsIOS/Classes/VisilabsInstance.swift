@@ -206,7 +206,7 @@ extension VisilabsInstance {
 
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveParameters(event)
-                if let _ = VisilabsBasePath.endpoints[.action] {
+                if let _ = VisilabsBasePath.endpoints[.action], self.inAppNotificationsEnabled {
                     self.checkInAppNotification(properties: event)
                 }
             }
