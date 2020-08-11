@@ -37,8 +37,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var maxGeofenceCount: Int
     var restUrl: String?
     var encryptedDataSource: String?
-    var segURL: String?
-    var realURL: String?
 
     var visilabsUser = VisilabsUser()
     var visilabsCookie = VisilabsCookie()
@@ -79,7 +77,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
 
-    init(organizationId: String, siteId: String, loggerUrl: String, dataSource: String, realTimeUrl: String, channel: String, requestTimeoutInSeconds: Int, targetUrl: String?, actionUrl: String?, geofenceUrl: String?, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
+    init(organizationId: String, siteId: String, dataSource: String, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
@@ -103,8 +101,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
         self.restUrl = restUrl
         self.encryptedDataSource = encryptedDataSource
-        self.segURL = loggerUrl
-        self.realURL = realTimeUrl
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.siteId)"
@@ -128,7 +124,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             VisilabsPersistence.archive(visilabsUser: visilabsUser)
         }
 
-        setEndpoints(loggerUrl: loggerUrl, realTimeUrl: realTimeUrl, targetUrl: targetUrl, actionUrl: actionUrl, geofenceUrl: geofenceUrl)
         
         if(self.geofenceEnabled && VisilabsBasePath.endpoints[.geofence] != nil){
             
@@ -151,12 +146,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
 
-    private func setEndpoints(loggerUrl: String, realTimeUrl: String, targetUrl: String?, actionUrl: String?, geofenceUrl: String?) {
-        VisilabsBasePath.endpoints[.logger] = "\(loggerUrl)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.realtime] = "\(realTimeUrl)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.target] = targetUrl
-        VisilabsBasePath.endpoints[.action] = actionUrl
-        VisilabsBasePath.endpoints[.geofence] = geofenceUrl
+    private func setEndpoints() {
+        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.target] = VisilabsConstants.RECOMMENDATION_END_POINT
+        VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
+        VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
         VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
     }
 

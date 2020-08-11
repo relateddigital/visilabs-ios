@@ -20,7 +20,7 @@ class VisilabsBaseTests: XCTestCase {
         //TODO: buraya stub'lar gelecek.
         
         
-        visilabs = Visilabs.createAPI(organizationId: "", siteId: "", loggerUrl: "", dataSource: "", realTimeUrl: "", channel: "", requestTimeoutInSeconds: 0, targetUrl: "", actionUrl: "", geofenceUrl: "", geofenceEnabled: false, maxGeofenceCount: 0, restUrl: "", encryptedDataSource: "")
+        visilabs = Visilabs.createAPI(organizationId: "", siteId: "", dataSource: "", channel: "", requestTimeoutInSeconds: 0, geofenceEnabled: false, maxGeofenceCount: 0, restUrl: "", encryptedDataSource: "")
         
         print("Visilabs test setup finished")
         
