@@ -46,7 +46,7 @@ class VisilabsRecommendationInstance {
             }
         }
         
-        VisilabsRecommendationRequest.sendRequest(properties: props, headers: [String : String](), timeoutInterval: timeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
+        VisilabsRequest.sendRecommendationRequest(properties: props, headers: [String : String](), timeoutInterval: timeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
             var products = [VisilabsProduct]()
             if reason != nil {
                 completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))

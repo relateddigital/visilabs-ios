@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/*
 class VisilabsInAppNotificationRequest: VisilabsNetwork {
     
     //TODO: completion Any mi olmalı, yoksa AnyObject mi?
@@ -42,3 +42,4 @@ class VisilabsInAppNotificationRequest: VisilabsNetwork {
             })
     }
 }
+*/

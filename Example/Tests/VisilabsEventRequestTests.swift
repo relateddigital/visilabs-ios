@@ -21,7 +21,7 @@ class VisilabsEventRequestTests: XCTestCase {
         
         var cs: [String: String]?
         
-        VisilabsEventRequest.sendRequest(visilabsEndpoint: .logger, properties: properties, headers: headers, timeoutInterval: timeoutInterval) { (cookies) in
+        VisilabsRequest.sendEventRequest(visilabsEndpoint: .logger, properties: properties, headers: headers, timeoutInterval: timeoutInterval) { (cookies) in
             
             cs = cookies
             promise.fulfill()
