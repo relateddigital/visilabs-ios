@@ -10,8 +10,14 @@ import Foundation
 struct VisilabsConstants {
     
     static var QUEUE_SIZE = 5000
-    static var MOBILE_END_POINT = "https://s.visilabs.net/mobile"
     
+    //TODO: bunlar https e çevirilecek
+    static var LOGGER_END_POINT = "http://lgr.visilabs.net"
+    static var REALTIME_END_POINT = "http://rt.visilabs.net"
+    static var RECOMMENDATION_END_POINT = "http://s.visilabs.net/json"
+    static var ACTION_END_POINT = "http://s.visilabs.net/actjson"
+    static var GEOFENCE_END_POINT = "http://s.visilabs.net/geojson"
+    static var MOBILE_END_POINT = "http://s.visilabs.net/mobile"
     
     static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieID"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
     static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity";
