@@ -44,7 +44,7 @@ class VisilabsInAppNotificationInstance {
         let headers = prepareHeaders(visilabsUser)
         var notifications = [VisilabsInAppNotification]()
         
-        VisilabsInAppNotificationRequest.sendRequest(properties: properties, headers: headers, timeoutInterval: timeoutInterval, completion: { visilabsInAppNotificationResult in
+        VisilabsRequest.sendInAppNotificationRequest(properties: properties, headers: headers, timeoutInterval: timeoutInterval, completion: { visilabsInAppNotificationResult in
             guard let result = visilabsInAppNotificationResult else  {
                 semaphore.signal()
                 completion(nil)

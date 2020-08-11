@@ -34,7 +34,7 @@ class VisilabsSendInstance: AppLifecycle {
             let loggerSemaphore = DispatchSemaphore(value: 0)
             let realTimeSemaphore = DispatchSemaphore(value: 0)
             //delegate?.updateNetworkActivityIndicator(true)
-            VisilabsEventRequest.sendRequest(visilabsEndpoint : .logger, properties: event, headers: loggerHeaders, timeoutInterval: timeoutInterval, completion: { [loggerSemaphore] cookies in
+            VisilabsRequest.sendEventRequest(visilabsEndpoint : .logger, properties: event, headers: loggerHeaders, timeoutInterval: timeoutInterval, completion: { [loggerSemaphore] cookies in
                                         //self.delegate?.updateNetworkActivityIndicator(false)
                                         if let cookies = cookies {
                                             for cookie in cookies {
@@ -50,7 +50,7 @@ class VisilabsSendInstance: AppLifecycle {
                                         loggerSemaphore.signal()
             })
             
-            VisilabsEventRequest.sendRequest(visilabsEndpoint : .realtime, properties: event, headers: realTimeHeaders, timeoutInterval: timeoutInterval, completion: { [realTimeSemaphore] cookies in
+            VisilabsRequest.sendEventRequest(visilabsEndpoint : .realtime, properties: event, headers: realTimeHeaders, timeoutInterval: timeoutInterval, completion: { [realTimeSemaphore] cookies in
                                         //self.delegate?.updateNetworkActivityIndicator(false)
                                         if let cookies = cookies {
                                             for cookie in cookies {

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 class VisilabsRecommendationRequest {
     
     //TODO: completion Any mi olmalı, yoksa AnyObject mi?
@@ -42,3 +43,4 @@ class VisilabsRecommendationRequest {
             })
     }
 }
+*/

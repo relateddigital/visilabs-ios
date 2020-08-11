@@ -133,4 +133,40 @@ class VisilabsRequest {
                 completion(result)
             })
     }
+    
+    // MARK: -Geofence
+    
+    //https://s.visilabs.net/geojson?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&act=getlist
+    //[{"actid":145,"trgevt":"OnEnter","dis":0,"geo":[{"id":4,"lat":41.0236665831979,"long":29.1222883408907,"rds":290.9502}]}]
+    class func sendGeofenceRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([[String: Any]]?) -> Void) {
+        var queryItems = [URLQueryItem]()
+        for property in properties{
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
+        }
+        
+        let responseParser: (Data) -> [[String: Any]]? = { data in
+            var response: Any? = nil
+            do {
+                response = try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                VisilabsLogger.warn(message: "exception decoding api data")
+            }
+            return response as? [[String: Any]]
+        }
+        
+        let resource = VisilabsNetwork.buildResource(endPoint: .action, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
+        
+        sendGeofenceRequestHandler(resource: resource, completion: { result in completion(result) })
+        
+    }
+    
+    private class func sendGeofenceRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (reason, data, response) in
+                VisilabsLogger.warn(message: "API request to \(resource.endPoint) has failed with reason \(reason)")
+                completion(nil)
+            }, success: { (result, response) in
+                completion(result)
+            })
+    }
 }

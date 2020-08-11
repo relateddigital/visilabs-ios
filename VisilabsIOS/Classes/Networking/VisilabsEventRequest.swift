@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/*
 class VisilabsEventRequest: VisilabsNetwork {
 
     class func sendRequest(visilabsEndpoint: VisilabsEndpoint, properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String : String]?) -> Void) {
@@ -61,3 +61,4 @@ class VisilabsEventRequest: VisilabsNetwork {
         return cookieKeyValues
     }
 }
+ */
