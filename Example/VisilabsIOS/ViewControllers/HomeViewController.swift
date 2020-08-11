@@ -99,6 +99,11 @@ class HomeViewController: FormViewController {
                     }
             }
             
+            <<< SwitchRow("inAppNotificationsEnabled") {
+                $0.title = "inAppNotificationsEnabled"
+                $0.value = visilabsProfile.inAppNotificationsEnabled
+            }
+            
             <<< TextRow("channel") {
                 $0.title = "channel"
                 $0.placeholder = "channel"
@@ -177,6 +182,7 @@ class HomeViewController: FormViewController {
                 let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
                 let siteIdRow: TextRow? = self.form.rowBy(tag: "siteId")
                 let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
+                let inAppNotificationsEnabledRow: SwitchRow? = self.form.rowBy(tag: "inAppNotificationsEnabled")
                 let channelRow: TextRow? = self.form.rowBy(tag: "channel")
                 let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
                 let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
@@ -187,13 +193,14 @@ class HomeViewController: FormViewController {
                 let orgId: String? = orgIdRow?.value
                 let siteId: String? = siteIdRow?.value
                 let dataSource: String? = dataSourceRow?.value
+                let geofenceEnabled: Bool = geofenceEnabledRow?.value ?? false
                 let channel: String? = channelRow?.value
                 let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
-                let geofenceEnabled: Bool = geofenceEnabledRow?.value ?? false
+                let inAppNotificationsEnabled: Bool = inAppNotificationsEnabledRow?.value ?? false
                 let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
                 let restUrl: String? = restUrlRow?.value?.absoluteString
                 let encryptedDataSource: String? = encryptedDataSourceRow?.value
-                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, dataSource: dataSource!, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
+                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
                 Visilabs.callAPI().loggingEnabled = true
                 
                 

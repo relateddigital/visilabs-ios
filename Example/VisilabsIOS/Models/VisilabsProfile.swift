@@ -14,6 +14,7 @@ struct VisilabsProfile {
     var dataSource = "visistore"
     var loggerUrl = "http://lgr.visilabs.net"
     var realTimeUrl = "http://rt.visilabs.net"
+    var inAppNotificationsEnabled: Bool = true
     var channel = "IOS"
     var requestTimeoutInSeconds = 30
     var targetUrl: String? = "http://s.visilabs.net/json"
