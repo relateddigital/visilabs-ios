@@ -39,7 +39,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var restUrl: String?
     var encryptedDataSource: String?
 
-    var visilabsUser = VisilabsUser()
+    var visilabsUser: VisilabsUser!
     var visilabsCookie = VisilabsCookie()
     var eventsQueue = Queue()
     // var flushEventsQueue = Queue()
@@ -92,6 +92,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
+        
+        
 
         self.organizationId = organizationId
         self.siteId = siteId
@@ -113,9 +115,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
         self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.organizationId, siteId: self.siteId)
+        
+        self.visilabsUser = unarchive()
         self.visilabsInAppNotificationInstance.inAppDelegate = self
         
-        unarchive()
+        
 
         if let idfa = VisilabsHelper.getIDFA() {
             visilabsUser.identifierForAdvertising = idfa
@@ -123,7 +127,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
-            VisilabsPersistence.archive(visilabsUser: visilabsUser)
+            VisilabsPersistence.archiveUser(visilabsUser: visilabsUser)
         }
 
         
@@ -197,7 +201,7 @@ extension VisilabsInstance {
             }
 
             self.readWriteLock.read {
-                VisilabsPersistence.archive(visilabsUser: self.visilabsUser)
+                VisilabsPersistence.archiveUser(visilabsUser: self.visilabsUser)
 
                 if clearUserParameters {
                     VisilabsPersistence.clearParameters()
@@ -247,34 +251,12 @@ extension VisilabsInstance {
     // MARK: - Persistence
 
     private func archive() {
+        
     }
 
     // TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
-    private func unarchive() {
-        let (cookieId, exVisitorId, appId, tokenId, userAgent, visitorData, identifierForAdvertising) = VisilabsPersistence.unarchive()
-        if let cid = cookieId {
-            visilabsUser.cookieId = cid
-        } else {
-            // TODO: set cookieid
-        }
-        if let exvid = exVisitorId {
-            visilabsUser.exVisitorId = exvid
-        }
-        if let aid = appId {
-            visilabsUser.appId = aid
-        }
-        if let tid = tokenId {
-            visilabsUser.tokenId = tid
-        }
-        if let ua = userAgent {
-            visilabsUser.userAgent = ua
-        }
-        if let vd = visitorData {
-            visilabsUser.visitorData = vd
-        }
-        if let ifa = identifierForAdvertising {
-            visilabsUser.identifierForAdvertising = ifa
-        }
+    private func unarchive() -> VisilabsUser {
+        return VisilabsPersistence.unarchiveUser()
     }
 }
 
