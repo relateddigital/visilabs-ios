@@ -27,6 +27,17 @@ struct VisilabsUser {
     var identifierForAdvertising: String?
 }
 
+struct VisilabsProfile {
+    var organizationId: String
+    var siteId: String
+    var dataSource: String
+    var channel: String
+    var requestTimeoutInSeconds: Int
+    var geofenceEnabled: Bool
+    var inAppNotificationsEnabled: Bool
+    var maxGeofenceCount: Int
+}
+
 public class VisilabsInstance: CustomDebugStringConvertible {
     var organizationId = ""
     var siteId = ""
