@@ -90,8 +90,13 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        print("didUpdateLocations")
+        VisilabsLogger.info("CLLocationManager didUpdateLocations")
         
+        if !locationServiceEnabled {
+            return
+        } else if (locations.count > 0){
+            
+        }
         
         /*
         if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
@@ -111,7 +116,31 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
                 NotificationCenter.default.post(notification)
             }
         }
- */
+         */
         
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+    
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+    
+    }
+    
+    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
+    
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+    
     }
 }
