@@ -68,11 +68,13 @@ internal class VisilabsHelper {
         return nil
     }
     
+    static var webView: WKWebView?
+    
     static func computeWebViewUserAgent(completion: @escaping ((String) -> Void)) {
         DispatchQueue.main.async { [completion] in
-            let webView = WKWebView(frame: CGRect.zero)
-            webView.loadHTMLString("<html></html>", baseURL: nil)
-            webView.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+            webView = WKWebView(frame: CGRect.zero)
+            webView?.loadHTMLString("<html></html>", baseURL: nil)
+            webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
                 if error == nil, let userAgentString = userAgent as? String, userAgentString.count > 0 {
                     completion(userAgentString)
                 }else {
