@@ -57,7 +57,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsSendInstance: VisilabsSendInstance
     let visilabsInAppNotificationInstance: VisilabsInAppNotificationInstance
     let visilabsRecommendationInstance: VisilabsRecommendationInstance
-    let visilabsGeofenceInstance: VisilabsGeofence
+    var visilabsGeofenceInstance: VisilabsGeofence?
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(self.visilabsProfile.profileId) organizationId: \(self.visilabsProfile.organizationId)"
@@ -108,9 +108,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
         self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
-        self.visilabsGeofenceInstance = VisilabsGeofence(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
         
-        self.visilabsUser = unarchive()
+        
+        self.visilabsUser = self.unarchive()
         self.visilabsInAppNotificationInstance.inAppDelegate = self
         
         
@@ -126,7 +126,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         
         if(self.visilabsProfile.geofenceEnabled){
-            self.visilabsGeofenceInstance.startGeofencing()
+            self.visilabsGeofenceInstance = VisilabsGeofence()
+            self.visilabsGeofenceInstance?.startGeofencing()
         }
 
         computeWebViewUserAgent2()
