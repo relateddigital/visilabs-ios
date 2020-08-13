@@ -96,7 +96,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
         
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
-        
+        VisilabsPersistence.archiveProfile(visilabsProfile)
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.visilabsProfile.profileId)"
@@ -119,7 +119,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
-            VisilabsPersistence.archiveUser(visilabsUser: visilabsUser)
+            VisilabsPersistence.archiveUser(visilabsUser)
         }
 
         
@@ -193,7 +193,7 @@ extension VisilabsInstance {
             }
 
             self.readWriteLock.read {
-                VisilabsPersistence.archiveUser(visilabsUser: self.visilabsUser)
+                VisilabsPersistence.archiveUser(self.visilabsUser)
 
                 if clearUserParameters {
                     VisilabsPersistence.clearParameters()

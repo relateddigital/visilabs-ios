@@ -20,7 +20,7 @@ class VisilabsPersistence {
         return urlUnwrapped
     }
 
-    class func archiveUser(visilabsUser: VisilabsUser) {
+    class func archiveUser(_ visilabsUser: VisilabsUser) {
         archiveQueueUtility.sync { [visilabsUser] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.USER_ARCHIVE_KEY)
             guard let path = propertiesFilePath else {
@@ -50,7 +50,7 @@ class VisilabsPersistence {
         }
     }
     
-    class func archiveProfile(visilabsProfile: VisilabsProfile) {
+    class func archiveProfile(_ visilabsProfile: VisilabsProfile) {
         archiveQueueUtility.sync { [visilabsProfile] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
             guard let path = propertiesFilePath else {
