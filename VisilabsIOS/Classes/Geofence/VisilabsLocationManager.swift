@@ -26,21 +26,41 @@ class VisilabsLocationManager : NSObject {
     
     
     var currentGeoLocationValue: CLLocationCoordinate2D?
+    var sentGeoLocationValue: CLLocationCoordinate2D? //TODO: ne işe yarayacak bu?
+    var sentGeoLocationTime: TimeInterval? //for calculate time delta to prevent too often location update notification send.
+    var locationServiceEnabled = false
     
     override init(){
         super.init()
         createLocationManager()
     }
     
+    deinit {
+        locationManager?.delegate = nil
+        NotificationCenter.default.removeObserver(self)// TODO: buna gerek var mı tekrar kontrol et.
+    }
+    
     func createLocationManager() {
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
+        self.locationManager = CLLocationManager()
+        self.locationManager?.delegate = self
         #if !TARGET_IPHONE_SIMULATOR
-        if locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
-            locationManager?.pausesLocationUpdatesAutomatically = false
+        if self.locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
+            self.locationManager?.pausesLocationUpdatesAutomatically = false
         }
         #endif
-        requestLocationAuthorization()
+        self.requestLocationAuthorization()
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        self.locationManager?.distanceFilter = CLLocationDistance(10)
+        self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
+        self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
+        self.sentGeoLocationTime = 0
+        
+        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
+            VisilabsLogger.info("Start significant location update.")
+            locationManager?.startMonitoringSignificantLocationChanges()
+            locationServiceEnabled = true
+        }
+        
     }
     
     public func requestLocationAuthorization() {
