@@ -9,7 +9,7 @@ import Foundation
 
 class VisilabsPersistence {
     
-    private static let archiveQueue: DispatchQueue = DispatchQueue(label: "com.relateddigital.archiveQueue", qos: .utility)
+    private static let archiveQueueUtility = DispatchQueue(label: "com.relateddigital.archiveQueue", qos: .utility)
     
     private class func filePath(filename: String) -> String? {
         let manager = FileManager.default
@@ -21,8 +21,8 @@ class VisilabsPersistence {
     }
 
     class func archiveUser(visilabsUser: VisilabsUser) {
-        archiveQueue.sync { [visilabsUser] in
-            let propertiesFilePath = filePath(filename: VisilabsConstants.PROPERTIES_ARCHIVE_KEY)
+        archiveQueueUtility.sync { [visilabsUser] in
+            let propertiesFilePath = filePath(filename: VisilabsConstants.USER_ARCHIVE_KEY)
             guard let path = propertiesFilePath else {
                 VisilabsLogger.error(message: "bad file path, cant fetch file")
                 return
@@ -34,22 +34,50 @@ class VisilabsPersistence {
             userDic[VisilabsConstants.TOKENID_KEY] = visilabsUser.tokenId
             userDic[VisilabsConstants.USERAGENT_KEY] = visilabsUser.userAgent
             userDic[VisilabsConstants.VISITOR_CAPPING_KEY] = visilabsUser.visitorData
+            userDic[VisilabsConstants.VISITORDATA] = visilabsUser.visitorData
             userDic[VisilabsConstants.MOBILEADID_KEY] = visilabsUser.identifierForAdvertising
             
             VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
                 if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
-                    VisilabsLogger.error(message: "failed to archive properties")
+                    VisilabsLogger.error(message: "failed to archive user")
                     return
                 }
             }, catch: { (error) in
-                VisilabsLogger.error(message: "failed to archive properties due to an uncaught exception")
+                VisilabsLogger.error(message: "failed to archive user due to an uncaught exception")
                 VisilabsLogger.error(message: error.debugDescription)
                 return
             }, finally: {})
         }
-        
-        //TODO: buna gerek var mı incele?
-        //addSkipBackupAttributeToItem(at: path)
+    }
+    
+    class func archiveProfile(visilabsProfile: VisilabsProfile) {
+        archiveQueueUtility.sync { [visilabsProfile] in
+            let propertiesFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
+            guard let path = propertiesFilePath else {
+                VisilabsLogger.error(message: "bad file path, cant fetch file")
+                return
+            }
+            var userDic = [String : Any?]()
+            userDic[VisilabsConstants.ORGANIZATIONID_KEY] = visilabsProfile.organizationId
+            userDic[VisilabsConstants.PROFILEID_KEY] = visilabsProfile.profileId
+            userDic[VisilabsConstants.DATASOURCE_KEY] = visilabsProfile.dataSource
+            userDic[VisilabsConstants.CHANNEL_KEY] = visilabsProfile.channel
+            userDic[VisilabsConstants.REQUESTTIMEINSECONDS_KEY] = visilabsProfile.requestTimeoutInSeconds
+            userDic[VisilabsConstants.GEOFENCEENABLED_KEY] = visilabsProfile.geofenceEnabled
+            userDic[VisilabsConstants.INAPPNOTIFICATIONSENABLED_KEY] = visilabsProfile.inAppNotificationsEnabled
+            userDic[VisilabsConstants.MAXGEOFENCECOUNT_KEY] = visilabsProfile.maxGeofenceCount
+            
+            VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
+                if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
+                    VisilabsLogger.error(message: "failed to archive profile")
+                    return
+                }
+            }, catch: { (error) in
+                VisilabsLogger.error(message: "failed to archive profile due to an uncaught exception")
+                VisilabsLogger.error(message: error.debugDescription)
+                return
+            }, finally: {})
+        }
     }
     
     
@@ -94,7 +122,7 @@ class VisilabsPersistence {
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving userAgent.")
         }
         
-        if let propsfp = filePath(filename: VisilabsConstants.PROPERTIES_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
+        if let propsfp = filePath(filename: VisilabsConstants.USER_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
             
             if let cid = props[VisilabsConstants.COOKIEID_KEY], !cid.isNilOrWhiteSpace {
                 visilabsUser.cookieId = cid
@@ -135,10 +163,56 @@ class VisilabsPersistence {
         return visilabsUser
     }
     
+    //TODO: bunu ExceptionWrapper içine al
+    class func unarchiveProfile() -> VisilabsProfile {
+        var visilabsProfile = VisilabsProfile(organizationId: "", profileId: "", dataSource: "", channel: VisilabsConstants.IOS, requestTimeoutInSeconds: 60, geofenceEnabled: false, inAppNotificationsEnabled: false, maxGeofenceCount: 20)
+        
+        if let propsfp = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : Any?] {
+            
+            if let oid = props[VisilabsConstants.ORGANIZATIONID_KEY], let organizationId = oid as? String {
+                visilabsProfile.organizationId = organizationId
+            }
+            
+            if let pid = props[VisilabsConstants.PROFILEID_KEY], let profileId = pid as? String {
+                visilabsProfile.profileId = profileId
+            }
+            
+            if let ds = props[VisilabsConstants.DATASOURCE_KEY], let dataSource = ds as? String {
+                visilabsProfile.dataSource = dataSource
+            }
+            
+            if let c = props[VisilabsConstants.CHANNEL_KEY], let channel = c as? String {
+                visilabsProfile.channel = channel
+            }
+            
+            if let rtis = props[VisilabsConstants.REQUESTTIMEINSECONDS_KEY], let requestTimeoutInSeconds = rtis as? Int {
+                visilabsProfile.requestTimeoutInSeconds = requestTimeoutInSeconds
+            }
+            
+            if let ge = props[VisilabsConstants.GEOFENCEENABLED_KEY], let geofenceEnabled = ge as? Bool {
+                visilabsProfile.geofenceEnabled = geofenceEnabled
+            }
+            
+            if let ie = props[VisilabsConstants.INAPPNOTIFICATIONSENABLED_KEY], let inAppNotificationsEnabled = ie as? Bool {
+                visilabsProfile.inAppNotificationsEnabled = inAppNotificationsEnabled
+            }
+            
+            if let mgc = props[VisilabsConstants.MAXGEOFENCECOUNT_KEY], let maxGeofenceCount = mgc as? Int {
+                visilabsProfile.maxGeofenceCount = maxGeofenceCount
+            }
+            
+        }else{
+            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving profile.")
+        }
+
+        return visilabsProfile
+    }
+    
+    
     
     //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
     class func saveParameters(_ parameters: [String : String]) {
-        archiveQueue.sync {
+        archiveQueueUtility.sync {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dateString = dateFormatter.string(from: Date())
