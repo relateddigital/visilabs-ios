@@ -37,7 +37,7 @@ class VisilabsGeofenceRequest: VisilabsAction {
     
     private func getParametersAsQueryString() -> String {
         
-        var queryParameters = "?\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConstants.SITEID_KEY)=\(siteID)"
+        var queryParameters = "?\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConstants.PROFILEID_KEY)=\(siteID)"
 
         if !cookieID.isNilOrWhiteSpace {
             let encodedCookieIDValue = cookieID!.urlEncode()

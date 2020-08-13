@@ -55,10 +55,10 @@ class HomeViewController: FormViewController {
                     }
             }
 
-            <<< TextRow("siteId") {
-                $0.title = "siteId"
+            <<< TextRow("profileId") {
+                $0.title = "profileId"
                 $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
-                $0.placeholder = "siteId"
+                $0.placeholder = "profileId"
                 $0.value = visilabsProfile.siteId
             }.onRowValidationChanged { cell, row in
                     let rowIndex = row.indexPath!.row
@@ -151,7 +151,7 @@ class HomeViewController: FormViewController {
                 }
                 
                 let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
-                let siteIdRow: TextRow? = self.form.rowBy(tag: "siteId")
+                let profileIdRow: TextRow? = self.form.rowBy(tag: "profileId")
                 let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
                 let inAppNotificationsEnabledRow: SwitchRow? = self.form.rowBy(tag: "inAppNotificationsEnabled")
                 let channelRow: TextRow? = self.form.rowBy(tag: "channel")
@@ -160,7 +160,7 @@ class HomeViewController: FormViewController {
                 let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
             
                 let orgId: String? = orgIdRow?.value
-                let siteId: String? = siteIdRow?.value
+                let profileId: String? = profileIdRow?.value
                 let dataSource: String? = dataSourceRow?.value
                 let geofenceEnabled: Bool = geofenceEnabledRow?.value ?? false
                 let channel: String? = channelRow?.value
@@ -168,7 +168,7 @@ class HomeViewController: FormViewController {
                 let inAppNotificationsEnabled: Bool = inAppNotificationsEnabledRow?.value ?? false
                 let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
 
-                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+                Visilabs.createAPI(organizationId: orgId!, profileId: profileId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
                 Visilabs.callAPI().loggingEnabled = true
                 
                 

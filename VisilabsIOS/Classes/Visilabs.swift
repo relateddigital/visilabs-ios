@@ -11,12 +11,12 @@ public class Visilabs {
             return instance
         } else {
             assert(false, "You have to call createAPI before calling the callAPI.")
-            return Visilabs.createAPI(organizationId: "", siteId: "", dataSource: "")
+            return Visilabs.createAPI(organizationId: "", profileId: "", dataSource: "")
         }
     }
 
     @discardableResult
-    public class func createAPI(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool = false, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20) -> VisilabsInstance {
-        VisilabsManager.sharedInstance.initialize(organizationId: organizationId, siteId: siteId, dataSource: dataSource, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+    public class func createAPI(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool = false, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20) -> VisilabsInstance {
+        VisilabsManager.sharedInstance.initialize(organizationId: organizationId, profileId: profileId, dataSource: dataSource, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
     }
 }

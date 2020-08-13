@@ -72,7 +72,7 @@ class VisilabsEventInstance {
         }
         
         props[VisilabsConstants.ORGANIZATIONID_KEY] = self.organizationId
-        props[VisilabsConstants.SITEID_KEY] = self.siteId
+        props[VisilabsConstants.PROFILEID_KEY] = self.siteId
         props[VisilabsConstants.COOKIEID_KEY] = vUser.cookieId ?? ""
         props[VisilabsConstants.CHANNEL_KEY] = chan
         props[VisilabsConstants.URI_KEY] = pageName
