@@ -34,14 +34,7 @@ struct VisilabsConstants {
     static let APPID_ARCHIVE_KEY = "Visilabs.appId";
     static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
     
-    static let ORGANIZATIONID_ARCHIVE_KEY = "Visilabs.organizationId";
-    static let SITEID_ARCHIVE_KEY = "Visilabs.siteId";
-    static let DATASOURCE_ARCHIVE_KEY = "Visilabs.dataSource";
-    static let CHANNEL_ARCHIVE_KEY = "Visilabs.channel";
-    static let REQUESTTIMEINSECONDS_ARCHIVE_KEY = "Visilabs.requestTimeoutInSeconds";
-    static let GEOFENCEENABLED_ARCHIVE_KEY = "Visilabs.geofenceEnabled";
-    static let INAPPNOTIFICATIONSENABLED_ARCHIVE_KEY = "Visilabs.inAppNotificationsEnabled";
-    static let MAXGEOFENCECOUNT_ARCHIVE_KEY = "Visilabs.maxGeofenceCount";
+
     
     static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount";
     static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled";
@@ -50,6 +43,11 @@ struct VisilabsConstants {
     static let DATASOURCE_KEY = "dataSource";
     static let USERAGENT_KEY = "OM.userAgent";
     static let VISITORDATA = "visitorData";
+    
+    
+    static let LAST_GEOFENCE_CHECK_TIME_KEY = "lastGeofenceCheckTime"
+    static let GEOFENCES_KEY = "geofences"
+    
     
     static let MOBILEADID_KEY = "OM.m_adid"
     static let MOBILEAPPLICATION_KEY = "OM.mappl"
