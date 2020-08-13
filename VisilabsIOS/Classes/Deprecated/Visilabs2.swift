@@ -195,7 +195,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
     }
 
     func propertiesFilePath() -> String? {
-        return filePath(forData: VisilabsConstants.PROPERTIES_ARCHIVE_KEY)
+        return filePath(forData: "VisilabsConstants.PROPERTIES_ARCHIVE_KEY")
     }
     
     private func archive() {
@@ -271,7 +271,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         var props = [VisilabsConstants.COOKIEID_KEY : self.cookieID ?? ""
             , VisilabsConstants.CHANNEL_KEY : self.channel
-            , VisilabsConstants.SITEID_KEY : self.siteID
+            , VisilabsConstants.PROFILEID_KEY : self.siteID
             , VisilabsConstants.ORGANIZATIONID_KEY : self.organizationID
             , VisilabsConstants.DAT_KEY : String(actualTimeOfevent)
             , VisilabsConstants.URI_KEY : "/OM_evt.gif".urlEncode()
@@ -307,7 +307,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
             if !self.notificationResponseCached{
                 let actualTimeOfevent = Int(Date().timeIntervalSince1970)
                 var props = [VisilabsConstants.COOKIEID_KEY : self.cookieID ?? ""
-                    , VisilabsConstants.SITEID_KEY : self.siteID
+                    , VisilabsConstants.PROFILEID_KEY : self.siteID
                     , VisilabsConstants.ORGANIZATIONID_KEY : self.organizationID
                     , VisilabsConstants.DAT_KEY : String(actualTimeOfevent)
                     , VisilabsConstants.APIVER_KEY : VisilabsConstants.IOS
@@ -905,7 +905,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         var eventProperties = [VisilabsConstants.COOKIEID_KEY : self.cookieID ?? ""
             , VisilabsConstants.CHANNEL_KEY : chan
-            , VisilabsConstants.SITEID_KEY : self.siteID
+            , VisilabsConstants.PROFILEID_KEY : self.siteID
             , VisilabsConstants.ORGANIZATIONID_KEY : self.organizationID
             , VisilabsConstants.DAT_KEY : String(actualTimeOfevent)
             , VisilabsConstants.URI_KEY : pageName.urlEncode()
@@ -997,7 +997,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         let escapedPageName = "/Push".urlEncode()
 
-        var pushURL = "\(restURL!)/\(encryptedDataSource!)/\(dataSource)/\(cookieID ?? "")?\(VisilabsConstants.CHANNEL_KEY)=\(channel)&\(VisilabsConstants.URI_KEY)=\(escapedPageName)&\(VisilabsConstants.SITEID_KEY)=\(siteID)&\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&dat=\(actualTimeOfevent)"
+        var pushURL = "\(restURL!)/\(encryptedDataSource!)/\(dataSource)/\(cookieID ?? "")?\(VisilabsConstants.CHANNEL_KEY)=\(channel)&\(VisilabsConstants.URI_KEY)=\(escapedPageName)&\(VisilabsConstants.PROFILEID_KEY)=\(siteID)&\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&dat=\(actualTimeOfevent)"
         
         if !self.exVisitorID.isNilOrWhiteSpace {
             pushURL = "\(pushURL)&\(VisilabsConstants.EXVISITORID_KEY)=\(exVisitorID!.urlEncode())"

@@ -29,7 +29,7 @@ struct VisilabsUser {
 
 struct VisilabsProfile {
     var organizationId: String
-    var siteId: String
+    var profileId: String
     var dataSource: String
     var channel: String
     var requestTimeoutInSeconds: Int
@@ -59,7 +59,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsRecommendationInstance: VisilabsRecommendationInstance
     
     public var debugDescription: String {
-        return "Visilabs(siteId : \(self.visilabsProfile.siteId) organizationId: \(self.visilabsProfile.organizationId)"
+        return "Visilabs(siteId : \(self.visilabsProfile.profileId) organizationId: \(self.visilabsProfile.organizationId)"
     }
 
     public var loggingEnabled: Bool = false {
@@ -80,7 +80,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
 
-    init(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+    init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
@@ -95,18 +95,18 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
         
-        self.visilabsProfile = VisilabsProfile(organizationId: organizationId, siteId: siteId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
+        self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
-        let label = "com.relateddigital.\(self.visilabsProfile.siteId)"
+        let label = "com.relateddigital.\(self.visilabsProfile.profileId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
-        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.siteId, lock: self.readWriteLock)
+        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
-        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.siteId)
+        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
         
         self.visilabsUser = unarchive()
         self.visilabsInAppNotificationInstance.inAppDelegate = self

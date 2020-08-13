@@ -26,7 +26,7 @@ class VisilabsRecommendationInstance {
         }
         
         props[VisilabsConstants.ORGANIZATIONID_KEY] = self.organizationId
-        props[VisilabsConstants.SITEID_KEY] = self.siteId
+        props[VisilabsConstants.PROFILEID_KEY] = self.siteId
         props[VisilabsConstants.COOKIEID_KEY] = visilabsUser.cookieId
         props[VisilabsConstants.EXVISITORID_KEY] = visilabsUser.exVisitorId
         props[VisilabsConstants.TOKENID_KEY] = visilabsUser.tokenId
@@ -87,7 +87,7 @@ class VisilabsRecommendationInstance {
     private func cleanProperties(_ properties: [String : String]) -> [String : String] {
         var props = properties
         for propKey in props.keys {
-            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.SITEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
+            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.PROFILEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
                 continue
             } else {
                 props.removeValue(forKey: propKey)

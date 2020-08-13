@@ -31,7 +31,7 @@ public class VisilabsTargetRequest: VisilabsAction {
     
     private func cleanParameters() {
         for propKey in properties.keys {
-            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.SITEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
+            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.PROFILEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
                 continue
             } else {
                 properties.removeValue(forKey: propKey)
@@ -72,7 +72,7 @@ public class VisilabsTargetRequest: VisilabsAction {
     }
     
     private func getParametersAsQueryString() -> String {
-        var queryParameters = "?\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConstants.SITEID_KEY)=\(siteID)"
+        var queryParameters = "?\(VisilabsConstants.ORGANIZATIONID_KEY)=\(organizationID)&\(VisilabsConstants.PROFILEID_KEY)=\(siteID)"
 
         if !cookieID.isNilOrWhiteSpace {
             let encodedCookieIDValue = cookieID!.urlEncode()
