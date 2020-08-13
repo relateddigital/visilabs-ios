@@ -26,8 +26,8 @@ class VisilabsSendInstance: AppLifecycle {
         
         for i in 0..<eventsQueue.count {
             let event = eventsQueue[i]
-            VisilabsLogger.debug(message: "Sending event")
-            VisilabsLogger.debug(message: event)
+            VisilabsLogger.debug("Sending event")
+            VisilabsLogger.debug(event)
             let loggerHeaders = prepareHeaders(.logger, event: event, visilabsUser: visilabsUser, visilabsCookie: visilabsCookie)
             let realTimeHeaders = prepareHeaders(.realtime, event: event, visilabsUser: visilabsUser, visilabsCookie: visilabsCookie)
             

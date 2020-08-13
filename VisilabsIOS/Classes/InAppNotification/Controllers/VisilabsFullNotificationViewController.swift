@@ -57,7 +57,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
                 imageView.contentMode = UIView.ContentMode.center
             }
         } else {
-            VisilabsLogger.error(message: "notification image failed to load from data")
+            VisilabsLogger.error("notification image failed to load from data")
         }
 
         /*

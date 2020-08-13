@@ -79,7 +79,7 @@ class VisilabsRecommendationInstance {
             let jsonData = try JSONSerialization.data(withJSONObject: abbrevatedFilters, options: [])
             queryStringValue = String(data: jsonData, encoding: .utf8)
         } catch {
-            VisilabsLogger.warn(message: "exception serializing recommendation filters: \(error.localizedDescription)")
+            VisilabsLogger.warn("exception serializing recommendation filters: \(error.localizedDescription)")
         }
         return queryStringValue
     }

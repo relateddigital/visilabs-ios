@@ -100,8 +100,8 @@ class VisilabsNetwork {
             return nil
         }
 
-        VisilabsLogger.debug(message: "Fetching URL");
-        VisilabsLogger.debug(message: url.absoluteURL);
+        VisilabsLogger.debug("Fetching URL");
+        VisilabsLogger.debug(url.absoluteURL);
         var request = URLRequest(url: url)
         request.httpMethod = resource.method.rawValue
         request.httpBody = resource.requestBody

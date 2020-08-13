@@ -78,7 +78,7 @@ internal class VisilabsHelper {
                 if error == nil, let userAgentString = userAgent as? String, userAgentString.count > 0 {
                     completion(userAgentString)
                 }else {
-                    VisilabsLogger.error(message: "Visilabs can not compute user agent.")
+                    VisilabsLogger.error("Visilabs can not compute user agent.")
                 }
             })
         }

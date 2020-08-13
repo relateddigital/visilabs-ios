@@ -34,7 +34,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
         DispatchQueue.main.async {
             if self.currentlyShowingNotification != nil {
-                VisilabsLogger.warn(message: "already showing an in-app notification")
+                VisilabsLogger.warn("already showing an in-app notification")
             } else {
                 var shownNotification = false
                 switch notification.type {
@@ -113,7 +113,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
     func markNotificationShown(notification: VisilabsInAppNotification) {
         lock.write {
-            VisilabsLogger.info(message: "marking notification as seen: \(notification.actId)")
+            VisilabsLogger.info("marking notification as seen: \(notification.actId)")
             currentlyShowingNotification = notification
             // TODO: burada customEvent request'i atılmalı
         }
@@ -145,7 +145,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
         if let callToActionURL = callToActionURL {
             controller.hide(animated: true) {
-                VisilabsLogger.info(message: "opening CTA URL: \(callToActionURL)")
+                VisilabsLogger.info("opening CTA URL: \(callToActionURL)")
                 VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL, waitUntilDone: true)
                 completionBlock()
             }

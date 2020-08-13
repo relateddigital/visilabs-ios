@@ -58,7 +58,7 @@ public class VisilabsInAppNotification {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
-                VisilabsLogger.error(message: "image failed to load from url \(iUrl)")
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
             }
         }
         return data
@@ -116,22 +116,22 @@ public class VisilabsInAppNotification {
     
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
-            VisilabsLogger.error(message: "notification json object should not be nil")
+            VisilabsLogger.error("notification json object should not be nil")
             return nil
         }
         
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
-            VisilabsLogger.error(message: "invalid \(PayloadKey.actId)")
+            VisilabsLogger.error("invalid \(PayloadKey.actId)")
             return nil
         }
         
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
-            VisilabsLogger.error(message: "invalid \(PayloadKey.actionData)")
+            VisilabsLogger.error("invalid \(PayloadKey.actionData)")
             return nil
         }
         
         guard let messageType = actionData[PayloadKey.messageType] as? String, let type = VisilabsInAppNotificationType(rawValue: messageType) else {
-            VisilabsLogger.error(message: "invalid \(PayloadKey.messageType)")
+            VisilabsLogger.error("invalid \(PayloadKey.messageType)")
             return nil
         }
         
