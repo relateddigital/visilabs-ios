@@ -82,6 +82,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 
     init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+        
+        //TODO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
@@ -95,6 +97,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
+        
+        
         
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         VisilabsPersistence.archiveProfile(visilabsProfile)
@@ -129,22 +133,13 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             self.visilabsGeofenceInstance = VisilabsGeofence()
             self.visilabsGeofenceInstance?.startGeofencing()
         }
-
-        computeWebViewUserAgent2()
-    }
-
-    var webView: WKWebView?
-
-    func computeWebViewUserAgent2() {
-        DispatchQueue.main.async {
-            self.webView = WKWebView(frame: CGRect.zero)
-            self.webView?.loadHTMLString("<html></html>", baseURL: nil)
-            self.webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, _ in
-                if let userAgentString = userAgent as? String {
-                    self.visilabsUser.userAgent = userAgentString
-                }
-            })
+        
+        self.setEndpoints()
+        
+        VisilabsHelper.computeWebViewUserAgent { (userAgentString) in
+            self.visilabsUser.userAgent = userAgentString
         }
+        
     }
 
     private func setEndpoints() {
