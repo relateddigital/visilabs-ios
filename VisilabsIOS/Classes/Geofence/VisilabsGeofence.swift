@@ -29,6 +29,10 @@ class VisilabsGeofence {
         self.siteId = siteId
     }
     
+    func startGeofencing() {
+        
+    }
+    
 }
 
 
