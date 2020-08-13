@@ -51,6 +51,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var encryptedDataSource: String?
 
     var visilabsUser: VisilabsUser!
+    var visilabsProfile: VisilabsProfile!
     var visilabsCookie = VisilabsCookie()
     var eventsQueue = Queue()
     // var flushEventsQueue = Queue()
@@ -104,7 +105,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
         
-        
+        self.visilabsProfile = VisilabsProfile(organizationId: organizationId, siteId: siteId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
 
         self.organizationId = organizationId
         self.siteId = siteId
