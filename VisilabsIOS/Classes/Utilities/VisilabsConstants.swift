@@ -22,6 +22,8 @@ struct VisilabsConstants {
     
     //MARK: -Archive Keys
     
+
+    static let GEOFENCE_ARCHIVE_KEY = "Visilabs.geofence"
     static let USER_ARCHIVE_KEY = "Visilabs.user";
     static let PROFILE_ARCHIVE_KEY = "Visilabs.profile";
     
