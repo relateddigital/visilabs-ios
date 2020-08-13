@@ -119,12 +119,12 @@ public class VisilabsProduct {
     internal init?(JSONObject: [String: Any?]?) {
         
         guard let object = JSONObject else {
-            VisilabsLogger.error(message: "product json object should not be nil")
+            VisilabsLogger.error("product json object should not be nil")
             return nil
         }
         
         guard let code = object[PayloadKey.code] as? String else {
-            VisilabsLogger.error(message: "invalid \(PayloadKey.code)")
+            VisilabsLogger.error("invalid \(PayloadKey.code)")
             return nil
         }
 

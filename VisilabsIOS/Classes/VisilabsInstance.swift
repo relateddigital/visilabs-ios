@@ -70,9 +70,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 VisilabsLogger.enableLevel(.info)
                 VisilabsLogger.enableLevel(.warning)
                 VisilabsLogger.enableLevel(.error)
-                VisilabsLogger.info(message: "Visilabs Logging Enabled")
+                VisilabsLogger.info("Logging Enabled")
             } else {
-                VisilabsLogger.info(message: "Visilabs Logging Disabled")
+                VisilabsLogger.info("Logging Disabled")
                 VisilabsLogger.disableLevel(.debug)
                 VisilabsLogger.disableLevel(.info)
                 VisilabsLogger.disableLevel(.warning)
@@ -88,7 +88,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
                 let wifi = flags.contains(SCNetworkReachabilityFlags.reachable) && !flags.contains(SCNetworkReachabilityFlags.isWWAN)
-                VisilabsLogger.info(message: "reachability changed, wifi=\(wifi)")
+                VisilabsLogger.info("reachability changed, wifi=\(wifi)")
             }
             if SCNetworkReachabilitySetCallback(reachability, reachabilityCallback, &context) {
                 if !SCNetworkReachabilitySetDispatchQueue(reachability, trackingQueue) {
@@ -164,7 +164,7 @@ extension VisilabsInstance {
 
     public func customEvent(_ pageName: String, properties: [String: String]) {
         if pageName.isEmptyOrWhitespace {
-            VisilabsLogger.error(message: "Visilabs: customEvent can not be called with empty page name.")
+            VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
 
@@ -214,7 +214,7 @@ extension VisilabsInstance {
 
     public func login(exVisitorId: String, properties: [String: String] = [String: String]()) {
         if exVisitorId.isEmptyOrWhitespace {
-            VisilabsLogger.error(message: "Visilabs: login can not be called with empty exVisitorId.")
+            VisilabsLogger.error("login can not be called with empty exVisitorId.")
             return
         }
         var props = properties
@@ -226,7 +226,7 @@ extension VisilabsInstance {
 
     public func signUp(exVisitorId: String, properties: [String: String] = [String: String]()) {
         if exVisitorId.isEmptyOrWhitespace {
-            VisilabsLogger.error(message: "Visilabs: signUp can not be called with empty exVisitorId.")
+            VisilabsLogger.error("signUp can not be called with empty exVisitorId.")
             return
         }
         var props = properties
@@ -360,7 +360,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]) {
         
         if (notification.queryString == nil || notification.queryString == "") {
-            VisilabsLogger.info(message: "Notification or query string is nil or empty")
+            VisilabsLogger.info("Notification or query string is nil or empty")
             return
         }
         

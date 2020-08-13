@@ -24,7 +24,7 @@ class VisilabsPersistence {
         archiveQueueUtility.sync { [visilabsUser] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.USER_ARCHIVE_KEY)
             guard let path = propertiesFilePath else {
-                VisilabsLogger.error(message: "bad file path, cant fetch file")
+                VisilabsLogger.error("bad file path, cant fetch file")
                 return
             }
             var userDic = [String : String?]()
@@ -39,12 +39,12 @@ class VisilabsPersistence {
             
             VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
                 if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
-                    VisilabsLogger.error(message: "failed to archive user")
+                    VisilabsLogger.error("failed to archive user")
                     return
                 }
             }, catch: { (error) in
-                VisilabsLogger.error(message: "failed to archive user due to an uncaught exception")
-                VisilabsLogger.error(message: error.debugDescription)
+                VisilabsLogger.error("failed to archive user due to an uncaught exception")
+                VisilabsLogger.error(error.debugDescription)
                 return
             }, finally: {})
         }
@@ -54,7 +54,7 @@ class VisilabsPersistence {
         archiveQueueUtility.sync { [visilabsProfile] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
             guard let path = propertiesFilePath else {
-                VisilabsLogger.error(message: "bad file path, cant fetch file")
+                VisilabsLogger.error("bad file path, cant fetch file")
                 return
             }
             var userDic = [String : Any?]()
@@ -69,12 +69,12 @@ class VisilabsPersistence {
             
             VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
                 if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
-                    VisilabsLogger.error(message: "failed to archive profile")
+                    VisilabsLogger.error("failed to archive profile")
                     return
                 }
             }, catch: { (error) in
-                VisilabsLogger.error(message: "failed to archive profile due to an uncaught exception")
-                VisilabsLogger.error(message: error.debugDescription)
+                VisilabsLogger.error("failed to archive profile due to an uncaught exception")
+                VisilabsLogger.error(error.debugDescription)
                 return
             }, finally: {})
         }
@@ -89,37 +89,37 @@ class VisilabsPersistence {
         if let cidfp = filePath(filename: VisilabsConstants.IDENTITY_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving cookieId.")
+            VisilabsLogger.warn("Error while unarchiving cookieId.")
         }
         
         if let cidfp = filePath(filename: VisilabsConstants.COOKIEID_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving cookieId.")
+            VisilabsLogger.warn("Error while unarchiving cookieId.")
         }
         
         if let exvidfp = filePath(filename: VisilabsConstants.EXVISITORID_ARCHIVE_KEY), let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
             visilabsUser.exVisitorId = exvid
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving exVisitorId.")
+            VisilabsLogger.warn("Error while unarchiving exVisitorId.")
         }
         
         if let appidfp = filePath(filename: VisilabsConstants.APPID_ARCHIVE_KEY), let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
             visilabsUser.appId = aid
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving appId.")
+            VisilabsLogger.warn("Error while unarchiving appId.")
         }
         
         if let tidfp = filePath(filename: VisilabsConstants.TOKENID_ARCHIVE_KEY), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
             visilabsUser.tokenId = tid
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving tokenID.")
+            VisilabsLogger.warn("Error while unarchiving tokenID.")
         }
         
         if let uafp = filePath(filename: VisilabsConstants.USERAGENT_ARCHIVE_KEY), let ua = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
             visilabsUser.userAgent = ua
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving userAgent.")
+            VisilabsLogger.warn("Error while unarchiving userAgent.")
         }
         
         if let propsfp = filePath(filename: VisilabsConstants.USER_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
@@ -157,7 +157,7 @@ class VisilabsPersistence {
             }
             
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving properties.")
+            VisilabsLogger.warn("Visilabs: Error while unarchiving properties.")
         }
 
         return visilabsUser
@@ -202,7 +202,7 @@ class VisilabsPersistence {
             }
             
         }else{
-            VisilabsLogger.warn(message: "Visilabs: Error while unarchiving profile.")
+            VisilabsLogger.warn("Error while unarchiving profile.")
         }
 
         return visilabsProfile

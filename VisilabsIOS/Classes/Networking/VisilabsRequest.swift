@@ -34,16 +34,16 @@ class VisilabsRequest {
                         requestUrl = url.absoluteString
                     }
                 }
-                VisilabsLogger.warn(message: "API request to \(requestUrl) has failed with reason \(reason)")
+                VisilabsLogger.warn("API request to \(requestUrl) has failed with reason \(reason)")
                 completion(nil)
             }, success: { (result, response) in
                 
                 if let httpResponse = response as? HTTPURLResponse, let url = httpResponse.url {
-                    VisilabsLogger.info(message: "\(url.absoluteString) request sent successfully")
+                    VisilabsLogger.info("\(url.absoluteString) request sent successfully")
                     let cookies = getCookies(url)
                     completion(cookies)
                 }else{
-                    VisilabsLogger.warn(message: "\(VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)) can not convert to HTTPURLResponse")
+                    VisilabsLogger.warn("\(VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)) can not convert to HTTPURLResponse")
                     completion(nil)
                 }
                 
@@ -78,7 +78,7 @@ class VisilabsRequest {
             do {
                 response = try JSONSerialization.jsonObject(with: data, options: [])
             } catch {
-                VisilabsLogger.warn(message: "exception decoding api data")
+                VisilabsLogger.warn("exception decoding api data")
             }
             return response as? [Any]
         }
@@ -92,7 +92,7 @@ class VisilabsRequest {
     private class func sendRecommendationRequestHandler(resource: VisilabsResource<[Any]>, completion: @escaping ([Any]?, VisilabsReason?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
-                VisilabsLogger.warn(message: "API request to \(resource.endPoint) has failed with reason \(reason)")
+                VisilabsLogger.warn("API request to \(resource.endPoint) has failed with reason \(reason)")
                 completion(nil, reason)
             }, success: { (result, response) in
                 completion(result, nil)
@@ -113,7 +113,7 @@ class VisilabsRequest {
             do {
                 response = try JSONSerialization.jsonObject(with: data, options: [])
             } catch {
-                VisilabsLogger.warn(message: "exception decoding api data")
+                VisilabsLogger.warn("exception decoding api data")
             }
             return response as? [[String: Any]]
         }
@@ -127,7 +127,7 @@ class VisilabsRequest {
     private class func sendInAppNotificationRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
-                VisilabsLogger.warn(message: "API request to \(resource.endPoint) has failed with reason \(reason)")
+                VisilabsLogger.warn("API request to \(resource.endPoint) has failed with reason \(reason)")
                 completion(nil)
             }, success: { (result, response) in
                 completion(result)
@@ -149,7 +149,7 @@ class VisilabsRequest {
             do {
                 response = try JSONSerialization.jsonObject(with: data, options: [])
             } catch {
-                VisilabsLogger.warn(message: "exception decoding api data")
+                VisilabsLogger.warn("exception decoding api data")
             }
             return response as? [[String: Any]]
         }
@@ -163,7 +163,7 @@ class VisilabsRequest {
     private class func sendGeofenceRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
-                VisilabsLogger.warn(message: "API request to \(resource.endPoint) has failed with reason \(reason)")
+                VisilabsLogger.warn("API request to \(resource.endPoint) has failed with reason \(reason)")
                 completion(nil)
             }, success: { (result, response) in
                 completion(result)
@@ -185,7 +185,7 @@ class VisilabsRequest {
             do {
                 response = try JSONSerialization.jsonObject(with: data, options: [])
             } catch {
-                VisilabsLogger.warn(message: "exception decoding api data")
+                VisilabsLogger.warn("exception decoding api data")
             }
             return response as? [String: Any]
         }
@@ -199,7 +199,7 @@ class VisilabsRequest {
     private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>, completion: @escaping ([String: Any]?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
-                VisilabsLogger.warn(message: "API request to \(resource.endPoint) has failed with reason \(reason)")
+                VisilabsLogger.warn("API request to \(resource.endPoint) has failed with reason \(reason)")
                 completion(nil)
             }, success: { (result, response) in
                 completion(result)

@@ -98,7 +98,7 @@ class VisilabsGeofence2 : NSObject, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
         locationManager = freshManager
 
-        VisilabsLogger.warn(message: "Recreated the LocationManager")
+        VisilabsLogger.warn("Recreated the LocationManager")
     }
     
 }
