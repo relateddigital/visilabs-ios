@@ -19,7 +19,24 @@ public extension TimeInterval {
     static var oneYear: TimeInterval { return oneDay * 365 }
 }
 
-class VisilabsGeofence : NSObject, CLLocationManagerDelegate {
+class VisilabsGeofence {
+    
+    let organizationId: String
+    let siteId: String
+    
+    init(organizationId: String, siteId: String) {
+        self.organizationId = organizationId
+        self.siteId = siteId
+    }
+    
+}
+
+
+class VisilabsGeofence2 : NSObject, CLLocationManagerDelegate {
+    
+    
+    
+    
     
     internal var lastLocationManagerCreated: Date?
     internal var maximumDesiredLocationAccuracy: CLLocationAccuracy = 30 // TODO: burada 30 yerine başka değer vermek doğru mu? önceden kCLLocationAccuracyHundredMeters kullanıyorduk.
