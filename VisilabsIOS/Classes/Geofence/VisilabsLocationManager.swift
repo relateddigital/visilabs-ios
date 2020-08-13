@@ -85,6 +85,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     
     // MARK: - CLLocationManagerDelegate implementation
     
+    //TODO: buna bak tekrardan
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.requestLocationAuthorizationCallback?(status)
     }
