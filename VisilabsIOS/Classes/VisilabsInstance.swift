@@ -39,14 +39,6 @@ struct VisilabsProfile {
 }
 
 public class VisilabsInstance: CustomDebugStringConvertible {
-    var organizationId = ""
-    var siteId = ""
-    var dataSource = ""
-    var channel = ""
-    var requestTimeoutInSeconds: Int
-    var geofenceEnabled = false
-    var inAppNotificationsEnabled = false
-    var maxGeofenceCount: Int
 
     var visilabsUser: VisilabsUser!
     var visilabsProfile: VisilabsProfile!
@@ -67,7 +59,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsRecommendationInstance: VisilabsRecommendationInstance
     
     public var debugDescription: String {
-        return "Visilabs(siteId : \(siteId) organizationId: \(organizationId)"
+        return "Visilabs(siteId : \(self.visilabsProfile.siteId) organizationId: \(self.visilabsProfile.organizationId)"
     }
 
     public var loggingEnabled: Bool = false {
@@ -104,26 +96,17 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
         
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, siteId: siteId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
-
-        self.organizationId = organizationId
-        self.siteId = siteId
-        self.dataSource = dataSource
-        self.channel = channel
-        self.requestTimeoutInSeconds = requestTimeoutInSeconds
-        self.geofenceEnabled = geofenceEnabled
-        self.inAppNotificationsEnabled = inAppNotificationsEnabled
-        self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
         
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
-        let label = "com.relateddigital.\(self.siteId)"
+        let label = "com.relateddigital.\(self.visilabsProfile.siteId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
-        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.organizationId, siteId: self.siteId, lock: self.readWriteLock)
+        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.siteId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
-        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.organizationId, siteId: self.siteId)
+        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.siteId)
         
         self.visilabsUser = unarchive()
         self.visilabsInAppNotificationInstance.inAppDelegate = self
@@ -140,7 +123,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
 
         
-        if(self.geofenceEnabled && VisilabsBasePath.endpoints[.geofence] != nil){
+        if(self.visilabsProfile.geofenceEnabled && VisilabsBasePath.endpoints[.geofence] != nil){
             
         }
 
@@ -162,8 +145,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 
     private func setEndpoints() {
-        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(self.visilabsProfile.dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(self.visilabsProfile.dataSource)/\(VisilabsConstants.OM_GIF)"
         VisilabsBasePath.endpoints[.target] = VisilabsConstants.RECOMMENDATION_END_POINT
         VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
         VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
@@ -198,7 +181,7 @@ extension VisilabsInstance {
             self.readWriteLock.read {
                 eQueue = self.eventsQueue
                 vUser = self.visilabsUser
-                chan = self.channel
+                chan = self.visilabsProfile.channel
             }
 
             let (eventsQueue, visilabsUser, clearUserParameters, channel) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: eQueue, visilabsUser: vUser, channel: chan)
@@ -206,7 +189,7 @@ extension VisilabsInstance {
             self.readWriteLock.write {
                 self.eventsQueue = eventsQueue
                 self.visilabsUser = visilabsUser
-                self.channel = channel
+                self.visilabsProfile.channel = channel
             }
 
             self.readWriteLock.read {
@@ -219,7 +202,7 @@ extension VisilabsInstance {
 
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveParameters(event)
-                if let _ = VisilabsBasePath.endpoints[.action], self.inAppNotificationsEnabled {
+                if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled {
                     self.checkInAppNotification(properties: event)
                 }
             }
@@ -293,7 +276,7 @@ extension VisilabsInstance {
                     self.eventsQueue.removeAll()
                 }
 
-                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds))
+                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds))
 
                 self.readWriteLock.write {
                     self.visilabsCookie = cookie
@@ -360,7 +343,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
                     return
                 }
 
-                self.visilabsInAppNotificationInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
+                self.visilabsInAppNotificationInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
                         self.visilabsInAppNotificationInstance.notificationsInstance.showNotification(notification)
                     }
@@ -386,7 +369,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         let qs = notification.queryString
         let qsArr = qs!.components(separatedBy: "&")
         var properties = properties
-        properties["OM.domain"] =  "\(self.dataSource)_IOS"
+        properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent("OM_evt.gif", properties: properties)
@@ -415,10 +398,10 @@ extension VisilabsInstance {
                 
                 self.readWriteLock.read {
                     vUser = self.visilabsUser
-                    channel = self.channel
+                    channel = self.visilabsProfile.channel
                 }
                 
-                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, timeoutInterval: TimeInterval(self.requestTimeoutInSeconds), properties: properties, filters: filters) { (response) in
+                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), properties: properties, filters: filters) { (response) in
                     completion(response)
                 }
                 
