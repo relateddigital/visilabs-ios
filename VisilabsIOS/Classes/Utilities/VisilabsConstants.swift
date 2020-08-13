@@ -19,14 +19,33 @@ struct VisilabsConstants {
     static var GEOFENCE_END_POINT = "http://s.visilabs.net/geojson"
     static var MOBILE_END_POINT = "http://s.visilabs.net/mobile"
     
-    static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieID"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
-    static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity";
-    static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorID";
-    static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenID";
-    static let APPID_ARCHIVE_KEY = "Visilabs.appID";
-    static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
-    static let PROPERTIES_ARCHIVE_KEY = "Visilabs.properties";
     
+    //MARK: -Archive Keys
+    
+    static let USER_ARCHIVE_KEY = "Visilabs.user";
+    static let PROFILE_ARCHIVE_KEY = "Visilabs.profile";
+    
+    static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieId"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
+    static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity";
+    static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorId";
+    static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenId";
+    static let APPID_ARCHIVE_KEY = "Visilabs.appId";
+    static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
+    
+    static let ORGANIZATIONID_ARCHIVE_KEY = "Visilabs.organizationId";
+    static let SITEID_ARCHIVE_KEY = "Visilabs.siteId";
+    static let DATASOURCE_ARCHIVE_KEY = "Visilabs.dataSource";
+    static let CHANNEL_ARCHIVE_KEY = "Visilabs.channel";
+    static let REQUESTTIMEINSECONDS_ARCHIVE_KEY = "Visilabs.requestTimeoutInSeconds";
+    static let GEOFENCEENABLED_ARCHIVE_KEY = "Visilabs.geofenceEnabled";
+    static let INAPPNOTIFICATIONSENABLED_ARCHIVE_KEY = "Visilabs.inAppNotificationsEnabled";
+    static let MAXGEOFENCECOUNT_ARCHIVE_KEY = "Visilabs.maxGeofenceCount";
+    
+    static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount";
+    static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled";
+    static let GEOFENCEENABLED_KEY = "geofenceEnabled";
+    static let REQUESTTIMEINSECONDS_KEY = "requestTimeoutInSeconds";
+    static let DATASOURCE_KEY = "dataSource";
     static let USERAGENT_KEY = "OM.userAgent";
     static let VISITORDATA = "visitorData";
     
@@ -43,7 +62,7 @@ struct VisilabsConstants {
     static let VISITOR_CAPPING_KEY = "OM.viscap"
     
     static let ORGANIZATIONID_KEY = "OM.oid"
-    static let SITEID_KEY = "OM.siteID"
+    static let PROFILEID_KEY = "OM.siteID"
     static let COOKIEID_KEY = "OM.cookieID"
     static let EXVISITORID_KEY = "OM.exVisitorID"
     static let ZONE_ID_KEY = "OM.zid"
