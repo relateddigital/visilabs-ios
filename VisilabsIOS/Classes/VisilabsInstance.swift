@@ -47,8 +47,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var geofenceEnabled = false
     var inAppNotificationsEnabled = false
     var maxGeofenceCount: Int
-    var restUrl: String?
-    var encryptedDataSource: String?
 
     var visilabsUser: VisilabsUser!
     var visilabsProfile: VisilabsProfile!
@@ -90,7 +88,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
 
-    init(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) {
+    init(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
             func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
@@ -115,8 +113,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.geofenceEnabled = geofenceEnabled
         self.inAppNotificationsEnabled = inAppNotificationsEnabled
         self.maxGeofenceCount = (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount
-        self.restUrl = restUrl
-        self.encryptedDataSource = encryptedDataSource
+        
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.siteId)"

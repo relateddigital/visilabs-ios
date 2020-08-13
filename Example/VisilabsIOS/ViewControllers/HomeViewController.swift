@@ -133,35 +133,6 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.maxGeofenceCount
             }
             
-            <<< URLRow("restUrl") {
-                $0.title = "restUrl"
-                $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
-                $0.placeholder = "restUrl"
-                if let rurl = visilabsProfile.restUrl {
-                    $0.value = URL(string: rurl)
-                }
-            }.onRowValidationChanged { cell, row in
-                    let rowIndex = row.indexPath!.row
-                    while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
-                        row.section?.remove(at: rowIndex + 1)
-                    }
-                    if !row.isValid {
-                        for (index, validationMsg) in row.validationErrors.map({ $0.msg }).enumerated() {
-                            let labelRow = LabelRow() {
-                                $0.title = validationMsg
-                                $0.cell.height = { 30 }
-                            }
-                            let indexPath = row.indexPath!.row + index + 1
-                            row.section?.insert(labelRow, at: indexPath)
-                        }
-                    }
-            }
-            
-            <<< TextRow("encryptedDataSource") {
-                $0.title = "encryptedDataSource"
-                $0.placeholder = "encryptedDataSource"
-                $0.value = visilabsProfile.encryptedDataSource
-            }
         
             +++ Section()
             <<< ButtonRow() {
@@ -187,9 +158,7 @@ class HomeViewController: FormViewController {
                 let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
                 let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
                 let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
-                let restUrlRow: URLRow? = self.form.rowBy(tag: "restUrl")
-                let encryptedDataSourceRow: TextRow? = self.form.rowBy(tag: "encryptedDataSource")
-                
+            
                 let orgId: String? = orgIdRow?.value
                 let siteId: String? = siteIdRow?.value
                 let dataSource: String? = dataSourceRow?.value
@@ -198,9 +167,8 @@ class HomeViewController: FormViewController {
                 let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
                 let inAppNotificationsEnabled: Bool = inAppNotificationsEnabledRow?.value ?? false
                 let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
-                let restUrl: String? = restUrlRow?.value?.absoluteString
-                let encryptedDataSource: String? = encryptedDataSourceRow?.value
-                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
+
+                Visilabs.createAPI(organizationId: orgId!, siteId: siteId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
                 Visilabs.callAPI().loggingEnabled = true
                 
                 

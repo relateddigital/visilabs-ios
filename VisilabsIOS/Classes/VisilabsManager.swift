@@ -13,9 +13,8 @@ class VisilabsManager {
         VisilabsLogger.addLogging(VisilabsPrintLogging())
     }
 
-    func initialize(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int, restUrl: String?, encryptedDataSource: String?) -> VisilabsInstance {
-        let instance = VisilabsInstance(organizationId: organizationId, siteId: siteId, dataSource: dataSource, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds
-            , geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount, restUrl: restUrl, encryptedDataSource: encryptedDataSource)
+    func initialize(organizationId: String, siteId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) -> VisilabsInstance {
+        let instance = VisilabsInstance(organizationId: organizationId, siteId: siteId, dataSource: dataSource, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
         self.instance = instance
         return instance
     }
