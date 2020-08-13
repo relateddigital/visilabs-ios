@@ -25,19 +25,18 @@ class VisilabsGeofenceEntity {
 
 class VisilabsGeofence {
     
-    var visilabsLocationManager : VisilabsLocationManager?
-    var activeGeofenceList: [VisilabsGeofenceEntity]
-    let organizationId: String
-    let siteId: String
+    public static let sharedManager = VisilabsGeofence()
     
-    init(organizationId: String, siteId: String) {
-        self.organizationId = organizationId
-        self.siteId = siteId
+    var activeGeofenceList: [VisilabsGeofenceEntity]
+    let profile: VisilabsProfile
+    
+    init() {
+        profile = VisilabsPersistence.unarchiveProfile()
         self.activeGeofenceList = [VisilabsGeofenceEntity]()
     }
     
     func startGeofencing() {
-        self.visilabsLocationManager = VisilabsLocationManager.sharedInstance()
+        VisilabsLocationManager.sharedInstance()
     }
     
 }
