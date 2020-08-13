@@ -20,7 +20,7 @@ class VisilabsPersistence {
         return urlUnwrapped
     }
 
-    class func archive(visilabsUser: VisilabsUser) {
+    class func archiveUser(visilabsUser: VisilabsUser) {
         archiveQueue.sync { [visilabsUser] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.PROPERTIES_ARCHIVE_KEY)
             guard let path = propertiesFilePath else {
@@ -54,48 +54,42 @@ class VisilabsPersistence {
     
     
     //TODO: bunu ExceptionWrapper içine al
-    class func unarchive() -> (cookieId: String?, exVisitorId: String?, appId: String?, tokenId: String?, userAgent: String?, visitorData: String?, mobileAdId: String?){
-        var cookieId: String?
-        var exVisitorId: String?
-        var appId: String?
-        var tokenId: String?
-        var userAgent: String?
-        var visitorData: String?
-        var mobileAdId: String?
+    class func unarchiveUser() -> VisilabsUser {
+        var visilabsUser = VisilabsUser()
         
         //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library we added this control.
         if let cidfp = filePath(filename: VisilabsConstants.IDENTITY_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
-            cookieId = cid
+            visilabsUser.cookieId = cid
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving cookieId.")
         }
         
         if let cidfp = filePath(filename: VisilabsConstants.COOKIEID_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
-            cookieId = cid
+            visilabsUser.cookieId = cid
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving cookieId.")
         }
         
         if let exvidfp = filePath(filename: VisilabsConstants.EXVISITORID_ARCHIVE_KEY), let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
-            exVisitorId = exvid
+            visilabsUser.exVisitorId = exvid
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving exVisitorId.")
         }
         
         if let appidfp = filePath(filename: VisilabsConstants.APPID_ARCHIVE_KEY), let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
-            appId = aid
+            visilabsUser.appId = aid
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving appId.")
         }
         
         if let tidfp = filePath(filename: VisilabsConstants.TOKENID_ARCHIVE_KEY), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
-            tokenId = tid
+            visilabsUser.tokenId = tid
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving tokenID.")
         }
         
         if let uafp = filePath(filename: VisilabsConstants.USERAGENT_ARCHIVE_KEY), let ua = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
-            userAgent = ua
+            visilabsUser.userAgent = ua
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving userAgent.")
         }
@@ -103,42 +97,42 @@ class VisilabsPersistence {
         if let propsfp = filePath(filename: VisilabsConstants.PROPERTIES_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
             
             if let cid = props[VisilabsConstants.COOKIEID_KEY], !cid.isNilOrWhiteSpace {
-                cookieId = cid
+                visilabsUser.cookieId = cid
             }
             
             if let exvid = props[VisilabsConstants.EXVISITORID_KEY], !exvid.isNilOrWhiteSpace {
-                exVisitorId = exvid
+                visilabsUser.exVisitorId = exvid
             }
             
             if let aid = props[VisilabsConstants.APPID_KEY], !aid.isNilOrWhiteSpace {
-                appId = aid
+                visilabsUser.appId = aid
             }
             
             if let tid = props[VisilabsConstants.TOKENID_KEY], !tid.isNilOrWhiteSpace {
-                tokenId = tid
+                visilabsUser.tokenId = tid
             }
             
             if let ua = props[VisilabsConstants.USERAGENT_KEY], !ua.isNilOrWhiteSpace {
-                userAgent = ua
+                visilabsUser.userAgent = ua
             }
             
             if let vd = props[VisilabsConstants.VISITORDATA], !vd.isNilOrWhiteSpace {
-                visitorData = vd
+                visilabsUser.visitorData = vd
             }
             
             if let vd = props[VisilabsConstants.VISITOR_CAPPING_KEY], !vd.isNilOrWhiteSpace {
-                visitorData = vd
+                visilabsUser.visitorData = vd
             }
             
             if let madid = props[VisilabsConstants.MOBILEADID_KEY], !madid.isNilOrWhiteSpace {
-                mobileAdId = madid
+                visilabsUser.identifierForAdvertising = madid
             }
             
         }else{
             VisilabsLogger.warn(message: "Visilabs: Error while unarchiving properties.")
         }
 
-        return (cookieId, exVisitorId, appId, tokenId, userAgent, visitorData, mobileAdId)
+        return visilabsUser
     }
     
     
