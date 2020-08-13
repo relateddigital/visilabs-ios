@@ -10,11 +10,40 @@ import CoreLocation
 
 class VisilabsLocationManager : NSObject {
     
-    private var locationManager = CLLocationManager()
+    private var instance: VisilabsLocationManager?
+    private static let sharedInstanceSharedLocationManager: VisilabsLocationManager? = {
+        var sharedLocationManager = VisilabsLocationManager()
+        return sharedLocationManager
+    }()
+    class func sharedInstance() -> VisilabsLocationManager {
+        return sharedInstanceSharedLocationManager!
+    }
+    
+    
+    
+    private var locationManager: CLLocationManager?
     private var requestLocationAuthorizationCallback: ((CLAuthorizationStatus) -> Void)?
     
+    
+    var currentGeoLocationValue: CLLocationCoordinate2D?
+    
+    override init(){
+        super.init()
+        createLocationManager()
+    }
+    
+    func createLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        #if !TARGET_IPHONE_SIMULATOR
+        if locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
+            locationManager?.pausesLocationUpdatesAutomatically = false
+        }
+        #endif
+        requestLocationAuthorization()
+    }
+    
     public func requestLocationAuthorization() {
-        self.locationManager.delegate = self
         let currentStatus = CLLocationManager.authorizationStatus()
 
         guard currentStatus == .notDetermined else { return }
@@ -22,12 +51,12 @@ class VisilabsLocationManager : NSObject {
         if #available(iOS 13.4, *) {
             self.requestLocationAuthorizationCallback = { status in
                 if status == .authorizedWhenInUse {
-                    self.locationManager.requestAlwaysAuthorization()
+                    self.locationManager?.requestAlwaysAuthorization()
                 }
             }
-            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager?.requestWhenInUseAuthorization()
         } else {
-            self.locationManager.requestAlwaysAuthorization()
+            self.locationManager?.requestAlwaysAuthorization()
         }
     }
 }
@@ -41,12 +70,17 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        print("didUpdateLocations")
+        
+        
+        /*
         if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
             return //initialize CLLocationManager but cannot call any function to avoid promote.
         }
-        /*
+        
+        
         if locations.count > 0 {
-            if let previousLocation = self.currentGeoLocation{
+            if let previousLocation = self.currentGeoLocation {
                 currentGeoLocationValue = (locations[0]).coordinate //no matter sent log or not, keep current geo location fresh.
                 sendGeoLocationUpdate()
                 //send out notification for location change
@@ -57,6 +91,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
                 NotificationCenter.default.post(notification)
             }
         }
-        */
+ */
+        
     }
 }

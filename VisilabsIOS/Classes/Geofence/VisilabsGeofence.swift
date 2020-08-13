@@ -19,18 +19,25 @@ public extension TimeInterval {
     static var oneYear: TimeInterval { return oneDay * 365 }
 }
 
+class VisilabsGeofenceEntity {
+    
+}
+
 class VisilabsGeofence {
     
+    var visilabsLocationManager : VisilabsLocationManager?
+    var activeGeofenceList: [VisilabsGeofenceEntity]
     let organizationId: String
     let siteId: String
     
     init(organizationId: String, siteId: String) {
         self.organizationId = organizationId
         self.siteId = siteId
+        self.activeGeofenceList = [VisilabsGeofenceEntity]()
     }
     
     func startGeofencing() {
-        
+        self.visilabsLocationManager = VisilabsLocationManager.sharedInstance()
     }
     
 }
