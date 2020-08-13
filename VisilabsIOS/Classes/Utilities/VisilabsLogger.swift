@@ -88,7 +88,7 @@ class VisilabsLogger {
         }
     }
     
-    class func debug(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+    class func debug(_ message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
        var enabledLevels = Set<VisilabsLogLevel>()
        readWriteLock.read {
            enabledLevels = self.enabledLevels
@@ -97,7 +97,7 @@ class VisilabsLogger {
        forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .debug))
    }
 
-    class func info(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+    class func info(_ message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
        var enabledLevels = Set<VisilabsLogLevel>()
        readWriteLock.read {
            enabledLevels = self.enabledLevels
@@ -106,7 +106,7 @@ class VisilabsLogger {
        forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .info))
    }
 
-    class func warn(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+    class func warn(_ message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
        var enabledLevels = Set<VisilabsLogLevel>()
        readWriteLock.read {
            enabledLevels = self.enabledLevels
@@ -115,7 +115,7 @@ class VisilabsLogger {
        forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .warning))
    }
 
-   class func error(message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
+   class func error(_ message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
        var enabledLevels = Set<VisilabsLogLevel>()
        readWriteLock.read {
            enabledLevels = self.enabledLevels
