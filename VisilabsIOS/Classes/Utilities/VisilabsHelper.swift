@@ -7,8 +7,9 @@
 
 import Foundation
 import AdSupport
+import WebKit
 
-internal class VisilabsHelper{
+internal class VisilabsHelper {
     
     //TODO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
     static func distanceSquared(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
@@ -65,6 +66,20 @@ internal class VisilabsHelper{
             return IDFA.uuidString
         }
         return nil
+    }
+    
+    static func computeWebViewUserAgent(completion: @escaping ((String) -> Void)) {
+        DispatchQueue.main.async { [completion] in
+            let webView = WKWebView(frame: CGRect.zero)
+            webView.loadHTMLString("<html></html>", baseURL: nil)
+            webView.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+                if error == nil, let userAgentString = userAgent as? String, userAgentString.count > 0 {
+                    completion(userAgentString)
+                }else {
+                    VisilabsLogger.error(message: "Visilabs can not compute user agent.")
+                }
+            })
+        }
     }
     
 }
