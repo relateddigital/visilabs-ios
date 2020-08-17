@@ -16,6 +16,7 @@
 		88007E2124A38CEE002A9132 /* RecommendationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88007E2024A38CEE002A9132 /* RecommendationViewController.swift */; };
 		88007E2424A3CED4002A9132 /* InAppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88007E2324A3CED4002A9132 /* InAppHelper.swift */; };
 		8811477524EABCA0006848F9 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8811477424EABCA0006848F9 /* DataManager.swift */; };
+		8811477724EAC3EF006848F9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8811477624EAC3EF006848F9 /* SceneDelegate.swift */; };
 		88370C9424853675005645F5 /* FormHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88370C9324853675005645F5 /* FormHelper.swift */; };
 		8862E462247ED6D000C230DD /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E45F247ED6D000C230DD /* EventViewController.swift */; };
 		8862E463247ED6D000C230DD /* InAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8862E460247ED6D000C230DD /* InAppViewController.swift */; };
@@ -59,6 +60,7 @@
 		88007E2024A38CEE002A9132 /* RecommendationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationViewController.swift; sourceTree = "<group>"; };
 		88007E2324A3CED4002A9132 /* InAppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppHelper.swift; sourceTree = "<group>"; };
 		8811477424EABCA0006848F9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		8811477624EAC3EF006848F9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		88370C9324853675005645F5 /* FormHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormHelper.swift; sourceTree = "<group>"; };
 		885BBDDC24E2DDA600F05769 /* VisilabsIOS_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VisilabsIOS_Example.entitlements; sourceTree = "<group>"; };
 		8862E45F247ED6D000C230DD /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				8811477624EAC3EF006848F9 /* SceneDelegate.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -418,6 +421,7 @@
 				88370C9424853675005645F5 /* FormHelper.swift in Sources */,
 				88B2A47B24A0DF7300C153DC /* GeofenceViewController.swift in Sources */,
 				8862E463247ED6D000C230DD /* InAppViewController.swift in Sources */,
+				8811477724EAC3EF006848F9 /* SceneDelegate.swift in Sources */,
 				88007E2424A3CED4002A9132 /* InAppHelper.swift in Sources */,
 				88007E2124A38CEE002A9132 /* RecommendationViewController.swift in Sources */,
 				8862E468247EDF5500C230DD /* HomeViewController.swift in Sources */,
