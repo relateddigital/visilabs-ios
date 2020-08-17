@@ -181,7 +181,7 @@ class HomeViewController: FormViewController {
                     , channel: visilabsProfile.channel, requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds, geofenceEnabled: visilabsProfile.geofenceEnabled, maxGeofenceCount:  visilabsProfile.maxGeofenceCount)
                 Visilabs.callAPI().loggingEnabled = true
                 
-                Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: true)
+                Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: false)
                 
                 Euromsg.registerForPushNotifications()
                 Euromsg.askForNotificationPermission()
