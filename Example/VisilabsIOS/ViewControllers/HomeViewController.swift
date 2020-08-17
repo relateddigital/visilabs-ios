@@ -8,6 +8,7 @@
 
 import VisilabsIOS
 import Eureka
+import Euromsg
 
 
 class HomeViewController: FormViewController {
@@ -175,12 +176,14 @@ class HomeViewController: FormViewController {
                 let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
                 let inAppNotificationsEnabled: Bool = inAppNotificationsEnabledRow?.value ?? false
                 let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
-                let appAlias: String? = appAliasRow?.value
+                let appAlias: String = appAliasRow?.value ?? "VisilabsIOSExample"
                 
 
                 Visilabs.createAPI(organizationId: orgId!, profileId: profileId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
                 Visilabs.callAPI().loggingEnabled = true
                 
+                Euromsg.configure(appAlias: appAlias, enableLog: true)
+                Euromsg.registerForPushNotifications()
                 
                 self.goToTabBarController()
                 //row.section?.form?.validate()
