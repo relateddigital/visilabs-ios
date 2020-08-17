@@ -10,11 +10,8 @@ import VisilabsIOS
 import Eureka
 import Euromsg
 
-
 class HomeViewController: FormViewController {
 
-    var visilabsProfile = VisilabsProfile()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
@@ -168,21 +165,22 @@ class HomeViewController: FormViewController {
                 let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
                 let appAliasRow: TextRow? = self.form.rowBy(tag: "appAlias")
             
-                let orgId: String? = orgIdRow?.value
-                let profileId: String? = profileIdRow?.value
-                let dataSource: String? = dataSourceRow?.value
-                let geofenceEnabled: Bool = geofenceEnabledRow?.value ?? false
-                let channel: String? = channelRow?.value
-                let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
-                let inAppNotificationsEnabled: Bool = inAppNotificationsEnabledRow?.value ?? false
-                let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
-                let appAlias: String = appAliasRow?.value ?? "VisilabsIOSExample"
+                visilabsProfile.organizationId = orgIdRow!.value!
+                visilabsProfile.profileId = profileIdRow!.value!
+                visilabsProfile.dataSource = dataSourceRow!.value!
+                visilabsProfile.geofenceEnabled = geofenceEnabledRow?.value ?? false
+                visilabsProfile.channel = channelRow!.value!
+                visilabsProfile.requestTimeoutInSeconds = requestTimeoutInSecondsRow!.value!
+                visilabsProfile.inAppNotificationsEnabled = inAppNotificationsEnabledRow?.value ?? false
+                visilabsProfile.maxGeofenceCount = maxGeofenceCountRow?.value ?? 20
+                visilabsProfile.appAlias = appAliasRow?.value ?? "VisilabsIOSExample"
                 
 
-                Visilabs.createAPI(organizationId: orgId!, profileId: profileId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+                Visilabs.createAPI(organizationId: visilabsProfile.organizationId, profileId: visilabsProfile.profileId, dataSource: visilabsProfile.dataSource, inAppNotificationsEnabled: visilabsProfile.inAppNotificationsEnabled
+                    , channel: visilabsProfile.channel, requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds, geofenceEnabled: visilabsProfile.geofenceEnabled, maxGeofenceCount:  visilabsProfile.maxGeofenceCount)
                 Visilabs.callAPI().loggingEnabled = true
                 
-                Euromsg.configure(appAlias: appAlias, enableLog: true)
+                Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: true)
                 Euromsg.registerForPushNotifications()
                 
                 self.goToTabBarController()
