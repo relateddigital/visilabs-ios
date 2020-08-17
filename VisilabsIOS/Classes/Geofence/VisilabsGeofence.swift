@@ -46,8 +46,36 @@ class VisilabsGeofence {
         VisilabsLocationManager.sharedManager
     }
     
-    func getGeofenceList() {
-        
+    func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
+        if profile.geofenceEnabled {
+            let user = VisilabsPersistence.unarchiveUser()
+            var geofenceHistory = VisilabsPersistence.unarchiveGeofenceHistory()
+            var props = [String: String]()
+            props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
+            props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
+            props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
+            props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
+            props[VisilabsConstants.ACT_KEY] = VisilabsConstants.GET_LIST
+            props[VisilabsConstants.TOKENID_KEY] = user.tokenId
+            props[VisilabsConstants.APPID_KEY] = user.appId
+            if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
+                props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
+                props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
+            } else if let lat = geofenceHistory.lastKnownLatitude, let lon = geofenceHistory.lastKnownLongitude {
+                props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
+                props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
+            }
+            
+            for (key, value) in VisilabsPersistence.getParameters() {
+               if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
+                   props[key] = value
+               }
+            }
+            
+            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result) in
+                
+            }
+        }
     }
     
     //TODO: lastKnownLatitude ve lastKnownLongitude a gerek yok kaldır
