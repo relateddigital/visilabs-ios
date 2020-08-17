@@ -16,7 +16,7 @@ protocol AppLifecycle {
     func applicationWillResignActive()
 }
 
-struct VisilabsUser {
+struct VisilabsUser : Codable {
     var cookieId: String?
     var exVisitorId: String?
     var tokenId: String?
@@ -27,7 +27,7 @@ struct VisilabsUser {
     var identifierForAdvertising: String?
 }
 
-struct VisilabsProfile {
+struct VisilabsProfile : Codable {
     var organizationId: String
     var profileId: String
     var dataSource: String
