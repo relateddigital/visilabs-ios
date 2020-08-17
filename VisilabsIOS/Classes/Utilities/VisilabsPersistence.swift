@@ -52,23 +52,13 @@ class VisilabsPersistence {
     
     class func archiveProfile(_ visilabsProfile: VisilabsProfile) {
         archiveQueueUtility.sync { [visilabsProfile] in
-            let propertiesFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
-            guard let path = propertiesFilePath else {
+            let profileFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
+            guard let path = profileFilePath else {
                 VisilabsLogger.error("bad file path, cant fetch file")
                 return
             }
-            var userDic = [String : Any?]()
-            userDic[VisilabsConstants.ORGANIZATIONID_KEY] = visilabsProfile.organizationId
-            userDic[VisilabsConstants.PROFILEID_KEY] = visilabsProfile.profileId
-            userDic[VisilabsConstants.DATASOURCE_KEY] = visilabsProfile.dataSource
-            userDic[VisilabsConstants.CHANNEL_KEY] = visilabsProfile.channel
-            userDic[VisilabsConstants.REQUESTTIMEINSECONDS_KEY] = visilabsProfile.requestTimeoutInSeconds
-            userDic[VisilabsConstants.GEOFENCEENABLED_KEY] = visilabsProfile.geofenceEnabled
-            userDic[VisilabsConstants.INAPPNOTIFICATIONSENABLED_KEY] = visilabsProfile.inAppNotificationsEnabled
-            userDic[VisilabsConstants.MAXGEOFENCECOUNT_KEY] = visilabsProfile.maxGeofenceCount
-            
-            VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
-                if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
+            VisilabsExceptionWrapper.try({ [cObject = visilabsProfile, cPath = path] in
+                if let data = try? PropertyListEncoder().encode(cObject), !NSKeyedArchiver.archiveRootObject(data, toFile: cPath) {
                     VisilabsLogger.error("failed to archive profile")
                     return
                 }
@@ -167,45 +157,39 @@ class VisilabsPersistence {
     class func unarchiveProfile() -> VisilabsProfile {
         var visilabsProfile = VisilabsProfile(organizationId: "", profileId: "", dataSource: "", channel: VisilabsConstants.IOS, requestTimeoutInSeconds: 60, geofenceEnabled: false, inAppNotificationsEnabled: false, maxGeofenceCount: 20)
         
-        if let propsfp = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : Any?] {
-            
-            if let oid = props[VisilabsConstants.ORGANIZATIONID_KEY], let organizationId = oid as? String {
-                visilabsProfile.organizationId = organizationId
-            }
-            
-            if let pid = props[VisilabsConstants.PROFILEID_KEY], let profileId = pid as? String {
-                visilabsProfile.profileId = profileId
-            }
-            
-            if let ds = props[VisilabsConstants.DATASOURCE_KEY], let dataSource = ds as? String {
-                visilabsProfile.dataSource = dataSource
-            }
-            
-            if let c = props[VisilabsConstants.CHANNEL_KEY], let channel = c as? String {
-                visilabsProfile.channel = channel
-            }
-            
-            if let rtis = props[VisilabsConstants.REQUESTTIMEINSECONDS_KEY], let requestTimeoutInSeconds = rtis as? Int {
-                visilabsProfile.requestTimeoutInSeconds = requestTimeoutInSeconds
-            }
-            
-            if let ge = props[VisilabsConstants.GEOFENCEENABLED_KEY], let geofenceEnabled = ge as? Bool {
-                visilabsProfile.geofenceEnabled = geofenceEnabled
-            }
-            
-            if let ie = props[VisilabsConstants.INAPPNOTIFICATIONSENABLED_KEY], let inAppNotificationsEnabled = ie as? Bool {
-                visilabsProfile.inAppNotificationsEnabled = inAppNotificationsEnabled
-            }
-            
-            if let mgc = props[VisilabsConstants.MAXGEOFENCECOUNT_KEY], let maxGeofenceCount = mgc as? Int {
-                visilabsProfile.maxGeofenceCount = maxGeofenceCount
-            }
-            
+        if let propsfp = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY), let p = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? Data, let profile = try? PropertyListDecoder().decode(VisilabsProfile.self, from: p)  {
+            visilabsProfile = profile
         }else{
             VisilabsLogger.warn("Error while unarchiving profile.")
         }
 
         return visilabsProfile
+    }
+    
+    //TODO: bunu ExceptionWrapper içine al
+    class func unarchiveGeofenceHistory() -> VisilabsGeofenceHistory {
+        let visilabsGeofenceHistory = VisilabsGeofenceHistory()
+        
+        if let ghfp = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: ghfp) as? [String : Any?] {
+            
+            if let lat = props[VisilabsConstants.LATITUDE_KEY], let latitude = lat as? Double {
+                visilabsGeofenceHistory.lastKnownLatitude = latitude
+            }
+            
+            if let lon = props[VisilabsConstants.LONGITUDE_KEY], let longitude = lon as? Double {
+                visilabsGeofenceHistory.lastKnownLongitude = longitude
+            }
+            
+            if let lgft = props[VisilabsConstants.LAST_GEOFENCE_FETCH_TIME_KEY], let lastFetchTime = lgft as? Date {
+                visilabsGeofenceHistory.lastFetchTime = lastFetchTime
+            }
+            
+            
+        }else{
+            VisilabsLogger.warn("Error while unarchiving geofence history.")
+        }
+
+        return visilabsGeofenceHistory
     }
     
     
