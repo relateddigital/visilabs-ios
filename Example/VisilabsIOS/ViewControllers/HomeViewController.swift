@@ -182,7 +182,12 @@ class HomeViewController: FormViewController {
                 Visilabs.callAPI().loggingEnabled = true
                 
                 Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: true)
+                
                 Euromsg.registerForPushNotifications()
+                Euromsg.askForNotificationPermission()
+                Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
+                Euromsg.setEmail(email: visilabsProfile.userEmail, permission: true)
+                Euromsg.setPushNotification(permission: true)
                 
                 self.goToTabBarController()
                 //row.section?.form?.validate()

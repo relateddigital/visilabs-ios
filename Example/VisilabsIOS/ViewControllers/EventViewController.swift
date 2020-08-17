@@ -84,12 +84,12 @@ class EventViewController: FormViewController {
         case .login:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
-            Visilabs.callAPI().login(exVisitorId: "egemen@visilab.com", properties: properties)
+            Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
             return
         case .signUp:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias //"App ID to use for push messages"
-            Visilabs.callAPI().signUp(exVisitorId: "egemen@visilab.com", properties: properties)
+            Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
             return
         case .pageView:
             Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
