@@ -70,6 +70,26 @@ class VisilabsPersistence {
         }
     }
     
+    class func archiveGeofenceHistory(_ visilabsGeofenceHistory: VisilabsGeofenceHistory) {
+        archiveQueueUtility.sync { [visilabsGeofenceHistory] in
+            let geofenceHistoryFilePath = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY)
+            guard let path = geofenceHistoryFilePath else {
+                VisilabsLogger.error("bad file path, cant fetch file")
+                return
+            }
+            VisilabsExceptionWrapper.try({ [cObject = visilabsGeofenceHistory, cPath = path] in
+                if let data = try? PropertyListEncoder().encode(cObject), !NSKeyedArchiver.archiveRootObject(data, toFile: cPath) {
+                    VisilabsLogger.error("failed to archive geofence history")
+                    return
+                }
+            }, catch: { (error) in
+                VisilabsLogger.error("failed to archive geofence history due to an uncaught exception")
+                VisilabsLogger.error(error.debugDescription)
+                return
+            }, finally: {})
+        }
+    }
+    
     
     //TODO: bunu ExceptionWrapper içine al
     class func unarchiveUser() -> VisilabsUser {
@@ -168,27 +188,12 @@ class VisilabsPersistence {
     
     //TODO: bunu ExceptionWrapper içine al
     class func unarchiveGeofenceHistory() -> VisilabsGeofenceHistory {
-        let visilabsGeofenceHistory = VisilabsGeofenceHistory()
-        
-        if let ghfp = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: ghfp) as? [String : Any?] {
-            
-            if let lat = props[VisilabsConstants.LATITUDE_KEY], let latitude = lat as? Double {
-                visilabsGeofenceHistory.lastKnownLatitude = latitude
-            }
-            
-            if let lon = props[VisilabsConstants.LONGITUDE_KEY], let longitude = lon as? Double {
-                visilabsGeofenceHistory.lastKnownLongitude = longitude
-            }
-            
-            if let lgft = props[VisilabsConstants.LAST_GEOFENCE_FETCH_TIME_KEY], let lastFetchTime = lgft as? Date {
-                visilabsGeofenceHistory.lastFetchTime = lastFetchTime
-            }
-            
-            
+        var visilabsGeofenceHistory = VisilabsGeofenceHistory()
+        if let ghfp = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY), let gh = NSKeyedUnarchiver.unarchiveObject(withFile: ghfp) as? Data, let geofenceHistory = try? PropertyListDecoder().decode(VisilabsGeofenceHistory.self, from: gh)  {
+            visilabsGeofenceHistory = geofenceHistory
         }else{
             VisilabsLogger.warn("Error while unarchiving geofence history.")
         }
-
         return visilabsGeofenceHistory
     }
     
