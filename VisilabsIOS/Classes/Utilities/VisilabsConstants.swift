@@ -45,7 +45,7 @@ struct VisilabsConstants {
     static let VISITORDATA = "visitorData";
     
     
-    static let LAST_GEOFENCE_CHECK_TIME_KEY = "lastGeofenceCheckTime"
+    static let LAST_GEOFENCE_FETCH_TIME_KEY = "lastGeofenceFetchTime"
     static let GEOFENCES_KEY = "geofences"
     
     
