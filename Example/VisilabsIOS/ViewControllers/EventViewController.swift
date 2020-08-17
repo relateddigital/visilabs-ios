@@ -37,27 +37,11 @@ class EventViewController: FormViewController {
         super.viewDidLoad()
         initializeForm()
     }
-    
-    
-    
-    
-    private func initializeForm() {
-    
-        /*
-        LabelRow.defaultCellUpdate = { cell, row in
-            cell.contentView.backgroundColor = .red
-            cell.textLabel?.textColor = .white
-            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
-            cell.textLabel?.textAlignment = .right
 
-        }
-*/
+    private func initializeForm() {
         form
-        
         +++ getCommonEventsSection()
-        
         +++ getInAppSection()
-        
     }
     
     
@@ -98,14 +82,14 @@ class EventViewController: FormViewController {
         var properties = [String:String]()
         switch eventType {
         case .login:
-            properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-            properties["OM.sys.AppID"] = "App ID to use for push messages"
-            Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
+            properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
+            properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
+            Visilabs.callAPI().login(exVisitorId: "egemen@visilab.com", properties: properties)
             return
         case .signUp:
-            properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-            properties["OM.sys.AppID"] = "App ID to use for push messages"
-            Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
+            properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
+            properties["OM.sys.AppID"] = visilabsProfile.appAlias //"App ID to use for push messages"
+            Visilabs.callAPI().signUp(exVisitorId: "egemen@visilab.com", properties: properties)
             return
         case .pageView:
             Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
@@ -165,8 +149,8 @@ class EventViewController: FormViewController {
             Visilabs.callAPI().customEvent("Login Page", properties: properties)
             return
         case .pushMessage:
-            properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-            properties["OM.sys.AppID"] = "App ID to use for push messages"
+            properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
+            properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
             Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
             return
         }
