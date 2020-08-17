@@ -175,6 +175,7 @@ class HomeViewController: FormViewController {
                 visilabsProfile.maxGeofenceCount = maxGeofenceCountRow?.value ?? 20
                 visilabsProfile.appAlias = appAliasRow?.value ?? "VisilabsIOSExample"
                 
+                DataManager.saveVisilabsProfile(visilabsProfile)
 
                 Visilabs.createAPI(organizationId: visilabsProfile.organizationId, profileId: visilabsProfile.profileId, dataSource: visilabsProfile.dataSource, inAppNotificationsEnabled: visilabsProfile.inAppNotificationsEnabled
                     , channel: visilabsProfile.channel, requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds, geofenceEnabled: visilabsProfile.geofenceEnabled, maxGeofenceCount:  visilabsProfile.maxGeofenceCount)
