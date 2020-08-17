@@ -10,14 +10,7 @@ import CoreLocation
 
 class VisilabsLocationManager : NSObject {
     
-    private var instance: VisilabsLocationManager?
-    private static let sharedInstanceSharedLocationManager: VisilabsLocationManager? = {
-        var sharedLocationManager = VisilabsLocationManager()
-        return sharedLocationManager
-    }()
-    class func sharedInstance() -> VisilabsLocationManager {
-        return sharedInstanceSharedLocationManager!
-    }
+    public static let sharedManager = VisilabsLocationManager()
     
     
     
@@ -44,9 +37,9 @@ class VisilabsLocationManager : NSObject {
         self.locationManager = CLLocationManager()
         self.locationManager?.delegate = self
         #if !TARGET_IPHONE_SIMULATOR
-        if self.locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
-            self.locationManager?.pausesLocationUpdatesAutomatically = false
-        }
+            if self.locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
+                self.locationManager?.pausesLocationUpdatesAutomatically = false
+            }
         #endif
         self.requestLocationAuthorization()
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
