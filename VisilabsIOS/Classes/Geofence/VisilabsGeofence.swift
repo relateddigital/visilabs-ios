@@ -43,6 +43,7 @@ class VisilabsGeofence {
         
     }
     
+    //TODO: lastKnownLatitude ve lastKnownLongitude a gerek yok kaldır
     func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool, lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
         let user = VisilabsPersistence.unarchiveUser()
         var props = [String: String]()
