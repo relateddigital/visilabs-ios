@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct VisilabsProfile {
+struct VisilabsProfile : Codable {
     var organizationId = "676D325830564761676D453D"
     var profileId = "356467332F6533766975593D"
     var dataSource = "visistore"
@@ -18,4 +18,5 @@ struct VisilabsProfile {
     var geofenceEnabled: Bool = true
     var maxGeofenceCount = 20
     var appAlias = "VisilabsIOSExample"
+    var appToken = ""
 }
