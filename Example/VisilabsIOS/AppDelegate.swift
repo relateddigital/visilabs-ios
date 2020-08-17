@@ -8,15 +8,22 @@
 
 import UIKit
 import Euromsg
+import UserNotifications
+
+var visilabsProfile = VisilabsProfile()
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         InAppHelper.downloadMiniIconImagesAndSave()
+        
+        if let vp = DataManager.readVisilabsProfile() {
+            visilabsProfile = vp
+        }
         
         if #available(iOS 13, *) {
             // handle push for iOS 13 and later in sceneDelegate
@@ -29,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        visilabsProfile.appToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         Euromsg.registerToken(tokenData: deviceToken)
     }
 
