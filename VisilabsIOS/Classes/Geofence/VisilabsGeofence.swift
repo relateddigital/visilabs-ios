@@ -23,6 +23,13 @@ class VisilabsGeofenceEntity {
     
 }
 
+class VisilabsGeofenceHistory {
+    var lastKnownLatitude : Double?
+    var lastKnownLongitude : Double?
+    var lastFetchTime : Date?
+    var fetchHistory: [Date: [VisilabsGeofenceEntity]]?
+}
+
 class VisilabsGeofence {
     
     public static let sharedManager = VisilabsGeofence()
@@ -36,7 +43,7 @@ class VisilabsGeofence {
     }
     
     func startGeofencing() {
-        VisilabsLocationManager.sharedInstance()
+        VisilabsLocationManager.sharedManager
     }
     
     func getGeofenceList() {
