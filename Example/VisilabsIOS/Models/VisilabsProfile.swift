@@ -17,4 +17,5 @@ struct VisilabsProfile {
     var requestTimeoutInSeconds = 30
     var geofenceEnabled: Bool = true
     var maxGeofenceCount = 20
+    var appAlias = "VisilabsIOSExample"
 }

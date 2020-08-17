@@ -133,6 +133,13 @@ class HomeViewController: FormViewController {
                 $0.value = visilabsProfile.maxGeofenceCount
             }
             
+            <<< TextRow("appAlias") {
+                $0.title = "appAlias"
+                $0.placeholder = "appAlias"
+                $0.value = visilabsProfile.appAlias
+            }
+            
+            
         
             +++ Section()
             <<< ButtonRow() {
@@ -158,6 +165,7 @@ class HomeViewController: FormViewController {
                 let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
                 let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
                 let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
+                let appAliasRow: TextRow? = self.form.rowBy(tag: "appAlias")
             
                 let orgId: String? = orgIdRow?.value
                 let profileId: String? = profileIdRow?.value
@@ -167,6 +175,8 @@ class HomeViewController: FormViewController {
                 let requestTimeoutInSeconds: Int? = requestTimeoutInSecondsRow?.value
                 let inAppNotificationsEnabled: Bool = inAppNotificationsEnabledRow?.value ?? false
                 let maxGeofenceCount: Int = maxGeofenceCountRow?.value ?? 20
+                let appAlias: String? = appAliasRow?.value
+                
 
                 Visilabs.createAPI(organizationId: orgId!, profileId: profileId!, dataSource: dataSource!, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel ?? "IOS", requestTimeoutInSeconds: requestTimeoutInSeconds!, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
                 Visilabs.callAPI().loggingEnabled = true
