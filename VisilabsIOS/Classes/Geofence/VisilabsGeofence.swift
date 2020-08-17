@@ -19,11 +19,11 @@ public extension TimeInterval {
     static var oneYear: TimeInterval { return oneDay * 365 }
 }
 
-class VisilabsGeofenceEntity {
+class VisilabsGeofenceEntity: Codable {
     
 }
 
-class VisilabsGeofenceHistory {
+class VisilabsGeofenceHistory: Codable {
     var lastKnownLatitude : Double?
     var lastKnownLongitude : Double?
     var lastFetchTime : Date?
