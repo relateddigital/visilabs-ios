@@ -39,6 +39,44 @@ class VisilabsGeofence {
         VisilabsLocationManager.sharedInstance()
     }
     
+    func getGeofenceList() {
+        
+    }
+    
+    func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool, lastKnownLatitude: Double, lastKnownLongitude: Double) {
+        let user = VisilabsPersistence.unarchiveUser()
+        var props = [String: String]()
+        props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
+        props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
+        props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
+        props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
+        props[VisilabsConstants.ACT_KEY] = VisilabsConstants.PROCESSV2
+        props[VisilabsConstants.ACT_ID_KEY] = actionId
+        props[VisilabsConstants.TOKENID_KEY] = user.tokenId
+        props[VisilabsConstants.APPID_KEY] = user.appId
+        props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lastKnownLatitude)
+        props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lastKnownLongitude)
+        props[VisilabsConstants.GEO_ID_KEY] = geofenceId
+        
+        if isDwell{
+            if isEnter {
+                props[VisilabsConstants.TRIGGER_EVENT_KEY] = VisilabsConstants.ON_ENTER
+            } else {
+                props[VisilabsConstants.TRIGGER_EVENT_KEY] = VisilabsConstants.ON_EXIT
+            }
+        }
+        
+        for (key, value) in VisilabsPersistence.getParameters() {
+           if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
+               props[key] = value
+           }
+        }
+        
+        VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result) in
+            
+        }
+    }
+    
 }
 
 
