@@ -59,7 +59,7 @@ class HomeViewController: FormViewController {
                 $0.title = "profileId"
                 $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
                 $0.placeholder = "profileId"
-                $0.value = visilabsProfile.siteId
+                $0.value = visilabsProfile.profileId
             }.onRowValidationChanged { cell, row in
                     let rowIndex = row.indexPath!.row
                     while row.section!.count > rowIndex + 1 && row.section?[rowIndex  + 1] is LabelRow {
