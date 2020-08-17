@@ -10,15 +10,17 @@ import Foundation
 
 class DataManager {
     
+    static let visilabsProfileKey = "VisilabsProfile"
+    
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
         let encoder = JSONEncoder()
         if let encodedVisilabsProfile = try? encoder.encode(visilabsProfile) {
-            save("VisilabsProfile", withObject: encodedVisilabsProfile)
+            save(visilabsProfileKey, withObject: encodedVisilabsProfile)
         }
     }
     
-    static func readVisilabsProfile(_ key: String) -> VisilabsProfile? {
-        if let savedVisilabsProfile = read("VisilabsProfile") as? Data {
+    static func readVisilabsProfile() -> VisilabsProfile? {
+        if let savedVisilabsProfile = read(visilabsProfileKey) as? Data {
             let decoder = JSONDecoder()
             if let loadedVisilabsProfile = try? decoder.decode(VisilabsProfile.self, from: savedVisilabsProfile) {
                 return loadedVisilabsProfile
