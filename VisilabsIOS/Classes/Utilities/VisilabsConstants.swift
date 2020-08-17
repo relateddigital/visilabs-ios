@@ -90,6 +90,9 @@ struct VisilabsConstants {
     static let UTM_MEDIUM_KEY = "utm_medium"
     static let UTM_CONTENT_KEY = "utm_content"
     
+    static let PROCESSV2 = "processV2"
+    static let ON_ENTER = "OnEnter"
+    static let ON_EXIT = "OnExit"
     static let APIVER_VALUE = "IOS"
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
