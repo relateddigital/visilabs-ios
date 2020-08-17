@@ -363,12 +363,14 @@
 				"${PODS_ROOT}/Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Colorful/Colorful.framework",
 				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
+				"${BUILT_PRODUCTS_DIR}/Euromsg/Euromsg.framework",
 				"${BUILT_PRODUCTS_DIR}/VisilabsIOS/VisilabsIOS.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Colorful.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Euromsg.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VisilabsIOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
