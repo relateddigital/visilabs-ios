@@ -59,29 +59,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         } else {
             VisilabsLogger.error("notification image failed to load from data")
         }
-
-        /*
-        if fullNotification.messageTitle == nil || fullNotification.messageBody == nil {
-            NSLayoutConstraint(item: titleLabel!,
-                               attribute: NSLayoutConstraint.Attribute.height,
-                               relatedBy: NSLayoutConstraint.Relation.equal,
-                               toItem: nil,
-                               attribute: NSLayoutConstraint.Attribute.notAnAttribute,
-                               multiplier: 1,
-                               constant: 0).isActive = true
-            NSLayoutConstraint(item: bodyLabel!,
-                               attribute: NSLayoutConstraint.Attribute.height,
-                               relatedBy: NSLayoutConstraint.Relation.equal,
-                               toItem: nil,
-                               attribute: NSLayoutConstraint.Attribute.notAnAttribute,
-                               multiplier: 1,
-                               constant: 0).isActive = true
-        } else {
-            titleLabel.text = fullNotification.messageTitle
-            bodyLabel.text = fullNotification.messageBody
-        }
- */
-
         
         titleLabel.text = fullNotification.messageTitle
         bodyLabel.text = fullNotification.messageBody
@@ -110,33 +87,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         closeButton.tintColor = UIColor(hex: "#FFFFFF", alpha: 1)
         closeButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFit
 
-        
         setupButtonView(buttonView: inAppButton)
-        
-        /*
-        if takeoverNotification.buttons.count >= 1 {
-            setupButtonView(buttonView: firstButton, buttonModel: takeoverNotification.buttons[0], index: 0)
-            if takeoverNotification.buttons.count == 2 {
-                setupButtonView(buttonView: secondButton, buttonModel: takeoverNotification.buttons[1], index: 1)
-            } else {
-                NSLayoutConstraint(item: secondButtonContainer!,
-                                   attribute: NSLayoutConstraint.Attribute.width,
-                                   relatedBy: NSLayoutConstraint.Relation.equal,
-                                   toItem: nil,
-                                   attribute: NSLayoutConstraint.Attribute.notAnAttribute,
-                                   multiplier: 1,
-                                   constant: 0).isActive = true
-            }
-        }
-
-
-        if !takeoverNotification.shouldFadeImage {
-            if bottomImageSpacing != nil {
-                bottomImageSpacing.constant = 30
-            }
-            fadingView.layer.mask = nil
-        }
-  */
 
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
             
@@ -145,9 +96,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             }else{
                 self.view.backgroundColor = UIColor(hex: "#000000", alpha: 0.6)
             }
-            
-            //self.view.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
-            //self.view.backgroundColor = self.view.backgroundColor?.withAlphaComponent(0.8)
+
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
@@ -252,26 +201,10 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
 }
 
 class FadingView: UIView {
-    //var gradientMask: CAGradientLayer!
-
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.backgroundColor = UIColor.clear
-        /*
-        gradientMask = CAGradientLayer()
-        layer.mask = gradientMask
-        gradientMask.colors = [UIColor.black.cgColor, UIColor.black.cgColor, UIColor.clear.cgColor, UIColor.clear.cgColor]
-        gradientMask.locations = [0, 0.4, 0.9, 1]
-        gradientMask.startPoint = CGPoint(x: 0, y: 0)
-        gradientMask.endPoint = CGPoint(x: 0, y: 1)
- */
     }
-/*
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientMask.frame = bounds
-    }
-  */
 }
 
 class InAppButtonView: UIButton {
