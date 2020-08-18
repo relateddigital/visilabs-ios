@@ -94,6 +94,7 @@ struct VisilabsConstants {
     static let PROCESSV2 = "processV2"
     static let ON_ENTER = "OnEnter"
     static let ON_EXIT = "OnExit"
+    static let DWELL = "Dwell"
     static let APIVER_VALUE = "IOS"
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
