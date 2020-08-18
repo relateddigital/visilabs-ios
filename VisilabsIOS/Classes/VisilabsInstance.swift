@@ -55,7 +55,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
     let visilabsEventInstance: VisilabsEventInstance
     let visilabsSendInstance: VisilabsSendInstance
-    let visilabsInAppNotificationInstance: VisilabsInAppNotificationInstance
+    let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendationInstance
     var visilabsGeofenceInstance: VisilabsGeofence?
     
@@ -110,12 +110,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
-        self.visilabsInAppNotificationInstance = VisilabsInAppNotificationInstance(lock: self.readWriteLock)
+        self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock)
         self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
         
         
         self.visilabsUser = self.unarchive()
-        self.visilabsInAppNotificationInstance.inAppDelegate = self
+        self.visilabsTargetingActionInstance.inAppDelegate = self
         
         
 
@@ -328,7 +328,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     
     // TODO: this method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
-        visilabsInAppNotificationInstance.notificationsInstance.showNotification(visilabsInAppNotification)
+        visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
     }
 
     func checkInAppNotification(properties: [String: String]) {
@@ -341,9 +341,9 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
                     return
                 }
 
-                self.visilabsInAppNotificationInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
+                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
-                        self.visilabsInAppNotificationInstance.notificationsInstance.showNotification(notification)
+                        self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
                     }
                 })
             }
