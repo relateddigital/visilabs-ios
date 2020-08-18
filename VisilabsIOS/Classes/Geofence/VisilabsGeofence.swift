@@ -20,7 +20,21 @@ public extension TimeInterval {
 }
 
 class VisilabsGeofenceEntity: Codable {
+    internal init(actId: Int, geofenceId: Int, latitude: Double, longitude: Double, radius: Double, targetEvent: String) {
+        self.actId = actId
+        self.geofenceId = geofenceId
+        self.latitude = latitude
+        self.longitude = longitude
+        self.radius = radius
+        self.targetEvent = targetEvent
+    }
     
+    var actId: Int
+    var geofenceId: Int
+    var latitude: Double
+    var longitude: Double
+    var radius: Double
+    var targetEvent: String
 }
 
 class VisilabsGeofenceHistory: Codable {
@@ -72,8 +86,19 @@ class VisilabsGeofence {
                }
             }
             
-            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result) in
-                
+            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [geofenceHistory] (result) in
+                var fetchedGeofences = [VisilabsGeofenceEntity]()
+                if let res = result {
+                    for targetingAction in res {
+                        if let actionId = targetingAction["actid"] as? Int, let targetEvent = targetingAction["trgevt"] as? String, let durationInSeconds = targetingAction["dis"] as? Int , let geofences = targetingAction["geo"] as? [[String: Any]] {
+                            for geofence in geofences {
+                                if let geofenceId = geofence["id"] as? Int, let latitude = geofence["lat"] as? Double, let longitude = geofence["long"] as? Double, let radius = geofence["rds"] as? Double {
+                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, targetEvent: targetEvent))
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
