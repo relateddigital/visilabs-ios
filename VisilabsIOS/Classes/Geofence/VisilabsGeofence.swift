@@ -67,11 +67,13 @@ class VisilabsGeofence {
     
     var activeGeofenceList: [VisilabsGeofenceEntity]
     let profile: VisilabsProfile
+    var geofenceHistory: VisilabsGeofenceHistory
     
     init?() {
         if let profile = VisilabsDataManager.readVisilabsProfile() {
             self.profile = profile
             self.activeGeofenceList = [VisilabsGeofenceEntity]()
+            self.geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
         }else {
             return nil
         }
@@ -81,12 +83,16 @@ class VisilabsGeofence {
         VisilabsLocationManager.sharedManager.createLocationManager()
     }
     
-    func startMonitorGeofences(fetchedGeofences: [VisilabsGeofenceEntity]) {
-        
+    func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
+        self.activeGeofenceList = Array(sortVisilabsGeofenceEntities(geofences).prefix(self.profile.maxGeofenceCount))
     }
     
-    private func sortVisilabsGeofenceEntities(){
-        
+    private func sortVisilabsGeofenceEntities(_ geofences: [VisilabsGeofenceEntity]) -> [VisilabsGeofenceEntity]{
+        return geofences.sorted { (first, second) -> Bool in
+            let firstDistance = first.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
+            let secondDistance = second.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
+            return firstDistance < secondDistance
+        }
     }
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
@@ -160,7 +166,9 @@ class VisilabsGeofence {
                         geofenceHistory.fetchHistory[key] = nil
                     }
                 }
+                self.geofenceHistory = geofenceHistory
                 VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
+                self.startMonitorGeofences(geofences: fetchedGeofences)
             }
         }
     }
