@@ -20,6 +20,12 @@ struct VisilabsConstants {
     static var MOBILE_END_POINT = "http://s.visilabs.net/mobile"
     
     
+    //MARK: -UserDefaults Keys
+    
+    static let USER_DEFAULTS_PROFILE_KEY = "Visilabs.profile"
+    static let USER_DEFAULTS_USER_KEY = "Visilabs.user"
+    static let USER_DEFAULTS_GEOFENCE_HISTORY_KEY = "Visilabs.geofenceHistory"
+    
     //MARK: -Archive Keys
     
 
