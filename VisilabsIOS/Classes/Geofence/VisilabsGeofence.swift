@@ -20,12 +20,13 @@ public extension TimeInterval {
 }
 
 class VisilabsGeofenceEntity: Codable {
-    internal init(actId: Int, geofenceId: Int, latitude: Double, longitude: Double, radius: Double, targetEvent: String) {
+    internal init(actId: Int, geofenceId: Int, latitude: Double, longitude: Double, radius: Double, durationInSeconds: Int, targetEvent: String) {
         self.actId = actId
         self.geofenceId = geofenceId
         self.latitude = latitude
         self.longitude = longitude
         self.radius = radius
+        self.durationInSeconds = durationInSeconds
         self.targetEvent = targetEvent
     }
     
@@ -34,6 +35,7 @@ class VisilabsGeofenceEntity: Codable {
     var latitude: Double
     var longitude: Double
     var radius: Double
+    var durationInSeconds: Int
     var targetEvent: String
 }
 
@@ -86,14 +88,14 @@ class VisilabsGeofence {
                }
             }
             
-            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [geofenceHistory] (result) in
+            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory] (result) in
                 var fetchedGeofences = [VisilabsGeofenceEntity]()
                 if let res = result {
                     for targetingAction in res {
                         if let actionId = targetingAction["actid"] as? Int, let targetEvent = targetingAction["trgevt"] as? String, let durationInSeconds = targetingAction["dis"] as? Int , let geofences = targetingAction["geo"] as? [[String: Any]] {
                             for geofence in geofences {
                                 if let geofenceId = geofence["id"] as? Int, let latitude = geofence["lat"] as? Double, let longitude = geofence["long"] as? Double, let radius = geofence["rds"] as? Double {
-                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, targetEvent: targetEvent))
+                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, durationInSeconds: durationInSeconds, targetEvent: targetEvent))
                                 }
                             }
                         }
