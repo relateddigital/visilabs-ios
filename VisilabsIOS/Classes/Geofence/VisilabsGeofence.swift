@@ -74,7 +74,11 @@ class VisilabsGeofence {
         VisilabsLocationManager.sharedManager
     }
     
-    func sortVisilabsGeofenceEntities(){
+    func startMonitorGeofences(visilabsGeofenceEntities: [VisilabsGeofenceEntity]) {
+        
+    }
+    
+    private func sortVisilabsGeofenceEntities(){
         
     }
     
@@ -104,7 +108,7 @@ class VisilabsGeofence {
                }
             }
             
-            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory] (result) in
+            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory] (result, reason) in
                 var fetchedGeofences = [VisilabsGeofenceEntity]()
                 if let res = result {
                     for targetingAction in res {
@@ -170,7 +174,7 @@ class VisilabsGeofence {
            }
         }
         
-        VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result) in
+        VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result, reason) in
             
         }
     }
