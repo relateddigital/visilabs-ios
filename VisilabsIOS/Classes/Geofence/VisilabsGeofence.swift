@@ -121,21 +121,19 @@ class VisilabsGeofence {
                         }
                     }
                 }
-                
-                //geofenceHistory
                 geofenceHistory.lastFetchTime = Date()
                 geofenceHistory.lastKnownLatitude = lastKnownLatitude
                 geofenceHistory.lastKnownLongitude = lastKnownLongitude
                 geofenceHistory.fetchHistory[Date()] = fetchedGeofences
                 
-                
+                if geofenceHistory.fetchHistory.count > VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT {
+                    let ascendingKeys = Array(geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
+                    let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT)]
+                    for key in keysToBeDeleted {
+                        geofenceHistory.fetchHistory[key] = nil
+                    }
+                }
                 VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
-                
-
-                
-                
-                
-                
             }
         }
     }
