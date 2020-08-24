@@ -57,7 +57,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsSendInstance: VisilabsSendInstance
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendationInstance
-    var visilabsGeofenceInstance: VisilabsGeofence?
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(self.visilabsProfile.profileId) organizationId: \(self.visilabsProfile.organizationId)"
@@ -131,8 +130,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         
         if(self.visilabsProfile.geofenceEnabled){
-            self.visilabsGeofenceInstance = VisilabsGeofence()
-            self.visilabsGeofenceInstance?.startGeofencing()
+            VisilabsGeofence.sharedManager?.startGeofencing()
         }
         
         self.setEndpoints()
