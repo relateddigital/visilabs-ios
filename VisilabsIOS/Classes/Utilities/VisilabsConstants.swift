@@ -11,6 +11,7 @@ struct VisilabsConstants {
     
     static var QUEUE_SIZE = 5000
     static let GEOFENCE_HISTORY_MAX_COUNT = 500 //TODO: bunu sonra değiştir
+    static let GEOFENCE_HISTORY_ERROR_MAX_COUNT = 500 //TODO: bunu sonra değiştir
     
     //TODO: bunlar https e çevirilecek
     static var LOGGER_END_POINT = "http://lgr.visilabs.net"
