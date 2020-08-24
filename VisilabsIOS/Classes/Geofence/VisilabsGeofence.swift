@@ -29,6 +29,7 @@ class VisilabsGeofenceEntity: Codable {
         self.durationInSeconds = durationInSeconds
         self.targetEvent = targetEvent
         self.distanceFromCurrentLastKnownLocation = distanceFromCurrentLastKnownLocation
+        self.identifier = "visilabs_\(self.actId)_\(self.geofenceId)_\(self.targetEvent)"
     }
     var actId: Int
     var geofenceId: Int
@@ -38,6 +39,7 @@ class VisilabsGeofenceEntity: Codable {
     var durationInSeconds: Int
     var targetEvent: String
     var distanceFromCurrentLastKnownLocation: Double?
+    let identifier: String
 }
 
 class VisilabsGeofenceHistory: Codable {
