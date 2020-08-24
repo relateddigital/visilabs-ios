@@ -25,12 +25,22 @@ class VisilabsLocationManager : NSObject {
     
     override init(){
         super.init()
-        
     }
     
     deinit {
         locationManager?.delegate = nil
         NotificationCenter.default.removeObserver(self)// TODO: buna gerek var mı tekrar kontrol et.
+    }
+    
+    func stopMonitorRegions(){
+        if let regions = self.locationManager?.monitoredRegions {
+            for region in regions {
+                if region.identifier.contains("visilabs", options: String.CompareOptions.caseInsensitive){
+                    self.locationManager?.stopMonitoring(for: region)
+                    VisilabsLogger.info("stopped monitoring region: \(region.identifier)")
+                }
+            }
+        }
     }
     
     func createLocationManager() {
