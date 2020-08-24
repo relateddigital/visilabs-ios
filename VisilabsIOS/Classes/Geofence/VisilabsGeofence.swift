@@ -20,7 +20,7 @@ public extension TimeInterval {
 }
 
 class VisilabsGeofenceEntity: Codable {
-    internal init(actId: Int, geofenceId: Int, latitude: Double, longitude: Double, radius: Double, durationInSeconds: Int, targetEvent: String) {
+    internal init(actId: Int, geofenceId: Int, latitude: Double, longitude: Double, radius: Double, durationInSeconds: Int, targetEvent: String, distanceFromCurrentLastKnownLocation: Double?) {
         self.actId = actId
         self.geofenceId = geofenceId
         self.latitude = latitude
@@ -28,6 +28,7 @@ class VisilabsGeofenceEntity: Codable {
         self.radius = radius
         self.durationInSeconds = durationInSeconds
         self.targetEvent = targetEvent
+        self.distanceFromCurrentLastKnownLocation = distanceFromCurrentLastKnownLocation
     }
     
     var actId: Int
@@ -37,6 +38,7 @@ class VisilabsGeofenceEntity: Codable {
     var radius: Double
     var durationInSeconds: Int
     var targetEvent: String
+    var distanceFromCurrentLastKnownLocation: Double?
 }
 
 class VisilabsGeofenceHistory: Codable {
@@ -72,10 +74,14 @@ class VisilabsGeofence {
         VisilabsLocationManager.sharedManager
     }
     
+    func sortVisilabsGeofenceEntities(){
+        
+    }
+    
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
         if profile.geofenceEnabled {
             let user = VisilabsDataManager.readVisilabsUser()
-            var geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
+            let geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
             var props = [String: String]()
             props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
             props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
@@ -87,7 +93,7 @@ class VisilabsGeofence {
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                 props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
-            } else if let lat = geofenceHistory?.lastKnownLatitude, let lon = geofenceHistory?.lastKnownLongitude {
+            } else if let lat = geofenceHistory.lastKnownLatitude, let lon = geofenceHistory.lastKnownLongitude {
                 props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
             }
@@ -105,16 +111,29 @@ class VisilabsGeofence {
                         if let actionId = targetingAction["actid"] as? Int, let targetEvent = targetingAction["trgevt"] as? String, let durationInSeconds = targetingAction["dis"] as? Int , let geofences = targetingAction["geo"] as? [[String: Any]] {
                             for geofence in geofences {
                                 if let geofenceId = geofence["id"] as? Int, let latitude = geofence["lat"] as? Double, let longitude = geofence["long"] as? Double, let radius = geofence["rds"] as? Double {
-                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, durationInSeconds: durationInSeconds, targetEvent: targetEvent))
+                                    var distanceFromCurrentLastKnownLocation: Double? = nil
+                                    if let lastLat = lastKnownLatitude, let lastLong = lastKnownLongitude {
+                                        distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat, lng1: lastLong, lat2: latitude, lng2: longitude)
+                                    }
+                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, durationInSeconds: durationInSeconds, targetEvent: targetEvent, distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
                                 }
                             }
                         }
                     }
                 }
                 
-                if geofenceHistory.fetchHistory == nil{
-                    geofenceHistory.fetchHistory = [Date: [VisilabsGeofenceEntity]]()
-                }
+                //geofenceHistory
+                geofenceHistory.lastFetchTime = Date()
+                geofenceHistory.lastKnownLatitude = lastKnownLatitude
+                geofenceHistory.lastKnownLongitude = lastKnownLongitude
+                geofenceHistory.fetchHistory[Date()] = fetchedGeofences
+                
+                
+                VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
+                
+
+                
+                
                 
                 
             }
