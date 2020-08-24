@@ -68,16 +68,20 @@ class VisilabsGeofence {
     var activeGeofenceList: [VisilabsGeofenceEntity]
     let profile: VisilabsProfile
     
-    init() {
-        profile = VisilabsPersistence.unarchiveProfile()
-        self.activeGeofenceList = [VisilabsGeofenceEntity]()
+    init?() {
+        if let profile = VisilabsDataManager.readVisilabsProfile() {
+            self.profile = profile
+            self.activeGeofenceList = [VisilabsGeofenceEntity]()
+        }else {
+            return nil
+        }
     }
     
     func startGeofencing() {
         VisilabsLocationManager.sharedManager
     }
     
-    func startMonitorGeofences(visilabsGeofenceEntities: [VisilabsGeofenceEntity]) {
+    func startMonitorGeofences(fetchedGeofences: [VisilabsGeofenceEntity]) {
         
     }
     
