@@ -50,14 +50,14 @@ class VisilabsDataManager {
         }
     }
     
-    static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory? {
+    static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
         if let savedVisilabsGeofenceHistory = read(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY) as? Data {
             let decoder = JSONDecoder()
             if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self, from: savedVisilabsGeofenceHistory) {
                 return loadedVisilabsGeofenceHistory
             }
         }
-        return nil
+        return VisilabsGeofenceHistory()
     }
     
     static func save(_ key: String, withObject value: Any?) {
