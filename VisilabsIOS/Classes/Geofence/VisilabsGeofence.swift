@@ -40,10 +40,20 @@ class VisilabsGeofenceEntity: Codable {
 }
 
 class VisilabsGeofenceHistory: Codable {
+    internal init(lastKnownLatitude: Double? = nil, lastKnownLongitude: Double? = nil, lastFetchTime: Date? = nil, fetchHistory: [Date : [VisilabsGeofenceEntity]]?) {
+        self.lastKnownLatitude = lastKnownLatitude
+        self.lastKnownLongitude = lastKnownLongitude
+        self.lastFetchTime = lastFetchTime
+        self.fetchHistory = fetchHistory ?? [Date: [VisilabsGeofenceEntity]]()
+    }
+    
+    internal init(){
+        self.fetchHistory = [Date: [VisilabsGeofenceEntity]]()
+    }
     var lastKnownLatitude : Double?
     var lastKnownLongitude : Double?
     var lastFetchTime : Date?
-    var fetchHistory: [Date: [VisilabsGeofenceEntity]]?
+    var fetchHistory: [Date: [VisilabsGeofenceEntity]]
 }
 
 class VisilabsGeofence {
@@ -64,20 +74,20 @@ class VisilabsGeofence {
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
         if profile.geofenceEnabled {
-            let user = VisilabsPersistence.unarchiveUser()
-            var geofenceHistory = VisilabsPersistence.unarchiveGeofenceHistory()
+            let user = VisilabsDataManager.readVisilabsUser()
+            var geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
             var props = [String: String]()
             props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
             props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-            props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
-            props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
+            props[VisilabsConstants.COOKIEID_KEY] = user?.cookieId ?? nil
+            props[VisilabsConstants.EXVISITORID_KEY] = user?.exVisitorId ?? nil
             props[VisilabsConstants.ACT_KEY] = VisilabsConstants.GET_LIST
-            props[VisilabsConstants.TOKENID_KEY] = user.tokenId
-            props[VisilabsConstants.APPID_KEY] = user.appId
+            props[VisilabsConstants.TOKENID_KEY] = user?.tokenId ?? nil
+            props[VisilabsConstants.APPID_KEY] = user?.appId ?? nil
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                 props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
-            } else if let lat = geofenceHistory.lastKnownLatitude, let lon = geofenceHistory.lastKnownLongitude {
+            } else if let lat = geofenceHistory?.lastKnownLatitude, let lon = geofenceHistory?.lastKnownLongitude {
                 props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
             }
@@ -101,6 +111,12 @@ class VisilabsGeofence {
                         }
                     }
                 }
+                
+                if geofenceHistory.fetchHistory == nil{
+                    geofenceHistory.fetchHistory = [Date: [VisilabsGeofenceEntity]]()
+                }
+                
+                
             }
         }
     }
