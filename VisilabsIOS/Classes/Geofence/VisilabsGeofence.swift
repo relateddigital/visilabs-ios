@@ -84,12 +84,11 @@ class VisilabsGeofence {
         VisilabsLocationManager.sharedManager.createLocationManager()
     }
     
-    func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
+    private func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
+        VisilabsLocationManager.sharedManager.stopMonitorRegions()
         self.activeGeofenceList = Array(sortVisilabsGeofenceEntities(geofences).prefix(self.profile.maxGeofenceCount))
-        
         for geofence in self.activeGeofenceList {
-            
-            var geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: "")
+            let geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: geofence.identifier)
         }
     }
     
