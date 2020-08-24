@@ -25,7 +25,7 @@ class VisilabsLocationManager : NSObject {
     
     override init(){
         super.init()
-        createLocationManager()
+        
     }
     
     deinit {
