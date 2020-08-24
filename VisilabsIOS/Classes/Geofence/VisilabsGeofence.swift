@@ -143,7 +143,7 @@ class VisilabsGeofence {
     }
     
     //TODO: lastKnownLatitude ve lastKnownLongitude a gerek yok kaldır
-    func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool, lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
+    func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool) {
         let user = VisilabsPersistence.unarchiveUser()
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
@@ -154,10 +154,6 @@ class VisilabsGeofence {
         props[VisilabsConstants.ACT_ID_KEY] = actionId
         props[VisilabsConstants.TOKENID_KEY] = user.tokenId
         props[VisilabsConstants.APPID_KEY] = user.appId
-        if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
-            props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
-            props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
-        }
         props[VisilabsConstants.GEO_ID_KEY] = geofenceId
         
         if isDwell{
