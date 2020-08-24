@@ -1,5 +1,5 @@
 //
-//  VisilabsGeofenceInstance.swift
+//  VisilabsGeofence.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 10.06.2020.
@@ -42,20 +42,23 @@ class VisilabsGeofenceEntity: Codable {
 }
 
 class VisilabsGeofenceHistory: Codable {
-    internal init(lastKnownLatitude: Double? = nil, lastKnownLongitude: Double? = nil, lastFetchTime: Date? = nil, fetchHistory: [Date : [VisilabsGeofenceEntity]]?) {
+    internal init(lastKnownLatitude: Double? = nil, lastKnownLongitude: Double? = nil, lastFetchTime: Date? = nil, fetchHistory: [Date : [VisilabsGeofenceEntity]]? = nil, errorHistory:[Date: VisilabsReason]? = nil) {
         self.lastKnownLatitude = lastKnownLatitude
         self.lastKnownLongitude = lastKnownLongitude
         self.lastFetchTime = lastFetchTime
         self.fetchHistory = fetchHistory ?? [Date: [VisilabsGeofenceEntity]]()
+        self.errorHistory = errorHistory ??  [Date: VisilabsReason]()
     }
     
     internal init(){
         self.fetchHistory = [Date: [VisilabsGeofenceEntity]]()
+        self.errorHistory = [Date: VisilabsReason]()
     }
     var lastKnownLatitude : Double?
     var lastKnownLongitude : Double?
     var lastFetchTime : Date?
     var fetchHistory: [Date: [VisilabsGeofenceEntity]]
+    var errorHistory: [Date: VisilabsReason]
 }
 
 class VisilabsGeofence {
@@ -109,6 +112,22 @@ class VisilabsGeofence {
             }
             
             VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory] (result, reason) in
+                
+                if reason != nil {
+                    geofenceHistory.lastFetchTime = Date()
+                    geofenceHistory.lastKnownLatitude = lastKnownLatitude
+                    geofenceHistory.lastKnownLongitude = lastKnownLongitude
+                    if geofenceHistory.errorHistory.count > VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT {
+                        let ascendingKeys = Array(geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
+                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT)]
+                        for key in keysToBeDeleted {
+                            geofenceHistory.errorHistory[key] = nil
+                        }
+                    }
+                    VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
+                    return
+                }
+                
                 var fetchedGeofences = [VisilabsGeofenceEntity]()
                 if let res = result {
                     for targetingAction in res {
@@ -142,7 +161,6 @@ class VisilabsGeofence {
         }
     }
     
-    //TODO: lastKnownLatitude ve lastKnownLongitude a gerek yok kaldır
     func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool) {
         let user = VisilabsPersistence.unarchiveUser()
         var props = [String: String]()
