@@ -101,7 +101,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         
         
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
-        VisilabsPersistence.archiveProfile(visilabsProfile)
+        VisilabsDataManager.saveVisilabsProfile(visilabsProfile)
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.visilabsProfile.profileId)"
@@ -125,7 +125,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
-            VisilabsPersistence.archiveUser(visilabsUser)
+            VisilabsDataManager.saveVisilabsUser(visilabsUser)
+            //VisilabsPersistence.archiveUser(visilabsUser)
         }
 
         
@@ -191,7 +192,8 @@ extension VisilabsInstance {
             }
 
             self.readWriteLock.read {
-                VisilabsPersistence.archiveUser(self.visilabsUser)
+                VisilabsDataManager.saveVisilabsUser(self.visilabsUser)
+                //VisilabsPersistence.archiveUser(self.visilabsUser)
 
                 if clearUserParameters {
                     VisilabsPersistence.clearParameters()
@@ -246,7 +248,11 @@ extension VisilabsInstance {
 
     // TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() -> VisilabsUser {
-        return VisilabsPersistence.unarchiveUser()
+        if let visilabsUser = VisilabsDataManager.readVisilabsUser(), !visilabsUser.cookieId.isNilOrWhiteSpace{
+            return visilabsUser
+        } else {
+            return VisilabsPersistence.unarchiveUser()
+        }
     }
 }
 
@@ -353,8 +359,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     func notificationDidShow(_ notification: VisilabsInAppNotification) {
         visilabsUser.visitData = notification.visitData
         visilabsUser.visitorData = notification.visitorData
-        
-        // TODO: burada archive da yapılacak.
+        VisilabsDataManager.saveVisilabsUser(visilabsUser)
     }
 
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]) {
