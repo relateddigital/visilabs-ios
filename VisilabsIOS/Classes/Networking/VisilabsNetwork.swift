@@ -62,7 +62,7 @@ public enum VisilabsReason: Codable {
             try container.encode(2, forKey: .rawValue)
             try container.encode(statusCode, forKey: .associatedValue)
         case .other(let errorDescription):
-            try container.encode(2, forKey: .rawValue)
+            try container.encode(3, forKey: .rawValue)
             try container.encode(errorDescription, forKey: .associatedValue)
         }
         
