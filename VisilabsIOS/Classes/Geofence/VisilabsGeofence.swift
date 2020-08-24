@@ -119,8 +119,8 @@ class VisilabsGeofence {
                 
                 if reason != nil {
                     geofenceHistory.lastFetchTime = Date()
-                    geofenceHistory.lastKnownLatitude = lastKnownLatitude
-                    geofenceHistory.lastKnownLongitude = lastKnownLongitude
+                    geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
+                    geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
                     if geofenceHistory.errorHistory.count > VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT {
                         let ascendingKeys = Array(geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
                         let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT)]
