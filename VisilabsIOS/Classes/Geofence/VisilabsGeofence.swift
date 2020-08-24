@@ -30,7 +30,6 @@ class VisilabsGeofenceEntity: Codable {
         self.targetEvent = targetEvent
         self.distanceFromCurrentLastKnownLocation = distanceFromCurrentLastKnownLocation
     }
-    
     var actId: Int
     var geofenceId: Int
     var latitude: Double
@@ -85,6 +84,11 @@ class VisilabsGeofence {
     
     func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
         self.activeGeofenceList = Array(sortVisilabsGeofenceEntities(geofences).prefix(self.profile.maxGeofenceCount))
+        
+        for geofence in self.activeGeofenceList {
+            
+            var geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: "")
+        }
     }
     
     private func sortVisilabsGeofenceEntities(_ geofences: [VisilabsGeofenceEntity]) -> [VisilabsGeofenceEntity]{
