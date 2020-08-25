@@ -115,11 +115,31 @@
                         <segue destination="wh7-fN-UuX" kind="relationship" relationship="viewControllers" id="8CX-iy-9gh"/>
                         <segue destination="uRA-XH-yfi" kind="relationship" relationship="viewControllers" id="6at-ew-ZuQ"/>
                         <segue destination="dvx-e3-EjW" kind="relationship" relationship="viewControllers" id="jKA-Y3-u95"/>
+                        <segue destination="gxJ-w2-02E" kind="relationship" relationship="viewControllers" id="PLH-5t-R6f"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vam-ZM-pWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1665" y="-70"/>
+        </scene>
+        <!--Favorite View Controller-->
+        <scene sceneID="ncc-YS-XkA">
+            <objects>
+                <viewController title="Favorite View Controller" id="gxJ-w2-02E" customClass="FavoriteViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OBc-Ir-2r6"/>
+                        <viewControllerLayoutGuide type="bottom" id="j45-AN-1i3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="evk-eU-Lhu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Favorite" image="Favorite" id="ysV-0e-Gxt"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yaq-JF-br2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2324" y="261"/>
         </scene>
         <!--Modal View Controller-->
         <scene sceneID="BFe-dD-VEE">
@@ -189,6 +209,7 @@
     </scenes>
     <resources>
         <image name="Event" width="25" height="25"/>
+        <image name="Favorite" width="25" height="25"/>
         <image name="Geofence" width="25" height="25"/>
         <image name="InApp" width="25" height="25"/>
         <image name="Recommendation" width="25" height="25"/>
