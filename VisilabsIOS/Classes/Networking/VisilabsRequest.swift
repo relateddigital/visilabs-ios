@@ -174,7 +174,7 @@ class VisilabsRequest {
     
     //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
     //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
-    class func sendMobileRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
+    class func sendMobileRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?, VisilabsReason?) -> Void) {
         var queryItems = [URLQueryItem]()
         for property in properties{
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -192,17 +192,17 @@ class VisilabsRequest {
         
         let resource = VisilabsNetwork.buildResource(endPoint: .mobile, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
         
-        sendMobileRequestHandler(resource: resource, completion: { result in completion(result) })
+        sendMobileRequestHandler(resource: resource, completion: { result, reason in completion(result, reason)})
         
     }
     
-    private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>, completion: @escaping ([String: Any]?) -> Void) {
+    private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>, completion: @escaping ([String: Any]?, VisilabsReason?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (reason, data, response) in
                 VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil)
+                completion(nil, reason)
             }, success: { (result, response) in
-                completion(result)
+                completion(result, nil)
             })
     }
 }
