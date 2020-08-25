@@ -109,7 +109,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
-        self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock)
+        self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
         self.visilabsRecommendationInstance = VisilabsRecommendation(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
         
         
