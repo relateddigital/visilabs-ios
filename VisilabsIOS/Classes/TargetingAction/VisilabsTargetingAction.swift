@@ -19,8 +19,11 @@ class VisilabsTargetingAction {
         }
     }
     
-    required init(lock: VisilabsReadWriteLock) {
+    let visilabsProfile: VisilabsProfile
+    
+    required init(lock: VisilabsReadWriteLock, visilabsProfile: VisilabsProfile) {
         self.notificationsInstance = VisilabsInAppNotifications(lock: lock)
+        self.visilabsProfile = visilabsProfile
     }
     
     func checkInAppNotification(properties: [String:String], visilabsUser: VisilabsUser, timeoutInterval: TimeInterval, completion: @escaping ((_ response: VisilabsInAppNotification?) -> Void)){
