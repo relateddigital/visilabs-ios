@@ -85,39 +85,36 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
         VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, reason: VisilabsReason?) in
-            
+            completion(self.parseFavoritesResponse(result, reason))
 
-            if reason != nil {
-                //completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))
-            }else {
-                for r in result!{
-                    if let product = VisilabsProduct(JSONObject: r as? [String: Any?]) {
-                        products.append(product)
-                    }
-                }
-                
-                completion(VisilabsRecommendationResponse(products: products, error: nil))
-            }
         })
         
     }
     
     //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
-    private func parseFavoritesResponse(result:[String: Any]?, reason: VisilabsReason?) -> VisilabsFavoriteAttributeActionResponse {
+    private func parseFavoritesResponse(_ result:[String: Any]?, _ reason: VisilabsReason?) -> VisilabsFavoriteAttributeActionResponse {
+        var favoritesResponse = [VisilabsFavoriteAttribute : [String]]()
+        var errorResponse: VisilabsReason? = nil
         if let error = reason {
-            return VisilabsFavoriteAttributeActionResponse(favorites: [VisilabsFavoriteAttribute : [String]](), error: error)
+            errorResponse = error
         } else if let res = result {
             if let favoriteAttributeActions = res[VisilabsConstants.FAVORITE_ATTRIBUTE_ACTION] as? [[String: Any?]] {
                 for favoriteAttributeAction in favoriteAttributeActions {
                     if let actiondata = favoriteAttributeAction[VisilabsConstants.ACTIONDATA] as? [String: Any?] {
                         if let favorites = actiondata[VisilabsConstants.FAVORITES] as? [String: [String]?]{
-                            
+                            for favorite in favorites {
+                                if let favoriteAttribute = VisilabsFavoriteAttribute(rawValue: favorite.key), let favoriteValues = favorite.value {
+                                    favoritesResponse[favoriteAttribute].mergeStringArray(favoriteValues)
+                                }
+                            }
                         }
                     }
                 }
             }
+        } else {
+            errorResponse = VisilabsReason.noData
         }
-        return VisilabsFavoriteAttributeActionResponse(favorites: [VisilabsFavoriteAttribute : [String]](), error: VisilabsReason.noData)
+        return VisilabsFavoriteAttributeActionResponse(favorites: favoritesResponse, error: errorResponse)
     }
     
 }
