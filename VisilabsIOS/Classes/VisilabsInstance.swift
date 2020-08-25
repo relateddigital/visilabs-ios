@@ -293,7 +293,7 @@ extension VisilabsInstance {
     }
 }
 
-public class VisilabsFavoritesResponse {
+public class VisilabsFavoriteAttributeActionResponse {
     public var favorites: [VisilabsFavoriteAttribute: [String]]
     public var error: VisilabsReason?
     
@@ -312,7 +312,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     
     // MARK: - Favorites
     
-    public func getFavorites(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
+    public func getFavorites(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)){
         visilabsTargetingActionInstance.getFavorites(actionId: actionId, completion: completion)
     }
     

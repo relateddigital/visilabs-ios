@@ -71,7 +71,7 @@ class VisilabsTargetingAction {
     
     //class func sendMobileRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
     //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
-    func getFavorites(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
+    func getFavorites(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)){
         
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
@@ -103,9 +103,9 @@ class VisilabsTargetingAction {
     }
     
     //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
-    private func parseFavoritesResponse(result:[String: Any]?, reason: VisilabsReason?) -> VisilabsFavoritesResponse {
+    private func parseFavoritesResponse(result:[String: Any]?, reason: VisilabsReason?) -> VisilabsFavoriteAttributeActionResponse {
         if let error = reason {
-            return VisilabsFavoritesResponse(favorites: [VisilabsFavoriteAttribute : [String]](), error: error)
+            return VisilabsFavoriteAttributeActionResponse(favorites: [VisilabsFavoriteAttribute : [String]](), error: error)
         } else if let res = result {
             if let favoriteAttributeActions = res[VisilabsConstants.FAVORITE_ATTRIBUTE_ACTION] as? [[String: Any?]] {
                 for favoriteAttributeAction in favoriteAttributeActions {
@@ -117,7 +117,7 @@ class VisilabsTargetingAction {
                 }
             }
         }
-        return VisilabsFavoritesResponse(favorites: [VisilabsFavoriteAttribute : [String]](), error: VisilabsReason.noData)
+        return VisilabsFavoriteAttributeActionResponse(favorites: [VisilabsFavoriteAttribute : [String]](), error: VisilabsReason.noData)
     }
     
 }
