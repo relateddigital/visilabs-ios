@@ -293,18 +293,6 @@ extension VisilabsInstance {
     }
 }
 
-public class VisilabsFavoriteAttributeActionResponse {
-    public var favorites: [VisilabsFavoriteAttribute: [String]]
-    public var error: VisilabsReason?
-    
-    internal init(favorites: [VisilabsFavoriteAttribute: [String]], error: VisilabsReason? = nil) {
-        self.favorites = favorites
-        self.error = error
-    }
-}
-
-
-
 extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     
     // MARK: - TargetingActions
