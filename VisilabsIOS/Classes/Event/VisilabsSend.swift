@@ -1,5 +1,5 @@
 //
-//  VisilabsSendInstance.swift
+//  VisilabsSend.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 11.05.2020.
@@ -14,7 +14,7 @@ protocol VisilabsSendDelegate {
 
 
 //TODO: lock kullanılımıyor sanki, kaldırılabilir
-class VisilabsSendInstance: AppLifecycle {
+class VisilabsSend: AppLifecycle {
     
     //TODO: bu delegate kullanılmıyor. kaldır.
     var delegate: VisilabsSendDelegate?
