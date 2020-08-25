@@ -163,8 +163,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 }
 
+// MARK: - EVENT
+
 extension VisilabsInstance {
-    // MARK: - Event
 
     public func customEvent(_ pageName: String, properties: [String: String]) {
         if pageName.isEmptyOrWhitespace {
@@ -259,9 +260,10 @@ extension VisilabsInstance {
     }
 }
 
-extension VisilabsInstance {
-    // MARK: - Send
+// MARK: - SEND
 
+extension VisilabsInstance {
+    
     private func send() {
         trackingQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
@@ -293,19 +295,33 @@ extension VisilabsInstance {
     }
 }
 
-extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
-    
-    // MARK: - TargetingActions
+// MARK: - TARGETING ACTIONS
 
+// MARK: - Favorite Attribute Actions
+
+extension VisilabsInstance {
     
-    // MARK: - Favorites
-    
-    public func getFavorites(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)){
-        visilabsTargetingActionInstance.getFavorites(actionId: actionId, completion: completion)
+    public func getFavoriteAttributeActions(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)){
+        self.targetingActionQueue.async { [weak self] in
+            self?.networkQueue.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                var vUser = VisilabsUser()
+                self.readWriteLock.read {
+                    vUser = self.visilabsUser
+                }
+                self.visilabsTargetingActionInstance.getFavorites(visilabsUser: vUser, actionId: actionId, completion: completion)
+            }
+        }
     }
     
-    // MARK: - InAppNotification
-    
+}
+
+// MARK: - InAppNotification
+
+extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
+
     // TODO: this method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
         visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
@@ -351,19 +367,22 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent("OM_evt.gif", properties: properties)
     }
-    
-    // MARK: - Story
-    
-    
+ 
 }
 
+// MARK: - Story
 
 extension VisilabsInstance {
     
-    //MARK: - Recommendation
+}
+
+//MARK: - RECOMMENDATION
+
+extension VisilabsInstance {
     
     public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
         
+        //TODO: buna gerek yok sanki kaldırılabilir.
         if VisilabsBasePath.endpoints[.target] == nil {
             return
         }
@@ -385,10 +404,10 @@ extension VisilabsInstance {
                 self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), properties: properties, filters: filters) { (response) in
                     completion(response)
                 }
-                
             }
         }
     }
+    
 }
 
 
