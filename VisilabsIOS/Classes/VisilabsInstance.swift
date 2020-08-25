@@ -115,7 +115,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsEventInstance = VisilabsEvent(visilabsProfile: self.visilabsProfile)
         self.visilabsSendInstance = VisilabsSend()
         self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
-        self.visilabsRecommendationInstance = VisilabsRecommendation(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
+        self.visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
         
         
         self.visilabsUser = self.unarchive()
@@ -401,7 +401,7 @@ extension VisilabsInstance {
                     channel = self.visilabsProfile.channel
                 }
                 
-                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), properties: properties, filters: filters) { (response) in
+                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, properties: properties, filters: filters) { (response) in
                     completion(response)
                 }
             }
