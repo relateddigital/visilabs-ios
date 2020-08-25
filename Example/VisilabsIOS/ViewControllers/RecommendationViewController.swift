@@ -38,7 +38,7 @@ class RecommendationViewController: FormViewController {
             
             Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, properties: properties){ response in
                 if let error = response.error{
-                    
+                    print(error)
                 }else{
                     for product in response.products{
                         print(product)
