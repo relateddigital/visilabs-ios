@@ -107,6 +107,7 @@ struct VisilabsConstants {
     
     static let ACTION_TYPE = "action_type"
     static let FAVORITE_ATTRIBUTE_ACTION = "FavoriteAttributeAction"
+    static let ACTION_ID = "action_id"
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
     private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
