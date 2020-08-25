@@ -58,7 +58,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
 
     let visilabsEventInstance: VisilabsEvent
-    let visilabsSendInstance: VisilabsSendInstance
+    let visilabsSendInstance: VisilabsSend
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendation
     
@@ -113,7 +113,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.targetingActionQueue = DispatchQueue(label: "\(label).targetingaction)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEvent(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
-        self.visilabsSendInstance = VisilabsSendInstance()
+        self.visilabsSendInstance = VisilabsSend()
         self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
         self.visilabsRecommendationInstance = VisilabsRecommendation(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
         
