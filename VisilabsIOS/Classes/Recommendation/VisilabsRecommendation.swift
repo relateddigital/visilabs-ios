@@ -8,13 +8,10 @@
 import Foundation
 
 class VisilabsRecommendation {
-    let organizationId: String
-    let siteId: String
-    
+    let visilabsProfile: VisilabsProfile
 
-    init(organizationId: String, siteId: String) {
-        self.organizationId = organizationId
-        self.siteId = siteId
+    init(visilabsProfile: VisilabsProfile) {
+        self.visilabsProfile = visilabsProfile
     }
     
     func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, timeoutInterval: TimeInterval, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
@@ -25,8 +22,8 @@ class VisilabsRecommendation {
             props[VisilabsConstants.FILTER_KEY] = getFiltersQueryStringValue(filters)
         }
         
-        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.organizationId
-        props[VisilabsConstants.PROFILEID_KEY] = self.siteId
+        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
+        props[VisilabsConstants.PROFILEID_KEY] = self.visilabsProfile.profileId
         props[VisilabsConstants.COOKIEID_KEY] = visilabsUser.cookieId
         props[VisilabsConstants.EXVISITORID_KEY] = visilabsUser.exVisitorId
         props[VisilabsConstants.TOKENID_KEY] = visilabsUser.tokenId
