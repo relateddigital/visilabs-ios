@@ -15,7 +15,7 @@ class InAppViewController: FormViewController {
         super.viewDidLoad()
         initializeForm()
         
-        Visilabs.callAPI().getFavorites(actionId: "1") { (visilabsFavoritesResponse) in
+        Visilabs.callAPI().getFavorites(actionId: 1) { (visilabsFavoritesResponse) in
             if visilabsFavoritesResponse.error != nil {
                 
                 return
