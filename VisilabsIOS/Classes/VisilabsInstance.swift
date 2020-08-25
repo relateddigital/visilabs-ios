@@ -57,7 +57,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     // TODO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
 
-    let visilabsEventInstance: VisilabsEventInstance
+    let visilabsEventInstance: VisilabsEvent
     let visilabsSendInstance: VisilabsSendInstance
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendation
@@ -112,7 +112,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
         self.targetingActionQueue = DispatchQueue(label: "\(label).targetingaction)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
-        self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
+        self.visilabsEventInstance = VisilabsEvent(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
         self.visilabsRecommendationInstance = VisilabsRecommendation(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
