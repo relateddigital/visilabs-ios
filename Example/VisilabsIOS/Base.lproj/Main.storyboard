@@ -45,6 +45,25 @@
             </objects>
             <point key="canvasLocation" x="-810" y="-330"/>
         </scene>
+        <!--Story View Controller-->
+        <scene sceneID="q6R-At-eBt">
+            <objects>
+                <viewController title="Story View Controller" id="EDY-ws-PEW" customClass="StoryViewController" customModule="VisilabsIOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5hd-s8-akZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="zWs-ab-8YE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jjC-Ch-dU0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Story" image="Story" id="lCi-Hy-rvx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BTx-6H-uWB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2052" y="935"/>
+        </scene>
         <!--Recommendation View Controller-->
         <scene sceneID="Zmr-Sr-bc6">
             <objects>
@@ -116,6 +135,7 @@
                         <segue destination="uRA-XH-yfi" kind="relationship" relationship="viewControllers" id="6at-ew-ZuQ"/>
                         <segue destination="dvx-e3-EjW" kind="relationship" relationship="viewControllers" id="jKA-Y3-u95"/>
                         <segue destination="gxJ-w2-02E" kind="relationship" relationship="viewControllers" id="PLH-5t-R6f"/>
+                        <segue destination="EDY-ws-PEW" kind="relationship" relationship="viewControllers" id="9hv-fj-aOP"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vam-ZM-pWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -139,7 +159,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yaq-JF-br2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2324" y="261"/>
+            <point key="canvasLocation" x="-2655" y="294"/>
         </scene>
         <!--Modal View Controller-->
         <scene sceneID="BFe-dD-VEE">
@@ -213,5 +233,6 @@
         <image name="Geofence" width="25" height="25"/>
         <image name="InApp" width="25" height="25"/>
         <image name="Recommendation" width="25" height="25"/>
+        <image name="Story" width="25" height="25"/>
     </resources>
 </document>
