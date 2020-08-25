@@ -49,6 +49,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var eventsQueue = Queue()
     // var flushEventsQueue = Queue()
     var trackingQueue: DispatchQueue!
+    var targetingActionQueue: DispatchQueue!
     var recommendationQueue: DispatchQueue!
     var networkQueue: DispatchQueue!
     let readWriteLock: VisilabsReadWriteLock
@@ -109,6 +110,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         let label = "com.relateddigital.\(self.visilabsProfile.profileId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
+        self.targetingActionQueue = DispatchQueue(label: "\(label).targetingaction)", qos: .utility)
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
