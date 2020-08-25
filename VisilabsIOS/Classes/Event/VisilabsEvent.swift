@@ -1,5 +1,5 @@
 //
-//  VisilabsEventInstance.swift
+//  VisilabsEvent.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 7.05.2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsEventInstance {
+class VisilabsEvent {
     let organizationId: String
     let siteId: String
     
