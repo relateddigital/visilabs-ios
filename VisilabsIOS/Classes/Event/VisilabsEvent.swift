@@ -10,14 +10,11 @@ import Foundation
 class VisilabsEvent {
     let organizationId: String
     let siteId: String
-    
-    //TODO: lock kullanılmıyor kaldırılabilir
-    let lock: VisilabsReadWriteLock
 
-    init(organizationId: String, siteId: String, lock: VisilabsReadWriteLock) {
+
+    init(organizationId: String, siteId: String) {
         self.organizationId = organizationId
         self.siteId = siteId
-        self.lock = lock
     }
     
     func customEvent(pageName: String, properties: [String:String], eventsQueue: Queue, visilabsUser: VisilabsUser, channel: String) -> (eventsQueque: Queue, visilabsUser: VisilabsUser, clearUserParameters: Bool, channel: String) {
