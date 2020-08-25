@@ -36,6 +36,9 @@ struct VisilabsProfile : Codable {
     var geofenceEnabled: Bool
     var inAppNotificationsEnabled: Bool
     var maxGeofenceCount: Int
+    var requestTimeoutInterval: TimeInterval {
+        return TimeInterval(requestTimeoutInSeconds)
+    }
 }
 
 public class VisilabsInstance: CustomDebugStringConvertible {
