@@ -156,13 +156,12 @@ extension Optional where Wrapped == String {
 }
 
 extension Optional where Wrapped == [String] {
-    mutating func mergeStringArray(_ newArray: [String]) -> [String]{
-        var originalArray = self ?? [String]()
+    mutating func mergeStringArray(_ newArray: [String]){
+        self = self ?? [String]()
         for newArrayElement in newArray {
-            if !originalArray.contains(newArrayElement) {
-                originalArray.append(newArrayElement)
+            if !self!.contains(newArrayElement) {
+                self!.append(newArrayElement)
             }
         }
-        return originalArray
     }
 }
