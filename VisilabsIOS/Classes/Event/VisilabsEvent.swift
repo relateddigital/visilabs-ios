@@ -8,13 +8,11 @@
 import Foundation
 
 class VisilabsEvent {
-    let organizationId: String
-    let siteId: String
+    
+    let visilabsProfile: VisilabsProfile
 
-
-    init(organizationId: String, siteId: String) {
-        self.organizationId = organizationId
-        self.siteId = siteId
+    init(visilabsProfile: VisilabsProfile) {
+        self.visilabsProfile = visilabsProfile
     }
     
     func customEvent(pageName: String, properties: [String:String], eventsQueue: Queue, visilabsUser: VisilabsUser, channel: String) -> (eventsQueque: Queue, visilabsUser: VisilabsUser, clearUserParameters: Bool, channel: String) {
@@ -68,8 +66,8 @@ class VisilabsEvent {
             props.removeValue(forKey: VisilabsConstants.CHANNEL_KEY)
         }
         
-        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.organizationId
-        props[VisilabsConstants.PROFILEID_KEY] = self.siteId
+        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
+        props[VisilabsConstants.PROFILEID_KEY] = self.visilabsProfile.profileId
         props[VisilabsConstants.COOKIEID_KEY] = vUser.cookieId ?? ""
         props[VisilabsConstants.CHANNEL_KEY] = chan
         props[VisilabsConstants.URI_KEY] = pageName
