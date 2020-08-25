@@ -105,6 +105,9 @@ struct VisilabsConstants {
     static let DWELL = "Dwell"
     static let APIVER_VALUE = "IOS"
     
+    static let ACTION_TYPE = "action_type"
+    static let FAVORITE_ATTRIBUTE_ACTION = "FavoriteAttributeAction"
+    
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
     private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
     private static let TARGET_PREF_VCMEDIUM_STORE_KEY = "OM.vcmedium"
