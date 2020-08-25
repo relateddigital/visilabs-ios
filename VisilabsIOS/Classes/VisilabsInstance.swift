@@ -326,9 +326,13 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     // MARK: - TargetingActions
 
     
-    public func getFavorites(actionId: String, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
+    // MARK: - Favorites
+    
+    public func getFavorites(actionId: String? = nil, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
         
     }
+    
+    // MARK: - InAppNotification
     
     // TODO: this method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
@@ -375,6 +379,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent("OM_evt.gif", properties: properties)
     }
+    
+    // MARK: - Story
+    
+    
 }
 
 
