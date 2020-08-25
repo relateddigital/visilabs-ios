@@ -1,5 +1,5 @@
 //
-//  VisilabsRecommendationInstance.swift
+//  VisilabsRecommendation.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 29.06.2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsRecommendationInstance {
+class VisilabsRecommendation {
     let organizationId: String
     let siteId: String
     
