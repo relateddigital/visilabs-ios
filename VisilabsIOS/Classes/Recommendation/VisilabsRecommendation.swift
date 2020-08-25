@@ -14,7 +14,7 @@ class VisilabsRecommendation {
         self.visilabsProfile = visilabsProfile
     }
     
-    func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, timeoutInterval: TimeInterval, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
+    func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
         
         var props = cleanProperties(properties)
         
@@ -43,7 +43,7 @@ class VisilabsRecommendation {
             }
         }
         
-        VisilabsRequest.sendRecommendationRequest(properties: props, headers: [String : String](), timeoutInterval: timeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
+        VisilabsRequest.sendRecommendationRequest(properties: props, headers: [String : String](), timeoutInterval: visilabsProfile.requestTimeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
             var products = [VisilabsProduct]()
             if reason != nil {
                 completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))
