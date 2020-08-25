@@ -56,7 +56,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsEventInstance: VisilabsEventInstance
     let visilabsSendInstance: VisilabsSendInstance
     let visilabsTargetingActionInstance: VisilabsTargetingAction
-    let visilabsRecommendationInstance: VisilabsRecommendationInstance
+    let visilabsRecommendationInstance: VisilabsRecommendation
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(self.visilabsProfile.profileId) organizationId: \(self.visilabsProfile.organizationId)"
@@ -110,7 +110,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsEventInstance = VisilabsEventInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId, lock: self.readWriteLock)
         self.visilabsSendInstance = VisilabsSendInstance()
         self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock)
-        self.visilabsRecommendationInstance = VisilabsRecommendationInstance(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
+        self.visilabsRecommendationInstance = VisilabsRecommendation(organizationId: self.visilabsProfile.organizationId, siteId: self.visilabsProfile.profileId)
         
         
         self.visilabsUser = self.unarchive()
@@ -328,8 +328,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     
     // MARK: - Favorites
     
-    public func getFavorites(actionId: String? = nil, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
-        
+    public func getFavorites(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
+        visilabsTargetingActionInstance.getFavorites(actionId: actionId, completion: completion)
     }
     
     // MARK: - InAppNotification
