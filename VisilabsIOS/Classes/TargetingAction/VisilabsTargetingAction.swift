@@ -8,7 +8,6 @@
 import Foundation
 
 class VisilabsTargetingAction {
-    var decideFetched = false
     var notificationsInstance: VisilabsInAppNotifications
     
     var inAppDelegate: VisilabsInAppNotificationsDelegate? {
@@ -57,6 +56,12 @@ class VisilabsTargetingAction {
         var headers = [String:String]()
         headers["User-Agent"] = visilabsUser.userAgent
         return headers
+    }
+    
+    // MARK: - Favorites
+    
+    func getFavorites(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoritesResponse) -> Void)){
+        
     }
     
 }
