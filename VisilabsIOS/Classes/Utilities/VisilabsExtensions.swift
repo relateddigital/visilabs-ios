@@ -156,7 +156,7 @@ extension Optional where Wrapped == String {
 }
 
 extension Optional where Wrapped == [String] {
-    mutating func mergeStringArray(newArray: [String]) -> [String]{
+    mutating func mergeStringArray(_ newArray: [String]) -> [String]{
         var originalArray = self ?? [String]()
         for newArrayElement in newArray {
             if !originalArray.contains(newArrayElement) {
