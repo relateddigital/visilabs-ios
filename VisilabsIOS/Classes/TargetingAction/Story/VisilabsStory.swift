@@ -8,5 +8,15 @@
 import Foundation
 
 class VisilabsStory {
+    internal init(title: String?, smallImg: String?, link: String?, linkOriginal: String?) {
+        self.title = title
+        self.smallImg = smallImg
+        self.link = link
+        self.linkOriginal = linkOriginal
+    }
     
+    let title: String?
+    let smallImg: String?
+    let link: String?
+    let linkOriginal: String?
 }
