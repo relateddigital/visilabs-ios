@@ -111,6 +111,7 @@ struct VisilabsConstants {
     static let ACTION_ID = "action_id"
     static let ACTIONDATA = "actiondata"
     static let FAVORITES = "favorites"
+    static let STORIES = "stories"
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
     private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
