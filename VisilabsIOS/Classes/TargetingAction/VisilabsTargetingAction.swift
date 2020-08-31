@@ -135,6 +135,7 @@ class VisilabsTargetingAction {
         })
     }
     
+    //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
     private func parseStories(_ result:[String: Any]?, _ reason: VisilabsReason?) -> VisilabsStoryResponse {
         var storiesResponse = [VisilabsStory]()
         var errorResponse: VisilabsReason? = nil
