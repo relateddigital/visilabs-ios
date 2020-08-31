@@ -6,7 +6,7 @@
 //
 
 class VisilabsStory {
-    internal init(title: String?, smallImg: String?, link: String?, linkOriginal: String?) {
+    internal init(title: String? = nil, smallImg: String? = nil, link: String? = nil, linkOriginal: String? = nil) {
         self.title = title
         self.smallImg = smallImg
         self.link = link
