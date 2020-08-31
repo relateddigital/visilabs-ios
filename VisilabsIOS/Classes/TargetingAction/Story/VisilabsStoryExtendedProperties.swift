@@ -6,5 +6,9 @@
 //
 
 class VisilabsStoryExtendedProperties {
-    
+    var imageBorderWidth: String?
+    var imageBorderRadius: String?
+    var imageBoxShadow: String?
+    var imageBorderColor: String?
+    var labelColor: String?
 }
