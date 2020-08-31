@@ -374,6 +374,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
 extension VisilabsInstance {
     
+    public func showStory(actionId: Int? = nil){
+        
+    }
+    
 }
 
 //MARK: - RECOMMENDATION
