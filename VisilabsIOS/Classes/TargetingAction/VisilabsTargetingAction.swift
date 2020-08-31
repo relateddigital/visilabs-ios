@@ -86,9 +86,7 @@ class VisilabsTargetingAction {
         
         VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, reason: VisilabsReason?) in
             completion(self.parseFavoritesResponse(result, reason))
-
         })
-        
     }
     
     //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
@@ -115,6 +113,49 @@ class VisilabsTargetingAction {
             errorResponse = VisilabsReason.noData
         }
         return VisilabsFavoriteAttributeActionResponse(favorites: favoritesResponse, error: errorResponse)
+    }
+    
+    // MARK: - Story
+    
+    func getStories(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryResponse) -> Void)){
+        
+        var props = [String: String]()
+        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
+        props[VisilabsConstants.PROFILEID_KEY] = self.visilabsProfile.profileId
+        props[VisilabsConstants.COOKIEID_KEY] = visilabsUser.cookieId
+        props[VisilabsConstants.EXVISITORID_KEY] = visilabsUser.exVisitorId
+        props[VisilabsConstants.TOKENID_KEY] = visilabsUser.tokenId
+        props[VisilabsConstants.APPID_KEY] = visilabsUser.appId
+        props[VisilabsConstants.APIVER_KEY] = VisilabsConstants.APIVER_VALUE
+        props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.STORY
+        props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
+        
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, reason: VisilabsReason?) in
+            completion(self.parseStories(result, reason))
+        })
+    }
+    
+    private func parseStories(_ result:[String: Any]?, _ reason: VisilabsReason?) -> VisilabsStoryResponse {
+        var storiesResponse = [VisilabsStory]()
+        var errorResponse: VisilabsReason? = nil
+        if let error = reason {
+            errorResponse = error
+        } else if let res = result {
+            if let storyActions = res[VisilabsConstants.STORY] as? [[String: Any?]] {
+                for storyAction in storyActions {
+                    if let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?] {
+                        if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
+                            for story in stories {
+                                storiesResponse.append(VisilabsStory(title: story["title"], smallImg: story["smallImg"], link: story["link"], linkOriginal: story["linkOriginal"]))
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            errorResponse = VisilabsReason.noData
+        }
+        return VisilabsStoryResponse(storyTemplate: .StoryLookingBanners, stories: storiesResponse, storyExtendedProperties: VisilabsStoryExtendedProperties(), error: errorResponse)
     }
     
 }
