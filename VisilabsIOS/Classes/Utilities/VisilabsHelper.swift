@@ -84,4 +84,13 @@ internal class VisilabsHelper {
         }
     }
     
+    static func setEndpoints(dataSource: String) {
+        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.target] = VisilabsConstants.RECOMMENDATION_END_POINT
+        VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
+        VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
+        VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
+    }
+    
 }
