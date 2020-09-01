@@ -29,14 +29,14 @@ class InAppHelper {
         let dataTask = URLSession.shared.dataTask(with: url) {(data, response, error) in
             if let data = data {
                 if let image = UIImage(data: data) {
-                    let heightInPoints = image.size.height
-                    let heightInPixels = heightInPoints * image.scale
-                    let widthInPoints = image.size.width
-                    let widthInPixels = widthInPoints * image.scale
+                    //let heightInPoints = image.size.height
+                    //let heightInPixels = heightInPoints * image.scale
+                    //let widthInPoints = image.size.width
+                    //let widthInPixels = widthInPoints * image.scale
                     if let iName = iconName {
                         miniIconImages[iName] = image
                     }
-                    print("Download Image: \(url.absoluteString) heightInPoints:\(heightInPoints), heightInPixels:\(heightInPixels), widthInPoints:\(widthInPoints), widthInPixels:\(widthInPixels)")
+                    //print("Download Image: \(url.absoluteString) heightInPoints:\(heightInPoints), heightInPixels:\(heightInPixels), widthInPoints:\(widthInPoints), widthInPixels:\(widthInPixels)")
                 }
             }
         }
