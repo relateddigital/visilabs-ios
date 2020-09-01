@@ -6,12 +6,10 @@
 //  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
-import Foundation
-import Eureka
-
-
 import UIKit
+import Eureka
 import VisilabsIOS
+import Euromsg
 
 enum VisilabsEventType : String, CaseIterable {
     case login = "Login"
@@ -85,11 +83,15 @@ class EventViewController: FormViewController {
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
             Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
+            Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
+            Euromsg.setEmail(email: visilabsProfile.userKey, permission: true)
             return
         case .signUp:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias //"App ID to use for push messages"
             Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
+            Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
+            Euromsg.setEmail(email: visilabsProfile.userKey, permission: true)
             return
         case .pageView:
             Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
