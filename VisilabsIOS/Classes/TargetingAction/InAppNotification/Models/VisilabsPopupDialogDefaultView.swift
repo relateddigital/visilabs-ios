@@ -65,8 +65,9 @@ public class VisilabsPopupDialogDefaultView: UIView {
         return npsView
     }()
     
-    let bundle = Bundle(identifier: "com.relateddigital.visilabs")
+    
     private func getUIImage(named: String) -> UIImage?{
+        let bundle = Bundle(identifier: "com.relateddigital.visilabs")
         return UIImage(named: named, in : bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
     }
     
