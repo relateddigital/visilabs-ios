@@ -53,7 +53,7 @@ class VisilabsLocationManager : NSObject {
         #endif
         self.requestLocationAuthorization()
         //TODO:bunu yayınlarken tekrar 100e çek
-        self.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters // kCLLocationAccuracyHundredMeters
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters // kCLLocationAccuracyBest
         self.locationManager?.distanceFilter = CLLocationDistance(10)
         self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
