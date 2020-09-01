@@ -117,12 +117,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
         self.visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
         
-        
         self.visilabsUser = self.unarchive()
         self.visilabsTargetingActionInstance.inAppDelegate = self
         
-        
-
         if let idfa = VisilabsHelper.getIDFA() {
             visilabsUser.identifierForAdvertising = idfa
         }
@@ -133,26 +130,16 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             //VisilabsPersistence.archiveUser(visilabsUser)
         }
 
-        
         if(self.visilabsProfile.geofenceEnabled){
             VisilabsGeofence.sharedManager?.startGeofencing()
         }
         
-        self.setEndpoints()
+        VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
         
         VisilabsHelper.computeWebViewUserAgent { (userAgentString) in
             self.visilabsUser.userAgent = userAgentString
         }
         
-    }
-
-    private func setEndpoints() {
-        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(self.visilabsProfile.dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(self.visilabsProfile.dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.target] = VisilabsConstants.RECOMMENDATION_END_POINT
-        VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
-        VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
-        VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
     }
 
     static func sharedUIApplication() -> UIApplication? {
