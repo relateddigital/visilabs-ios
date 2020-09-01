@@ -100,6 +100,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         } else if (locations.count > 0){
             self.currentGeoLocationValue = locations[0].coordinate
             VisilabsLogger.info("CLLocationManager didUpdateLocations: lat:\(locations[0].coordinate.latitude) lon:\(locations[0].coordinate.longitude)")
+            VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: self.currentGeoLocationValue?.latitude, lastKnownLongitude: self.currentGeoLocationValue?.longitude)
         }
     }
     
