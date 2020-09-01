@@ -69,6 +69,14 @@ class VisilabsGeofence {
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
         if profile.geofenceEnabled {
+            
+            let now = Date()
+            let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
+            if timeInterval < VisilabsConstants.GEOFENCE_FETCH_TIME_INTERVAL {
+                return
+            }
+            
+            self.lastGeofenceFetchTime = now
             let user = VisilabsDataManager.readVisilabsUser()
             let geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
             var props = [String: String]()
@@ -92,9 +100,6 @@ class VisilabsGeofence {
                    props[key] = value
                }
             }
-            
-            let now = Date()
-            self.lastGeofenceFetchTime = now
             
             VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, reason) in
                 
