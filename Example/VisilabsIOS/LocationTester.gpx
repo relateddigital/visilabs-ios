@@ -13,11 +13,14 @@
      <desc>vodafone park</desc>
    </wpt>
   
+  
+  <!--
   <wpt lat="40.9938384302468" lon="39.7823161213987">
     <time>2019-12-06T14:19:25Z</time>
     <name>trabzon havalimanı</name>
     <desc>trabzon havalimanı</desc>
   </wpt>
+  -->
   
   <wpt lat="41.0304487896279" lon="28.9892232335602">
      <time>2019-12-06T14:19:36Z</time>
