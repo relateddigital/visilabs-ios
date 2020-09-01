@@ -19,6 +19,6 @@ struct VisilabsProfile : Codable {
     var maxGeofenceCount = 20
     var appAlias = "VisilabsIOSExample"
     var appToken = ""
-    var userKey = "ogun.ozturk@euromsg.com"
-    var userEmail = "ogun.ozturk@euromsg.com"
+    var userKey = "egemen@visilabs.com"
+    var userEmail = "egemen@visilabs.com"
 }
