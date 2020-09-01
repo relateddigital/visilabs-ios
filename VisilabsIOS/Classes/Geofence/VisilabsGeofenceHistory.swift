@@ -5,7 +5,7 @@
 //  Created by Egemen on 1.09.2020.
 //
 
-class VisilabsGeofenceHistory: Codable {
+public class VisilabsGeofenceHistory: Codable {
     internal init(lastKnownLatitude: Double? = nil, lastKnownLongitude: Double? = nil, lastFetchTime: Date? = nil, fetchHistory: [Date : [VisilabsGeofenceEntity]]? = nil, errorHistory:[Date: VisilabsReason]? = nil) {
         self.lastKnownLatitude = lastKnownLatitude
         self.lastKnownLongitude = lastKnownLongitude
@@ -18,9 +18,9 @@ class VisilabsGeofenceHistory: Codable {
         self.fetchHistory = [Date: [VisilabsGeofenceEntity]]()
         self.errorHistory = [Date: VisilabsReason]()
     }
-    var lastKnownLatitude : Double?
-    var lastKnownLongitude : Double?
-    var lastFetchTime : Date?
-    var fetchHistory: [Date: [VisilabsGeofenceEntity]]
-    var errorHistory: [Date: VisilabsReason]
+    public var lastKnownLatitude : Double?
+    public var lastKnownLongitude : Double?
+    public var lastFetchTime : Date?
+    public var fetchHistory: [Date: [VisilabsGeofenceEntity]]
+    public var errorHistory: [Date: VisilabsReason]
 }
