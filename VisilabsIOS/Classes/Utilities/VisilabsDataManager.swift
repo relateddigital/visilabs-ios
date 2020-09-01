@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsDataManager {
+public class VisilabsDataManager {
     
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
         let encoder = JSONEncoder()
@@ -50,7 +50,7 @@ class VisilabsDataManager {
         }
     }
     
-    static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
+    public static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
         if let savedVisilabsGeofenceHistory = read(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY) as? Data {
             let decoder = JSONDecoder()
             if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self, from: savedVisilabsGeofenceHistory) {
