@@ -26,12 +26,22 @@ class VisilabsGeofence {
     var activeGeofenceList: [VisilabsGeofenceEntity]
     let profile: VisilabsProfile
     var geofenceHistory: VisilabsGeofenceHistory
+    var lastGeofenceFetchTime: Date
+    var lastSuccessfulGeofenceFetchTime: Date
     
     init?() {
         if let profile = VisilabsDataManager.readVisilabsProfile() {
             self.profile = profile
+            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)
             self.activeGeofenceList = [VisilabsGeofenceEntity]()
             self.geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
+            self.lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
+            self.lastSuccessfulGeofenceFetchTime = Date(timeIntervalSince1970: 0)
+            
+            //TODO:sil bunları sonra
+            print("self.geofenceHistory.fetchHistory.count")
+            print(self.geofenceHistory.fetchHistory.count)
+            
         }else {
             return nil
         }

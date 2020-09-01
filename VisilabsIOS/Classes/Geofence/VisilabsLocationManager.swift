@@ -52,7 +52,8 @@ class VisilabsLocationManager : NSObject {
             }
         #endif
         self.requestLocationAuthorization()
-        self.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        //TODO:bunu yayınlarken tekrar 100e çek
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters // kCLLocationAccuracyHundredMeters
         self.locationManager?.distanceFilter = CLLocationDistance(10)
         self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
@@ -94,34 +95,12 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        VisilabsLogger.info("CLLocationManager didUpdateLocations")
-        
         if !locationServiceEnabled {
             return
         } else if (locations.count > 0){
-            
+            self.currentGeoLocationValue = locations[0].coordinate
+            VisilabsLogger.info("CLLocationManager didUpdateLocations: lat:\(locations[0].coordinate.latitude) lon:\(locations[0].coordinate.longitude)")
         }
-        
-        /*
-        if let si = VisilabsGeofenceApp.sharedInstance(), !si.isLocationServiceEnabled {
-            return //initialize CLLocationManager but cannot call any function to avoid promote.
-        }
-        
-        
-        if locations.count > 0 {
-            if let previousLocation = self.currentGeoLocation {
-                currentGeoLocationValue = (locations[0]).coordinate //no matter sent log or not, keep current geo location fresh.
-                sendGeoLocationUpdate()
-                //send out notification for location change
-                let oldLocation = CLLocation(latitude: previousLocation.latitude, longitude: previousLocation.longitude)
-                //TODO: "NewLocation", "OldLocation" ve "SHLMUpdateLocationSuccessNotification" ı VisilabsConfig e taşı
-                let userInfo = ["NewLocation": locations[0], "OldLocation": oldLocation]
-                let notification = Notification(name: Notification.Name(rawValue: "SHLMUpdateLocationSuccessNotification"), object: self, userInfo: userInfo)
-                NotificationCenter.default.post(notification)
-            }
-        }
-         */
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
