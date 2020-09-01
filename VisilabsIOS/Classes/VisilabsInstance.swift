@@ -373,11 +373,6 @@ extension VisilabsInstance {
     
     public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
         
-        //TODO: buna gerek yok sanki kaldırılabilir.
-        if VisilabsBasePath.endpoints[.target] == nil {
-            return
-        }
-        
         self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else {
