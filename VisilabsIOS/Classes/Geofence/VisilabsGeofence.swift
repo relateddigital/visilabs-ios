@@ -26,8 +26,8 @@ class VisilabsGeofence {
     var activeGeofenceList: [VisilabsGeofenceEntity]
     let profile: VisilabsProfile
     var geofenceHistory: VisilabsGeofenceHistory
-    var lastGeofenceFetchTime: Date
-    var lastSuccessfulGeofenceFetchTime: Date
+    private var lastGeofenceFetchTime: Date
+    private var lastSuccessfulGeofenceFetchTime: Date
     
     init?() {
         if let profile = VisilabsDataManager.readVisilabsProfile() {
