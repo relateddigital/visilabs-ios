@@ -93,10 +93,12 @@ class VisilabsGeofence {
                }
             }
             
-            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory] (result, reason) in
+            let now = Date()
+            self.lastGeofenceFetchTime = now
+            
+            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, reason) in
                 
                 if reason != nil {
-                    geofenceHistory.lastFetchTime = Date()
                     geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
                     geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
                     if geofenceHistory.errorHistory.count > VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT {
@@ -109,7 +111,7 @@ class VisilabsGeofence {
                     VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
                     return
                 }
-                
+                (self.lastSuccessfulGeofenceFetchTime, geofenceHistory.lastFetchTime) = (now, now)
                 var fetchedGeofences = [VisilabsGeofenceEntity]()
                 if let res = result {
                     for targetingAction in res {
