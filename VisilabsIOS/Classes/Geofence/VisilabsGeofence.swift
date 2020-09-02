@@ -49,8 +49,8 @@ class VisilabsGeofence {
     }
     
     //notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
-    var locationServiceStateStatusForApplication: CLAuthorizationStatus {
-        return VisilabsLocationManager.sharedManager.locationServiceStateStatus
+    var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
+        return VisilabsCLAuthorizationStatus(rawValue: VisilabsLocationManager.sharedManager.locationServiceStateStatus.rawValue) ?? .none
     }
     
     private var locationServiceEnabledForApplication: Bool {
