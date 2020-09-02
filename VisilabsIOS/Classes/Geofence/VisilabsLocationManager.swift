@@ -43,6 +43,11 @@ class VisilabsLocationManager : NSObject {
         }
     }
     
+    //notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
+    var locationServiceStateStatus: CLAuthorizationStatus {
+        return CLLocationManager.authorizationStatus()
+    }
+    
     func startMonitorRegion(region: CLRegion) {
         
     }
@@ -63,6 +68,9 @@ class VisilabsLocationManager : NSObject {
         self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationTime = 0
         
+        
+        //Significant Location Change Monitoring is only available when using cell tower.
+        //https://stackoverflow.com/questions/5885293/hows-does-significant-location-change-work
         if CLLocationManager.significantLocationChangeMonitoringAvailable() {
             VisilabsLogger.info("Start significant location update.")
             locationManager?.startMonitoringSignificantLocationChanges()
