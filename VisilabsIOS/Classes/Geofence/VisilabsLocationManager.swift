@@ -43,6 +43,10 @@ class VisilabsLocationManager : NSObject {
         }
     }
     
+    func startMonitorRegion(region: CLRegion) {
+        
+    }
+    
     func createLocationManager() {
         self.locationManager = CLLocationManager()
         self.locationManager?.delegate = self
