@@ -131,7 +131,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
 
         if(self.visilabsProfile.geofenceEnabled){
-            VisilabsGeofence.sharedManager?.startGeofencing()
+            
         }
         
         VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
@@ -230,8 +230,9 @@ extension VisilabsInstance {
     }
 }
 
+// MARK: - PERSISTENCE
+
 extension VisilabsInstance {
-    // MARK: - Persistence
 
     private func archive() {
         
@@ -396,4 +397,19 @@ extension VisilabsInstance {
     
 }
 
+//MARK: - GEOFENCE
 
+extension VisilabsInstance {
+    
+    private func startGeofencing() {
+        VisilabsGeofence.sharedManager?.startGeofencing()
+    }
+    
+    public var locationServicesEnabledForDevice: Bool {
+        return VisilabsGeofence.sharedManager?.locationServicesEnabledForDevice ?? false
+    }
+    
+    public var locationServiceStateStatusForApplication: CLAuthorizationStatus {
+        return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? false
+    }
+}
