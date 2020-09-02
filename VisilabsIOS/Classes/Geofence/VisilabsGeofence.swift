@@ -30,15 +30,14 @@ class VisilabsGeofence {
     init?() {
         if let profile = VisilabsDataManager.readVisilabsProfile() {
             self.profile = profile
-            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)
+            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)//TODO: bunu if içine almaya gerek var mı?
             self.activeGeofenceList = [VisilabsGeofenceEntity]()
             self.geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
             self.lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
             self.lastSuccessfulGeofenceFetchTime = Date(timeIntervalSince1970: 0)
             
             //TODO:sil bunları sonra
-            print("self.geofenceHistory.fetchHistory.count")
-            print(self.geofenceHistory.fetchHistory.count)
+            print("geofenceHistory.fetchHistory.count: \(self.geofenceHistory.fetchHistory.count)")
             
         }else {
             return nil
