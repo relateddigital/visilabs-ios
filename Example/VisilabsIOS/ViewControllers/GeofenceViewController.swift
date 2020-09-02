@@ -14,16 +14,19 @@ import VisilabsIOS
 
 class GeofenceViewController: FormViewController {
     
+    let locationEnabledDevice = "Location Enabled(Device)"
+    let locationStatusApp = "Location Status(App)"
     let lastFetchTime = "Last Fetch Time"
     let lastKnownLatitude = "Last Known Latitude"
     let lastKnownLongitude = "Last Known Longitude"
     
     let dateFormatter = DateFormatter()
     var visilabsGeofenceHistory: VisilabsGeofenceHistory!
-    var formattedDateKeyFetchHistory = [String: [VisilabsGeofenceEntity]]()
     var historySection = Section("Geofence Server Checks".uppercased(with: Locale(identifier: "en_US")))
     var errorSection = Section("Geofence Server Checks With Error".uppercased(with: Locale(identifier: "en_US")))
     var refreshSection = Section()
+    var locationServicesEnabledForDeviceRow: TextRow!
+    var locationServiceStateStatusForApplicationRow: TextRow!
     var lastFetchTimeRow : TextRow!
     var lastKnownLatitudeRow : TextRow!
     var lastKnownLongitudeRow : TextRow!
@@ -41,6 +44,14 @@ class GeofenceViewController: FormViewController {
         .onCellSelection { cell, row in
             self.refreshData()
         })
+        locationServicesEnabledForDeviceRow = TextRow(locationEnabledDevice) {
+            $0.title = locationEnabledDevice
+            $0.disabled = true
+        }
+        locationServiceStateStatusForApplicationRow = TextRow(locationStatusApp) {
+            $0.title = locationStatusApp
+            $0.disabled = true
+        }
         lastFetchTimeRow = TextRow(lastFetchTime) {
             $0.title = lastFetchTime
             $0.disabled = true
@@ -54,6 +65,9 @@ class GeofenceViewController: FormViewController {
             $0.disabled = true
         }
         
+        
+        refreshSection.append(locationServicesEnabledForDeviceRow)
+        refreshSection.append(locationServiceStateStatusForApplicationRow)
         refreshSection.append(lastFetchTimeRow)
         refreshSection.append(lastKnownLatitudeRow)
         refreshSection.append(lastKnownLongitudeRow)
@@ -66,42 +80,42 @@ class GeofenceViewController: FormViewController {
         
     private func refreshData(){
         visilabsGeofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
+        locationServicesEnabledForDeviceRow.value = Visilabs.callAPI().locationServicesEnabledForDevice ? "YES" : "NO"
+        locationServiceStateStatusForApplicationRow.value = String(describing: Visilabs.callAPI().locationServiceStateStatusForApplication)
         lastFetchTimeRow.value = dateFormatter.string(from: visilabsGeofenceHistory.lastFetchTime ?? Date(timeIntervalSince1970: 0))
         lastKnownLatitudeRow.value = String(format: "%.013f", visilabsGeofenceHistory.lastKnownLatitude ?? 0.0)
         lastKnownLongitudeRow.value = String(format: "%.013f", visilabsGeofenceHistory.lastKnownLongitude ?? 0.0)
         refreshSection.reload()
-        
         historySection.removeAll()
-        formattedDateKeyFetchHistory.removeAll()
         
-        
-        for date in visilabsGeofenceHistory.fetchHistory.keys.sorted(by:>) {
-            let formattedDate = dateFormatter.string(from: date)
-            formattedDateKeyFetchHistory[formattedDate] = visilabsGeofenceHistory.fetchHistory[date]
-            
-            historySection.append(ButtonRow() {
-                $0.title = formattedDate
+        var dateRows = [ButtonRowOf<Date>]()
+        for date in visilabsGeofenceHistory.fetchHistory.keys.sorted(by:>).prefix(20) {
+            dateRows.append(ButtonRowOf<Date>() {
+                $0.title = dateFormatter.string(from: date)
+                $0.value = date
             }
             .onCellSelection { cell, row in
-                let alert = GeofenceAlertViewController(formattedDate: row.title!, visilabsGeofenceEntities: self.formattedDateKeyFetchHistory[row.title!])
+                let alert = GeofenceAlertViewController(date: row.value!, visilabsGeofenceEntities: self.visilabsGeofenceHistory.fetchHistory[row.value!])
                 alert.addAction(title: "Dismiss", style: .default)
                 self.present(alert, animated: true, completion: nil)
             })
         }
-        
+        historySection.append(contentsOf: dateRows)
     }
 }
 
 class GeofenceAlertViewController: CleanyAlertViewController {
+    let dateFormatter = DateFormatter()
     
-    init(formattedDate: String, visilabsGeofenceEntities: [VisilabsGeofenceEntity]?) {
+    init(date: Date, visilabsGeofenceEntities: [VisilabsGeofenceEntity]?) {
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
         styleSettings[.cornerRadius] = 18
         var message = "There is no data"
         if let geofences = visilabsGeofenceEntities, geofences.count > 0 {
             message = GeofenceAlertViewController.getMessageFromGeofenceEntities(geofences)
         }
-        super.init(title: formattedDate, message: message, preferredStyle: .alert, styleSettings: styleSettings)
+        super.init(title: dateFormatter.string(from: date) , message: message, preferredStyle: .alert, styleSettings: styleSettings)
     }
     
     private static func getMessageFromGeofenceEntities(_ geofences: [VisilabsGeofenceEntity]) -> String{
