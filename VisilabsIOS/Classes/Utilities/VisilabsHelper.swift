@@ -68,7 +68,7 @@ internal class VisilabsHelper {
         return nil
     }
     
-    static var webView: WKWebView?
+    static private var webView: WKWebView?
     
     static func computeWebViewUserAgent(completion: @escaping ((String) -> Void)) {
         DispatchQueue.main.async { [completion] in
@@ -91,6 +91,13 @@ internal class VisilabsHelper {
         VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
         VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
         VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
+    }
+    
+    static private let dateFormatter = DateFormatter()
+    
+    static func formatDate(_ date: Date, format : String = "yyyy-MM-dd HH:mm:ss") -> String {
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: date)
     }
     
 }
