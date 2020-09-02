@@ -144,20 +144,33 @@ class VisilabsRequest {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
         
-        let responseParser: (Data) -> [[String: Any]]? = { data in
-            var response: Any? = nil
-            do {
-                response = try JSONSerialization.jsonObject(with: data, options: [])
-            } catch {
-                VisilabsLogger.error("exception decoding api data")
+        if properties[VisilabsConstants.ACT_KEY] == VisilabsConstants.GET_LIST {
+            let responseParserGetList: (Data) -> [[String: Any]]? = { data in
+                var response: Any? = nil
+                do {
+                    response = try JSONSerialization.jsonObject(with: data, options: [])
+                } catch {
+                    VisilabsLogger.error("exception decoding api data")
+                }
+                return response as? [[String: Any]]
             }
-            return response as? [[String: Any]]
+            let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserGetList )
+            sendGeofenceRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
+        } else {
+            let responseParserSendPush: (Data) -> String? = { data in return nil }
+            let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserSendPush )
+            sendGeofencePushRequestHandler(resource: resource, completion: { result, reason in completion(nil, reason) })
         }
-        
-        let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
-        
-        sendGeofenceRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
-        
+    }
+    
+    private class func sendGeofencePushRequestHandler(resource: VisilabsResource<String>, completion: @escaping (String?, VisilabsReason?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (reason, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
+                completion(nil, reason)
+            }, success: { (result, response) in
+                completion(result, nil)
+            })
     }
     
     private class func sendGeofenceRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?, VisilabsReason?) -> Void) {
