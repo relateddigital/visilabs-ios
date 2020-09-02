@@ -56,6 +56,7 @@ class VisilabsGeofence {
         self.activeGeofenceList = Array(sortVisilabsGeofenceEntities(geofences).prefix(self.profile.maxGeofenceCount))
         for geofence in self.activeGeofenceList {
             let geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: geofence.identifier)
+            VisilabsLocationManager.sharedManager.startMonitorRegion(region: geoRegion)
         }
     }
     
@@ -82,11 +83,11 @@ class VisilabsGeofence {
             var props = [String: String]()
             props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
             props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-            props[VisilabsConstants.COOKIEID_KEY] = user?.cookieId ?? nil
-            props[VisilabsConstants.EXVISITORID_KEY] = user?.exVisitorId ?? nil
+            props[VisilabsConstants.COOKIEID_KEY] = user?.cookieId
+            props[VisilabsConstants.EXVISITORID_KEY] = user?.exVisitorId
             props[VisilabsConstants.ACT_KEY] = VisilabsConstants.GET_LIST
-            props[VisilabsConstants.TOKENID_KEY] = user?.tokenId ?? nil
-            props[VisilabsConstants.APPID_KEY] = user?.appId ?? nil
+            props[VisilabsConstants.TOKENID_KEY] = user?.tokenId
+            props[VisilabsConstants.APPID_KEY] = user?.appId
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                 props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
@@ -128,6 +129,8 @@ class VisilabsGeofence {
                                         distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat, lng1: lastLong, lat2: latitude, lng2: longitude)
                                     }
                                     fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, durationInSeconds: durationInSeconds, targetEvent: targetEvent, distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
+                                    
+                                    //self.sendPushNotification(actionId: String(actionId), geofenceId: String(geofenceId), isDwell: false, isEnter: true)
                                 }
                             }
                         }
@@ -153,19 +156,19 @@ class VisilabsGeofence {
     }
     
     func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool) {
-        let user = VisilabsPersistence.unarchiveUser()
+        let user = VisilabsDataManager.readVisilabsUser()
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
         props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-        props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
-        props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
+        props[VisilabsConstants.COOKIEID_KEY] = user?.cookieId
+        props[VisilabsConstants.EXVISITORID_KEY] = user?.exVisitorId
         props[VisilabsConstants.ACT_KEY] = VisilabsConstants.PROCESSV2
         props[VisilabsConstants.ACT_ID_KEY] = actionId
-        props[VisilabsConstants.TOKENID_KEY] = user.tokenId
-        props[VisilabsConstants.APPID_KEY] = user.appId
+        props[VisilabsConstants.TOKENID_KEY] = user?.tokenId
+        props[VisilabsConstants.APPID_KEY] = user?.appId
         props[VisilabsConstants.GEO_ID_KEY] = geofenceId
         
-        if isDwell{
+        if isDwell {
             if isEnter {
                 props[VisilabsConstants.TRIGGER_EVENT_KEY] = VisilabsConstants.ON_ENTER
             } else {
