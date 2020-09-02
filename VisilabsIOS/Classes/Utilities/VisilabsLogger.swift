@@ -50,18 +50,15 @@ protocol VisilabsLogging {
     func addMessage(message: VisilabsLogMessage)
 }
 
-/// Simply formats and prints the object by calling `print`
 class VisilabsPrintLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        print("[Visilabs - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
+        print("[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date())) - \(message.file) - func \(message.function)] : \(message.text)")
     }
 }
 
-/// Simply formats and prints the object by calling `debugPrint`, this makes things a bit easier if you
-/// need to print data that may be quoted for instance.
 class VisilabsPrintDebugLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        debugPrint("[Visilabs - \(message.file) - func \(message.function)] (\(message.level.rawValue)) - \(message.text)")
+        debugPrint("[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date())) - \(message.file) - func \(message.function)] : \(message.text)")
     }
 }
 
