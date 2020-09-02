@@ -65,7 +65,6 @@ class GeofenceViewController: FormViewController {
             $0.disabled = true
         }
         
-        
         refreshSection.append(locationServicesEnabledForDeviceRow)
         refreshSection.append(locationServiceStateStatusForApplicationRow)
         refreshSection.append(lastFetchTimeRow)
@@ -75,9 +74,11 @@ class GeofenceViewController: FormViewController {
         form.append(refreshSection)
         form.append(historySection)
         form.append(errorSection)
-        refreshData()
+        self.refreshData()
     }
         
+    var currentHistoryRowTags = [String:Bool]()
+    
     private func refreshData(){
         visilabsGeofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
         locationServicesEnabledForDeviceRow.value = Visilabs.callAPI().locationServicesEnabledForDevice ? "YES" : "NO"
@@ -86,11 +87,12 @@ class GeofenceViewController: FormViewController {
         lastKnownLatitudeRow.value = String(format: "%.013f", visilabsGeofenceHistory.lastKnownLatitude ?? 0.0)
         lastKnownLongitudeRow.value = String(format: "%.013f", visilabsGeofenceHistory.lastKnownLongitude ?? 0.0)
         refreshSection.reload()
-        historySection.removeAll()
-        
-        var dateRows = [ButtonRowOf<Date>]()
-        for date in visilabsGeofenceHistory.fetchHistory.keys.sorted(by:>).prefix(20) {
-            dateRows.append(ButtonRowOf<Date>() {
+        for date in visilabsGeofenceHistory.fetchHistory.keys.sorted(by:<) {
+            let tag = String(Int64((date.timeIntervalSince1970 * 1000.0).rounded()))
+            if currentHistoryRowTags[tag] != nil {
+                return
+            }
+            historySection.insert(ButtonRowOf<Date>(tag) {
                 $0.title = dateFormatter.string(from: date)
                 $0.value = date
             }
@@ -98,10 +100,11 @@ class GeofenceViewController: FormViewController {
                 let alert = GeofenceAlertViewController(date: row.value!, visilabsGeofenceEntities: self.visilabsGeofenceHistory.fetchHistory[row.value!])
                 alert.addAction(title: "Dismiss", style: .default)
                 self.present(alert, animated: true, completion: nil)
-            })
+            }, at: 0)
+            currentHistoryRowTags[tag] = true
         }
-        historySection.append(contentsOf: dateRows)
     }
+    
 }
 
 class GeofenceAlertViewController: CleanyAlertViewController {
