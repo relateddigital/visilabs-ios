@@ -283,6 +283,8 @@ extension VisilabsInstance {
     }
 }
 
+
+
 // MARK: - TARGETING ACTIONS
 
 // MARK: - Favorite Attribute Actions
@@ -368,6 +370,8 @@ extension VisilabsInstance {
     
 }
 
+
+
 //MARK: - RECOMMENDATION
 
 extension VisilabsInstance {
@@ -397,6 +401,8 @@ extension VisilabsInstance {
     
 }
 
+
+
 //MARK: - GEOFENCE
 
 extension VisilabsInstance {
@@ -409,7 +415,7 @@ extension VisilabsInstance {
         return VisilabsGeofence.sharedManager?.locationServicesEnabledForDevice ?? false
     }
     
-    public var locationServiceStateStatusForApplication: CLAuthorizationStatus {
-        return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? false
+    public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
+        return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
     }
 }
