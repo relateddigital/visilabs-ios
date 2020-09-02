@@ -8,8 +8,6 @@
 import Foundation
 import CoreLocation
 
-
-
 public extension TimeInterval {
     static var oneMinute: TimeInterval { return 60 }
     static var oneHour: TimeInterval { return oneMinute * 60 }
@@ -21,7 +19,7 @@ public extension TimeInterval {
 
 class VisilabsGeofence {
     
-    public static let sharedManager = VisilabsGeofence()
+    static let sharedManager = VisilabsGeofence()
     
     var activeGeofenceList: [VisilabsGeofenceEntity]
     let profile: VisilabsProfile
@@ -47,6 +45,19 @@ class VisilabsGeofence {
         }
     }
     
+    var locationServicesEnabledForDevice: Bool {
+        return VisilabsLocationManager.sharedManager.locationServicesEnabledForDevice
+    }
+    
+    //notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
+    var locationServiceStateStatusForApplication: CLAuthorizationStatus {
+        return VisilabsLocationManager.sharedManager.locationServiceStateStatus
+    }
+    
+    private var locationServiceEnabledForApplication: Bool {
+        return self.locationServiceStateStatusForApplication == .authorizedAlways || self.locationServiceStateStatusForApplication == .authorizedWhenInUse
+    }
+    
     func startGeofencing() {
         VisilabsLocationManager.sharedManager.createLocationManager()
     }
@@ -69,10 +80,16 @@ class VisilabsGeofence {
     }
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
-        if profile.geofenceEnabled {
+        if profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
             
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
+            
+            //TODO: bunu sil sonra, logları çok büyütür.
+            VisilabsLogger.info("getGeofenceList call:")
+            
+            
+            
             if timeInterval < VisilabsConstants.GEOFENCE_FETCH_TIME_INTERVAL {
                 return
             }
@@ -186,6 +203,9 @@ class VisilabsGeofence {
             
         }
     }
+    
+    
+    
     
 }
 

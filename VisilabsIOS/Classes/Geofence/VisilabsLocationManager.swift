@@ -48,6 +48,10 @@ class VisilabsLocationManager : NSObject {
         return CLLocationManager.authorizationStatus()
     }
     
+    var locationServicesEnabledForDevice: Bool {
+        return CLLocationManager.locationServicesEnabled()
+    }
+    
     func startMonitorRegion(region: CLRegion) {
         
     }
