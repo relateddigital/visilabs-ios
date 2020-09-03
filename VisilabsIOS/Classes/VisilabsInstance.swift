@@ -131,7 +131,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
 
         if(self.visilabsProfile.geofenceEnabled){
-            
+            self.startGeofencing()
         }
         
         VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
