@@ -53,7 +53,9 @@ class VisilabsLocationManager : NSObject {
     }
     
     func startMonitorRegion(region: CLRegion) {
-        
+        if CLLocationManager.isMonitoringAvailable(for: type(of: region)) {
+            locationManager?.startMonitoring(for: region)
+        }
     }
     
     func createLocationManager() {
