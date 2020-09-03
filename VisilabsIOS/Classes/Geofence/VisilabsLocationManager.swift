@@ -11,9 +11,7 @@ import CoreLocation
 class VisilabsLocationManager : NSObject {
     
     public static let sharedManager = VisilabsLocationManager()
-    
-    
-    
+
     private var locationManager: CLLocationManager?
     private var requestLocationAuthorizationCallback: ((CLAuthorizationStatus) -> Void)?
     
@@ -123,7 +121,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    
+        VisilabsLogger.error("CLLocationManager didFailWithError : \(error.localizedDescription)")
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
