@@ -125,13 +125,35 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-    
+        let elements = region.identifier.components(separatedBy: "_")
+        if elements.count == 4 , elements[0] == "visilabs" {
+            let actionId = elements[1]
+            let geofenceId = elements[2]
+            let targetEvent = elements[3]
+            if targetEvent == VisilabsConstants.ON_ENTER {
+                //TODO: burada isEnter false geçmişim neden?
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: false, isEnter: false)
+            } else if targetEvent == VisilabsConstants.DWELL {
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: true, isEnter: true)
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        
+        let elements = region.identifier.components(separatedBy: "_")
+        if elements.count == 4 , elements[0] == "visilabs" {
+            let actionId = elements[1]
+            let geofenceId = elements[2]
+            let targetEvent = elements[3]
+            if targetEvent == VisilabsConstants.ON_EXIT {
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: false, isEnter: false)
+            } else if targetEvent == VisilabsConstants.DWELL {
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: true, isEnter: false)
+            }
+        }
     }
     
+    //gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
     
     }
