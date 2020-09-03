@@ -8,6 +8,7 @@
 
 import UIKit
 import Eureka
+import CleanyModal
 import VisilabsIOS
 import Euromsg
 
@@ -45,6 +46,15 @@ class EventViewController: FormViewController {
     
     private func getCommonEventsSection() -> Section{
         let section = Section("Common Events".uppercased(with: Locale(identifier: "en_US")))
+        section.append(TextRow("exVisitorId") {
+            $0.title = "exVisitorId"
+            $0.value = visilabsProfile.userKey
+        })
+        section.append(TextRow("email") {
+            $0.title = "email"
+            $0.value = visilabsProfile.userEmail
+        })
+        
         for eventType in VisilabsEventType.allCases {
             section.append(ButtonRow() {
                 $0.title = eventType.rawValue
@@ -75,24 +85,40 @@ class EventViewController: FormViewController {
         Visilabs.callAPI().customEvent("InAppTest", properties: properties)
     }
     
+    private func showModal(title: String, message: String){
+        let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
+        styleSettings[.cornerRadius] = 18
+        let alertViewController = CleanyAlertViewController(title: title, message: message, preferredStyle: .alert, styleSettings: styleSettings)
+        alertViewController.addAction(title: "Dismiss", style: .default)
+        self.present(alertViewController, animated: true, completion: nil)
+    }
     
     private func customEvent(_ eventType: VisilabsEventType){
+        let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)!.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let email: String = ((self.form.rowBy(tag: "email") as TextRow?)!.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        
         var properties = [String:String]()
         switch eventType {
-        case .login:
+        case .login, .signUp:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
-            Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
-            Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
-            Euromsg.setEmail(email: visilabsProfile.userKey, permission: true)
-            return
-        case .signUp:
-            properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
-            properties["OM.sys.AppID"] = visilabsProfile.appAlias //"App ID to use for push messages"
-            Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
-            Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
-            Euromsg.setEmail(email: visilabsProfile.userKey, permission: true)
-            return
+            if exVisitorId.isEmpty {
+                self.showModal(title: "Warning", message: "exVisitorId can not be empty")
+                return
+            } else {
+                visilabsProfile.userKey = exVisitorId
+                visilabsProfile.userEmail = email
+                DataManager.saveVisilabsProfile(visilabsProfile)
+                if eventType == .login {
+                    Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
+                }
+                if eventType == .signUp {
+                    Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
+                }
+                Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
+                Euromsg.setEmail(email: visilabsProfile.userEmail, permission: true)
+                return
+            }
         case .pageView:
             Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
             return
