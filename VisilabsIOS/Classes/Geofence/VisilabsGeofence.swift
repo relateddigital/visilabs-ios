@@ -63,7 +63,7 @@ class VisilabsGeofence {
     
     private func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
         VisilabsLocationManager.sharedManager.stopMonitorRegions()
-        self.activeGeofenceList = Array(sortVisilabsGeofenceEntities(geofences).prefix(self.profile.maxGeofenceCount))
+        self.activeGeofenceList = sortAndTakeVisilabsGeofenceEntitiesToMonitor(geofences)
         if self.profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
             for geofence in self.activeGeofenceList {
                 let geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: geofence.identifier)
@@ -72,12 +72,23 @@ class VisilabsGeofence {
         }
     }
     
-    private func sortVisilabsGeofenceEntities(_ geofences: [VisilabsGeofenceEntity]) -> [VisilabsGeofenceEntity]{
-        return geofences.sorted { (first, second) -> Bool in
+    private func sortAndTakeVisilabsGeofenceEntitiesToMonitor(_ geofences: [VisilabsGeofenceEntity]) -> [VisilabsGeofenceEntity]{
+        let geofencesSortedAscending = geofences.sorted { (first, second) -> Bool in
             let firstDistance = first.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
             let secondDistance = second.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
             return firstDistance < secondDistance
         }
+        var geofencesToMonitor = [Int: VisilabsGeofenceEntity]()
+        for geofence in geofencesSortedAscending {
+            if geofencesToMonitor.count == self.profile.maxGeofenceCount {
+                break
+            }
+            if geofencesToMonitor[geofence.geofenceId] != nil {
+                continue
+            }
+            geofencesToMonitor[geofence.geofenceId] = geofence
+        }
+        return [VisilabsGeofenceEntity](geofencesToMonitor.values)
     }
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
@@ -154,20 +165,19 @@ class VisilabsGeofence {
                         }
                     }
                 }
-                geofenceHistory.lastFetchTime = Date()
-                geofenceHistory.lastKnownLatitude = lastKnownLatitude
-                geofenceHistory.lastKnownLongitude = lastKnownLongitude
-                geofenceHistory.fetchHistory[Date()] = fetchedGeofences
-                
-                if geofenceHistory.fetchHistory.count > VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT {
-                    let ascendingKeys = Array(geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
+                self.geofenceHistory.lastFetchTime = Date()
+                self.geofenceHistory.lastKnownLatitude = lastKnownLatitude
+                self.geofenceHistory.lastKnownLongitude = lastKnownLongitude
+                self.geofenceHistory.fetchHistory[Date()] = fetchedGeofences
+                if self.geofenceHistory.fetchHistory.count > VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT {
+                    let ascendingKeys = Array(self.geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
                     let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT)]
                     for key in keysToBeDeleted {
-                        geofenceHistory.fetchHistory[key] = nil
+                        self.geofenceHistory.fetchHistory[key] = nil
                     }
                 }
                 self.geofenceHistory = geofenceHistory
-                VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
+                VisilabsDataManager.saveVisilabsGeofenceHistory(self.geofenceHistory)
                 self.startMonitorGeofences(geofences: fetchedGeofences)
             }
         }
