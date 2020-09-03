@@ -154,12 +154,12 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        VisilabsLogger.info("CLLocationManager didStartMonitoringFor: region identifier:\(region.identifier)")
+        VisilabsLogger.info("CLLocationManager didStartMonitoringFor: region identifier: \(region.identifier)")
         self.locationManager?.requestState(for: region)
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-    
+        VisilabsLogger.error("CLLocationManager monitoringDidFailFor: region identifier: \(region?.identifier ?? "nil") error: \(error.localizedDescription)")
     }
     
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
