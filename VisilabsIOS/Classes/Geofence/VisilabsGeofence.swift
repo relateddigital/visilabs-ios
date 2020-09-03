@@ -211,7 +211,9 @@ class VisilabsGeofence {
         }
         
         VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result, reason) in
-            
+            if let error = reason {
+                VisilabsLogger.error("Geofence Push Send Error: \(error)")
+            }
         }
     }
     
