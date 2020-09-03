@@ -153,9 +153,9 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         }
     }
     
-    //gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-    
+        VisilabsLogger.info("CLLocationManager didStartMonitoringFor: region identifier:\(region.identifier)")
+        self.locationManager?.requestState(for: region)
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
