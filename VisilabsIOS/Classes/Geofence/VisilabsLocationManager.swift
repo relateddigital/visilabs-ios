@@ -107,7 +107,8 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     
     //TODO: buna bak tekrardan
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        self.requestLocationAuthorizationCallback?(status)
+        VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status)")
+        //self.requestLocationAuthorizationCallback?(status)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
@@ -162,7 +163,8 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         VisilabsLogger.error("CLLocationManager monitoringDidFailFor: region identifier: \(region?.identifier ?? "nil") error: \(error.localizedDescription)")
     }
     
+    //TODO: buna gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-    
+        VisilabsLogger.info("CLLocationManager didDetermineState: region identifier: \(region.identifier) state: \(state)")
     }
 }
