@@ -209,7 +209,7 @@ class VisilabsGeofence {
                props[key] = value
            }
         }
-        
+        VisilabsLogger.error("Geofence Triggerred: actionId: \(actionId) geofenceid: \(geofenceId)")
         VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result, reason) in
             if let error = reason {
                 VisilabsLogger.error("Geofence Push Send Error: \(error)")
