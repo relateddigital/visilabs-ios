@@ -64,9 +64,11 @@ class VisilabsGeofence {
     private func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
         VisilabsLocationManager.sharedManager.stopMonitorRegions()
         self.activeGeofenceList = Array(sortVisilabsGeofenceEntities(geofences).prefix(self.profile.maxGeofenceCount))
-        for geofence in self.activeGeofenceList {
-            let geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: geofence.identifier)
-            VisilabsLocationManager.sharedManager.startMonitorRegion(region: geoRegion)
+        if self.profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
+            for geofence in self.activeGeofenceList {
+                let geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: geofence.identifier)
+                VisilabsLocationManager.sharedManager.startMonitorRegion(region: geoRegion)
+            }
         }
     }
     
@@ -79,7 +81,7 @@ class VisilabsGeofence {
     }
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
-        if profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
+        if self.profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
             
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
