@@ -73,8 +73,8 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
         //#define SH_GEOLOCATION_LAT      @"SH_GEOLOCATION_LAT"
         //#define SH_GEOLOCATION_LNG      @"SH_GEOLOCATION_LNG"
        
-        VisilabsDataManager.save("SH_GEOLOCATION_LAT", withObject: CGFloat(0))
-        VisilabsDataManager.save("SH_GEOLOCATION_LNG", withObject: CGFloat(0))
+        VisilabsPersistence.saveUserDefaults("SH_GEOLOCATION_LAT", withObject: CGFloat(0))
+        VisilabsPersistence.saveUserDefaults("SH_GEOLOCATION_LNG", withObject: CGFloat(0))
         
         self.backgroundQueue = OperationQueue()
         self.backgroundQueue.maxConcurrentOperationCount = 1
@@ -87,13 +87,13 @@ class VisilabsGeofenceApp: NSObject, UIApplicationDelegate {
     
     var isLocationServiceEnabled: Bool{
         get{
-            guard let locationServiceEnabled = VisilabsDataManager.read("ENABLE_LOCATION_SERVICE") as? Bool else{
+            guard let locationServiceEnabled = VisilabsPersistence.readUserDefaults("ENABLE_LOCATION_SERVICE") as? Bool else{
                 return self.isDefaultLocationServiceEnabled
             }
             return locationServiceEnabled
         }set{
             if newValue != self.isLocationServiceEnabled {
-                VisilabsDataManager.save("ENABLE_LOCATION_SERVICE", withObject: newValue)
+                VisilabsPersistence.saveUserDefaults("ENABLE_LOCATION_SERVICE", withObject: newValue)
                 if newValue {
                     self.locationManager?.requestPermissionSinceiOS8()
                     NotificationCenter.default.post(name: NSNotification.Name("SH_LMBridge_StartMonitorGeoLocation"), object: nil)

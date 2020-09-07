@@ -80,7 +80,7 @@ class GeofenceViewController: FormViewController {
     var currentHistoryRowTags = [String:Bool]()
     
     private func refreshData(){
-        visilabsGeofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
+        visilabsGeofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
         locationServicesEnabledForDeviceRow.value = Visilabs.callAPI().locationServicesEnabledForDevice ? "YES" : "NO"
         locationServiceStateStatusForApplicationRow.value = String(describing: Visilabs.callAPI().locationServiceStateStatusForApplication)
         lastFetchTimeRow.value = dateFormatter.string(from: visilabsGeofenceHistory.lastFetchTime ?? Date(timeIntervalSince1970: 0))

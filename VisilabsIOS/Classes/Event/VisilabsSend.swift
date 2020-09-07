@@ -12,13 +12,10 @@ protocol VisilabsSendDelegate {
     func updateNetworkActivityIndicator(_ on: Bool)
 }
 
-
-//TODO: lock kullanılımıyor sanki, kaldırılabilir
-class VisilabsSend: AppLifecycle {
+class VisilabsSend {
     
     //TODO: bu delegate kullanılmıyor. kaldır.
     var delegate: VisilabsSendDelegate?
-    
     
     //TODO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
     func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> VisilabsCookie {
@@ -112,59 +109,5 @@ class VisilabsSend: AppLifecycle {
             }
         }
         return cookieString
-    }
-    
-    /*
-    func flushQueueInBatches(_ queue: Queue) -> Queue {
-        var mutableQueue = queue
-        while !mutableQueue.isEmpty {
-            var shouldContinue = false
-            let batchSize = min(mutableQueue.count, APIConstants.batchSize)
-            let range = 0..<batchSize
-            let batch = Array(mutableQueue[range])
-            // Log data payload sent
-            VisilabsLogger.debug(message: "Sending batch of data")
-            VisilabsLogger.debug(message: batch as Any)
-            let requestData = JSONHandler.encodeAPIData(batch)
-            if let requestData = requestData {
-                let semaphore = DispatchSemaphore(value: 0)
-                delegate?.updateNetworkActivityIndicator(true)
-                var shadowQueue = mutableQueue
-                loggerRequest.sendRequest(requestData,
-                                         type: type,
-                                         useIP: useIPAddressForGeoLocation,
-                                         completion: { [weak self, semaphore, range] success in
-                                            guard let self = self else { return }
-                                            self.delegate?.updateNetworkActivityIndicator(false)
-                                            if success {
-                                                if let lastIndex = range.last, shadowQueue.count - 1 > lastIndex {
-                                                    shadowQueue.removeSubrange(range)
-                                                } else {
-                                                    shadowQueue.removeAll()
-                                                }
-                                            }
-                                            shouldContinue = success
-                                            semaphore.signal()
-                })
-                _ = semaphore.wait(timeout: DispatchTime.distantFuture)
-                mutableQueue = shadowQueue
-            }
-
-            if !shouldContinue {
-                break
-            }
-        }
-        return mutableQueue
-    }
-    */
-    
-    
-    // MARK: - Lifecycle
-    func applicationDidBecomeActive() {
-        //startFlushTimer()
-    }
-
-    func applicationWillResignActive() {
-        //stopFlushTimer()
     }
 }

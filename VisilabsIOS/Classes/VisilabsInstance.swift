@@ -10,11 +10,6 @@ import SystemConfiguration
 
 typealias Queue = [[String: String]]
 
-protocol AppLifecycle {
-    func applicationDidBecomeActive()
-    func applicationWillResignActive()
-}
-
 struct VisilabsUser : Codable {
     var cookieId: String?
     var exVisitorId: String?
@@ -102,7 +97,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         
         
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
-        VisilabsDataManager.saveVisilabsProfile(visilabsProfile)
+        VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.visilabsProfile.profileId)"
@@ -124,8 +119,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
-            VisilabsDataManager.saveVisilabsUser(visilabsUser)
-            //VisilabsPersistence.archiveUser(visilabsUser)
+            VisilabsPersistence.archiveUser(visilabsUser)
         }
 
         if(self.visilabsProfile.geofenceEnabled){
@@ -174,8 +168,7 @@ extension VisilabsInstance {
                 self.visilabsProfile.channel = channel
             }
             self.readWriteLock.read {
-                VisilabsDataManager.saveVisilabsUser(self.visilabsUser)
-                //VisilabsPersistence.archiveUser(self.visilabsUser)
+                VisilabsPersistence.archiveUser(self.visilabsUser)
                 if clearUserParameters {
                     VisilabsPersistence.clearParameters()
                 }
@@ -226,11 +219,7 @@ extension VisilabsInstance {
 
     // TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() -> VisilabsUser {
-        if let visilabsUser = VisilabsDataManager.readVisilabsUser(), !visilabsUser.cookieId.isNilOrWhiteSpace{
-            return visilabsUser
-        } else {
-            return VisilabsPersistence.unarchiveUser()
-        }
+        return VisilabsPersistence.unarchiveUser()
     }
 }
 
@@ -310,7 +299,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     func notificationDidShow(_ notification: VisilabsInAppNotification) {
         visilabsUser.visitData = notification.visitData
         visilabsUser.visitorData = notification.visitorData
-        VisilabsDataManager.saveVisilabsUser(visilabsUser)
+        VisilabsPersistence.archiveUser(visilabsUser)
     }
 
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]) {

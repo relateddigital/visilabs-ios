@@ -7,7 +7,9 @@
 
 import Foundation
 
-class VisilabsPersistence {
+public class VisilabsPersistence {
+    
+    // MARK: - ARCHIVE
     
     private static let archiveQueueUtility = DispatchQueue(label: "com.relateddigital.archiveQueue", qos: .utility)
     
@@ -49,47 +51,6 @@ class VisilabsPersistence {
             }, finally: {})
         }
     }
-    
-    class func archiveProfile(_ visilabsProfile: VisilabsProfile) {
-        archiveQueueUtility.sync { [visilabsProfile] in
-            let profileFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
-            guard let path = profileFilePath else {
-                VisilabsLogger.error("bad file path, cant fetch file")
-                return
-            }
-            VisilabsExceptionWrapper.try({ [cObject = visilabsProfile, cPath = path] in
-                if let data = try? PropertyListEncoder().encode(cObject), !NSKeyedArchiver.archiveRootObject(data, toFile: cPath) {
-                    VisilabsLogger.error("failed to archive profile")
-                    return
-                }
-            }, catch: { (error) in
-                VisilabsLogger.error("failed to archive profile due to an uncaught exception")
-                VisilabsLogger.error(error.debugDescription)
-                return
-            }, finally: {})
-        }
-    }
-    
-    class func archiveGeofenceHistory(_ visilabsGeofenceHistory: VisilabsGeofenceHistory) {
-        archiveQueueUtility.sync { [visilabsGeofenceHistory] in
-            let geofenceHistoryFilePath = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY)
-            guard let path = geofenceHistoryFilePath else {
-                VisilabsLogger.error("bad file path, cant fetch file")
-                return
-            }
-            VisilabsExceptionWrapper.try({ [cObject = visilabsGeofenceHistory, cPath = path] in
-                if let data = try? PropertyListEncoder().encode(cObject), !NSKeyedArchiver.archiveRootObject(data, toFile: cPath) {
-                    VisilabsLogger.error("failed to archive geofence history")
-                    return
-                }
-            }, catch: { (error) in
-                VisilabsLogger.error("failed to archive geofence history due to an uncaught exception")
-                VisilabsLogger.error(error.debugDescription)
-                return
-            }, finally: {})
-        }
-    }
-    
     
     //TODO: bunu ExceptionWrapper içine al
     class func unarchiveUser() -> VisilabsUser {
@@ -173,31 +134,6 @@ class VisilabsPersistence {
         return visilabsUser
     }
     
-    //TODO: bunu ExceptionWrapper içine al
-    class func unarchiveProfile() -> VisilabsProfile {
-        var visilabsProfile = VisilabsProfile(organizationId: "", profileId: "", dataSource: "", channel: VisilabsConstants.IOS, requestTimeoutInSeconds: 60, geofenceEnabled: false, inAppNotificationsEnabled: false, maxGeofenceCount: 20)
-        
-        if let propsfp = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY), let p = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? Data, let profile = try? PropertyListDecoder().decode(VisilabsProfile.self, from: p)  {
-            visilabsProfile = profile
-        }else{
-            VisilabsLogger.warn("Error while unarchiving profile.")
-        }
-
-        return visilabsProfile
-    }
-    
-    //TODO: bunu ExceptionWrapper içine al
-    class func unarchiveGeofenceHistory() -> VisilabsGeofenceHistory {
-        var visilabsGeofenceHistory = VisilabsGeofenceHistory()
-        if let ghfp = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY), let gh = NSKeyedUnarchiver.unarchiveObject(withFile: ghfp) as? Data, let geofenceHistory = try? PropertyListDecoder().decode(VisilabsGeofenceHistory.self, from: gh)  {
-            visilabsGeofenceHistory = geofenceHistory
-        }else{
-            VisilabsLogger.warn("Error while unarchiving geofence history.")
-        }
-        return visilabsGeofenceHistory
-    }
-    
-    
     
     //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
     class func saveParameters(_ parameters: [String : String]) {
@@ -225,13 +161,13 @@ class VisilabsPersistence {
                                 parameterValueToStore = parameterValueToStore + ("|0")
                             }
                             parameterValueToStore = parameterValueToStore + (dateString)
-                            VisilabsDataManager.save(storeKey, withObject: parameterValueToStore)
+                            saveUserDefaults(storeKey, withObject: parameterValueToStore)
                         } else {
-                            VisilabsDataManager.save(storeKey, withObject: parameterValue)
+                            saveUserDefaults(storeKey, withObject: parameterValue)
                         }
                     }
                     else if count > 1 {
-                        let previousParameterValue = VisilabsDataManager.read(storeKey) as? String
+                        let previousParameterValue = readUserDefaults(storeKey) as? String
                         var parameterValueToStore = parameterValue.copy() as! String + ("|")
                         parameterValueToStore = parameterValueToStore + (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
@@ -249,7 +185,7 @@ class VisilabsPersistence {
                                 }
                             }
                         }
-                        VisilabsDataManager.save(storeKey, withObject: parameterValueToStore)
+                        saveUserDefaults(storeKey, withObject: parameterValueToStore)
                     }
                     
                 }
@@ -262,7 +198,7 @@ class VisilabsPersistence {
         var parameters: [String : String?] = [:]
         for visilabsParameter in VisilabsConstants.visilabsParameters() {
             let storeKey = visilabsParameter.storeKey
-            let value = VisilabsDataManager.read(storeKey) as? String
+            let value = readUserDefaults(storeKey) as? String
             if value != nil && (value?.count ?? 0) > 0 {
                 parameters[storeKey] = value
             }
@@ -272,7 +208,58 @@ class VisilabsPersistence {
 
     class func clearParameters() {
         for visilabsParameter in VisilabsConstants.visilabsParameters() {
-            VisilabsDataManager.remove(visilabsParameter.storeKey)
+            removeUserDefaults(visilabsParameter.storeKey)
         }
+    }
+    
+    // MARK: - USER DEFAULTS
+    
+    
+    static func saveUserDefaults(_ key: String, withObject value: Any?) {
+        UserDefaults.standard.set(value, forKey: key)
+        UserDefaults.standard.synchronize()
+    }
+
+    static func readUserDefaults(_ key: String) -> Any? {
+        return UserDefaults.standard.object(forKey: key)
+    }
+
+    static func removeUserDefaults(_ key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+        UserDefaults.standard.synchronize()
+    }
+    
+    static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
+        let encoder = JSONEncoder()
+        if let encodedVisilabsProfile = try? encoder.encode(visilabsProfile) {
+            saveUserDefaults(VisilabsConstants.USER_DEFAULTS_PROFILE_KEY, withObject: encodedVisilabsProfile)
+        }
+    }
+    
+    static func readVisilabsProfile() -> VisilabsProfile? {
+        if let savedVisilabsProfile = readUserDefaults(VisilabsConstants.USER_DEFAULTS_PROFILE_KEY) as? Data {
+            let decoder = JSONDecoder()
+            if let loadedVisilabsProfile = try? decoder.decode(VisilabsProfile.self, from: savedVisilabsProfile) {
+                return loadedVisilabsProfile
+            }
+        }
+        return nil
+    }
+    
+    static func saveVisilabsGeofenceHistory(_ visilabsGeofenceHistory: VisilabsGeofenceHistory) {
+        let encoder = JSONEncoder()
+        if let encodedVisilabsGeofenceHistory = try? encoder.encode(visilabsGeofenceHistory) {
+            saveUserDefaults(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY, withObject: encodedVisilabsGeofenceHistory)
+        }
+    }
+    
+    public static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
+        if let savedVisilabsGeofenceHistory = readUserDefaults(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY) as? Data {
+            let decoder = JSONDecoder()
+            if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self, from: savedVisilabsGeofenceHistory) {
+                return loadedVisilabsGeofenceHistory
+            }
+        }
+        return VisilabsGeofenceHistory()
     }
 }
