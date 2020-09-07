@@ -62,6 +62,7 @@
 		88007E2324A3CED4002A9132 /* InAppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppHelper.swift; sourceTree = "<group>"; };
 		8811477424EABCA0006848F9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		8811477624EAC3EF006848F9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		881D944F2506442E006D1BB6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		88370C9324853675005645F5 /* FormHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormHelper.swift; sourceTree = "<group>"; };
 		8858B7A324F52A2100FDF378 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		8858B7A524F52D2F00FDF378 /* StoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewController.swift; sourceTree = "<group>"; };
@@ -176,6 +177,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				881D944F2506442E006D1BB6 /* README.md */,
 				7A945771F641BD121B160C85 /* VisilabsIOS.podspec */,
 				06EBC49C43D294D27D4A4EA5 /* LICENSE */,
 			);
