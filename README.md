@@ -4,7 +4,7 @@
 
 # VisilabsIOS
 
-[![CI Status](https://img.shields.io/travis/egemen@visilabs.com/VisilabsIOS.svg?style=flat)](https://travis-ci.org/egemen@visilabs.com/VisilabsIOS)
+[![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
 [![Version](https://img.shields.io/cocoapods/v/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![License](https://img.shields.io/cocoapods/l/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![Platform](https://img.shields.io/cocoapods/p/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
