@@ -12,13 +12,10 @@ protocol VisilabsSendDelegate {
     func updateNetworkActivityIndicator(_ on: Bool)
 }
 
-
-//TODO: lock kullanılımıyor sanki, kaldırılabilir
-class VisilabsSend: AppLifecycle {
+class VisilabsSend {
     
     //TODO: bu delegate kullanılmıyor. kaldır.
     var delegate: VisilabsSendDelegate?
-    
     
     //TODO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
     func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> VisilabsCookie {

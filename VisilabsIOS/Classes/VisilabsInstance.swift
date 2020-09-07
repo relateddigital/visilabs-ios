@@ -10,11 +10,6 @@ import SystemConfiguration
 
 typealias Queue = [[String: String]]
 
-protocol AppLifecycle {
-    func applicationDidBecomeActive()
-    func applicationWillResignActive()
-}
-
 struct VisilabsUser : Codable {
     var cookieId: String?
     var exVisitorId: String?
