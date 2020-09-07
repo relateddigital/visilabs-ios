@@ -134,19 +134,19 @@ class VisilabsGeofence {
             VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, reason) in
                 
                 if reason != nil {
-                    geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
-                    geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
-                    if geofenceHistory.errorHistory.count > VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT {
-                        let ascendingKeys = Array(geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
+                    self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
+                    self.geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
+                    if self.geofenceHistory.errorHistory.count > VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT {
+                        let ascendingKeys = Array(self.geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
                         let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT)]
                         for key in keysToBeDeleted {
-                            geofenceHistory.errorHistory[key] = nil
+                            self.geofenceHistory.errorHistory[key] = nil
                         }
                     }
-                    VisilabsPersistence.saveVisilabsGeofenceHistory(geofenceHistory)
+                    VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
                     return
                 }
-                (self.lastSuccessfulGeofenceFetchTime, geofenceHistory.lastFetchTime) = (now, now)
+                (self.lastSuccessfulGeofenceFetchTime, self.geofenceHistory.lastFetchTime) = (now, now)
                 var fetchedGeofences = [VisilabsGeofenceEntity]()
                 if let res = result {
                     for targetingAction in res {
@@ -158,8 +158,6 @@ class VisilabsGeofence {
                                         distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat, lng1: lastLong, lat2: latitude, lng2: longitude)
                                     }
                                     fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, durationInSeconds: durationInSeconds, targetEvent: targetEvent, distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
-                                    
-                                    //self.sendPushNotification(actionId: String(actionId), geofenceId: String(geofenceId), isDwell: false, isEnter: true)
                                 }
                             }
                         }
@@ -176,7 +174,7 @@ class VisilabsGeofence {
                         self.geofenceHistory.fetchHistory[key] = nil
                     }
                 }
-                self.geofenceHistory = geofenceHistory
+                //self.geofenceHistory = geofenceHistory
                 VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
                 self.startMonitorGeofences(geofences: fetchedGeofences)
             }
