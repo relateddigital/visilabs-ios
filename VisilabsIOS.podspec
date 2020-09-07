@@ -22,5 +22,4 @@ Pod::Spec.new do |s|
   s.resources     = 'VisilabsIOS/Assets/Images/**/*'
   s.info_plist = { 'CFBundleIdentifier' => 'com.relateddigital.visilabs' }
   s.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'com.relateddigital.visilabs' }
-  
 end
