@@ -28,11 +28,11 @@ class VisilabsGeofence {
     private var lastSuccessfulGeofenceFetchTime: Date
     
     init?() {
-        if let profile = VisilabsDataManager.readVisilabsProfile() {
+        if let profile = VisilabsPersistence.readVisilabsProfile() {
             self.profile = profile
             VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)//TODO: bunu if içine almaya gerek var mı?
             self.activeGeofenceList = [VisilabsGeofenceEntity]()
-            self.geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
+            self.geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
             self.lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
             self.lastSuccessfulGeofenceFetchTime = Date(timeIntervalSince1970: 0)
             
@@ -107,16 +107,16 @@ class VisilabsGeofence {
             }
             
             self.lastGeofenceFetchTime = now
-            let user = VisilabsDataManager.readVisilabsUser()
-            let geofenceHistory = VisilabsDataManager.readVisilabsGeofenceHistory()
+            let user = VisilabsPersistence.unarchiveUser()
+            let geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
             var props = [String: String]()
             props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
             props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-            props[VisilabsConstants.COOKIEID_KEY] = user?.cookieId
-            props[VisilabsConstants.EXVISITORID_KEY] = user?.exVisitorId
+            props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
+            props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
             props[VisilabsConstants.ACT_KEY] = VisilabsConstants.GET_LIST
-            props[VisilabsConstants.TOKENID_KEY] = user?.tokenId
-            props[VisilabsConstants.APPID_KEY] = user?.appId
+            props[VisilabsConstants.TOKENID_KEY] = user.tokenId
+            props[VisilabsConstants.APPID_KEY] = user.appId
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                 props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
@@ -143,7 +143,7 @@ class VisilabsGeofence {
                             geofenceHistory.errorHistory[key] = nil
                         }
                     }
-                    VisilabsDataManager.saveVisilabsGeofenceHistory(geofenceHistory)
+                    VisilabsPersistence.saveVisilabsGeofenceHistory(geofenceHistory)
                     return
                 }
                 (self.lastSuccessfulGeofenceFetchTime, geofenceHistory.lastFetchTime) = (now, now)
@@ -177,23 +177,23 @@ class VisilabsGeofence {
                     }
                 }
                 self.geofenceHistory = geofenceHistory
-                VisilabsDataManager.saveVisilabsGeofenceHistory(self.geofenceHistory)
+                VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
                 self.startMonitorGeofences(geofences: fetchedGeofences)
             }
         }
     }
     
     func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool) {
-        let user = VisilabsDataManager.readVisilabsUser()
+        let user = VisilabsPersistence.unarchiveUser()
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
         props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-        props[VisilabsConstants.COOKIEID_KEY] = user?.cookieId
-        props[VisilabsConstants.EXVISITORID_KEY] = user?.exVisitorId
+        props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
+        props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
         props[VisilabsConstants.ACT_KEY] = VisilabsConstants.PROCESSV2
         props[VisilabsConstants.ACT_ID_KEY] = actionId
-        props[VisilabsConstants.TOKENID_KEY] = user?.tokenId
-        props[VisilabsConstants.APPID_KEY] = user?.appId
+        props[VisilabsConstants.TOKENID_KEY] = user.tokenId
+        props[VisilabsConstants.APPID_KEY] = user.appId
         props[VisilabsConstants.GEO_ID_KEY] = geofenceId
         
         if isDwell {
