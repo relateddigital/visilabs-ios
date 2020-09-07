@@ -27,10 +27,15 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We will use your location always!</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We will use your location when app is open!</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>location</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -45,9 +50,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We will use your location always!</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We will use your location when app is open!</string>
 </dict>
 </plist>

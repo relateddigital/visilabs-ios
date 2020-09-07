@@ -596,7 +596,7 @@
 				CODE_SIGN_ENTITLEMENTS = VisilabsIOS_Example.entitlements;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsIOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.relateddigital.visilabsexample;
@@ -615,7 +615,7 @@
 				CODE_SIGN_ENTITLEMENTS = VisilabsIOS_Example.entitlements;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsIOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.relateddigital.visilabsexample;
