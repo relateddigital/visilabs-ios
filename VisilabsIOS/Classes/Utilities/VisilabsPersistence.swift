@@ -9,6 +9,8 @@ import Foundation
 
 class VisilabsPersistence {
     
+    // MARK: - USER DEFAULTS
+    
     private static let archiveQueueUtility = DispatchQueue(label: "com.relateddigital.archiveQueue", qos: .utility)
     
     private class func filePath(filename: String) -> String? {
@@ -274,5 +276,22 @@ class VisilabsPersistence {
         for visilabsParameter in VisilabsConstants.visilabsParameters() {
             VisilabsDataManager.remove(visilabsParameter.storeKey)
         }
+    }
+    
+    // MARK: - USER DEFAULTS
+    
+    
+    static func saveUserDefaults(_ key: String, withObject value: Any?) {
+        UserDefaults.standard.set(value, forKey: key)
+        UserDefaults.standard.synchronize()
+    }
+
+    static func readUserDefaults(_ key: String) -> Any? {
+        return UserDefaults.standard.object(forKey: key)
+    }
+
+    static func removeUserDefaults(_ key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+        UserDefaults.standard.synchronize()
     }
 }
