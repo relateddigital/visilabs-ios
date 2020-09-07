@@ -7,7 +7,6 @@
 
 import Foundation
 import SystemConfiguration
-import WebKit
 
 typealias Queue = [[String: String]]
 
