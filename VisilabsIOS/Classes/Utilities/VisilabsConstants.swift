@@ -9,7 +9,10 @@ import Foundation
 
 struct VisilabsConstants {
     
-    static var QUEUE_SIZE = 5000
+    static let HTTP = "http"
+    static let HTTPS = "https"
+    
+    static let QUEUE_SIZE = 5000
     static let GEOFENCE_HISTORY_MAX_COUNT = 500 //TODO: bunu sonra değiştir
     static let GEOFENCE_HISTORY_ERROR_MAX_COUNT = 500 //TODO: bunu sonra değiştir
     static let GEOFENCE_FETCH_TIME_INTERVAL = TimeInterval(60) //TODO: bunu sonra değiştir 15 dakika yap

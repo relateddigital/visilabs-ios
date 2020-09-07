@@ -6,6 +6,7 @@
 # To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
 #
 
+
 Pod::Spec.new do |s|
   s.name             = 'VisilabsIOS'
   s.version          = '2.0.0'
@@ -22,5 +23,4 @@ Pod::Spec.new do |s|
   s.resources     = 'VisilabsIOS/Assets/Images/**/*'
   s.info_plist = { 'CFBundleIdentifier' => 'com.relateddigital.visilabs' }
   s.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'com.relateddigital.visilabs' }
-  
 end
