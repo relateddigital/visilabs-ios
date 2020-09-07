@@ -158,10 +158,10 @@
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				8891608124B4927C00752F03 /* VisilabsBaseTests.swift */,
+				8891608724B4AE3900752F03 /* VisilabsEventRequestTests.swift */,
 				8891608524B4A1E600752F03 /* VisilabsEventTests.swift */,
 				8891608324B49EA200752F03 /* VisilabsInAppNotificationTest.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
-				8891608724B4AE3900752F03 /* VisilabsEventRequestTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
