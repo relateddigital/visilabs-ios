@@ -134,31 +134,6 @@ class VisilabsPersistence {
         return visilabsUser
     }
     
-    //TODO: bunu ExceptionWrapper içine al
-    class func unarchiveProfile() -> VisilabsProfile {
-        var visilabsProfile = VisilabsProfile(organizationId: "", profileId: "", dataSource: "", channel: VisilabsConstants.IOS, requestTimeoutInSeconds: 60, geofenceEnabled: false, inAppNotificationsEnabled: false, maxGeofenceCount: 20)
-        
-        if let propsfp = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY), let p = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? Data, let profile = try? PropertyListDecoder().decode(VisilabsProfile.self, from: p)  {
-            visilabsProfile = profile
-        }else{
-            VisilabsLogger.warn("Error while unarchiving profile.")
-        }
-
-        return visilabsProfile
-    }
-    
-    //TODO: bunu ExceptionWrapper içine al
-    class func unarchiveGeofenceHistory() -> VisilabsGeofenceHistory {
-        var visilabsGeofenceHistory = VisilabsGeofenceHistory()
-        if let ghfp = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY), let gh = NSKeyedUnarchiver.unarchiveObject(withFile: ghfp) as? Data, let geofenceHistory = try? PropertyListDecoder().decode(VisilabsGeofenceHistory.self, from: gh)  {
-            visilabsGeofenceHistory = geofenceHistory
-        }else{
-            VisilabsLogger.warn("Error while unarchiving geofence history.")
-        }
-        return visilabsGeofenceHistory
-    }
-    
-    
     
     //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
     class func saveParameters(_ parameters: [String : String]) {
