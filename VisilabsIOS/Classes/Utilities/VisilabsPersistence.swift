@@ -161,13 +161,13 @@ class VisilabsPersistence {
                                 parameterValueToStore = parameterValueToStore + ("|0")
                             }
                             parameterValueToStore = parameterValueToStore + (dateString)
-                            VisilabsDataManager.save(storeKey, withObject: parameterValueToStore)
+                            saveUserDefaults(storeKey, withObject: parameterValueToStore)
                         } else {
-                            VisilabsDataManager.save(storeKey, withObject: parameterValue)
+                            saveUserDefaults(storeKey, withObject: parameterValue)
                         }
                     }
                     else if count > 1 {
-                        let previousParameterValue = VisilabsDataManager.read(storeKey) as? String
+                        let previousParameterValue = readUserDefaults(storeKey) as? String
                         var parameterValueToStore = parameterValue.copy() as! String + ("|")
                         parameterValueToStore = parameterValueToStore + (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
@@ -185,7 +185,7 @@ class VisilabsPersistence {
                                 }
                             }
                         }
-                        VisilabsDataManager.save(storeKey, withObject: parameterValueToStore)
+                        saveUserDefaults(storeKey, withObject: parameterValueToStore)
                     }
                     
                 }
@@ -198,7 +198,7 @@ class VisilabsPersistence {
         var parameters: [String : String?] = [:]
         for visilabsParameter in VisilabsConstants.visilabsParameters() {
             let storeKey = visilabsParameter.storeKey
-            let value = VisilabsDataManager.read(storeKey) as? String
+            let value = readUserDefaults(storeKey) as? String
             if value != nil && (value?.count ?? 0) > 0 {
                 parameters[storeKey] = value
             }
@@ -208,7 +208,7 @@ class VisilabsPersistence {
 
     class func clearParameters() {
         for visilabsParameter in VisilabsConstants.visilabsParameters() {
-            VisilabsDataManager.remove(visilabsParameter.storeKey)
+            removeUserDefaults(visilabsParameter.storeKey)
         }
     }
     
