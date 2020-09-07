@@ -46,7 +46,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var visilabsProfile: VisilabsProfile!
     var visilabsCookie = VisilabsCookie()
     var eventsQueue = Queue()
-    // var flushEventsQueue = Queue()
     var trackingQueue: DispatchQueue!
     var targetingActionQueue: DispatchQueue!
     var recommendationQueue: DispatchQueue!
@@ -105,7 +104,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         VisilabsDataManager.saveVisilabsProfile(visilabsProfile)
 
-        readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
+        self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
         let label = "com.relateddigital.\(self.visilabsProfile.profileId)"
         self.trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         self.recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
@@ -158,38 +157,29 @@ extension VisilabsInstance {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
-
-        // let epochInterval = Date().timeIntervalSince1970
-
         trackingQueue.async { [weak self, pageName, properties] in
             guard let self = self else { return }
             var eQueue = Queue()
             var vUser = VisilabsUser()
             var chan = ""
-
             self.readWriteLock.read {
                 eQueue = self.eventsQueue
                 vUser = self.visilabsUser
                 chan = self.visilabsProfile.channel
             }
-
             let (eventsQueue, visilabsUser, clearUserParameters, channel) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: eQueue, visilabsUser: vUser, channel: chan)
-
             self.readWriteLock.write {
                 self.eventsQueue = eventsQueue
                 self.visilabsUser = visilabsUser
                 self.visilabsProfile.channel = channel
             }
-
             self.readWriteLock.read {
                 VisilabsDataManager.saveVisilabsUser(self.visilabsUser)
                 //VisilabsPersistence.archiveUser(self.visilabsUser)
-
                 if clearUserParameters {
                     VisilabsPersistence.clearParameters()
                 }
             }
-
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveParameters(event)
                 if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled {
@@ -198,9 +188,6 @@ extension VisilabsInstance {
             }
 
             self.send()
-
-            // TODO:
-            // self.decideInstance.notificationsInstance.showNotification(event: event, properties: mergedProperties)
         }
     }
 
@@ -254,26 +241,19 @@ extension VisilabsInstance {
     private func send() {
         trackingQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
-                guard let self = self else {
-                    return
-                }
-
+                guard let self = self else { return }
                 var eQueue = Queue()
                 var vUser = VisilabsUser()
                 var vCookie = VisilabsCookie()
-
                 self.readWriteLock.read {
                     eQueue = self.eventsQueue
                     vUser = self.visilabsUser
                     vCookie = self.visilabsCookie
                 }
-
                 self.readWriteLock.write {
                     self.eventsQueue.removeAll()
                 }
-
                 let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds))
-
                 self.readWriteLock.write {
                     self.visilabsCookie = cookie
                 }
@@ -281,7 +261,6 @@ extension VisilabsInstance {
         }
     }
 }
-
 
 
 // MARK: - TARGETING ACTIONS
@@ -293,9 +272,7 @@ extension VisilabsInstance {
     public func getFavoriteAttributeActions(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)){
         self.targetingActionQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
-                guard let self = self else {
-                    return
-                }
+                guard let self = self else { return }
                 var vUser = VisilabsUser()
                 self.readWriteLock.read {
                     vUser = self.visilabsUser
@@ -311,7 +288,7 @@ extension VisilabsInstance {
 
 extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
-    // TODO: this method added for test purposes
+    // This method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
         visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
     }
@@ -319,13 +296,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     func checkInAppNotification(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
-
             self.networkQueue.async { [weak self, properties] in
-
-                guard let self = self else {
-                    return
-                }
-
+                guard let self = self else { return }
                 self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
                         self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
@@ -342,12 +314,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     }
 
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]) {
-        
         if (notification.queryString == nil || notification.queryString == "") {
             VisilabsLogger.info("Notification or query string is nil or empty")
             return
         }
-        
         let qs = notification.queryString
         let qsArr = qs!.components(separatedBy: "&")
         var properties = properties
@@ -376,21 +346,15 @@ extension VisilabsInstance {
 extension VisilabsInstance {
     
     public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
-        
         self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
-                guard let self = self else {
-                    return
-                }
-                
+                guard let self = self else { return }
                 var vUser = VisilabsUser()
                 var channel = "IOS"
-                
                 self.readWriteLock.read {
                     vUser = self.visilabsUser
                     channel = self.visilabsProfile.channel
                 }
-                
                 self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, properties: properties, filters: filters) { (response) in
                     completion(response)
                 }
@@ -399,7 +363,6 @@ extension VisilabsInstance {
     }
     
 }
-
 
 
 //MARK: - GEOFENCE
