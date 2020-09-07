@@ -221,11 +221,7 @@ extension VisilabsInstance {
 
     // TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() -> VisilabsUser {
-        if let visilabsUser = VisilabsDataManager.readVisilabsUser(), !visilabsUser.cookieId.isNilOrWhiteSpace{
-            return visilabsUser
-        } else {
-            return VisilabsPersistence.unarchiveUser()
-        }
+        return VisilabsPersistence.unarchiveUser()
     }
 }
 
