@@ -11,6 +11,7 @@ import XCTest
 
 class VisilabsEventRequestTests: XCTestCase {
     
+    /*
     func testLoggerCookies() {
         
         let promise = expectation(description: "Status code: 200")
@@ -30,6 +31,7 @@ class VisilabsEventRequestTests: XCTestCase {
         wait(for: [promise], timeout: 5)
         XCTAssert(cs == nil || cs?.count == 0, "No cookies")
     }
+ */
     
 }
 

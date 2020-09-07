@@ -157,7 +157,7 @@ class VisilabsRequest {
             let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserGetList )
             sendGeofenceRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
         } else {
-            let responseParserSendPush: (Data) -> String? = { data in return nil }
+            let responseParserSendPush: (Data) -> String = { data in return "" }
             let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserSendPush )
             sendGeofencePushRequestHandler(resource: resource, completion: { result, reason in completion(nil, reason) })
         }

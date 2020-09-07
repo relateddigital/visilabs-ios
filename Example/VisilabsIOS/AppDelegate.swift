@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: true)
+        Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: false)
         InAppHelper.downloadMiniIconImagesAndSave()
         
         if let vp = DataManager.readVisilabsProfile() {
