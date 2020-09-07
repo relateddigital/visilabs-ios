@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="Open GPX Tracker for iOS">
+  
+  <wpt lat="41.0355126375086" lon="28.9938532170648">
+     <time>2019-12-06T14:19:29Z</time>
+     <name>petrol ofisi kabataş</name>
+     <desc>petrol ofisi kabataş</desc>
+   </wpt>
+   
+   <wpt lat="41.0382473626342" lon="28.9952440606346">
+     <time>2019-12-06T14:19:31Z</time>
+     <name>vodafone park</name>
+     <desc>vodafone park</desc>
+   </wpt>
+  
+  
+  <!--
+  <wpt lat="40.9938384302468" lon="39.7823161213987">
+    <time>2019-12-06T14:19:25Z</time>
+    <name>trabzon havalimanı</name>
+    <desc>trabzon havalimanı</desc>
+  </wpt>
+  -->
+  
+  <wpt lat="41.0304487896279" lon="28.9892232335602">
+     <time>2019-12-06T14:19:36Z</time>
+     <name>mimar sinan güzel sanatlar fakültesi</name>
+     <desc>mimar sinan güzel sanatlar fakültesi</desc>
+  </wpt>
+  
+  <wpt lat="41.1141043664719" lon="29.0601044095245">
+     <time>2019-12-06T14:19:36Z</time>
+     <name>petrol ofisi istinye</name>
+     <desc>petrol ofisi istinye</desc>
+  </wpt>
+  
+  <wpt lat="41.0811762497304" lon="28.9868091451065">
+     <time>2019-12-06T14:19:36Z</time>
+     <name>petrol ofisi çağlayan</name>
+     <desc>petrol ofisi çağlayan</desc>
+  </wpt>
+  
+  <wpt lat="41.1088435394445" lon="29.0203928911392">
+     <time>2019-12-06T14:19:36Z</time>
+     <name>petrol ofisi maslak</name>
+     <desc>petrol ofisi maslak</desc>
+  </wpt>
+  
+  
+</gpx>
