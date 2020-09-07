@@ -48,5 +48,5 @@ script:
 
   # Run `pod lib lint` if specified
   - if [ $POD_LINT == "YES" ]; then
-      cd .. && pod lib lint --allow-warnings && cd Euromsg;
+      cd .. && pod lib lint --allow-warnings && cd VisilabsIOS;
     fi
