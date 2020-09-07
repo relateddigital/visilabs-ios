@@ -228,4 +228,38 @@ class VisilabsPersistence {
         UserDefaults.standard.removeObject(forKey: key)
         UserDefaults.standard.synchronize()
     }
+    
+    static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
+        let encoder = JSONEncoder()
+        if let encodedVisilabsProfile = try? encoder.encode(visilabsProfile) {
+            saveUserDefaults(VisilabsConstants.USER_DEFAULTS_PROFILE_KEY, withObject: encodedVisilabsProfile)
+        }
+    }
+    
+    static func readVisilabsProfile() -> VisilabsProfile? {
+        if let savedVisilabsProfile = readUserDefaults(VisilabsConstants.USER_DEFAULTS_PROFILE_KEY) as? Data {
+            let decoder = JSONDecoder()
+            if let loadedVisilabsProfile = try? decoder.decode(VisilabsProfile.self, from: savedVisilabsProfile) {
+                return loadedVisilabsProfile
+            }
+        }
+        return nil
+    }
+    
+    static func saveVisilabsGeofenceHistory(_ visilabsGeofenceHistory: VisilabsGeofenceHistory) {
+        let encoder = JSONEncoder()
+        if let encodedVisilabsGeofenceHistory = try? encoder.encode(visilabsGeofenceHistory) {
+            saveUserDefaults(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY, withObject: encodedVisilabsGeofenceHistory)
+        }
+    }
+    
+    public static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
+        if let savedVisilabsGeofenceHistory = readUserDefaults(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY) as? Data {
+            let decoder = JSONDecoder()
+            if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self, from: savedVisilabsGeofenceHistory) {
+                return loadedVisilabsGeofenceHistory
+            }
+        }
+        return VisilabsGeofenceHistory()
+    }
 }
