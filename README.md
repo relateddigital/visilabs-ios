@@ -305,6 +305,3 @@ egemen@visilabs.com, egemengulkilik@gmail.com, umutcan.alparslan@euromsg.com
 
 ## License
 
-VisilabsIOS is available under the MIT license. See the LICENSE file for more info.
- - [Related Digital ](https://www.relateddigital.com/)
- - [Visilabs ](http://visilabs.com/)
