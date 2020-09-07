@@ -1,0 +1,103 @@
+//
+//  VisilabsHelper.swift
+//  VisilabsIOS
+//
+//  Created by Egemen on 27.04.2020.
+//
+
+import Foundation
+import AdSupport
+import WebKit
+
+internal class VisilabsHelper {
+    
+    //TODO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
+    static func distanceSquared(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
+        let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
+        let nauticalMilesPerLatitude = 60.00721
+        //let nauticalMilesPerLongitude = 60.10793
+        let metersPerNauticalMile = 1852.00
+        let nauticalMilesPerLongitudeDividedByTwo = 30.053965
+        // simple pythagorean formula - for efficiency
+        let yDistance = (lat2 - lat1) * nauticalMilesPerLatitude
+        let xDistance = (cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo
+        let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
+        return res
+    }
+    
+    static func sendGeofencePushNotification(actionID: String, geofenceID: String, isDwell: Bool, isEnter: Bool) {
+        let request = Visilabs2.callAPI()?.buildGeofenceRequest(action: "processV2", latitude: 0.0, longitude: 0.0, isDwell: isDwell, isEnter: isEnter, actionID: actionID, geofenceID: geofenceID)
+        request?.execAsync(withSuccess: { response in }, andFailure: { response in })
+    }
+
+    //TODO: props un boş gelme ihtimalini de düşün
+    static func buildUrl(url: String, props: [String : String] = [:], additionalQueryString: String = "") -> String {
+        var qsKeyValues = [String]()
+        props.forEach { (key, value) in
+            qsKeyValues.append("\(key)=\(value)")
+        }
+        var queryString = qsKeyValues.joined(separator: "&")
+        if additionalQueryString.count > 0 {
+            queryString = "\(queryString)&\(additionalQueryString)"
+        }
+        return "\(url)?\(queryString)"
+    }
+    
+    static func generateCookieId() -> String {
+        return UUID().uuidString
+    }
+    
+    static func readCookie(_ url: URL) -> [HTTPCookie] {
+        let cookieStorage = HTTPCookieStorage.shared
+        let cookies = cookieStorage.cookies(for: url) ?? []
+        return cookies
+    }
+    
+    static func deleteCookie(_ url: URL) {
+        let cookieStorage = HTTPCookieStorage.shared
+        for cookie in readCookie(url) {
+            cookieStorage.deleteCookie(cookie)
+        }
+    }
+    
+    static func getIDFA() -> String? {
+        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+            let IDFA = ASIdentifierManager.shared().advertisingIdentifier
+            return IDFA.uuidString
+        }
+        return nil
+    }
+    
+    static private var webView: WKWebView?
+    
+    static func computeWebViewUserAgent(completion: @escaping ((String) -> Void)) {
+        DispatchQueue.main.async { [completion] in
+            webView = WKWebView(frame: CGRect.zero)
+            webView?.loadHTMLString("<html></html>", baseURL: nil)
+            webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
+                if error == nil, let userAgentString = userAgent as? String, userAgentString.count > 0 {
+                    completion(userAgentString)
+                }else {
+                    VisilabsLogger.error("Visilabs can not compute user agent.")
+                }
+            })
+        }
+    }
+    
+    static func setEndpoints(dataSource: String) {
+        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.target] = VisilabsConstants.RECOMMENDATION_END_POINT
+        VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
+        VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
+        VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
+    }
+    
+    static private let dateFormatter = DateFormatter()
+    
+    static func formatDate(_ date: Date, format : String = "yyyy-MM-dd HH:mm:ss") -> String {
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: date)
+    }
+    
+}
