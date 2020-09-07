@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsPersistence {
+public class VisilabsPersistence {
     
     // MARK: - ARCHIVE
     
