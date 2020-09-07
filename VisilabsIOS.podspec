@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '10.0'
   s.source_files = 'VisilabsIOS/Classes/**/*'
   s.resources     = 'VisilabsIOS/Assets/Images/**/*'
-  s.info_plist = { 'CFBundleIdentifier' => 'com.relateddigital.visilabs' }
+  #s.info_plist = { 'CFBundleIdentifier' => 'com.relateddigital.visilabs' }
   s.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'com.relateddigital.visilabs' }
 end
