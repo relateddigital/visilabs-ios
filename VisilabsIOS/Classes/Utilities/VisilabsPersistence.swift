@@ -9,7 +9,7 @@ import Foundation
 
 class VisilabsPersistence {
     
-    // MARK: - USER DEFAULTS
+    // MARK: - ARCHIVE
     
     private static let archiveQueueUtility = DispatchQueue(label: "com.relateddigital.archiveQueue", qos: .utility)
     
@@ -51,47 +51,6 @@ class VisilabsPersistence {
             }, finally: {})
         }
     }
-    
-    class func archiveProfile(_ visilabsProfile: VisilabsProfile) {
-        archiveQueueUtility.sync { [visilabsProfile] in
-            let profileFilePath = filePath(filename: VisilabsConstants.PROFILE_ARCHIVE_KEY)
-            guard let path = profileFilePath else {
-                VisilabsLogger.error("bad file path, cant fetch file")
-                return
-            }
-            VisilabsExceptionWrapper.try({ [cObject = visilabsProfile, cPath = path] in
-                if let data = try? PropertyListEncoder().encode(cObject), !NSKeyedArchiver.archiveRootObject(data, toFile: cPath) {
-                    VisilabsLogger.error("failed to archive profile")
-                    return
-                }
-            }, catch: { (error) in
-                VisilabsLogger.error("failed to archive profile due to an uncaught exception")
-                VisilabsLogger.error(error.debugDescription)
-                return
-            }, finally: {})
-        }
-    }
-    
-    class func archiveGeofenceHistory(_ visilabsGeofenceHistory: VisilabsGeofenceHistory) {
-        archiveQueueUtility.sync { [visilabsGeofenceHistory] in
-            let geofenceHistoryFilePath = filePath(filename: VisilabsConstants.GEOFENCE_HISTORY_ARCHIVE_KEY)
-            guard let path = geofenceHistoryFilePath else {
-                VisilabsLogger.error("bad file path, cant fetch file")
-                return
-            }
-            VisilabsExceptionWrapper.try({ [cObject = visilabsGeofenceHistory, cPath = path] in
-                if let data = try? PropertyListEncoder().encode(cObject), !NSKeyedArchiver.archiveRootObject(data, toFile: cPath) {
-                    VisilabsLogger.error("failed to archive geofence history")
-                    return
-                }
-            }, catch: { (error) in
-                VisilabsLogger.error("failed to archive geofence history due to an uncaught exception")
-                VisilabsLogger.error(error.debugDescription)
-                return
-            }, finally: {})
-        }
-    }
-    
     
     //TODO: bunu ExceptionWrapper içine al
     class func unarchiveUser() -> VisilabsUser {
