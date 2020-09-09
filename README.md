@@ -15,6 +15,7 @@
 - [Installation](#Installation)
 - [Usage](#Usage)
     - [Initializing](#Initializing)
+        - [Initial Parameters](#Initial-Parameters])
         - [Debugging](#Debugging)
     - [Data Collection](#Data-Collection)
     - [Targeting Actions](#Targeting-Actions)
@@ -59,6 +60,20 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
         return true
     }                                        
 ```
+
+
+
+### Initial Parameters
+
+* **organizationId** : The ID of your organization. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles.
+* **profileId** : The ID of the profile.
+* **dataSource** :
+* **inAppNotificationsEnabled** : Default value is false.
+* **channel** : Default value is **"IOS"**.
+* **requestTimeoutInSeconds** : Default value is **30**.
+* **geofenceEnabled** : Default value is **false**.
+* **maxGeofenceCount** : Default value is **20**.
+
 
 
 ### Debugging
