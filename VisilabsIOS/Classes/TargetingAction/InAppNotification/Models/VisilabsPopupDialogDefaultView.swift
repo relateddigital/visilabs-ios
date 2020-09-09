@@ -11,16 +11,16 @@ import UIKit
 public class VisilabsPopupDialogDefaultView: UIView {
     
     internal lazy var closeButton: UIButton = {
-        let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        let closeButton = UIButton()// UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.contentHorizontalAlignment = .right
-        closeButton.clipsToBounds = true
+        closeButton.clipsToBounds = false
         closeButton.setTitleColor(UIColor.white, for: .normal)
         closeButton.setTitle("╳", for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .bold)
+        closeButton.titleLabel?.font = .systemFont(ofSize: 30.0, weight: .bold)
+        closeButton.backgroundColor = UIColor.orange
         return closeButton
     }()
-    
 
     internal lazy var imageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
@@ -145,13 +145,6 @@ public class VisilabsPopupDialogDefaultView: UIView {
     
     internal var imageHeightConstraint: NSLayoutConstraint?
     
-    /*
-    internal override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-   */
-    
     weak var visilabsInAppNotification: VisilabsInAppNotification?
     
     init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification) {
@@ -174,7 +167,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
             self.backgroundColor = bgColor
         }
         
-        
+
         titleLabel.text = notification.messageTitle
         titleLabel.font = notification.messageTitleFont
         if let titleColor = notification.messageTitleColor {
@@ -199,13 +192,15 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
         addSubview(imageView)
         addSubview(closeButton)
-
+        
+        
         
         if notification.type == .image_button || notification.type == .full_image {
             views = ["imageView": imageView, "closeButton": closeButton]
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==0@900)-[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==10@900)-[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@1000)-|", options: [], metrics: nil, views: views)
+            //constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==10@900)-[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
             
         } else if notification.type == .image_text_button {
             addSubview(titleLabel)
@@ -221,15 +216,12 @@ public class VisilabsPopupDialogDefaultView: UIView {
             addSubview(titleLabel)
             addSubview(messageLabel)
             addSubview(npsView)
-            
-            
             views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "npsView" : npsView, "closeButton": closeButton] as [String: Any]
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==0@900)-[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
-            // TODO: burada sabit 60 vermek yerine hesaplanabilir.
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==60@900)-[npsView]-(==60@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
+            constraints.append(NSLayoutConstraint(item: npsView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0))
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[npsView]-(==30@900)-|", options: [], metrics: nil, views: views)
         } else if notification.type == .smile_rating {
                 addSubview(titleLabel)
@@ -260,12 +252,12 @@ public class VisilabsPopupDialogDefaultView: UIView {
         
         imageHeightConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
         
+        
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
         }
 
         NSLayoutConstraint.activate(constraints)
-
     }
 }
 

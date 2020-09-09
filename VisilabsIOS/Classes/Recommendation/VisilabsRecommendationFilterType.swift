@@ -43,7 +43,7 @@ public class VisilabsRecommendationFilter {
     var filterType: VisilabsRecommendationFilterType
     var value: String
     
-    init(attribute: VisilabsProductAttribute, filterType: VisilabsRecommendationFilterType, value: String){
+    public init(attribute: VisilabsProductAttribute, filterType: VisilabsRecommendationFilterType, value: String){
         self.attribute = attribute
         self.filterType = filterType
         self.value = value

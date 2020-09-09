@@ -60,6 +60,10 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
         }
     }
+    
+    func changeCloseButtonConstraints(){
+        
+    }
 
     public convenience init(notification: VisilabsInAppNotification) {
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
@@ -233,24 +237,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             buttonStackView.addArrangedSubview(button)
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         }
-
-        /*
-         if let closeImage = UIImage(systemItem: UIBarButtonItem.SystemItem.stop) {
-             self.closeButton = UIButton()
-             self.closeButton.setImage(closeImage, for: .normal)
-             self.closeButton.tintColor = notification.closeButtonColor
-             var views: [String: Any] = [:]
-             views = ["closeButton": self.closeButton!]
-             var constraints = [NSLayoutConstraint]()
-             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==40@950)-|", options: [], metrics: nil, views: views)
-             constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==40@950)-[closeButton]|", options: [], metrics: nil, views: views)
-             //NSLayoutConstraint.activate(constraints)
-
-             stackView.addSubview(self.closeButton)
-             stackView.addConstraints(constraints)
-             stackView.updateConstraints()
-         }
-         */
     }
 
     /*!

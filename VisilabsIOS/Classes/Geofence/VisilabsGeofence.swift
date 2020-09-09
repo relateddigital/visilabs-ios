@@ -78,17 +78,14 @@ class VisilabsGeofence {
             let secondDistance = second.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
             return firstDistance < secondDistance
         }
-        var geofencesToMonitor = [Int: VisilabsGeofenceEntity]()
+        var geofencesToMonitor = [VisilabsGeofenceEntity]()
         for geofence in geofencesSortedAscending {
             if geofencesToMonitor.count == self.profile.maxGeofenceCount {
                 break
             }
-            if geofencesToMonitor[geofence.geofenceId] != nil {
-                continue
-            }
-            geofencesToMonitor[geofence.geofenceId] = geofence
+            geofencesToMonitor.append(geofence)
         }
-        return [VisilabsGeofenceEntity](geofencesToMonitor.values)
+        return [VisilabsGeofenceEntity](geofencesToMonitor)
     }
     
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
