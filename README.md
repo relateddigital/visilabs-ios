@@ -44,7 +44,7 @@ pod 'VisilabsIOS'
 
 ## Initializing
 
-Import VisilabsIOS in AppDelegate.swift and call  `createAPI` method within  `application:didFinishLaunchingWithOptions:` method.
+Import VisilabsIOS in AppDelegate.swift and call  `createAPI` method within  `application:didFinishLaunchingWithOptions:`  method.
 
 The code below is a sample initialization of Visilabs library.
 
