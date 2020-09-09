@@ -15,7 +15,10 @@
 - [Installation](#Installation)
 - [Usage](#Usage)
     - [Initializing](#Initializing)
+        - [Debugging](#Debugging)
     - [Data Collection](#Data-Collection)
+    - [Targeting Actions](#Targeting-Actions)
+    - [Recommendation](#Recommendation)
 
 
 # Introduction
@@ -57,8 +60,31 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 
 
+### Debugging
+
+
 
 ## Data Collection
+
+
+
+## Targeting Actions
+
+
+## Recommendation
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -289,7 +315,7 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
 
-## Recommendation
+
 
 Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
 
