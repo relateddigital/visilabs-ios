@@ -194,7 +194,7 @@ properties["OM.OSB"] = "Banner Name/Banner Code"
 Visilabs.callAPI().customEvent("Banner Click", properties: properties)
 ```
 
-#### Add To Favourites
+#### Add To Favorites
 
 ```swift
 var properties = [String:String]()
@@ -204,7 +204,7 @@ properties["OM.ppr"] = "Product Price"
 Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
 ```
 
-#### Remove from Favourites
+#### Remove from Favorites
 
 ```swift
 var properties = [String:String]()
