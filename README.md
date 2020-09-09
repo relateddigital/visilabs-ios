@@ -1,18 +1,126 @@
 <p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-android"><img src="https://github.com/relateddigital/visilabs-android/blob/master/app/visilabs.png" alt="Visilabs Android Library" width="500" style="max-width:100%;"></a>
+  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-ios"><img src="https://github.com/relateddigital/visilabs-ios/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
 </p>
-
-# VisilabsIOS
-
 
 [![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
 [![Version](https://img.shields.io/cocoapods/v/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![License](https://img.shields.io/cocoapods/l/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![Platform](https://img.shields.io/cocoapods/p/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 
-## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Example](#Example)
+- [Installation](#Installation)
+- [Usage](#Usage)
+    - [Initializing](#Initializing)
+        - [Initial Parameters](#Initial-Parameters])
+        - [Debugging](#Debugging)
+    - [Data Collection](#Data-Collection)
+    - [Targeting Actions](#Targeting-Actions)
+    - [Recommendation](#Recommendation)
+
+
+# Introduction
+
+This library is the official Swift SDK of Visilabs for native IOS projects. The library is written with Swift 5 and minimum deployment target is 10.
+
+If you are using a lower version of Swift or minimum deployment target of your project is lower than 10, we recommend using **[Objective-C Library](https://github.com/visilabs/Visilabs-IOS )**.
+
+# Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory.
+
+# Installation
+
+VisilabsIOS is available through [CocoaPods](https://cocoapods.org). To install it, simply add the following line to your Podfile:
+
+```ruby
+pod 'VisilabsIOS'
+```
+
+# Usage
+
+
+## Initializing
+
+Import VisilabsIOS in AppDelegate.swift and call  `createAPI` method within  `application:didFinishLaunchingWithOptions:`  method.
+
+The code below is a sample initialization of Visilabs library.
+
+```swift
+import VisilabsIOS
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions 
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", profileId: "YOUR_PROFILE_ID"
+        , dataSource: "YOUR_DATASOURCE", inAppNotificationsEnabled: false, channel: "IOS"
+        , requestTimeoutInSeconds: 30, geofenceEnabled: false, maxGeofenceCount: 20)
+        return true
+    }                                        
+```
+
+
+
+### Initial Parameters
+
+* **Mandatory Parameters**
+    * **organizationId** : The ID of your organization. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
+    * **profileId** : The ID of the profile you want to integrate. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
+    * **dataSource** : The data source of the profile you want to integrate. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
+* **Optional Parameters**
+    * **inAppNotificationsEnabled** : Default value is **false**. If you want to use in app notification feature of Visilabs you need to set the value to **true**. If you are not using in app notification feature of Visilabs, we recommend that you leave this value to **false** in terms of performance because in each event request, another request is sent to check whether there exists a notification for the relevant event.
+    * **channel** : Default value is **"IOS"**. If you want to categorize the events of the IOS application in the Analytics section of the admin panel you may change this value.
+    * **requestTimeoutInSeconds** : Default value is **30**. The request timeout value in seconds to send data to Visilabs servers and receive data from.
+    * **geofenceEnabled** : Default value is **false**. If you want to use geofencing feature of Visilabs you need to set the value to **true**. If you are not using geofencing feature of Visilabs, we recommend that you leave this value to **false** in terms of performance because geofence monitoring would increase the battery consumption of your application.
+    * **maxGeofenceCount** : Default value is **20**. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots. However if you need some of these slots for another use you can set this parameter to a value lower than **20**. Setting a value higher than 20 would not affect the maximum number of regions to be monitored. 
+
+
+![Image of Profiles]
+(https://github.com/relateddigital/visilabs-ios/Screenshots/profiles-page.png)
+
+![Image of Profile]
+(https://github.com/relateddigital/visilabs-ios/Screenshots/profile-page.png)
+
+
+### Debugging
+
+You can tun on logging by setting `loggingEnabled` property to `true`.
+
+```swift
+Visilabs.callAPI().loggingEnabled = true                                      
+```
+
+
+## Data Collection
+
+
+
+## Targeting Actions
+
+
+## Recommendation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Requirements
 
@@ -236,7 +344,7 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
 
-## Recommendation
+
 
 Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
 
