@@ -221,15 +221,12 @@ public class VisilabsPopupDialogDefaultView: UIView {
             addSubview(titleLabel)
             addSubview(messageLabel)
             addSubview(npsView)
-            
-            
             views = ["imageView": imageView, "titleLabel": titleLabel, "messageLabel": messageLabel, "npsView" : npsView, "closeButton": closeButton] as [String: Any]
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[closeButton]-(==10@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==0@900)-[imageView]-(==0@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[titleLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==20@900)-[messageLabel]-(==20@900)-|", options: [], metrics: nil, views: views)
-            // TODO: burada sabit 60 vermek yerine hesaplanabilir.
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(==60@900)-[npsView]-(==60@900)-|", options: .alignAllCenterX, metrics: nil, views: views)
+            constraints.append(NSLayoutConstraint(item: npsView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0))
             constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-(==10@900)-[closeButton]-(==20@900)-[imageView]-(==30@900)-[titleLabel]-(==8@900)-[messageLabel]-(==30@900)-[npsView]-(==30@900)-|", options: [], metrics: nil, views: views)
         } else if notification.type == .smile_rating {
                 addSubview(titleLabel)
