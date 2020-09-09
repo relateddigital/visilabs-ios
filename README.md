@@ -70,11 +70,11 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
     * **profileId** : The ID of the profile you want to integrate. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
     * **dataSource** : The data source of the profile you want to integrate. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
 * **Optional Parameters**
-    * **inAppNotificationsEnabled** : Default value is false. If you want to use in app notification feature of Visilabs you need to set the value to **true**.
-    * **channel** : Default value is **"IOS"**.
-    * **requestTimeoutInSeconds** : Default value is **30**.
-    * **geofenceEnabled** : Default value is **false**.
-    * **maxGeofenceCount** : Default value is **20**.
+    * **inAppNotificationsEnabled** : Default value is **false**. If you want to use in app notification feature of Visilabs you need to set the value to **true**. If you are not using in app notification feature of Visilabs, we recommend that you leave this value to **false** in terms of performance because in each event request, another request is sent to check whether there exists a notification for the relevant event.
+    * **channel** : Default value is **"IOS"**. If you want to categorize the events of the IOS application in the Analytics section of the admin panel you may change this value.
+    * **requestTimeoutInSeconds** : Default value is **30**. The request timeout value in seconds to send data to Visilabs servers and receive data from.
+    * **geofenceEnabled** : Default value is **false**. If you want to use geofencing feature of Visilabs you need to set the value to **true**. If you are not using geofencing feature of Visilabs, we recommend that you leave this value to **false** in terms of performance because geofence monitoring would increase the battery consumption of your application.
+    * **maxGeofenceCount** : Default value is **20**. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots. However if you need some of these slots for another use you can set this parameter to a value lower than **20**. Setting a value higher than 20 would not affect the maximum number of regions to be monitored. 
 
 
 
