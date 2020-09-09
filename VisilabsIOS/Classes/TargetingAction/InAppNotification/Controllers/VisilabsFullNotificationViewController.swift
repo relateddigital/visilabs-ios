@@ -30,7 +30,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     }
     
     static func notificationXibToLoad() -> String {
-        var xibName = String(describing: VisilabsFullNotificationViewController.self)
+        let xibName = String(describing: VisilabsFullNotificationViewController.self)
         guard VisilabsInstance.sharedUIApplication() != nil else {
             return xibName
         }
@@ -40,7 +40,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let notificationImage = notification.image, let image = UIImage(data: notificationImage, scale: 2) {
+        if let notificationImage = notification.image, let image = UIImage(data: notificationImage, scale: 1) {
             imageView.image = image
             if let width = imageView.image?.size.width, width / UIScreen.main.bounds.width <= 0.6, let height = imageView.image?.size.height,
                 height / UIScreen.main.bounds.height <= 0.3 {
