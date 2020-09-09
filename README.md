@@ -15,7 +15,7 @@
 - [Installation](#Installation)
 - [Usage](#Usage)
     - [Initializing](#Initializing)
-    - [Start tracking](#start-tracking)
+    - [Data Collection](#Data-Collection)
 
 
 # Introduction
@@ -26,7 +26,7 @@ If you are using a lower version of Swift or minimum deployment target of your p
 
 # Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example project, clone the repo, and run `pod install` from the Example directory.
 
 # Installation
 
@@ -41,7 +41,7 @@ pod 'VisilabsIOS'
 
 ## Initializing
 
-
+## Data Collection
 
 
 
