@@ -49,10 +49,12 @@ class EventViewController: FormViewController {
         section.append(TextRow("exVisitorId") {
             $0.title = "exVisitorId"
             $0.value = visilabsProfile.userKey
+            $0.cell.textField.autocapitalizationType = .none
         })
         section.append(TextRow("email") {
             $0.title = "email"
             $0.value = visilabsProfile.userEmail
+            $0.cell.textField.autocapitalizationType = .none
         })
         
         for eventType in VisilabsEventType.allCases {
