@@ -65,14 +65,16 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 ### Initial Parameters
 
-* **organizationId** : The ID of your organization. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles.
-* **profileId** : The ID of the profile.
-* **dataSource** :
-* **inAppNotificationsEnabled** : Default value is false.
-* **channel** : Default value is **"IOS"**.
-* **requestTimeoutInSeconds** : Default value is **30**.
-* **geofenceEnabled** : Default value is **false**.
-* **maxGeofenceCount** : Default value is **20**.
+* **Mandatory Parameters**
+    * **organizationId** : The ID of your organization. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
+    * **profileId** : The ID of the profile you want to integrate. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
+    * **dataSource** : The data source of the profile you want to integrate. The value of this parameter could be obtained by https://intelligence.relateddigital.com/#Management/UserManagement/Profiles and selecting relevant profile.
+* **Optional Parameters**
+    * **inAppNotificationsEnabled** : Default value is false. If you want to use in app notification feature of Visilabs you need to set the value to **true**.
+    * **channel** : Default value is **"IOS"**.
+    * **requestTimeoutInSeconds** : Default value is **30**.
+    * **geofenceEnabled** : Default value is **false**.
+    * **maxGeofenceCount** : Default value is **20**.
 
 
 
