@@ -21,7 +21,7 @@
 
 # Introduction
 
-The VisilabsIOS library is the official SDK for native IOS projects. The library is written with Swift 5 and minimum deployment target is 10.
+This library is the official Swift SDK of Visilabs for native IOS projects. The library is written with Swift 5 and minimum deployment target is 10.
 
 If you are using a lower version of Swift or minimum deployment target of your project is lower than 10, we recommend using **[Objective-C Library](https://github.com/visilabs/Visilabs-IOS )**.
 
