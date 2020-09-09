@@ -34,16 +34,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         guard VisilabsInstance.sharedUIApplication() != nil else {
             return xibName
         }
-        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
-            if UIDevice.current.orientation.isLandscape {
-                xibName += "~iphonelandscape"
-            } else {
-                xibName += "~iphoneportrait"
-            }
-        } else {
-            xibName += "~ipad"
-        }
-
         return xibName
     }
     
