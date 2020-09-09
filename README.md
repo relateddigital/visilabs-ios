@@ -92,119 +92,16 @@ Visilabs.callAPI().loggingEnabled = true
 
 ## Data Collection
 
-Vislabs
+Vislabs uses events to collect data from IOS applications. The developer needs to implement the methods provided by SDK. `customEvent`  is a generic method to track user events. `customEvent`  takes 2 parameters: pageName and properties.
 
+* **pageName** : The current page of your application. If your event is not related to a page view, you should pass a value related to the event. If you pass an empty **String** the event would be considered invalid and discarded.
+* **properties** : A collection of key/value pairs related to the event. If your event does not have additional data apart from page name, passing an empty dictionary acceptable.
 
-## Targeting Actions
+In SDK apart from `customEvent`, there are 2 other methods to collect data: `login` and `signUp`.  As in the `customEvent` method, the `login` and `signUp` methods also take a mandatory and an optional parameter. The first parameter is `exVisitorId`  which uniquely identifies the user and can not be empty. The second parameter (`properties`)  is optional and passsing an empty dictionary also valid.
 
-
-## Recommendation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Requirements
-
-## Installation
-
-VisilabsIOS is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'VisilabsIOS'
-```
-
-Then go to the path of your project file from the terminal and run the ```pod install``` command.
-
-## Initializing
-Open ```AppDelegate.swift```<br />
-
-Add Visilabs using the line below <br />
-
-```import VisilabsIOS``` <br />
-
-Depending on your needs you can initialize Visilabs with various number of parameters. 
-
-In simplest form Visilabs IOS SDK could be initialized with 6 mandatory parameters. If you initialize Visilabs IOS SDK this way, only event logging functionalities would be available. The following example shows this type of initialization. 
-
-```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
-, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
-, realTimeUrl: "http://rt.visilabs.net", channel: "IOS")
-```
-
-If you want to use recommendation module you need to add **targetUrl** parameter and use **createAPI** method as shown below:
-
-```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
-, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
-, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json")
-```
-
-If you want to use target module and use in-app-messages you need to add **actionUrl** parameter and use **createAPI** method as shown below:
-
-```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
-, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
-, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", actionUrl: "http://s.visilabs.net/actjson")
-```
-
-If you want to use geofence module  you need to add **geofenceUrl**, **geofenceEnabled** and **maxGeofenceCoun**t parameter. **maxGeofenceCount** parameter indicates the maximum number of geographic areas which SDK can track. By default IOS is able to track 20 geofences, but if you need to restrict maximum number of geofences you can define a number less than 20 to **maxGeofenceCount** parameter.
-
-```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
-, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
-, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", geofenceUrl: "http://s.visilabs.net/geojson"
-, geofenceEnabled: true, maxGeofenceCount: 20)
-```
-
-If you are using all of the modules described above you can call **createAPI** method with all parameters mentioned above.
-
-```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
-, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
-, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json"
-, actionUrl: "http://s.visilabs.net/actjson", geofenceUrl: "http://s.visilabs.net/geojson"
-, geofenceEnabled: true, maxGeofenceCount: 20)
-```
-
-Initialization method  createAPI should be called in the **didFinishLaunchingWithOptions** method of **AppDelegate** class. Required parameters **organizationId**, **siteId** and **dataSource** is obtained by RMC web panel. 
-
-## Debugging
-
-By default console debugging is disabled. To enable debugging you need to set the **loggingEnabled** property of SDK to true after the call of **createAPI**.
-
-```swift
-Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", siteId: "YOUR_SITE_ID"
-, loggerUrl: "http://lgr.visilabs.net", dataSource: "YOUR_DATASOURCE"
-, realTimeUrl: "http://rt.visilabs.net", channel: "IOS", targetUrl: "http://s.visilabs.net/json"
-, actionUrl: "http://s.visilabs.net/actjson", geofenceUrl: "http://s.visilabs.net/geojson"
-, geofenceEnabled: true, maxGeofenceCount: 20)
-Visilabs.callAPI().loggingEnabled = true
-```
-
-## Event Logging
+Some of the most common events:
 
 ### Sign Up
-
-When an user signs up your application you need to call **signUp** method of SDK. At its simplest you can call **signUp** method by passing the unique identifier of the user to the method.
 
 ```swift
 Visilabs.callAPI().signUp(exVisitorId: "userId")
@@ -230,10 +127,6 @@ properties["OM.sys.TokenID"] = "Token ID to use for push messages"
 properties["OM.sys.AppID"] = "App ID to use for push messages"
 Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 ```
-
-### Custom Event
-
-**customEvent** is an universal method to record all events except login and sign up. **customEvent** receives 2 arguments: **pageName** and **properties**.  **pageName** indicates the page of application the user is visiting. **properties** should include additional information about the event. Below there are some common example usages of **customEvent** method.
 
 #### Page View
 
@@ -341,7 +234,10 @@ properties["OM.sys.AppID"] = "App ID to use for push messages"
 Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
+## Targeting Actions
 
+
+## Recommendation
 
 
 Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
@@ -407,7 +303,5 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, p
 
 ## Author
 
-egemen@visilabs.com, egemengulkilik@gmail.com, umutcan.alparslan@euromsg.com
-
-## License
+developer@relateddigital.com
 
