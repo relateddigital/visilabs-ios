@@ -1,6 +1,5 @@
-<p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-ios"><img src="https://github.com/relateddigital/visilabs-ios/tree/master/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
-</p>
+![IVisilabs Logo](/Screenshots/visilabs.png)
+
 
 [![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
 [![Version](https://img.shields.io/cocoapods/v/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
@@ -77,11 +76,9 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
     * **maxGeofenceCount** : Default value is **20**. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots. However if you need some of these slots for another use you can set this parameter to a value lower than **20**. Setting a value higher than 20 would not affect the maximum number of regions to be monitored. 
 
 
-![Image of Profiles]
-(https://github.com/relateddigital/visilabs-ios/tree/master/Screenshots/profiles-page.png)
+![Image of Profiles](/Screenshots/profiles-page.png)
 
-![Image of Profile]
-(https://github.com/relateddigital/visilabs-ios/tree/master/Screenshots/profile-page.png)
+![Image of Profile](/Screenshots/profile-page.png)
 
 
 ### Debugging
