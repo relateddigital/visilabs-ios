@@ -2,13 +2,36 @@
   <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-android"><img src="https://github.com/relateddigital/visilabs-android/blob/master/app/visilabs.png" alt="Visilabs Android Library" width="500" style="max-width:100%;"></a>
 </p>
 
-# VisilabsIOS
-
-
 [![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
 [![Version](https://img.shields.io/cocoapods/v/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![License](https://img.shields.io/cocoapods/l/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![Platform](https://img.shields.io/cocoapods/p/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
+
+
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+    - [CocoaPods](#cocoapods)
+    - [Manual Installation](#manual-installation)
+- [Initializing and Usage](#initializing-and-usage)
+    - [Integrate](#integrate)
+    - [Start tracking](#start-tracking)
+
+
+# Introduction
+
+The VisilabsIOS library is the official SDK for native IOS projects. The library is written with Swift 5 and minimum deployment target is 10.
+
+If you are using a lower version of Swift or minimum deployment target of your project is lower than 10, we recommend using **[Objective-C Library](https://github.com/visilabs/Visilabs-IOS )**.
+
+# Installation
+
+## CocoaPods
+
+
+
+
 
 ## Example
 
