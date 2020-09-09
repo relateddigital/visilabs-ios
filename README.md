@@ -11,11 +11,10 @@
 # Table of Contents
 
 - [Introduction](#introduction)
-- [Installation](#installation)
-    - [CocoaPods](#cocoapods)
-    - [Manual Installation](#manual-installation)
-- [Initializing and Usage](#initializing-and-usage)
-    - [Integrate](#integrate)
+- [Example](#Example)
+- [Installation](#Installation)
+- [Usage](#Usage)
+    - [Initializing](#Initializing)
     - [Start tracking](#start-tracking)
 
 
@@ -25,17 +24,31 @@ This library is the official Swift SDK of Visilabs for native IOS projects. The 
 
 If you are using a lower version of Swift or minimum deployment target of your project is lower than 10, we recommend using **[Objective-C Library](https://github.com/visilabs/Visilabs-IOS )**.
 
-# Installation
-
-## CocoaPods
-
-
-
-
-
-## Example
+# Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
+# Installation
+
+VisilabsIOS is available through [CocoaPods](https://cocoapods.org). To install it, simply add the following line to your Podfile:
+
+```ruby
+pod 'VisilabsIOS'
+```
+
+# Usage
+
+
+## Initializing
+
+
+
+
+
+
+
+
+
 
 ## Requirements
 
