@@ -44,9 +44,6 @@ class InAppViewController: FormViewController {
     let fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
     let closeButtonColors = ["black", "white"]
     
-    
-    
-    
     private func showHideRows(){
         let messageType = VisilabsInAppNotificationType.init(rawValue: (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?)!.value! as String)!
         switch messageType {
@@ -118,14 +115,12 @@ class InAppViewController: FormViewController {
         VisilabsInAppNotificationType.allCases.forEach {
             notificationTypes.append($0.rawValue)
         }
-    
         
         LabelRow.defaultCellUpdate = { cell, row in
             cell.contentView.backgroundColor = .red
             cell.textLabel?.textColor = .white
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
             cell.textLabel?.textAlignment = .right
-
         }
 
         form +++
@@ -188,12 +183,7 @@ class InAppViewController: FormViewController {
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "Image URL"
             $0.validationOptions = .validatesOnDemand
-            //$0.value = URL(string: "https://img.visilabs.net/in-app-message/uploaded_images/163_1100_133_20200428125252927.jpg")
-            
-            $0.value = URL(string: "https://assets.adidas.com/images/h_840,f_auto,q_auto:sensitive,fl_lossy/69721f2e7c934d909168a80e00818569_9366/Stan_Smith_Shoes_White_M20324_01_standard.jpg")
-            
-            //$0.value = URL(string: "https://img-morhipo.mncdn.com/Content/Banners/ps2aecd8d1feca1453c97623fde44dc9434.jpg")
-            
+            $0.value = URL(string: "https://x6k7p6q7.rocketcdn.me/wp-content/uploads/2019/02/Ways-You-Can-Draw-Attention-to-New-Products.png")
         }
             
         <<< PickerInputRow<String>("miniIcon"){
@@ -342,7 +332,6 @@ class InAppViewController: FormViewController {
             let buttonTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor) as TextRow?)!.value!  as String
             let buttonColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor) as TextRow?)!.value!  as String
             let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
-
             var imageUrlString :String? = ""
             
             if messageType == .mini {
@@ -350,23 +339,11 @@ class InAppViewController: FormViewController {
             }else {
                 imageUrlString = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString) as URLRow?)?.value?.absoluteString
             }
-   
-            
-            
-            let visilabsInAppNotification = VisilabsInAppNotification(actId: 0, type: messageType, messageTitle: messageTitle, messageBody: messageBody, buttonText: buttonText, iosLink: iosLink, imageUrlString: imageUrlString, visitorData: nil, visitData: nil, queryString: nil, messageTitleColor: messageTitleColor, messageBodyColor: messageBodyColor, messageBodyTextSize: messageBodyTextSize, fontFamily: fontFamily, backGround: backGround, closeButtonColor: closeButtonColor, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
-            
-            
-            
-            
-            Visilabs.callAPI().showNotification(visilabsInAppNotification)
-            
-            
-            
-        }
-        
-        showHideRows()
-        
-    }
-    
 
+            let visilabsInAppNotification = VisilabsInAppNotification(actId: 0, type: messageType, messageTitle: messageTitle, messageBody: messageBody, buttonText: buttonText, iosLink: iosLink, imageUrlString: imageUrlString, visitorData: nil, visitData: nil, queryString: nil, messageTitleColor: messageTitleColor, messageBodyColor: messageBodyColor, messageBodyTextSize: messageBodyTextSize, fontFamily: fontFamily, backGround: backGround, closeButtonColor: closeButtonColor, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
+
+            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+        }
+        showHideRows()
+    }
 }
