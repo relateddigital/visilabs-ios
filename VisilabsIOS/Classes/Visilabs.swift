@@ -16,7 +16,7 @@ public class Visilabs {
     }
 
     @discardableResult
-    public class func createAPI(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool = false, channel: String = "IOS", requestTimeoutInSeconds: Int = 60, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20) -> VisilabsInstance {
+    public class func createAPI(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool = false, channel: String = "IOS", requestTimeoutInSeconds: Int = 30, geofenceEnabled: Bool = false, maxGeofenceCount: Int = 20) -> VisilabsInstance {
         VisilabsManager.sharedInstance.initialize(organizationId: organizationId, profileId: profileId, dataSource: dataSource, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
     }
 }
