@@ -80,6 +80,11 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 ### Debugging
 
+You can tun on logging by setting `loggingEnabled` property to `true`.
+
+```swift
+Visilabs.callAPI().loggingEnabled = true                                      
+```
 
 
 ## Data Collection
