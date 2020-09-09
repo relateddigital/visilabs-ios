@@ -1,5 +1,5 @@
 <p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-ios"><img src="https://github.com/relateddigital/visilabs-ios/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
+  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-ios"><img src="https://github.com/relateddigital/visilabs-ios/tree/master/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
 </p>
 
 [![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
@@ -78,10 +78,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 
 ![Image of Profiles]
-(https://github.com/relateddigital/visilabs-ios/Screenshots/profiles-page.png)
+(https://github.com/relateddigital/visilabs-ios/tree/master/Screenshots/profiles-page.png)
 
 ![Image of Profile]
-(https://github.com/relateddigital/visilabs-ios/Screenshots/profile-page.png)
+(https://github.com/relateddigital/visilabs-ios/tree/master/Screenshots/profile-page.png)
 
 
 ### Debugging
