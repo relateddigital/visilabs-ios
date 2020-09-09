@@ -1,5 +1,5 @@
 <p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-android"><img src="https://github.com/relateddigital/visilabs-android/blob/master/app/visilabs.png" alt="Visilabs Android Library" width="500" style="max-width:100%;"></a>
+  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-android"><img src="https://github.com/relateddigital/visilabs-ios/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
 </p>
 
 [![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
