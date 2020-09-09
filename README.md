@@ -1,5 +1,5 @@
 <p align="center">
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-android"><img src="https://github.com/relateddigital/visilabs-ios/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
+  <a target="_blank" rel="noopener noreferrer" href="https://github.com/relateddigital/visilabs-ios"><img src="https://github.com/relateddigital/visilabs-ios/Screenshots/visilabs.png" alt="Visilabs IOS Library" width="500" style="max-width:100%;"></a>
 </p>
 
 [![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
@@ -76,6 +76,12 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
     * **geofenceEnabled** : Default value is **false**. If you want to use geofencing feature of Visilabs you need to set the value to **true**. If you are not using geofencing feature of Visilabs, we recommend that you leave this value to **false** in terms of performance because geofence monitoring would increase the battery consumption of your application.
     * **maxGeofenceCount** : Default value is **20**. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots. However if you need some of these slots for another use you can set this parameter to a value lower than **20**. Setting a value higher than 20 would not affect the maximum number of regions to be monitored. 
 
+
+![Image of Profiles]
+(https://github.com/relateddigital/visilabs-ios/Screenshots/profiles-page.png)
+
+![Image of Profile]
+(https://github.com/relateddigital/visilabs-ios/Screenshots/profile-page.png)
 
 
 ### Debugging
