@@ -262,4 +262,8 @@ public class VisilabsPersistence {
         }
         return VisilabsGeofenceHistory()
     }
+    
+    public static func clearVisilabsGeofenceHistory() {
+        removeUserDefaults(VisilabsConstants.USER_DEFAULTS_GEOFENCE_HISTORY_KEY)
+    }
 }
