@@ -39,6 +39,12 @@ class GeofenceViewController: FormViewController {
     
     private func initializeForm() {
         refreshSection.append(ButtonRow() {
+            $0.title = "Clear History"
+        }
+        .onCellSelection { cell, row in
+            self.clearHistory()
+        })
+        refreshSection.append(ButtonRow() {
             $0.title = "Refresh"
         }
         .onCellSelection { cell, row in
@@ -78,6 +84,7 @@ class GeofenceViewController: FormViewController {
     }
         
     var currentHistoryRowTags = [String:Bool]()
+    var currentErrorRowTags = [String:Bool]()
     
     private func refreshData(){
         visilabsGeofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
@@ -87,7 +94,7 @@ class GeofenceViewController: FormViewController {
         lastKnownLatitudeRow.value = String(format: "%.013f", visilabsGeofenceHistory.lastKnownLatitude ?? 0.0)
         lastKnownLongitudeRow.value = String(format: "%.013f", visilabsGeofenceHistory.lastKnownLongitude ?? 0.0)
         refreshSection.reload()
-        for date in visilabsGeofenceHistory.fetchHistory.keys.sorted(by:<) {
+        for date in visilabsGeofenceHistory.fetchHistory.keys.sorted(by:>) {
             let tag = String(Int64((date.timeIntervalSince1970 * 1000.0).rounded()))
             if currentHistoryRowTags[tag] != nil {
                 return
@@ -103,12 +110,46 @@ class GeofenceViewController: FormViewController {
             }, at: 0)
             currentHistoryRowTags[tag] = true
         }
+        for date in visilabsGeofenceHistory.errorHistory.keys.sorted(by:>) {
+            let tag = String(Int64((date.timeIntervalSince1970 * 1000.0).rounded()))
+            if currentErrorRowTags[tag] != nil {
+                return
+            }
+            errorSection.insert(ButtonRowOf<Date>(tag) {
+                $0.title = dateFormatter.string(from: date)
+                $0.value = date
+            }
+            .onCellSelection { cell, row in
+                let alert = GeofenceAlertViewController(date: row.value!, visilabsReason: self.visilabsGeofenceHistory.errorHistory[row.value!])
+                alert.addAction(title: "Dismiss", style: .default)
+                self.present(alert, animated: true, completion: nil)
+            }, at: 0)
+            currentHistoryRowTags[tag] = true
+        }
+        historySection.reload()
+        errorSection.reload()
     }
+    
+    private func clearHistory(){
+        VisilabsPersistence.clearVisilabsGeofenceHistory()
+        historySection.removeAll()
+        historySection.reload()
+        errorSection.removeAll()
+        errorSection.reload()
+    }
+    
     
 }
 
 class GeofenceAlertViewController: CleanyAlertViewController {
     let dateFormatter = DateFormatter()
+    
+    init(date: Date, visilabsReason: VisilabsReason?) {
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
+        styleSettings[.cornerRadius] = 18
+        super.init(title: dateFormatter.string(from: date) ,message: visilabsReason.debugDescription, preferredStyle: .alert, styleSettings: styleSettings)
+    }
     
     init(date: Date, visilabsGeofenceEntities: [VisilabsGeofenceEntity]?) {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
