@@ -129,7 +129,6 @@ class EventViewController: FormViewController {
             properties["OM.pn"] = "Product Name"
             properties["OM.ppr"] = "Product Price"
             properties["OM.pv.1"] = "Product Brand"
-            properties["OM.ppr"] = "Product Price"
             properties["OM.inv"] = "Number of items in stock"
             Visilabs.callAPI().customEvent("Product View", properties: properties)
             return
