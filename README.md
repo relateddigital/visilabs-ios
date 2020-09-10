@@ -18,6 +18,8 @@
         - [Debugging](#Debugging)
     - [Data Collection](#Data-Collection)
     - [Targeting Actions](#Targeting-Actions)
+        - [In-App Messaging](#In-App-Messaging)
+        - [Geofencing](#Geofencing)
     - [Recommendation](#Recommendation)
 
 
@@ -235,6 +237,10 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
 ## Targeting Actions
+
+### In-App Messaging
+
+### Geofencing
 
 
 ## Recommendation

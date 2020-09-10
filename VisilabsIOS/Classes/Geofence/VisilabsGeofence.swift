@@ -160,10 +160,10 @@ class VisilabsGeofence {
                         }
                     }
                 }
-                self.geofenceHistory.lastFetchTime = Date()
+                self.geofenceHistory.lastFetchTime = now
                 self.geofenceHistory.lastKnownLatitude = lastKnownLatitude
                 self.geofenceHistory.lastKnownLongitude = lastKnownLongitude
-                self.geofenceHistory.fetchHistory[Date()] = fetchedGeofences
+                self.geofenceHistory.fetchHistory[now] = fetchedGeofences
                 if self.geofenceHistory.fetchHistory.count > VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT {
                     let ascendingKeys = Array(self.geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
                     let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT)]
