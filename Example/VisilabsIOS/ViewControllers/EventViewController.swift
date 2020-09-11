@@ -22,8 +22,8 @@ enum VisilabsEventType : String, CaseIterable {
     case productCategoryPageView = "Product Category Page View"
     case inAppSearch = "In App Search"
     case bannerClick = "Banner Click"
-    case addToFavourites = "Add to Favourites"
-    case removeFromFavourites = "Remove from Favourites"
+    case addToFavorites = "Add to Favorites"
+    case removeFromFavorites = "Remove from Favorites"
     case sendingCampaignParameters = "Sending Campaign Parameters"
     case pushMessage = "Push Message"
 }
@@ -159,13 +159,13 @@ class EventViewController: FormViewController {
             properties["OM.OSB"] = "Banner Name/Banner Code"
             Visilabs.callAPI().customEvent("Banner Click", properties: properties)
             return
-        case .addToFavourites:
+        case .addToFavorites:
             properties["OM.pf"] = "Product Code"
             properties["OM.pfu"] = "1"
             properties["OM.ppr"] = "Product Price"
             Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
             return
-        case .removeFromFavourites:
+        case .removeFromFavorites:
             properties["OM.pf"] = "Product Code"
             properties["OM.pfu"] = "-1"
             properties["OM.ppr"] = "Product Price"
