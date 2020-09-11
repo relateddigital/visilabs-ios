@@ -38,7 +38,7 @@ class VisilabsRecommendation {
         }
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
-            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                 props[key] = value
             }
         }

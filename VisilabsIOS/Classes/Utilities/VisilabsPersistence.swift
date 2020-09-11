@@ -114,13 +114,13 @@ public class VisilabsPersistence {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dateString = dateFormatter.string(from: Date())
+            var targetParameters = [String: String]()
             
             for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
                 let key = visilabsParameter.key
                 let storeKey = visilabsParameter.storeKey
                 let relatedKeys = visilabsParameter.relatedKeys
                 let count = visilabsParameter.count
-
                 if let parameterValue = parameters[key], parameterValue.count > 0 {
                     if count == 1 {
                         if relatedKeys != nil && relatedKeys!.count > 0 {
@@ -134,9 +134,11 @@ public class VisilabsPersistence {
                                 parameterValueToStore = parameterValueToStore + ("|0")
                             }
                             parameterValueToStore = parameterValueToStore + (dateString)
-                            saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                            //saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                            targetParameters[storeKey] = parameterValueToStore
                         } else {
-                            saveUserDefaults(storeKey, withObject: parameterValue)
+                            //saveUserDefaults(storeKey, withObject: parameterValue)
+                            targetParameters[storeKey] = parameterValue
                         }
                     }
                     else if count > 1 {
@@ -158,31 +160,25 @@ public class VisilabsPersistence {
                                 }
                             }
                         }
-                        saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                        //saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                        targetParameters[storeKey] = parameterValueToStore
                     }
-                    
                 }
             }
             
+            saveUserDefaults(VisilabsConstants.USER_DEFAULTS_TARGET_KEY, withObject: targetParameters)
         }
     }
     
-    class func readTargetParameters() -> [String : String?] {
-        var parameters: [String : String?] = [:]
-        for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
-            let storeKey = visilabsParameter.storeKey
-            let value = readUserDefaults(storeKey) as? String
-            if value != nil && (value?.count ?? 0) > 0 {
-                parameters[storeKey] = value
-            }
+    class func readTargetParameters() -> [String : String] {
+        guard let targetParameters = readUserDefaults(VisilabsConstants.USER_DEFAULTS_TARGET_KEY) as? [String : String] else {
+            return [String : String]()
         }
-        return parameters
+        return targetParameters
     }
 
     class func clearTargetParameters() {
-        for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
-            removeUserDefaults(visilabsParameter.storeKey)
-        }
+        removeUserDefaults(VisilabsConstants.USER_DEFAULTS_TARGET_KEY)
     }
     
     // MARK: - USER DEFAULTS

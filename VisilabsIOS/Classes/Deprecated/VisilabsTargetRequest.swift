@@ -125,8 +125,8 @@ public class VisilabsTargetRequest: VisilabsAction {
         }
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
-            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace {
-                queryParameters = "\(queryParameters)&\(key)=\(value!.urlEncode())"
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace {
+                queryParameters = "\(queryParameters)&\(key)=\(value.urlEncode())"
             }
         }
 

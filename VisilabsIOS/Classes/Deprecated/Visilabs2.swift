@@ -330,10 +330,10 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                 }
                 
                 for (key, value) in VisilabsPersistence.readTargetParameters(){
-                    if value.isNilOrWhiteSpace{
+                    if value.isEmptyOrWhitespace{
                         externalProps.removeValue(forKey: key)
                     }else{
-                        props[key] = value!.urlEncode()
+                        props[key] = value.urlEncode()
                     }
                 }
                 
