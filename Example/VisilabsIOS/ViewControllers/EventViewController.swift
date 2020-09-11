@@ -14,6 +14,7 @@ import Euromsg
 
 enum VisilabsEventType : String, CaseIterable {
     case login = "Login"
+    case loginWithExtraParameters = "Login with Extra Parameters"
     case signUp  = "Sign Up"
     case pageView = "Page View"
     case productView = "Product View"
@@ -95,7 +96,7 @@ class EventViewController: FormViewController {
         self.present(alertViewController, animated: true, completion: nil)
     }
     
-    private func getRandomProductValues() -> (productCode1: Int, productCode2: Int, productPrice1: Double, productPrice2: Double, productQuantity1: Int, productQuantity2: Int, inventory: Int, basketID: Int, orderID: Int, categoryId: Int, numberOfSearchResults: Int, bannerCode: Int) {
+    private func getRandomProductValues() -> (productCode1: Int, productCode2: Int, productPrice1: Double, productPrice2: Double, productQuantity1: Int, productQuantity2: Int, inventory: Int, basketID: Int, orderID: Int, categoryId: Int, numberOfSearchResults: Int, bannerCode: Int, gender: String) {
         let randomProductCode1 = Int.random(min: 1, max: 1000)
         let randomProductCode2 = Int.random(min: 1, max: 1000, except: [randomProductCode1])
         let randomProductPrice1 = Double.random(in: 10..<10000)
@@ -108,17 +109,22 @@ class EventViewController: FormViewController {
         let randomCategoryID = Int.random(min: 1, max: 100)
         let randomNumberOfSearchResults = Int.random(min: 1, max: 100)
         let randomBannerCode = Int.random(min: 1, max: 100)
-        return (randomProductCode1, randomProductCode2, randomProductPrice1, randomProductPrice2, randomProductQuantity1, randomProductQuantity2, randomInventory, randomBasketID, randomOrderID, randomCategoryID, randomNumberOfSearchResults, randomBannerCode)
+        let genders: [String] = ["f", "m"]
+        let randomGender = genders[Int.random(min: 0, max: 1)]
+        return (randomProductCode1, randomProductCode2, randomProductPrice1, randomProductPrice2, randomProductQuantity1, randomProductQuantity2, randomInventory, randomBasketID, randomOrderID, randomCategoryID, randomNumberOfSearchResults, randomBannerCode, randomGender)
     }
     
     //TODO: favorites'lerde price göndermek gerekiyor mu?
+    //TODO: örnekte OM parametreleri mi olsun, utm mi?
+    //TODO: utm parametreleri geliyorsa bunları da targetpreferences içine kaydetmeli miyiz?
+    //TODO: birthday ve gender formatı doğru mu?
     private func customEvent(_ eventType: VisilabsEventType){
         let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)!.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let email: String = ((self.form.rowBy(tag: "email") as TextRow?)!.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         var properties = [String:String]()
         let randomValues = getRandomProductValues()
         switch eventType {
-        case .login, .signUp:
+        case .login, .signUp, .loginWithExtraParameters:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
             if exVisitorId.isEmpty {
@@ -130,8 +136,17 @@ class EventViewController: FormViewController {
                 DataManager.saveVisilabsProfile(visilabsProfile)
                 if eventType == .login {
                     Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
-                }
-                if eventType == .signUp {
+                } else if eventType == .signUp {
+                    Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
+                } else {
+                    properties["OM.vseg1"] = "OM.vseg1" // Visitor Segment 1
+                    properties["OM.vseg2"] = "OM.vseg2" // Visitor Segment 2
+                    properties["OM.vseg3"] = "OM.vseg1" // Visitor Segment 3
+                    properties["OM.vseg4"] = "OM.vseg1" // Visitor Segment 4
+                    properties["OM.vseg5"] = "OM.vseg1" // Visitor Segment 5
+                    properties["OM.bd"] = "1977-03-15" // Birthday
+                    properties["OM.gn"] = randomValues.gender // Gender
+                    properties["OM.loc"] = "Bursa" // Location
                     Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
                 }
                 Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
@@ -192,6 +207,9 @@ class EventViewController: FormViewController {
             properties["utm_source"] = "euromsg"
             properties["utm_medium"] = "push"
             properties["utm_campaign"] = "euromsg campaign"
+            properties["OM.csource"] = "euromsg"
+            properties["OM.cmedium"] = "push"
+            properties["OM.cname"] = "euromsg campaign"
             Visilabs.callAPI().customEvent("Login Page", properties: properties)
             return
         case .pushMessage:
