@@ -139,11 +139,11 @@ class EventViewController: FormViewController {
                 } else if eventType == .signUp {
                     Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
                 } else {
-                    properties["OM.vseg1"] = "OM.vseg1" // Visitor Segment 1
-                    properties["OM.vseg2"] = "OM.vseg2" // Visitor Segment 2
-                    properties["OM.vseg3"] = "OM.vseg1" // Visitor Segment 3
-                    properties["OM.vseg4"] = "OM.vseg1" // Visitor Segment 4
-                    properties["OM.vseg5"] = "OM.vseg1" // Visitor Segment 5
+                    properties["OM.vseg1"] = "seg1val" // Visitor Segment 1
+                    properties["OM.vseg2"] = "seg2val" // Visitor Segment 2
+                    properties["OM.vseg3"] = "seg3val" // Visitor Segment 3
+                    properties["OM.vseg4"] = "seg4val" // Visitor Segment 4
+                    properties["OM.vseg5"] = "seg5val" // Visitor Segment 5
                     properties["OM.bd"] = "1977-03-15" // Birthday
                     properties["OM.gn"] = randomValues.gender // Gender
                     properties["OM.loc"] = "Bursa" // Location
