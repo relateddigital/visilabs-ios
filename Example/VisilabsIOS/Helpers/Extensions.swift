@@ -25,7 +25,6 @@ extension Double {
       let formatter = NumberFormatter()
       formatter.decimalSeparator = "."
       formatter.maximumFractionDigits = 2
-      print("sdasd")
       return formatter
     }()
     
