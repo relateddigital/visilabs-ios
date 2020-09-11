@@ -24,5 +24,24 @@ class FavoriteViewController: FormViewController {
         Section("Favorite Attribute Actions".uppercased(with: Locale(identifier: "en_US")))
         
     }
+    
+    private func getFavoriteAttributeActions(){
+        Visilabs.callAPI().getFavoriteAttributeActions { (response) in
+            if let error = response.error {
+                print(error)
+            } else {
+                if let favoriteBrands = response.favorites[.brand] {
+                    for brand in favoriteBrands {
+                        print(brand)
+                    }
+                }
+                if let favoriteCategories = response.favorites[.category] {
+                    for category in favoriteCategories {
+                        print(category)
+                    }
+                }
+            }
+        }
+    }
 
 }
