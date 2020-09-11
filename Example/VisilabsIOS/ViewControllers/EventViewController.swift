@@ -147,7 +147,7 @@ class EventViewController: FormViewController {
                     properties["OM.bd"] = "1977-03-15" // Birthday
                     properties["OM.gn"] = randomValues.gender // Gender
                     properties["OM.loc"] = "Bursa" // Location
-                    Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
+                    Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
                 }
                 Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
                 Euromsg.setEmail(email: visilabsProfile.userEmail, permission: true)
