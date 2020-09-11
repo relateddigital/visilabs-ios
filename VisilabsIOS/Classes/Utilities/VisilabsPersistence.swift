@@ -107,14 +107,14 @@ public class VisilabsPersistence {
         return visilabsUser
     }
     
-    
+    //TODO: burada date kısmı yanlış geliyor sanki
     //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
     class func saveTargetParameters(_ parameters: [String : String]) {
         archiveQueueUtility.sync {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dateString = dateFormatter.string(from: Date())
-            var targetParameters = [String: String]()
+            var targetParameters = readTargetParameters()
             
             for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
                 let key = visilabsParameter.key
@@ -142,7 +142,7 @@ public class VisilabsPersistence {
                         }
                     }
                     else if count > 1 {
-                        let previousParameterValue = readUserDefaults(storeKey) as? String
+                        let previousParameterValue = targetParameters[storeKey]
                         var parameterValueToStore = parameterValue.copy() as! String + ("|")
                         parameterValueToStore = parameterValueToStore + (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
