@@ -10,7 +10,7 @@ import UIKit
 
 
 extension Int {
-    func random(min: Int, max: Int, except:[Int] = [Int]()) -> Int {
+    static func random(min: Int, max: Int, except:[Int] = [Int]()) -> Int {
         var randomNumber : Int
         repeat {
             randomNumber = Int.random(in: min..<(max+1))
