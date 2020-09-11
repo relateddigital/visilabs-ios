@@ -194,7 +194,7 @@ public class VisilabsPersistence {
         }
     }
     
-    class func getParameters() -> [String : String?] {
+    class func readTargetParameters() -> [String : String?] {
         var parameters: [String : String?] = [:]
         for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
             let storeKey = visilabsParameter.storeKey
@@ -206,7 +206,7 @@ public class VisilabsPersistence {
         return parameters
     }
 
-    class func clearParameters() {
+    class func clearTargetParameters() {
         for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
             removeUserDefaults(visilabsParameter.storeKey)
         }

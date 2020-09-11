@@ -329,7 +329,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                     props[VisilabsConstants.APPID_KEY] = self.appID!.urlEncode()
                 }
                 
-                for (key, value) in VisilabsPersistence.getParameters(){
+                for (key, value) in VisilabsPersistence.readTargetParameters(){
                     if value.isNilOrWhiteSpace{
                         externalProps.removeValue(forKey: key)
                     }else{
@@ -839,7 +839,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         
         if let cookieID = props[VisilabsConstants.COOKIEID_KEY] {
             if self.cookieID != cookieID {
-                VisilabsPersistence.clearParameters()
+                VisilabsPersistence.clearTargetParameters()
             }
             self.cookieID = cookieID
             if let cidfp = self.cookieIDFilePath(){
@@ -852,7 +852,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         
         if let exVisitorID = props[VisilabsConstants.EXVISITORID_KEY] {
             if self.exVisitorID != exVisitorID {
-                VisilabsPersistence.clearParameters()
+                VisilabsPersistence.clearTargetParameters()
             }
             if self.exVisitorID != nil && self.exVisitorID != exVisitorID{
                 self.setCookieID()

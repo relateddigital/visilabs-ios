@@ -122,7 +122,7 @@ class VisilabsGeofence {
                 props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
             }
             
-            for (key, value) in VisilabsPersistence.getParameters() {
+            for (key, value) in VisilabsPersistence.readTargetParameters() {
                if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
                    props[key] = value
                }
@@ -199,7 +199,7 @@ class VisilabsGeofence {
             }
         }
         
-        for (key, value) in VisilabsPersistence.getParameters() {
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
                props[key] = value
            }
