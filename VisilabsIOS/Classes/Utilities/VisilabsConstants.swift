@@ -31,6 +31,7 @@ struct VisilabsConstants {
     static let USER_DEFAULTS_PROFILE_KEY = "Visilabs.profile"
     static let USER_DEFAULTS_USER_KEY = "Visilabs.user"
     static let USER_DEFAULTS_GEOFENCE_HISTORY_KEY = "Visilabs.geofenceHistory"
+    static let USER_DEFAULTS_TARGET_KEY = "Visilabs.target"
     
     //MARK: -Archive Keys
     
