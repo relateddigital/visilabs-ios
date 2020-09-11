@@ -19,6 +19,21 @@ extension Int {
     }
 }
 
+extension Double {
+    
+    static let numberFormatter: NumberFormatter = {
+      let formatter = NumberFormatter()
+      formatter.decimalSeparator = "."
+      formatter.maximumFractionDigits = 2
+      print("sdasd")
+      return formatter
+    }()
+    
+    func formatPrice() -> String {
+        return Double.numberFormatter.string(from: NSNumber(value: self)) ?? "1.00"
+    }
+}
+
 extension UIColor {
 
     convenience init?(hex: String?, alpha: CGFloat = 1.0) {
