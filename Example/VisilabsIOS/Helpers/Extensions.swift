@@ -8,6 +8,17 @@
 
 import UIKit
 
+
+extension Int {
+    func random(min: Int, max: Int, except:[Int] = [Int]()) -> Int {
+        var randomNumber : Int
+        repeat {
+            randomNumber = Int.random(in: min..<(max+1))
+        } while except.contains(randomNumber)
+        return randomNumber
+    }
+}
+
 extension UIColor {
 
     convenience init?(hex: String?, alpha: CGFloat = 1.0) {
