@@ -170,7 +170,7 @@ extension VisilabsInstance {
             self.readWriteLock.read {
                 VisilabsPersistence.archiveUser(self.visilabsUser)
                 if clearUserParameters {
-                    VisilabsPersistence.clearParameters()
+                    VisilabsPersistence.clearTargetParameters()
                 }
             }
             if let event = self.eventsQueue.last {
