@@ -142,7 +142,7 @@ public class VisilabsPersistence {
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dateString = dateFormatter.string(from: Date())
             
-            for visilabsParameter in VisilabsConstants.visilabsParameters() {
+            for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
                 let key = visilabsParameter.key
                 let storeKey = visilabsParameter.storeKey
                 let relatedKeys = visilabsParameter.relatedKeys
@@ -196,7 +196,7 @@ public class VisilabsPersistence {
     
     class func getParameters() -> [String : String?] {
         var parameters: [String : String?] = [:]
-        for visilabsParameter in VisilabsConstants.visilabsParameters() {
+        for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
             let storeKey = visilabsParameter.storeKey
             let value = readUserDefaults(storeKey) as? String
             if value != nil && (value?.count ?? 0) > 0 {
@@ -207,7 +207,7 @@ public class VisilabsPersistence {
     }
 
     class func clearParameters() {
-        for visilabsParameter in VisilabsConstants.visilabsParameters() {
+        for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
             removeUserDefaults(visilabsParameter.storeKey)
         }
     }
