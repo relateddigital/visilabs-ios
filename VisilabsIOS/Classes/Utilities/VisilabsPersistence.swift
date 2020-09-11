@@ -136,7 +136,7 @@ public class VisilabsPersistence {
     
     
     //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
-    class func saveParameters(_ parameters: [String : String]) {
+    class func saveTargetParameters(_ parameters: [String : String]) {
         archiveQueueUtility.sync {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"

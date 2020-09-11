@@ -937,7 +937,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
             }
         }
         
-        VisilabsPersistence.saveParameters(props)
+        VisilabsPersistence.saveTargetParameters(props)
 
         let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: eventProperties)
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: eventProperties)
