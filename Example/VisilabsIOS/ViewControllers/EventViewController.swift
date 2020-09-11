@@ -151,8 +151,8 @@ class EventViewController: FormViewController {
             Visilabs.callAPI().customEvent("Category View", properties: properties)
             return
         case .inAppSearch:
-            properties["OM.oss"] = "Search Keyword"
-            properties["OM.ossr"] = "Number of Search Results"
+            properties["OM.OSS"] = "Search Keyword"
+            properties["OM.OSSR"] = "Number of Search Results"
             Visilabs.callAPI().customEvent("In App Search", properties: properties)
             return
         case .bannerClick:
