@@ -207,9 +207,11 @@ public class VisilabsInAppNotification {
             }
             else{
                 if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    finalFont = UIFont(name: "GillSans", size: CGFloat(size))!
+                    let fontName = style == .title2 ? "GillSans-Bold": "GillSans"
+                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
                 } else if font.lowercased() == "monospace" {
-                    finalFont = UIFont(name: "CourierNewPSMT", size: CGFloat(size))!
+                    let fontName = style == .title2 ? "CourierNewPS-BoldMT": "CourierNewPSMT"
+                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
                 }
             }
         }
