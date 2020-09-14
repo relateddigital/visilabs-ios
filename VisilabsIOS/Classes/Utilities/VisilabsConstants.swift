@@ -52,7 +52,7 @@ struct VisilabsConstants {
     static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount";
     static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled";
     static let GEOFENCEENABLED_KEY = "geofenceEnabled";
-    static let REQUESTTIMEINSECONDS_KEY = "requestTimeoutInSeconds";
+    static let REQUESTTIMEOUTINSECONDS_KEY = "requestTimeoutInSeconds";
     static let DATASOURCE_KEY = "dataSource";
     static let USERAGENT_KEY = "OM.userAgent";
     static let VISITORDATA = "visitorData";
