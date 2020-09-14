@@ -183,7 +183,7 @@ class InAppViewController: FormViewController {
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "Image URL"
             $0.validationOptions = .validatesOnDemand
-            $0.value = URL(string: "https://x6k7p6q7.rocketcdn.me/wp-content/uploads/2019/02/Ways-You-Can-Draw-Attention-to-New-Products.png")
+            $0.value = URL(string: "https://raw.githubusercontent.com/relateddigital/visilabs-ios/master/Screenshots/attention.png")
         }
             
         <<< PickerInputRow<String>("miniIcon"){
