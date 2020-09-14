@@ -76,6 +76,16 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
     }
+    
+    public var useInsecureProtocol: Bool = false {
+       didSet {
+        if useInsecureProtocol {
+               VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: true)
+           } else {
+               VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
+           }
+       }
+    }
 
     init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         
