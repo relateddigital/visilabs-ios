@@ -33,6 +33,7 @@ struct VisilabsProfile : Codable {
     var requestTimeoutInterval: TimeInterval {
         return TimeInterval(requestTimeoutInSeconds)
     }
+    var useInsecureProtocol = false
 }
 
 public class VisilabsInstance: CustomDebugStringConvertible {
@@ -78,13 +79,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     public var useInsecureProtocol: Bool = false {
-       didSet {
-            if useInsecureProtocol {
-                VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: true)
-            } else {
-               VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
-            }
-       }
+        didSet {
+            self.visilabsProfile.useInsecureProtocol = useInsecureProtocol
+            VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: useInsecureProtocol)
+            VisilabsPersistence.saveVisilabsProfile(self.visilabsProfile)
+        }
     }
 
     init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
