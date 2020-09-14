@@ -388,10 +388,20 @@ public enum VisilabsFavoriteAttribute: String {
 
 ### Geofencing
 
-To enable location services you need add the following keys to your `Info.plist` file.
+To enable location services in your application first of all you need to add the following keys to your `Info.plist` file.
 
 * NSLocationAlwaysAndWhenInUseUsageDescription
 * NSLocationWhenInUseUsageDescription
+
+An example implementation of these permissions as follows:
+
+```xml
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need access to your location for better user experience.</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need access to your location for better user experience.</string>
+```
+
 
 ```swift
 import VisilabsIOS
