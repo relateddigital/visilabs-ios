@@ -160,7 +160,7 @@ class GeofenceViewController: FormViewController {
 class GeofenceAlertViewController: CleanyAlertViewController {
     let dateFormatter = DateFormatter()
     
-    init(date: Date, visilabsReason: VisilabsReason?) {
+    init(date: Date, visilabsReason: VisilabsError?) {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
         styleSettings[.cornerRadius] = 18
