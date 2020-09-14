@@ -79,11 +79,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     
     public var useInsecureProtocol: Bool = false {
        didSet {
-        if useInsecureProtocol {
-               VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: true)
-           } else {
+            if useInsecureProtocol {
+                VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: true)
+            } else {
                VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
-           }
+            }
        }
     }
 
