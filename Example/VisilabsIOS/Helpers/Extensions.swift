@@ -8,6 +8,31 @@
 
 import UIKit
 
+
+extension Int {
+    static func random(min: Int, max: Int, except:[Int] = [Int]()) -> Int {
+        var randomNumber : Int
+        repeat {
+            randomNumber = Int.random(in: min..<(max+1))
+        } while except.contains(randomNumber)
+        return randomNumber
+    }
+}
+
+extension Double {
+    
+    static let numberFormatter: NumberFormatter = {
+      let formatter = NumberFormatter()
+      formatter.decimalSeparator = "."
+      formatter.maximumFractionDigits = 2
+      return formatter
+    }()
+    
+    func formatPrice() -> String {
+        return Double.numberFormatter.string(from: NSNumber(value: self)) ?? "1.00"
+    }
+}
+
 extension UIColor {
 
     convenience init?(hex: String?, alpha: CGFloat = 1.0) {

@@ -19,6 +19,7 @@
     - [Data Collection](#Data-Collection)
     - [Targeting Actions](#Targeting-Actions)
         - [In-App Messaging](#In-App-Messaging)
+        - [Favorite Attribute Actions](#Favorite-Attribute-Actions)
         - [Geofencing](#Geofencing)
     - [Recommendation](#Recommendation)
 
@@ -85,12 +86,17 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 ### Debugging
 
-You can turn on logging by setting `loggingEnabled` property to `true`.
+You can turn on logging by setting `loggingEnabled` property to `true`. If enabled the
 
 ```swift
 Visilabs.callAPI().loggingEnabled = true                                      
 ```
 
+The default protocol for requests to **Visilabs** servers is `https`. If you want to debug your requests more easily, you can change your protocol by setting `insecureProtocol` property to `true`. 
+
+```swift
+Visilabs.callAPI().insecureProtocol = true                                      
+```
 
 ## Data Collection
 
@@ -99,7 +105,7 @@ Vislabs uses events to collect data from IOS applications. The developer needs t
 * **pageName** : The current page of your application. If your event is not related to a page view, you should pass a value related to the event. If you pass an empty **String** the event would be considered invalid and discarded.
 * **properties** : A collection of key/value pairs related to the event. If your event does not have additional data apart from page name, passing an empty dictionary acceptable.
 
-In SDK apart from `customEvent`, there are 2 other methods to collect data: `login` and `signUp`.  As in the `customEvent` method, the `login` and `signUp` methods also take a mandatory and an optional parameter. The first parameter is `exVisitorId`  which uniquely identifies the user and can not be empty. The second parameter (`properties`)  is optional and passsing an empty dictionary also valid.
+In SDK, apart from `customEvent`, there are 2 other methods to collect data: `login` and `signUp`.  As in the `customEvent` method, the `login` and `signUp` methods also take a mandatory and an optional parameter. The first parameter is `exVisitorId`  which uniquely identifies the user and can not be empty. The second parameter `properties`  is optional and passsing an empty dictionary also valid.
 
 Some of the most common events:
 
@@ -109,7 +115,7 @@ Some of the most common events:
 Visilabs.callAPI().signUp(exVisitorId: "userId")
 ```
 
-Moreover, you can pass additional information to the optional parameter **properties**  when user signs up. The following example shows the call of **signUp** method with properties which includes **OM.sys.TokenID** and **OM.sys.AppID** parameters. **OM.sys.TokenID** and **OM.sys.AppID** are required to send push notifications and **OM.sys.AppID** parameter can be obtained by RMC web panel. 
+Moreover, you can pass additional information to the optional parameter `properties` when user signs up. The following example shows the call of `signUp` method with properties which includes `OM.sys.TokenID` and `OM.sys.AppID` parameters. `OM.sys.TokenID` and `OM.sys.AppID` are required to send push notifications and `OM.sys.AppID` parameter can be obtained by RMC web panel. 
 //TODO: burada OM.sys.AppID'nin nasıl alınabileceğini daha detaylı açıkla.
 
 ```swift
@@ -121,7 +127,7 @@ Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
 
 ### Login
 
-Like **signUp** method  **login** method can be called with or without optional parameter properties.
+Like `signUp` method  `login` method can be called with or without optional parameter `properties`.
 
 ```swift
 var properties = [String:String]()
@@ -144,7 +150,6 @@ properties["OM.pv"] = "Product Code"
 properties["OM.pn"] = "Product Name"
 properties["OM.ppr"] = "Product Price"
 properties["OM.pv.1"] = "Product Brand"
-properties["OM.ppr"] = "Product Price"
 properties["OM.inv"] = "Number of items in stock"
 Visilabs.callAPI().customEvent("Product View", properties: properties)
 ```
@@ -239,6 +244,8 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ## Targeting Actions
 
 ### In-App Messaging
+
+### Favorite Attribute Actions
 
 ### Geofencing
 

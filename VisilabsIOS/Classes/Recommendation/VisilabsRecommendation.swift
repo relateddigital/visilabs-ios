@@ -37,8 +37,8 @@ class VisilabsRecommendation {
             props[VisilabsConstants.BODY_KEY] = productCode
         }
         
-        for (key, value) in VisilabsPersistence.getParameters() {
-            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace && props[key] == nil {
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                 props[key] = value
             }
         }

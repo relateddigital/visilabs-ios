@@ -329,11 +329,11 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
                     props[VisilabsConstants.APPID_KEY] = self.appID!.urlEncode()
                 }
                 
-                for (key, value) in VisilabsPersistence.getParameters(){
-                    if value.isNilOrWhiteSpace{
+                for (key, value) in VisilabsPersistence.readTargetParameters(){
+                    if value.isEmptyOrWhitespace{
                         externalProps.removeValue(forKey: key)
                     }else{
-                        props[key] = value!.urlEncode()
+                        props[key] = value.urlEncode()
                     }
                 }
                 
@@ -839,7 +839,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         
         if let cookieID = props[VisilabsConstants.COOKIEID_KEY] {
             if self.cookieID != cookieID {
-                VisilabsPersistence.clearParameters()
+                VisilabsPersistence.clearTargetParameters()
             }
             self.cookieID = cookieID
             if let cidfp = self.cookieIDFilePath(){
@@ -852,7 +852,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
         
         if let exVisitorID = props[VisilabsConstants.EXVISITORID_KEY] {
             if self.exVisitorID != exVisitorID {
-                VisilabsPersistence.clearParameters()
+                VisilabsPersistence.clearTargetParameters()
             }
             if self.exVisitorID != nil && self.exVisitorID != exVisitorID{
                 self.setCookieID()
@@ -937,7 +937,7 @@ open class Visilabs2 : NSObject /*, VisilabsNotificationViewControllerDelegate*/
             }
         }
         
-        VisilabsPersistence.saveParameters(props)
+        VisilabsPersistence.saveTargetParameters(props)
 
         let lUrl = VisilabsHelper.buildUrl(url: "\(self.loggerURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: eventProperties)
         let rtUrl = VisilabsHelper.buildUrl(url: "\(self.realTimeURL)/\(self.dataSource)/\(VisilabsConstants.OM_GIF)", props: eventProperties)
