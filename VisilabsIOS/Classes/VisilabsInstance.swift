@@ -296,7 +296,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             guard let self = self else { return }
             self.networkQueue.async { [weak self, properties] in
                 guard let self = self else { return }
-                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
+                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
                         self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
                     }
