@@ -444,7 +444,7 @@ public class VisilabsRecommendationResponse {
     }
 }
 ```
-**VisilabsProduct** class has the following properties:
+`VisilabsProduct` class has the following properties:
 
 | Property      | Type |
 | ----------- | ----------- |
@@ -470,23 +470,38 @@ public class VisilabsRecommendationResponse {
 
 
 
-If recommended products exist for given arguments in **completion** method you need to handle the array of products. 
+If recommended products exist for given arguments in `completion` method you need to handle the array of products. 
 
 ```swift
-Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, properties: properties, completion: { response in
-    if let error = response.error{
-        
+Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: []){ response in
+    if let error = response.error {
+        print(error)
     }else{
+        print("Recommended Products")
         for product in response.products{
-            print(product)
+            print("product code: \(product.code) title: \(product.title)")
         }
     }
-})
+}
 ```
 
+You may also pass an array of filters to `recommend` method. For example the following implementation returns only the products which contains **laptop** in the title.
 
-
-
+```swift
+var filters = [VisilabsRecommendationFilter]()
+let filter = VisilabsRecommendationFilter(attribute: .title, filterType: .like, value: "laptop")
+filters.append(filter)
+Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ response in
+    if let error = response.error{
+        print(error)
+    }else{
+        print("Recommended Products")
+        for product in response.products{
+            print("product code: \(product.code) title: \(product.title)")
+        }
+    }
+}
+```
 
 
 
