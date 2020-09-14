@@ -172,8 +172,8 @@ struct VisilabsConstants {
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_GN_KEY, storeKey: TARGET_PREF_GN_STORE_KEY, count: 1, relatedKeys: nil))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_LOC_KEY, storeKey: TARGET_PREF_LOC_STORE_KEY, count: 1, relatedKeys: nil))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VPV_KEY, storeKey: TARGET_PREF_VPV_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: [TARGET_PREF_PPR_KEY]))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: [TARGET_PREF_PPR_KEY]))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VQ_KEY, storeKey: TARGET_PREF_VQ_STORE_KEY, count: 1, relatedKeys: nil))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VRDOMAIN_KEY, storeKey: TARGET_PREF_VRDOMAIN_STORE_KEY, count: 1, relatedKeys: nil))
         }
