@@ -18,12 +18,12 @@ struct VisilabsConstants {
     static let GEOFENCE_FETCH_TIME_INTERVAL = TimeInterval(60) //TODO: bunu sonra değiştir 15 dakika yap
     
     //TODO: bunlar https e çevirilecek
-    static var LOGGER_END_POINT = "http://lgr.visilabs.net"
-    static var REALTIME_END_POINT = "http://rt.visilabs.net"
-    static var RECOMMENDATION_END_POINT = "http://s.visilabs.net/json"
-    static var ACTION_END_POINT = "http://s.visilabs.net/actjson"
-    static var GEOFENCE_END_POINT = "http://s.visilabs.net/geojson"
-    static var MOBILE_END_POINT = "http://s.visilabs.net/mobile"
+    static var LOGGER_END_POINT = "lgr.visilabs.net"
+    static var REALTIME_END_POINT = "rt.visilabs.net"
+    static var RECOMMENDATION_END_POINT = "s.visilabs.net/json"
+    static var ACTION_END_POINT = "s.visilabs.net/actjson"
+    static var GEOFENCE_END_POINT = "s.visilabs.net/geojson"
+    static var MOBILE_END_POINT = "s.visilabs.net/mobile"
     
     
     //MARK: -UserDefaults Keys
@@ -31,6 +31,7 @@ struct VisilabsConstants {
     static let USER_DEFAULTS_PROFILE_KEY = "Visilabs.profile"
     static let USER_DEFAULTS_USER_KEY = "Visilabs.user"
     static let USER_DEFAULTS_GEOFENCE_HISTORY_KEY = "Visilabs.geofenceHistory"
+    static let USER_DEFAULTS_TARGET_KEY = "Visilabs.target"
     
     //MARK: -Archive Keys
     
@@ -154,29 +155,29 @@ struct VisilabsConstants {
     private static let TARGET_PREF_VRDOMAIN_KEY = "OM.rDomain"
     private static let TARGET_PREF_PPR_KEY = "OM.ppr"
     
-    private static var params = [VisilabsParameter]()
+    private static var targetParameters = [VisilabsParameter]()
     
-    static func visilabsParameters() -> [VisilabsParameter] {
-        if params.count == 0 {
-            params.append(VisilabsParameter(key: TARGET_PREF_VOSS_KEY, storeKey: TARGET_PREF_VOSS_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VCNAME_KEY, storeKey: TARGET_PREF_VCNAME_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VCMEDIUM_KEY, storeKey: TARGET_PREF_VCMEDIUM_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VCSOURCE_KEY, storeKey: TARGET_PREF_VCSOURCE_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VSEG1_KEY, storeKey: TARGET_PREF_VSEG1_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VSEG2_KEY, storeKey: TARGET_PREF_VSEG2_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VSEG3_KEY, storeKey: TARGET_PREF_VSEG3_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VSEG4_KEY, storeKey: TARGET_PREF_VSEG4_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VSEG5_KEY, storeKey: TARGET_PREF_VSEG5_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_BD_KEY, storeKey: TARGET_PREF_BD_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_GN_KEY, storeKey: TARGET_PREF_GN_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_LOC_KEY, storeKey: TARGET_PREF_LOC_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VPV_KEY, storeKey: TARGET_PREF_VPV_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: [TARGET_PREF_PPR_KEY]))
-            params.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VQ_KEY, storeKey: TARGET_PREF_VQ_STORE_KEY, count: 1, relatedKeys: nil))
-            params.append(VisilabsParameter(key: TARGET_PREF_VRDOMAIN_KEY, storeKey: TARGET_PREF_VRDOMAIN_STORE_KEY, count: 1, relatedKeys: nil))
+    static func visilabsTargetParameters() -> [VisilabsParameter] {
+        if targetParameters.count == 0 {
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VOSS_KEY, storeKey: TARGET_PREF_VOSS_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VCNAME_KEY, storeKey: TARGET_PREF_VCNAME_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VCMEDIUM_KEY, storeKey: TARGET_PREF_VCMEDIUM_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VCSOURCE_KEY, storeKey: TARGET_PREF_VCSOURCE_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG1_KEY, storeKey: TARGET_PREF_VSEG1_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG2_KEY, storeKey: TARGET_PREF_VSEG2_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG3_KEY, storeKey: TARGET_PREF_VSEG3_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG4_KEY, storeKey: TARGET_PREF_VSEG4_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG5_KEY, storeKey: TARGET_PREF_VSEG5_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_BD_KEY, storeKey: TARGET_PREF_BD_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_GN_KEY, storeKey: TARGET_PREF_GN_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LOC_KEY, storeKey: TARGET_PREF_LOC_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VPV_KEY, storeKey: TARGET_PREF_VPV_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: [TARGET_PREF_PPR_KEY]))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VQ_KEY, storeKey: TARGET_PREF_VQ_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VRDOMAIN_KEY, storeKey: TARGET_PREF_VRDOMAIN_STORE_KEY, count: 1, relatedKeys: nil))
         }
-        return params
+        return targetParameters
     }
     
 }

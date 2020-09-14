@@ -105,9 +105,9 @@ class VisilabsGeofenceRequest: VisilabsAction {
             }
         }
         
-        for (key, value) in VisilabsPersistence.getParameters() {
-            if !key.isEmptyOrWhitespace && !value.isNilOrWhiteSpace {
-                queryParameters = "\(queryParameters)&\(key)=\(value!.urlEncode())"
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace {
+                queryParameters = "\(queryParameters)&\(key)=\(value.urlEncode())"
             }
         }
 

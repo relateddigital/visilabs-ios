@@ -48,7 +48,7 @@ class GeofenceViewController: FormViewController {
             $0.title = "Refresh"
         }
         .onCellSelection { cell, row in
-            self.refreshData()
+            self.refreshData(firstTime: false)
         })
         locationServicesEnabledForDeviceRow = TextRow(locationEnabledDevice) {
             $0.title = locationEnabledDevice
@@ -80,13 +80,37 @@ class GeofenceViewController: FormViewController {
         form.append(refreshSection)
         form.append(historySection)
         form.append(errorSection)
-        self.refreshData()
+        self.refreshData(firstTime: true)
     }
         
     var currentHistoryRowTags = [String:Bool]()
     var currentErrorRowTags = [String:Bool]()
     
-    private func refreshData(){
+    private func getHistoryRow(tag: String, date: Date)-> ButtonRowOf<Date> {
+        return ButtonRowOf<Date>(tag) {
+            $0.title = dateFormatter.string(from: date)
+            $0.value = date
+        }
+        .onCellSelection { cell, row in
+            let alert = GeofenceAlertViewController(date: row.value!, visilabsGeofenceEntities: self.visilabsGeofenceHistory.fetchHistory[row.value!])
+            alert.addAction(title: "Dismiss", style: .default)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    private func getErrorRow(tag: String, date: Date) -> ButtonRowOf<Date> {
+        return ButtonRowOf<Date>(tag) {
+            $0.title = dateFormatter.string(from: date)
+            $0.value = date
+        }
+        .onCellSelection { cell, row in
+            let alert = GeofenceAlertViewController(date: row.value!, visilabsReason: self.visilabsGeofenceHistory.errorHistory[row.value!])
+            alert.addAction(title: "Dismiss", style: .default)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    private func refreshData(firstTime: Bool = false){
         visilabsGeofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
         locationServicesEnabledForDeviceRow.value = Visilabs.callAPI().locationServicesEnabledForDevice ? "YES" : "NO"
         locationServiceStateStatusForApplicationRow.value = String(describing: Visilabs.callAPI().locationServiceStateStatusForApplication)
@@ -99,15 +123,11 @@ class GeofenceViewController: FormViewController {
             if currentHistoryRowTags[tag] != nil {
                 return
             }
-            historySection.insert(ButtonRowOf<Date>(tag) {
-                $0.title = dateFormatter.string(from: date)
-                $0.value = date
+            if firstTime {
+                historySection.append(getHistoryRow(tag:tag, date: date))
+            } else {
+                historySection.insert(getHistoryRow(tag:tag, date: date), at: 0)
             }
-            .onCellSelection { cell, row in
-                let alert = GeofenceAlertViewController(date: row.value!, visilabsGeofenceEntities: self.visilabsGeofenceHistory.fetchHistory[row.value!])
-                alert.addAction(title: "Dismiss", style: .default)
-                self.present(alert, animated: true, completion: nil)
-            }, at: 0)
             currentHistoryRowTags[tag] = true
         }
         for date in visilabsGeofenceHistory.errorHistory.keys.sorted(by:>) {
@@ -115,15 +135,11 @@ class GeofenceViewController: FormViewController {
             if currentErrorRowTags[tag] != nil {
                 return
             }
-            errorSection.insert(ButtonRowOf<Date>(tag) {
-                $0.title = dateFormatter.string(from: date)
-                $0.value = date
+            if firstTime {
+                errorSection.append(getErrorRow(tag:tag, date: date))
+            } else {
+                errorSection.insert(getErrorRow(tag:tag, date: date), at: 0)
             }
-            .onCellSelection { cell, row in
-                let alert = GeofenceAlertViewController(date: row.value!, visilabsReason: self.visilabsGeofenceHistory.errorHistory[row.value!])
-                alert.addAction(title: "Dismiss", style: .default)
-                self.present(alert, animated: true, completion: nil)
-            }, at: 0)
             currentHistoryRowTags[tag] = true
         }
         historySection.reload()

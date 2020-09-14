@@ -55,74 +55,48 @@ public class VisilabsPersistence {
     //TODO: bunu ExceptionWrapper içine al
     class func unarchiveUser() -> VisilabsUser {
         var visilabsUser = VisilabsUser()
-        
         //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library we added this control.
         if let cidfp = filePath(filename: VisilabsConstants.IDENTITY_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
-        }else{
-            VisilabsLogger.warn("Error while unarchiving cookieId.")
         }
-        
         if let cidfp = filePath(filename: VisilabsConstants.COOKIEID_ARCHIVE_KEY), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
-        }else{
-            VisilabsLogger.warn("Error while unarchiving cookieId.")
         }
-        
         if let exvidfp = filePath(filename: VisilabsConstants.EXVISITORID_ARCHIVE_KEY), let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
             visilabsUser.exVisitorId = exvid
-        }else{
-            VisilabsLogger.warn("Error while unarchiving exVisitorId.")
         }
-        
         if let appidfp = filePath(filename: VisilabsConstants.APPID_ARCHIVE_KEY), let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
             visilabsUser.appId = aid
-        }else{
-            VisilabsLogger.warn("Error while unarchiving appId.")
         }
-        
         if let tidfp = filePath(filename: VisilabsConstants.TOKENID_ARCHIVE_KEY), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
             visilabsUser.tokenId = tid
-        }else{
-            VisilabsLogger.warn("Error while unarchiving tokenID.")
         }
-        
         if let uafp = filePath(filename: VisilabsConstants.USERAGENT_ARCHIVE_KEY), let ua = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
             visilabsUser.userAgent = ua
-        }else{
-            VisilabsLogger.warn("Error while unarchiving userAgent.")
         }
         
         if let propsfp = filePath(filename: VisilabsConstants.USER_ARCHIVE_KEY), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String : String?] {
-            
             if let cid = props[VisilabsConstants.COOKIEID_KEY], !cid.isNilOrWhiteSpace {
                 visilabsUser.cookieId = cid
             }
-            
             if let exvid = props[VisilabsConstants.EXVISITORID_KEY], !exvid.isNilOrWhiteSpace {
                 visilabsUser.exVisitorId = exvid
             }
-            
             if let aid = props[VisilabsConstants.APPID_KEY], !aid.isNilOrWhiteSpace {
                 visilabsUser.appId = aid
             }
-            
             if let tid = props[VisilabsConstants.TOKENID_KEY], !tid.isNilOrWhiteSpace {
                 visilabsUser.tokenId = tid
             }
-            
             if let ua = props[VisilabsConstants.USERAGENT_KEY], !ua.isNilOrWhiteSpace {
                 visilabsUser.userAgent = ua
             }
-            
             if let vd = props[VisilabsConstants.VISITORDATA], !vd.isNilOrWhiteSpace {
                 visilabsUser.visitorData = vd
             }
-            
             if let vd = props[VisilabsConstants.VISITOR_CAPPING_KEY], !vd.isNilOrWhiteSpace {
                 visilabsUser.visitorData = vd
             }
-            
             if let madid = props[VisilabsConstants.MOBILEADID_KEY], !madid.isNilOrWhiteSpace {
                 visilabsUser.identifierForAdvertising = madid
             }
@@ -130,24 +104,23 @@ public class VisilabsPersistence {
         }else{
             VisilabsLogger.warn("Visilabs: Error while unarchiving properties.")
         }
-
         return visilabsUser
     }
     
-    
+    //TODO: burada date kısmı yanlış geliyor sanki
     //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
-    class func saveParameters(_ parameters: [String : String]) {
+    class func saveTargetParameters(_ parameters: [String : String]) {
         archiveQueueUtility.sync {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let dateString = dateFormatter.string(from: Date())
+            var targetParameters = readTargetParameters()
             
-            for visilabsParameter in VisilabsConstants.visilabsParameters() {
+            for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
                 let key = visilabsParameter.key
                 let storeKey = visilabsParameter.storeKey
                 let relatedKeys = visilabsParameter.relatedKeys
                 let count = visilabsParameter.count
-
                 if let parameterValue = parameters[key], parameterValue.count > 0 {
                     if count == 1 {
                         if relatedKeys != nil && relatedKeys!.count > 0 {
@@ -161,13 +134,15 @@ public class VisilabsPersistence {
                                 parameterValueToStore = parameterValueToStore + ("|0")
                             }
                             parameterValueToStore = parameterValueToStore + (dateString)
-                            saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                            //saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                            targetParameters[storeKey] = parameterValueToStore
                         } else {
-                            saveUserDefaults(storeKey, withObject: parameterValue)
+                            //saveUserDefaults(storeKey, withObject: parameterValue)
+                            targetParameters[storeKey] = parameterValue
                         }
                     }
                     else if count > 1 {
-                        let previousParameterValue = readUserDefaults(storeKey) as? String
+                        let previousParameterValue = targetParameters[storeKey]
                         var parameterValueToStore = parameterValue.copy() as! String + ("|")
                         parameterValueToStore = parameterValueToStore + (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
@@ -185,31 +160,25 @@ public class VisilabsPersistence {
                                 }
                             }
                         }
-                        saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                        //saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                        targetParameters[storeKey] = parameterValueToStore
                     }
-                    
                 }
             }
             
+            saveUserDefaults(VisilabsConstants.USER_DEFAULTS_TARGET_KEY, withObject: targetParameters)
         }
     }
     
-    class func getParameters() -> [String : String?] {
-        var parameters: [String : String?] = [:]
-        for visilabsParameter in VisilabsConstants.visilabsParameters() {
-            let storeKey = visilabsParameter.storeKey
-            let value = readUserDefaults(storeKey) as? String
-            if value != nil && (value?.count ?? 0) > 0 {
-                parameters[storeKey] = value
-            }
+    class func readTargetParameters() -> [String : String] {
+        guard let targetParameters = readUserDefaults(VisilabsConstants.USER_DEFAULTS_TARGET_KEY) as? [String : String] else {
+            return [String : String]()
         }
-        return parameters
+        return targetParameters
     }
 
-    class func clearParameters() {
-        for visilabsParameter in VisilabsConstants.visilabsParameters() {
-            removeUserDefaults(visilabsParameter.storeKey)
-        }
+    class func clearTargetParameters() {
+        removeUserDefaults(VisilabsConstants.USER_DEFAULTS_TARGET_KEY)
     }
     
     // MARK: - USER DEFAULTS

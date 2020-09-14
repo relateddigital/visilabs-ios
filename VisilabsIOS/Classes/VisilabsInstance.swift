@@ -76,6 +76,16 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
     }
+    
+    public var useInsecureProtocol: Bool = false {
+       didSet {
+            if useInsecureProtocol {
+                VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: true)
+            } else {
+               VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
+            }
+       }
+    }
 
     init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
         
@@ -170,11 +180,11 @@ extension VisilabsInstance {
             self.readWriteLock.read {
                 VisilabsPersistence.archiveUser(self.visilabsUser)
                 if clearUserParameters {
-                    VisilabsPersistence.clearParameters()
+                    VisilabsPersistence.clearTargetParameters()
                 }
             }
             if let event = self.eventsQueue.last {
-                VisilabsPersistence.saveParameters(event)
+                VisilabsPersistence.saveTargetParameters(event)
                 if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled {
                     self.checkInAppNotification(properties: event)
                 }
