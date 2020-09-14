@@ -175,7 +175,7 @@ class InAppViewController: FormViewController {
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "IOS Link"
             $0.validationOptions = .validatesOnDemand
-            $0.value = URL(string: "https://www.google.com")
+            $0.value = URL(string: "https://www.relateddigital.com")
         }
         
         <<< URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
