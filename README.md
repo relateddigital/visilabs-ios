@@ -307,13 +307,16 @@ The existence of a relevant **in-app message** for an event controlled by after 
 There are 7 types of **in-app messages**.
 
 
-|       Pop-up - Image, Header, Text & Button      | Mini-icon&text                                   | Full Screen-image |
-|:------------------------------------------------:|--------------------------------------------------|-------------------|
-| ![full](/Screenshots/InAppNotification/full.png) | ![mini](/Screenshots/InAppNotification/mini.png) |                   |
-|                                                  |                                                  |                   |
-|                                                  |                                                  |                   |
-|                                                  |                                                  |                   |
-|                                                  |                                                  |                   |
+|       Pop-up - Image, Header, Text & Button      | Mini-icon&text                                   | Full Screen-image                                            |
+|:------------------------------------------------:|--------------------------------------------------|--------------------------------------------------------------|
+| ![full](/Screenshots/InAppNotification/full.png) | ![mini](/Screenshots/InAppNotification/mini.png) | ![full_image](/Screenshots/InAppNotification/full_image.png) |
+|                                                  |                                                  |                                                              |
+|                                                  |                                                  |                                                              |
+|                                                  |                                                  |                                                              |
+|                                                  |                                                  |                                                              |
+
+
+
 
 ### Favorite Attribute Actions
 
