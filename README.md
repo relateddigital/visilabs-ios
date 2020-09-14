@@ -379,9 +379,9 @@ Product recommendations are handled by the **recommend** method of SDK. You have
 ```swift
 public class VisilabsRecommendationResponse {
     public var products: [VisilabsProduct]
-    public var error: VisilabsReason?
+    public var error: VisilabsError?
     
-    internal init(products: [VisilabsProduct], error: VisilabsReason? = nil) {
+    internal init(products: [VisilabsProduct], error: VisilabsError? = nil) {
         self.products = products
         self.error = error
     }

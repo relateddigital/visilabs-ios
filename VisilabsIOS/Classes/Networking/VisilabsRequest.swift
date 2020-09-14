@@ -26,7 +26,7 @@ class VisilabsRequest {
     private class func sendEventRequestHandler(resource: VisilabsResource<Bool>, completion: @escaping ([String : String]?) -> Void) {
 
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
+            failure: { (error, data, response) in
 
                 var requestUrl = VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)
                 if let httpResponse = response as? HTTPURLResponse {
@@ -34,7 +34,7 @@ class VisilabsRequest {
                         requestUrl = url.absoluteString
                     }
                 }
-                VisilabsLogger.error("API request to \(requestUrl) has failed with reason \(reason)")
+                VisilabsLogger.error("API request to \(requestUrl) has failed with error \(error)")
                 completion(nil)
             }, success: { (result, response) in
                 
@@ -85,15 +85,15 @@ class VisilabsRequest {
         
         let resource = VisilabsNetwork.buildResource(endPoint: .target, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
         
-        sendRecommendationRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
+        sendRecommendationRequestHandler(resource: resource, completion: { result, error in completion(result, error) })
         
     }
     
     private class func sendRecommendationRequestHandler(resource: VisilabsResource<[Any]>, completion: @escaping ([Any]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
@@ -126,8 +126,8 @@ class VisilabsRequest {
     
     private class func sendInAppNotificationRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
                 completion(nil)
             }, success: { (result, response) in
                 completion(result)
@@ -155,19 +155,19 @@ class VisilabsRequest {
                 return response as? [[String: Any]]
             }
             let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserGetList )
-            sendGeofenceRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
+            sendGeofenceRequestHandler(resource: resource, completion: { result, error in completion(result, error) })
         } else {
             let responseParserSendPush: (Data) -> String = { data in return "" }
             let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserSendPush )
-            sendGeofencePushRequestHandler(resource: resource, completion: { result, reason in completion(nil, reason) })
+            sendGeofencePushRequestHandler(resource: resource, completion: { result, error in completion(nil, error) })
         }
     }
     
     private class func sendGeofencePushRequestHandler(resource: VisilabsResource<String>, completion: @escaping (String?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
@@ -175,9 +175,9 @@ class VisilabsRequest {
     
     private class func sendGeofenceRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
@@ -205,15 +205,15 @@ class VisilabsRequest {
         
         let resource = VisilabsNetwork.buildResource(endPoint: .mobile, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
         
-        sendMobileRequestHandler(resource: resource, completion: { result, reason in completion(result, reason)})
+        sendMobileRequestHandler(resource: resource, completion: { result, error in completion(result, error)})
         
     }
     
     private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>, completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
