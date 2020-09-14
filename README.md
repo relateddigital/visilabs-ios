@@ -86,12 +86,17 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 ### Debugging
 
-You can turn on logging by setting `loggingEnabled` property to `true`.
+You can turn on logging by setting `loggingEnabled` property to `true`. If enabled the
 
 ```swift
 Visilabs.callAPI().loggingEnabled = true                                      
 ```
 
+The default protocol for requests to **Visilabs** servers is `https`. If you want to debug your requests more easily, you can change your protocol by setting `insecureProtocol` property to `true`. 
+
+```swift
+Visilabs.callAPI().insecureProtocol = true                                      
+```
 
 ## Data Collection
 
