@@ -201,10 +201,12 @@ Visilabs.callAPI().customEvent("Category View", properties: properties)
 
 #### In App Search
 
+If the mobile app has a search functionality available, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.OSS"] = "Search Keyword"
-properties["OM.OSSR"] = "Number of Search Results"
+properties["OM.OSS"] = "USB" // Search Keyword
+properties["OM.OSSR"] = "61" // Number of Search Results
 Visilabs.callAPI().customEvent("In App Search", properties: properties)
 ```
 
