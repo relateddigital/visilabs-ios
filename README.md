@@ -288,6 +288,20 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 
 ### In-App Messaging
 
+**In-app messages** are notifications to your users when they are directly active in your mobile app. To enable **In-App Messaging** feature you need to set the value of `inAppNotificationsEnabled` parameter when calling  `createAPI` to initialize the SDK.
+
+```swift
+import VisilabsIOS
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions 
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", profileId: "YOUR_PROFILE_ID"
+        , dataSource: "YOUR_DATASOURCE", inAppNotificationsEnabled: true, channel: "IOS"
+        , requestTimeoutInSeconds: 30, geofenceEnabled: false, maxGeofenceCount: 20)
+        return true
+    }                                        
+```
+
 ### Favorite Attribute Actions
 
 ### Geofencing
