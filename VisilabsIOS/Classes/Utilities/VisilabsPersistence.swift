@@ -112,7 +112,7 @@ public class VisilabsPersistence {
     class func saveTargetParameters(_ parameters: [String : String]) {
         archiveQueueUtility.sync {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             let dateString = dateFormatter.string(from: Date())
             var targetParameters = readTargetParameters()
             
