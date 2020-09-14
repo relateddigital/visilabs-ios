@@ -120,8 +120,8 @@ Moreover, you can pass additional information to the optional parameter `propert
 
 ```swift
 var properties = [String:String]()
-properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-properties["OM.sys.AppID"] = "App ID to use for push messages"
+properties["OM.sys.TokenID"] = "F7C5231053E6EC543B8930FB440752E2FE41B2CFC2AA8F4E9C4843D347E6A847" // Token ID to use for push messages
+properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messages
 Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
 ```
 
@@ -129,146 +129,322 @@ Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
 
 Like `signUp` method  `login` method can be called with or without optional parameter `properties`.
 
+
+```swift
+Visilabs.callAPI().login(exVisitorId: "userId")
+```
+
 ```swift
 var properties = [String:String]()
-properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-properties["OM.sys.AppID"] = "App ID to use for push messages"
+properties["OM.sys.TokenID"] = "F7C5231053E6EC543B8930FB440752E2FE41B2CFC2AA8F4E9C4843D347E6A847" // Token ID to use for push messages
+properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messages
+Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
+```
+
+Moreover you can add user segment parameters  to `properties`.
+
+```swift
+var properties = [String:String]()
+properties["OM.vseg1"] = "seg1val" // Visitor Segment 1
+properties["OM.vseg2"] = "seg2val" // Visitor Segment 2
+properties["OM.vseg3"] = "seg3val" // Visitor Segment 3
+properties["OM.vseg4"] = "seg4val" // Visitor Segment 4
+properties["OM.vseg5"] = "seg5val" // Visitor Segment 5
+properties["OM.bd"] = "1977-03-15" // Birthday
+properties["OM.gn"] = "f" // Gender
+properties["OM.loc"] = "Bursa" // Location
 Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 ```
 
 #### Page View
 
+Use the following implementation of `customEvent`  method to record the page name the visitor is currently viewing. You may add extra parameters to properties dictionary or you may leave it empty.
+
 ```swift
-Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
+Visilabs.callAPI().customEvent("Frequently Asked Questions" /*Page Name*/, properties: [String:String]())
 ```
 
 #### Product View
 
+Use the following implementation of `customEvent`  when the user displays a product in the mobile app.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pv"] = "Product Code"
-properties["OM.pn"] = "Product Name"
-properties["OM.ppr"] = "Product Price"
-properties["OM.pv.1"] = "Product Brand"
-properties["OM.inv"] = "Number of items in stock"
+properties["OM.pv"] = "12345" // Product Code
+properties["OM.pn"] = "USB Charger" // Product Name
+properties["OM.ppr"] = 125.49" // Product Price
+properties["OM.pv.1"] = "Sample Brand" // Product Brand
+properties["OM.inv"] = "5" // Number of items in stock
 Visilabs.callAPI().customEvent("Product View", properties: properties)
 ```
 
 #### Add to Cart
 
+Use the following implementation of `customEvent`  when the user adds items to the cart or removes.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pbid"] = "Basket ID"
-properties["OM.pb"] = "Product1 Code;Product2 Code"
-properties["OM.pu"] = "Product1 Quantity;Product2 Quantity"
-properties["OM.ppr"] = "Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity"
+properties["OM.pbid"] = "bid-12345678" // Basket ID
+properties["OM.pb"] = "12345;23456" // Product1 Code;Product2 Code
+properties["OM.pu"] = "3;1" // Product1 Quantity;Product2 Quantity
+properties["OM.ppr"] = "376.47;23.50" // Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity
 Visilabs.callAPI().customEvent("Cart", properties: properties)
 ```
 
 #### Product Purchase
 
+Use the following implementation of `customEvent` when the user buys one or more items.
+
 ```swift
 var properties = [String:String]()
-properties["OM.tid"] = "Order ID"
-properties["OM.pp"] = "Product1 Code;Product2 Code"
-properties["OM.pu"] = "Product1 Quantity;Product2 Quantity"
-properties["OM.ppr"] = "Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity"
+properties["OM.tid"] = "oid-12345678" // Order ID/Transaction ID
+properties["OM.pp"] = "12345;23456" // Product1 Code;Product2 Code
+properties["OM.pu"] = "3;1" // Product1 Quantity;Product2 Quantity
+properties["OM.ppr"] = "376.47;23.50" // Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity
 Visilabs.callAPI().customEvent("Purchase", properties: properties)
 ```
 
 #### Product Category Page View
 
+When the user views a category list page, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.clist"] = "Category Code/Category ID"
+properties["OM.clist"] = "c-14" // Category Code/Category ID
 Visilabs.callAPI().customEvent("Category View", properties: properties)
 ```
 
 #### In App Search
 
+If the mobile app has a search functionality available, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.oss"] = "Search Keyword"
-properties["OM.ossr"] = "Number of Search Results"
+properties["OM.OSS"] = "USB" // Search Keyword
+properties["OM.OSSR"] = "61" // Number of Search Results
 Visilabs.callAPI().customEvent("In App Search", properties: properties)
 ```
 
 #### Banner Click
 
+You can monitor banner click data using the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.OSB"] = "Banner Name/Banner Code"
+properties["OM.OSB"] = "b-666" // Banner Name/Banner Code
 Visilabs.callAPI().customEvent("Banner Click", properties: properties)
 ```
 
 #### Add To Favorites
 
+When the user adds a product to their favorites, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pf"] = "Product Code"
+properties["OM.pf"] = "12345" // Product Code
 properties["OM.pfu"] = "1"
-properties["OM.ppr"] = "Product Price"
+properties["OM.ppr"] = 125.49" // Product Price
 Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
 ```
 
 #### Remove from Favorites
 
+When the user removes a product from their favorites, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pf"] = "Product Code"
+properties["OM.pf"] = "12345" // Product Code
 properties["OM.pfu"] = "-1"
-properties["OM.ppr"] = "Product Price"
+properties["OM.ppr"] = 125.49" // Product Price
 Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
 ```
 
 #### Sending Campaign Parameters
 
+After launching the application by clicking on a push message, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["utm_source"] = "euromsg"
-properties["utm_medium"] = "push"
-properties["utm_campaign"] = "euromsg campaign"
-Visilabs.callAPI().customEvent("Login Page", properties: properties)
+properties["utm_source"] = "euromsg" // utm_source value in the payload of push notification
+properties["utm_medium"] = "push" // utm_medium value in the payload of push notification
+properties["utm_campaign"] = "euromsg campaign" // utm_campaign value in the payload of push notification
+Visilabs.callAPI().customEvent("Login", properties: properties)
 ```
-
 
 #### Push Message Token Registration
 
+Visilabs needs to receive token to send push messages to users. The token value generated by APNS will be the value of the `OM.sys.TokenID` key. The value of the `OM.sys.AppID`  could be obtained by RMC administration panel. Follow the link https://intelligence.relateddigital.com/a02/index#/Push/AppList and select the relevant push application. The value of  `App Alias` refers to `OM.sys.AppID`. If you have problems, please contact RMC support team. 
+
 ```swift
 var properties = [String:String]()
-properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-properties["OM.sys.AppID"] = "App ID to use for push messages"
+properties["OM.sys.TokenID"] = "F7C5231053E6EC543B8930FB440752E2FE41B2CFC2AA8F4E9C4843D347E6A847" // Token ID to use for push messages
+properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messages
 Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
+
+![IOS Application Page](/Screenshots/ios-application-page.png)
 
 ## Targeting Actions
 
 ### In-App Messaging
 
+**In-app messages** are notifications to your users when they are directly active in your mobile app. To enable **In-App Messaging** feature you need to set the value of `inAppNotificationsEnabled` parameter when calling  `createAPI` to initialize the SDK.
+
+```swift
+import VisilabsIOS
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions 
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", profileId: "YOUR_PROFILE_ID"
+        , dataSource: "YOUR_DATASOURCE", inAppNotificationsEnabled: true, channel: "IOS"
+        , requestTimeoutInSeconds: 30, geofenceEnabled: false, maxGeofenceCount: 20)
+        return true
+    }                                        
+```
+
+The existence of a relevant **in-app message** for an event controlled by after each `customEvent` call. You can create and customize your **in-app messages** on https://intelligence.relateddigital.com/#Target/TargetingAction/TAList page of RMC administration panel.
+
+There are 7 types of **in-app messages**:
+
+
+|               Pop-up - Image, Header, Text & Button              | Mini-icon&text                                                             | Full Screen-image                                                |
+|:----------------------------------------------------------------:|----------------------------------------------------------------------------|------------------------------------------------------------------|
+| ![full](/Screenshots/InAppNotification/full.png)                 | ![mini](/Screenshots/InAppNotification/mini.png)                           | ![full_image](/Screenshots/InAppNotification/full_image.png)     |
+| Full Screen-image&button                                         | Pop-up - Image, Header, Text & Button                                      | Pop-up-Survey                                                    |
+| ![image_button](/Screenshots/InAppNotification/image_button.png) | ![image_text_button](/Screenshots/InAppNotification/image_text_button.png) | ![smile_rating](/Screenshots/InAppNotification/smile_rating.png) |
+| Pop-up - NPS with Text & Button                                  |                                                                            |                                                                  |
+| ![nps](/Screenshots/InAppNotification/nps.png)                   |                                                                            |                                                                  |
+
+
 ### Favorite Attribute Actions
+
+You can access favorite attributes of the **Targeting Actions** of type **Favorite Attribute Action**  that you defined from the  https://intelligence.relateddigital.com/#Target/TargetingAction/TAList/ section on the **RMC** panel via the mobile application as follows.
+
+```swift
+Visilabs.callAPI().getFavoriteAttributeActions { (response) in
+    if let error = response.error {
+        print(error)
+    } else {
+        if let favoriteBrands = response.favorites[.brand] {
+            for brand in favoriteBrands {
+                print(brand)
+            }
+        }
+        if let favoriteCategories = response.favorites[.category] {
+            for category in favoriteCategories {
+                print(category)
+            }
+        }
+    }
+}
+```
+
+You can also access favorite attributes of a particular **Targeting Action** by specifying the **ID**.
+
+![Favorite Attribute Action](/Screenshots/favorite-attribute-action-page.png)
+
+```swift
+Visilabs.callAPI().getFavoriteAttributeActions(actionId: 188) { (response) in
+    if let error = response.error {
+        print(error)
+    } else {
+        if let favoriteBrands = response.favorites[.brand] {
+            for brand in favoriteBrands {
+                print(brand)
+            }
+        }
+        if let favoriteCategories = response.favorites[.category] {
+            for category in favoriteCategories {
+                print(category)
+            }
+        }
+    }
+}
+```
+
+`favorites` property of `response` object is a dictionary which has an `enum` as key and an `array` of `String`s as value.  The cases of `VisilabsFavoriteAttribute`  `enum` are the followings:
+
+```swift
+public enum VisilabsFavoriteAttribute: String {
+    case ageGroup
+    case attr1
+    case attr2
+    case attr3
+    case attr4
+    case attr5
+    case attr6
+    case attr7
+    case attr8
+    case attr9
+    case attr10
+    case brand
+    case category
+    case color
+    case gender
+    case material
+    case title
+}
+```
 
 ### Geofencing
 
+To enable location services in your application first of all you need to add the following keys to your `Info.plist` file.
+
+* NSLocationAlwaysAndWhenInUseUsageDescription
+* NSLocationWhenInUseUsageDescription
+
+An example implementation of these permissions as follows:
+
+```xml
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need access to your location for better user experience.</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need access to your location for better user experience.</string>
+```
+
+You also need to add the following keys under `UIBackgroundModes` in your `Info.plist` file to monitor regions, refresh region list and receive push notifications.
+
+```xml
+<array>
+    <string>fetch</string>
+    <string>location</string>
+    <string>remote-notification</string>
+</array>
+```
+
+When initializing **Visilabs** SDK you need to set `geofenceEnabled` parameter of `createAPI` method to `true`. You may also change the `maxGeofenceCount` to a value lower than 20. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots.
+
+```swift
+import VisilabsIOS
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions 
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", profileId: "YOUR_PROFILE_ID"
+        , dataSource: "YOUR_DATASOURCE", inAppNotificationsEnabled: false, channel: "IOS"
+        , requestTimeoutInSeconds: 30, geofenceEnabled: true, maxGeofenceCount: 20)
+        return true
+    }                                        
+```
 
 ## Recommendation
 
 
-Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
+Product recommendations are handled by the `recommend` method of SDK. You have to pass 3 mandatory arguments which are `zoneId`, `productCode` and `completion` to `recommend` method.
 
-**completion** parameter is a closure expression which takes an **VisilabsRecommendationResponse** instance as input and returns nothing. The structure of **VisilabsRecommendationResponse** is shown below:
+`completion` parameter is a closure expression which takes an `VisilabsRecommendationResponse` instance as input and returns nothing. The structure of `VisilabsRecommendationResponse` is shown below:
 
 ```swift
 public class VisilabsRecommendationResponse {
     public var products: [VisilabsProduct]
-    public var error: VisilabsReason?
+    public var error: VisilabsError?
     
-    internal init(products: [VisilabsProduct], error: VisilabsReason? = nil) {
+    internal init(products: [VisilabsProduct], error: VisilabsError? = nil) {
         self.products = products
         self.error = error
     }
 }
 ```
-**VisilabsProduct** class has the following properties:
+`VisilabsProduct` class has the following properties:
 
 | Property      | Type |
 | ----------- | ----------- |
@@ -294,23 +470,38 @@ public class VisilabsRecommendationResponse {
 
 
 
-If recommended products exist for given arguments in **completion** method you need to handle the array of products. 
+If recommended products exist for given arguments in `completion` method you need to handle the array of products. 
 
 ```swift
-Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, properties: properties, completion: { response in
-    if let error = response.error{
-        
+Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: []){ response in
+    if let error = response.error {
+        print(error)
     }else{
+        print("Recommended Products")
         for product in response.products{
-            print(product)
+            print("product code: \(product.code) title: \(product.title)")
         }
     }
-})
+}
 ```
 
+You may also pass an array of filters to `recommend` method. For example the following implementation returns only the products which contains **laptop** in the title.
 
-
-
+```swift
+var filters = [VisilabsRecommendationFilter]()
+let filter = VisilabsRecommendationFilter(attribute: .title, filterType: .like, value: "laptop")
+filters.append(filter)
+Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ response in
+    if let error = response.error{
+        print(error)
+    }else{
+        print("Recommended Products")
+        for product in response.products{
+            print("product code: \(product.code) title: \(product.title)")
+        }
+    }
+}
+```
 
 
 

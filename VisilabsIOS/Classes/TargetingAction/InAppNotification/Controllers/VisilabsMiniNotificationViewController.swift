@@ -36,7 +36,6 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             imageView.image = UIImage(data: image)
         }
 
-        //TODO: bunları default set ediyorum doğru mudur?
         view.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
         titleLabel.textColor = UIColor.white
         imageView.tintColor = UIColor.white

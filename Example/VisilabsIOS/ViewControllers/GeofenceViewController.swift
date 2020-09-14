@@ -104,7 +104,7 @@ class GeofenceViewController: FormViewController {
             $0.value = date
         }
         .onCellSelection { cell, row in
-            let alert = GeofenceAlertViewController(date: row.value!, visilabsReason: self.visilabsGeofenceHistory.errorHistory[row.value!])
+            let alert = GeofenceAlertViewController(date: row.value!, visilabsError: self.visilabsGeofenceHistory.errorHistory[row.value!])
             alert.addAction(title: "Dismiss", style: .default)
             self.present(alert, animated: true, completion: nil)
         }
@@ -160,11 +160,11 @@ class GeofenceViewController: FormViewController {
 class GeofenceAlertViewController: CleanyAlertViewController {
     let dateFormatter = DateFormatter()
     
-    init(date: Date, visilabsReason: VisilabsReason?) {
+    init(date: Date, visilabsError: VisilabsError?) {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
         styleSettings[.cornerRadius] = 18
-        super.init(title: dateFormatter.string(from: date) ,message: visilabsReason.debugDescription, preferredStyle: .alert, styleSettings: styleSettings)
+        super.init(title: dateFormatter.string(from: date) ,message: visilabsError.debugDescription, preferredStyle: .alert, styleSettings: styleSettings)
     }
     
     init(date: Date, visilabsGeofenceEntities: [VisilabsGeofenceEntity]?) {

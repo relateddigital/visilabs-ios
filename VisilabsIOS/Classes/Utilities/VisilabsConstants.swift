@@ -52,7 +52,7 @@ struct VisilabsConstants {
     static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount";
     static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled";
     static let GEOFENCEENABLED_KEY = "geofenceEnabled";
-    static let REQUESTTIMEINSECONDS_KEY = "requestTimeoutInSeconds";
+    static let REQUESTTIMEOUTINSECONDS_KEY = "requestTimeoutInSeconds";
     static let DATASOURCE_KEY = "dataSource";
     static let USERAGENT_KEY = "OM.userAgent";
     static let VISITORDATA = "visitorData";
@@ -172,8 +172,8 @@ struct VisilabsConstants {
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_GN_KEY, storeKey: TARGET_PREF_GN_STORE_KEY, count: 1, relatedKeys: nil))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_LOC_KEY, storeKey: TARGET_PREF_LOC_STORE_KEY, count: 1, relatedKeys: nil))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VPV_KEY, storeKey: TARGET_PREF_VPV_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: [TARGET_PREF_PPR_KEY]))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: [TARGET_PREF_PPR_KEY]))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VQ_KEY, storeKey: TARGET_PREF_VQ_STORE_KEY, count: 1, relatedKeys: nil))
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VRDOMAIN_KEY, storeKey: TARGET_PREF_VRDOMAIN_STORE_KEY, count: 1, relatedKeys: nil))
         }

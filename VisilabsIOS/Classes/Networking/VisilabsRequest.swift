@@ -26,7 +26,7 @@ class VisilabsRequest {
     private class func sendEventRequestHandler(resource: VisilabsResource<Bool>, completion: @escaping ([String : String]?) -> Void) {
 
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
+            failure: { (error, data, response) in
 
                 var requestUrl = VisilabsBasePath.getEndpoint(visilabsEndpoint: resource.endPoint)
                 if let httpResponse = response as? HTTPURLResponse {
@@ -34,7 +34,7 @@ class VisilabsRequest {
                         requestUrl = url.absoluteString
                     }
                 }
-                VisilabsLogger.error("API request to \(requestUrl) has failed with reason \(reason)")
+                VisilabsLogger.error("API request to \(requestUrl) has failed with error \(error)")
                 completion(nil)
             }, success: { (result, response) in
                 
@@ -67,7 +67,7 @@ class VisilabsRequest {
     // MARK: -Recommendation
     
     //TODO: completion Any mi olmalı, yoksa AnyObject mi?
-    class func sendRecommendationRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([Any]?, VisilabsReason?) -> Void) {
+    class func sendRecommendationRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([Any]?, VisilabsError?) -> Void) {
         var queryItems = [URLQueryItem]()
         for property in properties{
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -85,15 +85,15 @@ class VisilabsRequest {
         
         let resource = VisilabsNetwork.buildResource(endPoint: .target, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
         
-        sendRecommendationRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
+        sendRecommendationRequestHandler(resource: resource, completion: { result, error in completion(result, error) })
         
     }
     
-    private class func sendRecommendationRequestHandler(resource: VisilabsResource<[Any]>, completion: @escaping ([Any]?, VisilabsReason?) -> Void) {
+    private class func sendRecommendationRequestHandler(resource: VisilabsResource<[Any]>, completion: @escaping ([Any]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
@@ -126,8 +126,8 @@ class VisilabsRequest {
     
     private class func sendInAppNotificationRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
                 completion(nil)
             }, success: { (result, response) in
                 completion(result)
@@ -138,7 +138,7 @@ class VisilabsRequest {
     
     //https://s.visilabs.net/geojson?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&act=getlist
     //[{"actid":145,"trgevt":"OnEnter","dis":0,"geo":[{"id":4,"lat":41.0236665831979,"long":29.1222883408907,"rds":290.9502}]}]
-    class func sendGeofenceRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([[String: Any]]?, VisilabsReason?) -> Void) {
+    class func sendGeofenceRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([[String: Any]]?, VisilabsError?) -> Void) {
         var queryItems = [URLQueryItem]()
         for property in properties{
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -155,29 +155,29 @@ class VisilabsRequest {
                 return response as? [[String: Any]]
             }
             let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserGetList )
-            sendGeofenceRequestHandler(resource: resource, completion: { result, reason in completion(result, reason) })
+            sendGeofenceRequestHandler(resource: resource, completion: { result, error in completion(result, error) })
         } else {
             let responseParserSendPush: (Data) -> String = { data in return "" }
             let resource = VisilabsNetwork.buildResource(endPoint: .geofence, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParserSendPush )
-            sendGeofencePushRequestHandler(resource: resource, completion: { result, reason in completion(nil, reason) })
+            sendGeofencePushRequestHandler(resource: resource, completion: { result, error in completion(nil, error) })
         }
     }
     
-    private class func sendGeofencePushRequestHandler(resource: VisilabsResource<String>, completion: @escaping (String?, VisilabsReason?) -> Void) {
+    private class func sendGeofencePushRequestHandler(resource: VisilabsResource<String>, completion: @escaping (String?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
     }
     
-    private class func sendGeofenceRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?, VisilabsReason?) -> Void) {
+    private class func sendGeofenceRequestHandler(resource: VisilabsResource<[[String: Any]]>, completion: @escaping ([[String: Any]]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })
@@ -187,7 +187,7 @@ class VisilabsRequest {
     
     //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
     //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
-    class func sendMobileRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?, VisilabsReason?) -> Void) {
+    class func sendMobileRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
         var queryItems = [URLQueryItem]()
         for property in properties{
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -205,15 +205,15 @@ class VisilabsRequest {
         
         let resource = VisilabsNetwork.buildResource(endPoint: .mobile, method: .get, timeoutInterval: timeoutInterval, requestBody: nil, queryItems: queryItems, headers: headers, parse: responseParser )
         
-        sendMobileRequestHandler(resource: resource, completion: { result, reason in completion(result, reason)})
+        sendMobileRequestHandler(resource: resource, completion: { result, error in completion(result, error)})
         
     }
     
-    private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>, completion: @escaping ([String: Any]?, VisilabsReason?) -> Void) {
+    private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>, completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (reason, data, response) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with reason \(reason)")
-                completion(nil, reason)
+            failure: { (error, data, response) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
             }, success: { (result, response) in
                 completion(result, nil)
             })

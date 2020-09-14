@@ -112,7 +112,7 @@ public class VisilabsPersistence {
     class func saveTargetParameters(_ parameters: [String : String]) {
         archiveQueueUtility.sync {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             let dateString = dateFormatter.string(from: Date())
             var targetParameters = readTargetParameters()
             
@@ -133,11 +133,9 @@ public class VisilabsPersistence {
                             } else {
                                 parameterValueToStore = parameterValueToStore + ("|0")
                             }
-                            parameterValueToStore = parameterValueToStore + (dateString)
-                            //saveUserDefaults(storeKey, withObject: parameterValueToStore)
+                            parameterValueToStore = parameterValueToStore + "|" + dateString
                             targetParameters[storeKey] = parameterValueToStore
                         } else {
-                            //saveUserDefaults(storeKey, withObject: parameterValue)
                             targetParameters[storeKey] = parameterValue
                         }
                     }
@@ -160,7 +158,6 @@ public class VisilabsPersistence {
                                 }
                             }
                         }
-                        //saveUserDefaults(storeKey, withObject: parameterValueToStore)
                         targetParameters[storeKey] = parameterValueToStore
                     }
                 }
