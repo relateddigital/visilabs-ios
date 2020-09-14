@@ -306,6 +306,15 @@ The existence of a relevant **in-app message** for an event controlled by after 
 
 There are 7 types of **in-app messages**.
 
+
+|                  Pop-up - Image, Header, Text & Button                  | Mini-icon&text | Full Screen-image |
+|:-----------------------------------------------------------------------:|----------------|-------------------|
+| ![Image of IOS Application Page](/Screenshots/InAppNotification/full.png) |                |                   |
+|                                                                         |                |                   |
+|                                                                         |                |                   |
+|                                                                         |                |                   |
+|                                                                         |                |                   |
+
 ### Favorite Attribute Actions
 
 ### Geofencing
