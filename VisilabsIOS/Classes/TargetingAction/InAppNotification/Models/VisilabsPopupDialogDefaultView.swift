@@ -16,9 +16,9 @@ public class VisilabsPopupDialogDefaultView: UIView {
         closeButton.contentHorizontalAlignment = .right
         closeButton.clipsToBounds = false
         closeButton.setTitleColor(UIColor.white, for: .normal)
-        closeButton.setTitle("╳", for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 30.0, weight: .bold)
-        closeButton.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+        closeButton.setTitle("×", for: .normal)
+        closeButton.titleLabel?.font = .systemFont(ofSize: 35.0, weight: .regular)
+        closeButton.contentEdgeInsets = UIEdgeInsets(top: 2.5, left: 2.5, bottom: 2.5, right: 2.5)
         return closeButton
     }()
 
