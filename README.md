@@ -153,11 +153,11 @@ Visilabs.callAPI().customEvent("Frequently Asked Questions" /*Page Name*/, prope
 
 ```swift
 var properties = [String:String]()
-properties["OM.pv"] = "Product Code"
-properties["OM.pn"] = "Product Name"
-properties["OM.ppr"] = "Product Price"
-properties["OM.pv.1"] = "Product Brand"
-properties["OM.inv"] = "Number of items in stock"
+properties["OM.pv"] = "12345" // Product Code
+properties["OM.pn"] = "USB Charger" // Product Name
+properties["OM.ppr"] = 125.49" // Product Price
+properties["OM.pv.1"] = "Sample Brand" // Product Brand
+properties["OM.inv"] = "5" // Number of items in stock
 Visilabs.callAPI().customEvent("Product View", properties: properties)
 ```
 
