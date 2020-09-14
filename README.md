@@ -120,8 +120,8 @@ Moreover, you can pass additional information to the optional parameter `propert
 
 ```swift
 var properties = [String:String]()
-properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-properties["OM.sys.AppID"] = "App ID to use for push messages"
+properties["OM.sys.TokenID"] = "F7C5231053E6EC543B8930FB440752E2FE41B2CFC2AA8F4E9C4843D347E6A847" // Token ID to use for push messages
+properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messages
 Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
 ```
 
@@ -129,17 +129,24 @@ Visilabs.callAPI().signUp(exVisitorId: "userId", properties: properties)
 
 Like `signUp` method  `login` method can be called with or without optional parameter `properties`.
 
+
+```swift
+Visilabs.callAPI().login(exVisitorId: "userId")
+```
+
 ```swift
 var properties = [String:String]()
-properties["OM.sys.TokenID"] = "Token ID to use for push messages"
-properties["OM.sys.AppID"] = "App ID to use for push messages"
+properties["OM.sys.TokenID"] = "F7C5231053E6EC543B8930FB440752E2FE41B2CFC2AA8F4E9C4843D347E6A847" // Token ID to use for push messages
+properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messages
 Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 ```
 
 #### Page View
 
+Use the following implementation of `customEvent`  method to record the page name the visitor is currently viewing. You may add extra parameters to properties dictionary or you may leave it empty.
+
 ```swift
-Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
+Visilabs.callAPI().customEvent("Frequently Asked Questions" /*Page Name*/, properties: [String:String]())
 ```
 
 #### Product View
