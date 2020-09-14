@@ -18,12 +18,12 @@ struct VisilabsConstants {
     static let GEOFENCE_FETCH_TIME_INTERVAL = TimeInterval(60) //TODO: bunu sonra değiştir 15 dakika yap
     
     //TODO: bunlar https e çevirilecek
-    static var LOGGER_END_POINT = "http://lgr.visilabs.net"
-    static var REALTIME_END_POINT = "http://rt.visilabs.net"
-    static var RECOMMENDATION_END_POINT = "http://s.visilabs.net/json"
-    static var ACTION_END_POINT = "http://s.visilabs.net/actjson"
-    static var GEOFENCE_END_POINT = "http://s.visilabs.net/geojson"
-    static var MOBILE_END_POINT = "http://s.visilabs.net/mobile"
+    static var LOGGER_END_POINT = "lgr.visilabs.net"
+    static var REALTIME_END_POINT = "rt.visilabs.net"
+    static var RECOMMENDATION_END_POINT = "s.visilabs.net/json"
+    static var ACTION_END_POINT = "s.visilabs.net/actjson"
+    static var GEOFENCE_END_POINT = "s.visilabs.net/geojson"
+    static var MOBILE_END_POINT = "s.visilabs.net/mobile"
     
     
     //MARK: -UserDefaults Keys
