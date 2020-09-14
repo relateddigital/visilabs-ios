@@ -109,7 +109,7 @@ class VisilabsGeofence {
                }
             }
             
-            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, error) in
+            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: profile.requestTimeoutInterval) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, error) in
                 
                 if error != nil {
                     self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
@@ -186,7 +186,7 @@ class VisilabsGeofence {
            }
         }
         VisilabsLogger.error("Geofence Triggerred: actionId: \(actionId) geofenceid: \(geofenceId)")
-        VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: TimeInterval(profile.requestTimeoutInSeconds)) { (result, error) in
+        VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: profile.requestTimeoutInterval) { (result, error) in
             if let error = error {
                 VisilabsLogger.error("Geofence Push Send Error: \(error)")
             }
