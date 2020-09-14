@@ -251,7 +251,7 @@ extension VisilabsInstance {
                 self.readWriteLock.write {
                     self.eventsQueue.removeAll()
                 }
-                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds))
+                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: self.visilabsProfile.requestTimeoutInterval)
                 self.readWriteLock.write {
                     self.visilabsCookie = cookie
                 }
