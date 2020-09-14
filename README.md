@@ -362,7 +362,7 @@ Visilabs.callAPI().getFavoriteAttributeActions(actionId: 188) { (response) in
 }
 ```
 
-`favorites` property of `response` object is a dictionary which has an `enum` as key.  The cases of `VisilabsFavoriteAttribute`  `enum` are the followings:
+`favorites` property of `response` object is a dictionary which has an `enum` as key and an `array` of `String`s as value.  The cases of `VisilabsFavoriteAttribute`  `enum` are the followings:
 
 ```swift
 public enum VisilabsFavoriteAttribute: String {
@@ -392,9 +392,9 @@ public enum VisilabsFavoriteAttribute: String {
 ## Recommendation
 
 
-Product recommendations are handled by the **recommend** method of SDK. You have to pass 3 mandatory arguments which are **zoneId**, **productCode** and **completion** to **recommend** method.
+Product recommendations are handled by the `recommend` method of SDK. You have to pass 3 mandatory arguments which are `zoneId`, `productCode` and `completion` to `recommend` method.
 
-**completion** parameter is a closure expression which takes an **VisilabsRecommendationResponse** instance as input and returns nothing. The structure of **VisilabsRecommendationResponse** is shown below:
+`completion` parameter is a closure expression which takes an `VisilabsRecommendationResponse` instance as input and returns nothing. The structure of `VisilabsRecommendationResponse` is shown below:
 
 ```swift
 public class VisilabsRecommendationResponse {
