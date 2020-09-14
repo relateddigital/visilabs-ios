@@ -141,6 +141,21 @@ properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messa
 Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
 ```
 
+Moreover you can add user segment parameters  to `properties`.
+
+```swift
+var properties = [String:String]()
+properties["OM.vseg1"] = "seg1val" // Visitor Segment 1
+properties["OM.vseg2"] = "seg2val" // Visitor Segment 2
+properties["OM.vseg3"] = "seg3val" // Visitor Segment 3
+properties["OM.vseg4"] = "seg4val" // Visitor Segment 4
+properties["OM.vseg5"] = "seg5val" // Visitor Segment 5
+properties["OM.bd"] = "1977-03-15" // Birthday
+properties["OM.gn"] = "f" // Gender
+properties["OM.loc"] = "Bursa" // Location
+Visilabs.callAPI().login(exVisitorId: "userId", properties: properties)
+```
+
 #### Page View
 
 Use the following implementation of `customEvent`  method to record the page name the visitor is currently viewing. You may add extra parameters to properties dictionary or you may leave it empty.
