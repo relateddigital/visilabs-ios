@@ -227,29 +227,35 @@ Visilabs.callAPI().customEvent("In App Search", properties: properties)
 
 #### Banner Click
 
+You can monitor banner click data using the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.OSB"] = "Banner Name/Banner Code"
+properties["OM.OSB"] = "b-666" // Banner Name/Banner Code
 Visilabs.callAPI().customEvent("Banner Click", properties: properties)
 ```
 
 #### Add To Favorites
 
+When the user adds a product to their favorites, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pf"] = "Product Code"
+properties["OM.pf"] = "12345" // Product Code
 properties["OM.pfu"] = "1"
-properties["OM.ppr"] = "Product Price"
+properties["OM.ppr"] = 125.49" // Product Price
 Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
 ```
 
 #### Remove from Favorites
 
+When the user removes a product from their favorites, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pf"] = "Product Code"
+properties["OM.pf"] = "12345" // Product Code
 properties["OM.pfu"] = "-1"
-properties["OM.ppr"] = "Product Price"
+properties["OM.ppr"] = 125.49" // Product Price
 Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
 ```
 
