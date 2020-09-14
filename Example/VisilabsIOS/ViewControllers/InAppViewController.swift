@@ -48,6 +48,7 @@ class InAppViewController: FormViewController {
         let messageType = VisilabsInAppNotificationType.init(rawValue: (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?)!.value! as String)!
         switch messageType {
         case .mini:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = true
@@ -62,6 +63,7 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: "miniIcon")?.hidden = false
             break
         case .full, .image_text_button, .smile_rating, .nps:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
@@ -72,10 +74,11 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
-            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         case.full_image:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
@@ -90,6 +93,7 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         case.image_button:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
@@ -100,7 +104,7 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
-            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         }
