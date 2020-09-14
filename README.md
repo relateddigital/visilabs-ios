@@ -302,6 +302,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
     }                                        
 ```
 
+The existence of a relevant **in-app message** for an event controlled by after each `customEvent` call. You can create and set the details and the display criteria of **in-app messages** on https://intelligence.relateddigital.com/#Target/TargetingAction/TAList page of RMC administration panel.
+
+There are 7 types of **in-app messages**.
+
 ### Favorite Attribute Actions
 
 ### Geofencing
