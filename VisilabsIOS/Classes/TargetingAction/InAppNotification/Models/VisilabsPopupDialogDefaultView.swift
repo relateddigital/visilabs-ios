@@ -34,7 +34,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         let titleLabel = UILabel(frame: .zero)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .left
+        titleLabel.textAlignment = .center
         titleLabel.textColor = UIColor(white: 0.4, alpha: 1)
         titleLabel.font = .boldSystemFont(ofSize: 14)
         return titleLabel
@@ -44,7 +44,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         let messageLabel = UILabel(frame: .zero)
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = .left
+        messageLabel.textAlignment = .center
         messageLabel.textColor = UIColor(white: 0.6, alpha: 1)
         messageLabel.font = .systemFont(ofSize: 14)
         return messageLabel
