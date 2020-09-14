@@ -388,6 +388,23 @@ public enum VisilabsFavoriteAttribute: String {
 
 ### Geofencing
 
+To enable location services you need add the following keys to your `Info.plist` file.
+
+* NSLocationAlwaysAndWhenInUseUsageDescription
+* NSLocationWhenInUseUsageDescription
+
+```swift
+import VisilabsIOS
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions 
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", profileId: "YOUR_PROFILE_ID"
+        , dataSource: "YOUR_DATASOURCE", inAppNotificationsEnabled: false, channel: "IOS"
+        , requestTimeoutInSeconds: 30, geofenceEnabled: true, maxGeofenceCount: 20)
+        return true
+    }                                        
+```
+
 
 ## Recommendation
 
