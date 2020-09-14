@@ -282,6 +282,8 @@ properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messa
 Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
+![Image of IOS Application Page](/Screenshots/ios-application-page.png)
+
 ## Targeting Actions
 
 ### In-App Messaging
