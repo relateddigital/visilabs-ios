@@ -203,8 +203,8 @@ Visilabs.callAPI().customEvent("Category View", properties: properties)
 
 ```swift
 var properties = [String:String]()
-properties["OM.oss"] = "Search Keyword"
-properties["OM.ossr"] = "Number of Search Results"
+properties["OM.OSS"] = "Search Keyword"
+properties["OM.OSSR"] = "Number of Search Results"
 Visilabs.callAPI().customEvent("In App Search", properties: properties)
 ```
 
