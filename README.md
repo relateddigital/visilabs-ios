@@ -307,15 +307,13 @@ The existence of a relevant **in-app message** for an event controlled by after 
 There are 7 types of **in-app messages**:
 
 
-|       Pop-up - Image, Header, Text & Button      | Mini-icon&text                                   | Full Screen-image                                            |
-|:------------------------------------------------:|--------------------------------------------------|--------------------------------------------------------------|
-| ![full](/Screenshots/InAppNotification/full.png) | ![mini](/Screenshots/InAppNotification/mini.png) | ![full_image](/Screenshots/InAppNotification/full_image.png) |
-|                                                  |                                                  |                                                              |
-|                                                  |                                                  |                                                              |
-|                                                  |                                                  |                                                              |
-|                                                  |                                                  |                                                              |
-
-
+|               Pop-up - Image, Header, Text & Button              | Mini-icon&text                                                             | Full Screen-image                                                |
+|:----------------------------------------------------------------:|----------------------------------------------------------------------------|------------------------------------------------------------------|
+| ![full](/Screenshots/InAppNotification/full.png)                 | ![mini](/Screenshots/InAppNotification/mini.png)                           | ![full_image](/Screenshots/InAppNotification/full_image.png)     |
+| Full Screen-image&button                                         | Pop-up - Image, Header, Text & Button                                      | Pop-up-Survey                                                    |
+| ![image_button](/Screenshots/InAppNotification/image_button.png) | ![image_text_button](/Screenshots/InAppNotification/image_text_button.png) | ![smile_rating](/Screenshots/InAppNotification/smile_rating.png) |
+| Pop-up - NPS with Text & Button                                  |                                                                            |                                                                  |
+| ![nps](/Screenshots/InAppNotification/nps.png)                   |                                                                            |                                                                  |
 
 
 ### Favorite Attribute Actions
