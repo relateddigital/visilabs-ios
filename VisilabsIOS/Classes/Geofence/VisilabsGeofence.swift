@@ -8,15 +8,6 @@
 import Foundation
 import CoreLocation
 
-public extension TimeInterval {
-    static var oneMinute: TimeInterval { return 60 }
-    static var oneHour: TimeInterval { return oneMinute * 60 }
-    static var oneDay: TimeInterval { return oneHour * 24 }
-    static var oneWeek: TimeInterval { return oneDay * 7 }
-    static var oneMonth: TimeInterval { return oneDay * 30 }
-    static var oneYear: TimeInterval { return oneDay * 365 }
-}
-
 class VisilabsGeofence {
     
     static let sharedManager = VisilabsGeofence()
@@ -35,10 +26,6 @@ class VisilabsGeofence {
             self.geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
             self.lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
             self.lastSuccessfulGeofenceFetchTime = Date(timeIntervalSince1970: 0)
-            
-            //TODO:sil bunları sonra
-            print("geofenceHistory.fetchHistory.count: \(self.geofenceHistory.fetchHistory.count)")
-            
         }else {
             return nil
         }
@@ -93,12 +80,6 @@ class VisilabsGeofence {
             
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
-            
-            //TODO: bunu sil sonra, logları çok büyütür.
-            VisilabsLogger.info("getGeofenceList call:")
-            
-            
-            
             if timeInterval < VisilabsConstants.GEOFENCE_FETCH_TIME_INTERVAL {
                 return
             }
