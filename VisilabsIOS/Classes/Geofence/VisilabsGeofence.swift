@@ -237,7 +237,7 @@ class VisilabsGeofence2 : NSObject, CLLocationManagerDelegate {
         // don't recreate location managers too often
         //if let last = lastLocationManagerCreated, last.age! < .oneMinute { return }
 
-        if let llmc = lastLocationManagerCreated, llmc > Date().addingTimeInterval(-TimeInterval.oneMinute) {
+        if let llmc = lastLocationManagerCreated, llmc > Date().addingTimeInterval(-TimeInterval(60)) {
             return
         }
         
