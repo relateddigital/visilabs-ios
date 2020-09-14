@@ -282,7 +282,7 @@ properties["OM.sys.AppID"] = "VisilabsIOSExample" //App ID to use for push messa
 Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
-![Image of IOS Application Page](/Screenshots/ios-application-page.png)
+![IOS Application Page](/Screenshots/ios-application-page.png)
 
 ## Targeting Actions
 
@@ -304,7 +304,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 The existence of a relevant **in-app message** for an event controlled by after each `customEvent` call. You can create and set the details and the display criteria of **in-app messages** on https://intelligence.relateddigital.com/#Target/TargetingAction/TAList page of RMC administration panel.
 
-There are 7 types of **in-app messages**.
+There are 7 types of **in-app messages**:
 
 
 |       Pop-up - Image, Header, Text & Button      | Mini-icon&text                                   | Full Screen-image                                            |
@@ -319,6 +319,52 @@ There are 7 types of **in-app messages**.
 
 
 ### Favorite Attribute Actions
+
+You can access favorite attributes of the **Targeting Actions** of type **Favorite Attribute Action**  that you defined from the  https://intelligence.relateddigital.com/#Target/TargetingAction/TAList/ section on the **RMC** panel via the mobile application as follows.
+
+```swift
+Visilabs.callAPI().getFavoriteAttributeActions { (response) in
+    if let error = response.error {
+        print(error)
+    } else {
+        if let favoriteBrands = response.favorites[.brand] {
+            for brand in favoriteBrands {
+                print(brand)
+            }
+        }
+        if let favoriteCategories = response.favorites[.category] {
+            for category in favoriteCategories {
+                print(category)
+            }
+        }
+    }
+}
+```
+
+You can also access favorite attributes of a particular **Targeting Action** by specifying the **ID**.
+
+![Favorite Attribute Action](/Screenshots/favorite-attribute-action-page.png)
+
+```swift
+Visilabs.callAPI().getFavoriteAttributeActions(actionId: 188) { (response) in
+    if let error = response.error {
+        print(error)
+    } else {
+        if let favoriteBrands = response.favorites[.brand] {
+            for brand in favoriteBrands {
+                print(brand)
+            }
+        }
+        if let favoriteCategories = response.favorites[.category] {
+            for category in favoriteCategories {
+                print(category)
+            }
+        }
+    }
+}
+```
+
+
 
 ### Geofencing
 
