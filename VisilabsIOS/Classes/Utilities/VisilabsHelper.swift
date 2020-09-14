@@ -84,13 +84,14 @@ internal class VisilabsHelper {
         }
     }
     
-    static func setEndpoints(dataSource: String) {
-        VisilabsBasePath.endpoints[.logger] = "\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.realtime] = "\(VisilabsConstants.REALTIME_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
-        VisilabsBasePath.endpoints[.target] = VisilabsConstants.RECOMMENDATION_END_POINT
-        VisilabsBasePath.endpoints[.action] = VisilabsConstants.ACTION_END_POINT
-        VisilabsBasePath.endpoints[.geofence] = VisilabsConstants.GEOFENCE_END_POINT
-        VisilabsBasePath.endpoints[.mobile] = VisilabsConstants.MOBILE_END_POINT
+    static func setEndpoints(dataSource: String, useInsecureProtocol: Bool = false) {
+        let httpProtocol = useInsecureProtocol ? VisilabsConstants.HTTP : VisilabsConstants.HTTPS
+        VisilabsBasePath.endpoints[.logger] = "\(httpProtocol)://\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.realtime] = "\(httpProtocol)://\(VisilabsConstants.REALTIME_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
+        VisilabsBasePath.endpoints[.target] = "\(httpProtocol)://\(VisilabsConstants.RECOMMENDATION_END_POINT)"
+        VisilabsBasePath.endpoints[.action] = "\(httpProtocol)://\(VisilabsConstants.ACTION_END_POINT)"
+        VisilabsBasePath.endpoints[.geofence] = "\(httpProtocol)://\(VisilabsConstants.GEOFENCE_END_POINT)"
+        VisilabsBasePath.endpoints[.mobile] = "\(httpProtocol)://\(VisilabsConstants.MOBILE_END_POINT)"
     }
     
     static private let dateFormatter = DateFormatter()
