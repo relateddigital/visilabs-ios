@@ -87,16 +87,16 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.FAVORITE_ATTRIBUTE_ACTION
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, reason: VisilabsReason?) in
-            completion(self.parseFavoritesResponse(result, reason))
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?) in
+            completion(self.parseFavoritesResponse(result, error))
         })
     }
     
     //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
-    private func parseFavoritesResponse(_ result:[String: Any]?, _ reason: VisilabsReason?) -> VisilabsFavoriteAttributeActionResponse {
+    private func parseFavoritesResponse(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsFavoriteAttributeActionResponse {
         var favoritesResponse = [VisilabsFavoriteAttribute : [String]]()
-        var errorResponse: VisilabsReason? = nil
-        if let error = reason {
+        var errorResponse: VisilabsError? = nil
+        if let error = error {
             errorResponse = error
         } else if let res = result {
             if let favoriteAttributeActions = res[VisilabsConstants.FAVORITE_ATTRIBUTE_ACTION] as? [[String: Any?]] {
@@ -113,7 +113,7 @@ class VisilabsTargetingAction {
                 }
             }
         } else {
-            errorResponse = VisilabsReason.noData
+            errorResponse = VisilabsError.noData
         }
         return VisilabsFavoriteAttributeActionResponse(favorites: favoritesResponse, error: errorResponse)
     }
@@ -133,16 +133,16 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.STORY
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, reason: VisilabsReason?) in
-            completion(self.parseStories(result, reason))
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?) in
+            completion(self.parseStories(result, error))
         })
     }
     
     //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
-    private func parseStories(_ result:[String: Any]?, _ reason: VisilabsReason?) -> VisilabsStoryResponse {
+    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsStoryResponse {
         var storiesResponse = [VisilabsStory]()
-        var errorResponse: VisilabsReason? = nil
-        if let error = reason {
+        var errorResponse: VisilabsError? = nil
+        if let error = error {
             errorResponse = error
         } else if let res = result {
             if let storyActions = res[VisilabsConstants.STORY] as? [[String: Any?]] {
@@ -157,7 +157,7 @@ class VisilabsTargetingAction {
                 }
             }
         } else {
-            errorResponse = VisilabsReason.noData
+            errorResponse = VisilabsError.noData
         }
         return VisilabsStoryResponse(storyTemplate: .StoryLookingBanners, stories: storiesResponse, storyExtendedProperties: VisilabsStoryExtendedProperties(), error: errorResponse)
     }

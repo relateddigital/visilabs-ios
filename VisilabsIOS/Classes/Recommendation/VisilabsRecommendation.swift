@@ -43,10 +43,10 @@ class VisilabsRecommendation {
             }
         }
         
-        VisilabsRequest.sendRecommendationRequest(properties: props, headers: [String : String](), timeoutInterval: visilabsProfile.requestTimeoutInterval, completion: { (result: [Any]?, reason: VisilabsReason?) in
+        VisilabsRequest.sendRecommendationRequest(properties: props, headers: [String : String](), timeoutInterval: visilabsProfile.requestTimeoutInterval, completion: { (result: [Any]?, error: VisilabsError?) in
             var products = [VisilabsProduct]()
-            if reason != nil {
-                completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: reason))
+            if error != nil {
+                completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: error))
             }else {
                 for r in result!{
                     if let product = VisilabsProduct(JSONObject: r as? [String: Any?]) {

@@ -11,11 +11,11 @@ enum VisilabsStoryTemplate : String {
 
 class VisilabsStoryResponse {
     public var stories: [VisilabsStory]
-    public var error: VisilabsReason?
+    public var error: VisilabsError?
     public var storyTemplate: VisilabsStoryTemplate
     public var storyExtendedProperties: VisilabsStoryExtendedProperties
     
-    internal init(storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], storyExtendedProperties: VisilabsStoryExtendedProperties, error: VisilabsReason? = nil) {
+    internal init(storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], storyExtendedProperties: VisilabsStoryExtendedProperties, error: VisilabsError? = nil) {
         self.storyTemplate = storyTemplate
         self.stories = stories
         self.storyExtendedProperties = storyExtendedProperties

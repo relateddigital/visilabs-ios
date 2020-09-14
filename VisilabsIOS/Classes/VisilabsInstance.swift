@@ -33,6 +33,7 @@ struct VisilabsProfile : Codable {
     var requestTimeoutInterval: TimeInterval {
         return TimeInterval(requestTimeoutInSeconds)
     }
+    var useInsecureProtocol = false
 }
 
 public class VisilabsInstance: CustomDebugStringConvertible {
@@ -78,13 +79,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
     
     public var useInsecureProtocol: Bool = false {
-       didSet {
-            if useInsecureProtocol {
-                VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: true)
-            } else {
-               VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
-            }
-       }
+        didSet {
+            self.visilabsProfile.useInsecureProtocol = useInsecureProtocol
+            VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: useInsecureProtocol)
+            VisilabsPersistence.saveVisilabsProfile(self.visilabsProfile)
+        }
     }
 
     init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
@@ -252,7 +251,7 @@ extension VisilabsInstance {
                 self.readWriteLock.write {
                     self.eventsQueue.removeAll()
                 }
-                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds))
+                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: self.visilabsProfile.requestTimeoutInterval)
                 self.readWriteLock.write {
                     self.visilabsCookie = cookie
                 }
@@ -297,7 +296,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             guard let self = self else { return }
             self.networkQueue.async { [weak self, properties] in
                 guard let self = self else { return }
-                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: TimeInterval(self.visilabsProfile.requestTimeoutInSeconds), completion: { visilabsInAppNotification in
+                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
                         self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
                     }

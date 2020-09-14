@@ -48,6 +48,7 @@ class InAppViewController: FormViewController {
         let messageType = VisilabsInAppNotificationType.init(rawValue: (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?)!.value! as String)!
         switch messageType {
         case .mini:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = true
@@ -62,6 +63,7 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: "miniIcon")?.hidden = false
             break
         case .full, .image_text_button, .smile_rating, .nps:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
@@ -72,10 +74,11 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
-            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         case.full_image:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
@@ -90,6 +93,7 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         case.image_button:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
@@ -100,7 +104,7 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
-            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         }
@@ -175,7 +179,7 @@ class InAppViewController: FormViewController {
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "IOS Link"
             $0.validationOptions = .validatesOnDemand
-            $0.value = URL(string: "https://www.google.com")
+            $0.value = URL(string: "https://www.relateddigital.com")
         }
         
         <<< URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
@@ -183,7 +187,7 @@ class InAppViewController: FormViewController {
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
             $0.placeholder = "Image URL"
             $0.validationOptions = .validatesOnDemand
-            $0.value = URL(string: "https://x6k7p6q7.rocketcdn.me/wp-content/uploads/2019/02/Ways-You-Can-Draw-Attention-to-New-Products.png")
+            $0.value = URL(string: "https://raw.githubusercontent.com/relateddigital/visilabs-ios/master/Screenshots/attention.png")
         }
             
         <<< PickerInputRow<String>("miniIcon"){

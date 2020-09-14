@@ -31,7 +31,7 @@ struct VisilabsResource<A> {
     let parse: (Data) -> A?
 }
 
-public enum VisilabsReason: Codable {
+public enum VisilabsError: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: Key.self)
         let rawValue = try container.decode(Int.self, forKey: .rawValue)
@@ -104,7 +104,7 @@ struct VisilabsBasePath {
 
 class VisilabsNetwork {
     
-    class func apiRequest<A>(resource: VisilabsResource<A>, failure: @escaping (VisilabsReason, Data?, URLResponse?) -> (), success: @escaping (A, URLResponse?) -> ()) {
+    class func apiRequest<A>(resource: VisilabsResource<A>, failure: @escaping (VisilabsError, Data?, URLResponse?) -> (), success: @escaping (A, URLResponse?) -> ()) {
         guard let request = buildURLRequest(resource: resource) else {
             return
         }
