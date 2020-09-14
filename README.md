@@ -151,6 +151,8 @@ Visilabs.callAPI().customEvent("Frequently Asked Questions" /*Page Name*/, prope
 
 #### Product View
 
+Use the following implementation of `customEvent`  when the user displays a product in the mobile app.
+
 ```swift
 var properties = [String:String]()
 properties["OM.pv"] = "12345" // Product Code
@@ -163,31 +165,37 @@ Visilabs.callAPI().customEvent("Product View", properties: properties)
 
 #### Add to Cart
 
+Use the following implementation of `customEvent`  when the user adds items to the cart or removes.
+
 ```swift
 var properties = [String:String]()
-properties["OM.pbid"] = "Basket ID"
-properties["OM.pb"] = "Product1 Code;Product2 Code"
-properties["OM.pu"] = "Product1 Quantity;Product2 Quantity"
-properties["OM.ppr"] = "Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity"
+properties["OM.pbid"] = "bid-12345678" // Basket ID
+properties["OM.pb"] = "12345;23456" // Product1 Code;Product2 Code
+properties["OM.pu"] = "3;1" // Product1 Quantity;Product2 Quantity
+properties["OM.ppr"] = "376.47;23.50" // Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity
 Visilabs.callAPI().customEvent("Cart", properties: properties)
 ```
 
 #### Product Purchase
 
+Use the following implementation of `customEvent` when the user buys one or more items.
+
 ```swift
 var properties = [String:String]()
-properties["OM.tid"] = "Order ID"
-properties["OM.pp"] = "Product1 Code;Product2 Code"
-properties["OM.pu"] = "Product1 Quantity;Product2 Quantity"
-properties["OM.ppr"] = "Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity"
+properties["OM.tid"] = "oid-12345678" // Order ID/Transaction ID
+properties["OM.pp"] = "12345;23456" // Product1 Code;Product2 Code
+properties["OM.pu"] = "3;1" // Product1 Quantity;Product2 Quantity
+properties["OM.ppr"] = "376.47;23.50" // Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity
 Visilabs.callAPI().customEvent("Purchase", properties: properties)
 ```
 
 #### Product Category Page View
 
+When the user views a category list page, use the following implementation of `customEvent`.
+
 ```swift
 var properties = [String:String]()
-properties["OM.clist"] = "Category Code/Category ID"
+properties["OM.clist"] = "c-14" // Category Code/Category ID
 Visilabs.callAPI().customEvent("Category View", properties: properties)
 ```
 
