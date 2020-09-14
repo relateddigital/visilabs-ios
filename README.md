@@ -402,6 +402,17 @@ An example implementation of these permissions as follows:
 <string>We need access to your location for better user experience.</string>
 ```
 
+You also need to add the following keys under `UIBackgroundModes` in your `Info.plist` file to monitor regions, refresh region list and receive push notifications.
+
+```xml
+<array>
+    <string>fetch</string>
+    <string>location</string>
+    <string>remote-notification</string>
+</array>
+```
+
+When initializing **Visilabs** SDK you need to set `geofenceEnabled` parameter of `createAPI` method to `true`. You may also change the `maxGeofenceCount` to a value lower than 20. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots.
 
 ```swift
 import VisilabsIOS
@@ -414,7 +425,6 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
         return true
     }                                        
 ```
-
 
 ## Recommendation
 
