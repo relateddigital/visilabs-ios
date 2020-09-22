@@ -120,7 +120,7 @@ class VisilabsTargetingAction {
     
     // MARK: - Story
     
-    func getStories(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryResponse) -> Void)){
+    func getStories(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryActionResponse) -> Void)){
         
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
@@ -139,7 +139,7 @@ class VisilabsTargetingAction {
     }
     
     //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
-    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsStoryResponse {
+    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsStoryActionResponse {
         var storiesResponse = [VisilabsStory]()
         var errorResponse: VisilabsError? = nil
         if let error = error {
@@ -159,7 +159,7 @@ class VisilabsTargetingAction {
         } else {
             errorResponse = VisilabsError.noData
         }
-        return VisilabsStoryResponse(storyTemplate: .StoryLookingBanners, stories: storiesResponse, storyExtendedProperties: VisilabsStoryExtendedProperties(), error: errorResponse)
+        return VisilabsStoryActionResponse(storyTemplate: .StoryLookingBanners, stories: storiesResponse, storyExtendedProperties: VisilabsStoryExtendedProperties(), error: errorResponse)
     }
     
 }
