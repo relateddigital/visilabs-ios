@@ -6,10 +6,10 @@
 //
 
 enum VisilabsStoryTemplate : String {
-    case StoryLookingBanners
+    case StoryLookingBanners = "story_looking_banners"
 }
 
-class VisilabsStoryResponse {
+class VisilabsStoryActionResponse {
     public var stories: [VisilabsStory]
     public var error: VisilabsError?
     public var storyTemplate: VisilabsStoryTemplate
