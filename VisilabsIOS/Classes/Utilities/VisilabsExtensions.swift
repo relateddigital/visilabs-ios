@@ -54,6 +54,10 @@ extension String {
         return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
     
+    func urlDecode() -> String {
+        return self.removingPercentEncoding ?? ""
+    }
+    
     var isEmptyOrWhitespace: Bool {
         return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
