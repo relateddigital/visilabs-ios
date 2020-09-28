@@ -5,15 +5,17 @@
 //  Created by Egemen on 28.09.2020.
 //
 
-import Foundation
+import UIKit
 
 public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var stories = [VisilabsStory]()
+    var extendedProperties = VisilabsStoryActionExtendedProperties()
     var storiesLoaded = false
     
-    func loadStories(stories: [VisilabsStory]){
-        self.stories = stories
+    func loadStoryAction(_ storyAction: VisilabsStoryAction){
+        self.stories = storyAction.stories
+        self.extendedProperties = storyAction.extendedProperties
         self.storiesLoaded = true
     }
     
@@ -27,10 +29,13 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         if !storiesLoaded {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.setAsLoadingCell()
+            cell.contentView.isUserInteractionEnabled = false
             return cell
         }else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.story = self.stories[indexPath.row]
+            cell.setProperties(extendedProperties)
+            cell.contentView.isUserInteractionEnabled = false
             return cell
         }
 
@@ -48,9 +53,12 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
          */
     }
     
+    
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        print(indexPath.row)
     }
+ 
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 80, height: 100)
