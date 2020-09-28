@@ -101,4 +101,9 @@ internal class VisilabsHelper {
         return dateFormatter.string(from: date)
     }
     
+    static func getUIImage(named: String) -> UIImage? {
+        let bundle = Bundle(identifier: "com.relateddigital.visilabs")
+        return UIImage(named: named, in : bundle, compatibleWith: nil)!
+    }
+    
 }
