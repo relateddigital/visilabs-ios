@@ -52,3 +52,45 @@ extension VisilabsStoryImageRequestable where Self: UIImageView {
         }
     }
 }
+
+enum ImageStyle: Int {
+    case squared,rounded
+}
+
+public enum VisilabsStoryImageRequestResult<V, E> {
+    case success(V)
+    case failure(E)
+}
+
+typealias SetImageRequester = (VisilabsStoryImageRequestResult<Bool,Error>) -> Void
+
+extension UIImageView: VisilabsStoryImageRequestable {
+    func setImage(url: String,
+                  style: ImageStyle = .rounded,
+                  completion: SetImageRequester? = nil) {
+        image = nil
+
+        //The following stmts are in SEQUENCE. before changing the order think twice :P
+        isActivityEnabled = true
+        layer.masksToBounds = false
+        if style == .rounded {
+            layer.cornerRadius = frame.height/2
+            activityStyle = .white
+        } else if style == .squared {
+            layer.cornerRadius = 0
+            activityStyle = .whiteLarge
+        }
+        
+        clipsToBounds = true
+        setImage(urlString: url) { (response) in
+            if let completion = completion {
+                switch response {
+                case .success(_):
+                    completion(VisilabsStoryImageRequestResult.success(true))
+                case .failure(let error):
+                    completion(VisilabsStoryImageRequestResult.failure(error))
+                }
+            }
+        }
+    }
+}
