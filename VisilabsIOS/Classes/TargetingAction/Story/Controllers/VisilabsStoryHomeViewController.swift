@@ -12,6 +12,11 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
     var stories = [VisilabsStory]()
     var storiesLoaded = false
     
+    func loadStories(stories: [VisilabsStory]){
+        self.stories = stories
+        self.storiesLoaded = true
+    }
+    
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return storiesLoaded ? stories.count : 1
@@ -25,6 +30,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
             return cell
         }else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
+            cell.story = self.stories[indexPath.row]
             return cell
         }
 
