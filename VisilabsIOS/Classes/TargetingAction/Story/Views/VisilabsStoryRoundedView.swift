@@ -47,6 +47,13 @@ class VisilabsStoryRoundedView: UIView {
 }
 
 extension VisilabsStoryRoundedView {
+    func setBorder(borderColor: UIColor, borderWidth: Int, borderRadius: Double){
+        layer.borderColor = borderColor.cgColor
+        layer.borderWidth = CGFloat(borderWidth)
+        layer.cornerRadius = frame.height * CGFloat(borderRadius)
+        imageView.layer.cornerRadius = imageView.frame.height * CGFloat(borderRadius)
+    }
+    /*
     func enableBorder(enabled: Bool = true) {
         if enabled {
             layer.borderColor = UIColor.clear.cgColor
@@ -56,5 +63,6 @@ extension VisilabsStoryRoundedView {
             layer.borderWidth = attributes.borderWidth
         }
     }
+     */
 }
 
