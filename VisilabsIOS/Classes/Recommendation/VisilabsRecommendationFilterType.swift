@@ -38,6 +38,24 @@ public enum VisilabsProductAttribute: String {
     case attr5
 }
 
+public enum VisilabsProductFilterAttribute: String {
+    case PRODUCTNAME
+    case COLOR
+    case AGEGROUP
+    case BRAND
+    case CATEGORY
+    case GENDER
+    case MATERIAL
+    case ATTRIBUTE1
+    case ATTRIBUTE2
+    case ATTRIBUTE3
+    case ATTRIBUTE4
+    case ATTRIBUTE5
+    case SHIPPINGONSAMEDAY
+    case FREESHIPPING
+    case ISDISCOUNTED
+}
+
 public class VisilabsRecommendationFilter {
     var attribute: VisilabsProductAttribute
     var filterType: VisilabsRecommendationFilterType
