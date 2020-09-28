@@ -12,9 +12,11 @@ enum VisilabsStoryTemplate : String {
 class VisilabsStoryActionResponse {
     public var storyActions: [VisilabsStoryAction]
     public var error: VisilabsError?
+    var guid: String
     
-    internal init(storyActions: [VisilabsStoryAction], error: VisilabsError? = nil) {
+    internal init(storyActions: [VisilabsStoryAction], error: VisilabsError? = nil, guid: String) {
         self.storyActions = storyActions
         self.error = error
+        self.guid = guid
     }
 }
