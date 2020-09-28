@@ -11,9 +11,11 @@ class VisilabsStoryAction {
     let actionId: Int
     let storyTemplate: VisilabsStoryTemplate
     let stories: [VisilabsStory]
-    init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory]) {
+    let clickQueryString: String
+    init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], clickQueryString: String) {
         self.actionId = actionId
         self.storyTemplate = storyTemplate
         self.stories = stories
+        self.clickQueryString = clickQueryString
     }
 }
