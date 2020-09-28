@@ -87,7 +87,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.FAVORITE_ATTRIBUTE_ACTION
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?) in
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?, guid: String?) in
             completion(self.parseFavoritesResponse(result, error))
         })
     }
@@ -120,7 +120,11 @@ class VisilabsTargetingAction {
     
     // MARK: - Story
     
-    func getStories(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryActionResponse) -> Void)){
+    
+    var visilabsStoryHomeViewControllers = [String: VisilabsStoryHomeViewController]()
+    var visilabsStoryHomeViews = [String: VisilabsStoryHomeView]()
+    
+    func getStories(visilabsUser: VisilabsUser, guid: String, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryActionResponse) -> Void)){
         
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
@@ -133,13 +137,13 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.STORY
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?) in
-            completion(self.parseStories(result, error))
-        })
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?, guid: String?) in
+            completion(self.parseStories(result, error, guid))
+        }, guid: guid)
     }
     
     //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
-    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsStoryActionResponse {
+    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?, _ guid: String?) -> VisilabsStoryActionResponse {
         var storiesResponse = [VisilabsStoryAction]()
         var errorResponse: VisilabsError? = nil
         if let error = error {
@@ -148,7 +152,8 @@ class VisilabsTargetingAction {
             if let storyActions = res[VisilabsConstants.STORY] as? [[String: Any?]] {
                 var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
-                    if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let template = storyAction[VisilabsConstants.TATEMPLATE] as? VisilabsStoryTemplate, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?] {
+                    if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?], let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String
+                    , let template = VisilabsStoryTemplate.init(rawValue: templateString){
                         if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
                             for story in stories {
                                 visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE], smallImg: story[VisilabsConstants.SMALLIMG], link: story[VisilabsConstants.LINK]))
@@ -158,7 +163,7 @@ class VisilabsTargetingAction {
                                 clickQueryString = click
                             }
                             if stories.count > 0 {
-                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString))
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString, extendedProperties: parseStoryExtendedProps()))
                             }
                         }
                     }
@@ -167,12 +172,12 @@ class VisilabsTargetingAction {
         } else {
             errorResponse = VisilabsError.noData
         }
-        return VisilabsStoryActionResponse(storyActions: storiesResponse, error: errorResponse)
+        return VisilabsStoryActionResponse(storyActions: storiesResponse, error: errorResponse, guid: guid)
     }
     
     
-    private func parseStoryExtendedProps() {
-        
+    private func parseStoryExtendedProps() -> VisilabsStoryActionExtendedProperties {
+        return VisilabsStoryActionExtendedProperties()
     }
     
 }
