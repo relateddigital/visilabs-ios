@@ -14,6 +14,11 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
         self.profileImageView.imageView.image = VisilabsHelper.getUIImage(named: "loading")
     }
     
+    func setProperties(_ properties: VisilabsStoryActionExtendedProperties) {
+        self.profileNameLabel.textColor = properties.labelColor
+        self.profileImageView.setBorder(borderColor: properties.imageBorderColor, borderWidth: properties.imageBorderWidth, borderRadius: properties.imageBorderRadius)
+    }
+    
     
     //MARK: - Public iVars
     var story: VisilabsStory? {
