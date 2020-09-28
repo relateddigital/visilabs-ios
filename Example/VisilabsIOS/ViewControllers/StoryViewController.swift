@@ -54,7 +54,7 @@ class StoryViewController: UIViewController {
     
     @objc func showStory(sender: UIButton!) {
         storyHomeView?.removeFromSuperview()
-        storyHomeView = Visilabs.callAPI().showStory()
+        storyHomeView = Visilabs.callAPI().getStoryView()
         self.stackView.addArrangedSubview(storyHomeView!)
         print(self.stackView.subviews.count)
         print("Button tapped")

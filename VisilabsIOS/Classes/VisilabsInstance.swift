@@ -331,8 +331,38 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
 extension VisilabsInstance {
     
-    public func showStory(actionId: Int? = nil){
+    public func getStoryView(actionId: Int? = nil) -> VisilabsStoryHomeView {
+        //let storyHomeView = VisilabsStoryHomeView(frame: CGRect(x: 0.0, y: 0.0, width: 600.0, height: 130.0))
+        let guid = UUID().uuidString
+        let storyHomeView = VisilabsStoryHomeView()
+        let storyHomeViewController = VisilabsStoryHomeViewController()
+        storyHomeView.collectionView.delegate = storyHomeViewController
+        storyHomeView.collectionView.dataSource = storyHomeViewController
+        storyHomeView.controller = storyHomeViewController
+        self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid] = storyHomeViewController
+        self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] = storyHomeView
         
+        trackingQueue.async { [weak self, actionId, guid] in
+            guard let self = self else { return }
+            self.networkQueue.async { [weak self, actionId, guid] in
+                guard let self = self else { return }
+                self.visilabsTargetingActionInstance.getStories(visilabsUser: self.visilabsUser, guid: guid, actionId: actionId, completion: { response in
+                    if let error = response.error {
+                        VisilabsLogger.error(error)
+                    } else {
+                        if let guid = response.guid, response.storyActions.count > 0, let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid]
+                           , let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid]{
+                            storyHomeViewController.loadStories(stories: response.storyActions.first!.stories)
+                            DispatchQueue.main.async {
+                                storyHomeView.collectionView.reloadData()
+                            }
+                        }
+                    }
+                })
+            }
+        }
+        
+        return storyHomeView
     }
     
 }
