@@ -10,15 +10,13 @@
 // https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&action_type=Story&OM.apiver=IOS
 
 class VisilabsStory {
-    internal init(title: String? = nil, smallImg: String? = nil, link: String? = nil, linkOriginal: String? = nil) {
+    internal init(title: String? = nil, smallImg: String? = nil, link: String? = nil) {
         self.title = title
         self.smallImg = smallImg
         self.link = link
-        self.linkOriginal = linkOriginal
     }
     
     let title: String?
     let smallImg: String?
     let link: String?
-    let linkOriginal: String?
 }
