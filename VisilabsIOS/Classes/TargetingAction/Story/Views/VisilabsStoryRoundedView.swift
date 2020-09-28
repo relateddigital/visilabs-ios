@@ -9,9 +9,9 @@ import UIKit
 
 //@note:Recommended Size: CGSize(width:70,height:70)
 struct Attributes {
-    let borderWidth:CGFloat = 2.0
-    let borderColor = UIColor.white
-    let backgroundColor = UIColor.red // IGTheme.redOrange
+    let borderWidth:CGFloat = 0.0 // 2.0
+    let borderColor = UIColor.clear// UIColor.white
+    let backgroundColor = UIColor.clear // UIColor.red // IGTheme.redOrange
     let size = CGSize(width:68,height:68)
 }
 
