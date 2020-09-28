@@ -13,7 +13,7 @@ public class VisilabsStoryHomeView: UIView {
     lazy var layout: UICollectionViewFlowLayout = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.itemSize = CGSize(width: 100, height: 100)
+        flowLayout.itemSize = CGSize(width: 80, height: 100)
         return flowLayout
     }()
     lazy var collectionView: UICollectionView = {
