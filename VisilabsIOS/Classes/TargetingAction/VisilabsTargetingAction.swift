@@ -5,7 +5,7 @@
 //  Created by Egemen on 18.08.2020.
 //
 
-import Foundation
+import UIKit
 
 class VisilabsTargetingAction {
     
@@ -152,8 +152,8 @@ class VisilabsTargetingAction {
             if let storyActions = res[VisilabsConstants.STORY] as? [[String: Any?]] {
                 var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
-                    if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?], let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String
-                    , let template = VisilabsStoryTemplate.init(rawValue: templateString){
+                    if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?]
+                       , let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString){
                         if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
                             for story in stories {
                                 visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE], smallImg: story[VisilabsConstants.SMALLIMG], link: story[VisilabsConstants.LINK]))
@@ -163,7 +163,7 @@ class VisilabsTargetingAction {
                                 clickQueryString = click
                             }
                             if stories.count > 0 {
-                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString, extendedProperties: parseStoryExtendedProps()))
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.EXTENDEDPROPS] as? String)))
                             }
                         }
                     }
@@ -176,8 +176,24 @@ class VisilabsTargetingAction {
     }
     
     
-    private func parseStoryExtendedProps() -> VisilabsStoryActionExtendedProperties {
-        return VisilabsStoryActionExtendedProperties()
+    //TODO: shadow
+    private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
+        let props = VisilabsStoryActionExtendedProperties()
+        if let s = extendedPropsString, let extendedProps = s.urlDecode().convertJsonStringToDictionary() {
+            if let imageBorderWidthString = extendedProps[VisilabsConstants.storylb_img_borderWidth] as? String, let imageBorderWidth = Int(imageBorderWidthString){
+                props.imageBorderWidth = imageBorderWidth
+            }
+            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylb_img_borderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))){
+                props.imageBorderRadius = imageBorderRadius / 100.0
+            }
+            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String, let imageBorderColor = UIColor.init(hex: imageBorderColorString) {
+                props.imageBorderColor = imageBorderColor
+            }
+            if let labelColorString = extendedProps[VisilabsConstants.storylb_label_color] as? String, let labelColor = UIColor.init(hex: labelColorString) {
+                props.labelColor = labelColor
+            }
+        }
+        return props
     }
     
 }
