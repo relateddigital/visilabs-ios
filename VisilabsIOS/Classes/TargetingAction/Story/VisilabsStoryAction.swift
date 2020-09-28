@@ -19,3 +19,7 @@ class VisilabsStoryAction {
         self.clickQueryString = clickQueryString
     }
 }
+
+class VisilabsStoryActionExtendedProperties {
+    
+}
