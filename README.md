@@ -485,6 +485,7 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: []){ respo
 }
 ```
 
+//TODO: burada filter type kısmını değiştir
 You may also pass an array of filters to `recommend` method. For example the following implementation returns only the products which contains **laptop** in the title.
 
 ```swift
