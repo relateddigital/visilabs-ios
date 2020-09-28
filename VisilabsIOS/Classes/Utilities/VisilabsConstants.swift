@@ -126,6 +126,12 @@ struct VisilabsConstants {
     static let IMPRESSION = "impression"
     static let CLICK = "click"
     static let EXTENDEDPROPS = "ExtendedProps"
+    static let storylb_img_borderWidth = "storylb_img_borderWidth"
+    static let storylb_img_borderColor = "storylb_img_borderColor"
+    static let storylb_img_borderRadius = "storylb_img_borderRadius"
+    static let storylb_img_boxShadow = "storylb_img_boxShadow"
+    static let storylb_label_color = "storylb_label_color"
+    
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
     private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
