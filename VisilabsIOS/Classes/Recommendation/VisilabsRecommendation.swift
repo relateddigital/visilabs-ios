@@ -14,7 +14,7 @@ class VisilabsRecommendation {
         self.visilabsProfile = visilabsProfile
     }
     
-    func recommend(zoneID: String, productCode: String, visilabsUser: VisilabsUser, channel: String, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
+    func recommend(zoneID: String, productCode: String?, visilabsUser: VisilabsUser, channel: String, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
         
         var props = cleanProperties(properties)
         
@@ -33,7 +33,7 @@ class VisilabsRecommendation {
         if zoneID.count > 0 {
             props[VisilabsConstants.ZONE_ID_KEY] = zoneID
         }
-        if productCode.count > 0 {
+        if !productCode.isNilOrWhiteSpace {
             props[VisilabsConstants.BODY_KEY] = productCode
         }
         
