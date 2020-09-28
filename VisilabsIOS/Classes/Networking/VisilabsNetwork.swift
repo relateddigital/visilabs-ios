@@ -29,6 +29,7 @@ struct VisilabsResource<A> {
     let queryItems: [URLQueryItem]?
     let headers: [String:String]
     let parse: (Data) -> A?
+    let guid: String?
 }
 
 public enum VisilabsError: Codable {
@@ -159,8 +160,8 @@ class VisilabsNetwork {
         return request as URLRequest
     }
     
-    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, timeoutInterval:TimeInterval, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?) -> VisilabsResource<A> {
-        return VisilabsResource(endPoint: endPoint, method: method, timeoutInterval: timeoutInterval, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse)
+    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, timeoutInterval:TimeInterval, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?, guid: String? = nil) -> VisilabsResource<A> {
+        return VisilabsResource(endPoint: endPoint, method: method, timeoutInterval: timeoutInterval, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse, guid: guid)
     }
     
 }
