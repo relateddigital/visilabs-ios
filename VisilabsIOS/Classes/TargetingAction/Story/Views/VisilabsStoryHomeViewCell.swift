@@ -9,20 +9,18 @@ import UIKit
 
 class VisilabsStoryHomeViewCell: UICollectionViewCell {
     
+    func setAsLoadingCell(){
+        self.profileNameLabel.text = "Loading"
+        self.profileImageView.imageView.image = VisilabsHelper.getUIImage(named: "loading")
+    }
+    
+    
     //MARK: - Public iVars
     var story: VisilabsStory? {
         didSet {
             self.profileNameLabel.text = story?.title
             if let picture = story?.smallImg {
                 self.profileImageView.imageView.setImage(url: picture)
-            }
-        }
-    }
-    var userDetails: (String,String)? {
-        didSet {
-            if let details = userDetails {
-                self.profileNameLabel.text = details.0
-                self.profileImageView.imageView.setImage(url: details.1)
             }
         }
     }
