@@ -58,6 +58,13 @@ extension String {
         return self.removingPercentEncoding ?? ""
     }
     
+    func convertJsonStringToDictionary() -> [String: Any]? {
+        if let data = self.data(using: .utf8) {
+            return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+        }
+        return nil
+    }
+    
     var isEmptyOrWhitespace: Bool {
         return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
