@@ -18,10 +18,9 @@ public class VisilabsStoryHomeView: UIView {
     }()
     lazy var collectionView: UICollectionView = {
         let cv = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
-        cv.backgroundColor = .white
+        cv.backgroundColor = .clear // .orange // .white
         cv.showsVerticalScrollIndicator = false
         cv.showsHorizontalScrollIndicator = false
-        cv.register(VisilabsStoryHomeViewCell.self, forCellWithReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier)
         cv.register(VisilabsStoryHomeViewCell.self, forCellWithReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier)
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
@@ -30,7 +29,7 @@ public class VisilabsStoryHomeView: UIView {
     //MARK: - Overridden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.white // UIColor.rgb(from: 0xEFEFF4)
+        backgroundColor = .clear // UIColor.white // UIColor.rgb(from: 0xEFEFF4)
         createUIElements()
         installLayoutConstraints()
     }
@@ -38,6 +37,8 @@ public class VisilabsStoryHomeView: UIView {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
+    
+    var controller: VisilabsStoryHomeViewController?
     
     //MARK: - Private functions
     private func createUIElements(){
