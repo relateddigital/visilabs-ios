@@ -140,17 +140,25 @@ class VisilabsTargetingAction {
     
     //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
     private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsStoryActionResponse {
-        var storiesResponse = [VisilabsStory]()
+        var storiesResponse = [VisilabsStoryAction]()
         var errorResponse: VisilabsError? = nil
         if let error = error {
             errorResponse = error
         } else if let res = result {
             if let storyActions = res[VisilabsConstants.STORY] as? [[String: Any?]] {
+                var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
-                    if let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?] {
+                    if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let template = storyAction[VisilabsConstants.TATEMPLATE] as? VisilabsStoryTemplate, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?] {
                         if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
                             for story in stories {
-                                storiesResponse.append(VisilabsStory(title: story["title"], smallImg: story["smallImg"], link: story["link"], linkOriginal: story["linkOriginal"]))
+                                visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE], smallImg: story[VisilabsConstants.SMALLIMG], link: story[VisilabsConstants.LINK]))
+                            }
+                            var clickQueryString = ""
+                            if let report = actiondata[VisilabsConstants.REPORT] as? [String: Any?], let click = report[VisilabsConstants.CLICK] as? String {
+                                clickQueryString = click
+                            }
+                            if stories.count > 0 {
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString))
                             }
                         }
                     }
@@ -159,7 +167,12 @@ class VisilabsTargetingAction {
         } else {
             errorResponse = VisilabsError.noData
         }
-        return VisilabsStoryActionResponse(storyTemplate: .StoryLookingBanners, stories: storiesResponse, storyExtendedProperties: VisilabsStoryExtendedProperties(), error: errorResponse)
+        return VisilabsStoryActionResponse(storyActions: storiesResponse, error: errorResponse)
+    }
+    
+    
+    private func parseStoryExtendedProps() {
+        
     }
     
 }
