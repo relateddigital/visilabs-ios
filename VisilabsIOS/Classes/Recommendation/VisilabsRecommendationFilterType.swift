@@ -57,11 +57,11 @@ public enum VisilabsProductFilterAttribute: String {
 }
 
 public class VisilabsRecommendationFilter {
-    var attribute: VisilabsProductAttribute
+    var attribute: VisilabsProductFilterAttribute
     var filterType: VisilabsRecommendationFilterType
     var value: String
     
-    public init(attribute: VisilabsProductAttribute, filterType: VisilabsRecommendationFilterType, value: String){
+    public init(attribute: VisilabsProductFilterAttribute, filterType: VisilabsRecommendationFilterType, value: String){
         self.attribute = attribute
         self.filterType = filterType
         self.value = value
