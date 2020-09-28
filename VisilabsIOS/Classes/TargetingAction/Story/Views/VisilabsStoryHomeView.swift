@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VisilabsStoryHomeView: UIView {
+public class VisilabsStoryHomeView: UIView {
     
     //MARK: - iVars
     lazy var layout: UICollectionViewFlowLayout = {
