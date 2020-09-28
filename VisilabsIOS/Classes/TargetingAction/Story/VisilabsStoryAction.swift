@@ -12,14 +12,20 @@ class VisilabsStoryAction {
     let storyTemplate: VisilabsStoryTemplate
     let stories: [VisilabsStory]
     let clickQueryString: String
-    init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], clickQueryString: String) {
+    let extendedProperties: VisilabsStoryActionExtendedProperties
+    init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], clickQueryString: String, extendedProperties: VisilabsStoryActionExtendedProperties) {
         self.actionId = actionId
         self.storyTemplate = storyTemplate
         self.stories = stories
         self.clickQueryString = clickQueryString
+        self.extendedProperties = extendedProperties
     }
 }
 
 class VisilabsStoryActionExtendedProperties {
-    
+    var imageBorderWidth = 0  //0,1,2,3
+    var imageBorderRadius = 0.0 //"","50%","10%"
+    var imageBoxShadow: String? // "rgba(0,0,0,0.4) 5px 5px 10px"
+    var imageBorderColor: String? //"#cc3a3a"
+    var labelColor: String? //"#a83c3c"
 }
