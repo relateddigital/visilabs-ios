@@ -352,8 +352,8 @@ extension VisilabsInstance {
                     } else {
                         if let guid = response.guid, response.storyActions.count > 0, let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid]
                            , let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid]{
-                            storyHomeViewController.loadStories(stories: response.storyActions.first!.stories)
                             DispatchQueue.main.async {
+                                storyHomeViewController.loadStoryAction(response.storyActions.first!)
                                 storyHomeView.collectionView.reloadData()
                             }
                         }
@@ -361,6 +361,7 @@ extension VisilabsInstance {
                 })
             }
         }
+ 
         
         return storyHomeView
     }
