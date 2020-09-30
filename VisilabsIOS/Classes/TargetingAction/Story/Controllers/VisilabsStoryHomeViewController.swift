@@ -5,6 +5,7 @@
 //  Created by Egemen on 28.09.2020.
 //
 
+import Foundation
 import UIKit
 
 public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -63,6 +64,11 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
     
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let story = self.stories[indexPath.row]
+        if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
+            VisilabsLogger.info("opening CTA URL: \(storyUrl)")
+            VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: storyUrl, waitUntilDone: true)
+        }
         print(indexPath.row)
     }
  
