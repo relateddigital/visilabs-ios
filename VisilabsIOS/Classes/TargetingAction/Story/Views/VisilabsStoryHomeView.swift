@@ -29,7 +29,7 @@ public class VisilabsStoryHomeView: UIView {
     //MARK: - Overridden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clear // UIColor.white // UIColor.rgb(from: 0xEFEFF4)
+        backgroundColor = .white // UIColor.white // UIColor.rgb(from: 0xEFEFF4)
         createUIElements()
         installLayoutConstraints()
     }
@@ -38,7 +38,12 @@ public class VisilabsStoryHomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var controller: VisilabsStoryHomeViewController?
+    public var controller: VisilabsStoryHomeViewController?
+    
+    func setDelegates() {
+        self.collectionView.delegate = controller
+        self.collectionView.dataSource = controller
+    }
     
     //MARK: - Private functions
     private func createUIElements(){
