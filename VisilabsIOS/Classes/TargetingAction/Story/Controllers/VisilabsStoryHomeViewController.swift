@@ -9,6 +9,13 @@ import UIKit
 
 public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    weak var collectionView: UICollectionView! {
+        didSet {
+            collectionView.dataSource = self
+            collectionView.delegate = self
+        }
+    }
+    
     var stories = [VisilabsStory]()
     var extendedProperties = VisilabsStoryActionExtendedProperties()
     var storiesLoaded = false
@@ -29,13 +36,13 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         if !storiesLoaded {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.setAsLoadingCell()
-            cell.contentView.isUserInteractionEnabled = false
+            //cell.contentView.isUserInteractionEnabled = false
             return cell
         }else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.story = self.stories[indexPath.row]
             cell.setProperties(extendedProperties)
-            cell.contentView.isUserInteractionEnabled = false
+            //cell.contentView.isUserInteractionEnabled = false
             return cell
         }
 
