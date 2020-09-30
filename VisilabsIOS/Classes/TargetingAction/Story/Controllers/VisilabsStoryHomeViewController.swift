@@ -19,11 +19,13 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
     
     var stories = [VisilabsStory]()
     var extendedProperties = VisilabsStoryActionExtendedProperties()
+    var clickQueryString = ""
     var storiesLoaded = false
     
     func loadStoryAction(_ storyAction: VisilabsStoryAction){
         self.stories = storyAction.stories
         self.extendedProperties = storyAction.extendedProperties
+        self.clickQueryString = storyAction.clickQueryString
         self.storiesLoaded = true
     }
     
@@ -64,11 +66,22 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
     
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.clickQueryString.count > 0 {
+            let qsArr = self.clickQueryString.components(separatedBy: "&")
+            var properties = [String: String]()
+            //properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
+            properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
+            properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
+            Visilabs.callAPI().customEvent("OM_evt.gif", properties: properties)
+        }
         let story = self.stories[indexPath.row]
         if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
             VisilabsLogger.info("opening CTA URL: \(storyUrl)")
             VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: storyUrl, waitUntilDone: true)
         }
+        
+        
+        
         print(indexPath.row)
     }
  
