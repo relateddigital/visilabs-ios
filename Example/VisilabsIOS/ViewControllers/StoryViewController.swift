@@ -17,10 +17,17 @@ class StoryViewController: UIViewController {
     var storyHomeView : VisilabsStoryHomeView?
     
     
+    override func loadView() {
+        super.loadView()
+        view = Visilabs.callAPI().getStoryView()
+        //_view.collectionView.delegate = self
+        //_view.collectionView.dataSource = self
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureStackView()
+        automaticallyAdjustsScrollViewInsets = false
+        //configureStackView()
         //addStoryButton()
     }
     
