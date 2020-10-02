@@ -66,6 +66,9 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
     
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.stories.count == 0 {
+            return
+        }
         if self.clickQueryString.count > 0 {
             let qsArr = self.clickQueryString.components(separatedBy: "&")
             var properties = [String: String]()
