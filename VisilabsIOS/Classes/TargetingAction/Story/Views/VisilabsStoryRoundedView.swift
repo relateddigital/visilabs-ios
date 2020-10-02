@@ -53,16 +53,5 @@ extension VisilabsStoryRoundedView {
         layer.cornerRadius = frame.height * CGFloat(borderRadius)
         imageView.layer.cornerRadius = imageView.frame.height * CGFloat(borderRadius)
     }
-    /*
-    func enableBorder(enabled: Bool = true) {
-        if enabled {
-            layer.borderColor = UIColor.clear.cgColor
-            layer.borderWidth = 0
-        }else {
-            layer.borderColor = attributes.borderColor.cgColor
-            layer.borderWidth = attributes.borderWidth
-        }
-    }
-     */
 }
 
