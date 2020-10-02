@@ -29,7 +29,7 @@ public class VisilabsStoryHomeView: UIView {
     //MARK: - Overridden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white // UIColor.white // UIColor.rgb(from: 0xEFEFF4)
+        backgroundColor = .clear // UIColor.white // UIColor.rgb(from: 0xEFEFF4)
         createUIElements()
         installLayoutConstraints()
     }
