@@ -17,6 +17,12 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
     func setProperties(_ properties: VisilabsStoryActionExtendedProperties) {
         self.profileNameLabel.textColor = properties.labelColor
         self.profileImageView.setBorder(borderColor: properties.imageBorderColor, borderWidth: properties.imageBorderWidth, borderRadius: properties.imageBorderRadius)
+        if properties.imageBoxShadow {
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = 0.5
+            self.layer.shadowOffset = CGSize(width: 5, height: 5)
+            self.layer.shadowRadius = 10
+        }
     }
     
     
