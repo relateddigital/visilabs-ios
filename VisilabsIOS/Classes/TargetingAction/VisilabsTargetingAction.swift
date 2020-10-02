@@ -186,11 +186,30 @@ class VisilabsTargetingAction {
             if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylb_img_borderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))){
                 props.imageBorderRadius = imageBorderRadius / 100.0
             }
-            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String, let imageBorderColor = UIColor.init(hex: imageBorderColorString) {
-                props.imageBorderColor = imageBorderColor
+            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String {
+                if imageBorderColorString.starts(with: "rgba") {
+                    if let imageBorderColor =  UIColor.init(rgbaString: imageBorderColorString){
+                        props.imageBorderColor = imageBorderColor
+                    }
+                } else{
+                    if let imageBorderColor = UIColor.init(hex: imageBorderColorString) {
+                        props.imageBorderColor = imageBorderColor
+                    }
+                }
             }
-            if let labelColorString = extendedProps[VisilabsConstants.storylb_label_color] as? String, let labelColor = UIColor.init(hex: labelColorString) {
-                props.labelColor = labelColor
+            if let labelColorString = extendedProps[VisilabsConstants.storylb_label_color] as? String {
+                if labelColorString.starts(with: "rgba") {
+                    if let labelColor =  UIColor.init(rgbaString: labelColorString){
+                        props.labelColor = labelColor
+                    }
+                } else{
+                    if let labelColor = UIColor.init(hex: labelColorString) {
+                        props.labelColor = labelColor
+                    }
+                }
+            }
+            if let boxShadowString = extendedProps[VisilabsConstants.storylb_img_boxShadow] as? String, boxShadowString.count > 0 {
+                props.imageBoxShadow = true
             }
         }
         return props
