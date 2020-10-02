@@ -332,9 +332,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 extension VisilabsInstance {
     
     public func getStoryView(actionId: Int? = nil) -> VisilabsStoryHomeView {
-        //let storyHomeView = VisilabsStoryHomeView(frame: CGRect(x: 0.0, y: 0.0, width: 600.0, height: 130.0))
         let guid = UUID().uuidString
-        let storyHomeView = VisilabsStoryHomeView(frame: UIScreen.main.bounds)
+        let storyHomeView = VisilabsStoryHomeView()
         let storyHomeViewController = VisilabsStoryHomeViewController()
         storyHomeView.controller = storyHomeViewController
         self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid] = storyHomeViewController
