@@ -9,61 +9,84 @@
 import UIKit
 import VisilabsIOS
 
-class StoryViewController: UIViewController {
+class StoryViewController: UIViewController, UITextFieldDelegate {
+    
+    var actionIdTextField : UITextField = {
+        let textField = UITextField()
+        textField.keyboardType = .numberPad
+        textField.placeholder = "Action Id(optional)"
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
+        textField.layer.cornerRadius = 10
+        textField.textAlignment = .center
+        
+        return textField
+    }()
+    
+    var storyButton : UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.setTitle("Show Story", for: .normal)
+        button.addTarget(self, action: #selector(showStory), for: .touchUpInside)
+        return button
+    }()
     
     
-    var stackView = UIStackView()
-    var storyButton = UIButton()
+    
     var storyHomeView : VisilabsStoryHomeView?
     
-    
-    override func loadView() {
-        super.loadView()
-        view = Visilabs.callAPI().getStoryView()
-        //_view.collectionView.delegate = self
-        //_view.collectionView.dataSource = self
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
-        //configureStackView()
-        //addStoryButton()
+        actionIdTextField.delegate = self
+        actionIdTextField.addTarget(self, action: #selector(self.textFieldFilter), for: .editingChanged)
+        self.view.addSubview(actionIdTextField)
+        self.view.addSubview(storyButton)
+        setupLayout()
+    }
+
+    
+    private func setupLayout(){
+        actionIdTextField.translatesAutoresizingMaskIntoConstraints = false
+        actionIdTextField.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        actionIdTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        actionIdTextField.topAnchor.constraint(equalTo: view.saferAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        actionIdTextField.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
+        
+        storyButton.translatesAutoresizingMaskIntoConstraints = false
+        storyButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        storyButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        storyButton.topAnchor.constraint(equalTo: actionIdTextField.bottomAnchor, constant: 20).isActive = true
+        storyButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
     }
     
-    private func configureStackView(){
-        view.addSubview(stackView)
-        stackView.axis = .vertical
-        stackView.distribution = .fill
-        stackView.spacing = 20
-        setStackViewConstraints()
-        stackView.alignment = .fill
-        view.addSubview(stackView)
-        addStoryButton()
+    @objc private func textFieldFilter(_ textField: UITextField) {
+        if let text = textField.text, let intText = Int(text), intText > 0 {
+            if text.count > 4 {
+                textField.text = String(text.prefix(4))
+            } else {
+                textField.text = "\(intText)"
+            }
+        } else {
+            textField.text = ""
+        }
     }
     
-    
-    private func setStackViewConstraints(){
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.topAnchor.constraint(equalTo: view.saferAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: view.saferAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: view.saferAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
-    
-    private func addStoryButton(){
-        //storyButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        storyButton.backgroundColor = UIColor.red
-        storyButton.setTitle("Show Story", for: .normal)
-        storyButton.addTarget(self, action: #selector(showStory), for: .touchUpInside)
-        self.stackView.addArrangedSubview(storyButton)
-    }
     
     @objc func showStory(sender: UIButton!) {
         storyHomeView?.removeFromSuperview()
-        storyHomeView = Visilabs.callAPI().getStoryView()
-        self.stackView.addArrangedSubview(storyHomeView!)
-        print(self.stackView.subviews.count)
+        storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""))
+        self.view.addSubview(storyHomeView!)
+        storyHomeView!.translatesAutoresizingMaskIntoConstraints = false
+        storyHomeView!.topAnchor.constraint(equalTo: storyButton.bottomAnchor, constant: 20).isActive = true
+        storyHomeView!.widthAnchor.constraint(equalTo: view.saferAreaLayoutGuide.widthAnchor).isActive = true
+        storyHomeView!.heightAnchor.constraint(equalToConstant: 100).isActive = true
         print("Button tapped")
      }
     
