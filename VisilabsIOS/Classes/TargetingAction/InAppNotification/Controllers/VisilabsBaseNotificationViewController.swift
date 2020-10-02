@@ -69,6 +69,20 @@ extension UIColor {
                 alpha: alpha)
     }
     
+    convenience init?(rgbaString: String) {
+        let rgbaNumbersString = rgbaString.replacingOccurrences(of: "rgba(", with: "").replacingOccurrences(of: ")", with: "")
+        let rgbaParts = rgbaNumbersString.split(separator: ",")
+        if rgbaParts.count == 4 {
+            guard let r = Float(rgbaParts[0]), let g = Float(rgbaParts[1]), let b = Float(rgbaParts[2]), let a = Float(rgbaParts[3]) else {
+               return nil
+            }
+            self.init(red: CGFloat(r / 255.0), green: CGFloat(g / 255.0), blue: CGFloat(b / 255.0), alpha: CGFloat(a))
+            
+        } else {
+            return nil
+        }
+    }
+    
 
     /**
      Add two colors together
