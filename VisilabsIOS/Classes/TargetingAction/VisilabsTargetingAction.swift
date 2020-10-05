@@ -5,7 +5,7 @@
 //  Created by Egemen on 18.08.2020.
 //
 
-import Foundation
+import UIKit
 
 class VisilabsTargetingAction {
     
@@ -87,7 +87,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.FAVORITE_ATTRIBUTE_ACTION
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?) in
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?, guid: String?) in
             completion(self.parseFavoritesResponse(result, error))
         })
     }
@@ -120,7 +120,11 @@ class VisilabsTargetingAction {
     
     // MARK: - Story
     
-    func getStories(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryResponse) -> Void)){
+    
+    var visilabsStoryHomeViewControllers = [String: VisilabsStoryHomeViewController]()
+    var visilabsStoryHomeViews = [String: VisilabsStoryHomeView]()
+    
+    func getStories(visilabsUser: VisilabsUser, guid: String, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryActionResponse) -> Void)){
         
         var props = [String: String]()
         props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
@@ -133,24 +137,33 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.ACTION_TYPE] = VisilabsConstants.STORY
         props[VisilabsConstants.ACTION_ID] = actionId == nil ? nil : String(actionId!)
         
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?) in
-            completion(self.parseStories(result, error))
-        })
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String : String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result:[String: Any]?, error: VisilabsError?, guid: String?) in
+            completion(self.parseStories(result, error, guid))
+        }, guid: guid)
     }
     
     //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
-    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?) -> VisilabsStoryResponse {
-        var storiesResponse = [VisilabsStory]()
+    private func parseStories(_ result:[String: Any]?, _ error: VisilabsError?, _ guid: String?) -> VisilabsStoryActionResponse {
+        var storiesResponse = [VisilabsStoryAction]()
         var errorResponse: VisilabsError? = nil
         if let error = error {
             errorResponse = error
         } else if let res = result {
             if let storyActions = res[VisilabsConstants.STORY] as? [[String: Any?]] {
+                var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
-                    if let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?] {
+                    if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?]
+                       , let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString){
                         if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
                             for story in stories {
-                                storiesResponse.append(VisilabsStory(title: story["title"], smallImg: story["smallImg"], link: story["link"], linkOriginal: story["linkOriginal"]))
+                                visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE], smallImg: story[VisilabsConstants.SMALLIMG], link: story[VisilabsConstants.LINK]))
+                            }
+                            var clickQueryString = ""
+                            if let report = actiondata[VisilabsConstants.REPORT] as? [String: Any?], let click = report[VisilabsConstants.CLICK] as? String {
+                                clickQueryString = click
+                            }
+                            if stories.count > 0 {
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.EXTENDEDPROPS] as? String)))
                             }
                         }
                     }
@@ -159,7 +172,47 @@ class VisilabsTargetingAction {
         } else {
             errorResponse = VisilabsError.noData
         }
-        return VisilabsStoryResponse(storyTemplate: .StoryLookingBanners, stories: storiesResponse, storyExtendedProperties: VisilabsStoryExtendedProperties(), error: errorResponse)
+        return VisilabsStoryActionResponse(storyActions: storiesResponse, error: errorResponse, guid: guid)
+    }
+    
+    
+    //TODO: shadow
+    private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
+        let props = VisilabsStoryActionExtendedProperties()
+        if let s = extendedPropsString, let extendedProps = s.urlDecode().convertJsonStringToDictionary() {
+            if let imageBorderWidthString = extendedProps[VisilabsConstants.storylb_img_borderWidth] as? String, let imageBorderWidth = Int(imageBorderWidthString){
+                props.imageBorderWidth = imageBorderWidth
+            }
+            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylb_img_borderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))){
+                props.imageBorderRadius = imageBorderRadius / 100.0
+            }
+            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String {
+                if imageBorderColorString.starts(with: "rgba") {
+                    if let imageBorderColor =  UIColor.init(rgbaString: imageBorderColorString){
+                        props.imageBorderColor = imageBorderColor
+                    }
+                } else{
+                    if let imageBorderColor = UIColor.init(hex: imageBorderColorString) {
+                        props.imageBorderColor = imageBorderColor
+                    }
+                }
+            }
+            if let labelColorString = extendedProps[VisilabsConstants.storylb_label_color] as? String {
+                if labelColorString.starts(with: "rgba") {
+                    if let labelColor =  UIColor.init(rgbaString: labelColorString){
+                        props.labelColor = labelColor
+                    }
+                } else{
+                    if let labelColor = UIColor.init(hex: labelColorString) {
+                        props.labelColor = labelColor
+                    }
+                }
+            }
+            if let boxShadowString = extendedProps[VisilabsConstants.storylb_img_boxShadow] as? String, boxShadowString.count > 0 {
+                props.imageBoxShadow = true
+            }
+        }
+        return props
     }
     
 }

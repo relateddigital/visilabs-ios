@@ -331,8 +331,40 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
 extension VisilabsInstance {
     
-    public func showStory(actionId: Int? = nil){
+    public func getStoryView(actionId: Int? = nil) -> VisilabsStoryHomeView {
+        let guid = UUID().uuidString
+        let storyHomeView = VisilabsStoryHomeView()
+        let storyHomeViewController = VisilabsStoryHomeViewController()
+        storyHomeView.controller = storyHomeViewController
+        self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid] = storyHomeViewController
+        self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] = storyHomeView
+        storyHomeView.setDelegates()
+        storyHomeViewController.collectionView = storyHomeView.collectionView
         
+        trackingQueue.async { [weak self, actionId, guid] in
+            guard let self = self else { return }
+            self.networkQueue.async { [weak self, actionId, guid] in
+                guard let self = self else { return }
+                self.visilabsTargetingActionInstance.getStories(visilabsUser: self.visilabsUser, guid: guid, actionId: actionId, completion: { response in
+                    if let error = response.error {
+                        VisilabsLogger.error(error)
+                    } else {
+                        if let guid = response.guid, response.storyActions.count > 0, let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid]
+                           , let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid]{
+                            DispatchQueue.main.async {
+                                storyHomeViewController.loadStoryAction(response.storyActions.first!)
+                                storyHomeView.collectionView.reloadData()
+                                storyHomeView.setDelegates()
+                                storyHomeViewController.collectionView = storyHomeView.collectionView
+                            }
+                        }
+                    }
+                })
+            }
+        }
+ 
+        
+        return storyHomeView
     }
     
 }
@@ -343,7 +375,7 @@ extension VisilabsInstance {
 
 extension VisilabsInstance {
     
-    public func recommend(zoneID: String, productCode: String, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+    public func recommend(zoneID: String, productCode: String? = nil, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
         self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else { return }
