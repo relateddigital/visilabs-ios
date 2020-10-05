@@ -389,7 +389,19 @@ public enum VisilabsFavoriteAttribute: String {
 
 ### Story Actions
 
+Story actions allow you to add widgets similar to "Instagram Story" list view on your iOS devices. `getStoryView` method returns an instance of `VisilabsStoryHomeView` which is a subclass of `UIView`.
 
+```swift
+let storyView = Visilabs.callAPI().getStoryView()
+view.addSubview(storyHomeView)
+```
+
+You can also access a story action by specifying the **ID** of the **Targeting Action**.
+
+```swift
+let storyView = Visilabs.callAPI().getStoryView(actionId: 67)
+view.addSubview(storyHomeView)
+```
 
 ### Geofencing
 
@@ -490,12 +502,11 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: []){ respo
 }
 ```
 
-//TODO: burada filter type kısmını değiştir
 You may also pass an array of filters to `recommend` method. For example the following implementation returns only the products which contains **laptop** in the title.
 
 ```swift
 var filters = [VisilabsRecommendationFilter]()
-let filter = VisilabsRecommendationFilter(attribute: .title, filterType: .like, value: "laptop")
+let filter = VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop")
 filters.append(filter)
 Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ response in
     if let error = response.error{
@@ -509,6 +520,25 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ 
 }
 ```
 
+`VisilabsProductFilterAttribute` enum has the following cases  and sample values:
+
+| case      | example |
+| ----------- | ----------- |
+| PRODUCTNAME      | ""       |
+| COLOR   | "blue"        |
+| AGEGROUP   | "18-40"        |
+| BRAND   | "visilabs"        |
+| CATEGORY   | "145"        |
+| GENDER   | "f"        |
+| MATERIAL   | "wood"        |
+| ATTRIBUTE1   | "attr1value"        |
+| ATTRIBUTE2   | "attr2value"          |
+| ATTRIBUTE3   | "attr3value"          |
+| ATTRIBUTE4   | "attr4value"          |
+| ATTRIBUTE5   | "attr5value"          |
+| SHIPPINGONSAMEDAY   | "1"        |
+| FREESHIPPING   | "1"         |
+| ISDISCOUNTED   | "1"         |
 
 
 ## Author
