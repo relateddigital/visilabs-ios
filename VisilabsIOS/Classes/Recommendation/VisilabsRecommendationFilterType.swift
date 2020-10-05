@@ -18,32 +18,30 @@ public enum VisilabsRecommendationFilterType: Int {
     static let exclude = notLike
 }
 
-public enum VisilabsProductAttribute: String {
-    case title
-    case img
-    case code
-    case dest_url
-    case brand
-    case price
-    case dprice
-    case cur
-    case rating
-    case comment
-    case freeshipping
-    case samedayshipping
-    case attr1
-    case attr2
-    case attr3
-    case attr4
-    case attr5
+public enum VisilabsProductFilterAttribute: String {
+    case PRODUCTNAME
+    case COLOR
+    case AGEGROUP
+    case BRAND
+    case CATEGORY
+    case GENDER
+    case MATERIAL
+    case ATTRIBUTE1
+    case ATTRIBUTE2
+    case ATTRIBUTE3
+    case ATTRIBUTE4
+    case ATTRIBUTE5
+    case SHIPPINGONSAMEDAY
+    case FREESHIPPING
+    case ISDISCOUNTED
 }
 
 public class VisilabsRecommendationFilter {
-    var attribute: VisilabsProductAttribute
+    var attribute: VisilabsProductFilterAttribute
     var filterType: VisilabsRecommendationFilterType
     var value: String
     
-    public init(attribute: VisilabsProductAttribute, filterType: VisilabsRecommendationFilterType, value: String){
+    public init(attribute: VisilabsProductFilterAttribute, filterType: VisilabsRecommendationFilterType, value: String){
         self.attribute = attribute
         self.filterType = filterType
         self.value = value
