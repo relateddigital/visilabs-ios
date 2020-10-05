@@ -35,6 +35,7 @@ class RecommendationViewController: FormViewController {
             properties["prop1"] = "prop1val"
             properties["prop1"] = "prop2val"
             var filters = [VisilabsRecommendationFilter]()
+            filters.append(VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop"))
             
             Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters, properties: properties){ response in
                 if let error = response.error{
