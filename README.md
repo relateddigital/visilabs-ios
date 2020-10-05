@@ -20,6 +20,7 @@
     - [Targeting Actions](#Targeting-Actions)
         - [In-App Messaging](#In-App-Messaging)
         - [Favorite Attribute Actions](#Favorite-Attribute-Actions)
+        - [Story Actions](#Story-Actions)
         - [Geofencing](#Geofencing)
     - [Recommendation](#Recommendation)
 
@@ -385,6 +386,10 @@ public enum VisilabsFavoriteAttribute: String {
     case title
 }
 ```
+
+### Story Actions
+
+
 
 ### Geofencing
 
