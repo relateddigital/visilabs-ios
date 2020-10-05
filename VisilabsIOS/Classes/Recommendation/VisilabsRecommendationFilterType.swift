@@ -18,26 +18,6 @@ public enum VisilabsRecommendationFilterType: Int {
     static let exclude = notLike
 }
 
-public enum VisilabsProductAttribute: String {
-    case title
-    case img
-    case code
-    case dest_url
-    case brand
-    case price
-    case dprice
-    case cur
-    case rating
-    case comment
-    case freeshipping
-    case samedayshipping
-    case attr1
-    case attr2
-    case attr3
-    case attr4
-    case attr5
-}
-
 public enum VisilabsProductFilterAttribute: String {
     case PRODUCTNAME
     case COLOR
