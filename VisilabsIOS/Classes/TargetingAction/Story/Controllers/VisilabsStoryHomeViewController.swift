@@ -17,6 +17,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         }
     }
     
+    var storyAction : VisilabsStoryAction?
     var stories = [VisilabsStory]()
     var extendedProperties = VisilabsStoryActionExtendedProperties()
     var clickQueryString = ""
@@ -26,6 +27,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         self.stories = storyAction.stories
         self.extendedProperties = storyAction.extendedProperties
         self.clickQueryString = storyAction.clickQueryString
+        self.storyAction = storyAction
         self.storiesLoaded = true
     }
     
