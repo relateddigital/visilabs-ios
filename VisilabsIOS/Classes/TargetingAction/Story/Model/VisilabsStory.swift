@@ -16,7 +16,11 @@ class VisilabsStory {
         self.link = link
         if let snaps = snaps {
             self._snaps = snaps
+        } else {
+            self._snaps = [VisilabsSnap]()
         }
+        self.internalIdentifier = ""
+        self.lastUpdated = 0
     }
     
     let title: String?
