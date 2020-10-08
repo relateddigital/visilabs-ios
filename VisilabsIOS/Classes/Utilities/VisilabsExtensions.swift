@@ -176,3 +176,9 @@ extension Optional where Wrapped == [String] {
         }
     }
 }
+
+extension Int {
+    var toFloat: CGFloat {
+        return CGFloat(self)
+    }
+}
