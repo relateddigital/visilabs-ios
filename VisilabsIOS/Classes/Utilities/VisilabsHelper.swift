@@ -8,6 +8,7 @@
 import Foundation
 import AdSupport
 import WebKit
+import UIKit
 
 internal class VisilabsHelper {
     
@@ -105,5 +106,20 @@ internal class VisilabsHelper {
         let bundle = Bundle(identifier: "com.relateddigital.visilabs")
         return UIImage(named: named, in : bundle, compatibleWith: nil)!
     }
+    
+    /* TODO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.orientationLock = orientation
+        }
+    }
+    
+    /// OPTIONAL Added method to adjust lock and rotate to the desired orientation
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        self.lockOrientation(orientation)
+        UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+        UINavigationController.attemptRotationToDeviceOrientation()
+    }
+     */
     
 }
