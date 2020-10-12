@@ -10,14 +10,14 @@
 // https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&action_type=Story&OM.apiver=IOS
 
 class VisilabsStory {
-    internal init(title: String? = nil, smallImg: String? = nil, link: String? = nil, snaps: [VisilabsSnap]? = nil) {
+    internal init(title: String? = nil, smallImg: String? = nil, link: String? = nil, items: [VisilabsStoryItem]? = nil) {
         self.title = title
         self.smallImg = smallImg
         self.link = link
-        if let snaps = snaps {
-            self._snaps = snaps
+        if let items = items {
+            self._items = items
         } else {
-            self._snaps = [VisilabsSnap]()
+            self._items = [VisilabsStoryItem]()
         }
         self.internalIdentifier = ""
         self.lastUpdated = 0
@@ -33,11 +33,11 @@ class VisilabsStory {
     }
     
     // To hold the json snaps.
-    private var _snaps: [VisilabsSnap]
+    private var _items: [VisilabsStoryItem]
     
     // To carry forwarding non-deleted snaps.
-    public var snaps: [VisilabsSnap] {
-        return _snaps.filter{!($0.isDeleted)}
+    public var snaps: [VisilabsStoryItem] {
+        return _items.filter{!($0.isDeleted)}
     }
     //TODO: bu nasıl set edilecek düşün
     public var internalIdentifier: String
@@ -53,7 +53,7 @@ class VisilabsStory {
         case lastUpdated = "last_updated"
         case title = "title"
         case smallImg = "smallImg"
-        case link = "link"
+        case link = "items"
     }
 }
 

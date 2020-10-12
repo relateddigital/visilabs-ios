@@ -1,5 +1,5 @@
 //
-//  VisilabsSnap.swift
+//  VisilabsStoryItem.swift
 //  VisilabsIOS
 //
 //  Created by Egemen on 8.10.2020.
@@ -12,7 +12,7 @@ public enum MimeType: String {
     case video
     case unknown
 }
-public class VisilabsSnap: Codable {
+public class VisilabsStoryItem: Codable {
     public let internalIdentifier: String
     public let mimeType: String
     public let lastUpdated: String
