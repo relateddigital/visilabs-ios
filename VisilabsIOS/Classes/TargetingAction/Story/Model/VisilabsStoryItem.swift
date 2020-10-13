@@ -17,6 +17,8 @@ public class VisilabsStoryItem: Codable {
     public let mimeType: String
     public let lastUpdated: String
     public let url: String
+    public var displayTime = 3 // TODO:
+    public let targetUrl: String // TODO:
     //TODO: buna bizde gerek yok sanırım
     // Store the deleted snaps id in NSUserDefaults, so that when app get relaunch deleted snaps will not display.
     public var isDeleted: Bool {
@@ -37,10 +39,22 @@ public class VisilabsStoryItem: Codable {
                 return MimeType.unknown
         }
     }
+    
+    init (fileType: String, displayTime: Int, thumbnail: String, targetUrl: String) {
+        self.mimeType = fileType
+        self.displayTime = displayTime // TODO:
+        self.url = thumbnail // TODO:
+        self.targetUrl = targetUrl
+        self.lastUpdated = ""
+        self.internalIdentifier = UUID().uuidString // TODO:
+    }
+    
     enum CodingKeys: String, CodingKey {
         case internalIdentifier = "id"
         case mimeType = "mime_type"
         case lastUpdated = "last_updated"
         case url = "url"
+        case displayTime = "displayTime"
+        case targetUrl = "targetUrl"
     }
 }

@@ -121,6 +121,12 @@ struct VisilabsConstants {
     static let TITLE = "title"
     static let SMALLIMG = "smallImg"
     static let LINK = "link"
+    static let THUMBNAIL = "thumbnail"
+    static let ITEMS = "items"
+    static let FILETYPE = "fileType"
+    static let DISPLAYTIME = "displayTime"
+    static let FILESRC = "fileSrc"
+    static let TARGETURL = "targetUrl"
     static let TATEMPLATE = "taTemplate"
     static let REPORT = "report"
     static let IMPRESSION = "impression"
@@ -131,6 +137,7 @@ struct VisilabsConstants {
     static let storylb_img_borderRadius = "storylb_img_borderRadius"
     static let storylb_img_boxShadow = "storylb_img_boxShadow"
     static let storylb_label_color = "storylb_label_color"
+    static let storyz_img_borderColor = "storyz_img_borderColor"
     
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"

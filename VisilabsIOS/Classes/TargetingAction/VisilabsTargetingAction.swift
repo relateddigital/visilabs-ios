@@ -153,10 +153,20 @@ class VisilabsTargetingAction {
                 var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
                     if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?]
-                       , let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString){
-                        if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
+                       , let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString) {
+                        if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: Any]]{
                             for story in stories {
-                                visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE], smallImg: story[VisilabsConstants.SMALLIMG], link: story[VisilabsConstants.LINK]))
+                                if template == .SkinBased {
+                                    var storyItems = [VisilabsStoryItem]()
+                                    if let items = story[VisilabsConstants.ITEMS] as? [[String: String]]{
+                                        for item in items {
+                                            var visilabsStoryItem = VisilabsStoryItem(fileType: <#T##String#>, displayTime: <#T##Int#>, thumbnail: <#T##String#>, targetUrl: <#T##String#>)
+
+                                        }
+                                    }
+                                } else {
+                                    visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE] as? String, smallImg: story[VisilabsConstants.SMALLIMG] as? String, link: story[VisilabsConstants.LINK] as? String))
+                                }
                             }
                             var clickQueryString = ""
                             if let report = actiondata[VisilabsConstants.REPORT] as? [String: Any?], let click = report[VisilabsConstants.CLICK] as? String {
