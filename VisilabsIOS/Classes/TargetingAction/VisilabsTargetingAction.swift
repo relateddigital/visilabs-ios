@@ -160,8 +160,15 @@ class VisilabsTargetingAction {
                                     var storyItems = [VisilabsStoryItem]()
                                     if let items = story[VisilabsConstants.ITEMS] as? [[String: String]]{
                                         for item in items {
-                                            var visilabsStoryItem = VisilabsStoryItem(fileType: <#T##String#>, displayTime: <#T##Int#>, thumbnail: <#T##String#>, targetUrl: <#T##String#>)
-
+                                            let fileType = item[VisilabsConstants.FILETYPE] ?? "photo"
+                                            let thumbnail = item[VisilabsConstants.THUMBNAIL] ?? ""
+                                            let targetUrl = item[VisilabsConstants.TARGETURL] ?? ""
+                                            var displayTime = 3
+                                            if let displayTimeString = item[VisilabsConstants.DISPLAYTIME], let dTime = Int(displayTimeString), dTime > 0 {
+                                                displayTime = dTime
+                                            }
+                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, thumbnail: thumbnail, targetUrl: targetUrl)
+                                            storyItems.append(visilabsStoryItem)
                                         }
                                     }
                                 } else {
