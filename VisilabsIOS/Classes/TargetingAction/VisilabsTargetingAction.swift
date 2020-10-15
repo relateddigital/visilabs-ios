@@ -158,17 +158,20 @@ class VisilabsTargetingAction {
                             for story in stories {
                                 if template == .SkinBased {
                                     var storyItems = [VisilabsStoryItem]()
-                                    if let items = story[VisilabsConstants.ITEMS] as? [[String: String]]{
+                                    if let items = story[VisilabsConstants.ITEMS] as? [[String: Any]]{
                                         for item in items {
-                                            let fileType = item[VisilabsConstants.FILETYPE] ?? "photo"
-                                            let thumbnail = item[VisilabsConstants.THUMBNAIL] ?? ""
-                                            let targetUrl = item[VisilabsConstants.TARGETURL] ?? ""
+                                            let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
+                                            let fileSrc = (item[VisilabsConstants.FILESRC] as? String) ?? ""
+                                            let targetUrl = (item[VisilabsConstants.TARGETURL]  as? String) ?? ""
                                             var displayTime = 3
-                                            if let displayTimeString = item[VisilabsConstants.DISPLAYTIME], let dTime = Int(displayTimeString), dTime > 0 {
+                                            if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
                                                 displayTime = dTime
                                             }
-                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, thumbnail: thumbnail, targetUrl: targetUrl)
+                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl)
                                             storyItems.append(visilabsStoryItem)
+                                        }
+                                        if storyItems.count > 0 {
+                                            visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE] as? String, smallImg: story[VisilabsConstants.THUMBNAIL] as? String, link: story[VisilabsConstants.LINK] as? String, items: storyItems))
                                         }
                                     }
                                 } else {
