@@ -312,7 +312,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             /*!
              * Based on the tap gesture(X) setting the direction to either forward or backward
              */
-            if let snap = story?.snaps[n], snap.kind == .image, getSnapview()?.image == nil {
+            if let snap = story?.snaps[n], snap.kind == .photo, getSnapview()?.image == nil {
                 //Remove retry button if tap forward or backward if it exists
                 if let snapView = getSnapview(), let btn = retryBtn, snapView.subviews.contains(btn) {
                     snapView.removeRetryButton()
@@ -467,7 +467,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             progressView.story_identifier = self.story?.internalIdentifier
             progressView.snapIndex = snapIndex
             DispatchQueue.main.async {
-                if type == .image {
+                if type == .photo {
                     progressView.start(with: 5.0, holderView: holderView, completion: {(identifier, snapIndex, isCancelledAbruptly) in
                         print("Completed snapindex: \(snapIndex)")
                         if isCancelledAbruptly == false {
@@ -487,7 +487,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             if self.scrollview.subviews.count > 0 {
                 let imageView = self.scrollview.subviews.filter{v in v.tag == self.snapIndex + snapViewTagIndicator}.first as? UIImageView
                 if imageView?.image != nil && self.story?.isCompletelyVisible == true {
-                    self.gearupTheProgressors(type: .image)
+                    self.gearupTheProgressors(type: .photo)
                 } else {
                     // Didend displaying will call this startProgressors method. After that only isCompletelyVisible get true. Then we have to start the video if that snap contains video.
                     if self.story?.isCompletelyVisible == true {
