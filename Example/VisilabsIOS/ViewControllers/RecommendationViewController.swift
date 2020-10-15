@@ -109,7 +109,7 @@ class RecommendationViewController: FormViewController {
                 }()
         }
         filterSections.append(filterSection)
-        print(filtersSection.index)
+        //print(filtersSection.index)
         form.insert(filterSection, at: filtersSection.index! + filterSections.count)
     }
     
