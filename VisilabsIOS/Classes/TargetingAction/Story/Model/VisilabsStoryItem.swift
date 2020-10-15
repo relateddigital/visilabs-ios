@@ -8,7 +8,7 @@
 import Foundation
 
 public enum MimeType: String {
-    case image
+    case photo
     case video
     case unknown
 }
@@ -31,8 +31,8 @@ public class VisilabsStoryItem: Codable {
     }
     public var kind: MimeType {
         switch mimeType {
-            case MimeType.image.rawValue:
-                return MimeType.image
+            case MimeType.photo.rawValue:
+                return MimeType.photo
             case MimeType.video.rawValue:
                 return MimeType.video
             default:
@@ -40,10 +40,10 @@ public class VisilabsStoryItem: Codable {
         }
     }
     
-    init (fileType: String, displayTime: Int, thumbnail: String, targetUrl: String) {
+    init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String) {
         self.mimeType = fileType
         self.displayTime = displayTime // TODO:
-        self.url = thumbnail // TODO:
+        self.url = fileSrc // TODO:
         self.targetUrl = targetUrl
         self.lastUpdated = ""
         self.internalIdentifier = UUID().uuidString // TODO:
