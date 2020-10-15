@@ -55,7 +55,10 @@ final class VisilabsStoryPreviewHeaderView: UIView {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(#imageLiteral(resourceName: "ic_close"), for: .normal)
+        //TODO: server'dan siyah ya da beyaz seçeneği gelecek.
+        if let closeButtonImage = VisilabsHelper.getUIImage(named: "VisilabsCloseButton@3x") {
+            button.setImage(closeButtonImage, for: .normal)
+        }
         button.addTarget(self, action: #selector(didTapClose(_:)), for: .touchUpInside)
         return button
     }()
