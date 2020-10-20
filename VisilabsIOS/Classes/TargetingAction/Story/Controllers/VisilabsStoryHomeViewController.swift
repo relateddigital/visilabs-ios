@@ -31,7 +31,6 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if !storiesLoaded {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.setAsLoadingCell()
@@ -44,28 +43,12 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
             //cell.contentView.isUserInteractionEnabled = false
             return cell
         }
-
-        /*
-        if indexPath.row == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier, for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
-            cell.userDetails = ("Your story","https://avatars2.githubusercontent.com/u/32802714?s=200&v=4")
-            return cell
-        }else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
-            let story = viewModel.cellForItemAt(indexPath: indexPath)
-            cell.story = story
-            return cell
-        }
-         */
     }
-    
-    
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if self.storyAction.stories.count == 0 {
             return
         }
-        
         if self.storyAction.storyTemplate == .SkinBased {
             DispatchQueue.main.async {
                 let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories, handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
