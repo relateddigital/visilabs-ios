@@ -39,7 +39,7 @@ class VisilabsStoryItem {
         self.url = fileSrc // TODO:
         self.targetUrl = targetUrl
         self.buttonText = buttonText
-        self.lastUpdated = ""
+        self.lastUpdated = "" //TODO kalkacak
         self.internalIdentifier = UUID().uuidString
         self.buttonTextColor = buttonTextColor
         self.buttonColor = buttonColor

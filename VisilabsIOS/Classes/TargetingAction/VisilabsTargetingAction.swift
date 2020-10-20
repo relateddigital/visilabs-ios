@@ -160,15 +160,7 @@ class VisilabsTargetingAction {
                                     var storyItems = [VisilabsStoryItem]()
                                     if let items = story[VisilabsConstants.ITEMS] as? [[String: Any]]{
                                         for item in items {
-                                            let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
-                                            let fileSrc = (item[VisilabsConstants.FILESRC] as? String) ?? ""
-                                            let targetUrl = (item[VisilabsConstants.TARGETURL]  as? String) ?? ""
-                                            var displayTime = 3
-                                            if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
-                                                displayTime = dTime
-                                            }
-                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: "")
-                                            storyItems.append(visilabsStoryItem)
+                                            storyItems.append(parseStoryItem(item))
                                         }
                                         if storyItems.count > 0 {
                                             visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE] as? String, smallImg: story[VisilabsConstants.THUMBNAIL] as? String, link: story[VisilabsConstants.LINK] as? String, items: storyItems))
@@ -206,7 +198,31 @@ class VisilabsTargetingAction {
         if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
             displayTime = dTime
         }
-        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: buttonText)
+        var buttonTextColor = UIColor.white
+        var buttonColor = UIColor.black
+        if let buttonTextColorString = item[VisilabsConstants.BUTTONTEXTCOLOR] as? String {
+            if buttonTextColorString.starts(with: "rgba") {
+                if let btColor =  UIColor.init(rgbaString: buttonTextColorString){
+                    buttonTextColor = btColor
+                }
+            } else{
+                if let btColor = UIColor.init(hex: buttonTextColorString) {
+                    buttonTextColor = btColor
+                }
+            }
+        }
+        if let buttonColorString = item[VisilabsConstants.BUTTONCOLOR] as? String {
+            if buttonColorString.starts(with: "rgba") {
+                if let bColor =  UIColor.init(rgbaString: buttonColorString){
+                    buttonColor = bColor
+                }
+            } else{
+                if let bColor = UIColor.init(hex: buttonColorString) {
+                    buttonColor = bColor
+                }
+            }
+        }
+        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: buttonText, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
         return visilabsStoryItem
     }
  
