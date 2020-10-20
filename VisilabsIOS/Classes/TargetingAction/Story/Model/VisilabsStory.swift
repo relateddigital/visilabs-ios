@@ -19,7 +19,7 @@ class VisilabsStory {
         } else {
             self._items = [VisilabsStoryItem]()
         }
-        self.internalIdentifier = ""
+        self.internalIdentifier = UUID().uuidString // TODO:
         self.lastUpdated = 0
     }
     
@@ -37,7 +37,7 @@ class VisilabsStory {
     
     // To carry forwarding non-deleted snaps.
     public var snaps: [VisilabsStoryItem] {
-        return _items.filter{!($0.isDeleted)}
+        return _items // _items.filter{!($0.isDeleted)}
     }
     //TODO: bu nasıl set edilecek düşün
     public var internalIdentifier: String
