@@ -20,7 +20,6 @@ class VisilabsStory {
             self._items = [VisilabsStoryItem]()
         }
         self.internalIdentifier = UUID().uuidString // TODO:
-        self.lastUpdated = 0
     }
     
     let title: String?
@@ -41,7 +40,6 @@ class VisilabsStory {
     }
     //TODO: bu nasıl set edilecek düşün
     public var internalIdentifier: String
-    public var lastUpdated: Int
     var lastPlayedSnapIndex = 0
     var isCompletelyVisible = false
     var isCancelledAbruptly = false
@@ -50,7 +48,6 @@ class VisilabsStory {
         //case snapsCount = "snaps_count"
         case _snaps = "snaps"
         case internalIdentifier = "id"
-        case lastUpdated = "last_updated"
         case title = "title"
         case smallImg = "smallImg"
         case link = "items"
