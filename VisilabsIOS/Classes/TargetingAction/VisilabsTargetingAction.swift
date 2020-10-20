@@ -158,7 +158,6 @@ class VisilabsTargetingAction {
                             for story in stories {
                                 if template == .SkinBased {
                                     var storyItems = [VisilabsStoryItem]()
-                                    var storyItemIdentifierIndex = 1
                                     if let items = story[VisilabsConstants.ITEMS] as? [[String: Any]]{
                                         for item in items {
                                             let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
@@ -168,8 +167,7 @@ class VisilabsTargetingAction {
                                             if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
                                                 displayTime = dTime
                                             }
-                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, internalIdentifier: "c\(storyItemIdentifierIndex)")
-                                            storyItemIdentifierIndex = storyItemIdentifierIndex + 1
+                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl)
                                             storyItems.append(visilabsStoryItem)
                                         }
                                         if storyItems.count > 0 {
@@ -197,8 +195,21 @@ class VisilabsTargetingAction {
         return VisilabsStoryActionResponse(storyActions: storiesResponse, error: errorResponse, guid: guid)
     }
     
+
+    /*
+    private func parseStoryItem(_ item: [String: Any]) -> VisilabsStoryItem {
+        let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
+        let fileSrc = (item[VisilabsConstants.FILESRC] as? String) ?? ""
+        let targetUrl = (item[VisilabsConstants.TARGETURL]  as? String) ?? ""
+        var displayTime = 3
+        if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
+            displayTime = dTime
+        }
+        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, internalIdentifier: "c\(storyItemIdentifierIndex)")
+        return visilabsStoryItem
+    }
+ */
     
-    //TODO: shadow
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
         if let s = extendedPropsString, let extendedProps = s.urlDecode().convertJsonStringToDictionary() {
