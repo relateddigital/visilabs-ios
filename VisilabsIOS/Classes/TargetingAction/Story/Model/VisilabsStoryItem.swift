@@ -7,29 +7,22 @@
 
 import Foundation
 
-public enum MimeType: String {
+enum MimeType: String {
     case photo
     case video
     case unknown
 }
-public class VisilabsStoryItem: Codable {
-    public let internalIdentifier: String
-    public let mimeType: String
-    public let lastUpdated: String
-    public let url: String
-    public var displayTime = 3 // TODO:
-    public let targetUrl: String // TODO:
-    //TODO: buna bizde gerek yok sanırım
-    // Store the deleted snaps id in NSUserDefaults, so that when app get relaunch deleted snaps will not display.
-    public var isDeleted: Bool {
-        set{
-            UserDefaults.standard.set(newValue, forKey: internalIdentifier)
-        }
-        get{
-            return UserDefaults.standard.value(forKey: internalIdentifier) != nil
-        }
-    }
-    public var kind: MimeType {
+class VisilabsStoryItem {
+    let internalIdentifier: String
+    let mimeType: String
+    let lastUpdated: String
+    let url: String
+    let displayTime: Int
+    let targetUrl: String
+    let buttonText: String
+    let buttonTextColor: UIColor
+    let buttonColor: UIColor
+    var kind: MimeType {
         switch mimeType {
             case MimeType.photo.rawValue:
                 return MimeType.photo
@@ -40,21 +33,15 @@ public class VisilabsStoryItem: Codable {
         }
     }
     
-    init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String) {
+    init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String, buttonText: String, buttonTextColor: UIColor, buttonColor: UIColor) {
         self.mimeType = fileType
         self.displayTime = displayTime // TODO:
         self.url = fileSrc // TODO:
         self.targetUrl = targetUrl
+        self.buttonText = buttonText
         self.lastUpdated = ""
         self.internalIdentifier = UUID().uuidString
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case internalIdentifier = "id"
-        case mimeType = "mime_type"
-        case lastUpdated = "last_updated"
-        case url = "url"
-        case displayTime = "displayTime"
-        case targetUrl = "targetUrl"
+        self.buttonTextColor = buttonTextColor
+        self.buttonColor = buttonColor
     }
 }
