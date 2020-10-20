@@ -51,6 +51,11 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         }
         if self.storyAction.storyTemplate == .SkinBased {
             DispatchQueue.main.async {
+                for (index, _) in self.storyAction.stories.enumerated() {
+                    self.storyAction.stories[index].lastPlayedSnapIndex = 0
+                    self.storyAction.stories[index].isCompletelyVisible = false
+                    self.storyAction.stories[index].isCancelledAbruptly = false
+                }
                 let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories, handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
                 VisilabsInstance.sharedUIApplication()?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: nil) //TODO: burada keywindow rootViewController yaklaşımı uygun mu?
             }            
