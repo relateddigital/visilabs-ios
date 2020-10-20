@@ -7,9 +7,6 @@
 
 import UIKit
 
-//TODO: buna gerek var mı bak?
-internal var isDeleteSnapEnabled = true
-
 final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognizerDelegate {
     
     //MARK: - Private Vars
@@ -37,11 +34,7 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         gesture.direction = .down
         return gesture
     }()
-    private let showActionSheetGesture: UISwipeGestureRecognizer = {
-        let gesture = UISwipeGestureRecognizer()
-        gesture.direction = .up
-        return gesture
-    }()
+
     private var currentCell: VisilabsStoryPreviewCell? {
         guard let indexPath = self.currentIndexPath else {
             debugPrint("Current IndexPath is nil")
@@ -49,18 +42,6 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         }
         return self._view.snapsCollectionView.cellForItem(at: indexPath) as? VisilabsStoryPreviewCell
     }
-    lazy private var actionSheetController: UIAlertController = {
-        let alertController = UIAlertController(title: "Instagram Stories", message: "More Options", preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.deleteSnap()
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-            self?.currentCell?.resumeEntireSnap()
-        }
-        alertController.addAction(deleteAction)
-        alertController.addAction(cancelAction)
-        return alertController
-    }()
     
     //MARK: - Overriden functions
     override func loadView() {
@@ -71,13 +52,6 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         dismissGesture.delegate = self
         dismissGesture.addTarget(self, action: #selector(didSwipeDown(_:)))
         _view.snapsCollectionView.addGestureRecognizer(dismissGesture)
-        
-        // This should be handled for only currently logged in user story and not for all other user stories.
-        if(isDeleteSnapEnabled) {
-            showActionSheetGesture.delegate = self
-            showActionSheetGesture.addTarget(self, action: #selector(showActionSheet))
-            _view.snapsCollectionView.addGestureRecognizer(showActionSheetGesture)
-        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,19 +103,6 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
     }
     override var prefersStatusBarHidden: Bool { return true }
     
-    @objc private func showActionSheet() {
-        self.present(actionSheetController, animated: true) { [weak self] in
-            self?.currentCell?.pauseEntireSnap()
-        }
-    }
-    private func deleteSnap() {
-        guard let indexPath = currentIndexPath else {
-            debugPrint("Current IndexPath is nil")
-            return
-        }
-        let cell = _view.snapsCollectionView.cellForItem(at: indexPath) as? VisilabsStoryPreviewCell
-        cell?.deleteSnap()
-    }
     //MARK: - Selectors
     @objc func didSwipeDown(_ sender: Any) {
         dismiss(animated: true, completion: nil)
