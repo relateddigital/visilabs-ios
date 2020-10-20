@@ -248,16 +248,12 @@ public class VisilabsPopupDialogDefaultView: UIView {
         }
         
         imageHeightConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
-//
-//
+        
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
         }
         
         closeButton.trailing(to: self, offset: -10.0)
-//        constraints.append(closeButton.leftAnchor.constraint(equalTo: self.rightAnchor, constant: -40.0))
-//        constraints.append(closeButton.leadingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40.0))
-
         NSLayoutConstraint.activate(constraints)
     }
 }
