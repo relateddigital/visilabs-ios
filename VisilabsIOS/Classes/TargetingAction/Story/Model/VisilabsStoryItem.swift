@@ -40,13 +40,13 @@ public class VisilabsStoryItem: Codable {
         }
     }
     
-    init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String, internalIdentifier: String) {
+    init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String) {
         self.mimeType = fileType
         self.displayTime = displayTime // TODO:
         self.url = fileSrc // TODO:
         self.targetUrl = targetUrl
         self.lastUpdated = ""
-        self.internalIdentifier = internalIdentifier
+        self.internalIdentifier = UUID().uuidString
     }
     
     enum CodingKeys: String, CodingKey {
