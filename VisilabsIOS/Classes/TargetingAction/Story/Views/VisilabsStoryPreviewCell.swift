@@ -520,53 +520,6 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     func adjustPreviousSnapProgressorsWidth(with index: Int) {
         fillupLastPlayedSnaps(index)
     }
-    func deleteSnap() {
-        let progressView = storyHeaderView.getProgressView
-        clearLastPlayedSnaps(snapIndex)
-        stopSnapProgressors(with: snapIndex)
-        
-        let snapCount = story?.snapsCount ?? 0
-        if let lastIndicatorView = getProgressIndicatorView(with: snapCount-1), let preLastIndicatorView = getProgressIndicatorView(with: snapCount-2) {
-            
-            lastIndicatorView.constraints.forEach { $0.isActive = false }
-            
-            preLastIndicatorView.rightConstraiant?.isActive = false
-            preLastIndicatorView.rightConstraiant = progressView.igRightAnchor.constraint(equalTo: preLastIndicatorView.igRightAnchor, constant: 8)
-            preLastIndicatorView.rightConstraiant?.isActive = true
-        } else {
-            debugPrint("No Snaps")
-        }
-        /**
-         - If user is going to delete video snap, then we need to stop the player.
-         - Remove the videoView/snapView from the scrollview subviews. Because once the snap got deleted, the next snap will be created on that same frame(x,y,width,height). If we didn't remove the videoView/snapView from scrollView subviews then it will create some wierd issues.
-         */
-        if story?.snaps[snapIndex].kind == .video {
-            stopPlayer()
-        }
-        scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
-        
-        /**
-         Once we set isDeleted, snaps and snaps count will be reduced by one. So, instead of snapIndex+1, we need to pass snapIndex to willMoveToPreviousOrNextSnap. But the corresponding progressIndicator is not currently in active. Another possible way is we can always remove last presented progress indicator. So that snapIndex and tag will matches, so that progress indicator starts.
-         */
-        story?.snaps[snapIndex].isDeleted = true
-        direction = .forward
-        for sIndex in 0..<snapIndex {
-            if let holderView = self.getProgressIndicatorView(with: sIndex),
-                let progressView = self.getProgressView(with: sIndex){
-                progressView.widthConstraint?.isActive = false
-                progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor, multiplier: 1.0)
-                progressView.widthConstraint?.isActive = true
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {[weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.willMoveToPreviousOrNextSnap(n: strongSelf.snapIndex)
-        }
-        
-        //Do the api call, when api request is success remove the snap using snap internal identifier from the nsuserdefaults.
-    }
     
     //MARK: - Public functions
     public func willDisplayCellForZerothIndex(with sIndex: Int, handpickedSnapIndex: Int) {
