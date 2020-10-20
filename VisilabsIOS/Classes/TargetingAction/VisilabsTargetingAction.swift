@@ -167,7 +167,7 @@ class VisilabsTargetingAction {
                                             if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
                                                 displayTime = dTime
                                             }
-                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl)
+                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: "")
                                             storyItems.append(visilabsStoryItem)
                                         }
                                         if storyItems.count > 0 {
@@ -196,19 +196,20 @@ class VisilabsTargetingAction {
     }
     
 
-    /*
+    
     private func parseStoryItem(_ item: [String: Any]) -> VisilabsStoryItem {
         let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
         let fileSrc = (item[VisilabsConstants.FILESRC] as? String) ?? ""
         let targetUrl = (item[VisilabsConstants.TARGETURL]  as? String) ?? ""
+        let buttonText = (item[VisilabsConstants.BUTTONTEXT]  as? String) ?? ""
         var displayTime = 3
         if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
             displayTime = dTime
         }
-        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, internalIdentifier: "c\(storyItemIdentifierIndex)")
+        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: buttonText)
         return visilabsStoryItem
     }
- */
+ 
     
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
