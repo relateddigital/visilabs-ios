@@ -158,6 +158,7 @@ class VisilabsTargetingAction {
                             for story in stories {
                                 if template == .SkinBased {
                                     var storyItems = [VisilabsStoryItem]()
+                                    var storyItemIdentifierIndex = 1
                                     if let items = story[VisilabsConstants.ITEMS] as? [[String: Any]]{
                                         for item in items {
                                             let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
@@ -167,7 +168,8 @@ class VisilabsTargetingAction {
                                             if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
                                                 displayTime = dTime
                                             }
-                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl)
+                                            let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, internalIdentifier: "c\(storyItemIdentifierIndex)")
+                                            storyItemIdentifierIndex = storyItemIdentifierIndex + 1
                                             storyItems.append(visilabsStoryItem)
                                         }
                                         if storyItems.count > 0 {
