@@ -170,12 +170,9 @@ class VisilabsTargetingAction {
                                     visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE] as? String, smallImg: story[VisilabsConstants.SMALLIMG] as? String, link: story[VisilabsConstants.LINK] as? String))
                                 }
                             }
-                            var clickQueryString = ""
-                            if let report = actiondata[VisilabsConstants.REPORT] as? [String: Any?], let click = report[VisilabsConstants.CLICK] as? String {
-                                clickQueryString = click
-                            }
+                            let (clickQueryItems, impressionQueryItems) = parseStoryReport(actiondata[VisilabsConstants.REPORT] as? [String: Any?])
                             if stories.count > 0 {
-                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.EXTENDEDPROPS] as? String)))
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryItems: clickQueryItems, impressionQueryItems: impressionQueryItems, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.EXTENDEDPROPS] as? String)))
                             }
                         }
                     }
@@ -188,6 +185,33 @@ class VisilabsTargetingAction {
     }
     
 
+    private func parseStoryReport(_ report: [String: Any?]?) -> ([String: String], [String: String]) {
+        var clickItems = [String: String]()
+        var impressionItems = [String: String]()
+        //clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
+        if let rep = report {
+            if let click = rep[VisilabsConstants.CLICK] as? String {
+                let qsArr = click.components(separatedBy: "&")
+                for queryItem in qsArr {
+                    let queryItemComponents = queryItem.components(separatedBy: "=")
+                    if queryItemComponents.count == 2 {
+                        clickItems[queryItemComponents[0]] = queryItemComponents[1]
+                    }
+                }
+            }
+            if let impression = rep[VisilabsConstants.IMPRESSION] as? String {
+                let qsArr = impression.components(separatedBy: "&")
+                for queryItem in qsArr {
+                    let queryItemComponents = queryItem.components(separatedBy: "=")
+                    if queryItemComponents.count == 2 {
+                        impressionItems[queryItemComponents[0]] = queryItemComponents[1]
+                    }
+                }
+            }
+            
+        }
+        return (clickItems, impressionItems)
+    }
     
     private func parseStoryItem(_ item: [String: Any]) -> VisilabsStoryItem {
         let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
