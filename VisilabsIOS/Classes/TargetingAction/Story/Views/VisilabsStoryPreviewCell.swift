@@ -177,7 +177,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         let snapView = UIImageView()
         snapView.translatesAutoresizingMaskIntoConstraints = false
         snapView.tag = snapIndex + snapViewTagIndicator
-        
+ 
         /**
          Delete if there is any snapview/videoview already present in that frame location. Because of snap delete functionality, snapview/videoview can occupy different frames(created in 2nd position(frame), when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
          - If only snapViews are there, it will not create any issues.
@@ -190,6 +190,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         
         /// Setting constraints for snap view.
         NSLayoutConstraint.activate([
+            
+            //snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
+            //snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
+            
             snapView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ? scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
             snapView.igTopAnchor.constraint(equalTo: scrollview.igTopAnchor),
             snapView.widthAnchor.constraint(equalTo: scrollview.widthAnchor),
@@ -253,6 +257,30 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                     case .success(_):
                         /// Start progressor only if handpickedSnapIndex matches with snapIndex and the requested image url should be matched with current snapIndex imageurl
                         if(strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.snaps[strongSelf.snapIndex].url) {
+                            
+                            
+                            if let snaps = strongSelf.story?.snaps, snaps.count > strongSelf.snapIndex {
+                                if snaps[strongSelf.snapIndex].buttonText.count > 0 {
+                                    let snap = snaps[strongSelf.snapIndex]
+                                    let snapButton = UIButton()
+                                    snapButton.setTitle(snap.buttonText, for: .normal)
+                                    snapButton.backgroundColor = snap.buttonColor
+                                    snapButton.setTitleColor(snap.buttonTextColor, for: .normal)
+                                    snapButton.layer.cornerRadius = 10
+                                    snapButton.translatesAutoresizingMaskIntoConstraints = false
+                                    snapButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+                                    snapView.addSubview(snapButton)
+                                    NSLayoutConstraint.activate([
+                                        snapButton.igBottomAnchor.constraint(equalTo: snapView.igBottomAnchor, constant: -50),
+                                        snapButton.centerXAnchor.constraint(equalTo: snapView.centerXAnchor),
+                                    ])
+                                    
+                                }
+                            }
+                            
+                            
+ 
+                            
                             strongSelf.startProgressors()
                     }
                     case .failure(_):
