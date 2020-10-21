@@ -579,13 +579,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     public func startSnapProgress(with sIndex: Int) {
         if let indicatorView = getProgressIndicatorView(with: sIndex),
             let pv = getProgressView(with: sIndex) {
-            //TODO: 5.0 değeri displayTime'dan gelecek.
-            
             var timeInterval = TimeInterval(5)
             if let displayTime = self.story?.items[sIndex].displayTime {
                 timeInterval = TimeInterval(displayTime)
             }
-            
             pv.start(with: timeInterval, holderView: indicatorView, completion: { (identifier, snapIndex, isCancelledAbruptly) in
                 if isCancelledAbruptly == false {
                     self.didCompleteProgress()
