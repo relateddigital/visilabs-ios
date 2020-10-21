@@ -11,13 +11,15 @@ class VisilabsStoryAction {
     let actionId: Int
     let storyTemplate: VisilabsStoryTemplate
     let stories: [VisilabsStory]
-    let clickQueryString: String
+    let clickQueryItems: [String: String]
+    let impressionQueryItems: [String: String]
     let extendedProperties: VisilabsStoryActionExtendedProperties
-    init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], clickQueryString: String, extendedProperties: VisilabsStoryActionExtendedProperties) {
+    init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], clickQueryItems: [String: String], impressionQueryItems: [String: String], extendedProperties: VisilabsStoryActionExtendedProperties) {
         self.actionId = actionId
         self.storyTemplate = storyTemplate
         self.stories = stories
-        self.clickQueryString = clickQueryString
+        self.clickQueryItems = clickQueryItems
+        self.impressionQueryItems = impressionQueryItems
         self.extendedProperties = extendedProperties
     }
 }

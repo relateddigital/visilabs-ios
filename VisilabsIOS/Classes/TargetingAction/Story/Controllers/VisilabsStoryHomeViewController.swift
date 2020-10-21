@@ -61,17 +61,8 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
             }            
         } else {
             
-            if self.storyAction.clickQueryString.count > 0 {
-                let qsArr = self.storyAction.clickQueryString.components(separatedBy: "&")
-                var properties = [String: String]()
-                //properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
-                for queryItem in qsArr {
-                    let queryItemComponents = queryItem.components(separatedBy: "=")
-                    if queryItemComponents.count == 2 {
-                        properties[queryItemComponents[0]] = queryItemComponents[1]
-                    }
-                }
-                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: properties)
+            if self.storyAction.clickQueryItems.count > 0 {
+                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: self.storyAction.clickQueryItems)
             }
             let story = self.storyAction.stories[indexPath.row]
             if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
