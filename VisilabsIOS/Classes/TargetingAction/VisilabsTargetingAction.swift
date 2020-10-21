@@ -236,7 +236,7 @@ class VisilabsTargetingAction {
             if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylb_img_borderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))){
                 props.imageBorderRadius = imageBorderRadius / 100.0
             }
-            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String {
+            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String ?? extendedProps[VisilabsConstants.storyz_img_borderColor] as? String {
                 if imageBorderColorString.starts(with: "rgba") {
                     if let imageBorderColor =  UIColor.init(rgbaString: imageBorderColorString){
                         props.imageBorderColor = imageBorderColor
