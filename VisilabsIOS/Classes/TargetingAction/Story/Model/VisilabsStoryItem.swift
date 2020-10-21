@@ -15,7 +15,6 @@ enum MimeType: String {
 class VisilabsStoryItem {
     let internalIdentifier: String
     let mimeType: String
-    let lastUpdated: String
     let url: String
     let displayTime: Int
     let targetUrl: String
@@ -39,7 +38,6 @@ class VisilabsStoryItem {
         self.url = fileSrc // TODO:
         self.targetUrl = targetUrl
         self.buttonText = buttonText
-        self.lastUpdated = "" //TODO kalkacak
         self.internalIdentifier = UUID().uuidString
         self.buttonTextColor = buttonTextColor
         self.buttonColor = buttonColor
