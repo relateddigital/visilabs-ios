@@ -33,6 +33,17 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    
+    private lazy var snapButton: UIButton = {
+        let snapButton = UIButton()
+        snapButton.isUserInteractionEnabled = true
+        snapButton.layer.cornerRadius = 10
+        snapButton.translatesAutoresizingMaskIntoConstraints = false
+        snapButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        snapButton.addTarget(self, action: #selector(self.didTapLinkButton), for: .touchUpInside)
+        return snapButton
+    }()
+    
     private lazy var longPress_gesture: UILongPressGestureRecognizer = {
         let lp = UILongPressGestureRecognizer.init(target: self, action: #selector(didLongPress(_:)))
         lp.minimumPressDuration = 0.2
@@ -151,6 +162,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         scrollview.backgroundColor = .black
         contentView.addSubview(scrollview)
         contentView.addSubview(storyHeaderView)
+        contentView.addSubview(snapButton)
         scrollview.addGestureRecognizer(longPress_gesture)
         scrollview.addGestureRecognizer(tap_gesture)
     }
@@ -169,6 +181,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             contentView.igRightAnchor.constraint(equalTo: storyHeaderView.igRightAnchor),
             storyHeaderView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
             storyHeaderView.heightAnchor.constraint(equalToConstant: 80)
+        ])
+        NSLayoutConstraint.activate([
+            snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
+            snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
         ])
     }
     private func createSnapView() -> UIImageView {
@@ -255,35 +271,26 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                     case .success(_):
                         /// Start progressor only if handpickedSnapIndex matches with snapIndex and the requested image url should be matched with current snapIndex imageurl
                         if(strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.items[strongSelf.snapIndex].url) {
-                            
-                            
-                            if let items = strongSelf.story?.items, items.count > strongSelf.snapIndex {
-                                if items[strongSelf.snapIndex].buttonText.count > 0 {
-                                    let snap = items[strongSelf.snapIndex]
-                                    let snapButton = UIButton()
-                                    snapButton.setTitle(snap.buttonText, for: .normal)
-                                    snapButton.backgroundColor = snap.buttonColor
-                                    snapButton.setTitleColor(snap.buttonTextColor, for: .normal)
-                                    snapButton.layer.cornerRadius = 10
-                                    snapButton.translatesAutoresizingMaskIntoConstraints = false
-                                    snapButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-                                    snapView.addSubview(snapButton)
-                                    NSLayoutConstraint.activate([
-                                        snapButton.igBottomAnchor.constraint(equalTo: snapView.igBottomAnchor, constant: -50),
-                                        snapButton.centerXAnchor.constraint(equalTo: snapView.centerXAnchor),
-                                    ])
-                                    
-                                }
-                            }
-                            
-                            
- 
-                            
                             strongSelf.startProgressors()
                     }
                     case .failure(_):
                         strongSelf.showRetryButton(with: url, for: snapView)
                 }
+            }
+        }
+        if let story = self.story, story.items.count > self.snapIndex {
+            if story.impressionQueryItems.count > 0 {
+                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: story.impressionQueryItems)
+            }
+            if story.items[self.snapIndex].buttonText.count > 0 {
+                let snap = story.items[self.snapIndex]
+                snapButton.isHidden = false
+                snapButton.setTitle(snap.buttonText, for: .normal)
+                snapButton.backgroundColor = snap.buttonColor
+                snapButton.setTitleColor(snap.buttonTextColor, for: .normal)
+            }
+            else {
+                snapButton.isHidden = true
             }
         }
     }
@@ -331,6 +338,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
     }
     @objc private func didTapSnap(_ sender: UITapGestureRecognizer) {
+
         let touchLocation = sender.location(ofTouch: 0, in: self.scrollview)
         
         if let snapCount = story?.items.count {
@@ -393,6 +401,20 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
         resetSnapProgressors(with: snapIndex)
     }
+    
+    @objc private func didTapLinkButton() {
+        if let story = story {
+            if story.clickQueryItems.count > 0 {
+                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: story.clickQueryItems)
+            }
+            if story.items[snapIndex].targetUrl.count > 0, let snapUrl = URL(string: story.items[snapIndex].targetUrl) {
+                VisilabsLogger.info("opening CTA URL: \(snapUrl)")
+                VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: snapUrl, waitUntilDone: true)
+            }
+            delegate?.didTapCloseButton()
+        }
+    }
+    
     private func willMoveToPreviousOrNextSnap(n: Int) {
         if let count = story?.items.count {
             if n < count {
@@ -500,7 +522,6 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             
             DispatchQueue.main.async {
                 if type == .photo {
-                    //TODO: 5.0 değeri displayTime'dan gelecek.
                     progressView.start(with: timeInterval, holderView: holderView, completion: {(identifier, snapIndex, isCancelledAbruptly) in
                         print("Completed snapindex: \(snapIndex)")
                         if isCancelledAbruptly == false {

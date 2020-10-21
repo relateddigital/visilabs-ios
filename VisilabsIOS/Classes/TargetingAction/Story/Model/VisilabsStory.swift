@@ -27,6 +27,8 @@ class VisilabsStory {
     var lastPlayedSnapIndex = 0
     var isCompletelyVisible = false
     var isCancelledAbruptly = false
+    var clickQueryItems = [String: String]()
+    var impressionQueryItems = [String: String]()
 }
 
 extension VisilabsStory: Equatable {
