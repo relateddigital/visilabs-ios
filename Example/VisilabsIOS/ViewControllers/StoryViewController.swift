@@ -87,7 +87,6 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         storyHomeView!.topAnchor.constraint(equalTo: storyButton.bottomAnchor, constant: 20).isActive = true
         storyHomeView!.widthAnchor.constraint(equalTo: view.saferAreaLayoutGuide.widthAnchor).isActive = true
         storyHomeView!.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        print("Button tapped")
      }
     
 }

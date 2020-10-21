@@ -10,14 +10,19 @@ import Foundation
 class VisilabsStoryAction {
     let actionId: Int
     let storyTemplate: VisilabsStoryTemplate
-    let stories: [VisilabsStory]
+    var stories: [VisilabsStory]
     let clickQueryItems: [String: String]
     let impressionQueryItems: [String: String]
     let extendedProperties: VisilabsStoryActionExtendedProperties
     init(actionId: Int, storyTemplate: VisilabsStoryTemplate, stories: [VisilabsStory], clickQueryItems: [String: String], impressionQueryItems: [String: String], extendedProperties: VisilabsStoryActionExtendedProperties) {
         self.actionId = actionId
         self.storyTemplate = storyTemplate
-        self.stories = stories
+        self.stories = [VisilabsStory]()
+        for story in stories {
+            story.clickQueryItems = clickQueryItems
+            story.impressionQueryItems = impressionQueryItems
+            self.stories.append(story)
+        }
         self.clickQueryItems = clickQueryItems
         self.impressionQueryItems = impressionQueryItems
         self.extendedProperties = extendedProperties
