@@ -67,7 +67,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
                 //properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
                 properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
                 properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
-                Visilabs.callAPI().customEvent("OM_evt.gif", properties: properties)
+                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: properties)
             }
             let story = self.storyAction.stories[indexPath.row]
             if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
