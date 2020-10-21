@@ -466,9 +466,16 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             let progressView = getProgressView(with: snapIndex){
             progressView.story_identifier = self.story?.internalIdentifier
             progressView.snapIndex = snapIndex
+            
+            var timeInterval = TimeInterval(5)
+            if let displayTime = self.story?.snaps[snapIndex].displayTime {
+                timeInterval = TimeInterval(displayTime)
+            }
+            
             DispatchQueue.main.async {
                 if type == .photo {
-                    progressView.start(with: 5.0, holderView: holderView, completion: {(identifier, snapIndex, isCancelledAbruptly) in
+                    //TODO: 5.0 değeri displayTime'dan gelecek.
+                    progressView.start(with: timeInterval, holderView: holderView, completion: {(identifier, snapIndex, isCancelledAbruptly) in
                         print("Completed snapindex: \(snapIndex)")
                         if isCancelledAbruptly == false {
                             self.didCompleteProgress()
@@ -546,7 +553,14 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     public func startSnapProgress(with sIndex: Int) {
         if let indicatorView = getProgressIndicatorView(with: sIndex),
             let pv = getProgressView(with: sIndex) {
-            pv.start(with: 5.0, holderView: indicatorView, completion: { (identifier, snapIndex, isCancelledAbruptly) in
+            //TODO: 5.0 değeri displayTime'dan gelecek.
+            
+            var timeInterval = TimeInterval(5)
+            if let displayTime = self.story?.snaps[sIndex].displayTime {
+                timeInterval = TimeInterval(displayTime)
+            }
+            
+            pv.start(with: timeInterval, holderView: indicatorView, completion: { (identifier, snapIndex, isCancelledAbruptly) in
                 if isCancelledAbruptly == false {
                     self.didCompleteProgress()
                 }
