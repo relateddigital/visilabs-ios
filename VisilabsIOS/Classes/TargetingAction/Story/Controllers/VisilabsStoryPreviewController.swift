@@ -170,7 +170,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
             if vCell.longPressGestureState == nil {
                 vCell.resumePreviousSnapProgress(with: (vCell.story?.lastPlayedSnapIndex)!)
             }
-            if (vCell.story?.snaps[vCell.story?.lastPlayedSnapIndex ?? 0])?.kind == .video {
+            if (vCell.story?.items[vCell.story?.lastPlayedSnapIndex ?? 0])?.kind == .video {
                 vCell.resumePlayer(with: vCell.story?.lastPlayedSnapIndex ?? 0)
             }
             vCell.longPressGestureState = nil

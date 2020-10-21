@@ -75,8 +75,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             scrollview.isUserInteractionEnabled = true
             switch direction {
                 case .forward:
-                    if snapIndex < story?.snapsCount ?? 0 {
-                        if let snap = story?.snaps[snapIndex] {
+                    if snapIndex < story?.items.count ?? 0 {
+                        if let snap = story?.items[snapIndex] {
                             if snap.kind != MimeType.video {
                                 if let snapView = getSnapview() {
                                     startRequest(snapView: snapView, with: snap.url)
@@ -92,12 +92,11 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                     startPlayer(videoView: videoView, with: snap.url)
                                 }
                             }
-                            storyHeaderView.lastUpdatedLabel.text = snap.lastUpdated
                         }
                 }
                 case .backward:
-                    if snapIndex < story?.snapsCount ?? 0 {
-                        if let snap = story?.snaps[snapIndex] {
+                    if snapIndex < story?.items.count ?? 0 {
+                        if let snap = story?.items[snapIndex] {
                             if snap.kind != MimeType.video {
                                 if let snapView = getSnapview() {
                                     self.startRequest(snapView: snapView, with: snap.url)
@@ -111,7 +110,6 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                     self.startPlayer(videoView: videoView, with: snap.url)
                                 }
                             }
-                            storyHeaderView.lastUpdatedLabel.text = snap.lastUpdated
                         }
                 }
             }
@@ -256,12 +254,12 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 switch result {
                     case .success(_):
                         /// Start progressor only if handpickedSnapIndex matches with snapIndex and the requested image url should be matched with current snapIndex imageurl
-                        if(strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.snaps[strongSelf.snapIndex].url) {
+                        if(strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.items[strongSelf.snapIndex].url) {
                             
                             
-                            if let snaps = strongSelf.story?.snaps, snaps.count > strongSelf.snapIndex {
-                                if snaps[strongSelf.snapIndex].buttonText.count > 0 {
-                                    let snap = snaps[strongSelf.snapIndex]
+                            if let items = strongSelf.story?.items, items.count > strongSelf.snapIndex {
+                                if items[strongSelf.snapIndex].buttonText.count > 0 {
+                                    let snap = items[strongSelf.snapIndex]
                                     let snapButton = UIButton()
                                     snapButton.setTitle(snap.buttonText, for: .normal)
                                     snapButton.backgroundColor = snap.buttonColor
@@ -335,12 +333,12 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     @objc private func didTapSnap(_ sender: UITapGestureRecognizer) {
         let touchLocation = sender.location(ofTouch: 0, in: self.scrollview)
         
-        if let snapCount = story?.snapsCount {
+        if let snapCount = story?.items.count {
             var n = snapIndex
             /*!
              * Based on the tap gesture(X) setting the direction to either forward or backward
              */
-            if let snap = story?.snaps[n], snap.kind == .photo, getSnapview()?.image == nil {
+            if let snap = story?.items[n], snap.kind == .photo, getSnapview()?.image == nil {
                 //Remove retry button if tap forward or backward if it exists
                 if let snapView = getSnapview(), let btn = retryBtn, snapView.subviews.contains(btn) {
                     snapView.removeRetryButton()
@@ -378,7 +376,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
     }
     @objc private func didEnterForeground() {
-        if let snap = story?.snaps[snapIndex] {
+        if let snap = story?.items[snapIndex] {
             if snap.kind == .video {
                 let videoView = getVideoView(with: snapIndex)
                 startPlayer(videoView: videoView!, with: snap.url)
@@ -388,7 +386,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
     }
     @objc private func didEnterBackground() {
-        if let snap = story?.snaps[snapIndex] {
+        if let snap = story?.items[snapIndex] {
             if snap.kind == .video {
                 stopPlayer()
             }
@@ -396,7 +394,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         resetSnapProgressors(with: snapIndex)
     }
     private func willMoveToPreviousOrNextSnap(n: Int) {
-        if let count = story?.snapsCount {
+        if let count = story?.items.count {
             if n < count {
                 //Move to next or previous snap based on index n
                 let x = n.toFloat * frame.width
@@ -412,7 +410,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
     @objc private func didCompleteProgress() {
         let n = snapIndex + 1
-        if let count = story?.snapsCount {
+        if let count = story?.items.count {
             if n < count {
                 //Move to next snap
                 let x = n.toFloat * frame.width
@@ -439,7 +437,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
     //Before progress view starts we have to fill the progressView
     private func fillupLastPlayedSnap(_ sIndex: Int) {
-        if let snap = story?.snaps[sIndex], snap.kind == .video {
+        if let snap = story?.items[sIndex], snap.kind == .video {
             videoSnapIndex = sIndex
             stopPlayer()
         }
@@ -496,7 +494,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             progressView.snapIndex = snapIndex
             
             var timeInterval = TimeInterval(5)
-            if let displayTime = self.story?.snaps[snapIndex].displayTime {
+            if let displayTime = self.story?.items[snapIndex].displayTime {
                 timeInterval = TimeInterval(displayTime)
             }
             
@@ -527,7 +525,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                     // Didend displaying will call this startProgressors method. After that only isCompletelyVisible get true. Then we have to start the video if that snap contains video.
                     if self.story?.isCompletelyVisible == true {
                         let videoView = self.scrollview.subviews.filter{v in v.tag == self.snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
-                        let snap = self.story?.snaps[self.snapIndex]
+                        let snap = self.story?.items[self.snapIndex]
                         if let vv = videoView, self.story?.isCompletelyVisible == true {
                             self.startPlayer(videoView: vv, with: snap!.url)
                         }
@@ -584,7 +582,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             //TODO: 5.0 değeri displayTime'dan gelecek.
             
             var timeInterval = TimeInterval(5)
-            if let displayTime = self.story?.snaps[sIndex].displayTime {
+            if let displayTime = self.story?.items[sIndex].displayTime {
                 timeInterval = TimeInterval(displayTime)
             }
             

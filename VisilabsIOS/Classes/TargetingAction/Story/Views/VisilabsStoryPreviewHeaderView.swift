@@ -22,7 +22,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
     fileprivate var snapsPerStory: Int = 0
     public var story:VisilabsStory? {
         didSet {
-            snapsPerStory  = (story?.snapsCount)! < maxSnaps ? (story?.snapsCount)! : maxSnaps
+            snapsPerStory  = (story?.items.count)! < maxSnaps ? (story?.items.count)! : maxSnaps
         }
     }
     fileprivate var progressView: UIView?
@@ -41,12 +41,6 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         return view
     }()
     private let snaperNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        return label
-    }()
-    internal let lastUpdatedLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -92,7 +86,6 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         addSubview(snaperImageView)
         addSubview(detailView)
         detailView.addSubview(snaperNameLabel)
-        detailView.addSubview(lastUpdatedLabel)
         addSubview(closeButton)
     }
     private func installLayoutConstraints(){
@@ -135,15 +128,8 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         //Setting constraints for snapperNameLabel
         NSLayoutConstraint.activate([
             snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
-            lastUpdatedLabel.igLeftAnchor.constraint(equalTo: snaperNameLabel.igRightAnchor, constant: 10.0),
             snaperNameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 100),
             snaperNameLabel.igCenterYAnchor.constraint(equalTo: detailView.igCenterYAnchor)
-            ])
-        
-        //Setting constraints for lastUpdatedLabel
-        NSLayoutConstraint.activate([
-            lastUpdatedLabel.igCenterYAnchor.constraint(equalTo: detailView.igCenterYAnchor),
-            lastUpdatedLabel.igLeftAnchor.constraint(equalTo: snaperNameLabel.igRightAnchor, constant:10.0)
             ])
     }
     private func applyShadowOffset() {

@@ -19,7 +19,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.layer.cornerRadius = 10
         textField.textAlignment = .center
-        
+        textField.text = "305"
         return textField
     }()
     
