@@ -65,8 +65,12 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
                 let qsArr = self.storyAction.clickQueryString.components(separatedBy: "&")
                 var properties = [String: String]()
                 //properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
-                properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
-                properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
+                for queryItem in qsArr {
+                    let queryItemComponents = queryItem.components(separatedBy: "=")
+                    if queryItemComponents.count == 2 {
+                        properties[queryItemComponents[0]] = queryItemComponents[1]
+                    }
+                }
                 Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: properties)
             }
             let story = self.storyAction.stories[indexPath.row]
