@@ -41,7 +41,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     // MARK: Public
 
     /// The content view of the popup dialog
-    public var viewController: UIViewController
+    public var viewController: VisilabsDefaultPopupNotificationViewController
 
     // MARK: - Initializers
 
@@ -119,7 +119,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         panGestureDismissal: Bool = true,
         hideStatusBar: Bool = false,
         completion: (() -> Void)? = nil) {
-        self.viewController = viewController
+        self.viewController = viewController as! VisilabsDefaultPopupNotificationViewController
         self.preferredWidth = preferredWidth
         self.hideStatusBar = hideStatusBar
         self.completion = completion
@@ -257,7 +257,9 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     /// Calls the action closure of the button instance tapped
     @objc fileprivate func buttonTapped(_ button: VisilabsPopupDialogButton) {
-        if button.dismissOnTap {
+        if notification.type == .email_form {
+            viewController.standardView.sendEmailButtonTapped()
+        } else if button.dismissOnTap {
             dismiss({ button.buttonAction?() })
         } else {
             button.buttonAction?()

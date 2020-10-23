@@ -31,7 +31,7 @@ enum VisilabsEventType : String, CaseIterable {
 
 class EventViewController: FormViewController {
     
-    let inAppNotificationIds = ["mini": 139, "full": 140, "image_text_button": 153, "full_image": 154, "nps": 155, "image_button": 156, "smile_rating": 157]
+    let inAppNotificationIds = ["mini": 139, "full": 140, "image_text_button": 153, "full_image": 154, "nps": 155, "image_button": 156, "smile_rating": 157, "email_form" : 158]
     
     override func viewDidLoad() {
         super.viewDidLoad()

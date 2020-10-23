@@ -60,6 +60,8 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
             self.form.rowBy(tag: "miniIcon")?.hidden = false
             break
         case .full, .image_text_button, .smile_rating, .nps:
@@ -75,6 +77,8 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         case.full_image:
@@ -90,6 +94,8 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
         case.image_button:
@@ -105,8 +111,28 @@ class InAppViewController: FormViewController {
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
             self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
             self.form.rowBy(tag: "miniIcon")?.hidden = true
             break
+        case .email_form:
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = true
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = false
+            self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = false
+            self.form.rowBy(tag: "miniIcon")?.hidden = true
+            break
+            
         }
         
         self.form.allRows.forEach { (row) in
@@ -304,6 +330,18 @@ class InAppViewController: FormViewController {
             self.present(vc, animated: true, completion: nil)
         }
             
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.successMessage) {
+            $0.title = "Success Message"
+            $0.placeholder = "E-posta adresiniz kayıt edildi."
+            $0.value = "E-posta adresiniz kayıt edildi."
+        }
+            
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.failMessage) {
+            $0.title = "Fail Message"
+            $0.placeholder = "Lütfen geçerli bir e-posta adresi giriniz"
+            $0.value = "Lütfen geçerli bir e-posta adresi giriniz"
+        }
+            
 
     
         +++ Section()
@@ -336,6 +374,9 @@ class InAppViewController: FormViewController {
             let buttonTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor) as TextRow?)!.value!  as String
             let buttonColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor) as TextRow?)!.value!  as String
             let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
+            let permissionLink = "" //geçici
+            let successMessage = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage) as TextRow?)!.value! as String
+            let failMessage = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage) as TextRow?)!.value! as String
             var imageUrlString :String? = ""
             
             if messageType == .mini {
@@ -344,7 +385,7 @@ class InAppViewController: FormViewController {
                 imageUrlString = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString) as URLRow?)?.value?.absoluteString
             }
 
-            let visilabsInAppNotification = VisilabsInAppNotification(actId: 0, type: messageType, messageTitle: messageTitle, messageBody: messageBody, buttonText: buttonText, iosLink: iosLink, imageUrlString: imageUrlString, visitorData: nil, visitData: nil, queryString: nil, messageTitleColor: messageTitleColor, messageBodyColor: messageBodyColor, messageBodyTextSize: messageBodyTextSize, fontFamily: fontFamily, backGround: backGround, closeButtonColor: closeButtonColor, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
+            let visilabsInAppNotification = VisilabsInAppNotification(actId: 0, type: messageType, messageTitle: messageTitle, messageBody: messageBody, buttonText: buttonText, iosLink: iosLink, imageUrlString: imageUrlString, visitorData: nil, visitData: nil, queryString: nil, messageTitleColor: messageTitleColor, messageBodyColor: messageBodyColor, messageBodyTextSize: messageBodyTextSize, fontFamily: fontFamily, backGround: backGround, closeButtonColor: closeButtonColor, buttonTextColor: buttonTextColor, buttonColor: buttonColor, permissionLink: permissionLink, successMessage: successMessage, failMessage: failMessage)
 
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
         }

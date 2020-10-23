@@ -65,6 +65,44 @@ public class VisilabsPopupDialogDefaultView: UIView {
         return npsView
     }()
     
+    internal lazy var emailTF: UITextField = {
+        let textField = UITextField(frame: .zero)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textAlignment = .natural
+        textField.font = .systemFont(ofSize: 14)
+//        textField.backgroundColor = UIColor(hex: "38baa4")
+        textField.textColor = .white
+        textField.placeholder = "E-posta adresinizi giriniz."
+        textField.borderStyle = .line
+        textField.delegate = self
+        return textField
+    }()
+    
+    internal lazy var checkbox: Checkbox = {
+        let check = Checkbox(frame: .zero)
+        check.checkmarkStyle = .tick
+        check.borderStyle = .square
+        check.uncheckedBorderColor = .white
+        check.checkedBorderColor = .white
+        check.checkmarkColor = .white
+        return check
+    }()
+    
+    internal lazy var termsLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        //geçici
+        label.text = "Kullanım koşullarını okuldum ve kabul ediyorum."
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 12)
+        return label
+    }()
+    
+    internal lazy var resultLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .natural
+        label.font = .systemFont(ofSize: 12)
+        return label
+    }()
     
     private func getUIImage(named: String) -> UIImage?{
         let bundle = Bundle(identifier: "com.relateddigital.visilabs")
@@ -186,7 +224,6 @@ public class VisilabsPopupDialogDefaultView: UIView {
         var constraints = [NSLayoutConstraint]()
 
         translatesAutoresizingMaskIntoConstraints = false
-
         addSubview(imageView)
         addSubview(closeButton)
         
@@ -237,6 +274,44 @@ public class VisilabsPopupDialogDefaultView: UIView {
             sliderStepRating.leading(to: self, offset: 20.0)
             sliderStepRating.trailing(to: self, offset: -20.0)
             
+        } else if notification.type == .email_form {
+            imageView.removeFromSuperview()
+            addSubview(titleLabel)
+            addSubview(messageLabel)
+            addSubview(emailTF)
+            addSubview(termsLabel)
+            addSubview(checkbox)
+            addSubview(self.resultLabel)
+            
+            resultLabel.isHidden = true
+            messageLabel.textAlignment = .natural
+            titleLabel.top(to: self, offset: 50)
+            messageLabel.topToBottom(of: titleLabel, offset: 10)
+            emailTF.topToBottom(of: messageLabel, offset: 20)
+            checkbox.topToBottom(of: emailTF, offset: 20)
+            termsLabel.centerY(to: checkbox)
+            resultLabel.topToBottom(of: checkbox, offset: 10.0)
+            checkbox.bottom(to: self, offset: -80)
+            
+            checkbox.size(CGSize(width: 20, height: 20))
+        
+            checkbox.leading(to: self, offset: 20)
+            termsLabel.leadingToTrailing(of: checkbox, offset: 10)
+            titleLabel.leading(to: self, offset: 20)
+            messageLabel.leading(to: titleLabel)
+            messageLabel.trailing(to: self, offset: -20)
+            emailTF.leading(to: self, offset: 20)
+            emailTF.trailing(to: self, offset: -20.0)
+            resultLabel.leading(to: self.checkbox)
+
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
+            self.addGestureRecognizer(tapGesture)
+            
+        
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+            
         } else {
             addSubview(titleLabel)
             addSubview(messageLabel)
@@ -256,6 +331,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
         closeButton.trailing(to: self, offset: -10.0)
         NSLayoutConstraint.activate(constraints)
     }
+    
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        emailTF.resignFirstResponder()
+    }
+    
 }
 
 //MARK:- SliderStepDelegate
@@ -264,3 +344,72 @@ extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
         sliderStep.value = value
     }
 }
+
+//Email form extension
+extension VisilabsPopupDialogDefaultView {
+    
+    func sendEmailButtonTapped() {
+        
+        guard let notification = visilabsInAppNotification else { return }
+        DispatchQueue.main.async {
+            if self.checkbox.isChecked {
+                self.resultLabel.text = notification.successMessage
+                self.resultLabel.textColor = .green
+            } else {
+                self.resultLabel.text = notification.failMessage
+                self.resultLabel.textColor = .red
+            }
+            self.resultLabel.isHidden = false
+        }
+    }
+}
+
+
+extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
+    
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+    }
+    
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+
+    }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        emailTF.resignFirstResponder()
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if let view = getTopView() {
+                if view.frame.origin.y == 0 {
+                    view.frame.origin.y -= keyboardSize.height
+                }
+            }
+            
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let view = getTopView() {
+            if view.frame.origin.y != 0 {
+                view.frame.origin.y = 0
+            }
+        }
+    }
+    
+    func getTopView() -> UIView? {
+        var topView: UIView?
+        let window = UIApplication.shared.keyWindow
+        if window != nil {
+            for subview in window?.subviews ?? [] {
+                if !subview.isHidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0 {
+                    topView = subview
+                }
+            }
+        }
+        return topView
+    }
+}
+
+
