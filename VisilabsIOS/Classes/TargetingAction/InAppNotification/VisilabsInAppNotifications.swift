@@ -145,7 +145,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
         if let callToActionURL = callToActionURL {
             controller.hide(animated: true) {
-                VisilabsLogger.info("opening CTA URL: \(callToActionURL)")
                 VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL, waitUntilDone: true)
                 completionBlock()
             }

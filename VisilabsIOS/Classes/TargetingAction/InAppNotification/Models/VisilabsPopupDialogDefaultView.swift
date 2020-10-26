@@ -88,13 +88,16 @@ public class VisilabsPopupDialogDefaultView: UIView {
         return check
     }()
     
-    internal lazy var termsLabel: UILabel = {
-        let label = UILabel(frame: .zero)
+    internal lazy var termsButton: UIButton = {
         //geçici
-        label.text = "Kullanım koşullarını okuldum ve kabul ediyorum."
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 12)
-        return label
+        let button = UIButton(frame: .zero)
+        let text = "Kullanım koşullarını okuldum ve kabul ediyorum."
+        button.setTitle(text, for: .normal)
+        button.tintColor = .white
+        button.titleLabel?.textColor = .white
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.addTarget(self, action: #selector(termsButtonTapped(_:)), for: .touchUpInside)
+        return button
     }()
     
     internal lazy var resultLabel: UILabel = {
@@ -279,7 +282,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
             addSubview(titleLabel)
             addSubview(messageLabel)
             addSubview(emailTF)
-            addSubview(termsLabel)
+            addSubview(termsButton)
             addSubview(checkbox)
             addSubview(self.resultLabel)
             
@@ -289,14 +292,15 @@ public class VisilabsPopupDialogDefaultView: UIView {
             messageLabel.topToBottom(of: titleLabel, offset: 10)
             emailTF.topToBottom(of: messageLabel, offset: 20)
             checkbox.topToBottom(of: emailTF, offset: 20)
-            termsLabel.centerY(to: checkbox)
+            termsButton.centerY(to: checkbox)
             resultLabel.topToBottom(of: checkbox, offset: 10.0)
             checkbox.bottom(to: self, offset: -80)
             
             checkbox.size(CGSize(width: 20, height: 20))
         
             checkbox.leading(to: self, offset: 20)
-            termsLabel.leadingToTrailing(of: checkbox, offset: 10)
+            termsButton.leadingToTrailing(of: checkbox, offset: 10)
+            termsButton.trailing(to: self, offset: -12)
             titleLabel.leading(to: self, offset: 20)
             messageLabel.leading(to: titleLabel)
             messageLabel.trailing(to: self, offset: -20)
@@ -361,6 +365,12 @@ extension VisilabsPopupDialogDefaultView {
             }
             self.resultLabel.isHidden = false
         }
+    }
+    
+    @objc func termsButtonTapped(_ sender: UIButton) {
+        guard let permission = visilabsInAppNotification?.permissionLink else { return }
+        guard let url = URL(string: permission) else { return }
+        VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
     }
 }
 

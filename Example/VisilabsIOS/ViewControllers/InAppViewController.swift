@@ -342,6 +342,11 @@ class InAppViewController: FormViewController {
             $0.value = "Lütfen geçerli bir e-posta adresi giriniz"
         }
             
+        <<< TextRow(VisilabsInAppNotification.PayloadKey.permissionLink) {
+            $0.title = "Terms and Conditions Link"
+            $0.placeholder = "https://www.google.com"
+            $0.value = "https://www.google.com"
+        }
 
     
         +++ Section()
@@ -374,7 +379,7 @@ class InAppViewController: FormViewController {
             let buttonTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor) as TextRow?)!.value!  as String
             let buttonColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor) as TextRow?)!.value!  as String
             let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
-            let permissionLink = "" //geçici
+            let permissionLink = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.permissionLink) as TextRow?)!.value! as String
             let successMessage = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage) as TextRow?)!.value! as String
             let failMessage = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage) as TextRow?)!.value! as String
             var imageUrlString :String? = ""
