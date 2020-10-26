@@ -143,6 +143,7 @@ struct VisilabsConstants {
     static let storylb_img_boxShadow = "storylb_img_boxShadow"
     static let storylb_label_color = "storylb_label_color"
     static let storyz_img_borderColor = "storyz_img_borderColor"
+    static let storyz_img_borderRadius = "storyz_img_borderRadius"
     
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
