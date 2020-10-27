@@ -153,17 +153,26 @@ class VisilabsTargetingAction {
                 var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
                     if let actionId = storyAction[VisilabsConstants.ACTID] as? Int, let actiondata = storyAction[VisilabsConstants.ACTIONDATA] as? [String: Any?]
-                       , let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString){
-                        if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: String]]{
+                       , let templateString = actiondata[VisilabsConstants.TATEMPLATE] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString) {
+                        if let stories = actiondata[VisilabsConstants.STORIES] as? [[String: Any]]{
                             for story in stories {
-                                visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE], smallImg: story[VisilabsConstants.SMALLIMG], link: story[VisilabsConstants.LINK]))
+                                if template == .SkinBased {
+                                    var storyItems = [VisilabsStoryItem]()
+                                    if let items = story[VisilabsConstants.ITEMS] as? [[String: Any]]{
+                                        for item in items {
+                                            storyItems.append(parseStoryItem(item))
+                                        }
+                                        if storyItems.count > 0 {
+                                            visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE] as? String, smallImg: story[VisilabsConstants.THUMBNAIL] as? String, link: story[VisilabsConstants.LINK] as? String, items: storyItems))
+                                        }
+                                    }
+                                } else {
+                                    visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.TITLE] as? String, smallImg: story[VisilabsConstants.SMALLIMG] as? String, link: story[VisilabsConstants.LINK] as? String))
+                                }
                             }
-                            var clickQueryString = ""
-                            if let report = actiondata[VisilabsConstants.REPORT] as? [String: Any?], let click = report[VisilabsConstants.CLICK] as? String {
-                                clickQueryString = click
-                            }
+                            let (clickQueryItems, impressionQueryItems) = parseStoryReport(actiondata[VisilabsConstants.REPORT] as? [String: Any?])
                             if stories.count > 0 {
-                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryString: clickQueryString, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.EXTENDEDPROPS] as? String)))
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryItems: clickQueryItems, impressionQueryItems: impressionQueryItems, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.EXTENDEDPROPS] as? String)))
                             }
                         }
                     }
@@ -175,18 +184,83 @@ class VisilabsTargetingAction {
         return VisilabsStoryActionResponse(storyActions: storiesResponse, error: errorResponse, guid: guid)
     }
     
+
+    private func parseStoryReport(_ report: [String: Any?]?) -> ([String: String], [String: String]) {
+        var clickItems = [String: String]()
+        var impressionItems = [String: String]()
+        //clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
+        if let rep = report {
+            if let click = rep[VisilabsConstants.CLICK] as? String {
+                let qsArr = click.components(separatedBy: "&")
+                for queryItem in qsArr {
+                    let queryItemComponents = queryItem.components(separatedBy: "=")
+                    if queryItemComponents.count == 2 {
+                        clickItems[queryItemComponents[0]] = queryItemComponents[1]
+                    }
+                }
+            }
+            if let impression = rep[VisilabsConstants.IMPRESSION] as? String {
+                let qsArr = impression.components(separatedBy: "&")
+                for queryItem in qsArr {
+                    let queryItemComponents = queryItem.components(separatedBy: "=")
+                    if queryItemComponents.count == 2 {
+                        impressionItems[queryItemComponents[0]] = queryItemComponents[1]
+                    }
+                }
+            }
+            
+        }
+        return (clickItems, impressionItems)
+    }
     
-    //TODO: shadow
+    private func parseStoryItem(_ item: [String: Any]) -> VisilabsStoryItem {
+        let fileType = (item[VisilabsConstants.FILETYPE] as? String) ?? "photo"
+        let fileSrc = (item[VisilabsConstants.FILESRC] as? String) ?? ""
+        let targetUrl = (item[VisilabsConstants.TARGETURL]  as? String) ?? ""
+        let buttonText = (item[VisilabsConstants.BUTTONTEXT]  as? String) ?? ""
+        var displayTime = 3
+        if let dTime = item[VisilabsConstants.DISPLAYTIME] as? Int, dTime > 0 {
+            displayTime = dTime
+        }
+        var buttonTextColor = UIColor.white
+        var buttonColor = UIColor.black
+        if let buttonTextColorString = item[VisilabsConstants.BUTTONTEXTCOLOR] as? String {
+            if buttonTextColorString.starts(with: "rgba") {
+                if let btColor =  UIColor.init(rgbaString: buttonTextColorString){
+                    buttonTextColor = btColor
+                }
+            } else{
+                if let btColor = UIColor.init(hex: buttonTextColorString) {
+                    buttonTextColor = btColor
+                }
+            }
+        }
+        if let buttonColorString = item[VisilabsConstants.BUTTONCOLOR] as? String {
+            if buttonColorString.starts(with: "rgba") {
+                if let bColor =  UIColor.init(rgbaString: buttonColorString){
+                    buttonColor = bColor
+                }
+            } else{
+                if let bColor = UIColor.init(hex: buttonColorString) {
+                    buttonColor = bColor
+                }
+            }
+        }
+        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: buttonText, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
+        return visilabsStoryItem
+    }
+ 
+    
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
         if let s = extendedPropsString, let extendedProps = s.urlDecode().convertJsonStringToDictionary() {
             if let imageBorderWidthString = extendedProps[VisilabsConstants.storylb_img_borderWidth] as? String, let imageBorderWidth = Int(imageBorderWidthString){
                 props.imageBorderWidth = imageBorderWidth
             }
-            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylb_img_borderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))){
+            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylb_img_borderRadius] as? String ?? extendedProps[VisilabsConstants.storyz_img_borderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))){
                 props.imageBorderRadius = imageBorderRadius / 100.0
             }
-            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String {
+            if let imageBorderColorString = extendedProps[VisilabsConstants.storylb_img_borderColor] as? String ?? extendedProps[VisilabsConstants.storyz_img_borderColor] as? String {
                 if imageBorderColorString.starts(with: "rgba") {
                     if let imageBorderColor =  UIColor.init(rgbaString: imageBorderColorString){
                         props.imageBorderColor = imageBorderColor

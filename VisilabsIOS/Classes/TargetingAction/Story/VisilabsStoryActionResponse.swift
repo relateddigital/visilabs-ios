@@ -7,6 +7,7 @@
 
 enum VisilabsStoryTemplate : String {
     case StoryLookingBanners = "story_looking_banners"
+    case SkinBased = "skin_based"
 }
 
 class VisilabsStoryActionResponse {
