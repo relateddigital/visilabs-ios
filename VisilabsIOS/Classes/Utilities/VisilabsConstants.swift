@@ -73,6 +73,8 @@ struct VisilabsConstants {
     static let DOMAIN_KEY = "OM.domain"
     static let VISIT_CAPPING_KEY = "OM.vcap"
     static let VISITOR_CAPPING_KEY = "OM.viscap"
+    static let OM_EVT_GIF = "OM_evt.gif"
+    
     
     static let ORGANIZATIONID_KEY = "OM.oid"
     static let PROFILEID_KEY = "OM.siteID"
@@ -121,6 +123,15 @@ struct VisilabsConstants {
     static let TITLE = "title"
     static let SMALLIMG = "smallImg"
     static let LINK = "link"
+    static let THUMBNAIL = "thumbnail"
+    static let ITEMS = "items"
+    static let FILETYPE = "fileType"
+    static let DISPLAYTIME = "displayTime"
+    static let FILESRC = "fileSrc"
+    static let TARGETURL = "targetUrl"
+    static let BUTTONTEXT = "buttonText"
+    static let BUTTONTEXTCOLOR = "buttonTextColor"
+    static let BUTTONCOLOR = "buttonColor"
     static let TATEMPLATE = "taTemplate"
     static let REPORT = "report"
     static let IMPRESSION = "impression"
@@ -131,6 +142,8 @@ struct VisilabsConstants {
     static let storylb_img_borderRadius = "storylb_img_borderRadius"
     static let storylb_img_boxShadow = "storylb_img_boxShadow"
     static let storylb_label_color = "storylb_label_color"
+    static let storyz_img_borderColor = "storyz_img_borderColor"
+    static let storyz_img_borderRadius = "storyz_img_borderRadius"
     
     
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"

@@ -8,6 +8,7 @@
 import Foundation
 import AdSupport
 import WebKit
+import UIKit
 
 internal class VisilabsHelper {
     
@@ -23,11 +24,6 @@ internal class VisilabsHelper {
         let xDistance = (cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo
         let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
         return res
-    }
-    
-    static func sendGeofencePushNotification(actionID: String, geofenceID: String, isDwell: Bool, isEnter: Bool) {
-        let request = Visilabs2.callAPI()?.buildGeofenceRequest(action: "processV2", latitude: 0.0, longitude: 0.0, isDwell: isDwell, isEnter: isEnter, actionID: actionID, geofenceID: geofenceID)
-        request?.execAsync(withSuccess: { response in }, andFailure: { response in })
     }
 
     //TODO: props un boş gelme ihtimalini de düşün
@@ -105,5 +101,20 @@ internal class VisilabsHelper {
         let bundle = Bundle(identifier: "com.relateddigital.visilabs")
         return UIImage(named: named, in : bundle, compatibleWith: nil)!
     }
+    
+    /* TODO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.orientationLock = orientation
+        }
+    }
+    
+    /// OPTIONAL Added method to adjust lock and rotate to the desired orientation
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        self.lockOrientation(orientation)
+        UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+        UINavigationController.attemptRotationToDeviceOrientation()
+    }
+     */
     
 }

@@ -184,7 +184,7 @@ extension VisilabsInstance {
             }
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveTargetParameters(event)
-                if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled {
+                if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled, pageName != VisilabsConstants.OM_EVT_GIF {
                     self.checkInAppNotification(properties: event)
                 }
             }
@@ -322,7 +322,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
-        customEvent("OM_evt.gif", properties: properties)
+        customEvent(VisilabsConstants.OM_EVT_GIF, properties: properties)
     }
  
 }

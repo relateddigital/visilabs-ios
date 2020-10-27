@@ -17,75 +17,59 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         }
     }
     
-    var stories = [VisilabsStory]()
-    var extendedProperties = VisilabsStoryActionExtendedProperties()
-    var clickQueryString = ""
+    var storyAction : VisilabsStoryAction!
     var storiesLoaded = false
     
-    func loadStoryAction(_ storyAction: VisilabsStoryAction){
-        self.stories = storyAction.stories
-        self.extendedProperties = storyAction.extendedProperties
-        self.clickQueryString = storyAction.clickQueryString
+    func loadStoryAction(_ storyAction: VisilabsStoryAction) {
+        self.storyAction = storyAction
         self.storiesLoaded = true
     }
     
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return storiesLoaded ? stories.count : 1
+        return storiesLoaded ? storyAction.stories.count : 1
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if !storiesLoaded {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.setAsLoadingCell()
-            //cell.contentView.isUserInteractionEnabled = false
             return cell
         }else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
-            cell.story = self.stories[indexPath.row]
-            cell.setProperties(extendedProperties)
-            //cell.contentView.isUserInteractionEnabled = false
+            cell.story = self.storyAction.stories[indexPath.row]
+            cell.setProperties(self.storyAction.extendedProperties)
+            cell.layoutIfNeeded()
             return cell
         }
-
-        /*
-        if indexPath.row == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier, for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
-            cell.userDetails = ("Your story","https://avatars2.githubusercontent.com/u/32802714?s=200&v=4")
-            return cell
-        }else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
-            let story = viewModel.cellForItemAt(indexPath: indexPath)
-            cell.story = story
-            return cell
-        }
-         */
     }
     
-    
-    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if self.stories.count == 0 {
+        if self.storyAction.stories.count == 0 {
             return
         }
-        if self.clickQueryString.count > 0 {
-            let qsArr = self.clickQueryString.components(separatedBy: "&")
-            var properties = [String: String]()
-            //properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
-            properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
-            properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
-            Visilabs.callAPI().customEvent("OM_evt.gif", properties: properties)
+        if self.storyAction.storyTemplate == .SkinBased {
+            DispatchQueue.main.async {
+                for (index, _) in self.storyAction.stories.enumerated() {
+                    self.storyAction.stories[index].lastPlayedSnapIndex = 0
+                    self.storyAction.stories[index].isCompletelyVisible = false
+                    self.storyAction.stories[index].isCancelledAbruptly = false
+                }
+                let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories, handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
+                storyPreviewScene.modalPresentationStyle = .fullScreen
+                VisilabsInstance.sharedUIApplication()?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: nil) //TODO: burada keywindow rootViewController yaklaşımı uygun mu?
+            }            
+        } else {
+            
+            if self.storyAction.clickQueryItems.count > 0 {
+                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: self.storyAction.clickQueryItems)
+            }
+            let story = self.storyAction.stories[indexPath.row]
+            if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
+                VisilabsLogger.info("opening CTA URL: \(storyUrl)")
+                VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: storyUrl, waitUntilDone: true)
+            }
         }
-        let story = self.stories[indexPath.row]
-        if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
-            VisilabsLogger.info("opening CTA URL: \(storyUrl)")
-            VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: storyUrl, waitUntilDone: true)
-        }
-        
-        
-        
-        print(indexPath.row)
     }
  
     

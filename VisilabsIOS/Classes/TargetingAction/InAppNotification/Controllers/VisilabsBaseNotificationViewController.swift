@@ -56,17 +56,25 @@ extension UIColor {
 
         if (cString.hasPrefix("#")) { cString.removeFirst() }
 
-        if ((cString.count) != 6) {
+        if (cString.count != 6 && cString.count != 8) {
             return nil
         }
 
         var rgbValue: UInt64 = 0
         Scanner(string: cString).scanHexInt64(&rgbValue)
-
-        self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-                green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-                blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-                alpha: alpha)
+        
+        if cString.count == 6 {
+            self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+                    green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+                    blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+                    alpha: alpha)
+        } else {
+            let a = CGFloat((rgbValue & 0xff000000) >> 24) / 255
+            let r = CGFloat((rgbValue & 0x00ff0000) >> 16) / 255
+            let g = CGFloat((rgbValue & 0x0000ff00) >> 8) / 255
+            let b = CGFloat(rgbValue & 0x000000ff) / 255
+            self.init(red: r, green: g, blue: b, alpha: a)
+        }
     }
     
     convenience init?(rgbaString: String) {

@@ -147,16 +147,20 @@ final public class VisilabsPopupDialogContainerView: UIView {
         container.addSubview(stackView)
 
         // Layout views
-        let views = ["shadowContainer": shadowContainer, "container": container, "stackView": stackView]
         var constraints = [NSLayoutConstraint]()
 
         // Shadow container constraints
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
-            let metrics = ["preferredWidth": preferredWidth]
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=40)-[shadowContainer(==preferredWidth@900)]-(>=40)-|", options: [], metrics: metrics, views: views)
+            shadowContainer.width(preferredWidth)
+            shadowContainer.leading(to: self, offset: 40.0, relation: .equalOrGreater, priority: .required)
+            shadowContainer.trailing(to: self, offset: -40.0, relation: .equalOrLess, priority: .required)
         } else {
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10,==20@900)-[shadowContainer(<=340,>=300)]-(>=10,==20@900)-|", options: [], metrics: nil, views: views)
+            shadowContainer.width(300, relation: .equalOrGreater)
+            shadowContainer.width(340, relation: .equalOrLess)
+            shadowContainer.leading(to: self, offset: 10, relation: .equalOrGreater)
+            shadowContainer.trailing(to: self, offset: -10, relation: .equalOrLess)
         }
+        
         constraints += [NSLayoutConstraint(item: shadowContainer, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)]
         centerYConstraint = NSLayoutConstraint(item: shadowContainer, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
         
@@ -164,13 +168,8 @@ final public class VisilabsPopupDialogContainerView: UIView {
             constraints.append(centerYConstraint)
         }
         
-        // Container constraints
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[container]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[container]|", options: [], metrics: nil, views: views)
-
-        // Main stack view constraints
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[stackView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[stackView]|", options: [], metrics: nil, views: views)
+        container.allEdges(to: shadowContainer)
+        stackView.allEdges(to: container)
 
         // Activate constraints
         NSLayoutConstraint.activate(constraints)

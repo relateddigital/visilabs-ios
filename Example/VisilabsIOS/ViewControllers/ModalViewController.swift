@@ -47,7 +47,7 @@ class ModalViewController: UIViewController {
     }
     
     @objc func handleColorChanged(picker: ColorPicker) {
-        let color = picker.color
+        //let color = picker.color
     }
 }
 

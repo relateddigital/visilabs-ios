@@ -19,7 +19,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.layer.cornerRadius = 10
         textField.textAlignment = .center
-        
+        textField.text = "305"
         return textField
     }()
     
@@ -87,7 +87,6 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         storyHomeView!.topAnchor.constraint(equalTo: storyButton.bottomAnchor, constant: 20).isActive = true
         storyHomeView!.widthAnchor.constraint(equalTo: view.saferAreaLayoutGuide.widthAnchor).isActive = true
         storyHomeView!.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        print("Button tapped")
      }
     
 }
