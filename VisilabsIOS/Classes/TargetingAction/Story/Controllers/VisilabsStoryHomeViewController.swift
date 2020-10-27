@@ -34,13 +34,12 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         if !storiesLoaded {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.setAsLoadingCell()
-            //cell.contentView.isUserInteractionEnabled = false
             return cell
         }else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier,for: indexPath) as? VisilabsStoryHomeViewCell else { fatalError() }
             cell.story = self.storyAction.stories[indexPath.row]
             cell.setProperties(self.storyAction.extendedProperties)
-            //cell.contentView.isUserInteractionEnabled = false
+            cell.layoutIfNeeded()
             return cell
         }
     }
@@ -57,6 +56,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
                     self.storyAction.stories[index].isCancelledAbruptly = false
                 }
                 let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories, handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
+                storyPreviewScene.modalPresentationStyle = .fullScreen
                 VisilabsInstance.sharedUIApplication()?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: nil) //TODO: burada keywindow rootViewController yaklaşımı uygun mu?
             }            
         } else {

@@ -13,6 +13,7 @@ struct Attributes {
     let borderColor = UIColor.clear// UIColor.white
     let backgroundColor = UIColor.clear // UIColor.red // IGTheme.redOrange
     let size = CGSize(width:68,height:68)
+    var borderRadius: Double = 0.0
 }
 
 class VisilabsStoryRoundedView: UIView {
@@ -40,14 +41,15 @@ class VisilabsStoryRoundedView: UIView {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = frame.height/2
+        layer.cornerRadius = frame.height * CGFloat(attributes.borderRadius)
         imageView.frame = CGRect(x:1,y:1,width:(attributes.size.width)-2,height:attributes.size.height-2)
-        imageView.layer.cornerRadius = imageView.frame.height/2
+        imageView.layer.cornerRadius = imageView.frame.height * CGFloat(attributes.borderRadius)
     }
 }
 
 extension VisilabsStoryRoundedView {
     func setBorder(borderColor: UIColor, borderWidth: Int, borderRadius: Double){
+        attributes.borderRadius = borderRadius
         layer.borderColor = borderColor.cgColor
         layer.borderWidth = CGFloat(borderWidth)
         layer.cornerRadius = frame.height * CGFloat(borderRadius)
