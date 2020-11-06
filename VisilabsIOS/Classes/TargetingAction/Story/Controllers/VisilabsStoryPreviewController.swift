@@ -91,7 +91,7 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         isTransitioning = true
         _view.snapsCollectionView.collectionViewLayout.invalidateLayout()
     }
-    init(layout:VisilabsLayoutType = .cubic, stories: [VisilabsStory], handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0) {
+    init(layout:VisilabsLayoutType = .parallax, stories: [VisilabsStory], handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0) {
         self.layoutType = layout
         self.stories = stories
         self.handPickedStoryIndex = handPickedStoryIndex
