@@ -314,14 +314,7 @@ extension VisilabsPopupNotificationViewController {
     }
 }
 
-// MARK: - Shake
 
-extension VisilabsPopupNotificationViewController {
-    /// Performs a shake animation on the dialog
-    @objc public func shake() {
-        popupContainerView.pv_shake()
-    }
-}
 
 /// This extension is designed to handle dialog positioning
 /// if a keyboard is displayed while the popup is on top
@@ -349,25 +342,7 @@ internal extension VisilabsPopupNotificationViewController {
      - parameter notification: NSNotification
      */
     @objc fileprivate func orientationChanged(_ notification: Notification) {
-        // if keyboardShown { centerPopup() }
-        // centerPopup()
+        
     }
 
-    /*
-     fileprivate func centerPopup() {
-
-         // Make sure keyboard should reposition on keayboard notifications
-         guard keyboardShiftsView else { return }
-
-         // Make sure a valid keyboard height is available
-         guard let keyboardHeight = keyboardHeight else { return }
-
-         // Calculate new center of shadow background
-         let popupCenter =  keyboardShown ? keyboardHeight / -2 : 0
-
-         // Reposition and animate
-         popupContainerView.centerYConstraint?.constant = popupCenter
-         popupContainerView.pv_layoutIfNeededAnimated()
-     }
-     */
 }
