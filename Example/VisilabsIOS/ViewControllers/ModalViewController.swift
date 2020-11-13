@@ -11,7 +11,7 @@ import Colorful
 import Eureka
 
 class ModalViewController: UIViewController {
-    
+
     var selectedColor = UIColor.black
     var headerText = "Header"
     var textRow: TextRow!
@@ -20,7 +20,7 @@ class ModalViewController: UIViewController {
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var colorPickerView: ColorPicker!
     @IBOutlet weak var selectButton: UIButton!
-    
+
     var colorSpace: HRColorSpace = .sRGB
 
     override func viewDidLoad() {
@@ -37,7 +37,6 @@ class ModalViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
 
     @IBAction func handleSelect(_ sender: Any) {
         self.textRow.value = colorPickerView.color.toHexString()

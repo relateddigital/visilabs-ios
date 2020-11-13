@@ -17,15 +17,13 @@ class FavoriteViewController: FormViewController {
         super.viewDidLoad()
         initializeForm()
     }
-    
+
     private func initializeForm() {
         form +++
-            
         Section("Favorite Attribute Actions".uppercased(with: Locale(identifier: "en_US")))
-        
     }
-    
-    private func getFavoriteAttributeActions(){
+
+    private func getFavoriteAttributeActions() {
         Visilabs.callAPI().getFavoriteAttributeActions { (response) in
             if let error = response.error {
                 print(error)
@@ -43,8 +41,8 @@ class FavoriteViewController: FormViewController {
             }
         }
     }
-    
-    private func getFavoriteAttributeActions2(){
+
+    private func getFavoriteAttributeActions2() {
         Visilabs.callAPI().getFavoriteAttributeActions(actionId: 188) { (response) in
             if let error = response.error {
                 print(error)

@@ -9,7 +9,6 @@
 import XCTest
 @testable import VisilabsIOS
 
-
 public enum PayloadKey {
     public static let actId = "actid"
     public static let actionData = "actiondata"
@@ -32,23 +31,19 @@ public enum PayloadKey {
     public static let buttonColor = "button_color"
 }
 
-
 class VisilabsInAppNotificationTest: XCTestCase {
-    
-    func testInAppNotificationInitReturnNilIfActIdEqualsZero(){
+
+    func testInAppNotificationInitReturnNilIfActIdEqualsZero() {
         // 1. given
         var jsonObject = [String: Any]()
         jsonObject[VisilabsInAppNotification.PayloadKey.actId] = 0
-        
         // 2. when
         let visilabsInAppNotification = VisilabsInAppNotification(JSONObject: jsonObject)
-        
         // 3. then
         XCTAssertNil(visilabsInAppNotification, "VisilabsInAppNotification init invalid act id returns non-nil.")
     }
-    
-    
-    func testInAppNotificationInitReturnNilIfMessageTypeNotValid(){
+
+    func testInAppNotificationInitReturnNilIfMessageTypeNotValid() {
         var jsonObject = [String: Any]()
         jsonObject[VisilabsInAppNotification.PayloadKey.messageType] = "InvalidType"
         let visilabsInAppNotification = VisilabsInAppNotification(JSONObject: jsonObject)

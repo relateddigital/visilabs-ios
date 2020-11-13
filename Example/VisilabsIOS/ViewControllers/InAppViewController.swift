@@ -35,9 +35,9 @@ class InAppViewController: FormViewController {
                 }
             }
         }
-        
+
     }
-    
+
     var notificationTypes = [String]()
     let fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
     let closeButtonColors = ["black", "white"]
@@ -161,7 +161,7 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
     }
-    
+
     func setFormRowsForImageButton() {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = true

@@ -16,12 +16,10 @@ class RecommendationViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
-        
     }
-    
     var filtersSection = Section("FILTERS")
     var filterSections: [Section] = []
-    
+
     private func initializeForm() {
         form +++
         Section("Recommendation".uppercased(with: Locale(identifier: "en_US")))
@@ -33,7 +31,7 @@ class RecommendationViewController: FormViewController {
             properties["prop1"] = "prop2val"
             var filters = [VisilabsRecommendationFilter]()
             filters.append(VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop"))
-            
+
             Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc",
                                          filters: filters,
                                          properties: properties) { response in
