@@ -17,9 +17,6 @@ enum RowType {
     case colorRow
 }
 
-
-
-
 class FormRow {
     var rowType: RowType
     var rowValueType: Any.Type
@@ -29,7 +26,9 @@ class FormRow {
     var options: [Any]
     var value: Any?
     var rules = [BaseRuleType]()
-    init(rowType: RowType, rowValueType: Any.Type, tag: String, title: String?, placeholder: String? = nil, options: [Any] = [], value: Any? = nil, rules: [BaseRuleType]? = nil){
+    init(rowType: RowType, rowValueType: Any.Type, tag: String,
+         title: String?, placeholder: String? = nil, options: [Any] = [],
+         value: Any? = nil, rules: [BaseRuleType]? = nil) {
         self.rowType = rowType
         self.rowValueType = rowValueType
         self.tag = tag
@@ -37,8 +36,8 @@ class FormRow {
         self.placeholder = placeholder
         self.options = options
         self.value = value
-        if let r = rules {
-            self.rules = r
+        if let rls = rules {
+            self.rules = rls
         }
     }
 }
@@ -46,30 +45,28 @@ class FormRow {
 class FormSection {
     var header: String?
     var sectionRows: [FormRow]
-    init(_ header: String?, _ sectionRows: [FormRow]){
+    init(_ header: String?, _ sectionRows: [FormRow]) {
         self.header = header
         self.sectionRows = sectionRows
     }
-    
+
 }
 
-
-
-class FormHelper{
+class FormHelper {
 
     func createForm(_ formSections: [FormSection]) -> Form {
-        LabelRow.defaultCellUpdate = { cell, row in
+        LabelRow.defaultCellUpdate = { cell, _ in
             cell.contentView.backgroundColor = .red
             cell.textLabel?.textColor = .white
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
             cell.textLabel?.textAlignment = .right
         }
-        
+
         let form = Form()
-        
-        for formSection in formSections{
+
+        for formSection in formSections {
             let section = Section(formSection.header)
-            
+
             for formRow in formSection.sectionRows {
                 var baseRow: BaseRow?
                 if formRow.rowType == .textRow {
@@ -85,11 +82,11 @@ class FormHelper{
                     }
                 }
                 if formRow.rowType == .pickerInputRow {
-                    if formRow.rowValueType == String.self{
+                    if formRow.rowValueType == String.self {
                         baseRow = PickerInputRow<String>(formRow.tag) { (row) in
                             row.value = formRow.value as? String
-                            for option in formRow.options{
-                                if let opt = option as? String{
+                            for option in formRow.options {
+                                if let opt = option as? String {
                                     row.options.append(opt)
                                 }
                             }
@@ -98,18 +95,10 @@ class FormHelper{
                 }
                 baseRow?.title = formRow.title
                 section.append(baseRow!)
-                
-            
-            
-                
             }
             form.append(section)
-            
+
         }
-        
-        
         return form
-        
     }
 }
-
