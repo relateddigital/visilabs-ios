@@ -10,27 +10,23 @@ import XCTest
 import VisilabsIOS
 
 class VisilabsBaseTests: XCTestCase {
-    
+
     var visilabs: VisilabsInstance!
-    
-    override func setUp(){
+
+    override func setUp() {
         print("Visilabs test setup starting")
         super.setUp()
-        
-        //TODO: buraya stub'lar gelecek.
-        
-        
-        visilabs = Visilabs.createAPI(organizationId: "", profileId: "", dataSource: "", channel: "", requestTimeoutInSeconds: 0, geofenceEnabled: false, maxGeofenceCount: 0)
-        
+        visilabs = Visilabs.createAPI(organizationId: "",
+                                      profileId: "",
+                                      dataSource: "",
+                                      channel: "",
+                                      requestTimeoutInSeconds: 0,
+                                      geofenceEnabled: false,
+                                      maxGeofenceCount: 0)
         print("Visilabs test setup finished")
-        
-        
     }
-    
+
     override func tearDown() {
-        
         super.tearDown()
     }
-    
-    
 }

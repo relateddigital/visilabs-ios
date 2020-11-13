@@ -11,13 +11,13 @@ import UIKit
 class InAppHelper {
 
     typealias ImageHandler = (UIImage) -> Void
-    
+
     static let miniIconUrlFormat = "https://img.visilabs.net/in-app-message/icons/icon_#.png"
     static let miniIcons = ["alert", "bell", "chat", "checkmark", "coin", "download", "flag",
                             "gear", "heart", "megaphone", "phone", "pricetag", "refresh",
                             "rocket", "star", "trophy", "vip"]
     static var miniIconImages = [String: UIImage]()
-    
+
     static func downloadMiniIconImagesAndSave() {
         for miniIcon in miniIcons {
             if let miniIconUrl = URL(string: miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon)) {

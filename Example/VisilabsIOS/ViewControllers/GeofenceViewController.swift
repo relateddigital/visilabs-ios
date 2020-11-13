@@ -12,13 +12,13 @@ import CleanyModal
 import VisilabsIOS
 
 class GeofenceViewController: FormViewController {
-    
+
     let locationEnabledDevice = "Location Enabled(Device)"
     let locationStatusApp = "Location Status(App)"
     let lastFetchTime = "Last Fetch Time"
     let lastKnownLatitude = "Last Known Latitude"
     let lastKnownLongitude = "Last Known Longitude"
-    
+
     let dateFormatter = DateFormatter()
     var visilabsGeofenceHistory: VisilabsGeofenceHistory!
     var historySection = Section("Geofence Server Checks".uppercased(with: Locale(identifier: "en_US")))
@@ -35,7 +35,7 @@ class GeofenceViewController: FormViewController {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         initializeForm()
     }
-    
+
     private func initializeForm() {
         refreshSection.append(ButtonRow {
             $0.title = "Clear History"
@@ -83,7 +83,7 @@ class GeofenceViewController: FormViewController {
 
     var currentHistoryRowTags = [String: Bool]()
     var currentErrorRowTags = [String: Bool]()
-    
+
     private func getHistoryRow(tag: String, date: Date)-> ButtonRowOf<Date> {
         return ButtonRowOf<Date>(tag) {
             $0.title = dateFormatter.string(from: date)

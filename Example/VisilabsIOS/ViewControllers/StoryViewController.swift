@@ -44,7 +44,6 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         setupLayout()
     }
 
-
     private func setupLayout() {
         actionIdTextField.translatesAutoresizingMaskIntoConstraints = false
         actionIdTextField.widthAnchor.constraint(equalToConstant: 150).isActive = true

@@ -12,7 +12,7 @@ import CleanyModal
 import VisilabsIOS
 import Euromsg
 
-enum VisilabsEventType : String, CaseIterable {
+enum VisilabsEventType: String, CaseIterable {
     case login = "Login"
     case loginWithExtraParameters = "Login with Extra Parameters"
     case signUp  = "Sign Up"
@@ -30,9 +30,16 @@ enum VisilabsEventType : String, CaseIterable {
 }
 
 class EventViewController: FormViewController {
-    
-    let inAppNotificationIds = ["mini": 139, "full": 140, "image_text_button": 153, "full_image": 154, "nps": 155, "image_button": 156, "smile_rating": 157, "email_form" : 158]
-    
+
+    let inAppNotificationIds = ["mini": 139,
+                                "full": 140,
+                                "image_text_button": 153,
+                                "full_image": 154,
+                                "nps": 155,
+                                "image_button": 156,
+                                "smile_rating": 157,
+                                "email_form": 158]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
@@ -43,9 +50,8 @@ class EventViewController: FormViewController {
         +++ getCommonEventsSection()
         +++ getInAppSection()
     }
-    
-    
-    private func getCommonEventsSection() -> Section{
+
+    private func getCommonEventsSection() -> Section {
         let section = Section("Common Events".uppercased(with: Locale(identifier: "en_US")))
         section.append(TextRow("exVisitorId") {
             $0.title = "exVisitorId"
@@ -57,45 +63,49 @@ class EventViewController: FormViewController {
             $0.value = visilabsProfile.userEmail
             $0.cell.textField.autocapitalizationType = .none
         })
-        
+
         for eventType in VisilabsEventType.allCases {
-            section.append(ButtonRow() {
+            section.append(ButtonRow {
                 $0.title = eventType.rawValue
             }
-            .onCellSelection { cell, row in
+            .onCellSelection { _, _ in
                 self.customEvent(eventType)
             })
         }
         return section
     }
-    
-    private func  getInAppSection() -> Section{
+
+    private func  getInAppSection() -> Section {
         let section = Section("In App Notification Types".uppercased(with: Locale(identifier: "en_US")))
         for visilabsInAppNotificationType in VisilabsInAppNotificationType.allCases {
-            section.append(ButtonRow() {
-                $0.title = visilabsInAppNotificationType.rawValue + " ID: " + String(inAppNotificationIds[visilabsInAppNotificationType.rawValue]!)
+            section.append(ButtonRow {
+                let notId = String(inAppNotificationIds[visilabsInAppNotificationType.rawValue]!)
+                $0.title = visilabsInAppNotificationType.rawValue + " ID: " + notId
             }
-            .onCellSelection { cell, row in
+            .onCellSelection { _, _ in
                 self.inAppEvent(visilabsInAppNotificationType)
             })
         }
         return section
     }
-    
-    private func inAppEvent(_ visilabsInAppNotificationType: VisilabsInAppNotificationType){
-        var properties = [String:String]()
+
+    private func inAppEvent(_ visilabsInAppNotificationType: VisilabsInAppNotificationType) {
+        var properties = [String: String]()
         properties["OM.inapptype"] = visilabsInAppNotificationType.rawValue
         Visilabs.callAPI().customEvent("InAppTest", properties: properties)
     }
-    
-    private func showModal(title: String, message: String){
+
+    private func showModal(title: String, message: String) {
         let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
         styleSettings[.cornerRadius] = 18
-        let alertViewController = CleanyAlertViewController(title: title, message: message, preferredStyle: .alert, styleSettings: styleSettings)
+        let alertViewController = CleanyAlertViewController(title: title,
+                                                            message: message,
+                                                            preferredStyle: .alert,
+                                                            styleSettings: styleSettings)
         alertViewController.addAction(title: "Dismiss", style: .default)
         self.present(alertViewController, animated: true, completion: nil)
     }
-    
+
     private func getRandomProductValues() -> RandomProduct {
         let randomProductCode1 = Int.random(min: 1, max: 1000)
         let randomProductCode2 = Int.random(min: 1, max: 1000, except: [randomProductCode1])
@@ -111,7 +121,7 @@ class EventViewController: FormViewController {
         let randomBannerCode = Int.random(min: 1, max: 100)
         let genders: [String] = ["f", "m"]
         let randomGender = genders[Int.random(min: 0, max: 1)]
-        
+
         return RandomProduct(randomProductCode1: randomProductCode1,
                              randomProductCode2: randomProductCode2,
                              randomProductPrice1: randomProductPrice1,
@@ -127,16 +137,22 @@ class EventViewController: FormViewController {
                              genders: genders,
                              randomGender: randomGender)
     }
-    
+
+    //swiftlint:disable todo
+    //swiftlint:disable cyclomatic_complexity
+    //swiftlint:disable function_body_length
     //TODO: favorites'lerde price göndermek gerekiyor mu?
     //TODO: örnekte OM parametreleri mi olsun, utm mi?
     //TODO: utm parametreleri geliyorsa bunları da targetpreferences içine kaydetmeli miyiz?
     //TODO: birthday ve gender formatı doğru mu?
-    private func customEvent(_ eventType: VisilabsEventType){
-        let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)!.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let email: String = ((self.form.rowBy(tag: "email") as TextRow?)!.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        var properties = [String:String]()
+    private func customEvent(_ eventType: VisilabsEventType) {
+        let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)!.value
+                                    ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let email: String = ((self.form.rowBy(tag: "email") as TextRow?)!.value
+                                ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        var properties = [String: String]()
         let randomValues = getRandomProductValues()
+
         switch eventType {
         case .login, .signUp, .loginWithExtraParameters:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
@@ -168,7 +184,7 @@ class EventViewController: FormViewController {
                 return
             }
         case .pageView:
-            Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
+            Visilabs.callAPI().customEvent("Page Name", properties: [String: String]())
             return
         case .productView:
             properties["OM.pv"] = "\(randomValues.randomProductCode1)" // Product Code
@@ -240,7 +256,6 @@ class EventViewController: FormViewController {
             Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
             return
         }
-        
     }
 }
 

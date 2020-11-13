@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: false)
         InAppHelper.downloadMiniIconImagesAndSave()
-        
+
         if let vlp = DataManager.readVisilabsProfile() {
             visilabsProfile = vlp
         }
@@ -31,10 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else if let userInfo = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any] {
             Euromsg.handlePush(pushDictionary: userInfo)
         }
-                
         return true
     }
-    
+
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         visilabsProfile.appToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         DataManager.saveVisilabsProfile(visilabsProfile)
