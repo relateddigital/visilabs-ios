@@ -9,7 +9,7 @@
 import Foundation
 
 class DataManager {
-    
+
     static let visilabsProfileKey = "VisilabsProfile"
     
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {

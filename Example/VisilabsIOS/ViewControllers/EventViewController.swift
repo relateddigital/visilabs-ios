@@ -96,7 +96,7 @@ class EventViewController: FormViewController {
         self.present(alertViewController, animated: true, completion: nil)
     }
     
-    private func getRandomProductValues() -> (productCode1: Int, productCode2: Int, productPrice1: Double, productPrice2: Double, productQuantity1: Int, productQuantity2: Int, inventory: Int, basketID: Int, orderID: Int, categoryId: Int, numberOfSearchResults: Int, bannerCode: Int, gender: String) {
+    private func getRandomProductValues() -> RandomProduct {
         let randomProductCode1 = Int.random(min: 1, max: 1000)
         let randomProductCode2 = Int.random(min: 1, max: 1000, except: [randomProductCode1])
         let randomProductPrice1 = Double.random(in: 10..<10000)
@@ -111,7 +111,21 @@ class EventViewController: FormViewController {
         let randomBannerCode = Int.random(min: 1, max: 100)
         let genders: [String] = ["f", "m"]
         let randomGender = genders[Int.random(min: 0, max: 1)]
-        return (randomProductCode1, randomProductCode2, randomProductPrice1, randomProductPrice2, randomProductQuantity1, randomProductQuantity2, randomInventory, randomBasketID, randomOrderID, randomCategoryID, randomNumberOfSearchResults, randomBannerCode, randomGender)
+        
+        return RandomProduct(randomProductCode1: randomProductCode1,
+                             randomProductCode2: randomProductCode2,
+                             randomProductPrice1: randomProductPrice1,
+                             randomProductPrice2: randomProductPrice2,
+                             randomProductQuantity1: randomProductQuantity1,
+                             randomProductQuantity2: randomProductQuantity2,
+                             randomInventory: randomInventory,
+                             randomBasketID: randomBasketID,
+                             randomOrderID: randomOrderID,
+                             randomCategoryID: randomCategoryID,
+                             randomNumberOfSearchResults: randomNumberOfSearchResults,
+                             randomBannerCode: randomBannerCode,
+                             genders: genders,
+                             randomGender: randomGender)
     }
     
     //TODO: favorites'lerde price göndermek gerekiyor mu?
@@ -145,7 +159,7 @@ class EventViewController: FormViewController {
                     properties["OM.vseg4"] = "seg4val" // Visitor Segment 4
                     properties["OM.vseg5"] = "seg5val" // Visitor Segment 5
                     properties["OM.bd"] = "1977-03-15" // Birthday
-                    properties["OM.gn"] = randomValues.gender // Gender
+                    properties["OM.gn"] = randomValues.randomGender // Gender
                     properties["OM.loc"] = "Bursa" // Location
                     Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
                 }
@@ -157,50 +171,58 @@ class EventViewController: FormViewController {
             Visilabs.callAPI().customEvent("Page Name", properties: [String:String]())
             return
         case .productView:
-            properties["OM.pv"] = "\(randomValues.productCode1)" // Product Code
-            properties["OM.pn"] = "Name-\(randomValues.productCode1)" //Product Name
-            properties["OM.ppr"] = randomValues.productPrice1.formatPrice() // Product Price
+            properties["OM.pv"] = "\(randomValues.randomProductCode1)" // Product Code
+            properties["OM.pn"] = "Name-\(randomValues.randomProductCode1)" //Product Name
+            properties["OM.ppr"] = randomValues.randomProductPrice1.formatPrice() // Product Price
             properties["OM.pv.1"] = "Brand" //Product Brand
-            properties["OM.inv"] = "\(randomValues.inventory)" //Number of items in stock
+            properties["OM.inv"] = "\(randomValues.randomInventory)" //Number of items in stock
             Visilabs.callAPI().customEvent("Product View", properties: properties)
             return
         case .productAddToCart:
-            properties["OM.pbid"] = "\(randomValues.basketID)" // Basket ID
-            properties["OM.pb"] = "\(randomValues.productCode1);\(randomValues.productCode2)" //Product1 Code;Product2 Code
-            properties["OM.pu"] = "\(randomValues.productQuantity1);\(randomValues.productQuantity2)" // Product1 Quantity;Product2 Quantity
-            properties["OM.ppr"] = "\((randomValues.productPrice1 * Double(randomValues.productQuantity1)).formatPrice());\((randomValues.productPrice2 * Double(randomValues.productQuantity2)).formatPrice())" // Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity
+            properties["OM.pbid"] = "\(randomValues.randomBasketID)" // Basket ID
+            properties["OM.pb"] = "\(randomValues.randomProductCode1);\(randomValues.randomProductCode2)"
+            //Product1 Code;Product2 Code
+            properties["OM.pu"] = "\(randomValues.randomProductQuantity1);\(randomValues.randomProductQuantity2)"
+            // Product1 Quantity;Product2 Quantity
+            let price1 = (randomValues.randomProductPrice1 * Double(randomValues.randomProductQuantity1)).formatPrice()
+            let price2 = (randomValues.randomProductPrice2 * Double(randomValues.randomProductQuantity2)).formatPrice()
+            properties["OM.ppr"] = "\(price1):\(price2)"
             Visilabs.callAPI().customEvent("Cart", properties: properties)
             return
         case .productPurchase:
-            properties["OM.tid"] = "\(randomValues.orderID)" // Order ID
-            properties["OM.pp"] = "\(randomValues.productCode1);\(randomValues.productCode2)" //Product1 Code;Product2 Code
-            properties["OM.pu"] = "\(randomValues.productQuantity1);\(randomValues.productQuantity2)" // Product1 Quantity;Product2 Quantity
-            properties["OM.ppr"] = "\((randomValues.productPrice1 * Double(randomValues.productQuantity1)).formatPrice());\((randomValues.productPrice2 * Double(randomValues.productQuantity2)).formatPrice())" // Product1 Price*Product1 Quantity;Product2 Price*Product2 Quantity
+            properties["OM.tid"] = "\(randomValues.randomOrderID)" // Order ID
+            properties["OM.pp"] = "\(randomValues.randomProductCode1);\(randomValues.randomProductCode2)"
+            //Product1 Code;Product2 Code
+            properties["OM.pu"] = "\(randomValues.randomProductQuantity1);\(randomValues.randomProductQuantity2)"
+            // Product1 Quantity;Product2 Quantity
+            let price1 = (randomValues.randomProductPrice1 * Double(randomValues.randomProductQuantity1)).formatPrice()
+            let price2 = (randomValues.randomProductPrice2 * Double(randomValues.randomProductQuantity2)).formatPrice()
+            properties["OM.ppr"] = "\(price1):\(price2)"
             Visilabs.callAPI().customEvent("Purchase", properties: properties)
             return
         case .productCategoryPageView:
-            properties["OM.clist"] = "\(randomValues.categoryId)" // Category Code/Category ID
+            properties["OM.clist"] = "\(randomValues.randomCategoryID)" // Category Code/Category ID
             Visilabs.callAPI().customEvent("Category View", properties: properties)
             return
         case .inAppSearch:
             properties["OM.OSS"] = "laptop" // Search Keyword
-            properties["OM.OSSR"] = "\(randomValues.numberOfSearchResults)" // Number of Search Results
+            properties["OM.OSSR"] = "\(randomValues.randomNumberOfSearchResults)" // Number of Search Results
             Visilabs.callAPI().customEvent("In App Search", properties: properties)
             return
         case .bannerClick:
-            properties["OM.OSB"] = "\(randomValues.bannerCode)" // Banner Name/Banner Code
+            properties["OM.OSB"] = "\(randomValues.randomBannerCode)" // Banner Name/Banner Code
             Visilabs.callAPI().customEvent("Banner Click", properties: properties)
             return
         case .addToFavorites:
-            properties["OM.pf"] = "\(randomValues.productCode1)" // Product Code
+            properties["OM.pf"] = "\(randomValues.randomProductCode1)" // Product Code
             properties["OM.pfu"] = "1"
-            properties["OM.ppr"] = randomValues.productPrice1.formatPrice() // Product Price
+            properties["OM.ppr"] = randomValues.randomProductPrice1.formatPrice() // Product Price
             Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
             return
         case .removeFromFavorites:
-            properties["OM.pf"] = "\(randomValues.productCode1)" // Product Code
+            properties["OM.pf"] = "\(randomValues.randomProductCode1)" // Product Code
             properties["OM.pfu"] = "-1"
-            properties["OM.ppr"] = randomValues.productPrice1.formatPrice() // Product Price
+            properties["OM.ppr"] = randomValues.randomProductPrice1.formatPrice() // Product Price
             Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
             return
         case .sendingCampaignParameters:
@@ -220,6 +242,21 @@ class EventViewController: FormViewController {
         }
         
     }
-    
+}
 
+struct RandomProduct {
+    let randomProductCode1: Int
+    let randomProductCode2: Int
+    let randomProductPrice1: Double
+    let randomProductPrice2: Double
+    let randomProductQuantity1: Int
+    let randomProductQuantity2: Int
+    let randomInventory: Int
+    let randomBasketID: Int
+    let randomOrderID: Int
+    let randomCategoryID: Int
+    let randomNumberOfSearchResults: Int
+    let randomBannerCode: Int
+    let genders: [String]
+    let randomGender: String
 }
