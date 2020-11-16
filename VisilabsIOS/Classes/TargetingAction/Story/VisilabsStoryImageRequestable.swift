@@ -33,7 +33,7 @@ extension VisilabsStoryImageRequestable where Self: UIImageView {
             }
             guard let completion = completionBlock else { return }
             return completion(.success(cachedImage))
-        }else {
+        } else {
             VisilabsStoryImageURLSession.default.downloadImage(using: urlString) { [weak self] (response) in
                 guard let strongSelf = self else { return }
                 strongSelf.hideActivityIndicator()
@@ -54,7 +54,7 @@ extension VisilabsStoryImageRequestable where Self: UIImageView {
 }
 
 enum ImageStyle: Int {
-    case squared,rounded
+    case squared, rounded
 }
 
 public enum VisilabsStoryImageRequestResult<V, E> {
@@ -62,7 +62,7 @@ public enum VisilabsStoryImageRequestResult<V, E> {
     case failure(E)
 }
 
-typealias SetImageRequester = (VisilabsStoryImageRequestResult<Bool,Error>) -> Void
+typealias SetImageRequester = (VisilabsStoryImageRequestResult<Bool, Error>) -> Void
 
 extension UIImageView: VisilabsStoryImageRequestable {
     func setImage(url: String,
@@ -80,12 +80,12 @@ extension UIImageView: VisilabsStoryImageRequestable {
             layer.cornerRadius = 0
             activityStyle = .whiteLarge
         }
-        
+
         clipsToBounds = true
         setImage(urlString: url) { (response) in
             if let completion = completion {
                 switch response {
-                case .success(_):
+                case .success:
                     completion(VisilabsStoryImageRequestResult.success(true))
                 case .failure(let error):
                     completion(VisilabsStoryImageRequestResult.failure(error))

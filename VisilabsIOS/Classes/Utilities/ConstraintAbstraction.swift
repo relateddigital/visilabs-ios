@@ -17,9 +17,8 @@ internal typealias EdgeInsets = UIEdgeInsets
 internal typealias Constraint = NSLayoutConstraint
 internal typealias Constraints = [Constraint]
 
-
 extension UIView: Constrainable {
-    
+
     @discardableResult
     internal func prepareForLayout() -> Self {
         translatesAutoresizingMaskIntoConstraints = false
@@ -39,10 +38,10 @@ internal protocol Constrainable {
     var rightAnchor: NSLayoutXAxisAnchor { get }
     var leadingAnchor: NSLayoutXAxisAnchor { get }
     var trailingAnchor: NSLayoutXAxisAnchor { get }
-    
+
     var centerXAnchor: NSLayoutXAxisAnchor { get }
     var centerYAnchor: NSLayoutYAxisAnchor { get }
-    
+
     var widthAnchor: NSLayoutDimension { get }
     var heightAnchor: NSLayoutDimension { get }
 

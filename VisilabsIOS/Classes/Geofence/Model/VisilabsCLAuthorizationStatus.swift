@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum VisilabsCLAuthorizationStatus : Int32 {
+public enum VisilabsCLAuthorizationStatus: Int32 {
    case notDetermined = 0
    case restricted = 1
    case denied = 2

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol VisilabsInAppNotificationsDelegate {
+protocol VisilabsInAppNotificationsDelegate: AnyObject {
     func notificationDidShow(_ notification: VisilabsInAppNotification)
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String])
 }
@@ -23,7 +23,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     // var inAppNotifications = [VisilabsInAppNotification]()
     var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
-    var delegate: VisilabsInAppNotificationsDelegate?
+    weak var delegate: VisilabsInAppNotificationsDelegate?
 
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
@@ -133,7 +133,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         properties = [:]
                     }
                 }
-                if (additionalTrackingProperties != nil) {
+                if additionalTrackingProperties != nil {
                     properties!["OM.s_point"] = additionalTrackingProperties!["OM.s_point"]
                     properties!["OM.s_cat"] = additionalTrackingProperties!["OM.s_cat"]
                     properties!["OM.s_page"] = additionalTrackingProperties!["OM.s_page"]

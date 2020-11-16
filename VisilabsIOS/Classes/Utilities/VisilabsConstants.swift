@@ -8,15 +8,15 @@
 import Foundation
 
 struct VisilabsConstants {
-    
+
     static let HTTP = "http"
     static let HTTPS = "https"
-    
+
     static let QUEUE_SIZE = 5000
     static let GEOFENCE_HISTORY_MAX_COUNT = 500 //TODO: bunu sonra değiştir
     static let GEOFENCE_HISTORY_ERROR_MAX_COUNT = 500 //TODO: bunu sonra değiştir
     static let GEOFENCE_FETCH_TIME_INTERVAL = TimeInterval(60) //TODO: bunu sonra değiştir 15 dakika yap
-    
+
     //TODO: bunlar https e çevirilecek
     static var LOGGER_END_POINT = "lgr.visilabs.net"
     static var REALTIME_END_POINT = "rt.visilabs.net"
@@ -24,49 +24,43 @@ struct VisilabsConstants {
     static var ACTION_END_POINT = "s.visilabs.net/actjson"
     static var GEOFENCE_END_POINT = "s.visilabs.net/geojson"
     static var MOBILE_END_POINT = "s.visilabs.net/mobile"
-    
-    
-    //MARK: -UserDefaults Keys
-    
+
+    // MARK: - UserDefaults Keys
+
     static let USER_DEFAULTS_PROFILE_KEY = "Visilabs.profile"
     static let USER_DEFAULTS_USER_KEY = "Visilabs.user"
     static let USER_DEFAULTS_GEOFENCE_HISTORY_KEY = "Visilabs.geofenceHistory"
     static let USER_DEFAULTS_TARGET_KEY = "Visilabs.target"
-    
-    //MARK: -Archive Keys
-    
+
+    // MARK: - Archive Keys
 
     static let GEOFENCE_HISTORY_ARCHIVE_KEY = "Visilabs.geofenceHistory"
-    static let USER_ARCHIVE_KEY = "Visilabs.user";
-    static let PROFILE_ARCHIVE_KEY = "Visilabs.profile";
-    
-    static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieId"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
-    static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity";
-    static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorId";
-    static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenId";
-    static let APPID_ARCHIVE_KEY = "Visilabs.appId";
-    static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
-    
+    static let USER_ARCHIVE_KEY = "Visilabs.user"
+    static let PROFILE_ARCHIVE_KEY = "Visilabs.profile"
 
-    
-    static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount";
-    static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled";
-    static let GEOFENCEENABLED_KEY = "geofenceEnabled";
-    static let REQUESTTIMEOUTINSECONDS_KEY = "requestTimeoutInSeconds";
-    static let DATASOURCE_KEY = "dataSource";
-    static let USERAGENT_KEY = "OM.userAgent";
-    static let VISITORDATA = "visitorData";
-    
-    
+    static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieId"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
+    static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity"
+    static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorId"
+    static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenId"
+    static let APPID_ARCHIVE_KEY = "Visilabs.appId"
+    static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent"
+
+    static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount"
+    static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled"
+    static let GEOFENCEENABLED_KEY = "geofenceEnabled"
+    static let REQUESTTIMEOUTINSECONDS_KEY = "requestTimeoutInSeconds"
+    static let DATASOURCE_KEY = "dataSource"
+    static let USERAGENT_KEY = "OM.userAgent"
+    static let VISITORDATA = "visitorData"
+
     static let LAST_GEOFENCE_FETCH_TIME_KEY = "lastGeofenceFetchTime"
     static let GEOFENCES_KEY = "geofences"
-    
-    
+
     static let MOBILEADID_KEY = "OM.m_adid"
     static let MOBILEAPPLICATION_KEY = "OM.mappl"
-    
+
     static let TRUE = "true"
-    
+
     static let IOS = "IOS"
     static let DAT_KEY = "dat"
     static let OM_GIF = "om.gif"
@@ -74,8 +68,7 @@ struct VisilabsConstants {
     static let VISIT_CAPPING_KEY = "OM.vcap"
     static let VISITOR_CAPPING_KEY = "OM.viscap"
     static let OM_EVT_GIF = "OM_evt.gif"
-    
-    
+
     static let ORGANIZATIONID_KEY = "OM.oid"
     static let PROFILEID_KEY = "OM.siteID"
     static let COOKIEID_KEY = "OM.cookieID"
@@ -96,22 +89,22 @@ struct VisilabsConstants {
     static let APIVER_KEY = "OM.apiver"
     static let GEO_ID_KEY = "OM.locationid"
     static let TRIGGER_EVENT_KEY = "OM.triggerevent"
-    
+
     static let CHANNEL_KEY = "OM.vchannel"
     static let URI_KEY = "OM.uri"
-    
+
     static let UTM_SOURCE_KEY = "utm_source"
     static let UTM_CAMPAIGN_KEY = "utm_campaign"
     static let UTM_MEDIUM_KEY = "utm_medium"
     static let UTM_CONTENT_KEY = "utm_content"
-    
+
     static let GET_LIST = "getlist"
     static let PROCESSV2 = "processV2"
     static let ON_ENTER = "OnEnter"
     static let ON_EXIT = "OnExit"
     static let DWELL = "Dwell"
     static let APIVER_VALUE = "IOS"
-    
+
     static let ACTION_TYPE = "action_type"
     static let FAVORITE_ATTRIBUTE_ACTION = "FavoriteAttributeAction"
     static let STORY = "Story"
@@ -144,8 +137,7 @@ struct VisilabsConstants {
     static let storylb_label_color = "storylb_label_color"
     static let storyz_img_borderColor = "storyz_img_borderColor"
     static let storyz_img_borderRadius = "storyz_img_borderRadius"
-    
-    
+
     private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
     private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
     private static let TARGET_PREF_VCMEDIUM_STORE_KEY = "OM.vcmedium"
@@ -163,7 +155,7 @@ struct VisilabsConstants {
     private static let TARGET_PREF_LPP_STORE_KEY = "OM.lpp"
     private static let TARGET_PREF_VQ_STORE_KEY = "OM.vq"
     private static let TARGET_PREF_VRDOMAIN_STORE_KEY = "OM.vrDomain"
-    
+
     private static let TARGET_PREF_VOSS_KEY = "OM.OSS"
     private static let TARGET_PREF_VCNAME_KEY = "OM.cname"
     private static let TARGET_PREF_VCMEDIUM_KEY = "OM.cmedium"
@@ -182,9 +174,9 @@ struct VisilabsConstants {
     private static let TARGET_PREF_VQ_KEY = "OM.q"
     private static let TARGET_PREF_VRDOMAIN_KEY = "OM.rDomain"
     private static let TARGET_PREF_PPR_KEY = "OM.ppr"
-    
+
     private static var targetParameters = [VisilabsParameter]()
-    
+
     static func visilabsTargetParameters() -> [VisilabsParameter] {
         if targetParameters.count == 0 {
             targetParameters.append(VisilabsParameter(key: TARGET_PREF_VOSS_KEY, storeKey: TARGET_PREF_VOSS_STORE_KEY, count: 1, relatedKeys: nil))
@@ -207,9 +199,8 @@ struct VisilabsConstants {
         }
         return targetParameters
     }
-    
-}
 
+}
 
 struct VisilabsInAppNotificationsConstants {
     static let miniInAppHeight: CGFloat = 75

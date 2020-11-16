@@ -39,8 +39,8 @@ protocol PlayerControls: class {
 }
 
 class VisilabsPlayerView: UIView {
-    
-    //MARK: - Private Vars
+
+    // MARK: - Private Vars
     private var timeObserverToken: AnyObject?
     private var playerItemStatusObserver: NSKeyValueObservation?
     private var playerTimeControlStatusObserver: NSKeyValueObservation?
@@ -66,8 +66,8 @@ class VisilabsPlayerView: UIView {
             })
         }
     }
-    
-    //MARK: - iVars
+
+    // MARK: - iVars
     var player: AVPlayer? {
         willSet {
             // Remove any previous KVO observer.
@@ -93,18 +93,18 @@ class VisilabsPlayerView: UIView {
         return player?.currentItem?.error
     }
     var activityIndicator: UIActivityIndicatorView!
-    
+
     var currentItem: AVPlayerItem? {
         return player?.currentItem
     }
     var currentTime: Float {
         return Float(self.player?.currentTime().value ?? 0)
     }
-    
-    //MARK: - Public Vars
+
+    // MARK: - Public Vars
     public weak var playerObserverDelegate: VisilabsPlayerObserver?
-    
-    //MARK:- Init methods
+
+    // MARK: - Init methods
     override init(frame: CGRect) {
         activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +124,7 @@ class VisilabsPlayerView: UIView {
             removeObservers()
         }
     }
-    
+
     // MARK: - Internal methods
     func setupActivityIndicator() {
         activityIndicator.hidesWhenStopped = true
@@ -155,7 +155,7 @@ class VisilabsPlayerView: UIView {
     func setupPlayerPeriodicTimeObserver() {
         // Only add the time observer if one hasn't been created yet.
         guard timeObserverToken == nil else { return }
-        
+
         // Use a weak self variable to avoid a retain cycle in the block.
         timeObserverToken =
             player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main) {
@@ -176,9 +176,9 @@ class VisilabsPlayerView: UIView {
 
 // MARK: - Protocol | PlayerControls
 extension VisilabsPlayerView: PlayerControls {
-    
+
     func play(with resource: VideoResource) {
-        
+
         guard let url = URL(string: resource.filePath) else {fatalError("Unable to form URL from resource")}
         if let existingPlayer = player {
             DispatchQueue.main.async { [weak self] in
@@ -216,7 +216,7 @@ extension VisilabsPlayerView: PlayerControls {
             DispatchQueue.main.async {[weak self] in
                 guard let strongSelf = self else { return }
                 existingPlayer.pause()
-                
+
                 //Remove observer if observer presents before setting player to nil
                 if existingPlayer.observationInfo != nil {
                     strongSelf.removeObservers()

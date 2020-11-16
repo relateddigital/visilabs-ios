@@ -128,4 +128,3 @@ extension VisilabsBlurLayer {
         return false
     }
 }
-

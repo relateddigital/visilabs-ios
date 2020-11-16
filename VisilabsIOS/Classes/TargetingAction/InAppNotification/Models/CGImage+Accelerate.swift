@@ -62,4 +62,3 @@ extension CGImage {
         return context?.makeImage(with: blendColor, blendMode: blendMode, size: size)
     }
 }
-

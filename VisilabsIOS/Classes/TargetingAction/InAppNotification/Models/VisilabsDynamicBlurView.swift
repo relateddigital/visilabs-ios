@@ -8,7 +8,7 @@
 import UIKit
 
 open class VisilabsDynamicBlurView: UIView {
-    open override class var layerClass : AnyClass {
+    open override class var layerClass: AnyClass {
         return VisilabsBlurLayer.self
     }
 

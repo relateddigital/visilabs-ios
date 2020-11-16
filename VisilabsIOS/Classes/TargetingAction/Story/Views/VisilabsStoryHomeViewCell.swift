@@ -8,12 +8,12 @@
 import UIKit
 
 class VisilabsStoryHomeViewCell: UICollectionViewCell {
-    
-    func setAsLoadingCell(){
+
+    func setAsLoadingCell() {
         self.profileNameLabel.text = "Loading"
         self.profileImageView.imageView.image = VisilabsHelper.getUIImage(named: "loading")
     }
-    
+
     func setProperties(_ properties: VisilabsStoryActionExtendedProperties) {
         self.profileNameLabel.textColor = properties.labelColor
         self.profileImageView.setBorder(borderColor: properties.imageBorderColor, borderWidth: properties.imageBorderWidth, borderRadius: properties.imageBorderRadius)
@@ -24,9 +24,8 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
             self.layer.shadowRadius = 10
         }
     }
-    
-    
-    //MARK: - Public iVars
+
+    // MARK: - Public iVars
     var story: VisilabsStory? {
         didSet {
             self.profileNameLabel.text = story?.title
@@ -35,14 +34,14 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
             }
         }
     }
-    
-    //MARK: -  Private ivars
+
+    // MARK: - Private ivars
     private let profileImageView: VisilabsStoryRoundedView = {
         let roundedView = VisilabsStoryRoundedView()
         roundedView.translatesAutoresizingMaskIntoConstraints = false
         return roundedView
     }()
-    
+
     private let profileNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,8 +50,8 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
-    
-    //MARK: - Overriden functions
+
+    // MARK: - Overriden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadUIElements()
@@ -62,9 +61,8 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    //MARK:- Private functions
+
+    // MARK: - Private functions
     private func loadUIElements() {
         addSubview(profileImageView)
         addSubview(profileNameLabel)
@@ -82,7 +80,7 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
             profileNameLabel.igTopAnchor.constraint(equalTo: self.profileImageView.igBottomAnchor, constant: 2),
             profileNameLabel.igCenterXAnchor.constraint(equalTo: self.igCenterXAnchor),
             self.igBottomAnchor.constraint(equalTo: profileNameLabel.igBottomAnchor, constant: 8)])
-        
+
         layoutIfNeeded()
     }
 }

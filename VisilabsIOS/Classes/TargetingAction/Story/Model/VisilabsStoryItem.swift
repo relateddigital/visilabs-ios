@@ -31,7 +31,7 @@ class VisilabsStoryItem {
                 return MimeType.unknown
         }
     }
-    
+
     init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String, buttonText: String, buttonTextColor: UIColor, buttonColor: UIColor) {
         self.mimeType = fileType
         self.displayTime = displayTime // TODO:

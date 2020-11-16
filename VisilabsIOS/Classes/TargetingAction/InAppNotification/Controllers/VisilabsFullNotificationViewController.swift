@@ -14,7 +14,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             return super.notification
         }
     }
-    
+
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bodyLabel: UILabel!
@@ -24,11 +24,11 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var viewMask: UIView!
     @IBOutlet weak var fadingView: FadingView!
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
-    
+
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification, nameOfClass: String(describing: VisilabsFullNotificationViewController.notificationXibToLoad()))
     }
-    
+
     static func notificationXibToLoad() -> String {
         let xibName = String(describing: VisilabsFullNotificationViewController.self)
         guard VisilabsInstance.sharedUIApplication() != nil else {
@@ -36,7 +36,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         }
         return xibName
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,25 +49,25 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         } else {
             VisilabsLogger.error("notification image failed to load from data")
         }
-        
+
         titleLabel.text = fullNotification.messageTitle
         bodyLabel.text = fullNotification.messageBody
-        
+
         if let bgColor = fullNotification.backGroundColor {
             viewMask.backgroundColor = bgColor.withAlphaComponent(0.8)
-        }else{
+        } else {
             viewMask.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
         }
-        
+
         if let tColor = fullNotification.messageTitleColor {
             titleLabel.textColor = tColor
-        }else{
+        } else {
             titleLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
         }
-        
+
         if let bColor = fullNotification.messageBodyColor {
             bodyLabel.textColor = bColor
-        }else{
+        } else {
             bodyLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
         }
 
@@ -80,10 +80,10 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         setupButtonView(buttonView: inAppButton)
 
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
-            
+
             if let bgColor = fullNotification.backGroundColor {
                 self.view.backgroundColor = bgColor.withAlphaComponent(0.6)
-            }else{
+            } else {
                 self.view.backgroundColor = UIColor(hex: "#000000", alpha: 0.6)
             }
 
@@ -92,23 +92,23 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         }
 
     }
-    
+
     func setupButtonView(buttonView: UIButton) {
         buttonView.setTitle(fullNotification.buttonText, for: UIControl.State.normal)
         buttonView.titleLabel?.adjustsFontSizeToFitWidth = true
         buttonView.layer.cornerRadius = 20
         buttonView.layer.borderWidth = 2
-        
+
         var buttonColor = UIColor.black
-        if let bColor = fullNotification.buttonColor{
+        if let bColor = fullNotification.buttonColor {
             buttonColor = bColor
         }
-        
+
         var buttonTextColor = UIColor.white
-        if let bTextColor = fullNotification.buttonTextColor{
+        if let bTextColor = fullNotification.buttonTextColor {
             buttonTextColor = bTextColor
         }
-        
+
         buttonView.setTitleColor(buttonTextColor, for: UIControl.State.normal)
         buttonView.setTitleColor(buttonTextColor, for: UIControl.State.highlighted)
         buttonView.setTitleColor(buttonTextColor, for: UIControl.State.selected)
@@ -117,8 +117,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         buttonView.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControl.Event.touchUpInside)
         buttonView.tag = 0
     }
-    
-    
+
     override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return
@@ -164,7 +163,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         })
     }
 
-    
     //TODO: burada additionalTrackingProperties kısmında aksiyon id'si gönderilebilir.
     @objc func buttonTapped(_ sender: AnyObject) {
         delegate?.notificationShouldDismiss(controller: self,
@@ -172,10 +170,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
                                             shouldTrack: true,
                                             additionalTrackingProperties: nil)
     }
-    
-    
-    
-    
+
     @IBAction func tappedClose(_ sender: Any) {
         delegate?.notificationShouldDismiss(controller: self,
         callToActionURL: nil,
@@ -186,7 +181,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     override var shouldAutorotate: Bool {
         return false
     }
-
 
 }
 

@@ -18,22 +18,22 @@ enum SnapMovementDirectionState {
     case backward
 }
 //Identifiers
-fileprivate let snapViewTagIndicator: Int = 8
+private let snapViewTagIndicator: Int = 8
 
 final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
-    
-    //MARK: - Delegate
+
+    // MARK: - Delegate
     public weak var delegate: VisilabsStoryPreviewProtocol? {
         didSet { storyHeaderView.delegate = self }
     }
-    
-    //MARK:- Private iVars
+
+    // MARK: - Private iVars
     private lazy var storyHeaderView: VisilabsStoryPreviewHeaderView = {
         let v = VisilabsStoryPreviewHeaderView()
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-    
+
     private lazy var snapButton: UIButton = {
         let snapButton = UIButton()
         snapButton.isUserInteractionEnabled = true
@@ -43,7 +43,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         snapButton.addTarget(self, action: #selector(self.didTapLinkButton), for: .touchUpInside)
         return snapButton
     }()
-    
+
     private lazy var longPress_gesture: UILongPressGestureRecognizer = {
         let lp = UILongPressGestureRecognizer.init(target: self, action: #selector(didLongPress(_:)))
         lp.minimumPressDuration = 0.2
@@ -52,7 +52,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }()
     private lazy var tap_gesture: UITapGestureRecognizer = {
         let tg = UITapGestureRecognizer(target: self, action: #selector(didTapSnap(_:)))
-        tg.cancelsTouchesInView = false;
+        tg.cancelsTouchesInView = false
         tg.numberOfTapsRequired = 1
         tg.delegate = self
         return tg
@@ -67,8 +67,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     private var handpickedSnapIndex: Int = 0
     var retryBtn: VisilabsRetryLoaderButton!
     var longPressGestureState: UILongPressGestureRecognizer.State?
-    
-    //MARK:- Public iVars
+
+    // MARK: - Public iVars
     public var direction: SnapMovementDirectionState = .forward
     public let scrollview: UIScrollView = {
         let sv = UIScrollView()
@@ -95,10 +95,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                     let snapView = createSnapView()
                                     startRequest(snapView: snapView, with: snap.url)
                                 }
-                            }else {
+                            } else {
                                 if let videoView = getVideoView(with: snapIndex) {
                                     startPlayer(videoView: videoView, with: snap.url)
-                                }else {
+                                } else {
                                     let videoView = createVideoView()
                                     startPlayer(videoView: videoView, with: snap.url)
                                 }
@@ -112,11 +112,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                 if let snapView = getSnapview() {
                                     self.startRequest(snapView: snapView, with: snap.url)
                                 }
-                            }else {
+                            } else {
                                 if let videoView = getVideoView(with: snapIndex) {
                                     startPlayer(videoView: videoView, with: snap.url)
-                                }
-                                else {
+                                } else {
                                     let videoView = self.createVideoView()
                                     self.startPlayer(videoView: videoView, with: snap.url)
                                 }
@@ -134,8 +133,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             }
         }
     }
-    
-    //MARK: - Overriden functions
+
+    // MARK: - Overriden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
         scrollview.frame = bounds
@@ -154,8 +153,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    //MARK: - Private functions
+
+    // MARK: - Private functions
     private func loadUIElements() {
         scrollview.delegate = self
         scrollview.isPagingEnabled = true
@@ -184,14 +183,14 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         ])
         NSLayoutConstraint.activate([
             snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
-            snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
+            snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor)
         ])
     }
     private func createSnapView() -> UIImageView {
         let snapView = UIImageView()
         snapView.translatesAutoresizingMaskIntoConstraints = false
         snapView.tag = snapIndex + snapViewTagIndicator
- 
+
         /**
          Delete if there is any snapview/videoview already present in that frame location. Because of snap delete functionality, snapview/videoview can occupy different frames(created in 2nd position(frame), when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
          - If only snapViews are there, it will not create any issues.
@@ -199,22 +198,22 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
          - That's why we need to remove if any snap exists on the same position.
          */
         scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
-        
+
         scrollview.addSubview(snapView)
-        
+
         /// Setting constraints for snap view.
         NSLayoutConstraint.activate([
-            
+
             //snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
             //snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
-            
+
             snapView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ? scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
             snapView.igTopAnchor.constraint(equalTo: scrollview.igTopAnchor),
             snapView.widthAnchor.constraint(equalTo: scrollview.widthAnchor),
             snapView.heightAnchor.constraint(equalTo: scrollview.heightAnchor),
             scrollview.igBottomAnchor.constraint(equalTo: snapView.igBottomAnchor)
         ])
-        if(snapIndex != 0) {
+        if snapIndex != 0 {
             NSLayoutConstraint.activate([
                 snapView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor, constant: CGFloat(snapIndex)*scrollview.width)
             ])
@@ -232,7 +231,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         videoView.translatesAutoresizingMaskIntoConstraints = false
         videoView.tag = snapIndex + snapViewTagIndicator
         videoView.playerObserverDelegate = self
-        
+
         /**
          Delete if there is any snapview/videoview already present in that frame location. Because of snap delete functionality, snapview/videoview can occupy different frames(created in 2nd position(frame), when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
          - If only snapViews are there, it will not create any issues.
@@ -240,7 +239,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
          - That's why we need to remove if any snap exists on the same position.
          */
         scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
-        
+
         scrollview.addSubview(videoView)
         NSLayoutConstraint.activate([
             videoView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ? scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
@@ -249,9 +248,9 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             videoView.heightAnchor.constraint(equalTo: scrollview.heightAnchor),
             scrollview.igBottomAnchor.constraint(equalTo: videoView.igBottomAnchor)
         ])
-        if(snapIndex != 0) {
+        if snapIndex != 0 {
             NSLayoutConstraint.activate([
-                videoView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor, constant: CGFloat(snapIndex)*scrollview.width),
+                videoView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor, constant: CGFloat(snapIndex)*scrollview.width)
             ])
         }
         return videoView
@@ -262,18 +261,18 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
         return nil
     }
-    
+
     private func startRequest(snapView: UIImageView, with url: String) {
         snapView.setImage(url: url, style: .squared) { result in
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return}
                 switch result {
-                    case .success(_):
+                    case .success:
                         /// Start progressor only if handpickedSnapIndex matches with snapIndex and the requested image url should be matched with current snapIndex imageurl
-                        if(strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.items[strongSelf.snapIndex].url) {
+                        if strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.items[strongSelf.snapIndex].url {
                             strongSelf.startProgressors()
                     }
-                    case .failure(_):
+                    case .failure:
                         strongSelf.showRetryButton(with: url, for: snapView)
                 }
             }
@@ -288,13 +287,12 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 snapButton.setTitle(snap.buttonText, for: .normal)
                 snapButton.backgroundColor = snap.buttonColor
                 snapButton.setTitleColor(snap.buttonTextColor, for: .normal)
-            }
-            else {
+            } else {
                 snapButton.isHidden = true
             }
         }
     }
-    
+
     private func showRetryButton(with url: String, for snapView: UIImageView) {
         self.retryBtn = VisilabsRetryLoaderButton.init(withURL: url)
         self.retryBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -315,7 +313,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                     switch result {
                         case .success(let videoURL):
                             /// Start progressor only if handpickedSnapIndex matches with snapIndex
-                            if(strongSelf.handpickedSnapIndex == strongSelf.snapIndex) {
+                            if strongSelf.handpickedSnapIndex == strongSelf.snapIndex {
                                 let videoResource = VideoResource(filePath: videoURL.absoluteString)
                                 videoView.play(with: videoResource)
                         }
@@ -330,7 +328,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     @objc private func didLongPress(_ sender: UILongPressGestureRecognizer) {
         longPressGestureState = sender.state
         if sender.state == .began ||  sender.state == .ended {
-            if(sender.state == .began) {
+            if sender.state == .began {
                 pauseEntireSnap()
             } else {
                 resumeEntireSnap()
@@ -340,7 +338,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     @objc private func didTapSnap(_ sender: UITapGestureRecognizer) {
 
         let touchLocation = sender.location(ofTouch: 0, in: self.scrollview)
-        
+
         if let snapCount = story?.items.count {
             var n = snapIndex
             /*!
@@ -352,7 +350,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                     snapView.removeRetryButton()
                 }
                 fillupLastPlayedSnap(n)
-            }else {
+            } else {
                 //Remove retry button if tap forward or backward if it exists
                 if let videoView = getVideoView(with: n), let btn = retryBtn, videoView.subviews.contains(btn) {
                     videoView.removeRetryButton()
@@ -388,7 +386,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             if snap.kind == .video {
                 let videoView = getVideoView(with: snapIndex)
                 startPlayer(videoView: videoView!, with: snap.url)
-            }else {
+            } else {
                 startSnapProgress(with: snapIndex)
             }
         }
@@ -401,7 +399,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
         resetSnapProgressors(with: snapIndex)
     }
-    
+
     @objc private func didTapLinkButton() {
         if let story = story {
             if story.clickQueryItems.count > 0 {
@@ -414,13 +412,13 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             delegate?.didTapCloseButton()
         }
     }
-    
+
     private func willMoveToPreviousOrNextSnap(n: Int) {
         if let count = story?.items.count {
             if n < count {
                 //Move to next or previous snap based on index n
                 let x = n.toFloat * frame.width
-                let offset = CGPoint(x: x,y: 0)
+                let offset = CGPoint(x: x, y: 0)
                 scrollview.setContentOffset(offset, animated: false)
                 story?.lastPlayedSnapIndex = n
                 handpickedSnapIndex = n
@@ -436,13 +434,13 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             if n < count {
                 //Move to next snap
                 let x = n.toFloat * frame.width
-                let offset = CGPoint(x: x,y: 0)
+                let offset = CGPoint(x: x, y: 0)
                 scrollview.setContentOffset(offset, animated: false)
                 story?.lastPlayedSnapIndex = n
                 direction = .forward
                 handpickedSnapIndex = n
                 snapIndex = n
-            }else {
+            } else {
                 stopPlayer()
                 delegate?.didCompletePreview()
             }
@@ -464,7 +462,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             stopPlayer()
         }
         if let holderView = self.getProgressIndicatorView(with: sIndex),
-            let progressView = self.getProgressView(with: sIndex){
+            let progressView = self.getProgressView(with: sIndex) {
             progressView.widthConstraint?.isActive = false
             progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor, multiplier: 1.0)
             progressView.widthConstraint?.isActive = true
@@ -475,7 +473,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         if sIndex != 0 {
             for i in 0..<sIndex {
                 if let holderView = self.getProgressIndicatorView(with: i),
-                    let progressView = self.getProgressView(with: i){
+                    let progressView = self.getProgressView(with: i) {
                     progressView.widthConstraint?.isActive = false
                     progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor, multiplier: 1.0)
                     progressView.widthConstraint?.isActive = true
@@ -511,41 +509,41 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
     private func gearupTheProgressors(type: MimeType, playerView: VisilabsPlayerView? = nil) {
         if let holderView = getProgressIndicatorView(with: snapIndex),
-            let progressView = getProgressView(with: snapIndex){
+            let progressView = getProgressView(with: snapIndex) {
             progressView.story_identifier = self.story?.internalIdentifier
             progressView.snapIndex = snapIndex
-            
+
             var timeInterval = TimeInterval(5)
             if let displayTime = self.story?.items[snapIndex].displayTime {
                 timeInterval = TimeInterval(displayTime)
             }
-            
+
             DispatchQueue.main.async {
                 if type == .photo {
-                    progressView.start(with: timeInterval, holderView: holderView, completion: {(identifier, snapIndex, isCancelledAbruptly) in
+                    progressView.start(with: timeInterval, holderView: holderView, completion: {(_, snapIndex, isCancelledAbruptly) in
                         print("Completed snapindex: \(snapIndex)")
                         if isCancelledAbruptly == false {
                             self.didCompleteProgress()
                         }
                     })
-                }else {
+                } else {
                     //Handled in delegate methods for videos
                 }
             }
         }
     }
-    
-    //MARK:- Internal functions
+
+    // MARK: - Internal functions
     func startProgressors() {
         DispatchQueue.main.async {
             if self.scrollview.subviews.count > 0 {
-                let imageView = self.scrollview.subviews.filter{v in v.tag == self.snapIndex + snapViewTagIndicator}.first as? UIImageView
+                let imageView = self.scrollview.subviews.filter {v in v.tag == self.snapIndex + snapViewTagIndicator}.first as? UIImageView
                 if imageView?.image != nil && self.story?.isCompletelyVisible == true {
                     self.gearupTheProgressors(type: .photo)
                 } else {
                     // Didend displaying will call this startProgressors method. After that only isCompletelyVisible get true. Then we have to start the video if that snap contains video.
                     if self.story?.isCompletelyVisible == true {
-                        let videoView = self.scrollview.subviews.filter{v in v.tag == self.snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
+                        let videoView = self.scrollview.subviews.filter {v in v.tag == self.snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
                         let snap = self.story?.items[self.snapIndex]
                         if let vv = videoView, self.story?.isCompletelyVisible == true {
                             self.startPlayer(videoView: vv, with: snap!.url)
@@ -574,8 +572,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     func adjustPreviousSnapProgressorsWidth(with index: Int) {
         fillupLastPlayedSnaps(index)
     }
-    
-    //MARK: - Public functions
+
+    // MARK: - Public functions
     public func willDisplayCellForZerothIndex(with sIndex: Int, handpickedSnapIndex: Int) {
         self.handpickedSnapIndex = handpickedSnapIndex
         story?.isCompletelyVisible = true
@@ -589,10 +587,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         fillUpMissingImageViews(sIndex)
         fillupLastPlayedSnaps(sIndex)
         snapIndex = sIndex
-        
+
         //Remove the previous observors
         NotificationCenter.default.removeObserver(self)
-        
+
         // Add the observer to handle application from background to foreground
         NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -604,7 +602,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             if let displayTime = self.story?.items[sIndex].displayTime {
                 timeInterval = TimeInterval(displayTime)
             }
-            pv.start(with: timeInterval, holderView: indicatorView, completion: { (identifier, snapIndex, isCancelledAbruptly) in
+            pv.start(with: timeInterval, holderView: indicatorView, completion: { (_, _, isCancelledAbruptly) in
                 if isCancelledAbruptly == false {
                     self.didCompleteProgress()
                 }
@@ -636,28 +634,28 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         getVideoView(with: sIndex)?.play()
     }
     public func didEndDisplayingCell() {
-        
+
     }
     public func resumePreviousSnapProgress(with sIndex: Int) {
         getProgressView(with: sIndex)?.resume()
     }
     public func pauseEntireSnap() {
         let v = getProgressView(with: snapIndex)
-        let videoView = scrollview.subviews.filter{v in v.tag == snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
+        let videoView = scrollview.subviews.filter {v in v.tag == snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
         if videoView != nil {
             v?.pause()
             videoView?.pause()
-        }else {
+        } else {
             v?.pause()
         }
     }
     public func resumeEntireSnap() {
         let v = getProgressView(with: snapIndex)
-        let videoView = scrollview.subviews.filter{v in v.tag == snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
+        let videoView = scrollview.subviews.filter {v in v.tag == snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
         if videoView != nil {
             v?.resume()
             videoView?.play()
-        }else {
+        } else {
             v?.resume()
         }
     }
@@ -666,30 +664,30 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         if let v = view as? UIImageView {
             v.removeRetryButton()
             self.startRequest(snapView: v, with: url)
-        }else if let v = view as? VisilabsPlayerView {
+        } else if let v = view as? VisilabsPlayerView {
             v.removeRetryButton()
             self.startPlayer(videoView: v, with: url)
         }
     }
 }
 
-//MARK: - Extension|StoryPreviewHeaderProtocol
+// MARK: - Extension|StoryPreviewHeaderProtocol
 extension VisilabsStoryPreviewCell: StoryPreviewHeaderProtocol {
     func didTapCloseButton() {
         delegate?.didTapCloseButton()
     }
 }
 
-//MARK: - Extension|RetryBtnDelegate
+// MARK: - Extension|RetryBtnDelegate
 extension VisilabsStoryPreviewCell: RetryBtnDelegate {
     func retryButtonTapped() {
         self.retryRequest(view: retryBtn.superview!, with: retryBtn.contentURL!)
     }
 }
 
-//MARK: - Extension|IGPlayerObserverDelegate
+// MARK: - Extension|IGPlayerObserverDelegate
 extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
-    
+
     func didStartPlaying() {
         if let videoView = getVideoView(with: snapIndex), videoView.currentTime <= 0 {
             if videoView.error == nil && (story?.isCompletelyVisible)! == true {
@@ -699,7 +697,7 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
                     progressView.snapIndex = snapIndex
                     if let duration = videoView.currentItem?.asset.duration {
                         if Float(duration.value) > 0 {
-                            progressView.start(with: duration.seconds, holderView: holderView, completion: {(identifier, snapIndex, isCancelledAbruptly) in
+                            progressView.start(with: duration.seconds, holderView: holderView, completion: {(_, snapIndex, isCancelledAbruptly) in
                                 if isCancelledAbruptly == false {
                                     self.videoSnapIndex = snapIndex
                                     self.stopPlayer()
@@ -709,7 +707,7 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
                                     self.stopPlayer()
                                 }
                             })
-                        }else {
+                        } else {
                             debugPrint("Player error: Unable to play the video")
                         }
                     }
@@ -734,7 +732,7 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
     func didCompletePlay() {
         //Video completed
     }
-    
+
     func didTrack(progress: Float) {
         //Delegate already handled. If we just print progress, it will print the player current running time
     }
@@ -742,7 +740,7 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
 
 extension VisilabsStoryPreviewCell: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if(gestureRecognizer is UISwipeGestureRecognizer) {
+        if gestureRecognizer is UISwipeGestureRecognizer {
             return true
         }
         return false

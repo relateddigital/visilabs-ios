@@ -8,8 +8,8 @@
 import UIKit
 
 public class VisilabsStoryHomeView: UIView {
-    
-    //MARK: - iVars
+
+    // MARK: - iVars
     lazy var layout: UICollectionViewFlowLayout = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -25,8 +25,8 @@ public class VisilabsStoryHomeView: UIView {
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
-    
-    //MARK: - Overridden functions
+
+    // MARK: - Overridden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear // UIColor.white // UIColor.rgb(from: 0xEFEFF4)
@@ -37,19 +37,19 @@ public class VisilabsStoryHomeView: UIView {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     public var controller: VisilabsStoryHomeViewController?
-    
+
     func setDelegates() {
         self.collectionView.delegate = controller
         self.collectionView.dataSource = controller
     }
-    
-    //MARK: - Private functions
-    private func createUIElements(){
+
+    // MARK: - Private functions
+    private func createUIElements() {
         addSubview(collectionView)
     }
-    private func installLayoutConstraints(){
+    private func installLayoutConstraints() {
         NSLayoutConstraint.activate([
             igLeftAnchor.constraint(equalTo: collectionView.igLeftAnchor),
             igTopAnchor.constraint(equalTo: collectionView.igTopAnchor),
@@ -57,4 +57,3 @@ public class VisilabsStoryHomeView: UIView {
             collectionView.heightAnchor.constraint(equalToConstant: 100)])
     }
 }
-

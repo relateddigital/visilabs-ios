@@ -15,25 +15,25 @@ extension UIImageView {
         static var isEnabled = false
         static var style = _style
         static var view = _view
-        
+
         static var _style: UIActivityIndicatorView.Style {
             if #available(iOS 13.0, *) {
                 return .large
-            }else {
+            } else {
                 return .whiteLarge
             }
         }
-        
+
         static var _view: UIActivityIndicatorView {
             if #available(iOS 13.0, *) {
                 return UIActivityIndicatorView(style: .large)
-            }else {
+            } else {
                 return UIActivityIndicatorView(style: .whiteLarge)
             }
         }
     }
-    
-    //MARK: Public Vars
+
+    // MARK: Public Vars
     public var isActivityEnabled: Bool {
         get {
             guard let value = objc_getAssociatedObject(self, &ActivityIndicator.isEnabled) as? Bool else {
@@ -46,11 +46,11 @@ extension UIImageView {
         }
     }
     public var activityStyle: UIActivityIndicatorView.Style {
-        get{
+        get {
             guard let value = objc_getAssociatedObject(self, &ActivityIndicator.style) as? UIActivityIndicatorView.Style else {
                 if #available(iOS 13.0, *) {
                     return .large
-                }else {
+                } else {
                     return .whiteLarge
                 }
             }
@@ -65,7 +65,7 @@ extension UIImageView {
             guard let value = objc_getAssociatedObject(self, &ActivityIndicator.view) as? UIActivityIndicatorView else {
                 if #available(iOS 13.0, *) {
                     return UIActivityIndicatorView(style: .large)
-                }else {
+                } else {
                     return UIActivityIndicatorView(style: .whiteLarge)
                 }
             }
@@ -77,8 +77,8 @@ extension UIImageView {
             objc_setAssociatedObject(self, &ActivityIndicator.view, activityView, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
-    //MARK: - Private methods
+
+    // MARK: - Private methods
     func showActivityIndicator() {
         if isActivityEnabled {
             var isActivityIndicatorFound = false
@@ -89,7 +89,7 @@ extension UIImageView {
                 if self.subviews.isEmpty {
                     isActivityIndicatorFound = false
                     self.addSubview(self.activityIndicator)
-                    
+
                 } else {
                     for view in self.subviews {
                         if !view.isKind(of: UIActivityIndicatorView.self) {
@@ -111,7 +111,7 @@ extension UIImageView {
             }
         }
     }
-    
+
     func hideActivityIndicator() {
         if isActivityEnabled {
             DispatchQueue.main.async {
@@ -125,4 +125,3 @@ extension UIImageView {
         }
     }
 }
-

@@ -54,7 +54,6 @@ final internal class BounceUpTransition: VisilabsTransitionAnimator {
     }
 }
 
-
 /// Dialog bounces in from top and is dismissed to top
 final internal class BounceDownTransition: VisilabsTransitionAnimator {
 
@@ -166,4 +165,3 @@ final internal class DismissInteractiveTransition: VisilabsTransitionAnimator {
         })
     }
 }
-

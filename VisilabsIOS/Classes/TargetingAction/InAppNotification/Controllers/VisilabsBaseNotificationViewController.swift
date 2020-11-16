@@ -7,22 +7,21 @@
 
 import Foundation
 
-
-protocol VisilabsNotificationViewControllerDelegate {
+protocol VisilabsNotificationViewControllerDelegate: AnyObject {
     @discardableResult
     func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
                                    callToActionURL: URL?,
                                    shouldTrack: Bool,
-                                   additionalTrackingProperties: [String:String]?) -> Bool
+                                   additionalTrackingProperties: [String: String]?) -> Bool
 }
 
 class VisilabsBaseNotificationViewController: UIViewController {
 
     var notification: VisilabsInAppNotification!
-    var delegate: VisilabsNotificationViewControllerDelegate?
+    weak var delegate: VisilabsNotificationViewControllerDelegate?
     var window: UIWindow?
     var panStartPoint: CGPoint!
-    
+
     convenience init(notification: VisilabsInAppNotification, nameOfClass: String) {
         // avoiding `type(of: self)` as it doesn't work with Swift 4.0.3 compiler
         // perhaps due to `self` not being fully constructed at this point
@@ -30,7 +29,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
         self.init(nibName: nameOfClass, bundle: bundle)
         self.notification = notification
     }
-    
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .all
     }
@@ -41,28 +40,27 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
     func show(animated: Bool) {}
     func hide(animated: Bool, completion: @escaping () -> Void) {}
-    
-}
 
+}
 
 extension UIColor {
 
     convenience init?(hex: String?, alpha: CGFloat = 1.0) {
-        
+
         guard let hexString = hex else {
             return nil
         }
         var cString: String = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
 
-        if (cString.hasPrefix("#")) { cString.removeFirst() }
+        if cString.hasPrefix("#") { cString.removeFirst() }
 
-        if (cString.count != 6 && cString.count != 8) {
+        if cString.count != 6 && cString.count != 8 {
             return nil
         }
 
         var rgbValue: UInt64 = 0
         Scanner(string: cString).scanHexInt64(&rgbValue)
-        
+
         if cString.count == 6 {
             self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
                     green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
@@ -76,7 +74,7 @@ extension UIColor {
             self.init(red: r, green: g, blue: b, alpha: a)
         }
     }
-    
+
     convenience init?(rgbaString: String) {
         let rgbaNumbersString = rgbaString.replacingOccurrences(of: "rgba(", with: "").replacingOccurrences(of: ")", with: "")
         let rgbaParts = rgbaNumbersString.split(separator: ",")
@@ -85,12 +83,11 @@ extension UIColor {
                return nil
             }
             self.init(red: CGFloat(r / 255.0), green: CGFloat(g / 255.0), blue: CGFloat(b / 255.0), alpha: CGFloat(a))
-            
+
         } else {
             return nil
         }
     }
-    
 
     /**
      Add two colors together

@@ -8,27 +8,27 @@
 import UIKit
 
 final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognizerDelegate {
-    
-    //MARK: - Private Vars
+
+    // MARK: - Private Vars
     private var _view: VisilabsStoryPreviewView {return view as! VisilabsStoryPreviewView}
     private var viewModel: VisilabsStoryPreviewModel?
-    
+
     private(set) var stories: [VisilabsStory]
     /** This index will tell you which Story, user has picked*/
     private(set) var handPickedStoryIndex: Int //starts with(i)
     /** This index will tell you which Snap, user has picked*/
     private(set) var handPickedSnapIndex: Int //starts with(i)
     /** This index will help you simply iterate the story one by one*/
-    
+
     private var nStoryIndex: Int = 0 //iteration(i+1)
     private var story_copy: VisilabsStory?
     private(set) var layoutType: VisilabsLayoutType
     private(set) var executeOnce = false
-    
+
     //check whether device rotation is happening or not
     private(set) var isTransitioning = false
     private(set) var currentIndexPath: IndexPath?
-    
+
     private let dismissGesture: UISwipeGestureRecognizer = {
         let gesture = UISwipeGestureRecognizer()
         gesture.direction = .down
@@ -42,8 +42,8 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         }
         return self._view.snapsCollectionView.cellForItem(at: indexPath) as? VisilabsStoryPreviewCell
     }
-    
-    //MARK: - Overriden functions
+
+    // MARK: - Overriden functions
     override func loadView() {
         super.loadView()
         view = VisilabsStoryPreviewView.init(layoutType: self.layoutType)
@@ -91,7 +91,7 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         isTransitioning = true
         _view.snapsCollectionView.collectionViewLayout.invalidateLayout()
     }
-    init(layout:VisilabsLayoutType = .parallax, stories: [VisilabsStory], handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0) {
+    init(layout: VisilabsLayoutType = .parallax, stories: [VisilabsStory], handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0) {
         self.layoutType = layout
         self.stories = stories
         self.handPickedStoryIndex = handPickedStoryIndex
@@ -102,16 +102,15 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         fatalError("init(coder:) has not been implemented")
     }
     override var prefersStatusBarHidden: Bool { return true }
-    
-    //MARK: - Selectors
+
+    // MARK: - Selectors
     @objc func didSwipeDown(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
 }
 
-
-//MARK:- Extension|UICollectionViewDataSource
-extension VisilabsStoryPreviewController:UICollectionViewDataSource {
+// MARK: - Extension|UICollectionViewDataSource
+extension VisilabsStoryPreviewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let model = viewModel else {return 0}
         return model.numberOfItemsInSection(section)
@@ -129,13 +128,13 @@ extension VisilabsStoryPreviewController:UICollectionViewDataSource {
     }
 }
 
-//MARK:- Extension|UICollectionViewDelegate
+// MARK: - Extension|UICollectionViewDelegate
 extension VisilabsStoryPreviewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? VisilabsStoryPreviewCell else {
             return
         }
-        
+
         //Taking Previous(Visible) cell to store previous story
         let visibleCells = collectionView.visibleCells.sortedArrayByPosition()
         let visibleCell = visibleCells.first as? VisilabsStoryPreviewCell
@@ -164,7 +163,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
             return
         }
         vCell.story?.isCompletelyVisible = true
-        
+
         if vCell.story == story_copy {
             nStoryIndex = vCellIndexPath.item
             if vCell.longPressGestureState == nil {
@@ -174,7 +173,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
                 vCell.resumePlayer(with: vCell.story?.lastPlayedSnapIndex ?? 0)
             }
             vCell.longPressGestureState = nil
-        }else {
+        } else {
             if let cell = cell as? VisilabsStoryPreviewCell {
                 cell.stopPlayer()
             }
@@ -186,7 +185,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
     }
 }
 
-//MARK:- Extension|UICollectionViewDelegateFlowLayout
+// MARK: - Extension|UICollectionViewDelegateFlowLayout
 extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         /* During device rotation, invalidateLayout gets call to make cell width and height proper.
@@ -207,7 +206,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
                 }
                 vCell.scrollview.setContentOffset(CGPoint(x: CGFloat(vCell.snapIndex) * collectionView.frame.width, y: 0), animated: false)
                 vCell.adjustPreviousSnapProgressorsWidth(with: vCell.snapIndex)
-                
+
                 if pv.state == .running {
                     pv.widthConstraint?.constant = progressIndicatorView.frame.width
                 }
@@ -222,7 +221,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-//MARK:- Extension|UIScrollViewDelegate<CollectionView>
+// MARK: - Extension|UIScrollViewDelegate<CollectionView>
 extension VisilabsStoryPreviewController {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         guard let vCell = _view.snapsCollectionView.visibleCells.first as? VisilabsStoryPreviewCell else {return}
@@ -240,7 +239,7 @@ extension VisilabsStoryPreviewController {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
                 self.dismiss(animated: true, completion: nil)
             }
-        }else if f_IndexPath?.item == numberOfItems {
+        } else if f_IndexPath?.item == numberOfItems {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
                 self.dismiss(animated: true, completion: nil)
             }
@@ -251,7 +250,7 @@ extension VisilabsStoryPreviewController {
     }
 }
 
-//MARK:- StoryPreview Protocol implementation
+// MARK: - StoryPreview Protocol implementation
 extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
     func didCompletePreview() {
         let n = handPickedStoryIndex+nStoryIndex+1
@@ -265,7 +264,7 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
             /**@Note:
              Here we are navigating to next snap explictly, So we need to handle the isCompletelyVisible. With help of this Bool variable we are requesting snap. Otherwise cell wont get Image as well as the Progress move :P
              */
-        }else {
+        } else {
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -282,22 +281,22 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
         }
     }
     func didTapCloseButton() {
-        self.dismiss(animated: true, completion:nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
 extension Array {
      func sortedArrayByPosition() -> [Element] {
-        return sorted(by: { (obj1 : Element, obj2 : Element) -> Bool in
-            
+        return sorted(by: { (obj1: Element, obj2: Element) -> Bool in
+
             let view1 = obj1 as! UIView
             let view2 = obj2 as! UIView
-            
+
             let x1 = view1.frame.minX
             let y1 = view1.frame.minY
             let x2 = view2.frame.minX
             let y2 = view2.frame.minY
-            
+
             if y1 != y2 {
                 return y1 < y2
             } else {
