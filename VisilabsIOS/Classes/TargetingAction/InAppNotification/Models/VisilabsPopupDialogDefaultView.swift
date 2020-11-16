@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 public class VisilabsPopupDialogDefaultView: UIView {
-    
-    //MARK: - VARIABLES
-    
+
+    // MARK: - VARIABLES
+
     internal lazy var closeButton = setCloseButton()
     internal lazy var imageView = setImageView()
     internal lazy var titleLabel = setTitleLabel()
@@ -22,7 +22,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var termsButton = setTermsButton()
     internal lazy var resultLabel = setResultLabel()
     internal lazy var sliderStepRating = setSliderStepRating()
-    
+
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
         set { titleLabel.font = newValue }
@@ -37,7 +37,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         get { return titleLabel.textAlignment }
         set { titleLabel.textAlignment = newValue }
     }
-    
+
     @objc public dynamic var messageFont: UIFont {
         get { return messageLabel.font }
         set { messageLabel.font = newValue }
@@ -52,18 +52,17 @@ public class VisilabsPopupDialogDefaultView: UIView {
         get { return messageLabel.textAlignment }
         set { messageLabel.textAlignment = newValue }
     }
-    
-    
+
     @objc public dynamic var closeButtonColor: UIColor? {
         get { return closeButton.currentTitleColor }
         set { closeButton.setTitleColor(newValue, for: .normal) }
     }
-    
+
     internal var imageHeightConstraint: NSLayoutConstraint?
-    
+
     weak var visilabsInAppNotification: VisilabsInAppNotification?
-    
-    //MARK: - CONSTRUCTOR
+
+    // MARK: - CONSTRUCTOR
     init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification) {
         self.visilabsInAppNotification = visilabsInAppNotification
         super.init(frame: frame)
@@ -73,16 +72,15 @@ public class VisilabsPopupDialogDefaultView: UIView {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 
     internal func setupViews() {
-        
+
         guard let notification = visilabsInAppNotification else {
             return
         }
-        
+
         baseSetup(notification)
-        
+
         var constraints = [NSLayoutConstraint]()
 
         switch notification.type {
@@ -105,24 +103,24 @@ public class VisilabsPopupDialogDefaultView: UIView {
             setupForDefault()
             break
         }
-        
+
         imageHeightConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
-        
+
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
         }
-        
+
         closeButton.trailing(to: self, offset: -10.0)
         NSLayoutConstraint.activate(constraints)
     }
-    
+
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
         emailTF.resignFirstResponder()
     }
-        
+
 }
 
-//MARK:- SliderStepDelegate
+// MARK: - SliderStepDelegate
 extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
     func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float) {
         sliderStep.value = value
@@ -131,9 +129,9 @@ extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
 
 //Email form extension
 extension VisilabsPopupDialogDefaultView {
-    
+
     func sendEmailButtonTapped() {
-        
+
         guard let notification = visilabsInAppNotification else { return }
         DispatchQueue.main.async {
             if self.checkbox.isChecked {
@@ -146,7 +144,7 @@ extension VisilabsPopupDialogDefaultView {
             self.resultLabel.isHidden = false
         }
     }
-    
+
     @objc func termsButtonTapped(_ sender: UIButton) {
         guard let permission = visilabsInAppNotification?.permissionLink else { return }
         guard let url = URL(string: permission) else { return }
@@ -154,21 +152,20 @@ extension VisilabsPopupDialogDefaultView {
     }
 }
 
-
 extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
-    
+
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        
+
     }
-    
+
     public func textFieldDidEndEditing(_ textField: UITextField) {
 
     }
-    
+
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         emailTF.resignFirstResponder()
     }
-    
+
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if let view = getTopView() {
@@ -176,7 +173,7 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
                     view.frame.origin.y -= keyboardSize.height
                 }
             }
-            
+
         }
     }
 
@@ -187,7 +184,7 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
             }
         }
     }
-    
+
     func getTopView() -> UIView? {
         var topView: UIView?
         let window = UIApplication.shared.keyWindow

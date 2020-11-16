@@ -5,7 +5,6 @@
 //  Created by Egemen on 8.06.2020.
 //
 
-
 // Star rating control written in Swift for iOS and tvOS.
 // https://github.com/evgenyneu/Cosmos
 import Foundation
@@ -18,14 +17,13 @@ Defines how the star is filled when the rating is not an integer number. For exa
 public enum StarFillMode: Int {
   /// Show only fully filled stars. For example, fourth star will be empty for 3.2.
   case full = 0
-  
+
   /// Show fully filled and half-filled stars. For example, fourth star will be half filled for 3.6.
   case half = 1
-  
+
   /// Fill star according to decimal rating. For example, fourth star will be 20% filled for 3.2.
   case precise = 2
 }
-
 
 // ----------------------------
 //
@@ -60,15 +58,15 @@ struct StarLayer {
   */
   static func create(_ starPoints: [CGPoint], size: Double,
     lineWidth: Double, fillColor: UIColor, strokeColor: UIColor) -> CALayer {
-      
+
     let containerLayer = createContainerLayer(size)
     let path = createStarPath(starPoints, size: size, lineWidth: lineWidth)
-      
+
     let shapeLayer = createShapeLayer(path.cgPath, lineWidth: lineWidth,
       fillColor: fillColor, strokeColor: strokeColor, size: size)
-      
+
     containerLayer.addSublayer(shapeLayer)
-    
+
     return containerLayer
   }
 
@@ -88,10 +86,10 @@ struct StarLayer {
     containerLayer.addSublayer(imageLayer)
     imageLayer.contents = image.cgImage
     imageLayer.contentsGravity = CALayerContentsGravity.resizeAspect
-    
+
     return containerLayer
   }
-  
+
   /**
   
   Creates the star shape layer.
@@ -109,7 +107,7 @@ struct StarLayer {
   */
   static func createShapeLayer(_ path: CGPath, lineWidth: Double, fillColor: UIColor,
     strokeColor: UIColor, size: Double) -> CALayer {
-      
+
     let layer = CAShapeLayer()
     layer.anchorPoint = CGPoint()
     layer.contentsScale = UIScreen.main.scale
@@ -122,7 +120,7 @@ struct StarLayer {
     layer.isOpaque = true
     return layer
   }
-  
+
   /**
   
   Creates a layer that will contain the shape layer.
@@ -139,7 +137,7 @@ struct StarLayer {
     layer.isOpaque = true
     return layer
   }
-  
+
   /**
   
   Creates a path for the given star points and size. The star points specify a shape of size 100 by 100. The star shape will be scaled if the size parameter is not 100. For exampe, if size parameter is 200 the shape will be scaled by 2.
@@ -153,25 +151,25 @@ struct StarLayer {
   */
   static func createStarPath(_ starPoints: [CGPoint], size: Double,
                              lineWidth: Double) -> UIBezierPath {
-    
+
     let lineWidthLocal = lineWidth + ceil(lineWidth * 0.3)
     let sizeWithoutLineWidth = size - lineWidthLocal * 2
-    
+
     let points = scaleStar(starPoints, factor: sizeWithoutLineWidth / 100,
                            lineWidth: lineWidthLocal)
-    
+
     let path = UIBezierPath()
     path.move(to: points[0])
     let remainingPoints = Array(points[1..<points.count])
-    
+
     for point in remainingPoints {
       path.addLine(to: point)
     }
-    
+
     path.close()
     return path
   }
-  
+
   /**
   
   Scale the star points by the given factor.
@@ -193,7 +191,6 @@ struct StarLayer {
   }
 }
 
-
 // ----------------------------
 //
 // CosmosAccessibility.swift
@@ -213,24 +210,24 @@ struct CosmosAccessibility {
   Makes the view accesible by settings its label and using rating as value.
   
   */
-    
+
   static func update(_ view: UIView, rating: Double, text: String?, settings: CosmosSettings) {
     view.isAccessibilityElement = true
-    
+
     view.accessibilityTraits = settings.updateOnTouch ?
       UIAccessibilityTraits.adjustable :UIAccessibilityTraits.none
-    
+
     var accessibilityLabel = CosmosLocalizedRating.ratingTranslation
-    
+
     if let text = text, text != "" {
       accessibilityLabel += " \(text)"
     }
-    
+
     view.accessibilityLabel = accessibilityLabel
-    
+
     view.accessibilityValue = accessibilityValue(view, rating: rating, settings: settings)
   }
-  
+
   /**
   
   Returns the rating that is used as accessibility value.
@@ -243,10 +240,10 @@ struct CosmosAccessibility {
   static func accessibilityValue(_ view: UIView, rating: Double, settings: CosmosSettings) -> String {
     let accessibilityRating = CosmosRating.displayedRatingFromPreciseRating(rating,
       fillMode: settings.fillMode, totalStars: settings.totalStars)
-    
+
     // Omit decimals if the value is an integer
     let isInteger = (accessibilityRating * 10).truncatingRemainder(dividingBy: 10) == 0
-    
+
     if isInteger {
       return "\(Int(accessibilityRating))"
     } else {
@@ -255,7 +252,7 @@ struct CosmosAccessibility {
       return "\(roundedToFirstDecimalPlace)"
     }
   }
-  
+
   /**
 
   Returns the amount of increment for the rating. When .half and .precise fill modes are used the
@@ -264,7 +261,7 @@ struct CosmosAccessibility {
   */
   static func accessibilityIncrement(_ rating: Double, settings: CosmosSettings) -> Double {
     var increment: Double = 0
-      
+
     switch settings.fillMode {
     case .full:
       increment = ceil(rating) - rating
@@ -274,26 +271,26 @@ struct CosmosAccessibility {
       increment = (ceil(rating * 2) - rating * 2) / 2
       if increment == 0 { increment = 0.5 }
     }
-    
+
     if rating >= Double(settings.totalStars) { increment = 0 }
 
     let roundedToFirstDecimalPlace = Double( round(10 * increment) / 10 )
     return roundedToFirstDecimalPlace
   }
-  
+
   static func accessibilityDecrement(_ rating: Double, settings: CosmosSettings) -> Double {
     var increment: Double = 0
-    
+
     switch settings.fillMode {
     case .full:
       increment = rating - floor(rating)
       if increment == 0 { increment = 1 }
-      
+
     case .half, .precise:
       increment = (rating * 2 - floor(rating * 2)) / 2
       if increment == 0 { increment = 0.5 }
     }
-    
+
     if rating <= settings.minTouchRating { increment = 0 }
 
     let roundedToFirstDecimalPlace = Double( round(10 * increment) / 10 )
@@ -301,14 +298,11 @@ struct CosmosAccessibility {
   }
 }
 
-
 // ----------------------------
 //
 // CosmosText.swift
 //
 // ----------------------------
-
-
 
 import UIKit
 
@@ -334,7 +328,6 @@ class CosmosText {
   }
 }
 
-
 // ----------------------------
 //
 // CosmosDefaultSettings.swift
@@ -350,106 +343,101 @@ Defaults setting values.
 */
 struct CosmosDefaultSettings {
   init() {}
-  
+
   static let defaultColor = UIColor(red: 1, green: 149/255, blue: 0, alpha: 1)
-  
-  
+
   // MARK: - Star settings
   // -----------------------------
 
   /// Border color of an empty star.
   static let emptyBorderColor = defaultColor
-  
+
   /// Width of the border for the empty star.
   static let emptyBorderWidth: Double = 1 / Double(UIScreen.main.scale)
-  
+
   /// Border color of a filled star.
   static let filledBorderColor = defaultColor
-  
+
   /// Width of the border for a filled star.
   static let filledBorderWidth: Double = 1 / Double(UIScreen.main.scale)
-  
+
   /// Background color of an empty star.
   static let emptyColor = UIColor.clear
-  
+
   /// Background color of a filled star.
   static let filledColor = defaultColor
-  
+
   /**
 
   Defines how the star is filled when the rating value is not an integer value. It can either show full stars, half stars or stars partially filled according to the rating value.
 
   */
   static let fillMode = StarFillMode.full
-  
+
   /// Rating value that is shown in the storyboard by default.
   static let rating: Double = 2.718281828
-  
+
   /// Distance between stars.
   static let starMargin: Double = 5
-  
+
   /**
   
   Array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
   
   */
   static let starPoints: [CGPoint] = [
-    CGPoint(x: 49.5,  y: 0.0),
-    CGPoint(x: 60.5,  y: 35.0),
+    CGPoint(x: 49.5, y: 0.0),
+    CGPoint(x: 60.5, y: 35.0),
     CGPoint(x: 99.0, y: 35.0),
-    CGPoint(x: 67.5,  y: 58.0),
-    CGPoint(x: 78.5,  y: 92.0),
-    CGPoint(x: 49.5,    y: 71.0),
-    CGPoint(x: 20.5,  y: 92.0),
-    CGPoint(x: 31.5,  y: 58.0),
-    CGPoint(x: 0.0,   y: 35.0),
-    CGPoint(x: 38.5,  y: 35.0)
+    CGPoint(x: 67.5, y: 58.0),
+    CGPoint(x: 78.5, y: 92.0),
+    CGPoint(x: 49.5, y: 71.0),
+    CGPoint(x: 20.5, y: 92.0),
+    CGPoint(x: 31.5, y: 58.0),
+    CGPoint(x: 0.0, y: 35.0),
+    CGPoint(x: 38.5, y: 35.0)
   ]
-  
+
   /// Size of a single star.
   static var starSize: Double = 20
 
   /// The total number of stars to be shown.
   static let totalStars = 5
-  
-  
+
   // MARK: - Text settings
   // -----------------------------
-  
-  
+
   /// Color of the text.
   static let textColor = UIColor(red: 127/255, green: 127/255, blue: 127/255, alpha: 1)
-  
+
   /// Font for the text.
   static let textFont = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
-  
+
   /// Distance between the text and the stars.
   static let textMargin: Double = 5
-  
+
   /// Calculates the size of the default text font. It is used for making the text size configurable from the storyboard.
   static var textSize: Double {
     get {
       return Double(textFont.pointSize)
     }
   }
-  
-  
+
   // MARK: - Touch settings
   // -----------------------------
 
   /// The lowest rating that user can set by touching the stars.
   static let minTouchRating: Double = 1
-  
+
   /// Set to `false` if you don't want to pass touches to superview (can be useful in a table view).
   static let passTouchesToSuperview = true
-  
+
   /// When `true` the star fill level is updated when user touches the cosmos view. When `false` the Cosmos view only shows the rating and does not act as the input control.
   static let updateOnTouch = true
 
   /// Set to `true` if you want to ignore pan gestures (can be useful when presented modally with a `presentationStyle` of `pageSheet` to avoid competing with the dismiss gesture)
   static let disablePanGestures = false
 }
-
 
 // ----------------------------
 //
@@ -472,21 +460,20 @@ class CosmosSize {
   */
   class func calculateSizeToFitLayers(_ layers: [CALayer]) -> CGSize {
     var size = CGSize()
-    
+
     for layer in layers {
       if layer.frame.maxX > size.width {
         size.width = layer.frame.maxX
       }
-      
+
       if layer.frame.maxY > size.height {
         size.height = layer.frame.maxY
       }
     }
-    
+
     return size
   }
 }
-
 
 // ----------------------------
 //
@@ -495,7 +482,6 @@ class CosmosSize {
 // ----------------------------
 
 import UIKit
-
 
 /**
 
@@ -520,21 +506,20 @@ class CosmosLayers {
     var starLayers = [CALayer]()
 
     for _ in (0..<settings.totalStars) {
-      
+
       let fillLevel = CosmosRating.starFillLevel(ratingRemainder: ratingRemander,
         fillMode: settings.fillMode)
-      
+
       let starLayer = createCompositeStarLayer(fillLevel, settings: settings, isRightToLeft: isRightToLeft)
       starLayers.append(starLayer)
       ratingRemander -= 1
     }
-    
+
     if isRightToLeft { starLayers.reverse() }
     positionStarLayers(starLayers, starMargin: settings.starMargin)
     return starLayers
   }
 
-  
   /**
   
   Creates an layer that shows a star that can look empty, fully filled or partially filled.
@@ -576,20 +561,19 @@ class CosmosLayers {
     let filledStar = createStarLayer(true, settings: settings)
     let emptyStar = createStarLayer(false, settings: settings)
 
-
     let parentLayer = CALayer()
     parentLayer.contentsScale = UIScreen.main.scale
     parentLayer.bounds = CGRect(origin: CGPoint(), size: filledStar.bounds.size)
     parentLayer.anchorPoint = CGPoint()
     parentLayer.addSublayer(emptyStar)
     parentLayer.addSublayer(filledStar)
-    
+
     if isRightToLeft {
       // Flip the star horizontally for a right-to-left language
       let rotation = CATransform3DMakeRotation(CGFloat(Double.pi), 0, 1, 0)
       filledStar.transform = CATransform3DTranslate(rotation, -filledStar.bounds.size.width, 0, 0)
     }
-    
+
     // Make filled layer width smaller according to the fill level
     filledStar.bounds.size.width *= CGFloat(starFillLevel)
 
@@ -601,9 +585,9 @@ class CosmosLayers {
       // Create a layer that shows a star from an image
       return StarLayer.create(image: image, size: settings.starSize)
     }
-    
+
     // Create a layer that draws a star from an array of points
-    
+
     let fillColor = isFilled ? settings.filledColor : settings.emptyColor
     let strokeColor = isFilled ? settings.filledBorderColor : settings.emptyBorderColor
 
@@ -623,7 +607,7 @@ class CosmosLayers {
 
   */
   class func positionStarLayers(_ layers: [CALayer], starMargin: Double) {
-    var positionX:CGFloat = 0
+    var positionX: CGFloat = 0
 
     for layer in layers {
       layer.position.x = positionX
@@ -631,7 +615,6 @@ class CosmosLayers {
     }
   }
 }
-
 
 // ----------------------------
 //
@@ -648,7 +631,7 @@ Returns the word "Rating" in user's language. It is used for voice-over  in acce
 */
 struct CosmosLocalizedRating {
   static var defaultText = "Rating"
-  
+
   static var localizedRatings = [
     "ar": "تصنيف",
     "bg": "Рейтинг",
@@ -687,12 +670,12 @@ struct CosmosLocalizedRating {
     "vi": "Đánh giá",
     "zh": "评分"
   ]
-  
+
   static var ratingTranslation: String {
     let languages = preferredLanguages(Locale.preferredLanguages)
     return ratingInPreferredLanguage(languages)
   }
-  
+
   /**
 
   Returns the word "Rating" in user's language.
@@ -703,7 +686,7 @@ struct CosmosLocalizedRating {
   static func translation(_ language: String) -> String? {
     return localizedRatings[language]
   }
-  
+
   /**
   
   Returns translation using the preferred language.
@@ -720,36 +703,35 @@ struct CosmosLocalizedRating {
   static func translationInPreferredLanguage(_ preferredLanguages: [String],
     localizedText: [String: String],
     fallbackTranslation: String) -> String {
-    
+
     for language in preferredLanguages {
       if let translatedText = translation(language) {
         return translatedText
       }
     }
-      
+
     return fallbackTranslation
   }
-  
+
   static func ratingInPreferredLanguage(_ preferredLanguages: [String]) -> String {
     return translationInPreferredLanguage(preferredLanguages,
       localizedText: localizedRatings,
       fallbackTranslation: defaultText)
   }
-  
+
   static func preferredLanguages(_ preferredLocales: [String]) -> [String] {
     return preferredLocales.map { element in
-      
+
       let dashSeparated = element.components(separatedBy: "-")
       if dashSeparated.count > 1 { return dashSeparated[0] }
-      
+
       let underscoreSeparated = element.components(separatedBy: "_")
       if underscoreSeparated.count > 1 { return underscoreSeparated[0] }
-      
+
       return element
     }
   }
 }
-
 
 // ----------------------------
 //
@@ -774,21 +756,20 @@ class CosmosLayerHelper {
   */
   class func createTextLayer(_ text: String, font: UIFont, color: UIColor) -> CATextLayer {
     let size = NSString(string: text).size(withAttributes: [NSAttributedString.Key.font: font])
-    
+
     let layer = CATextLayer()
     layer.bounds = CGRect(origin: CGPoint(), size: size)
     layer.anchorPoint = CGPoint()
-    
+
     layer.string = text
     layer.font = CGFont(font.fontName as CFString)
     layer.fontSize = font.pointSize
     layer.foregroundColor = color.cgColor
     layer.contentsScale = UIScreen.main.scale
-    
+
     return layer
   }
 }
-
 
 // ----------------------------
 //
@@ -819,24 +800,23 @@ struct CosmosTouch {
       numberOfStars: settings.totalStars,
       starSize: settings.starSize,
       starMargin: settings.starMargin)
-    
+
     if settings.fillMode == .half {
       rating += 0.20
     }
-    
+
     if settings.fillMode == .full {
       rating += 0.45
     }
-    
+
     rating = CosmosRating.displayedRatingFromPreciseRating(rating,
       fillMode: settings.fillMode, totalStars: settings.totalStars)
-    
+
     rating = max(settings.minTouchRating, rating) // Can't be less than min rating
-        
+
     return rating
   }
-  
-  
+
   /**
    
   Returns the precise rating based on the touch position.
@@ -850,33 +830,31 @@ struct CosmosTouch {
   */
   static func preciseRating(position: Double, numberOfStars: Int,
                             starSize: Double, starMargin: Double) -> Double {
-    
+
     if position < 0 { return 0 }
-    var positionRemainder = position;
-    
+    var positionRemainder = position
+
     // Calculate the number of times the star with a margin fits the position
     // This will be the whole part of the rating
     var rating: Double = Double(Int(position / (starSize + starMargin)))
-    
+
     // If rating is grater than total number of stars - return maximum rating
     if Int(rating) > numberOfStars { return Double(numberOfStars) }
-    
+
     // Calculate what portion of the last star does the position correspond to
     // This will be the added partial part of the rating
-    
+
     positionRemainder -= rating * (starSize + starMargin)
-    
-    if positionRemainder > starSize
-    {
+
+    if positionRemainder > starSize {
       rating += 1
     } else {
       rating += positionRemainder / starSize
     }
-    
+
     return rating
   }
 }
-
 
 // ----------------------------
 //
@@ -892,7 +870,7 @@ Helper functions for calculating rating.
 
 */
 struct CosmosRating {
-  
+
   /**
   
   Returns a decimal number between 0 and 1 describing the star fill level.
@@ -905,15 +883,15 @@ struct CosmosRating {
   
   */
   static func starFillLevel(ratingRemainder: Double, fillMode: StarFillMode) -> Double {
-    
+
     var result = ratingRemainder
-    
+
     if result > 1 { result = 1 }
     if result < 0 { result = 0 }
-    
+
     return roundFillLevel(result, fillMode: fillMode)
   }
-  
+
   /**
   
   Rounds a single star's fill level according to the fill mode. "Full" mode returns 0 or 1 by using the standard decimal rounding. "Half" mode returns 0, 0.5 or 1 by rounding the decimal to closest of 3 values. "Precise" mode will return the fill level unchanged.
@@ -935,8 +913,7 @@ struct CosmosRating {
       return starFillLevel
     }
   }
-  
-  
+
   /**
   
   Helper function for calculating the rating that is displayed to the user
@@ -953,19 +930,19 @@ struct CosmosRating {
   */
   static func displayedRatingFromPreciseRating(_ preciseRating: Double,
     fillMode: StarFillMode, totalStars: Int) -> Double {
-      
+
     let starFloorNumber = floor(preciseRating)
     let singleStarRemainder = preciseRating - starFloorNumber
-    
+
     var displayedRating = starFloorNumber + starFillLevel(
       ratingRemainder: singleStarRemainder, fillMode: fillMode)
-      
+
     displayedRating = min(Double(totalStars), displayedRating) // Can't go bigger than number of stars
     displayedRating = max(0, displayedRating) // Can't be less than zero
-    
+
     return displayedRating
   }
-  
+
   /**
   
   Returns the number of filled stars for given rating.
@@ -978,11 +955,10 @@ struct CosmosRating {
   static func numberOfFilledStars(_ rating: Double, totalNumberOfStars: Int) -> Double {
     if rating > Double(totalNumberOfStars) { return Double(totalNumberOfStars) }
     if rating < 0 { return 0 }
-    
+
     return rating
   }
 }
-
 
 // ----------------------------
 //
@@ -1005,97 +981,95 @@ public struct CosmosSettings {
   }
 
   public init() {}
-  
+
   // MARK: - Star settings
   // -----------------------------
-    
+
   /// Border color of an empty star.
   public var emptyBorderColor = CosmosDefaultSettings.emptyBorderColor
-  
+
   /// Width of the border for empty star.
   public var emptyBorderWidth: Double = CosmosDefaultSettings.emptyBorderWidth
-  
+
   /// Border color of a filled star.
   public var filledBorderColor = CosmosDefaultSettings.filledBorderColor
-  
+
   /// Width of the border for a filled star.
   public var filledBorderWidth: Double = CosmosDefaultSettings.filledBorderWidth
 
   /// Background color of an empty star.
   public var emptyColor = CosmosDefaultSettings.emptyColor
-  
+
   /// Background color of a filled star.
   public var filledColor = CosmosDefaultSettings.filledColor
-  
+
   /**
   
   Defines how the star is filled when the rating value is not a whole integer. It can either show full stars, half stars or stars partially filled according to the rating value.
   
   */
   public var fillMode = CosmosDefaultSettings.fillMode
-  
+
   /// Distance between stars.
   public var starMargin: Double = CosmosDefaultSettings.starMargin
-  
+
   /**
   
   Array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
   
   */
   public var starPoints: [CGPoint] = CosmosDefaultSettings.starPoints
-  
+
   /// Size of a single star.
   public var starSize: Double = CosmosDefaultSettings.starSize
-  
+
   /// The maximum number of stars to be shown.
   public var totalStars = CosmosDefaultSettings.totalStars
-  
+
   // MARK: - Star image settings
   // -----------------------------
-  
+
   /**
   
   Image used for the filled portion of the star. By default the star is drawn from the array of points unless an image is supplied.
   
   */
-  public var filledImage: UIImage? = nil
-  
+  public var filledImage: UIImage?
+
   /**
    
    Image used for the empty portion of the star. By default the star is drawn from the array of points unless an image is supplied.
    
    */
-  public var emptyImage: UIImage? = nil
-  
+  public var emptyImage: UIImage?
+
   // MARK: - Text settings
   // -----------------------------
-  
+
   /// Color of the text.
   public var textColor = CosmosDefaultSettings.textColor
-  
+
   /// Font for the text.
   public var textFont = CosmosDefaultSettings.textFont
-  
+
   /// Distance between the text and the stars.
   public var textMargin: Double = CosmosDefaultSettings.textMargin
-  
-  
+
   // MARK: - Touch settings
   // -----------------------------
-  
+
   /// The lowest rating that user can set by touching the stars.
   public var minTouchRating: Double = CosmosDefaultSettings.minTouchRating
-  
+
   /// Set to `false` if you don't want to pass touches to superview (can be useful in a table view).
   public var passTouchesToSuperview = CosmosDefaultSettings.passTouchesToSuperview
-  
+
   /// When `true` the star fill level is updated when user touches the cosmos view. When `false` the Cosmos view only shows the rating and does not act as the input control.
   public var updateOnTouch = CosmosDefaultSettings.updateOnTouch
 
   /// Set to `true` if you want to ignore pan gestures (can be useful when presented modally with a `presentationStyle` of `pageSheet` to avoid competing with the dismiss gesture)
   public var disablePanGestures = CosmosDefaultSettings.disablePanGestures
 }
-
 
 // ----------------------------
 //
@@ -1114,20 +1088,19 @@ The function is used in pointInside(point: CGPoint, withEvent event: UIEvent?) o
 struct CosmosTouchTarget {
   static func optimize(_ bounds: CGRect) -> CGRect {
     let recommendedHitSize: CGFloat = 44
-    
-    var hitWidthIncrease:CGFloat = recommendedHitSize - bounds.width
-    var hitHeightIncrease:CGFloat = recommendedHitSize - bounds.height
-    
+
+    var hitWidthIncrease: CGFloat = recommendedHitSize - bounds.width
+    var hitHeightIncrease: CGFloat = recommendedHitSize - bounds.height
+
     if hitWidthIncrease < 0 { hitWidthIncrease = 0 }
     if hitHeightIncrease < 0 { hitHeightIncrease = 0 }
-    
+
     let extendedBounds: CGRect = bounds.insetBy(dx: -hitWidthIncrease / 2,
       dy: -hitHeightIncrease / 2)
-    
+
     return extendedBounds
   }
 }
-
 
 // ----------------------------
 //
@@ -1153,7 +1126,6 @@ struct RightToLeft {
   }
 }
 
-
 // ----------------------------
 //
 // CosmosView.swift
@@ -1175,7 +1147,7 @@ Shows: ★★★★☆ (123)
 
 */
 @IBDesignable open class CosmosView: UIView {
-    
+
   /**
   
   The currently shown number of stars, usually between 1 and 5. If the value is decimal the stars will be shown according to the Fill Mode setting.
@@ -1188,7 +1160,7 @@ Shows: ★★★★☆ (123)
       }
     }
   }
-  
+
   /// Currently shown text. Set it to nil to display just the stars without text.
   @IBInspectable open var text: String? {
     didSet {
@@ -1197,21 +1169,21 @@ Shows: ★★★★☆ (123)
       }
     }
   }
-  
+
   /// Star rating settings.
   open var settings: CosmosSettings = .default {
     didSet {
       update()
     }
   }
-  
+
   /// Stores calculated size of the view. It is used as intrinsic content size.
   private var viewSize = CGSize()
 
   /// Draws the stars when the view comes out of storyboard with default settings
   open override func awakeFromNib() {
     super.awakeFromNib()
-    
+
     update()
   }
 
@@ -1241,39 +1213,39 @@ Shows: ★★★★☆ (123)
     update()
     improvePerformance()
   }
-  
+
   /// Initializes and returns a newly allocated cosmos view object.
   required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
-    
+
     improvePerformance()
   }
-  
+
   /// Change view settings for faster drawing
   private func improvePerformance() {
     /// Cache the view into a bitmap instead of redrawing the stars each time
     layer.shouldRasterize = true
     layer.rasterizationScale = UIScreen.main.scale
-    
+
     isOpaque = true
   }
-  
+
   /**
   
   Updates the stars and optional text based on current values of `rating` and `text` properties.
   
   */
   open func update() {
-    
+
     // Create star layers
     // ------------
-    
+
     var layers = CosmosLayers.createStarLayers(
       rating,
       settings: settings,
       isRightToLeft: RightToLeft.isRightToLeft(self)
     )
-    
+
     // Create text layer
     // ------------
 
@@ -1281,21 +1253,20 @@ Shows: ★★★★☆ (123)
       let textLayer = createTextLayer(text, layers: layers)
       layers = addTextLayer(textLayer: textLayer, layers: layers)
     }
-    
+
     layer.sublayers = layers
-    
-    
+
     // Update size
     // ------------
 
     updateSize(layers)
-    
+
     // Update accesibility
     // ------------
 
     updateAccessibility()
   }
-  
+
   /**
   
   Creates the text layer for the given text string.
@@ -1309,20 +1280,20 @@ Shows: ★★★★☆ (123)
   private func createTextLayer(_ text: String, layers: [CALayer]) -> CALayer {
     let textLayer = CosmosLayerHelper.createTextLayer(text,
       font: settings.textFont, color: settings.textColor)
-    
+
     let starsSize = CosmosSize.calculateSizeToFitLayers(layers)
-    
+
     if RightToLeft.isRightToLeft(self) {
       CosmosText.position(textLayer, starsSize: CGSize(width: 0, height: starsSize.height), textMargin: 0)
     } else {
       CosmosText.position(textLayer, starsSize: starsSize, textMargin: settings.textMargin)
     }
-    
+
     layer.addSublayer(textLayer)
-    
+
     return textLayer
   }
-  
+
   /**
    
    Adds text layer to the array of layers
@@ -1337,17 +1308,17 @@ Shows: ★★★★☆ (123)
     // Position stars after the text for right-to-left languages
     if RightToLeft.isRightToLeft(self) {
       for starLayer in layers {
-        starLayer.position.x += textLayer.bounds.width + CGFloat(settings.textMargin);
+        starLayer.position.x += textLayer.bounds.width + CGFloat(settings.textMargin)
       }
-      
+
       allLayers.insert(textLayer, at: 0)
     } else {
       allLayers.append(textLayer)
     }
-    
+
     return allLayers
   }
-  
+
   /**
 
   Updates the size to fit all the layers containing stars and text.
@@ -1363,12 +1334,12 @@ Shows: ★★★★☆ (123)
     // Needed when used without Auto Layout to receive touches for all stars.
     frame.size = intrinsicContentSize
   }
-  
+
   /// Returns the content size to fit all the star and text layers.
-  override open var intrinsicContentSize:CGSize {
+  override open var intrinsicContentSize: CGSize {
     return viewSize
   }
-  
+
   /**
    
   Prepares the Cosmos view for reuse in a table view cell.
@@ -1380,7 +1351,7 @@ Shows: ★★★★☆ (123)
   open func prepareForReuse() {
     previousRatingForDidTouchCallback = -123.192
   }
-  
+
   /**
   
   Makes sure that the right colors are used when the user switches between Light and Dark mode
@@ -1389,71 +1360,71 @@ Shows: ★★★★☆ (123)
   */
   open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
-        
+
     if #available(iOS 13.0, tvOS 10.0, *) {
       if self.traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
         update()
       }
     }
   }
-  
+
   // MARK: - Accessibility
-  
+
   private func updateAccessibility() {
     CosmosAccessibility.update(self, rating: rating, text: text, settings: settings)
   }
-  
+
   /// Called by the system in accessibility voice-over mode when the value is incremented by the user.
   open override func accessibilityIncrement() {
     super.accessibilityIncrement()
-    
+
     rating += CosmosAccessibility.accessibilityIncrement(rating, settings: settings)
     didTouchCosmos?(rating)
     didFinishTouchingCosmos?(rating)
   }
-  
+
   /// Called by the system in accessibility voice-over mode when the value is decremented by the user.
   open override func accessibilityDecrement() {
     super.accessibilityDecrement()
-    
+
     rating -= CosmosAccessibility.accessibilityDecrement(rating, settings: settings)
     didTouchCosmos?(rating)
     didFinishTouchingCosmos?(rating)
   }
-  
+
   // MARK: - Touch recognition
-  
+
   /// Closure will be called when user touches the cosmos view. The touch rating argument is passed to the closure.
-  open var didTouchCosmos: ((Double)->())?
-  
+  open var didTouchCosmos: ((Double)->Void)?
+
   /// Closure will be called when the user lifts finger from the cosmos view. The touch rating argument is passed to the closure.
-  open var didFinishTouchingCosmos: ((Double)->())?
-  
+  open var didFinishTouchingCosmos: ((Double)->Void)?
+
   /// Overriding the function to detect the first touch gesture.
   open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     if settings.passTouchesToSuperview { super.touchesBegan(touches, with: event) }
     guard let location = touchLocationFromBeginningOfRating(touches) else { return }
     onDidTouch(location)
   }
-  
+
   /// Overriding the function to detect touch move.
   open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     if settings.passTouchesToSuperview { super.touchesMoved(touches, with: event) }
     guard let location = touchLocationFromBeginningOfRating(touches) else { return }
     onDidTouch(location)
   }
-  
+
   /// Returns the distance of the touch relative to the left edge of the first star
   func touchLocationFromBeginningOfRating(_ touches: Set<UITouch>) -> CGFloat? {
     guard let touch = touches.first else { return nil }
     var location = touch.location(in: self).x
-    
+
     // In right-to-left languages, the first star will be on the right
     if RightToLeft.isRightToLeft(self) { location = bounds.width - location }
-    
+
     return location
   }
-  
+
   /// Detecting event when the user lifts their finger.
   open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     if settings.passTouchesToSuperview { super.touchesEnded(touches, with: event) }
@@ -1490,138 +1461,136 @@ Shows: ★★★★☆ (123)
   */
   func onDidTouch(_ locationX: CGFloat) {
     let calculatedTouchRating = CosmosTouch.touchRating(locationX, settings: settings)
-    
+
     if settings.updateOnTouch {
       rating = calculatedTouchRating
     }
-    
+
     if calculatedTouchRating == previousRatingForDidTouchCallback {
       // Do not call didTouchCosmos if rating has not changed
       return
     }
-    
+
     didTouchCosmos?(calculatedTouchRating)
     previousRatingForDidTouchCallback = calculatedTouchRating
   }
-  
+
   private var previousRatingForDidTouchCallback: Double = -123.192
-  
+
   /// Increase the hitsize of the view if it's less than 44px for easier touching.
   override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
     let oprimizedBounds = CosmosTouchTarget.optimize(bounds)
     return oprimizedBounds.contains(point)
   }
-  
-  
+
   // MARK: - Properties inspectable from the storyboard
-  
+
   @IBInspectable var totalStars: Int = CosmosDefaultSettings.totalStars {
     didSet {
       settings.totalStars = totalStars
     }
   }
-  
+
   @IBInspectable var starSize: Double = CosmosDefaultSettings.starSize {
     didSet {
       settings.starSize = starSize
     }
   }
-  
+
   @IBInspectable var filledColor: UIColor = CosmosDefaultSettings.filledColor {
     didSet {
       settings.filledColor = filledColor
     }
   }
-  
+
   @IBInspectable var emptyColor: UIColor = CosmosDefaultSettings.emptyColor {
     didSet {
       settings.emptyColor = emptyColor
     }
   }
-    
+
   @IBInspectable var emptyBorderColor: UIColor = CosmosDefaultSettings.emptyBorderColor {
       didSet {
           settings.emptyBorderColor = emptyBorderColor
       }
   }
-  
+
   @IBInspectable var emptyBorderWidth: Double = CosmosDefaultSettings.emptyBorderWidth {
       didSet {
           settings.emptyBorderWidth = emptyBorderWidth
       }
   }
-  
+
   @IBInspectable var filledBorderColor: UIColor = CosmosDefaultSettings.filledBorderColor {
       didSet {
           settings.filledBorderColor = filledBorderColor
       }
   }
-  
+
   @IBInspectable var filledBorderWidth: Double = CosmosDefaultSettings.filledBorderWidth {
       didSet {
           settings.filledBorderWidth = filledBorderWidth
       }
   }
-  
+
   @IBInspectable var starMargin: Double = CosmosDefaultSettings.starMargin {
     didSet {
       settings.starMargin = starMargin
     }
   }
-  
+
   @IBInspectable var fillMode: Int = CosmosDefaultSettings.fillMode.rawValue {
     didSet {
       settings.fillMode = StarFillMode(rawValue: fillMode) ?? CosmosDefaultSettings.fillMode
     }
   }
-  
+
   @IBInspectable var textSize: Double = CosmosDefaultSettings.textSize {
     didSet {
       settings.textFont = settings.textFont.withSize(CGFloat(textSize))
     }
   }
-  
+
   @IBInspectable var textMargin: Double = CosmosDefaultSettings.textMargin {
     didSet {
       settings.textMargin = textMargin
     }
   }
-  
+
   @IBInspectable var textColor: UIColor = CosmosDefaultSettings.textColor {
     didSet {
       settings.textColor = textColor
     }
   }
-  
+
   @IBInspectable var updateOnTouch: Bool = CosmosDefaultSettings.updateOnTouch {
     didSet {
       settings.updateOnTouch = updateOnTouch
     }
   }
-  
+
   @IBInspectable var minTouchRating: Double = CosmosDefaultSettings.minTouchRating {
     didSet {
       settings.minTouchRating = minTouchRating
     }
   }
-  
+
   @IBInspectable var filledImage: UIImage? {
     didSet {
       settings.filledImage = filledImage
     }
   }
-  
+
   @IBInspectable var emptyImage: UIImage? {
     didSet {
       settings.emptyImage = emptyImage
     }
   }
-  
+
   /// Draw the stars in interface buidler
   open override func prepareForInterfaceBuilder() {
     super.prepareForInterfaceBuilder()
-    
+
     update()
   }
 }
-

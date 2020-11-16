@@ -7,7 +7,7 @@
 
 import Foundation
 
-fileprivate let ONE_HUNDRED_MEGABYTES = 1024 * 1024 * 100
+private let ONE_HUNDRED_MEGABYTES = 1024 * 1024 * 100
 
 class VisilabsStoryImageCache: NSCache<AnyObject, AnyObject> {
     static let shared = VisilabsStoryImageCache()

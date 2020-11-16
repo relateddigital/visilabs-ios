@@ -10,7 +10,7 @@ import SystemConfiguration
 
 typealias Queue = [[String: String]]
 
-struct VisilabsUser : Codable {
+struct VisilabsUser: Codable {
     var cookieId: String?
     var exVisitorId: String?
     var tokenId: String?
@@ -21,7 +21,7 @@ struct VisilabsUser : Codable {
     var identifierForAdvertising: String?
 }
 
-struct VisilabsProfile : Codable {
+struct VisilabsProfile: Codable {
     var organizationId: String
     var profileId: String
     var dataSource: String
@@ -55,7 +55,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsSendInstance: VisilabsSend
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendation
-    
+
     public var debugDescription: String {
         return "Visilabs(siteId : \(self.visilabsProfile.profileId) organizationId: \(self.visilabsProfile.organizationId)"
     }
@@ -77,7 +77,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
     }
-    
+
     public var useInsecureProtocol: Bool = false {
         didSet {
             self.visilabsProfile.useInsecureProtocol = useInsecureProtocol
@@ -87,7 +87,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 
     init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
-        
+
         //TODO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
@@ -102,9 +102,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
-        
-        
-        
+
         self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
@@ -118,10 +116,10 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsSendInstance = VisilabsSend()
         self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
         self.visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
-        
+
         self.visilabsUser = self.unarchive()
         self.visilabsTargetingActionInstance.inAppDelegate = self
-        
+
         if let idfa = VisilabsHelper.getIDFA() {
             visilabsUser.identifierForAdvertising = idfa
         }
@@ -131,16 +129,16 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             VisilabsPersistence.archiveUser(visilabsUser)
         }
 
-        if(self.visilabsProfile.geofenceEnabled){
+        if self.visilabsProfile.geofenceEnabled {
             self.startGeofencing()
         }
-        
+
         VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource)
-        
+
         VisilabsHelper.computeWebViewUserAgent { (userAgentString) in
             self.visilabsUser.userAgent = userAgentString
         }
-        
+
     }
 
     static func sharedUIApplication() -> UIApplication? {
@@ -223,7 +221,7 @@ extension VisilabsInstance {
 extension VisilabsInstance {
 
     private func archive() {
-        
+
     }
 
     // TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
@@ -235,7 +233,7 @@ extension VisilabsInstance {
 // MARK: - SEND
 
 extension VisilabsInstance {
-    
+
     private func send() {
         trackingQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
@@ -260,14 +258,13 @@ extension VisilabsInstance {
     }
 }
 
-
 // MARK: - TARGETING ACTIONS
 
 // MARK: - Favorite Attribute Actions
 
 extension VisilabsInstance {
-    
-    public func getFavoriteAttributeActions(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)){
+
+    public func getFavoriteAttributeActions(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
         self.targetingActionQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
                 guard let self = self else { return }
@@ -279,7 +276,7 @@ extension VisilabsInstance {
             }
         }
     }
-    
+
 }
 
 // MARK: - InAppNotification
@@ -311,8 +308,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         VisilabsPersistence.archiveUser(visilabsUser)
     }
 
-    func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String : String]) {
-        if (notification.queryString == nil || notification.queryString == "") {
+    func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String]) {
+        if notification.queryString == nil || notification.queryString == "" {
             VisilabsLogger.info("Notification or query string is nil or empty")
             return
         }
@@ -324,13 +321,13 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent(VisilabsConstants.OM_EVT_GIF, properties: properties)
     }
- 
+
 }
 
 // MARK: - Story
 
 extension VisilabsInstance {
-    
+
     public func getStoryView(actionId: Int? = nil) -> VisilabsStoryHomeView {
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
@@ -340,7 +337,7 @@ extension VisilabsInstance {
         self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] = storyHomeView
         storyHomeView.setDelegates()
         storyHomeViewController.collectionView = storyHomeView.collectionView
-        
+
         trackingQueue.async { [weak self, actionId, guid] in
             guard let self = self else { return }
             self.networkQueue.async { [weak self, actionId, guid] in
@@ -349,8 +346,7 @@ extension VisilabsInstance {
                     if let error = response.error {
                         VisilabsLogger.error(error)
                     } else {
-                        if let guid = response.guid, response.storyActions.count > 0, let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid]
-                           , let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid]{
+                        if let guid = response.guid, response.storyActions.count > 0, let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid], let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] {
                             DispatchQueue.main.async {
                                 storyHomeViewController.loadStoryAction(response.storyActions.first!)
                                 storyHomeView.collectionView.reloadData()
@@ -362,20 +358,17 @@ extension VisilabsInstance {
                 })
             }
         }
- 
-        
+
         return storyHomeView
     }
-    
+
 }
 
-
-
-//MARK: - RECOMMENDATION
+// MARK: - RECOMMENDATION
 
 extension VisilabsInstance {
-    
-    public func recommend(zoneID: String, productCode: String? = nil, filters: [VisilabsRecommendationFilter] = [], properties: [String : String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+
+    public func recommend(zoneID: String, productCode: String? = nil, filters: [VisilabsRecommendationFilter] = [], properties: [String: String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
         self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else { return }
@@ -391,22 +384,21 @@ extension VisilabsInstance {
             }
         }
     }
-    
+
 }
 
-
-//MARK: - GEOFENCE
+// MARK: - GEOFENCE
 
 extension VisilabsInstance {
-    
+
     private func startGeofencing() {
         VisilabsGeofence.sharedManager?.startGeofencing()
     }
-    
+
     public var locationServicesEnabledForDevice: Bool {
         return VisilabsGeofence.sharedManager?.locationServicesEnabledForDevice ?? false
     }
-    
+
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
         return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
     }

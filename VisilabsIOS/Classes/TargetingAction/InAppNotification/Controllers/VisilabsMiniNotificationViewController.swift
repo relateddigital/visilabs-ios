@@ -14,11 +14,11 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             return super.notification
         }
     }
-    
+
     @IBOutlet weak var circleLabel: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    
+
     var isDismissing = false
     var canPan = true
     var position: CGPoint!
@@ -39,13 +39,13 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         view.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
         titleLabel.textColor = UIColor.white
         imageView.tintColor = UIColor.white
-        
+
         circleLabel.backgroundColor = UIColor(hex: "#000000", alpha: 0)
         circleLabel.layer.cornerRadius = self.circleLabel.frame.size.width / 2
         circleLabel.clipsToBounds = false //TODO: burası true olsa ne olur
         circleLabel.layer.borderWidth = 2.0
         circleLabel.layer.borderColor = UIColor.white.cgColor
-        
+
         imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap(gesture:)))
@@ -103,7 +103,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             window.clipsToBounds = true
             window.rootViewController = self
             window.layer.cornerRadius = 6
-            
+
             //TODO: bunları default set ediyorum doğru mudur?
             window.layer.borderColor = UIColor.white.cgColor
             window.layer.borderWidth = 1
@@ -176,7 +176,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             return
         }
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { (ctx) in
+        coordinator.animate(alongsideTransition: { (_) in
             let frame: CGRect
             if  UIDevice.current.orientation.isPortrait
                 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone {
@@ -198,4 +198,3 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             }, completion: nil)
     }
 }
-

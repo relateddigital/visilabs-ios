@@ -33,7 +33,7 @@ internal class VisilabsTransitionAnimator: NSObject, UIViewControllerAnimatedTra
         case .in:
             guard let to = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
                 let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
-            
+
             self.to = to
             self.from = from
 
@@ -42,10 +42,9 @@ internal class VisilabsTransitionAnimator: NSObject, UIViewControllerAnimatedTra
         case .out:
             guard let to = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
                 let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
-            
+
             self.to = to
             self.from = from
         }
     }
 }
-

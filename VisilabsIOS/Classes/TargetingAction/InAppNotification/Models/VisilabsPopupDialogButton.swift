@@ -20,10 +20,10 @@ open class VisilabsPopupDialogButton: UIButton {
         get { return titleLabel?.font }
         set { titleLabel?.font = newValue }
     }
-    
+
     /// The height of the button
     @objc open dynamic var buttonHeight: Int
-    
+
     /// The title color of the button
     @objc open dynamic var titleColor: UIColor? {
         get { return self.titleColor(for: UIControl.State()) }
@@ -95,16 +95,14 @@ open class VisilabsPopupDialogButton: UIButton {
 
         // Assign the button height
         buttonHeight = height
-        
+
         // Assign the button action
         buttonAction = action
-        
+
         defaultTitleFont = font
-        
-        
 
         super.init(frame: .zero)
-        
+
         if let bTextColor = buttonTextColor {
             self.titleColor = bTextColor
         }
@@ -157,4 +155,3 @@ open class VisilabsPopupDialogButton: UIButton {
         }
     }
 }
-

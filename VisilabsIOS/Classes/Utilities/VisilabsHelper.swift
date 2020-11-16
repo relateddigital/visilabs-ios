@@ -11,7 +11,7 @@ import WebKit
 import UIKit
 
 internal class VisilabsHelper {
-    
+
     //TODO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
     static func distanceSquared(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
         let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
@@ -27,7 +27,7 @@ internal class VisilabsHelper {
     }
 
     //TODO: props un boş gelme ihtimalini de düşün
-    static func buildUrl(url: String, props: [String : String] = [:], additionalQueryString: String = "") -> String {
+    static func buildUrl(url: String, props: [String: String] = [:], additionalQueryString: String = "") -> String {
         var qsKeyValues = [String]()
         props.forEach { (key, value) in
             qsKeyValues.append("\(key)=\(value)")
@@ -38,24 +38,24 @@ internal class VisilabsHelper {
         }
         return "\(url)?\(queryString)"
     }
-    
+
     static func generateCookieId() -> String {
         return UUID().uuidString
     }
-    
+
     static func readCookie(_ url: URL) -> [HTTPCookie] {
         let cookieStorage = HTTPCookieStorage.shared
         let cookies = cookieStorage.cookies(for: url) ?? []
         return cookies
     }
-    
+
     static func deleteCookie(_ url: URL) {
         let cookieStorage = HTTPCookieStorage.shared
         for cookie in readCookie(url) {
             cookieStorage.deleteCookie(cookie)
         }
     }
-    
+
     static func getIDFA() -> String? {
         if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
             let IDFA = ASIdentifierManager.shared().advertisingIdentifier
@@ -63,9 +63,9 @@ internal class VisilabsHelper {
         }
         return nil
     }
-    
+
     static private var webView: WKWebView?
-    
+
     static func computeWebViewUserAgent(completion: @escaping ((String) -> Void)) {
         DispatchQueue.main.async { [completion] in
             webView = WKWebView(frame: CGRect.zero)
@@ -73,13 +73,13 @@ internal class VisilabsHelper {
             webView?.evaluateJavaScript("navigator.userAgent", completionHandler: { userAgent, error in
                 if error == nil, let userAgentString = userAgent as? String, userAgentString.count > 0 {
                     completion(userAgentString)
-                }else {
+                } else {
                     VisilabsLogger.error("Visilabs can not compute user agent.")
                 }
             })
         }
     }
-    
+
     static func setEndpoints(dataSource: String, useInsecureProtocol: Bool = false) {
         let httpProtocol = useInsecureProtocol ? VisilabsConstants.HTTP : VisilabsConstants.HTTPS
         VisilabsBasePath.endpoints[.logger] = "\(httpProtocol)://\(VisilabsConstants.LOGGER_END_POINT)/\(dataSource)/\(VisilabsConstants.OM_GIF)"
@@ -89,19 +89,19 @@ internal class VisilabsHelper {
         VisilabsBasePath.endpoints[.geofence] = "\(httpProtocol)://\(VisilabsConstants.GEOFENCE_END_POINT)"
         VisilabsBasePath.endpoints[.mobile] = "\(httpProtocol)://\(VisilabsConstants.MOBILE_END_POINT)"
     }
-    
+
     static private let dateFormatter = DateFormatter()
-    
-    static func formatDate(_ date: Date, format : String = "yyyy-MM-dd HH:mm:ss") -> String {
+
+    static func formatDate(_ date: Date, format: String = "yyyy-MM-dd HH:mm:ss") -> String {
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: date)
     }
-    
+
     static func getUIImage(named: String) -> UIImage? {
         let bundle = Bundle(identifier: "com.relateddigital.visilabs")
-        return UIImage(named: named, in : bundle, compatibleWith: nil)!
+        return UIImage(named: named, in: bundle, compatibleWith: nil)!
     }
-    
+
     /* TODO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
     static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
         if let delegate = UIApplication.shared.delegate as? AppDelegate {
@@ -116,5 +116,5 @@ internal class VisilabsHelper {
         UINavigationController.attemptRotationToDeviceOrientation()
     }
      */
-    
+
 }

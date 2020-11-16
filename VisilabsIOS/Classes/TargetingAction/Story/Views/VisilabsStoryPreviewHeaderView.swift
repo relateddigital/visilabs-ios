@@ -7,20 +7,20 @@
 
 import UIKit
 
-protocol StoryPreviewHeaderProtocol:class {func didTapCloseButton()}
+protocol StoryPreviewHeaderProtocol: class {func didTapCloseButton()}
 
-fileprivate let maxSnaps = 30
+private let maxSnaps = 30
 
 //Identifiers
 public let progressIndicatorViewTag = 88
 public let progressViewTag = 99
 
 final class VisilabsStoryPreviewHeaderView: UIView {
-    
-    //MARK: - iVars
-    public weak var delegate:StoryPreviewHeaderProtocol?
+
+    // MARK: - iVars
+    public weak var delegate: StoryPreviewHeaderProtocol?
     fileprivate var snapsPerStory: Int = 0
-    public var story:VisilabsStory? {
+    public var story: VisilabsStory? {
         didSet {
             snapsPerStory  = (story?.items.count)! < maxSnaps ? (story?.items.count)! : maxSnaps
         }
@@ -66,8 +66,8 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         self.addSubview(self.getProgressView)
         return v
     }
-    
-    //MARK: - Overriden functions
+
+    // MARK: - Overriden functions
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame = frame
@@ -78,9 +78,9 @@ final class VisilabsStoryPreviewHeaderView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    //MARK: - Private functions
-    private func loadUIElements(){
+
+    // MARK: - Private functions
+    private func loadUIElements() {
         backgroundColor = .clear
         addSubview(getProgressView)
         addSubview(snaperImageView)
@@ -88,7 +88,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         detailView.addSubview(snaperNameLabel)
         addSubview(closeButton)
     }
-    private func installLayoutConstraints(){
+    private func installLayoutConstraints() {
         //Setting constraints for progressView
         let pv = getProgressView
         NSLayoutConstraint.activate([
@@ -97,7 +97,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             self.igRightAnchor.constraint(equalTo: pv.igRightAnchor),
             pv.heightAnchor.constraint(equalToConstant: 10)
             ])
-        
+
         //Setting constraints for snapperImageView
         NSLayoutConstraint.activate([
             snaperImageView.widthAnchor.constraint(equalToConstant: 40),
@@ -107,7 +107,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 10)
             ])
         layoutIfNeeded() //To make snaperImageView round. Adding this to somewhere else will create constraint warnings.
-        
+
         //Setting constraints for detailView
         NSLayoutConstraint.activate([
             detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 10),
@@ -115,7 +115,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             detailView.heightAnchor.constraint(equalToConstant: 40),
             closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 10)
             ])
-        
+
         //Setting constraints for closeButton
         NSLayoutConstraint.activate([
             closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 10),
@@ -124,7 +124,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             closeButton.widthAnchor.constraint(equalToConstant: 60),
             closeButton.heightAnchor.constraint(equalToConstant: 80)
             ])
-        
+
         //Setting constraints for snapperNameLabel
         NSLayoutConstraint.activate([
             snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
@@ -148,16 +148,16 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         }
         return view
     }
-    
-    //MARK: - Selectors
+
+    // MARK: - Selectors
     @objc func didTapClose(_ sender: UIButton) {
         delegate?.didTapCloseButton()
     }
-    
-    //MARK: - Public functions
+
+    // MARK: - Public functions
     public func clearTheProgressorSubviews() {
         getProgressView.subviews.forEach { v in
-            v.subviews.forEach{v in (v as! VisilabsSnapProgressView).stop()}
+            v.subviews.forEach {v in (v as! VisilabsSnapProgressView).stop()}
             v.removeFromSuperview()
         }
     }
@@ -166,23 +166,23 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         getProgressView.removeFromSuperview()
         self.progressView = nil
     }
-    public func clearSnapProgressor(at index:Int) {
+    public func clearSnapProgressor(at index: Int) {
         getProgressView.subviews[index].removeFromSuperview()
     }
-    public func createSnapProgressors(){
+    public func createSnapProgressors() {
         print("Progressor count: \(getProgressView.subviews.count)")
         let padding: CGFloat = 8 //GUI-Padding
         let height: CGFloat = 3
         var pvIndicatorArray: [VisilabsSnapProgressIndicatorView] = []
         var pvArray: [VisilabsSnapProgressView] = []
-        
+
         // Adding all ProgressView Indicator and ProgressView to seperate arrays
-        for i in 0..<snapsPerStory{
+        for i in 0..<snapsPerStory {
             let pvIndicator = VisilabsSnapProgressIndicatorView()
             pvIndicator.translatesAutoresizingMaskIntoConstraints = false
-            getProgressView.addSubview(applyProperties(pvIndicator, with: i+progressIndicatorViewTag, alpha:0.2))
+            getProgressView.addSubview(applyProperties(pvIndicator, with: i+progressIndicatorViewTag, alpha: 0.2))
             pvIndicatorArray.append(pvIndicator)
-            
+
             let pv = VisilabsSnapProgressView()
             pv.translatesAutoresizingMaskIntoConstraints = false
             pvIndicator.addSubview(applyProperties(pv))
@@ -202,7 +202,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
                     pvIndicator.rightConstraiant = self.getProgressView.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: padding)
                     pvIndicator.rightConstraiant!.isActive = true
                 }
-            }else {
+            } else {
                 let prePVIndicator = pvIndicatorArray[index-1]
                 pvIndicator.widthConstraint = pvIndicator.widthAnchor.constraint(equalTo: prePVIndicator.widthAnchor, multiplier: 1.0)
                 pvIndicator.leftConstraiant = pvIndicator.igLeftAnchor.constraint(equalTo: prePVIndicator.igRightAnchor, constant: padding)

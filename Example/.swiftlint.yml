@@ -1,2 +1,4 @@
 excluded:
-    - Pods
+    - Pods/Eureka
+    - Pods/Colorful
+    - Pods/CleanyModal

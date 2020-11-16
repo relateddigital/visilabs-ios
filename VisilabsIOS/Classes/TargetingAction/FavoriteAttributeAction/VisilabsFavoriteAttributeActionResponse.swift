@@ -8,7 +8,7 @@
 public class VisilabsFavoriteAttributeActionResponse {
     public var favorites: [VisilabsFavoriteAttribute: [String]]
     public var error: VisilabsError?
-    
+
     internal init(favorites: [VisilabsFavoriteAttribute: [String]], error: VisilabsError? = nil) {
         self.favorites = favorites
         self.error = error
