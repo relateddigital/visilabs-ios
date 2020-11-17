@@ -52,13 +52,17 @@ protocol VisilabsLogging {
 
 class VisilabsPrintLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        print("[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date())) - \(message.file) - func \(message.function)] : \(message.text)")
+        let msg = "[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date()))" +
+            " - \(message.file) - func \(message.function)] : \(message.text)"
+        print(msg)
     }
 }
 
 class VisilabsPrintDebugLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        debugPrint("[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date())) - \(message.file) - func \(message.function)] : \(message.text)")
+        let msg = "[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date()))" +
+            " - \(message.file) - func \(message.function)] : \(message.text)"
+        debugPrint(msg)
     }
 }
 

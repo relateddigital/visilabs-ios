@@ -71,11 +71,34 @@ public class VisilabsInAppNotification {
     }()
 
     let callToActionUrl: URL?
-    var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
-    var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
-    var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
+    var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
+                                          size: CGFloat(12))
+    var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                         size: CGFloat(8))
+    var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                        size: CGFloat(8))
 
-    public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageUrlString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?, permissionLink: String, successMessage: String?, failMessage: String) {
+    public init(actId: Int,
+                type: VisilabsInAppNotificationType,
+                messageTitle: String?,
+                messageBody: String?,
+                buttonText: String?,
+                iosLink: String?,
+                imageUrlString: String?,
+                visitorData: String?,
+                visitData: String?,
+                queryString: String?,
+                messageTitleColor: String?,
+                messageBodyColor: String?,
+                messageBodyTextSize: String?,
+                fontFamily: String?,
+                backGround: String?,
+                closeButtonColor: String?,
+                buttonTextColor: String?,
+                buttonColor: String?,
+                permissionLink: String,
+                successMessage: String?,
+                failMessage: String) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -137,7 +160,8 @@ public class VisilabsInAppNotification {
             return nil
         }
 
-        guard let messageType = actionData[PayloadKey.messageType] as? String, let type = VisilabsInAppNotificationType(rawValue: messageType) else {
+        guard let messageType = actionData[PayloadKey.messageType] as? String,
+              let type = VisilabsInAppNotificationType(rawValue: messageType) else {
             VisilabsLogger.error("invalid \(PayloadKey.messageType)")
             return nil
         }
@@ -191,9 +215,15 @@ public class VisilabsInAppNotification {
     }
 
     private func setFonts() {
-        self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily, fontSize: self.messageBodyTextSize, style: .title2)
-        self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily, fontSize: self.messageBodyTextSize, style: .body)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily, fontSize: self.messageBodyTextSize, style: .title2)
+        self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+                                                                  fontSize: self.messageBodyTextSize,
+                                                                  style: .title2)
+        self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+                                                                 fontSize: self.messageBodyTextSize,
+                                                                 style: .body)
+        self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+                                                                fontSize: self.messageBodyTextSize,
+                                                                style: .title2)
     }
 
     private static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
@@ -201,7 +231,8 @@ public class VisilabsInAppNotification {
         if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
             size = size + siz
         }
-        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style), size: CGFloat(size))
+        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
+                               size: CGFloat(size))
         if let font = fontFamily {
             if #available(iOS 13.0, *) {
                 var systemDesign: UIFontDescriptor.SystemDesign  = .default
@@ -210,7 +241,8 @@ public class VisilabsInAppNotification {
                 } else if font.lowercased() == "monospace" {
                     systemDesign = .monospaced
                 }
-                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style).withDesign(systemDesign) {
+                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
+                    .withDesign(systemDesign) {
                     finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
                 }
             } else {
@@ -232,7 +264,10 @@ public class VisilabsInAppNotification {
         if type == .mini {
             urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
         }
-        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed), let imageUrlComponents = URLComponents(string: escapedImageUrlString), let imageUrlParsed = imageUrlComponents.url {
+        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
+                                                                     NSCharacterSet.urlQueryAllowed),
+           let imageUrlComponents = URLComponents(string: escapedImageUrlString),
+           let imageUrlParsed = imageUrlComponents.url {
             imageUrl = imageUrlParsed
         }
         return imageUrl

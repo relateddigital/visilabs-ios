@@ -91,7 +91,8 @@ open class VisilabsPopupDialogButton: UIButton {
 
      - returns: PopupDialogButton
      */
-    @objc public init(title: String, height: Int = 45, font: UIFont, buttonTextColor: UIColor?, buttonColor: UIColor?, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
+    @objc public init(title: String, height: Int = 45, font: UIFont, buttonTextColor: UIColor?,
+                      buttonColor: UIColor?, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
 
         // Assign the button height
         buttonHeight = height
@@ -141,11 +142,16 @@ open class VisilabsPopupDialogButton: UIButton {
         let views = ["separator": separator, "leftSeparator": leftSeparator, "button": self]
         let metrics = ["buttonHeight": buttonHeight]
         var constraints = [NSLayoutConstraint]()
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:[button(buttonHeight)]", options: [], metrics: metrics, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[separator]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[separator(1)]", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[leftSeparator(1)]", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[leftSeparator]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:[button(buttonHeight)]",
+                                                      options: [], metrics: metrics, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[separator]|",
+                                                      options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[separator(1)]",
+                                                      options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[leftSeparator(1)]",
+                                                      options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[leftSeparator]|",
+                                                      options: [], metrics: nil, views: views)
         NSLayoutConstraint.activate(constraints)
     }
 

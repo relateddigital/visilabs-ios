@@ -53,12 +53,16 @@ class VisilabsPlayerView: UIView {
         }
         didSet {
             player?.replaceCurrentItem(with: playerItem)
-            playerItemStatusObserver = playerItem?.observe(\AVPlayerItem.status, options: [.new, .initial], changeHandler: { [weak self] (item, _) in
+            playerItemStatusObserver = playerItem?.observe(\AVPlayerItem.status,
+                                        options: [.new, .initial], changeHandler: { [weak self] (item, _) in
                 guard let strongSelf = self else { return }
                 if item.status == .failed {
                     strongSelf.activityIndicator.stopAnimating()
-                    if let item = strongSelf.player?.currentItem, let error = item.error, let url = item.asset as? AVURLAsset {
-                        strongSelf.playerObserverDelegate?.didFailed(withError: error.localizedDescription, for: url.url)
+                    if let item = strongSelf.player?.currentItem,
+                       let error = item.error,
+                       let url = item.asset as? AVURLAsset {
+                        strongSelf.playerObserverDelegate?.didFailed(withError: error.localizedDescription,
+                                                                     for: url.url)
                     } else {
                         strongSelf.playerObserverDelegate?.didFailed(withError: "Unknown error", for: nil)
                     }
@@ -75,7 +79,8 @@ class VisilabsPlayerView: UIView {
             playerTimeControlStatusObserver.invalidate()
         }
         didSet {
-            playerTimeControlStatusObserver = player?.observe(\AVPlayer.timeControlStatus, options: [.new, .initial], changeHandler: { [weak self] (player, _) in
+            playerTimeControlStatusObserver = player?.observe(\AVPlayer.timeControlStatus,
+                                            options: [.new, .initial], changeHandler: { [weak self] (player, _) in
                 guard let strongSelf = self else { return }
                 if player.timeControlStatus == .playing {
                     //Started Playing
@@ -158,7 +163,8 @@ class VisilabsPlayerView: UIView {
 
         // Use a weak self variable to avoid a retain cycle in the block.
         timeObserverToken =
-            player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main) {
+            player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100),
+                                    queue: DispatchQueue.main) {
                 [weak self] time in
                 let timeString = String(format: "%02.2f", CMTimeGetSeconds(time))
                 if let currentItem = self?.player?.currentItem {

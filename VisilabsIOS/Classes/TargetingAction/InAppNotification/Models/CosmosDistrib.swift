@@ -11,7 +11,8 @@ import Foundation
 
 /**
 
-Defines how the star is filled when the rating is not an integer number. For example, if rating is 4.6 and the fill more is Half, the star will appear to be half filled.
+Defines how the star is filled when the rating is not an integer number.
+ For example, if rating is 4.6 and the fill more is Half, the star will appear to be half filled.
 
 */
 public enum StarFillMode: Int {
@@ -140,7 +141,10 @@ struct StarLayer {
 
   /**
   
-  Creates a path for the given star points and size. The star points specify a shape of size 100 by 100. The star shape will be scaled if the size parameter is not 100. For exampe, if size parameter is 200 the shape will be scaled by 2.
+  Creates a path for the given star points and size.
+    The star points specify a shape of size 100 by 100.
+     The star shape will be scaled if the size parameter is not 100.
+     For exampe, if size parameter is 200 the shape will be scaled by 2.
   
   - parameter starPoints: Array of points for drawing a closed shape. The size of enclosing rectangle is 100 by 100.
   
@@ -176,7 +180,8 @@ struct StarLayer {
   
   - parameter starPoints: Array of points for drawing a closed shape. The size of enclosing rectangle is 100 by 100.
   
-  - parameter factor: The factor by which the star points are scaled. For example, if it is 0.5 the output points will define the shape twice as small as the original.
+  - parameter factor: The factor by which the star points are scaled.
+     For example, if it is 0.5 the output points will define the shape twice as small as the original.
   
   - returns: The scaled shape.
   
@@ -369,7 +374,8 @@ struct CosmosDefaultSettings {
 
   /**
 
-  Defines how the star is filled when the rating value is not an integer value. It can either show full stars, half stars or stars partially filled according to the rating value.
+  Defines how the star is filled when the rating value is not an integer value.
+     It can either show full stars, half stars or stars partially filled according to the rating value.
 
   */
   static let fillMode = StarFillMode.full
@@ -382,7 +388,8 @@ struct CosmosDefaultSettings {
 
   /**
   
-  Array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
+  Array of points for drawing the star with size of 100 by 100 pixels.
+     Supply your points if you need to draw a different shape.
   
   */
   static let starPoints: [CGPoint] = [
@@ -416,7 +423,8 @@ struct CosmosDefaultSettings {
   /// Distance between the text and the stars.
   static let textMargin: Double = 5
 
-  /// Calculates the size of the default text font. It is used for making the text size configurable from the storyboard.
+  /// Calculates the size of the default text font.
+    /// It is used for making the text size configurable from the storyboard.
   static var textSize: Double {
     get {
       return Double(textFont.pointSize)
@@ -432,10 +440,13 @@ struct CosmosDefaultSettings {
   /// Set to `false` if you don't want to pass touches to superview (can be useful in a table view).
   static let passTouchesToSuperview = true
 
-  /// When `true` the star fill level is updated when user touches the cosmos view. When `false` the Cosmos view only shows the rating and does not act as the input control.
+  /// When `true` the star fill level is updated when user touches the cosmos view.
+  ///  When `false` the Cosmos view only shows the rating and does not act as the input control.
   static let updateOnTouch = true
 
-  /// Set to `true` if you want to ignore pan gestures (can be useful when presented modally with a `presentationStyle` of `pageSheet` to avoid competing with the dismiss gesture)
+  /// Set to `true` if you want to ignore pan gestures
+    /// (can be useful when presented modally with a `presentationStyle`
+    ///  of `pageSheet` to avoid competing with the dismiss gesture)
   static let disablePanGestures = false
 }
 
@@ -455,7 +466,8 @@ Helper class for calculating size for the cosmos view.
 class CosmosSize {
   /**
   
-  Calculates the size of the cosmos view. It goes through all the star and text layers and makes size the view size is large enough to show all of them.
+  Calculates the size of the cosmos view. It goes through all the star and text layers
+     and makes size the view size is large enough to show all of them.
   
   */
   class func calculateSizeToFitLayers(_ layers: [CALayer]) -> CGSize {
@@ -693,7 +705,8 @@ struct CosmosLocalizedRating {
   
   - parameter preferredLanguages: Array of preferred language codes (ISO 639-1). The first element is most preferred.
   
-  - parameter localizedText: Dictionary with translations for the languages. The keys are ISO 639-1 language codes and values are the text.
+  - parameter localizedText: Dictionary with translations for the languages.
+     The keys are ISO 639-1 language codes and values are the text.
   
   - parameter fallbackTranslation: The translation text used if no translation found for the preferred languages.
   
@@ -875,11 +888,16 @@ struct CosmosRating {
   
   Returns a decimal number between 0 and 1 describing the star fill level.
   
-  - parameter ratingRemainder: This value is passed from the loop that creates star layers. The value starts with the rating value and decremented by 1 when each star is created. For example, suppose we want to display rating of 3.5. When the first star is created the ratingRemainder parameter will be 3.5. For the second star it will be 2.5. Third: 1.5. Fourth: 0.5. Fifth: -0.5.
+  - parameter ratingRemainder: This value is passed from the loop that creates star layers.
+     The value starts with the rating value and decremented by 1 when each star is created.
+     For example, suppose we want to display rating of 3.5.
+     When the first star is created the ratingRemainder parameter will be 3.5.
+     For the second star it will be 2.5. Third: 1.5. Fourth: 0.5. Fifth: -0.5.
   
   - parameter fillMode: Describe how stars should be filled: full, half or precise.
   
-  - returns: Decimal value between 0 and 1 describing the star fill level. 1 is a fully filled star. 0 is an empty star. 0.5 is a half-star.
+  - returns: Decimal value between 0 and 1 describing the star fill level.
+     1 is a fully filled star. 0 is an empty star. 0.5 is a half-star.
   
   */
   static func starFillLevel(ratingRemainder: Double, fillMode: StarFillMode) -> Double {
@@ -894,7 +912,9 @@ struct CosmosRating {
 
   /**
   
-  Rounds a single star's fill level according to the fill mode. "Full" mode returns 0 or 1 by using the standard decimal rounding. "Half" mode returns 0, 0.5 or 1 by rounding the decimal to closest of 3 values. "Precise" mode will return the fill level unchanged.
+  Rounds a single star's fill level according to the fill mode. "Full" mode returns 0 or 1
+     by using the standard decimal rounding. "Half" mode returns 0, 0.5 or 1 by rounding
+     the decimal to closest of 3 values. "Precise" mode will return the fill level unchanged.
   
   - parameter starFillLevel: Decimal number between 0 and 1 describing the star fill level.
   
@@ -917,7 +937,8 @@ struct CosmosRating {
   /**
   
   Helper function for calculating the rating that is displayed to the user
-  taking into account the star fill mode. For example, if the fill mode is .half and precise rating is 4.6, the displayed rating will be 4.5. And if the fill mode is .full the displayed rating will be 5.
+  taking into account the star fill mode. For example, if the fill mode is .half and precise rating is 4.6,
+     the displayed rating will be 4.5. And if the fill mode is .full the displayed rating will be 5.
   
   - parameter preciseRating: Precise rating value, like 4.8237
   
@@ -949,7 +970,8 @@ struct CosmosRating {
   
   - parameter rating: The rating to be displayed.
   - parameter totalNumberOfStars: Total number of stars.
-  - returns: Number of filled stars. If rating is biggen than the total number of stars (usually 5) it returns the maximum number of stars.
+  - returns: Number of filled stars. If rating is biggen than the total number of stars
+     (usually 5) it returns the maximum number of stars.
   
   */
   static func numberOfFilledStars(_ rating: Double, totalNumberOfStars: Int) -> Double {
@@ -1005,7 +1027,8 @@ public struct CosmosSettings {
 
   /**
   
-  Defines how the star is filled when the rating value is not a whole integer. It can either show full stars, half stars or stars partially filled according to the rating value.
+  Defines how the star is filled when the rating value is not a whole integer.
+     It can either show full stars, half stars or stars partially filled according to the rating value.
   
   */
   public var fillMode = CosmosDefaultSettings.fillMode
@@ -1015,7 +1038,8 @@ public struct CosmosSettings {
 
   /**
   
-  Array of points for drawing the star with size of 100 by 100 pixels. Supply your points if you need to draw a different shape.
+  Array of points for drawing the star with size of 100 by 100 pixels.
+     Supply your points if you need to draw a different shape.
   
   */
   public var starPoints: [CGPoint] = CosmosDefaultSettings.starPoints
@@ -1031,14 +1055,16 @@ public struct CosmosSettings {
 
   /**
   
-  Image used for the filled portion of the star. By default the star is drawn from the array of points unless an image is supplied.
+  Image used for the filled portion of the star.
+     By default the star is drawn from the array of points unless an image is supplied.
   
   */
   public var filledImage: UIImage?
 
   /**
    
-   Image used for the empty portion of the star. By default the star is drawn from the array of points unless an image is supplied.
+   Image used for the empty portion of the star.
+     By default the star is drawn from the array of points unless an image is supplied.
    
    */
   public var emptyImage: UIImage?
@@ -1064,10 +1090,13 @@ public struct CosmosSettings {
   /// Set to `false` if you don't want to pass touches to superview (can be useful in a table view).
   public var passTouchesToSuperview = CosmosDefaultSettings.passTouchesToSuperview
 
-  /// When `true` the star fill level is updated when user touches the cosmos view. When `false` the Cosmos view only shows the rating and does not act as the input control.
+  /// When `true` the star fill level is updated when user touches the cosmos view.
+    ///  When `false` the Cosmos view only shows the rating and does not act as the input control.
   public var updateOnTouch = CosmosDefaultSettings.updateOnTouch
 
-  /// Set to `true` if you want to ignore pan gestures (can be useful when presented modally with a `presentationStyle` of `pageSheet` to avoid competing with the dismiss gesture)
+  /// Set to `true` if you want to ignore pan gestures
+    /// (can be useful when presented modally with a `presentationStyle` of `pageSheet`
+    ///  to avoid competing with the dismiss gesture)
   public var disablePanGestures = CosmosDefaultSettings.disablePanGestures
 }
 
@@ -1136,7 +1165,9 @@ import UIKit
 
 /**
 
-A star rating view that can be used to show customer rating for the products. On can select stars by tapping on them when updateOnTouch settings is true. An optional text can be supplied that is shown on the right side.
+A star rating view that can be used to show customer rating for the products.
+ On can select stars by tapping on them when updateOnTouch settings is true.
+ An optional text can be supplied that is shown on the right side.
 
 Example:
 
@@ -1150,7 +1181,8 @@ Shows: ★★★★☆ (123)
 
   /**
   
-  The currently shown number of stars, usually between 1 and 5. If the value is decimal the stars will be shown according to the Fill Mode setting.
+  The currently shown number of stars, usually between 1 and 5.
+     If the value is decimal the stars will be shown according to the Fill Mode setting.
 
   */
   @IBInspectable open var rating: Double = CosmosDefaultSettings.rating {
@@ -1397,7 +1429,8 @@ Shows: ★★★★☆ (123)
   /// Closure will be called when user touches the cosmos view. The touch rating argument is passed to the closure.
   open var didTouchCosmos: ((Double)->Void)?
 
-  /// Closure will be called when the user lifts finger from the cosmos view. The touch rating argument is passed to the closure.
+  /// Closure will be called when the user lifts finger from the cosmos view.
+    /// The touch rating argument is passed to the closure.
   open var didFinishTouchingCosmos: ((Double)->Void)?
 
   /// Overriding the function to detect the first touch gesture.

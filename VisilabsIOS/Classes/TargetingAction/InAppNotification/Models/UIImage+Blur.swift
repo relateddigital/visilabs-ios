@@ -6,7 +6,8 @@
 //
 
 public extension UIImage {
-    func blurred(radius: CGFloat, iterations: Int, ratio: CGFloat, blendColor color: UIColor?, blendMode mode: CGBlendMode) -> UIImage? {
+    func blurred(radius: CGFloat, iterations: Int, ratio: CGFloat,
+                 blendColor color: UIColor?, blendMode mode: CGBlendMode) -> UIImage? {
         guard let cgImage = cgImage else {
             return nil
         }
@@ -33,14 +34,16 @@ public extension UIImage {
         }
     }
 
-    convenience init?(systemItem sysItem: UIBarButtonItem.SystemItem, renderingMode: UIImage.RenderingMode = .automatic) {
+    convenience init?(systemItem sysItem: UIBarButtonItem.SystemItem,
+                      renderingMode: UIImage.RenderingMode = .automatic) {
         guard let sysImage = UIImage.imageFromSystemItem(sysItem, renderingMode: renderingMode)?.cgImage else {
             return nil
         }
         self.init(cgImage: sysImage)
     }
 
-    private class func imageFromSystemItem(_ systemItem: UIBarButtonItem.SystemItem, renderingMode: UIImage.RenderingMode = .automatic) -> UIImage? {
+    private class func imageFromSystemItem(_ systemItem: UIBarButtonItem.SystemItem,
+                                           renderingMode: UIImage.RenderingMode = .automatic) -> UIImage? {
 
         let tempItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: nil, action: nil)
 

@@ -91,7 +91,10 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         isTransitioning = true
         _view.snapsCollectionView.collectionViewLayout.invalidateLayout()
     }
-    init(layout: VisilabsLayoutType = .parallax, stories: [VisilabsStory], handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0) {
+    init(layout: VisilabsLayoutType = .parallax,
+         stories: [VisilabsStory],
+         handPickedStoryIndex: Int,
+         handPickedSnapIndex: Int = 0) {
         self.layoutType = layout
         self.stories = stories
         self.handPickedStoryIndex = handPickedStoryIndex
@@ -115,8 +118,11 @@ extension VisilabsStoryPreviewController: UICollectionViewDataSource {
         guard let model = viewModel else {return 0}
         return model.numberOfItemsInSection(section)
     }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisilabsStoryPreviewCell.reuseIdentifier, for: indexPath) as? VisilabsStoryPreviewCell else {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
+                    VisilabsStoryPreviewCell.reuseIdentifier, for: indexPath)
+                as? VisilabsStoryPreviewCell else {
             fatalError()
         }
         let story = viewModel?.cellForItemAtIndexPath(indexPath)
@@ -130,7 +136,9 @@ extension VisilabsStoryPreviewController: UICollectionViewDataSource {
 
 // MARK: - Extension|UICollectionViewDelegate
 extension VisilabsStoryPreviewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         guard let cell = cell as? VisilabsStoryPreviewCell else {
             return
         }
@@ -145,17 +153,22 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
         }
         //Prepare the setup for first time story launch
         if storyCopy == nil {
-            cell.willDisplayCellForZerothIndex(with: cell.story?.lastPlayedSnapIndex ?? 0, handpickedSnapIndex: handPickedSnapIndex)
+            cell.willDisplayCellForZerothIndex(with: cell.story?.lastPlayedSnapIndex ?? 0,
+                                               handpickedSnapIndex: handPickedSnapIndex)
             return
         }
         if indexPath.item == nStoryIndex {
             let story = stories[nStoryIndex+handPickedStoryIndex]
             cell.willDisplayCell(with: story.lastPlayedSnapIndex)
         }
-        /// Setting to 0, otherwise for next story snaps, it will consider the same previous story's handPickedSnapIndex. It will create issue in starting the snap progressors.
+        /// Setting to 0, otherwise for next story snaps,
+        ///  it will consider the same previous story's handPickedSnapIndex.
+        /// It will create issue in starting the snap progressors.
         handPickedSnapIndex = 0
     }
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         let visibleCells = collectionView.visibleCells.sortedArrayByPosition()
         let visibleCell = visibleCells.first as? VisilabsStoryPreviewCell
         guard let vCell = visibleCell else {return}
@@ -187,11 +200,17 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
 
 // MARK: - Extension|UICollectionViewDelegateFlowLayout
 extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         /* During device rotation, invalidateLayout gets call to make cell width and height proper.
-         * InvalidateLayout methods call this UICollectionViewDelegateFlowLayout method, and the scrollView content offset moves to (0, 0). Which is not the expected result.
-         * To keep the contentOffset to that same position adding the below code which will execute after 0.1 second because need time for collectionView adjusts its width and height.
-         * Adjusting preview snap progressors width to Holder view width because when animation finished in portrait orientation, when we switch to landscape orientation, we have to update the progress view width for preview snap progressors also.
+         * InvalidateLayout methods call this UICollectionViewDelegateFlowLayout method,
+         and the scrollView content offset moves to (0, 0). Which is not the expected result.
+         * To keep the contentOffset to that same position adding the below code
+         which will execute after 0.1 second because need time for collectionView adjusts its width and height.
+         * Adjusting preview snap progressors width to Holder view width because
+         when animation finished in portrait orientation, when we switch to landscape orientation,
+         we have to update the progress view width for preview snap progressors also.
          * Also, adjusting progress view width to updated frame width when the progress view animation is executing.
          */
         if isTransitioning {
@@ -204,7 +223,8 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
                     let progress = vCell.getProgressView(with: vCell.snapIndex) else {
                         fatalError("Visible cell or progressIndicatorView or progressView is nil")
                 }
-                vCell.scrollview.setContentOffset(CGPoint(x: CGFloat(vCell.snapIndex) * collectionView.frame.width, y: 0), animated: false)
+                vCell.scrollview.setContentOffset(CGPoint(x: CGFloat(vCell.snapIndex) * collectionView.frame.width,
+                                                          y: 0), animated: false)
                 vCell.adjustPreviousSnapProgressorsWidth(with: vCell.snapIndex)
 
                 if progress.state == .running {
@@ -214,7 +234,8 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
             }
         }
         if #available(iOS 11.0, *) {
-            return CGSize(width: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.width, height: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.height)
+            return CGSize(width: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.width,
+                          height: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.height)
         } else {
             return CGSize(width: _view.snapsCollectionView.frame.width, height: _view.snapsCollectionView.frame.height)
         }
@@ -245,7 +266,8 @@ extension VisilabsStoryPreviewController {
             }
         }
     }
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
@@ -262,7 +284,9 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
             //_view.snapsCollectionView.layer.speed = 0;
             _view.snapsCollectionView.scrollToItem(at: nIndexPath, at: .right, animated: true)
             /**@Note:
-             Here we are navigating to next snap explictly, So we need to handle the isCompletelyVisible. With help of this Bool variable we are requesting snap. Otherwise cell wont get Image as well as the Progress move :P
+             Here we are navigating to next snap explictly, So we need to handle the isCompletelyVisible.
+             With help of this Bool variable we are requesting snap.
+             Otherwise cell wont get Image as well as the Progress move :P
              */
         } else {
             self.dismiss(animated: true, completion: nil)

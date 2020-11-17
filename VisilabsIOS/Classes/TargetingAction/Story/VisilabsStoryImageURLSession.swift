@@ -24,7 +24,7 @@ extension VisilabsStoryImageURLSession {
         guard let url = URL(string: urlString) else {
             return completionBlock(.failure(VisilabsStoryImageError.invalidImageURL))
         }
-        dataTasks.append(VisilabsStoryImageURLSession.shared.dataTask(with: url, completionHandler: { (data, _, error) in
+        dataTasks.append(VisilabsStoryImageURLSession.shared.dataTask(with: url, completionHandler: {(data, _, error) in
             if let result = data, error == nil, let imageToCache = UIImage(data: result) {
                 VisilabsStoryImageCache.shared.setObject(imageToCache, forKey: url.absoluteString as AnyObject)
                 completionBlock(.success(imageToCache))

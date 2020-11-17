@@ -17,7 +17,8 @@ class VisilabsLocationManager: NSObject {
 
     var currentGeoLocationValue: CLLocationCoordinate2D?
     var sentGeoLocationValue: CLLocationCoordinate2D? //TODO: ne işe yarayacak bu?
-    var sentGeoLocationTime: TimeInterval? //for calculate time delta to prevent too often location update notification send.
+    var sentGeoLocationTime: TimeInterval?
+    //for calculate time delta to prevent too often location update notification send.
     var locationServiceEnabled = false
 
     override init() {
@@ -59,13 +60,14 @@ class VisilabsLocationManager: NSObject {
         self.locationManager = CLLocationManager()
         self.locationManager?.delegate = self
         #if !TARGET_IPHONE_SIMULATOR
-            if self.locationManager?.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
+            if self.locationManager?.responds(to:
+                        #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
                 self.locationManager?.pausesLocationUpdatesAutomatically = false
             }
         #endif
         self.requestLocationAuthorization()
         //TODO:bunu yayınlarken tekrar 100e çek
-        self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest //kCLLocationAccuracyHundredMeters 
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest //kCLLocationAccuracyHundredMeters
         self.locationManager?.distanceFilter = CLLocationDistance(10)
         self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
@@ -114,8 +116,11 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             return
         } else if locations.count > 0 {
             self.currentGeoLocationValue = locations[0].coordinate
-            VisilabsLogger.info("CLLocationManager didUpdateLocations: lat:\(locations[0].coordinate.latitude) lon:\(locations[0].coordinate.longitude)")
-            VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: self.currentGeoLocationValue?.latitude, lastKnownLongitude: self.currentGeoLocationValue?.longitude)
+            let infoMessage = "CLLocationManager didUpdateLocations: lat:\(locations[0].coordinate.latitude)" +
+                " lon:\(locations[0].coordinate.longitude)"
+            VisilabsLogger.info(infoMessage)
+            VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: self.currentGeoLocationValue?.latitude,
+                                                        lastKnownLongitude: self.currentGeoLocationValue?.longitude)
         }
     }
 
@@ -131,9 +136,13 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             let targetEvent = elements[3]
             if targetEvent == VisilabsConstants.onEnter {
                 //TODO: burada isEnter false geçmişim neden?
-                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: false, isEnter: false)
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId,
+                                                                     geofenceId: geofenceId,
+                                                                     isDwell: false, isEnter: false)
             } else if targetEvent == VisilabsConstants.dwell {
-                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: true, isEnter: true)
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId,
+                                                                     geofenceId: geofenceId,
+                                                                     isDwell: true, isEnter: true)
             }
         }
     }
@@ -145,9 +154,13 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             let geofenceId = elements[2]
             let targetEvent = elements[3]
             if targetEvent == VisilabsConstants.onExit {
-                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: false, isEnter: false)
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId,
+                                                                     geofenceId: geofenceId,
+                                                                     isDwell: false, isEnter: false)
             } else if targetEvent == VisilabsConstants.dwell {
-                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: true, isEnter: false)
+                VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId,
+                                                                     geofenceId: geofenceId,
+                                                                     isDwell: true, isEnter: false)
             }
         }
     }
@@ -158,11 +171,14 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-        VisilabsLogger.error("CLLocationManager monitoringDidFailFor: region identifier: \(region?.identifier ?? "nil") error: \(error.localizedDescription)")
+        let errorMessage = "CLLocationManager monitoringDidFailFor: region identifier:" +
+            " \(region?.identifier ?? "nil") error: \(error.localizedDescription)"
+        VisilabsLogger.error(errorMessage)
     }
 
     //TODO: buna gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-        VisilabsLogger.info("CLLocationManager didDetermineState: region identifier: \(region.identifier) state: \(state)")
+        let infoMessage = "CLLocationManager didDetermineState: region identifier: \(region.identifier) state: \(state)"
+        VisilabsLogger.info(infoMessage)
     }
 }

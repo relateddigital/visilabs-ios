@@ -63,7 +63,8 @@ class VisilabsVideoCacheManager {
         guard let cacheURL =  mainDirectoryUrl else { return }
         do {
             // Get the directory contents urls (including subfolders urls)
-            let directoryContents = try FileManager.default.contentsOfDirectory( at: cacheURL, includingPropertiesForKeys: nil, options: [])
+            let directoryContents = try FileManager.default.contentsOfDirectory(at: cacheURL,
+                                                        includingPropertiesForKeys: nil, options: [])
             if let string = urlString, let url = URL(string: string) {
                 do {
                     try fileManager.removeItem(at: url)
@@ -84,7 +85,10 @@ class VisilabsVideoCacheManager {
         }
     }
     private func directoryFor(stringUrl: String) -> URL? {
-        guard let fileURL = URL(string: stringUrl)?.lastPathComponent, let mainDirURL = self.mainDirectoryUrl else { return nil }
+        guard let fileURL = URL(string: stringUrl)?.lastPathComponent,
+              let mainDirURL = self.mainDirectoryUrl else {
+            return nil
+        }
         let file = mainDirURL.appendingPathComponent(fileURL)
         return file
     }

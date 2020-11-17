@@ -55,27 +55,35 @@ public class VisilabsPersistence {
     //TODO: bunu ExceptionWrapper içine al
     class func unarchiveUser() -> VisilabsUser {
         var visilabsUser = VisilabsUser()
-        //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library we added this control.
-        if let cidfp = filePath(filename: VisilabsConstants.identityArchiveKey), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
+        //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library
+        //we added this control.
+        if let cidfp = filePath(filename: VisilabsConstants.identityArchiveKey),
+           let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
         }
-        if let cidfp = filePath(filename: VisilabsConstants.cookieidArchiveKey), let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
+        if let cidfp = filePath(filename: VisilabsConstants.cookieidArchiveKey),
+           let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
         }
-        if let exvidfp = filePath(filename: VisilabsConstants.exvisitorIdArchiveKey), let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
+        if let exvidfp = filePath(filename: VisilabsConstants.exvisitorIdArchiveKey),
+           let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
             visilabsUser.exVisitorId = exvid
         }
-        if let appidfp = filePath(filename: VisilabsConstants.appidArchiveKey), let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
+        if let appidfp = filePath(filename: VisilabsConstants.appidArchiveKey),
+           let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
             visilabsUser.appId = aid
         }
-        if let tidfp = filePath(filename: VisilabsConstants.tokenidArchiveKey), let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
+        if let tidfp = filePath(filename: VisilabsConstants.tokenidArchiveKey),
+           let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
             visilabsUser.tokenId = tid
         }
-        if let uafp = filePath(filename: VisilabsConstants.useragentArchiveKey), let userAgent = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
+        if let uafp = filePath(filename: VisilabsConstants.useragentArchiveKey),
+           let userAgent = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
             visilabsUser.userAgent = userAgent
         }
 
-        if let propsfp = filePath(filename: VisilabsConstants.userArchiveKey), let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String: String?] {
+        if let propsfp = filePath(filename: VisilabsConstants.userArchiveKey),
+           let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String: String?] {
             if let cid = props[VisilabsConstants.cookieIdKey], !cid.isNilOrWhiteSpace {
                 visilabsUser.cookieId = cid
             }
@@ -128,7 +136,8 @@ public class VisilabsPersistence {
                             var parameterValueToStore = parameterValue.copy() as! String
                             let relatedKey = relatedKeys![0]
                             if parameters[relatedKey] != nil {
-                                let relatedKeyValue = (parameters[relatedKey])?.trimmingCharacters(in: CharacterSet.whitespaces)
+                                let relatedKeyValue = (parameters[relatedKey])?
+                                    .trimmingCharacters(in: CharacterSet.whitespaces)
                                 parameterValueToStore = parameterValueToStore + ("|")
                                 parameterValueToStore = parameterValueToStore + (relatedKeyValue ?? "")
                             } else {
@@ -151,7 +160,8 @@ public class VisilabsPersistence {
                                 }
                                 let decodedPreviousParameterValuePart = previousParameterValueParts[counter] as String
                                 //TODO:burayı kontrol et java'da "\\|" yapmak gerekiyordu.
-                                let decodedPreviousParameterValuePartArray = decodedPreviousParameterValuePart.components(separatedBy: "|")
+                                let decodedPreviousParameterValuePartArray = decodedPreviousParameterValuePart
+                                    .components(separatedBy: "|")
                                 if decodedPreviousParameterValuePartArray.count == 2 {
                                     parameterValueToStore = parameterValueToStore + ("~")
                                     parameterValueToStore = parameterValueToStore + (decodedPreviousParameterValuePart )
@@ -168,7 +178,8 @@ public class VisilabsPersistence {
     }
 
     class func readTargetParameters() -> [String: String] {
-        guard let targetParameters = readUserDefaults(VisilabsConstants.userDefaultsTargetKey) as? [String: String] else {
+        guard let targetParameters = readUserDefaults(VisilabsConstants.userDefaultsTargetKey)
+                as? [String: String] else {
             return [String: String]()
         }
         return targetParameters
@@ -214,14 +225,17 @@ public class VisilabsPersistence {
     static func saveVisilabsGeofenceHistory(_ visilabsGeofenceHistory: VisilabsGeofenceHistory) {
         let encoder = JSONEncoder()
         if let encodedVisilabsGeofenceHistory = try? encoder.encode(visilabsGeofenceHistory) {
-            saveUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey, withObject: encodedVisilabsGeofenceHistory)
+            saveUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey,
+                             withObject: encodedVisilabsGeofenceHistory)
         }
     }
 
     public static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
-        if let savedVisilabsGeofenceHistory = readUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey) as? Data {
+        if let savedVisilabsGeofenceHistory =
+            readUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey) as? Data {
             let decoder = JSONDecoder()
-            if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self, from: savedVisilabsGeofenceHistory) {
+            if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self,
+                                                                       from: savedVisilabsGeofenceHistory) {
                 return loadedVisilabsGeofenceHistory
             }
         }

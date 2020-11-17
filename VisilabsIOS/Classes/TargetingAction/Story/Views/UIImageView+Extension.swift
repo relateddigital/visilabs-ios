@@ -42,12 +42,14 @@ extension UIImageView {
             return value
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &ActivityIndicator.isEnabled, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &ActivityIndicator.isEnabled,
+                                     newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     public var activityStyle: UIActivityIndicatorView.Style {
         get {
-            guard let value = objc_getAssociatedObject(self, &ActivityIndicator.style) as? UIActivityIndicatorView.Style else {
+            guard let value = objc_getAssociatedObject(self, &ActivityIndicator.style)
+                    as? UIActivityIndicatorView.Style else {
                 if #available(iOS 13.0, *) {
                     return .large
                 } else {
@@ -57,7 +59,8 @@ extension UIImageView {
             return value
         }
         set(newValue) {
-            objc_setAssociatedObject(self, &ActivityIndicator.style, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &ActivityIndicator.style, newValue,
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     public var activityIndicator: UIActivityIndicatorView {
@@ -74,7 +77,8 @@ extension UIImageView {
         set(newValue) {
             let activityView = newValue
             activityView.hidesWhenStopped = true
-            objc_setAssociatedObject(self, &ActivityIndicator.view, activityView, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &ActivityIndicator.view, activityView,
+                                     objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 

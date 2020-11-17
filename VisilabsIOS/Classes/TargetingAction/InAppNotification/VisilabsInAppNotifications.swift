@@ -60,7 +60,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         miniNotificationVC.show(animated: true)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + miniNotificationPresentationTime) {
-            self.notificationShouldDismiss(controller: miniNotificationVC, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+            self.notificationShouldDismiss(controller: miniNotificationVC, callToActionURL: nil,
+                                           shouldTrack: false, additionalTrackingProperties: nil)
         }
         return true
     }
@@ -78,7 +79,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let window = UIApplication.shared.keyWindow
         if window != nil {
             for subview in window?.subviews ?? [] {
-                if !subview.isHidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0 {
+                if !subview.isHidden && subview.alpha > 0
+                    && subview.frame.size.width > 0
+                    && subview.frame.size.height > 0 {
                     topView = subview
                 }
             }
@@ -120,7 +123,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     @discardableResult
-    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController, callToActionURL: URL?, shouldTrack: Bool, additionalTrackingProperties: [String: String]?) -> Bool {
+    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
+                                   callToActionURL: URL?, shouldTrack: Bool,
+                                   additionalTrackingProperties: [String: String]?) -> Bool {
         if currentlyShowingNotification?.actId != controller.notification.actId {
             return false
         }
@@ -145,7 +150,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
         if let callToActionURL = callToActionURL {
             controller.hide(animated: true) {
-                VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL, waitUntilDone: true)
+                let app = VisilabsInstance.sharedUIApplication()
+                app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL,
+                                     waitUntilDone: true)
                 completionBlock()
             }
         } else {

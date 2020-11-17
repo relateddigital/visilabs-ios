@@ -192,20 +192,24 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         for index in 0..<pvIndicatorArray.count {
             let pvIndicator = pvIndicatorArray[index]
             if index == 0 {
-                pvIndicator.leftConstraiant = pvIndicator.igLeftAnchor.constraint(equalTo: self.getProgressView.igLeftAnchor, constant: padding)
+                pvIndicator.leftConstraiant =
+                pvIndicator.igLeftAnchor.constraint(equalTo: self.getProgressView.igLeftAnchor, constant: padding)
                 NSLayoutConstraint.activate([
                     pvIndicator.leftConstraiant!,
                     pvIndicator.igCenterYAnchor.constraint(equalTo: self.getProgressView.igCenterYAnchor),
                     pvIndicator.heightAnchor.constraint(equalToConstant: height)
                     ])
                 if pvIndicatorArray.count == 1 {
-                    pvIndicator.rightConstraiant = self.getProgressView.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: padding)
+                    pvIndicator.rightConstraiant =
+                    self.getProgressView.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: padding)
                     pvIndicator.rightConstraiant!.isActive = true
                 }
             } else {
                 let prePVIndicator = pvIndicatorArray[index-1]
-                pvIndicator.widthConstraint = pvIndicator.widthAnchor.constraint(equalTo: prePVIndicator.widthAnchor, multiplier: 1.0)
-                pvIndicator.leftConstraiant = pvIndicator.igLeftAnchor.constraint(equalTo: prePVIndicator.igRightAnchor, constant: padding)
+                pvIndicator.widthConstraint =
+                pvIndicator.widthAnchor.constraint(equalTo: prePVIndicator.widthAnchor, multiplier: 1.0)
+                pvIndicator.leftConstraiant =
+                pvIndicator.igLeftAnchor.constraint(equalTo: prePVIndicator.igRightAnchor, constant: padding)
                 NSLayoutConstraint.activate([
                     pvIndicator.leftConstraiant!,
                     pvIndicator.igCenterYAnchor.constraint(equalTo: prePVIndicator.igCenterYAnchor),
@@ -213,7 +217,8 @@ final class VisilabsStoryPreviewHeaderView: UIView {
                     pvIndicator.widthConstraint!
                     ])
                 if index == pvIndicatorArray.count-1 {
-                    pvIndicator.rightConstraiant = self.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: padding)
+                    pvIndicator.rightConstraiant =
+                    self.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: padding)
                     pvIndicator.rightConstraiant!.isActive = true
                 }
             }

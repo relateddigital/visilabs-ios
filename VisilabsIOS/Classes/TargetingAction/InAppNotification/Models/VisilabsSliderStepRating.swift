@@ -97,7 +97,8 @@ class VisilabsSliderStep: UISlider {
         }
 
         self.addTarget(self, action: #selector(VisilabsSliderStep.movingSliderStepValue), for: .valueChanged)
-        self.addTarget(self, action: #selector(VisilabsSliderStep.didMoveSliderStepValue), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        self.addTarget(self, action: #selector(VisilabsSliderStep.didMoveSliderStepValue),
+                       for: [.touchUpInside, .touchUpOutside, .touchCancel])
     }
 
     @objc internal func sliderTapped(_ gestureRecognizer: UIGestureRecognizer) {
@@ -139,7 +140,8 @@ class VisilabsSliderStep: UISlider {
     @objc internal func setThumbForSliderValue(_ value: Float) {
         //Image
         if let selectionImage = thumbForSliderValue(value) {
-            let image = selectionImage.resizeImage(targetSize: CGSize(width: highlightedImageSize, height: highlightedImageSize))
+            let image = selectionImage.resizeImage(targetSize: CGSize(width: highlightedImageSize,
+                                                                height: highlightedImageSize))
             self.setThumbImage(image, for: UIControl.State())
             self.setThumbImage(image, for: UIControl.State.selected)
             self.setThumbImage(image, for: UIControl.State.highlighted)
@@ -184,7 +186,8 @@ class VisilabsSliderStep: UISlider {
 
     override func draw(_ rect: CGRect) {
         guard minimumValue >= 0 && maximumValue > minimumValue else {
-            print("SliderStep ERROR: minimumValue AND maximumValue need to be UInt: maximumValue < minimumValue OR minimumValue < 0 OR maximumValue < 0. EXIT.")
+            print("SliderStep ERROR: minimumValue AND maximumValue need to be" +
+                    " UInt: maximumValue < minimumValue OR minimumValue < 0 OR maximumValue < 0. EXIT.")
             return
         }
 
@@ -341,7 +344,8 @@ class VisilabsSliderStep: UISlider {
             ctx?.setFillColor(trackColor.cgColor)
             let xPoint = trackLeftOffset
             let yPoint = bounds.midY - CGFloat(trackHeight / 2)
-            let rect = CGRect(x: xPoint, y: yPoint, width: bounds.width - trackLeftOffset - trackRightOffset, height: CGFloat(trackHeight))
+            let rect = CGRect(x: xPoint, y: yPoint,
+                              width: bounds.width - trackLeftOffset - trackRightOffset, height: CGFloat(trackHeight))
             let trackPath = UIBezierPath(rect: rect)
 
             ctx?.addPath(trackPath.cgPath)
@@ -400,7 +404,8 @@ extension UIImage {
         let size = self.size
         let widthRatio  = targetSize.width  / size.width
         let heightRatio = targetSize.height / size.height
-        let newSize = widthRatio > heightRatio ?  CGSize(width: size.width * heightRatio, height: size.height * heightRatio) : CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        let newSize = widthRatio > heightRatio ?  CGSize(width: size.width * heightRatio,
+        height: size.height * heightRatio) : CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
         let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
 
         UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)

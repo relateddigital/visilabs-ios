@@ -51,13 +51,19 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: self.notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: nil)
+            self.delegate?.notificationShouldDismiss(controller: self,
+                                                     callToActionURL: self.notification.callToActionUrl,
+                                                     shouldTrack: true,
+                                                     additionalTrackingProperties: nil)
         }
     }
 
     @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+            self.delegate?.notificationShouldDismiss(controller: self,
+                                                     callToActionURL: nil,
+                                                     shouldTrack: false,
+                                                     additionalTrackingProperties: nil)
         }
     }
 
@@ -67,30 +73,48 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     public convenience init(notification: VisilabsInAppNotification) {
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
-        self.init(notification: notification, viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
+        self.init(notification: notification,
+                  viewController: viewController,
+                  buttonAlignment: .vertical,
+                  transitionStyle: .zoomIn,
+                  preferredWidth: 580,
+                  tapGestureDismissal: false,
+                  panGestureDismissal: false,
+                  hideStatusBar: false)
         if notification.type != .fullImage {
 
-            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: {
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!,
+                                                   font: notification.buttonTextFont,
+                                                   buttonTextColor: notification.buttonTextColor,
+                                                   buttonColor: notification.buttonColor, action: {
 
                 var additionalTrackingProperties = [String: String]()
                            if notification.type == .smileRating {
-                               additionalTrackingProperties["OM.s_point"] = String(Int(viewController.standardView.sliderStepRating.value))
+                               additionalTrackingProperties["OM.s_point"]
+                                = String(Int(viewController.standardView.sliderStepRating.value))
                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
                            } else if notification.type == .nps {
-                               additionalTrackingProperties["OM.s_point"] = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",", with: ".")
+                               additionalTrackingProperties["OM.s_point"]
+                                = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",",
+                                                                                                        with: ".")
                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
                            }
 
-                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: additionalTrackingProperties) })
+                self.delegate?.notificationShouldDismiss(controller: self,
+                                                         callToActionURL: notification.callToActionUrl,
+                                                         shouldTrack: true,
+                                                         additionalTrackingProperties: additionalTrackingProperties)})
             addButton(button)
         } else {
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                              action: #selector(imageTapped(tapGestureRecognizer:)))
             viewController.standardView.imageView.isUserInteractionEnabled = true
             viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
         }
-        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeButtonTapped(tapGestureRecognizer:)))
+        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                        action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
     }
@@ -152,7 +176,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         }
         // Allow for dialog dismissal on dialog pan gesture
         if panGestureDismissal {
-            let panRecognizer = UIPanGestureRecognizer(target: interactor, action: #selector(VisilabsInteractiveTransition.handlePan))
+            let panRecognizer = UIPanGestureRecognizer(target: interactor,
+                                                       action: #selector(VisilabsInteractiveTransition.handlePan))
             panRecognizer.cancelsTouchesInView = false
             popupContainerView.stackView.addGestureRecognizer(panRecognizer)
         }
@@ -288,7 +313,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     /*
      convenience init(notification: VisilabsInAppNotification) {
-         self.init(notification: notification, nameOfClass: String(describing: VisilabsPopupNotificationViewController.self))
+         self.init(notification: notification,
+     nameOfClass: String(describing: VisilabsPopupNotificationViewController.self))
      }
      */
 }

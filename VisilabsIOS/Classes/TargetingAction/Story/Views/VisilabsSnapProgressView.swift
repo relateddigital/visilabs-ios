@@ -14,14 +14,18 @@ enum ProgressorState {
     case finished
 }
 protocol ViewAnimator {
-    func start(with duration: TimeInterval, holderView: UIView, completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int, _ isCancelledAbruptly: Bool) -> Void)
+    func start(with duration: TimeInterval, holderView: UIView,
+               completion: @escaping (_ storyIdentifier: String,
+                                      _ snapIndex: Int, _ isCancelledAbruptly: Bool) -> Void)
     func resume()
     func pause()
     func stop()
     func reset()
 }
 extension ViewAnimator where Self: VisilabsSnapProgressView {
-    func start(with duration: TimeInterval, holderView: UIView, completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int, _ isCancelledAbruptly: Bool) -> Void) {
+    func start(with duration: TimeInterval, holderView: UIView,
+               completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int,
+                                      _ isCancelledAbruptly: Bool) -> Void) {
         // Modifying the existing widthConstraint and setting the width equalTo holderView's widthAchor
         self.state = .running
         self.widthConstraint?.isActive = false
@@ -38,10 +42,13 @@ extension ViewAnimator where Self: VisilabsSnapProgressView {
             self?.state = .finished
             if finished == true {
                 if let strongSelf = self {
-                    return completion(strongSelf.storyIdentifier!, strongSelf.snapIndex!, strongSelf.story.isCancelledAbruptly)
+                    return completion(strongSelf.storyIdentifier!,
+                                      strongSelf.snapIndex!,
+                                      strongSelf.story.isCancelledAbruptly)
                 }
             } else {
-                return completion(self?.storyIdentifier ?? "Unknown", self?.snapIndex ?? 0, self?.story.isCancelledAbruptly ?? true)
+                return completion(self?.storyIdentifier ?? "Unknown",
+                                  self?.snapIndex ?? 0, self?.story.isCancelledAbruptly ?? true)
             }
         }
     }

@@ -302,7 +302,10 @@ open class Checkbox: UIControl {
 
     override public func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let relativeFrame = self.bounds
-        let hitTestEdgeInsets = UIEdgeInsets(top: -increasedTouchRadius, left: -increasedTouchRadius, bottom: -increasedTouchRadius, right: -increasedTouchRadius)
+        let hitTestEdgeInsets = UIEdgeInsets(top: -increasedTouchRadius,
+                                             left: -increasedTouchRadius,
+                                             bottom: -increasedTouchRadius,
+                                             right: -increasedTouchRadius)
         let hitFrame = relativeFrame.inset(by: hitTestEdgeInsets)
         return hitFrame.contains(point)
     }

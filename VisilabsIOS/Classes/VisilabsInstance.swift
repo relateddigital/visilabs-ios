@@ -57,7 +57,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsRecommendationInstance: VisilabsRecommendation
 
     public var debugDescription: String {
-        return "Visilabs(siteId : \(self.visilabsProfile.profileId) organizationId: \(self.visilabsProfile.organizationId)"
+        return "Visilabs(siteId : \(self.visilabsProfile.profileId)" +
+            "organizationId: \(self.visilabsProfile.organizationId)"
     }
 
     public var loggingEnabled: Bool = false {
@@ -81,18 +82,31 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     public var useInsecureProtocol: Bool = false {
         didSet {
             self.visilabsProfile.useInsecureProtocol = useInsecureProtocol
-            VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource, useInsecureProtocol: useInsecureProtocol)
+            VisilabsHelper.setEndpoints(dataSource: self.visilabsProfile.dataSource,
+                                        useInsecureProtocol: useInsecureProtocol)
             VisilabsPersistence.saveVisilabsProfile(self.visilabsProfile)
         }
     }
 
-    init(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) {
+    init(organizationId: String,
+         profileId: String,
+         dataSource: String,
+         inAppNotificationsEnabled: Bool,
+         channel: String,
+         requestTimeoutInSeconds: Int,
+         geofenceEnabled: Bool,
+         maxGeofenceCount: Int) {
 
         //TODO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
-            var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
-            func reachabilityCallback(reachability: SCNetworkReachability, flags: SCNetworkReachabilityFlags, unsafePointer: UnsafeMutableRawPointer?) {
-                let wifi = flags.contains(SCNetworkReachabilityFlags.reachable) && !flags.contains(SCNetworkReachabilityFlags.isWWAN)
+            var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil,
+                                                       release: nil, copyDescription: nil)
+
+            func reachabilityCallback(reachability: SCNetworkReachability,
+                                      flags: SCNetworkReachabilityFlags,
+                                      unsafePointer: UnsafeMutableRawPointer?) {
+                let wifi = flags.contains(SCNetworkReachabilityFlags.reachable)
+                    && !flags.contains(SCNetworkReachabilityFlags.isWWAN)
                 VisilabsLogger.info("reachability changed, wifi=\(wifi)")
             }
             if SCNetworkReachabilitySetCallback(reachability, reachabilityCallback, &context) {
@@ -103,7 +117,14 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
 
-        self.visilabsProfile = VisilabsProfile(organizationId: organizationId, profileId: profileId, dataSource: dataSource, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, inAppNotificationsEnabled: inAppNotificationsEnabled, maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
+        self.visilabsProfile = VisilabsProfile(organizationId: organizationId,
+                                               profileId: profileId,
+                                               dataSource: dataSource,
+                                               channel: channel,
+                                               requestTimeoutInSeconds: requestTimeoutInSeconds,
+                                               geofenceEnabled: geofenceEnabled,
+                                               inAppNotificationsEnabled: inAppNotificationsEnabled,
+                                               maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
@@ -114,7 +135,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         self.visilabsEventInstance = VisilabsEvent(visilabsProfile: self.visilabsProfile)
         self.visilabsSendInstance = VisilabsSend()
-        self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock, visilabsProfile: self.visilabsProfile)
+        self.visilabsTargetingActionInstance = VisilabsTargetingAction(lock: self.readWriteLock,
+                                                                       visilabsProfile: self.visilabsProfile)
         self.visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
 
         self.visilabsUser = self.unarchive()
@@ -142,7 +164,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 
     static func sharedUIApplication() -> UIApplication? {
-        guard let sharedApplication = UIApplication.perform(NSSelectorFromString("sharedApplication"))?.takeUnretainedValue() as? UIApplication else {
+        let shared = UIApplication.perform(NSSelectorFromString("sharedApplication"))?.takeUnretainedValue()
+        guard let sharedApplication = shared as? UIApplication else {
             return nil
         }
         return sharedApplication
@@ -168,21 +191,27 @@ extension VisilabsInstance {
                 vUser = self.visilabsUser
                 chan = self.visilabsProfile.channel
             }
-            let (eventsQueue, visilabsUser, clearUserParameters, channel) = self.visilabsEventInstance.customEvent(pageName: pageName, properties: properties, eventsQueue: eQueue, visilabsUser: vUser, channel: chan)
+            let result = self.visilabsEventInstance.customEvent(pageName: pageName,
+                                                                properties: properties,
+                                                                eventsQueue: eQueue,
+                                                                visilabsUser: vUser,
+                                                                channel: chan)
             self.readWriteLock.write {
-                self.eventsQueue = eventsQueue
-                self.visilabsUser = visilabsUser
-                self.visilabsProfile.channel = channel
+                self.eventsQueue = result.eventsQueque
+                self.visilabsUser = result.visilabsUser
+                self.visilabsProfile.channel = result.channel
             }
             self.readWriteLock.read {
                 VisilabsPersistence.archiveUser(self.visilabsUser)
-                if clearUserParameters {
+                if result.clearUserParameters {
                     VisilabsPersistence.clearTargetParameters()
                 }
             }
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveTargetParameters(event)
-                if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled, pageName != VisilabsConstants.omEvtGif {
+                if let _ = VisilabsBasePath.endpoints[.action],
+                   self.visilabsProfile.inAppNotificationsEnabled,
+                   pageName != VisilabsConstants.omEvtGif {
                     self.checkInAppNotification(properties: event)
                 }
             }
@@ -249,7 +278,10 @@ extension VisilabsInstance {
                 self.readWriteLock.write {
                     self.eventsQueue.removeAll()
                 }
-                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue, visilabsUser: vUser, visilabsCookie: vCookie, timeoutInterval: self.visilabsProfile.requestTimeoutInterval)
+                let cookie = self.visilabsSendInstance.sendEventsQueue(eQueue,
+                                                                       visilabsUser: vUser,
+                                                                       visilabsCookie: vCookie,
+                                    timeoutInterval: self.visilabsProfile.requestTimeoutInterval)
                 self.readWriteLock.write {
                     self.visilabsCookie = cookie
                 }
@@ -264,7 +296,8 @@ extension VisilabsInstance {
 
 extension VisilabsInstance {
 
-    public func getFavoriteAttributeActions(actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
+    public func getFavoriteAttributeActions(actionId: Int? = nil,
+                completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
         self.targetingActionQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
                 guard let self = self else { return }
@@ -272,7 +305,9 @@ extension VisilabsInstance {
                 self.readWriteLock.read {
                     vUser = self.visilabsUser
                 }
-                self.visilabsTargetingActionInstance.getFavorites(visilabsUser: vUser, actionId: actionId, completion: completion)
+                self.visilabsTargetingActionInstance.getFavorites(visilabsUser: vUser,
+                                                                  actionId: actionId,
+                                                                  completion: completion)
             }
         }
     }
@@ -293,7 +328,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             guard let self = self else { return }
             self.networkQueue.async { [weak self, properties] in
                 guard let self = self else { return }
-                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties, visilabsUser: self.visilabsUser, timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { visilabsInAppNotification in
+                self.visilabsTargetingActionInstance.checkInAppNotification(properties: properties,
+                                                                            visilabsUser: self.visilabsUser,
+                                                timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
+                                                                            completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
                         self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
                     }
@@ -342,11 +380,16 @@ extension VisilabsInstance {
             guard let self = self else { return }
             self.networkQueue.async { [weak self, actionId, guid] in
                 guard let self = self else { return }
-                self.visilabsTargetingActionInstance.getStories(visilabsUser: self.visilabsUser, guid: guid, actionId: actionId, completion: { response in
+                self.visilabsTargetingActionInstance.getStories(visilabsUser: self.visilabsUser,
+                                                                guid: guid,
+                                                                actionId: actionId,
+                                                                completion: { response in
                     if let error = response.error {
                         VisilabsLogger.error(error)
                     } else {
-                        if let guid = response.guid, response.storyActions.count > 0, let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid], let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] {
+                        if let guid = response.guid, response.storyActions.count > 0,
+        let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid],
+                           let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] {
                             DispatchQueue.main.async {
                                 storyHomeViewController.loadStoryAction(response.storyActions.first!)
                                 storyHomeView.collectionView.reloadData()
@@ -368,7 +411,12 @@ extension VisilabsInstance {
 
 extension VisilabsInstance {
 
-    public func recommend(zoneID: String, productCode: String? = nil, filters: [VisilabsRecommendationFilter] = [], properties: [String: String] = [:], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+    public func recommend(zoneID: String,
+                          productCode: String? = nil,
+                          filters: [VisilabsRecommendationFilter] = [],
+                          properties: [String: String] = [:],
+                          completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+
         self.recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else { return }
@@ -378,7 +426,12 @@ extension VisilabsInstance {
                     vUser = self.visilabsUser
                     channel = self.visilabsProfile.channel
                 }
-                self.visilabsRecommendationInstance.recommend(zoneID: zoneID, productCode: productCode, visilabsUser: vUser, channel: channel, properties: properties, filters: filters) { (response) in
+                self.visilabsRecommendationInstance.recommend(zoneID: zoneID,
+                                                              productCode: productCode,
+                                                              visilabsUser: vUser,
+                                                              channel: channel,
+                                                              properties: properties,
+                                                              filters: filters) { (response) in
                     completion(response)
                 }
             }
