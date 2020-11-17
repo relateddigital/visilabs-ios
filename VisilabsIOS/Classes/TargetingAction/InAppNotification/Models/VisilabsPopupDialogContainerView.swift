@@ -161,8 +161,21 @@ final public class VisilabsPopupDialogContainerView: UIView {
             shadowContainer.trailing(to: self, offset: -10, relation: .equalOrLess)
         }
 
-        constraints += [NSLayoutConstraint(item: shadowContainer, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)]
-        centerYConstraint = NSLayoutConstraint(item: shadowContainer, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
+        constraints += [NSLayoutConstraint(item: shadowContainer,
+                                           attribute: .centerX,
+                                           relatedBy: .equal,
+                                           toItem: self,
+                                           attribute: .centerX,
+                                           multiplier: 1,
+                                           constant: 0)]
+
+        centerYConstraint = NSLayoutConstraint(item: shadowContainer,
+                                               attribute: .centerY,
+                                               relatedBy: .equal,
+                                               toItem: self,
+                                               attribute: .centerY,
+                                               multiplier: 1,
+                                               constant: 0)
 
         if let centerYConstraint = centerYConstraint {
             constraints.append(centerYConstraint)

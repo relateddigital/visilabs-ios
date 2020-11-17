@@ -6,7 +6,11 @@
 //
 
 public class VisilabsGeofenceHistory: Codable {
-    internal init(lastKnownLatitude: Double? = nil, lastKnownLongitude: Double? = nil, lastFetchTime: Date? = nil, fetchHistory: [Date: [VisilabsGeofenceEntity]]? = nil, errorHistory: [Date: VisilabsError]? = nil) {
+    internal init(lastKnownLatitude: Double? = nil,
+                  lastKnownLongitude: Double? = nil,
+                  lastFetchTime: Date? = nil,
+                  fetchHistory: [Date: [VisilabsGeofenceEntity]]? = nil,
+                  errorHistory: [Date: VisilabsError]? = nil) {
         self.lastKnownLatitude = lastKnownLatitude
         self.lastKnownLongitude = lastKnownLongitude
         self.lastFetchTime = lastFetchTime

@@ -21,7 +21,8 @@ extension CGImage {
     }
 
     private func imageBuffer(from data: UnsafeMutableRawPointer!) -> vImage_Buffer {
-        return vImage_Buffer(data: data, height: vImagePixelCount(height), width: vImagePixelCount(width), rowBytes: bytesPerRow)
+        return vImage_Buffer(data: data, height: vImagePixelCount(height),
+                             width: vImagePixelCount(width), rowBytes: bytesPerRow)
     }
 
     func blurred(with boxSize: UInt32, iterations: Int, blendColor: UIColor?, blendMode: CGBlendMode) -> CGImage? {
@@ -35,7 +36,8 @@ extension CGImage {
         let outData = malloc(bytes)
         var outBuffer = imageBuffer(from: outData)
 
-        let tempSize = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, nil, 0, 0, boxSize, boxSize, nil, vImage_Flags(kvImageEdgeExtend + kvImageGetTempBufferSize))
+        let tempSize = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, nil,
+                            0, 0, boxSize, boxSize, nil, vImage_Flags(kvImageEdgeExtend + kvImageGetTempBufferSize))
         let tempData = malloc(tempSize)
 
         defer {
@@ -48,7 +50,8 @@ extension CGImage {
         memcpy(inBuffer.data, source, bytes)
 
         for _ in 0..<iterations {
-            vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, tempData, 0, 0, boxSize, boxSize, nil, vImage_Flags(kvImageEdgeExtend))
+            vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, tempData,
+                                0, 0, boxSize, boxSize, nil, vImage_Flags(kvImageEdgeExtend))
 
             let temp = inBuffer.data
             inBuffer.data = outBuffer.data
@@ -56,7 +59,9 @@ extension CGImage {
         }
 
         let context = colorSpace.flatMap {
-            CGContext(data: inBuffer.data, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: $0, bitmapInfo: bitmapInfo.rawValue)
+            CGContext(data: inBuffer.data, width: width, height: height,
+                      bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow,
+                      space: $0, bitmapInfo: bitmapInfo.rawValue)
         }
 
         return context?.makeImage(with: blendColor, blendMode: blendMode, size: size)

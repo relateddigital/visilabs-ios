@@ -32,7 +32,11 @@ internal class VisilabsTransitionAnimator: NSObject, UIViewControllerAnimatedTra
         switch direction {
         case .in:
             guard let toVC = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
-                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
+                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)
+            else {
+                return
+
+            }
 
             self.toViewController = toVC
             self.from = from
@@ -41,7 +45,9 @@ internal class VisilabsTransitionAnimator: NSObject, UIViewControllerAnimatedTra
             container.addSubview(toVC.view)
         case .out:
             guard let toVC = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
-                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
+                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else {
+                return
+            }
 
             self.toViewController = toVC
             self.from = from

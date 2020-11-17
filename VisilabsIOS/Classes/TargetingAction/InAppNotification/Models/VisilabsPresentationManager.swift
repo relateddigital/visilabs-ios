@@ -19,12 +19,17 @@ final internal class VisilabsPresentationManager: NSObject, UIViewControllerTran
         super.init()
     }
 
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let presentationController = VisilabsPresentationController(presentedViewController: presented, presenting: source)
+    func presentationController(forPresented presented: UIViewController,
+                                presenting: UIViewController?,
+                                source: UIViewController) -> UIPresentationController? {
+        let presentationController = VisilabsPresentationController(presentedViewController: presented,
+                                                                    presenting: source)
         return presentationController
     }
 
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forPresented presented: UIViewController,
+                             presenting: UIViewController,
+                             source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 
         var transition: VisilabsTransitionAnimator
         switch transitionStyle {
@@ -62,7 +67,8 @@ final internal class VisilabsPresentationManager: NSObject, UIViewControllerTran
         return transition
     }
 
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
+    -> UIViewControllerInteractiveTransitioning? {
         return interactor.hasStarted ? interactor : nil
     }
 }

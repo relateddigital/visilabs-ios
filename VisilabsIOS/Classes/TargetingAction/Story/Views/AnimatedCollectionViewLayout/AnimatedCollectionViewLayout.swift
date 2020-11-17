@@ -20,7 +20,8 @@ open class AnimatedCollectionViewLayout: UICollectionViewFlowLayout {
 
     open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributes = super.layoutAttributesForElements(in: rect) else { return nil }
-        return attributes.compactMap { $0.copy() as? AnimatedCollectionViewLayoutAttributes }.map { self.transformLayoutAttributes($0) }
+        return attributes.compactMap { $0.copy() as?
+            AnimatedCollectionViewLayoutAttributes }.map { self.transformLayoutAttributes($0) }
     }
 
     open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -38,7 +39,9 @@ open class AnimatedCollectionViewLayout: UICollectionViewFlowLayout {
     }
 
     override open func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        guard let indexPath = focusedIndexPath, let attributes = layoutAttributesForItem(at: indexPath), let collectionView = collectionView else {
+        guard let indexPath = focusedIndexPath,
+              let attributes = layoutAttributesForItem(at: indexPath),
+              let collectionView = collectionView else {
                 return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
         }
         return CGPoint(x: attributes.frame.origin.x - collectionView.contentInset.left,
@@ -51,13 +54,14 @@ open class AnimatedCollectionViewLayout: UICollectionViewFlowLayout {
     }
     /////// END
 
-    private func transformLayoutAttributes(_ attributes: AnimatedCollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+    private func transformLayoutAttributes(_ attributes: AnimatedCollectionViewLayoutAttributes)
+    -> UICollectionViewLayoutAttributes {
 
         guard let collectionView = self.collectionView else { return attributes }
 
         let attr = attributes
 
-        /** 
+        /**
          The position for each cell is defined as the ratio of the distance between
          the center of the cell and the center of the collectionView and the collectionView width/height
          depending on the scroll direction. It can be negative if the cell is, for instance,
@@ -71,12 +75,14 @@ open class AnimatedCollectionViewLayout: UICollectionViewFlowLayout {
             distance = collectionView.frame.width
             itemOffset = attr.center.x - collectionView.contentOffset.x
             attr.startOffset = (attr.frame.origin.x - collectionView.contentOffset.x) / attr.frame.width
-            attr.endOffset = (attr.frame.origin.x - collectionView.contentOffset.x - collectionView.frame.width) / attr.frame.width
+            attr.endOffset = (attr.frame.origin.x - collectionView.contentOffset.x - collectionView.frame.width)
+                / attr.frame.width
         } else {
             distance = collectionView.frame.height
             itemOffset = attr.center.y - collectionView.contentOffset.y
             attr.startOffset = (attr.frame.origin.y - collectionView.contentOffset.y) / attr.frame.height
-            attr.endOffset = (attr.frame.origin.y - collectionView.contentOffset.y - collectionView.frame.height) / attr.frame.height
+            attr.endOffset = (attr.frame.origin.y - collectionView.contentOffset.y - collectionView.frame.height)
+                / attr.frame.height
         }
 
         attr.scrollDirection = scrollDirection
@@ -99,13 +105,23 @@ open class AnimatedCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     public var contentView: UIView?
     public var scrollDirection: UICollectionView.ScrollDirection = .vertical
 
-    /// The ratio of the distance between the start of the cell and the start of the collectionView and the height/width of the cell depending on the scrollDirection. It's 0 when the start of the cell aligns the start of the collectionView. It gets positive when the cell moves towards the scrolling direction (right/down) while getting negative when moves opposite.
+    /// The ratio of the distance between the start of the cell and the start of the collectionView
+    ///  and the height/width of the cell depending on the scrollDirection.
+    ///   It's 0 when the start of the cell aligns the start of the collectionView.
+    ///    It gets positive when the cell moves towards the scrolling direction (right/down)
+    ///     while getting negative when moves opposite.
     public var startOffset: CGFloat = 0
 
-    /// The ratio of the distance between the center of the cell and the center of the collectionView and the height/width of the cell depending on the scrollDirection. It's 0 when the center of the cell aligns the center of the collectionView. It gets positive when the cell moves towards the scrolling direction (right/down) while getting negative when moves opposite.
+    /// The ratio of the distance between the center of the cell and the center of the collectionView
+    ///  and the height/width of the cell depending on the scrollDirection. It's 0 when the center of the cell aligns
+    ///   the center of the collectionView. It gets positive when the cell moves
+    ///    towards the scrolling direction (right/down) while getting negative when moves opposite.
     public var middleOffset: CGFloat = 0
 
-    /// The ratio of the distance between the **start** of the cell and the end of the collectionView and the height/width of the cell depending on the scrollDirection. It's 0 when the **start** of the cell aligns the end of the collectionView. It gets positive when the cell moves towards the scrolling direction (right/down) while getting negative when moves opposite.
+    /// The ratio of the distance between the **start** of the cell and the end of the collectionView
+    /// and the height/width of the cell depending on the scrollDirection. It's 0 when the
+    /// **start** of the cell aligns the end of the collectionView. It gets positive when the cell moves
+    /// towards the scrolling direction (right/down) while getting negative when moves opposite.
     public var endOffset: CGFloat = 0
 
     open override func copy(with zone: NSZone? = nil) -> Any {

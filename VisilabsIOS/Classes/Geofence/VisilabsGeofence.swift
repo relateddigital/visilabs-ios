@@ -37,11 +37,13 @@ class VisilabsGeofence {
 
     //notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
     var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
-        return VisilabsCLAuthorizationStatus(rawValue: VisilabsLocationManager.sharedManager.locationServiceStateStatus.rawValue) ?? .none
+        return VisilabsCLAuthorizationStatus(rawValue:
+                            VisilabsLocationManager.sharedManager.locationServiceStateStatus.rawValue) ?? .none
     }
 
     private var locationServiceEnabledForApplication: Bool {
-        return self.locationServiceStateStatusForApplication == .authorizedAlways || self.locationServiceStateStatusForApplication == .authorizedWhenInUse
+        return self.locationServiceStateStatusForApplication == .authorizedAlways
+            || self.locationServiceStateStatusForApplication == .authorizedWhenInUse
     }
 
     func startGeofencing() {
@@ -51,15 +53,21 @@ class VisilabsGeofence {
     private func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
         VisilabsLocationManager.sharedManager.stopMonitorRegions()
         self.activeGeofenceList = sortAndTakeVisilabsGeofenceEntitiesToMonitor(geofences)
-        if self.profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
+        if self.profile.geofenceEnabled
+            && self.locationServicesEnabledForDevice
+            && self.locationServiceEnabledForApplication {
             for geofence in self.activeGeofenceList {
-                let geoRegion = CLCircularRegion(center: CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude), radius: geofence.radius, identifier: geofence.identifier)
+                let geoRegion = CLCircularRegion(center:
+                    CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude),
+                    radius: geofence.radius,
+                    identifier: geofence.identifier)
                 VisilabsLocationManager.sharedManager.startMonitorRegion(region: geoRegion)
             }
         }
     }
 
-    private func sortAndTakeVisilabsGeofenceEntitiesToMonitor(_ geofences: [VisilabsGeofenceEntity]) -> [VisilabsGeofenceEntity] {
+    private func sortAndTakeVisilabsGeofenceEntitiesToMonitor(_ geofences: [VisilabsGeofenceEntity])
+                                                                    -> [VisilabsGeofenceEntity] {
         let geofencesSortedAscending = geofences.sorted { (first, second) -> Bool in
             let firstDistance = first.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
             let secondDistance = second.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
@@ -76,7 +84,9 @@ class VisilabsGeofence {
     }
 
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
-        if self.profile.geofenceEnabled && self.locationServicesEnabledForDevice && self.locationServiceEnabledForApplication {
+        if self.profile.geofenceEnabled
+            && self.locationServicesEnabledForDevice
+            && self.locationServiceEnabledForApplication {
 
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
@@ -109,14 +119,20 @@ class VisilabsGeofence {
                }
             }
 
-            VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: profile.requestTimeoutInterval) { [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, error) in
+            VisilabsRequest.sendGeofenceRequest(properties: props,
+                                                headers: [String: String](),
+                                            timeoutInterval: profile.requestTimeoutInterval) { [lastKnownLatitude,
+                                                                                                lastKnownLongitude,
+                                                                                                geofenceHistory, now]
+                (result, error) in
 
                 if error != nil {
                     self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
                     self.geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
                     if self.geofenceHistory.errorHistory.count > VisilabsConstants.geofenceHistoryErrorMaxCount {
                         let ascendingKeys = Array(self.geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
-                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.geofenceHistoryErrorMaxCount)]
+                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count
+                                            - VisilabsConstants.geofenceHistoryErrorMaxCount)]
                         for key in keysToBeDeleted {
                             self.geofenceHistory.errorHistory[key] = nil
                         }
@@ -128,14 +144,31 @@ class VisilabsGeofence {
                 var fetchedGeofences = [VisilabsGeofenceEntity]()
                 if let res = result {
                     for targetingAction in res {
-                        if let actionId = targetingAction["actid"] as? Int, let targetEvent = targetingAction["trgevt"] as? String, let durationInSeconds = targetingAction["dis"] as? Int, let geofences = targetingAction["geo"] as? [[String: Any]] {
+                        if let actionId = targetingAction["actid"] as? Int,
+                           let targetEvent = targetingAction["trgevt"] as? String,
+                           let durationInSeconds = targetingAction["dis"] as? Int,
+                           let geofences = targetingAction["geo"] as? [[String: Any]] {
+
                             for geofence in geofences {
-                                if let geofenceId = geofence["id"] as? Int, let latitude = geofence["lat"] as? Double, let longitude = geofence["long"] as? Double, let radius = geofence["rds"] as? Double {
+                                if let geofenceId = geofence["id"] as? Int,
+                                   let latitude = geofence["lat"] as? Double,
+                                   let longitude = geofence["long"] as? Double,
+                                   let radius = geofence["rds"] as? Double {
                                     var distanceFromCurrentLastKnownLocation: Double?
                                     if let lastLat = lastKnownLatitude, let lastLong = lastKnownLongitude {
-                                        distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat, lng1: lastLong, lat2: latitude, lng2: longitude)
+                            distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat,
+                                                                            lng1: lastLong,
+                                                                            lat2: latitude,
+                                                                            lng2: longitude)
                                     }
-                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId, geofenceId: geofenceId, latitude: latitude, longitude: longitude, radius: radius, durationInSeconds: durationInSeconds, targetEvent: targetEvent, distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
+                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId,
+                                                                                   geofenceId: geofenceId,
+                                                                                   latitude: latitude,
+                                                                                   longitude: longitude,
+                                                                                   radius: radius,
+                                                                                   durationInSeconds: durationInSeconds,
+                                                                                   targetEvent: targetEvent,
+                                        distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
                                 }
                             }
                         }
@@ -147,7 +180,8 @@ class VisilabsGeofence {
                 self.geofenceHistory.fetchHistory[now] = fetchedGeofences
                 if self.geofenceHistory.fetchHistory.count > VisilabsConstants.geofenceHistoryMaxCount {
                     let ascendingKeys = Array(self.geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
-                    let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.geofenceHistoryMaxCount)]
+                    let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count
+                                                            - VisilabsConstants.geofenceHistoryMaxCount)]
                     for key in keysToBeDeleted {
                         self.geofenceHistory.fetchHistory[key] = nil
                     }
@@ -186,7 +220,9 @@ class VisilabsGeofence {
            }
         }
         VisilabsLogger.error("Geofence Triggerred: actionId: \(actionId) geofenceid: \(geofenceId)")
-        VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: profile.requestTimeoutInterval) { (_, error) in
+        VisilabsRequest.sendGeofenceRequest(properties: props,
+                                            headers: [String: String](),
+                                            timeoutInterval: profile.requestTimeoutInterval) { (_, error) in
             if let error = error {
                 VisilabsLogger.error("Geofence Push Send Error: \(error)")
             }
@@ -198,7 +234,8 @@ class VisilabsGeofence {
 class VisilabsGeofence2: NSObject, CLLocationManagerDelegate {
 
     internal var lastLocationManagerCreated: Date?
-    internal var maximumDesiredLocationAccuracy: CLLocationAccuracy = 30 // TODO: burada 30 yerine başka değer vermek doğru mu? önceden kCLLocationAccuracyHundredMeters kullanıyorduk.
+    internal var maximumDesiredLocationAccuracy: CLLocationAccuracy = 30
+    // TODO: yukarıda 30 yerine başka değer vermek doğru mu? önceden kCLLocationAccuracyHundredMeters kullanıyorduk.
     let organizationId: String
     let siteId: String
 

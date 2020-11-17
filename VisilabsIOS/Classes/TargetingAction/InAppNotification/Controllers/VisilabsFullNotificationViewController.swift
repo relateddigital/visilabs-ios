@@ -26,7 +26,8 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
 
     convenience init(notification: VisilabsInAppNotification) {
-        self.init(notification: notification, nameOfClass: String(describing: VisilabsFullNotificationViewController.notificationXibToLoad()))
+        self.init(notification: notification,
+                  nameOfClass: String(describing: VisilabsFullNotificationViewController.notificationXibToLoad()))
     }
 
     static func notificationXibToLoad() -> String {
@@ -42,7 +43,8 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
 
         if let notificationImage = notification.image, let image = UIImage(data: notificationImage, scale: 1) {
             imageView.image = image
-            if let width = imageView.image?.size.width, width / UIScreen.main.bounds.width <= 0.6, let height = imageView.image?.size.height,
+            if let width = imageView.image?.size.width,
+               width / UIScreen.main.bounds.width <= 0.6, let height = imageView.image?.size.height,
                 height / UIScreen.main.bounds.height <= 0.3 {
                 imageView.contentMode = UIView.ContentMode.center
             }

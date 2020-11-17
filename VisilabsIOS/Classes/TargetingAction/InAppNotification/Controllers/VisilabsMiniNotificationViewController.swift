@@ -24,7 +24,8 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
     var position: CGPoint!
 
     convenience init(notification: VisilabsInAppNotification) {
-        self.init(notification: notification, nameOfClass: String(describing: VisilabsMiniNotificationViewController.self))
+        self.init(notification: notification,
+                  nameOfClass: String(describing: VisilabsMiniNotificationViewController.self))
     }
 
     override func viewDidLoad() {
@@ -112,7 +113,8 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
         let duration = animated ? 0.1 : 0
         UIView.animate(withDuration: duration, animations: {
-            self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight + VisilabsInAppNotificationsConstants.miniBottomPadding)
+            self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                            + VisilabsInAppNotificationsConstants.miniBottomPadding)
             self.canPan = true
             }, completion: { _ in
                 self.position = self.window?.layer.position
@@ -125,7 +127,8 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             isDismissing = true
             let duration = animated ? 0.5 : 0
             UIView.animate(withDuration: duration, animations: {
-                self.window?.frame.origin.y += (VisilabsInAppNotificationsConstants.miniInAppHeight + VisilabsInAppNotificationsConstants.miniBottomPadding)
+                self.window?.frame.origin.y += (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                            + VisilabsInAppNotificationsConstants.miniBottomPadding)
                 }, completion: { _ in
                     self.window?.isHidden = true
                     self.window?.removeFromSuperview()
@@ -182,14 +185,16 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
                 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone {
                 frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
                                y: UIScreen.main.bounds.size.height -
-                                (VisilabsInAppNotificationsConstants.miniInAppHeight + VisilabsInAppNotificationsConstants.miniBottomPadding),
+                                (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                + VisilabsInAppNotificationsConstants.miniBottomPadding),
                                width: UIScreen.main.bounds.size.width -
                                 (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
                                height: VisilabsInAppNotificationsConstants.miniInAppHeight)
             } else { // Is iPad or Landscape mode
                 frame = CGRect(x: UIScreen.main.bounds.size.width / 4,
                                y: UIScreen.main.bounds.size.height -
-                                (VisilabsInAppNotificationsConstants.miniInAppHeight + VisilabsInAppNotificationsConstants.miniBottomPadding),
+                                (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                + VisilabsInAppNotificationsConstants.miniBottomPadding),
                                width: UIScreen.main.bounds.size.width / 2,
                                height: VisilabsInAppNotificationsConstants.miniInAppHeight)
             }

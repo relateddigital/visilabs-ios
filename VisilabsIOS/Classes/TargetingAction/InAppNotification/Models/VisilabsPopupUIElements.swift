@@ -109,8 +109,12 @@ extension VisilabsPopupDialogDefaultView {
 
         let sliderStepRating = VisilabsSliderStep()
 
-        sliderStepRating.stepImages =   [getUIImage(named: "terrible")!, getUIImage(named: "bad")!, getUIImage(named: "okay")!, getUIImage(named: "good")!, getUIImage(named: "great")! ]
-        sliderStepRating.tickImages = [getUIImage(named: "unTerrible")!, getUIImage(named: "unBad")!, getUIImage(named: "unOkay")!, getUIImage(named: "unGood")!, getUIImage(named: "unGreat")! ]
+        sliderStepRating.stepImages =   [getUIImage(named: "terrible")!, getUIImage(named: "bad")!,
+                                         getUIImage(named: "okay")!, getUIImage(named: "good")!,
+                                         getUIImage(named: "great")! ]
+        sliderStepRating.tickImages = [getUIImage(named: "unTerrible")!, getUIImage(named: "unBad")!,
+                                       getUIImage(named: "unOkay")!, getUIImage(named: "unGood")!,
+                                       getUIImage(named: "unGreat")! ]
 
         sliderStepRating.tickTitles = ["Berbat", "Kötü", "Normal", "İyi", "Harika"]
 
@@ -129,12 +133,15 @@ extension VisilabsPopupDialogDefaultView {
         sliderStepRating.contentMode = .redraw //enable redraw on rotation (calls setNeedsDisplay)
 
         if sliderStepRating.enableTap {
-            let tap = UITapGestureRecognizer(target: sliderStepRating, action: #selector(VisilabsSliderStep.sliderTapped(_:)))
+            let tap = UITapGestureRecognizer(target: sliderStepRating,
+                                action: #selector(VisilabsSliderStep.sliderTapped(_:)))
             self.addGestureRecognizer(tap)
         }
 
-        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.movingSliderStepValue), for: .valueChanged)
-        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.didMoveSliderStepValue), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.movingSliderStepValue),
+                                   for: .valueChanged)
+        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.didMoveSliderStepValue),
+                                   for: [.touchUpInside, .touchUpOutside, .touchCancel])
         return sliderStepRating
     }
 
@@ -247,8 +254,10 @@ extension VisilabsPopupDialogDefaultView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.addGestureRecognizer(tapGesture)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     internal func setupForDefault() {

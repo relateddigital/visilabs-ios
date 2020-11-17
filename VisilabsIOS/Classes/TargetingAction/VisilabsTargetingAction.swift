@@ -29,7 +29,10 @@ class VisilabsTargetingAction {
         }
     }
 
-    func checkInAppNotification(properties: [String: String], visilabsUser: VisilabsUser, timeoutInterval: TimeInterval, completion: @escaping ((_ response: VisilabsInAppNotification?) -> Void)) {
+    func checkInAppNotification(properties: [String: String],
+                                visilabsUser: VisilabsUser,
+                                timeoutInterval: TimeInterval,
+                                completion: @escaping ((_ response: VisilabsInAppNotification?) -> Void)) {
         let semaphore = DispatchSemaphore(value: 0)
         let headers = prepareHeaders(visilabsUser)
         var notifications = [VisilabsInAppNotification]()
@@ -37,7 +40,10 @@ class VisilabsTargetingAction {
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
 
-        VisilabsRequest.sendInAppNotificationRequest(properties: props, headers: headers, timeoutInterval: timeoutInterval, completion: { visilabsInAppNotificationResult in
+        VisilabsRequest.sendInAppNotificationRequest(properties: props,
+                                                     headers: headers,
+                                                     timeoutInterval: timeoutInterval,
+                                                     completion: { visilabsInAppNotificationResult in
             guard let result = visilabsInAppNotificationResult else {
                 semaphore.signal()
                 completion(nil)
@@ -46,7 +52,9 @@ class VisilabsTargetingAction {
 
             for rawNotif in result {
                 if let actionData = rawNotif["actiondata"] as? [String: Any] {
-                    if let typeString = actionData["msg_type"] as? String, let _ = VisilabsInAppNotificationType(rawValue: typeString), let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
+                    if let typeString = actionData["msg_type"] as? String,
+                       let _ = VisilabsInAppNotificationType(rawValue: typeString),
+                       let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
                         notifications.append(notification)
                     }
                 }
@@ -55,7 +63,8 @@ class VisilabsTargetingAction {
         })
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)
 
-        VisilabsLogger.info("in app notification check: \(notifications.count) found. actid's: \(notifications.map({String($0.actId)}).joined(separator: ","))")
+        VisilabsLogger.info("in app notification check: \(notifications.count) found." +
+                            " actid's: \(notifications.map({String($0.actId)}).joined(separator: ","))")
 
         self.notificationsInstance.inAppNotification = notifications.first
         completion(notifications.first)
@@ -69,9 +78,13 @@ class VisilabsTargetingAction {
 
     // MARK: - Favorites
 
-    //class func sendMobileRequest(properties: [String : String], headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
-    //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
-    func getFavorites(visilabsUser: VisilabsUser, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
+    //class func sendMobileRequest(properties: [String : String],
+    //headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
+    //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM
+    //.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&
+    //OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
+    func getFavorites(visilabsUser: VisilabsUser, actionId: Int? = nil,
+                      completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
 
         var props = [String: String]()
         props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
@@ -84,13 +97,19 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.actionType] = VisilabsConstants.favoriteAttributeAction
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
 
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String: String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result: [String: Any]?, error: VisilabsError?, _: String?) in
+        VisilabsRequest.sendMobileRequest(properties: props, headers: [String: String](),
+                                          timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
+                                          completion: { (result: [String: Any]?, error: VisilabsError?, _: String?) in
             completion(self.parseFavoritesResponse(result, error))
         })
     }
 
-    //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
-    private func parseFavoritesResponse(_ result: [String: Any]?, _ error: VisilabsError?) -> VisilabsFavoriteAttributeActionResponse {
+    //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction:
+    //[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction",
+    //"actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],
+    //"brand":["Kozmo","Luxury Room","OFS"]}}}]}
+    private func parseFavoritesResponse(_ result: [String: Any]?,
+                                        _ error: VisilabsError?) -> VisilabsFavoriteAttributeActionResponse {
         var favoritesResponse = [VisilabsFavoriteAttribute: [String]]()
         var errorResponse: VisilabsError?
         if let error = error {
@@ -101,7 +120,8 @@ class VisilabsTargetingAction {
                     if let actiondata = favoriteAttributeAction[VisilabsConstants.actionData] as? [String: Any?] {
                         if let favorites = actiondata[VisilabsConstants.favorites] as? [String: [String]?] {
                             for favorite in favorites {
-                                if let favoriteAttribute = VisilabsFavoriteAttribute(rawValue: favorite.key), let favoriteValues = favorite.value {
+                                if let favoriteAttribute = VisilabsFavoriteAttribute(rawValue: favorite.key),
+                                   let favoriteValues = favorite.value {
                                     favoritesResponse[favoriteAttribute].mergeStringArray(favoriteValues)
                                 }
                             }
@@ -120,7 +140,9 @@ class VisilabsTargetingAction {
     var visilabsStoryHomeViewControllers = [String: VisilabsStoryHomeViewController]()
     var visilabsStoryHomeViews = [String: VisilabsStoryHomeView]()
 
-    func getStories(visilabsUser: VisilabsUser, guid: String, actionId: Int? = nil, completion: @escaping ((_ response: VisilabsStoryActionResponse) -> Void)) {
+    func getStories(visilabsUser: VisilabsUser,
+                    guid: String, actionId: Int? = nil,
+                    completion: @escaping ((_ response: VisilabsStoryActionResponse) -> Void)) {
 
         var props = [String: String]()
         props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
@@ -133,13 +155,19 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.actionType] = VisilabsConstants.story
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
 
-        VisilabsRequest.sendMobileRequest(properties: props, headers: [String: String](), timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result: [String: Any]?, error: VisilabsError?, guid: String?) in
+        VisilabsRequest.sendMobileRequest(properties: props,
+                                          headers: [String: String](),
+                                          timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
+                                          completion: { (result: [String: Any]?,
+                                                         error: VisilabsError?, guid: String?) in
             completion(self.parseStories(result, error, guid))
         }, guid: guid)
     }
 
     //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
-    private func parseStories(_ result: [String: Any]?, _ error: VisilabsError?, _ guid: String?) -> VisilabsStoryActionResponse {
+    private func parseStories(_ result: [String: Any]?,
+                              _ error: VisilabsError?,
+                              _ guid: String?) -> VisilabsStoryActionResponse {
         var storiesResponse = [VisilabsStoryAction]()
         var errorResponse: VisilabsError?
         if let error = error {
@@ -148,7 +176,10 @@ class VisilabsTargetingAction {
             if let storyActions = res[VisilabsConstants.story] as? [[String: Any?]] {
                 var visilabsStories = [VisilabsStory]()
                 for storyAction in storyActions {
-                    if let actionId = storyAction[VisilabsConstants.actid] as? Int, let actiondata = storyAction[VisilabsConstants.actionData] as? [String: Any?], let templateString = actiondata[VisilabsConstants.taTemplate] as? String, let template = VisilabsStoryTemplate.init(rawValue: templateString) {
+                    if let actionId = storyAction[VisilabsConstants.actid] as? Int,
+                       let actiondata = storyAction[VisilabsConstants.actionData] as? [String: Any?],
+                       let templateString = actiondata[VisilabsConstants.taTemplate] as? String,
+                       let template = VisilabsStoryTemplate.init(rawValue: templateString) {
                         if let stories = actiondata[VisilabsConstants.stories] as? [[String: Any]] {
                             for story in stories {
                                 if template == .skinBased {
@@ -158,16 +189,29 @@ class VisilabsTargetingAction {
                                             storyItems.append(parseStoryItem(item))
                                         }
                                         if storyItems.count > 0 {
-                                            visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.title] as? String, smallImg: story[VisilabsConstants.thumbnail] as? String, link: story[VisilabsConstants.link] as? String, items: storyItems))
+                                            visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.title]
+                                                                                    as? String,
+                                            smallImg: story[VisilabsConstants.thumbnail] as? String,
+                                            link: story[VisilabsConstants.link] as? String, items: storyItems))
                                         }
                                     }
                                 } else {
-                                    visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.title] as? String, smallImg: story[VisilabsConstants.smallImg] as? String, link: story[VisilabsConstants.link] as? String))
+                                    visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.title]
+                                                                            as? String,
+                                    smallImg: story[VisilabsConstants.smallImg] as? String,
+                                    link: story[VisilabsConstants.link] as? String))
                                 }
                             }
-                            let (clickQueryItems, impressionQueryItems) = parseStoryReport(actiondata[VisilabsConstants.report] as? [String: Any?])
+                            let (clickQueryItems, impressionQueryItems)
+                                = parseStoryReport(actiondata[VisilabsConstants.report] as? [String: Any?])
                             if stories.count > 0 {
-                                storiesResponse.append(VisilabsStoryAction(actionId: actionId, storyTemplate: template, stories: visilabsStories, clickQueryItems: clickQueryItems, impressionQueryItems: impressionQueryItems, extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.extendedProps] as? String)))
+                                storiesResponse.append(VisilabsStoryAction(actionId: actionId,
+                                                                           storyTemplate: template,
+                                                                           stories: visilabsStories,
+                                                                           clickQueryItems: clickQueryItems,
+                                                                           impressionQueryItems: impressionQueryItems,
+                        extendedProperties: parseStoryExtendedProps(actiondata[VisilabsConstants.extendedProps]
+                                                                                                    as? String)))
                             }
                         }
                     }
@@ -240,20 +284,31 @@ class VisilabsTargetingAction {
                 }
             }
         }
-        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType, displayTime: displayTime, fileSrc: fileSrc, targetUrl: targetUrl, buttonText: buttonText, buttonTextColor: buttonTextColor, buttonColor: buttonColor)
+        let visilabsStoryItem = VisilabsStoryItem(fileType: fileType,
+                                                  displayTime: displayTime,
+                                                  fileSrc: fileSrc,
+                                                  targetUrl: targetUrl,
+                                                  buttonText: buttonText,
+                                                  buttonTextColor: buttonTextColor,
+                                                  buttonColor: buttonColor)
         return visilabsStoryItem
     }
 
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
         if let propStr = extendedPropsString, let extendedProps = propStr.urlDecode().convertJsonStringToDictionary() {
-            if let imageBorderWidthString = extendedProps[VisilabsConstants.storylbImgBorderWidth] as? String, let imageBorderWidth = Int(imageBorderWidthString) {
+            if let imageBorderWidthString = extendedProps[VisilabsConstants.storylbImgBorderWidth] as? String,
+               let imageBorderWidth = Int(imageBorderWidthString) {
                 props.imageBorderWidth = imageBorderWidth
             }
-            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylbImgBorderRadius] as? String ?? extendedProps[VisilabsConstants.storyzImgBorderRadius] as? String, let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in: CharacterSet(charactersIn: "%"))) {
+            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylbImgBorderRadius] as? String
+                ?? extendedProps[VisilabsConstants.storyzImgBorderRadius] as? String,
+               let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in:
+                                                                        CharacterSet(charactersIn: "%"))) {
                 props.imageBorderRadius = imageBorderRadius / 100.0
             }
-            if let imageBorderColorString = extendedProps[VisilabsConstants.storylbImgBorderColor] as? String ?? extendedProps[VisilabsConstants.storyzimgBorderColor] as? String {
+            if let imageBorderColorString = extendedProps[VisilabsConstants.storylbImgBorderColor] as? String
+                ?? extendedProps[VisilabsConstants.storyzimgBorderColor] as? String {
                 if imageBorderColorString.starts(with: "rgba") {
                     if let imageBorderColor =  UIColor.init(rgbaString: imageBorderColorString) {
                         props.imageBorderColor = imageBorderColor
@@ -275,7 +330,8 @@ class VisilabsTargetingAction {
                     }
                 }
             }
-            if let boxShadowString = extendedProps[VisilabsConstants.storylbImgBoxShadow] as? String, boxShadowString.count > 0 {
+            if let boxShadowString = extendedProps[VisilabsConstants.storylbImgBoxShadow] as? String,
+               boxShadowString.count > 0 {
                 props.imageBoxShadow = true
             }
         }

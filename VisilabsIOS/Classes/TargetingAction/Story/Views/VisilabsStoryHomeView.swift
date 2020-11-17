@@ -21,7 +21,8 @@ public class VisilabsStoryHomeView: UIView {
         colView.backgroundColor = .clear // .orange // .white
         colView.showsVerticalScrollIndicator = false
         colView.showsHorizontalScrollIndicator = false
-        colView.register(VisilabsStoryHomeViewCell.self, forCellWithReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier)
+        colView.register(VisilabsStoryHomeViewCell.self,
+                         forCellWithReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier)
         colView.translatesAutoresizingMaskIntoConstraints = false
         return colView
     }()

@@ -38,7 +38,8 @@ struct VisilabsConstants {
     static let userArchiveKey = "Visilabs.user"
     static let profileArchiveKey = "Visilabs.profile"
 
-    static let cookieidArchiveKey = "Visilabs.cookieId"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
+    static let cookieidArchiveKey = "Visilabs.cookieId"
+    //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
     static let identityArchiveKey = "Visilabs.identity"
     static let exvisitorIdArchiveKey = "Visilabs.exVisitorId"
     static let tokenidArchiveKey = "Visilabs.tokenId"
@@ -179,23 +180,40 @@ struct VisilabsConstants {
 
     static func visilabsTargetParameters() -> [VisilabsParameter] {
         if targetParameters.count == 0 {
-            targetParameters.append(VisilabsParameter(key: targetPrefVossKey, storeKey: targetPrefVossStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVcNameKey, storeKey: targetPrefVcnameStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVcmediumKey, storeKey: targetPrefVcmediumStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVcsourceKey, storeKey: targetPrefVcsourceStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVseg1Key, storeKey: targetPrefVseg1StoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVseg2Key, storeKey: targetPrefVseg2StoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVseg3Key, storeKey: targetPrefVseg3StoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVseg4Key, storeKey: targetPrefVseg4StoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVseg5Key, storeKey: targetPrefVseg5StoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefBDKey, storeKey: targetPrefBdStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefGNKey, storeKey: targetPrefGnStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefLOCKey, storeKey: targetPrefLocStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVPVKey, storeKey: targetPrefVPVStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefLPVSKey, storeKey: targetPrefLPVSStoreKey, count: 10, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefLPPKey, storeKey: targetPrefLPPStoreKey, count: 1, relatedKeys: [targetPrefPPRKey]))
-            targetParameters.append(VisilabsParameter(key: targetPrefVQKey, storeKey: targetPrefVQStoreKey, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: targetPrefVRDomainKey, storeKey: targetPrefVRStoreKey, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVossKey, storeKey: targetPrefVossStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVcNameKey, storeKey: targetPrefVcnameStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVcmediumKey, storeKey: targetPrefVcmediumStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVcsourceKey, storeKey: targetPrefVcsourceStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg1Key, storeKey: targetPrefVseg1StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg2Key, storeKey: targetPrefVseg2StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg3Key, storeKey: targetPrefVseg3StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg4Key, storeKey: targetPrefVseg4StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg5Key, storeKey: targetPrefVseg5StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefBDKey, storeKey: targetPrefBdStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefGNKey, storeKey: targetPrefGnStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefLOCKey, storeKey: targetPrefLocStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVPVKey, storeKey: targetPrefVPVStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefLPVSKey, storeKey: targetPrefLPVSStoreKey,
+                                                      count: 10, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefLPPKey, storeKey: targetPrefLPPStoreKey,
+                                                      count: 1, relatedKeys: [targetPrefPPRKey]))
+            targetParameters.append(VisilabsParameter(key: targetPrefVQKey, storeKey: targetPrefVQStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVRDomainKey, storeKey: targetPrefVRStoreKey,
+                                                      count: 1, relatedKeys: nil))
         }
         return targetParameters
     }

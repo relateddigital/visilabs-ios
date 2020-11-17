@@ -41,7 +41,8 @@ public class VisilabsRecommendationFilter {
     var filterType: VisilabsRecommendationFilterType
     var value: String
 
-    public init(attribute: VisilabsProductFilterAttribute, filterType: VisilabsRecommendationFilterType, value: String) {
+    public init(attribute: VisilabsProductFilterAttribute,
+                filterType: VisilabsRecommendationFilterType, value: String) {
         self.attribute = attribute
         self.filterType = filterType
         self.value = value
@@ -92,7 +93,26 @@ public class VisilabsProduct {
     public var attr4: String
     public var attr5: String
 
-    internal init(code: String, title: String, img: String, destUrl: String, brand: String, price: Double, dprice: Double, cur: String, dcur: String, freeshipping: Bool, samedayshipping: Bool, rating: Int, comment: Int, discount: Double, attr1: String, attr2: String, attr3: String, attr4: String, attr5: String) {
+    internal init(code: String,
+                  title: String,
+                  img: String,
+                  destUrl: String,
+                  brand: String,
+                  price: Double,
+                  dprice: Double,
+                  cur: String,
+                  dcur: String,
+                  freeshipping: Bool,
+                  samedayshipping: Bool,
+                  rating: Int,
+                  comment: Int,
+                  discount: Double,
+                  attr1: String,
+                  attr2: String,
+                  attr3: String,
+                  attr4: String,
+                  attr5: String) {
+
         self.code = code
         self.title = title
         self.img = img

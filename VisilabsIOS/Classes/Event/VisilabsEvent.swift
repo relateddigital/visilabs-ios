@@ -15,7 +15,14 @@ class VisilabsEvent {
         self.visilabsProfile = visilabsProfile
     }
 
-    func customEvent(pageName: String, properties: [String: String], eventsQueue: Queue, visilabsUser: VisilabsUser, channel: String) -> (eventsQueque: Queue, visilabsUser: VisilabsUser, clearUserParameters: Bool, channel: String) {
+    func customEvent(pageName: String,
+                     properties: [String: String],
+                     eventsQueue: Queue,
+                     visilabsUser: VisilabsUser,
+                     channel: String) -> (eventsQueque: Queue,
+                                          visilabsUser: VisilabsUser,
+                                          clearUserParameters: Bool,
+                                          channel: String) {
         var props = properties
         var vUser = visilabsUser
         var chan = channel

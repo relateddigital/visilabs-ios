@@ -104,7 +104,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
             break
         }
 
-        imageHeightConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+        imageHeightConstraint = NSLayoutConstraint(item: imageView,
+            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
 
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
@@ -167,7 +168,8 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+                                as? NSValue)?.cgRectValue {
             if let view = getTopView() {
                 if view.frame.origin.y == 0 {
                     view.frame.origin.y -= keyboardSize.height
@@ -190,7 +192,9 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
         let window = UIApplication.shared.keyWindow
         if window != nil {
             for subview in window?.subviews ?? [] {
-                if !subview.isHidden && subview.alpha > 0 && subview.frame.size.width > 0 && subview.frame.size.height > 0 {
+                if !subview.isHidden && subview.alpha > 0
+                    && subview.frame.size.width > 0
+                    && subview.frame.size.height > 0 {
                     topView = subview
                 }
             }

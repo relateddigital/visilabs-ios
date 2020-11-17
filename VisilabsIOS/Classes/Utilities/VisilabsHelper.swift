@@ -21,8 +21,10 @@ internal class VisilabsHelper {
         let nauticalMilesPerLongitudeDividedByTwo = 30.053965
         // simple pythagorean formula - for efficiency
         let yDistance = (lat2 - lat1) * nauticalMilesPerLatitude
-        let xDistance = (cos(lat1 * radius) + cos(lat2 * radius)) * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo
-        let res = ((yDistance * yDistance) + (xDistance * xDistance)) * (metersPerNauticalMile * metersPerNauticalMile)
+        let xDistance = (cos(lat1 * radius) + cos(lat2 * radius))
+            * (lng2 - lng1) * nauticalMilesPerLongitudeDividedByTwo
+        let res = ((yDistance * yDistance) + (xDistance * xDistance))
+            * (metersPerNauticalMile * metersPerNauticalMile)
         return res
     }
 
@@ -82,8 +84,10 @@ internal class VisilabsHelper {
 
     static func setEndpoints(dataSource: String, useInsecureProtocol: Bool = false) {
         let httpProtocol = useInsecureProtocol ? VisilabsConstants.HTTP : VisilabsConstants.HTTPS
-        VisilabsBasePath.endpoints[.logger] = "\(httpProtocol)://\(VisilabsConstants.loggerEndPoint)/\(dataSource)/\(VisilabsConstants.omGif)"
-        VisilabsBasePath.endpoints[.realtime] = "\(httpProtocol)://\(VisilabsConstants.realtimeEndPoint)/\(dataSource)/\(VisilabsConstants.omGif)"
+        VisilabsBasePath.endpoints[.logger] =
+        "\(httpProtocol)://\(VisilabsConstants.loggerEndPoint)/\(dataSource)/\(VisilabsConstants.omGif)"
+        VisilabsBasePath.endpoints[.realtime] =
+        "\(httpProtocol)://\(VisilabsConstants.realtimeEndPoint)/\(dataSource)/\(VisilabsConstants.omGif)"
         VisilabsBasePath.endpoints[.target] = "\(httpProtocol)://\(VisilabsConstants.recommendationEndPoint)"
         VisilabsBasePath.endpoints[.action] = "\(httpProtocol)://\(VisilabsConstants.actionEndPoint)"
         VisilabsBasePath.endpoints[.geofence] = "\(httpProtocol)://\(VisilabsConstants.geofenceEndPoint)"
@@ -110,7 +114,8 @@ internal class VisilabsHelper {
     }
     
     /// OPTIONAL Added method to adjust lock and rotate to the desired orientation
-    static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+    static func lockOrientation(_ orientation: UIInterfaceOrientationMask,
+     andRotateTo rotateOrientation:UIInterfaceOrientation) {
         self.lockOrientation(orientation)
         UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
         UINavigationController.attemptRotationToDeviceOrientation()

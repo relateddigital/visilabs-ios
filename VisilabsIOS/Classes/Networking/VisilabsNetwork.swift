@@ -105,7 +105,9 @@ struct VisilabsBasePath {
 
 class VisilabsNetwork {
 
-    class func apiRequest<A>(resource: VisilabsResource<A>, failure: @escaping (VisilabsError, Data?, URLResponse?) -> Void, success: @escaping (A, URLResponse?) -> Void) {
+    class func apiRequest<A>(resource: VisilabsResource<A>,
+                             failure: @escaping (VisilabsError, Data?, URLResponse?) -> Void,
+                             success: @escaping (A, URLResponse?) -> Void) {
         guard let request = buildURLRequest(resource: resource) else {
             return
         }
@@ -141,7 +143,8 @@ class VisilabsNetwork {
     }
 
     private class func buildURLRequest<A>(resource: VisilabsResource<A>) -> URLRequest? {
-        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint, queryItems: resource.queryItems) else {
+        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint,
+                                                  queryItems: resource.queryItems) else {
             return nil
         }
 
@@ -159,8 +162,22 @@ class VisilabsNetwork {
         return request as URLRequest
     }
 
-    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, timeoutInterval: TimeInterval, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?, guid: String? = nil) -> VisilabsResource<A> {
-        return VisilabsResource(endPoint: endPoint, method: method, timeoutInterval: timeoutInterval, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse, guid: guid)
+    class func buildResource<A>(endPoint: VisilabsEndpoint,
+                                method: VisilabsRequestMethod,
+                                timeoutInterval: TimeInterval,
+                                requestBody: Data? = nil,
+                                queryItems: [URLQueryItem]? = nil,
+                                headers: [String: String],
+                                parse: @escaping (Data) -> A?,
+                                guid: String? = nil) -> VisilabsResource<A> {
+        return VisilabsResource(endPoint: endPoint,
+                                method: method,
+                                timeoutInterval: timeoutInterval,
+                                requestBody: requestBody,
+                                queryItems: queryItems,
+                                headers: headers,
+                                parse: parse,
+                                guid: guid)
     }
 
 }
