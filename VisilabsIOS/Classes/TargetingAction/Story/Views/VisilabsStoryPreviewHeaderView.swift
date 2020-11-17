@@ -60,11 +60,11 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         if let progressView = self.progressView {
             return progressView
         }
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        self.progressView = v
+        let progress = UIView()
+        progress.translatesAutoresizingMaskIntoConstraints = false
+        self.progressView = progress
         self.addSubview(self.getProgressView)
-        return v
+        return progress
     }
 
     // MARK: - Overriden functions
@@ -90,12 +90,12 @@ final class VisilabsStoryPreviewHeaderView: UIView {
     }
     private func installLayoutConstraints() {
         //Setting constraints for progressView
-        let pv = getProgressView
+        let prgView = getProgressView
         NSLayoutConstraint.activate([
-            pv.igLeftAnchor.constraint(equalTo: self.igLeftAnchor),
-            pv.igTopAnchor.constraint(equalTo: self.igTopAnchor, constant: 8),
-            self.igRightAnchor.constraint(equalTo: pv.igRightAnchor),
-            pv.heightAnchor.constraint(equalToConstant: 10)
+            prgView.igLeftAnchor.constraint(equalTo: self.igLeftAnchor),
+            prgView.igTopAnchor.constraint(equalTo: self.igTopAnchor, constant: 8),
+            self.igRightAnchor.constraint(equalTo: prgView.igRightAnchor),
+            prgView.heightAnchor.constraint(equalToConstant: 10)
             ])
 
         //Setting constraints for snapperImageView
@@ -156,9 +156,9 @@ final class VisilabsStoryPreviewHeaderView: UIView {
 
     // MARK: - Public functions
     public func clearTheProgressorSubviews() {
-        getProgressView.subviews.forEach { v in
-            v.subviews.forEach {v in (v as! VisilabsSnapProgressView).stop()}
-            v.removeFromSuperview()
+        getProgressView.subviews.forEach { view in
+            view.subviews.forEach {view in (view as! VisilabsSnapProgressView).stop()}
+            view.removeFromSuperview()
         }
     }
     public func clearAllProgressors() {
@@ -177,16 +177,16 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         var pvArray: [VisilabsSnapProgressView] = []
 
         // Adding all ProgressView Indicator and ProgressView to seperate arrays
-        for i in 0..<snapsPerStory {
+        for counter in 0 ..< snapsPerStory {
             let pvIndicator = VisilabsSnapProgressIndicatorView()
             pvIndicator.translatesAutoresizingMaskIntoConstraints = false
-            getProgressView.addSubview(applyProperties(pvIndicator, with: i+progressIndicatorViewTag, alpha: 0.2))
+            getProgressView.addSubview(applyProperties(pvIndicator, with: counter+progressIndicatorViewTag, alpha: 0.2))
             pvIndicatorArray.append(pvIndicator)
 
-            let pv = VisilabsSnapProgressView()
-            pv.translatesAutoresizingMaskIntoConstraints = false
-            pvIndicator.addSubview(applyProperties(pv))
-            pvArray.append(pv)
+            let prgView = VisilabsSnapProgressView()
+            prgView.translatesAutoresizingMaskIntoConstraints = false
+            pvIndicator.addSubview(applyProperties(prgView))
+            pvArray.append(prgView)
         }
         // Setting Constraints for all progressView indicators
         for index in 0..<pvIndicatorArray.count {
@@ -220,14 +220,14 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         }
         // Setting Constraints for all progressViews
         for index in 0..<pvArray.count {
-            let pv = pvArray[index]
+            let prgView = pvArray[index]
             let pvIndicator = pvIndicatorArray[index]
-            pv.widthConstraint = pv.widthAnchor.constraint(equalToConstant: 0)
+            prgView.widthConstraint = prgView.widthAnchor.constraint(equalToConstant: 0)
             NSLayoutConstraint.activate([
-                pv.igLeftAnchor.constraint(equalTo: pvIndicator.igLeftAnchor),
-                pv.heightAnchor.constraint(equalTo: pvIndicator.heightAnchor),
-                pv.igTopAnchor.constraint(equalTo: pvIndicator.igTopAnchor),
-                pv.widthConstraint!
+                prgView.igLeftAnchor.constraint(equalTo: pvIndicator.igLeftAnchor),
+                prgView.heightAnchor.constraint(equalTo: pvIndicator.heightAnchor),
+                prgView.igTopAnchor.constraint(equalTo: pvIndicator.igTopAnchor),
+                prgView.widthConstraint!
                 ])
         }
         snaperNameLabel.text = story?.title

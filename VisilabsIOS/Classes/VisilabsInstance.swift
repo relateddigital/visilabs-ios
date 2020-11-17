@@ -182,7 +182,7 @@ extension VisilabsInstance {
             }
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveTargetParameters(event)
-                if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled, pageName != VisilabsConstants.OM_EVT_GIF {
+                if let _ = VisilabsBasePath.endpoints[.action], self.visilabsProfile.inAppNotificationsEnabled, pageName != VisilabsConstants.omEvtGif {
                     self.checkInAppNotification(properties: event)
                 }
             }
@@ -197,7 +197,7 @@ extension VisilabsInstance {
             return
         }
         var props = properties
-        props[VisilabsConstants.EXVISITORID_KEY] = exVisitorId
+        props[VisilabsConstants.exvisitorIdKey] = exVisitorId
         props["Login"] = exVisitorId
         props["OM.b_login"] = "Login"
         customEvent("LoginPage", properties: props)
@@ -209,7 +209,7 @@ extension VisilabsInstance {
             return
         }
         var props = properties
-        props[VisilabsConstants.EXVISITORID_KEY] = exVisitorId
+        props[VisilabsConstants.exvisitorIdKey] = exVisitorId
         props["SignUp"] = exVisitorId
         props["OM.b_sgnp"] = "SignUp"
         customEvent("SignUpPage", properties: props)
@@ -313,13 +313,13 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             VisilabsLogger.info("Notification or query string is nil or empty")
             return
         }
-        let qs = notification.queryString
-        let qsArr = qs!.components(separatedBy: "&")
+        let queryString = notification.queryString
+        let qsArr = queryString!.components(separatedBy: "&")
         var properties = properties
         properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
-        customEvent(VisilabsConstants.OM_EVT_GIF, properties: properties)
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
 
 }

@@ -8,12 +8,12 @@
 import UIKit
 
 private extension CGRect {
-    func rectangle(_ s: CGSize) -> CGRect {
-        let x = origin.x / s.width
-        let y = origin.y / s.height
-        let width = size.width / s.width
-        let height = size.height / s.height
-        return CGRect(x: x, y: y, width: width, height: height)
+    func rectangle(_ size: CGSize) -> CGRect {
+        let xPoint = origin.x / size.width
+        let yPoint = origin.y / size.height
+        let width = size.width / size.width
+        let height = size.height / size.height
+        return CGRect(x: xPoint, y: yPoint, width: width, height: height)
     }
 }
 

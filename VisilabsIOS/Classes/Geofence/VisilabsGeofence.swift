@@ -80,7 +80,7 @@ class VisilabsGeofence {
 
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
-            if timeInterval < VisilabsConstants.GEOFENCE_FETCH_TIME_INTERVAL {
+            if timeInterval < VisilabsConstants.geofenceFetchTimeInterval {
                 return
             }
 
@@ -88,19 +88,19 @@ class VisilabsGeofence {
             let user = VisilabsPersistence.unarchiveUser()
             let geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
             var props = [String: String]()
-            props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
-            props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-            props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
-            props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
-            props[VisilabsConstants.ACT_KEY] = VisilabsConstants.GET_LIST
-            props[VisilabsConstants.TOKENID_KEY] = user.tokenId
-            props[VisilabsConstants.APPID_KEY] = user.appId
+            props[VisilabsConstants.organizationIdKey] = profile.organizationId
+            props[VisilabsConstants.profileIdKey] = profile.profileId
+            props[VisilabsConstants.cookieIdKey] = user.cookieId
+            props[VisilabsConstants.exvisitorIdKey] = user.exVisitorId
+            props[VisilabsConstants.actKey] = VisilabsConstants.getList
+            props[VisilabsConstants.tokenIdKey] = user.tokenId
+            props[VisilabsConstants.appidKey] = user.appId
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
-                props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
-                props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
+                props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
+                props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
             } else if let lat = geofenceHistory.lastKnownLatitude, let lon = geofenceHistory.lastKnownLongitude {
-                props[VisilabsConstants.LATITUDE_KEY] = String(format: "%.013f", lat)
-                props[VisilabsConstants.LONGITUDE_KEY] = String(format: "%.013f", lon)
+                props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
+                props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
             }
 
             for (key, value) in VisilabsPersistence.readTargetParameters() {
@@ -114,9 +114,9 @@ class VisilabsGeofence {
                 if error != nil {
                     self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
                     self.geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
-                    if self.geofenceHistory.errorHistory.count > VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT {
+                    if self.geofenceHistory.errorHistory.count > VisilabsConstants.geofenceHistoryErrorMaxCount {
                         let ascendingKeys = Array(self.geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
-                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_ERROR_MAX_COUNT)]
+                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.geofenceHistoryErrorMaxCount)]
                         for key in keysToBeDeleted {
                             self.geofenceHistory.errorHistory[key] = nil
                         }
@@ -145,9 +145,9 @@ class VisilabsGeofence {
                 self.geofenceHistory.lastKnownLatitude = lastKnownLatitude
                 self.geofenceHistory.lastKnownLongitude = lastKnownLongitude
                 self.geofenceHistory.fetchHistory[now] = fetchedGeofences
-                if self.geofenceHistory.fetchHistory.count > VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT {
+                if self.geofenceHistory.fetchHistory.count > VisilabsConstants.geofenceHistoryMaxCount {
                     let ascendingKeys = Array(self.geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
-                    let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.GEOFENCE_HISTORY_MAX_COUNT)]
+                    let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.geofenceHistoryMaxCount)]
                     for key in keysToBeDeleted {
                         self.geofenceHistory.fetchHistory[key] = nil
                     }
@@ -162,21 +162,21 @@ class VisilabsGeofence {
     func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool) {
         let user = VisilabsPersistence.unarchiveUser()
         var props = [String: String]()
-        props[VisilabsConstants.ORGANIZATIONID_KEY] = profile.organizationId
-        props[VisilabsConstants.PROFILEID_KEY] = profile.profileId
-        props[VisilabsConstants.COOKIEID_KEY] = user.cookieId
-        props[VisilabsConstants.EXVISITORID_KEY] = user.exVisitorId
-        props[VisilabsConstants.ACT_KEY] = VisilabsConstants.PROCESSV2
-        props[VisilabsConstants.ACT_ID_KEY] = actionId
-        props[VisilabsConstants.TOKENID_KEY] = user.tokenId
-        props[VisilabsConstants.APPID_KEY] = user.appId
-        props[VisilabsConstants.GEO_ID_KEY] = geofenceId
+        props[VisilabsConstants.organizationIdKey] = profile.organizationId
+        props[VisilabsConstants.profileIdKey] = profile.profileId
+        props[VisilabsConstants.cookieIdKey] = user.cookieId
+        props[VisilabsConstants.exvisitorIdKey] = user.exVisitorId
+        props[VisilabsConstants.actKey] = VisilabsConstants.processV2
+        props[VisilabsConstants.actidKey] = actionId
+        props[VisilabsConstants.tokenIdKey] = user.tokenId
+        props[VisilabsConstants.appidKey] = user.appId
+        props[VisilabsConstants.geoIdKey] = geofenceId
 
         if isDwell {
             if isEnter {
-                props[VisilabsConstants.TRIGGER_EVENT_KEY] = VisilabsConstants.ON_ENTER
+                props[VisilabsConstants.triggerEventKey] = VisilabsConstants.onEnter
             } else {
-                props[VisilabsConstants.TRIGGER_EVENT_KEY] = VisilabsConstants.ON_EXIT
+                props[VisilabsConstants.triggerEventKey] = VisilabsConstants.onExit
             }
         }
 

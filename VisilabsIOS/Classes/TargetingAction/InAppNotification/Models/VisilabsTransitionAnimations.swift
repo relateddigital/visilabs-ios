@@ -35,10 +35,10 @@ final internal class BounceUpTransition: VisilabsTransitionAnimator {
 
         switch direction {
         case .in:
-            to.view.bounds.origin = CGPoint(x: 0, y: -from.view.bounds.size.height)
+            toViewController.view.bounds.origin = CGPoint(x: 0, y: -from.view.bounds.size.height)
             UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.curveEaseOut], animations: { [weak self] in
                 guard let self = self else { return }
-                self.to.view.bounds = self.from.view.bounds
+                self.toViewController.view.bounds = self.from.view.bounds
             }, completion: { _ in
                 transitionContext.completeTransition(true)
             })
@@ -66,10 +66,10 @@ final internal class BounceDownTransition: VisilabsTransitionAnimator {
 
         switch direction {
         case .in:
-            to.view.bounds.origin = CGPoint(x: 0, y: from.view.bounds.size.height)
+            toViewController.view.bounds.origin = CGPoint(x: 0, y: from.view.bounds.size.height)
             UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.curveEaseOut], animations: { [weak self] in
                 guard let self = self else { return }
-                self.to.view.bounds = self.from.view.bounds
+                self.toViewController.view.bounds = self.from.view.bounds
             }, completion: { _ in
                 transitionContext.completeTransition(true)
             })
@@ -97,10 +97,10 @@ final internal class ZoomTransition: VisilabsTransitionAnimator {
 
         switch direction {
         case .in:
-            to.view.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            toViewController.view.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.curveEaseOut], animations: { [weak self] in
                 guard let self = self else { return }
-                self.to.view.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.toViewController.view.transform = CGAffineTransform(scaleX: 1, y: 1)
             }, completion: { _ in
                 transitionContext.completeTransition(true)
             })
@@ -128,11 +128,11 @@ final internal class FadeTransition: VisilabsTransitionAnimator {
 
         switch direction {
         case .in:
-            to.view.alpha = 0
+            toViewController.view.alpha = 0
             UIView.animate(withDuration: 0.6, delay: 0.0, options: [.curveEaseOut],
             animations: { [weak self] in
                 guard let self = self else { return }
-                self.to.view.alpha = 1
+                self.toViewController.view.alpha = 1
             }, completion: { _ in
                 transitionContext.completeTransition(true)
             })

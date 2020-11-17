@@ -8,10 +8,10 @@
 public enum VisilabsInAppNotificationType: String, CaseIterable {
     case mini
     case full
-    case image_text_button
-    case full_image
+    case imageTextButton
+    case fullImage
     case nps
-    case image_button
-    case smile_rating
-    case email_form
+    case imageButton
+    case smileRating
+    case emailForm
 }

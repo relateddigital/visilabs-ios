@@ -129,10 +129,10 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             let actionId = elements[1]
             let geofenceId = elements[2]
             let targetEvent = elements[3]
-            if targetEvent == VisilabsConstants.ON_ENTER {
+            if targetEvent == VisilabsConstants.onEnter {
                 //TODO: burada isEnter false geçmişim neden?
                 VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: false, isEnter: false)
-            } else if targetEvent == VisilabsConstants.DWELL {
+            } else if targetEvent == VisilabsConstants.dwell {
                 VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: true, isEnter: true)
             }
         }
@@ -144,9 +144,9 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             let actionId = elements[1]
             let geofenceId = elements[2]
             let targetEvent = elements[3]
-            if targetEvent == VisilabsConstants.ON_EXIT {
+            if targetEvent == VisilabsConstants.onExit {
                 VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: false, isEnter: false)
-            } else if targetEvent == VisilabsConstants.DWELL {
+            } else if targetEvent == VisilabsConstants.dwell {
                 VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId, geofenceId: geofenceId, isDwell: true, isEnter: false)
             }
         }

@@ -20,14 +20,14 @@ extension UIView {
         newPoint = newPoint.applying(transform)
         oldPoint = oldPoint.applying(transform)
 
-        var c = layer.position
-        c.x -= oldPoint.x
-        c.x += newPoint.x
+        var newPos = layer.position
+        newPos.x -= oldPoint.x
+        newPos.x += newPoint.x
 
-        c.y -= oldPoint.y
-        c.y += newPoint.y
+        newPos.y -= oldPoint.y
+        newPos.y += newPoint.y
 
-        layer.position = c
+        layer.position = newPos
         layer.anchorPoint = point
     }
 }

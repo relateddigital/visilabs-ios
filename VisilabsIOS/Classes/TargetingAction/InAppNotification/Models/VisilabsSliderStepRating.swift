@@ -9,8 +9,8 @@ import UIKit
 
 private func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
     switch (lhs, rhs) {
-    case let (l?, r?):
-        return l < r
+    case let (left?, right?):
+        return left < right
     case (nil, _?):
         return true
     default:
@@ -20,8 +20,8 @@ private func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 private func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
     switch (lhs, rhs) {
-    case let (l?, r?):
-        return l > r
+    case let (left?, right?):
+        return left > right
     default:
         return rhs < lhs
     }
@@ -167,11 +167,11 @@ class VisilabsSliderStep: UISlider {
         let intValue = Int(round(value))
         let lblIndex = intValue - Int(minimumValue)
 
-        for i in 0 ..<  _stepTickLabels!.count {
-            if i == lblIndex {
-                _stepTickLabels?[i].textColor = selectedColor
+        for counter in 0 ..<  _stepTickLabels!.count {
+            if counter == lblIndex {
+                _stepTickLabels?[counter].textColor = selectedColor
             } else {
-                _stepTickLabels?[i].textColor = unselectedColor
+                _stepTickLabels?[counter].textColor = unselectedColor
             }
         }
     }
@@ -227,7 +227,7 @@ class VisilabsSliderStep: UISlider {
 
     @objc internal func drawLabels() {
 
-        guard let ti = tickTitles else {
+        guard let tTitles = tickTitles else {
             return
         }
 
@@ -235,14 +235,14 @@ class VisilabsSliderStep: UISlider {
             _stepTickLabels = []
         }
 
-        if let sl = _stepTickLabels {
-            for l in sl {
-                l.removeFromSuperview()
+        if let labels = _stepTickLabels {
+            for label in labels {
+                label.removeFromSuperview()
             }
             _stepTickLabels?.removeAll()
 
-            for index in 0..<ti.count {
-                let title = ti[index]
+            for index in 0..<tTitles.count {
+                let title = tTitles[index]
                 let lbl = UILabel()
                 lbl.font = unselectedFont
                 lbl.text = title
@@ -264,9 +264,9 @@ class VisilabsSliderStep: UISlider {
                     offset = -trackRightOffset
                 }
 
-                let x = offset + CGFloat(Double(index) * stepWidth) - (lbl.frame.size.width / 2)
+                let xPoint = offset + CGFloat(Double(index) * stepWidth) - (lbl.frame.size.width / 2)
                 var rect = lbl.frame
-                rect.origin.x = x
+                rect.origin.x = xPoint
                 rect.origin.y = bounds.midY - (bounds.size.height / 2) - rect.size.height + highlightedImageSize + 20
                 lbl.frame = rect
                 self.addSubview(lbl)
@@ -276,7 +276,7 @@ class VisilabsSliderStep: UISlider {
     }
 
     @objc internal func drawImages() {
-        guard let ti = tickImages else {
+        guard let tImages = tickImages else {
             return
         }
 
@@ -284,14 +284,14 @@ class VisilabsSliderStep: UISlider {
             _stepTickImages = []
         }
 
-        if let sl = _stepTickImages {
-            for l in sl {
-                l.removeFromSuperview()
+        if let stImages = _stepTickImages {
+            for image in stImages {
+                image.removeFromSuperview()
             }
             _stepTickImages?.removeAll()
 
-            for index in 0..<ti.count {
-                let img = ti[index]
+            for index in 0..<tImages.count {
+                let img = tImages[index]
                 let imv = UIImageView(image: img)
                 imv.contentMode = .scaleAspectFit
                 imv.sizeToFit()
@@ -312,9 +312,9 @@ class VisilabsSliderStep: UISlider {
                     offset = -trackRightOffset
                 }
 
-                let x = offset + CGFloat(Double(index) * stepWidth) - (imv.frame.size.width / 2)
+                let xPoint = offset + CGFloat(Double(index) * stepWidth) - (imv.frame.size.width / 2)
                 var rect = imv.frame
-                rect.origin.x = x
+                rect.origin.x = xPoint
                 rect.origin.y = bounds.midY - (rect.size.height / 2)
                 imv.frame = rect
                 self.insertSubview(imv, at: 2) //index 2 => draw images below the thumb/above the line
@@ -339,9 +339,9 @@ class VisilabsSliderStep: UISlider {
 
             // Draw custom track
             ctx?.setFillColor(trackColor.cgColor)
-            let x = trackLeftOffset
-            let y = bounds.midY - CGFloat(trackHeight / 2)
-            let rect = CGRect(x: x, y: y, width: bounds.width - trackLeftOffset - trackRightOffset, height: CGFloat(trackHeight))
+            let xPoint = trackLeftOffset
+            let yPoint = bounds.midY - CGFloat(trackHeight / 2)
+            let rect = CGRect(x: xPoint, y: yPoint, width: bounds.width - trackLeftOffset - trackRightOffset, height: CGFloat(trackHeight))
             let trackPath = UIBezierPath(rect: rect)
 
             ctx?.addPath(trackPath.cgPath)
@@ -364,12 +364,12 @@ class VisilabsSliderStep: UISlider {
                     offset = -trackRightOffset
                 }
 
-                let x = offset + CGFloat(Double(index) * stepWidth) - CGFloat(stepTickWidth / 2)
-                let y = bounds.midY - CGFloat(stepTickHeight / 2)
+                let xPoint = offset + CGFloat(Double(index) * stepWidth) - CGFloat(stepTickWidth / 2)
+                let yPoint = bounds.midY - CGFloat(stepTickHeight / 2)
 
                 // Create rounded/squared tick bezier
                 let stepPath: UIBezierPath
-                let rect = CGRect(x: x, y: y, width: CGFloat(stepTickWidth), height: CGFloat(stepTickHeight))
+                let rect = CGRect(x: xPoint, y: yPoint, width: CGFloat(stepTickWidth), height: CGFloat(stepTickHeight))
 
                 if customTrack && stepTickRounded {
                     let radius = CGFloat(stepTickHeight/2)

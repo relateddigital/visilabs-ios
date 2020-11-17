@@ -191,18 +191,18 @@ public class VisilabsInAppNotification {
     }
 
     private func setFonts() {
-        self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
-        self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
+        self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily, fontSize: self.messageBodyTextSize, style: .title2)
+        self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily, fontSize: self.messageBodyTextSize, style: .body)
+        self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily, fontSize: self.messageBodyTextSize, style: .title2)
     }
 
-    private static func getFont(font_family: String?, font_size: String?, style: UIFont.TextStyle) -> UIFont {
+    private static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
         var size = style == .title2 ? 12 : 8
-        if let fSize = font_size, let s = Int(fSize), s > 0 {
-            size = size + s
+        if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
+            size = size + siz
         }
         var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style), size: CGFloat(size))
-        if let font = font_family {
+        if let font = fontFamily {
             if #available(iOS 13.0, *) {
                 var systemDesign: UIFontDescriptor.SystemDesign  = .default
                 if font.lowercased() == "serif" || font.lowercased() == "sansserif" {

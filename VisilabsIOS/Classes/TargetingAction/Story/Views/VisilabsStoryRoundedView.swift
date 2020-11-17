@@ -19,11 +19,11 @@ struct Attributes {
 class VisilabsStoryRoundedView: UIView {
     private var attributes: Attributes = Attributes()
     lazy var imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.layer.borderWidth = (attributes.borderWidth)
-        iv.layer.borderColor = attributes.borderColor.cgColor
-        iv.clipsToBounds = true
-        return iv
+        let imgView = UIImageView()
+        imgView.layer.borderWidth = (attributes.borderWidth)
+        imgView.layer.borderColor = attributes.borderColor.cgColor
+        imgView.clipsToBounds = true
+        return imgView
     }()
 
     override init(frame: CGRect) {

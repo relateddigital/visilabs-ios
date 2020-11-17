@@ -33,8 +33,8 @@ internal extension Collection where Iterator.Element == Constraint {
 
 internal extension Constraint {
     @objc
-    func with(_ p: LayoutPriority) -> Self {
-        priority = p
+    func with(_ priority: LayoutPriority) -> Self {
+        self.priority = priority
         return self
     }
 

@@ -115,9 +115,9 @@ open class VisilabsDynamicBlurView: UIView {
 
     private func draw(_ image: UIImage, blurRadius radius: CGFloat, fixes isFixes: Bool, baseLayer: CALayer?) {
         async(on: globalQueue) { [weak self] in
-            if let me = self, let blurredImage = image.blurred(radius: radius, iterations: me.iterations, ratio: me.blurRatio, blendColor: me.blendColor, blendMode: me.blendMode) {
-                me.sync(on: me.mainQueue) {
-                    me.blurLayer.draw(blurredImage, fixes: isFixes, baseLayer: baseLayer)
+            if let blurView = self, let blurredImage = image.blurred(radius: radius, iterations: blurView.iterations, ratio: blurView.blurRatio, blendColor: blurView.blendColor, blendMode: blurView.blendMode) {
+                blurView.sync(on: blurView.mainQueue) {
+                    blurView.blurLayer.draw(blurredImage, fixes: isFixes, baseLayer: baseLayer)
                 }
             }
         }

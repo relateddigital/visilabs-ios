@@ -21,7 +21,7 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
     /** This index will help you simply iterate the story one by one*/
 
     private var nStoryIndex: Int = 0 //iteration(i+1)
-    private var story_copy: VisilabsStory?
+    private var storyCopy: VisilabsStory?
     private(set) var layoutType: VisilabsLayoutType
     private(set) var executeOnce = false
 
@@ -141,16 +141,16 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
         if let vCell = visibleCell {
             vCell.story?.isCompletelyVisible = false
             vCell.pauseSnapProgressors(with: (vCell.story?.lastPlayedSnapIndex)!)
-            story_copy = vCell.story
+            storyCopy = vCell.story
         }
         //Prepare the setup for first time story launch
-        if story_copy == nil {
+        if storyCopy == nil {
             cell.willDisplayCellForZerothIndex(with: cell.story?.lastPlayedSnapIndex ?? 0, handpickedSnapIndex: handPickedSnapIndex)
             return
         }
         if indexPath.item == nStoryIndex {
-            let s = stories[nStoryIndex+handPickedStoryIndex]
-            cell.willDisplayCell(with: s.lastPlayedSnapIndex)
+            let story = stories[nStoryIndex+handPickedStoryIndex]
+            cell.willDisplayCell(with: story.lastPlayedSnapIndex)
         }
         /// Setting to 0, otherwise for next story snaps, it will consider the same previous story's handPickedSnapIndex. It will create issue in starting the snap progressors.
         handPickedSnapIndex = 0
@@ -164,7 +164,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
         }
         vCell.story?.isCompletelyVisible = true
 
-        if vCell.story == story_copy {
+        if vCell.story == storyCopy {
             nStoryIndex = vCellIndexPath.item
             if vCell.longPressGestureState == nil {
                 vCell.resumePreviousSnapProgress(with: (vCell.story?.lastPlayedSnapIndex)!)
@@ -201,14 +201,14 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegateFlowLayout {
                 guard let strongSelf = self,
                     let vCell = visibleCell,
                     let progressIndicatorView = vCell.getProgressIndicatorView(with: vCell.snapIndex),
-                    let pv = vCell.getProgressView(with: vCell.snapIndex) else {
+                    let progress = vCell.getProgressView(with: vCell.snapIndex) else {
                         fatalError("Visible cell or progressIndicatorView or progressView is nil")
                 }
                 vCell.scrollview.setContentOffset(CGPoint(x: CGFloat(vCell.snapIndex) * collectionView.frame.width, y: 0), animated: false)
                 vCell.adjustPreviousSnapProgressorsWidth(with: vCell.snapIndex)
 
-                if pv.state == .running {
-                    pv.widthConstraint?.constant = progressIndicatorView.frame.width
+                if progress.state == .running {
+                    progress.widthConstraint?.constant = progressIndicatorView.frame.width
                 }
                 strongSelf.isTransitioning = false
             }
@@ -230,16 +230,16 @@ extension VisilabsStoryPreviewController {
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let sortedVCells = _view.snapsCollectionView.visibleCells.sortedArrayByPosition()
-        guard let f_Cell = sortedVCells.first as? VisilabsStoryPreviewCell else {return}
-        guard let l_Cell = sortedVCells.last as? VisilabsStoryPreviewCell else {return}
-        let f_IndexPath = _view.snapsCollectionView.indexPath(for: f_Cell)
-        let l_IndexPath = _view.snapsCollectionView.indexPath(for: l_Cell)
+        guard let firstCell = sortedVCells.first as? VisilabsStoryPreviewCell else {return}
+        guard let lastCell = sortedVCells.last as? VisilabsStoryPreviewCell else {return}
+        let firstIndexPath = _view.snapsCollectionView.indexPath(for: firstCell)
+        let lastIndexPath = _view.snapsCollectionView.indexPath(for: lastCell)
         let numberOfItems = collectionView(_view.snapsCollectionView, numberOfItemsInSection: 0)-1
-        if l_IndexPath?.item == 0 {
+        if lastIndexPath?.item == 0 {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
                 self.dismiss(animated: true, completion: nil)
             }
-        } else if f_IndexPath?.item == numberOfItems {
+        } else if firstIndexPath?.item == numberOfItems {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2) {
                 self.dismiss(animated: true, completion: nil)
             }
@@ -253,10 +253,10 @@ extension VisilabsStoryPreviewController {
 // MARK: - StoryPreview Protocol implementation
 extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
     func didCompletePreview() {
-        let n = handPickedStoryIndex+nStoryIndex+1
-        if n < stories.count {
+        let number = handPickedStoryIndex+nStoryIndex+1
+        if number < stories.count {
             //Move to next story
-            story_copy = stories[nStoryIndex+handPickedStoryIndex]
+            storyCopy = stories[nStoryIndex+handPickedStoryIndex]
             nStoryIndex = nStoryIndex + 1
             let nIndexPath = IndexPath.init(row: nStoryIndex, section: 0)
             //_view.snapsCollectionView.layer.speed = 0;
@@ -270,9 +270,9 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
     }
     func moveToPreviousStory() {
         //let n = handPickedStoryIndex+nStoryIndex+1
-        let n = nStoryIndex+1
-        if n <= stories.count && n > 1 {
-            story_copy = stories[nStoryIndex+handPickedStoryIndex]
+        let number = nStoryIndex+1
+        if number <= stories.count && number > 1 {
+            storyCopy = stories[nStoryIndex+handPickedStoryIndex]
             nStoryIndex = nStoryIndex - 1
             let nIndexPath = IndexPath.init(row: nStoryIndex, section: 0)
             _view.snapsCollectionView.scrollToItem(at: nIndexPath, at: .left, animated: true)
@@ -292,15 +292,15 @@ extension Array {
             let view1 = obj1 as! UIView
             let view2 = obj2 as! UIView
 
-            let x1 = view1.frame.minX
-            let y1 = view1.frame.minY
-            let x2 = view2.frame.minX
-            let y2 = view2.frame.minY
+            let x1Point = view1.frame.minX
+            let y1Point = view1.frame.minY
+            let x2Point = view2.frame.minX
+            let y2Point = view2.frame.minY
 
-            if y1 != y2 {
-                return y1 < y2
+            if y1Point != y2Point {
+                return y1Point < y2Point
             } else {
-                return x1 < x2
+                return x1Point < x2Point
             }
         })
     }

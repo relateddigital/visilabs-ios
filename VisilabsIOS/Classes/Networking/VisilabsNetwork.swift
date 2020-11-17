@@ -153,8 +153,8 @@ class VisilabsNetwork {
         //TODO: timeoutInterval dışarıdan alınacak
         request.timeoutInterval = 60
 
-        for (k, v) in resource.headers {
-            request.setValue(v, forHTTPHeaderField: k)
+        for (key, value) in resource.headers {
+            request.setValue(value, forHTTPHeaderField: key)
         }
         return request as URLRequest
     }

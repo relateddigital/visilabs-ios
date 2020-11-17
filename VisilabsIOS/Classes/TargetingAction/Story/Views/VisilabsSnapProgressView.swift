@@ -38,10 +38,10 @@ extension ViewAnimator where Self: VisilabsSnapProgressView {
             self?.state = .finished
             if finished == true {
                 if let strongSelf = self {
-                    return completion(strongSelf.story_identifier!, strongSelf.snapIndex!, strongSelf.story.isCancelledAbruptly)
+                    return completion(strongSelf.storyIdentifier!, strongSelf.snapIndex!, strongSelf.story.isCancelledAbruptly)
                 }
             } else {
-                return completion(self?.story_identifier ?? "Unknown", self?.snapIndex ?? 0, self?.story.isCancelledAbruptly ?? true)
+                return completion(self?.storyIdentifier ?? "Unknown", self?.snapIndex ?? 0, self?.story.isCancelledAbruptly ?? true)
             }
         }
     }
@@ -75,7 +75,7 @@ extension ViewAnimator where Self: VisilabsSnapProgressView {
 }
 
 final class VisilabsSnapProgressView: UIView, ViewAnimator {
-    public var story_identifier: String?
+    public var storyIdentifier: String?
     public var snapIndex: Int?
     public var story: VisilabsStory!
     public var widthConstraint: NSLayoutConstraint?
