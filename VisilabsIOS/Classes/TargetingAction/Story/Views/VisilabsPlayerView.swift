@@ -231,8 +231,8 @@ extension VisilabsPlayerView: PlayerControls {
         }
     }
     var playerStatus: PlayerStatus {
-        if let p = player {
-            switch p.status {
+        if let plyr = player {
+            switch plyr.status {
             case .unknown: return .unknown
             case .readyToPlay: return .readyToPlay
             case .failed: return .failed

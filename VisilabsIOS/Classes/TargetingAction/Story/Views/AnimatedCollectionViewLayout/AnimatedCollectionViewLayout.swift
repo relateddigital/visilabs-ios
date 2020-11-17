@@ -55,7 +55,7 @@ open class AnimatedCollectionViewLayout: UICollectionViewFlowLayout {
 
         guard let collectionView = self.collectionView else { return attributes }
 
-        let a = attributes
+        let attr = attributes
 
         /** 
          The position for each cell is defined as the ratio of the distance between
@@ -69,28 +69,28 @@ open class AnimatedCollectionViewLayout: UICollectionViewFlowLayout {
 
         if scrollDirection == .horizontal {
             distance = collectionView.frame.width
-            itemOffset = a.center.x - collectionView.contentOffset.x
-            a.startOffset = (a.frame.origin.x - collectionView.contentOffset.x) / a.frame.width
-            a.endOffset = (a.frame.origin.x - collectionView.contentOffset.x - collectionView.frame.width) / a.frame.width
+            itemOffset = attr.center.x - collectionView.contentOffset.x
+            attr.startOffset = (attr.frame.origin.x - collectionView.contentOffset.x) / attr.frame.width
+            attr.endOffset = (attr.frame.origin.x - collectionView.contentOffset.x - collectionView.frame.width) / attr.frame.width
         } else {
             distance = collectionView.frame.height
-            itemOffset = a.center.y - collectionView.contentOffset.y
-            a.startOffset = (a.frame.origin.y - collectionView.contentOffset.y) / a.frame.height
-            a.endOffset = (a.frame.origin.y - collectionView.contentOffset.y - collectionView.frame.height) / a.frame.height
+            itemOffset = attr.center.y - collectionView.contentOffset.y
+            attr.startOffset = (attr.frame.origin.y - collectionView.contentOffset.y) / attr.frame.height
+            attr.endOffset = (attr.frame.origin.y - collectionView.contentOffset.y - collectionView.frame.height) / attr.frame.height
         }
 
-        a.scrollDirection = scrollDirection
-        a.middleOffset = itemOffset / distance - 0.5
+        attr.scrollDirection = scrollDirection
+        attr.middleOffset = itemOffset / distance - 0.5
 
         // Cache the contentView since we're going to use it a lot.
-        if a.contentView == nil,
-            let c = collectionView.cellForItem(at: attributes.indexPath)?.contentView {
-            a.contentView = c
+        if attr.contentView == nil,
+            let contentView = collectionView.cellForItem(at: attributes.indexPath)?.contentView {
+            attr.contentView = contentView
         }
 
-        animator?.animate(collectionView: collectionView, attributes: a)
+        animator?.animate(collectionView: collectionView, attributes: attr)
 
-        return a
+        return attr
     }
 }
 
@@ -119,13 +119,13 @@ open class AnimatedCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     }
 
     open override func isEqual(_ object: Any?) -> Bool {
-        guard let o = object as? AnimatedCollectionViewLayoutAttributes else { return false }
+        guard let obj = object as? AnimatedCollectionViewLayoutAttributes else { return false }
 
-        return super.isEqual(o)
-            && o.contentView == contentView
-            && o.scrollDirection == scrollDirection
-            && o.startOffset == startOffset
-            && o.middleOffset == middleOffset
-            && o.endOffset == endOffset
+        return super.isEqual(obj)
+            && obj.contentView == contentView
+            && obj.scrollDirection == scrollDirection
+            && obj.startOffset == startOffset
+            && obj.middleOffset == middleOffset
+            && obj.endOffset == endOffset
     }
 }

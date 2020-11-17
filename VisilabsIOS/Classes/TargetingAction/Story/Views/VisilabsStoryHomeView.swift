@@ -17,13 +17,13 @@ public class VisilabsStoryHomeView: UIView {
         return flowLayout
     }()
     lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear // .orange // .white
-        cv.showsVerticalScrollIndicator = false
-        cv.showsHorizontalScrollIndicator = false
-        cv.register(VisilabsStoryHomeViewCell.self, forCellWithReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        return cv
+        let colView = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
+        colView.backgroundColor = .clear // .orange // .white
+        colView.showsVerticalScrollIndicator = false
+        colView.showsHorizontalScrollIndicator = false
+        colView.register(VisilabsStoryHomeViewCell.self, forCellWithReuseIdentifier: VisilabsStoryHomeViewCell.reuseIdentifier)
+        colView.translatesAutoresizingMaskIntoConstraints = false
+        return colView
     }()
 
     // MARK: - Overridden functions

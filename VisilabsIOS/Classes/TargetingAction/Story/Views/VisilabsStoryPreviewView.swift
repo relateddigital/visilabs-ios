@@ -34,16 +34,16 @@ class VisilabsStoryPreviewView: UIView {
         return flowLayout
     }()
     lazy var snapsCollectionView: UICollectionView! = {
-        let cv = UICollectionView.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), collectionViewLayout: snapsCollectionViewFlowLayout)
-        cv.backgroundColor = .black
-        cv.showsVerticalScrollIndicator = false
-        cv.showsHorizontalScrollIndicator = false
-        cv.register(VisilabsStoryPreviewCell.self, forCellWithReuseIdentifier: VisilabsStoryPreviewCell.reuseIdentifier)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.isPagingEnabled = true
-        cv.isPrefetchingEnabled = false
-        cv.collectionViewLayout = snapsCollectionViewFlowLayout
-        return cv
+        let colView = UICollectionView.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height), collectionViewLayout: snapsCollectionViewFlowLayout)
+        colView.backgroundColor = .black
+        colView.showsVerticalScrollIndicator = false
+        colView.showsHorizontalScrollIndicator = false
+        colView.register(VisilabsStoryPreviewCell.self, forCellWithReuseIdentifier: VisilabsStoryPreviewCell.reuseIdentifier)
+        colView.translatesAutoresizingMaskIntoConstraints = false
+        colView.isPagingEnabled = true
+        colView.isPrefetchingEnabled = false
+        colView.collectionViewLayout = snapsCollectionViewFlowLayout
+        return colView
     }()
 
     // MARK: - Overridden functions

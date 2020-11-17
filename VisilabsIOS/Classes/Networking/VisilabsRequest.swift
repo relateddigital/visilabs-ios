@@ -53,10 +53,10 @@ class VisilabsRequest {
     private class func getCookies(_ url: URL) -> [String: String] {
         var cookieKeyValues = [String: String]()
         for cookie in VisilabsHelper.readCookie(url) {
-            if cookie.name.contains(VisilabsConstants.LOAD_BALANCE_PREFIX, options: .caseInsensitive) {
+            if cookie.name.contains(VisilabsConstants.loadBalancePrefix, options: .caseInsensitive) {
                 cookieKeyValues[cookie.name] = cookie.value
             }
-            if cookie.name.contains(VisilabsConstants.OM_3_KEY, options: .caseInsensitive) {
+            if cookie.name.contains(VisilabsConstants.om3Key, options: .caseInsensitive) {
                 cookieKeyValues[cookie.name] = cookie.value
             }
         }
@@ -143,7 +143,7 @@ class VisilabsRequest {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
 
-        if properties[VisilabsConstants.ACT_KEY] == VisilabsConstants.GET_LIST {
+        if properties[VisilabsConstants.actKey] == VisilabsConstants.getList {
             let responseParserGetList: (Data) -> [[String: Any]]? = { data in
                 var response: Any?
                 do {

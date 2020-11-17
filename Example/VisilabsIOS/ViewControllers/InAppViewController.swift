@@ -92,13 +92,13 @@ class InAppViewController: FormViewController {
         switch messageType {
         case .mini:
             setFormRowsForMini()
-        case .full, .image_text_button, .smile_rating, .nps:
+        case .full, .imageTextButton, .smileRating, .nps:
             setFormRowsForDefault()
-        case.full_image:
+        case.fullImage:
             setFormRowsForFullImage()
-        case.image_button:
+        case.imageButton:
             setFormRowsForImageButton()
-        case .email_form:
+        case .emailForm:
             setFormRowsForEmail()
         }
         self.form.allRows.forEach { (row) in

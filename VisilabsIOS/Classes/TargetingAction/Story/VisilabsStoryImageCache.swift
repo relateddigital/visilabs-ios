@@ -7,7 +7,7 @@
 
 import Foundation
 
-private let ONE_HUNDRED_MEGABYTES = 1024 * 1024 * 100
+private let oneHundredMB = 1024 * 1024 * 100
 
 class VisilabsStoryImageCache: NSCache<AnyObject, AnyObject> {
     static let shared = VisilabsStoryImageCache()
@@ -18,7 +18,7 @@ class VisilabsStoryImageCache: NSCache<AnyObject, AnyObject> {
 }
 
 extension VisilabsStoryImageCache {
-    func setMaximumLimit(size: Int = ONE_HUNDRED_MEGABYTES) {
+    func setMaximumLimit(size: Int = oneHundredMB) {
         totalCostLimit = size
     }
 }

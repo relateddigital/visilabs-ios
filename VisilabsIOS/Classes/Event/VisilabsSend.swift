@@ -9,7 +9,7 @@ import Foundation
 
 protocol VisilabsSendDelegate: AnyObject {
     func send(completion: (() -> Void)?)
-    func updateNetworkActivityIndicator(_ on: Bool)
+    func updateNetworkActivityIndicator(_ isOn: Bool)
 }
 
 class VisilabsSend {
@@ -21,8 +21,8 @@ class VisilabsSend {
     func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> VisilabsCookie {
         var mutableCookie = visilabsCookie
 
-        for i in 0..<eventsQueue.count {
-            let event = eventsQueue[i]
+        for counter in 0..<eventsQueue.count {
+            let event = eventsQueue[counter]
             VisilabsLogger.debug("Sending event")
             VisilabsLogger.debug(event)
             let loggerHeaders = prepareHeaders(.logger, event: event, visilabsUser: visilabsUser, visilabsCookie: visilabsCookie)
@@ -35,11 +35,11 @@ class VisilabsSend {
                                         //self.delegate?.updateNetworkActivityIndicator(false)
                                         if let cookies = cookies {
                                             for cookie in cookies {
-                                                if cookie.key.contains(VisilabsConstants.LOAD_BALANCE_PREFIX, options: .caseInsensitive) {
+                                                if cookie.key.contains(VisilabsConstants.loadBalancePrefix, options: .caseInsensitive) {
                                                     mutableCookie.loggerCookieKey = cookie.key
                                                     mutableCookie.loggerCookieValue = cookie.value
                                                 }
-                                                if cookie.key.contains(VisilabsConstants.OM_3_KEY, options: .caseInsensitive) {
+                                                if cookie.key.contains(VisilabsConstants.om3Key, options: .caseInsensitive) {
                                                     mutableCookie.loggerOM3rdCookieValue = cookie.value
                                                 }
                                             }
@@ -51,11 +51,11 @@ class VisilabsSend {
                                         //self.delegate?.updateNetworkActivityIndicator(false)
                                         if let cookies = cookies {
                                             for cookie in cookies {
-                                                if cookie.key.contains(VisilabsConstants.LOAD_BALANCE_PREFIX, options: .caseInsensitive) {
+                                                if cookie.key.contains(VisilabsConstants.loadBalancePrefix, options: .caseInsensitive) {
                                                     mutableCookie.realTimeCookieKey = cookie.key
                                                     mutableCookie.realTimeCookieValue = cookie.value
                                                 }
-                                                if cookie.key.contains(VisilabsConstants.OM_3_KEY, options: .caseInsensitive) {
+                                                if cookie.key.contains(VisilabsConstants.om3Key, options: .caseInsensitive) {
                                                     mutableCookie.realTimeOM3rdCookieValue = cookie.value
                                                 }
                                             }
@@ -72,7 +72,7 @@ class VisilabsSend {
 
     private func prepareHeaders(_ visilabsEndpoint: VisilabsEndpoint, event: [String: String], visilabsUser: VisilabsUser, visilabsCookie: VisilabsCookie) -> [String: String] {
         var headers = [String: String]()
-        headers["Referer"] = event[VisilabsConstants.URI_KEY] ?? ""
+        headers["Referer"] = event[VisilabsConstants.uriKey] ?? ""
         headers["User-Agent"] = visilabsUser.userAgent
         if let cookie = prepareCookie(visilabsEndpoint, visilabsCookie: visilabsCookie) {
             headers["Cookie"] = cookie
@@ -92,7 +92,7 @@ class VisilabsSend {
                 } else { //TODO: bu kısmı güzelleştir
                     cookieString = ""
                 }
-                cookieString = cookieString! + "\(VisilabsConstants.OM_3_KEY)=\(om3rdValue)"
+                cookieString = cookieString! + "\(VisilabsConstants.om3Key)=\(om3rdValue)"
             }
         }
         if visilabsEndpoint == .realtime {
@@ -105,7 +105,7 @@ class VisilabsSend {
                 } else { //TODO: bu kısmı güzelleştir
                     cookieString = ""
                 }
-                cookieString = cookieString! + "\(VisilabsConstants.OM_3_KEY)=\(om3rdValue)"
+                cookieString = cookieString! + "\(VisilabsConstants.om3Key)=\(om3rdValue)"
             }
         }
         return cookieString

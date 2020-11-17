@@ -47,7 +47,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         if self.storyAction.stories.count == 0 {
             return
         }
-        if self.storyAction.storyTemplate == .SkinBased {
+        if self.storyAction.storyTemplate == .skinBased {
             DispatchQueue.main.async {
                 for (index, _) in self.storyAction.stories.enumerated() {
                     self.storyAction.stories[index].lastPlayedSnapIndex = 0
@@ -61,7 +61,7 @@ public class VisilabsStoryHomeViewController: NSObject, UICollectionViewDataSour
         } else {
 
             if self.storyAction.clickQueryItems.count > 0 {
-                Visilabs.callAPI().customEvent(VisilabsConstants.OM_EVT_GIF, properties: self.storyAction.clickQueryItems)
+                Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: self.storyAction.clickQueryItems)
             }
             let story = self.storyAction.stories[indexPath.row]
             if let storyLink = story.link, let storyUrl = URL(string: storyLink) {

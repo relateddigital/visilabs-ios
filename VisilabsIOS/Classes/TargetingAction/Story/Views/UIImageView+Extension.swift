@@ -13,10 +13,10 @@ extension UIImageView {
     //DataSource: UI-Level
     struct ActivityIndicator {
         static var isEnabled = false
-        static var style = _style
-        static var view = _view
+        static var style = myStyle
+        static var view = myView
 
-        static var _style: UIActivityIndicatorView.Style {
+        static var myStyle: UIActivityIndicatorView.Style {
             if #available(iOS 13.0, *) {
                 return .large
             } else {
@@ -24,7 +24,7 @@ extension UIImageView {
             }
         }
 
-        static var _view: UIActivityIndicatorView {
+        static var myView: UIActivityIndicatorView {
             if #available(iOS 13.0, *) {
                 return UIActivityIndicatorView(style: .large)
             } else {
@@ -117,8 +117,8 @@ extension UIImageView {
             DispatchQueue.main.async {
                 self.backgroundColor = UIColor.white
                 self.subviews.forEach({ (view) in
-                    if let av = view as? UIActivityIndicatorView {
-                        av.stopAnimating()
+                    if let activityIndicator = view as? UIActivityIndicatorView {
+                        activityIndicator.stopAnimating()
                     }
                 })
             }

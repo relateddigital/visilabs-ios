@@ -22,15 +22,15 @@ class VisilabsEvent {
         var clearUserParameters = false
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
 
-        if let cookieId = props[VisilabsConstants.COOKIEID_KEY] {
+        if let cookieId = props[VisilabsConstants.cookieIdKey] {
             if vUser.cookieId != cookieId {
                 clearUserParameters = true
             }
             vUser.cookieId = cookieId
-            props.removeValue(forKey: VisilabsConstants.COOKIEID_KEY)
+            props.removeValue(forKey: VisilabsConstants.cookieIdKey)
         }
 
-        if let exVisitorId = props[VisilabsConstants.EXVISITORID_KEY] {
+        if let exVisitorId = props[VisilabsConstants.exvisitorIdKey] {
             if vUser.exVisitorId != exVisitorId {
                 clearUserParameters = true
             }
@@ -39,60 +39,60 @@ class VisilabsEvent {
                 vUser.cookieId = VisilabsHelper.generateCookieId()
             }
             vUser.exVisitorId = exVisitorId
-            props.removeValue(forKey: VisilabsConstants.EXVISITORID_KEY)
+            props.removeValue(forKey: VisilabsConstants.exvisitorIdKey)
         }
 
-        if let tokenId = props[VisilabsConstants.TOKENID_KEY] {
+        if let tokenId = props[VisilabsConstants.tokenIdKey] {
             vUser.tokenId = tokenId
-            props.removeValue(forKey: VisilabsConstants.TOKENID_KEY)
+            props.removeValue(forKey: VisilabsConstants.tokenIdKey)
         }
 
-        if let appId = props[VisilabsConstants.APPID_KEY] {
+        if let appId = props[VisilabsConstants.appidKey] {
             vUser.appId = appId
-            props.removeValue(forKey: VisilabsConstants.APPID_KEY)
+            props.removeValue(forKey: VisilabsConstants.appidKey)
         }
 
         //TODO: Dışarıdan mobile ad id gelince neden siliyoruz?
-        if props.keys.contains(VisilabsConstants.MOBILEADID_KEY) {
-            props.removeValue(forKey: VisilabsConstants.MOBILEADID_KEY)
+        if props.keys.contains(VisilabsConstants.mobileIdKey) {
+            props.removeValue(forKey: VisilabsConstants.mobileIdKey)
         }
 
-        if props.keys.contains(VisilabsConstants.APIVER_KEY) {
-            props.removeValue(forKey: VisilabsConstants.APIVER_KEY)
+        if props.keys.contains(VisilabsConstants.apiverKey) {
+            props.removeValue(forKey: VisilabsConstants.apiverKey)
         }
 
-        if props.keys.contains(VisilabsConstants.CHANNEL_KEY) {
-            chan = props[VisilabsConstants.CHANNEL_KEY]!
-            props.removeValue(forKey: VisilabsConstants.CHANNEL_KEY)
+        if props.keys.contains(VisilabsConstants.channelKey) {
+            chan = props[VisilabsConstants.channelKey]!
+            props.removeValue(forKey: VisilabsConstants.channelKey)
         }
 
-        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
-        props[VisilabsConstants.PROFILEID_KEY] = self.visilabsProfile.profileId
-        props[VisilabsConstants.COOKIEID_KEY] = vUser.cookieId ?? ""
-        props[VisilabsConstants.CHANNEL_KEY] = chan
-        props[VisilabsConstants.URI_KEY] = pageName
-        props[VisilabsConstants.MOBILEAPPLICATION_KEY] = VisilabsConstants.TRUE
-        props[VisilabsConstants.MOBILEADID_KEY] = vUser.identifierForAdvertising ?? ""
-        props[VisilabsConstants.APIVER_KEY] = VisilabsConstants.IOS
+        props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
+        props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId
+        props[VisilabsConstants.cookieIdKey] = vUser.cookieId ?? ""
+        props[VisilabsConstants.channelKey] = chan
+        props[VisilabsConstants.uriKey] = pageName
+        props[VisilabsConstants.mobileApplicationKey] = VisilabsConstants.isTrue
+        props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
+        props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
 
         if !vUser.exVisitorId.isNilOrWhiteSpace {
-            props[VisilabsConstants.EXVISITORID_KEY] = vUser.exVisitorId
+            props[VisilabsConstants.exvisitorIdKey] = vUser.exVisitorId
         }
 
         if !vUser.tokenId.isNilOrWhiteSpace {
-            props[VisilabsConstants.TOKENID_KEY] = vUser.tokenId
+            props[VisilabsConstants.tokenIdKey] = vUser.tokenId
         }
 
         if !vUser.appId.isNilOrWhiteSpace {
-            props[VisilabsConstants.APPID_KEY] = vUser.appId
+            props[VisilabsConstants.appidKey] = vUser.appId
         }
 
-        props[VisilabsConstants.DAT_KEY] = String(actualTimeOfevent)
+        props[VisilabsConstants.datKey] = String(actualTimeOfevent)
 
         var eQueue = eventsQueue
 
         eQueue.append(props)
-        if eQueue.count > VisilabsConstants.QUEUE_SIZE {
+        if eQueue.count > VisilabsConstants.queueSize {
             eQueue.remove(at: 0)
         }
         //TODO: VisilabsPersistentTargetManager.saveParameters dışarıda yapılacak

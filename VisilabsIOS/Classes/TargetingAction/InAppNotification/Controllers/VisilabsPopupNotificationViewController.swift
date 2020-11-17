@@ -68,12 +68,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public convenience init(notification: VisilabsInAppNotification) {
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
         self.init(notification: notification, viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
-        if notification.type != .full_image {
+        if notification.type != .fullImage {
 
             let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: {
 
                 var additionalTrackingProperties = [String: String]()
-                           if notification.type == .smile_rating {
+                           if notification.type == .smileRating {
                                additionalTrackingProperties["OM.s_point"] = String(Int(viewController.standardView.sliderStepRating.value))
                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
@@ -257,7 +257,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     /// Calls the action closure of the button instance tapped
     @objc fileprivate func buttonTapped(_ button: VisilabsPopupDialogButton) {
-        if notification.type == .email_form {
+        if notification.type == .emailForm {
             viewController.standardView.sendEmailButtonTapped()
         } else if button.dismissOnTap {
             dismiss({ button.buttonAction?() })
