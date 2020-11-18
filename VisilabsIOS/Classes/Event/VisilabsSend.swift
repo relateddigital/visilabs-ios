@@ -14,10 +14,10 @@ protocol VisilabsSendDelegate: AnyObject {
 
 class VisilabsSend {
 
-    //TODO: bu delegate kullanılmıyor. kaldır.
+    //TO_DO: bu delegate kullanılmıyor. kaldır.
     weak var delegate: VisilabsSendDelegate?
 
-    //TODO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
+    //TO_DO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
     func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser,
                          visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> VisilabsCookie {
         var mutableCookie = visilabsCookie
@@ -101,7 +101,7 @@ class VisilabsSend {
             if let om3rdValue = visilabsCookie.loggerOM3rdCookieValue {
                 if !cookieString.isNilOrWhiteSpace {
                     cookieString = cookieString! + ";"
-                } else { //TODO: bu kısmı güzelleştir
+                } else { //TO_DO: bu kısmı güzelleştir
                     cookieString = ""
                 }
                 cookieString = cookieString! + "\(VisilabsConstants.om3Key)=\(om3rdValue)"
@@ -114,7 +114,7 @@ class VisilabsSend {
             if let om3rdValue = visilabsCookie.realTimeOM3rdCookieValue {
                 if !cookieString.isNilOrWhiteSpace {
                     cookieString = cookieString! + ";"
-                } else { //TODO: bu kısmı güzelleştir
+                } else { //TO_DO: bu kısmı güzelleştir
                     cookieString = ""
                 }
                 cookieString = cookieString! + "\(VisilabsConstants.om3Key)=\(om3rdValue)"

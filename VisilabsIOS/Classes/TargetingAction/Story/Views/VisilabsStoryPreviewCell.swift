@@ -86,42 +86,42 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         didSet {
             scrollview.isUserInteractionEnabled = true
             switch direction {
-                case .forward:
-                    if snapIndex < story?.items.count ?? 0 {
-                        if let snap = story?.items[snapIndex] {
-                            if snap.kind != MimeType.video {
-                                if let snapView = getSnapview() {
-                                    startRequest(snapView: snapView, with: snap.url)
-                                } else {
-                                    let snapView = createSnapView()
-                                    startRequest(snapView: snapView, with: snap.url)
-                                }
+            case .forward:
+                if snapIndex < story?.items.count ?? 0 {
+                    if let snap = story?.items[snapIndex] {
+                        if snap.kind != MimeType.video {
+                            if let snapView = getSnapview() {
+                                startRequest(snapView: snapView, with: snap.url)
                             } else {
-                                if let videoView = getVideoView(with: snapIndex) {
-                                    startPlayer(videoView: videoView, with: snap.url)
-                                } else {
-                                    let videoView = createVideoView()
-                                    startPlayer(videoView: videoView, with: snap.url)
-                                }
+                                let snapView = createSnapView()
+                                startRequest(snapView: snapView, with: snap.url)
+                            }
+                        } else {
+                            if let videoView = getVideoView(with: snapIndex) {
+                                startPlayer(videoView: videoView, with: snap.url)
+                            } else {
+                                let videoView = createVideoView()
+                                startPlayer(videoView: videoView, with: snap.url)
                             }
                         }
+                    }
                 }
-                case .backward:
-                    if snapIndex < story?.items.count ?? 0 {
-                        if let snap = story?.items[snapIndex] {
-                            if snap.kind != MimeType.video {
-                                if let snapView = getSnapview() {
-                                    self.startRequest(snapView: snapView, with: snap.url)
-                                }
+            case .backward:
+                if snapIndex < story?.items.count ?? 0 {
+                    if let snap = story?.items[snapIndex] {
+                        if snap.kind != MimeType.video {
+                            if let snapView = getSnapview() {
+                                self.startRequest(snapView: snapView, with: snap.url)
+                            }
+                        } else {
+                            if let videoView = getVideoView(with: snapIndex) {
+                                startPlayer(videoView: videoView, with: snap.url)
                             } else {
-                                if let videoView = getVideoView(with: snapIndex) {
-                                    startPlayer(videoView: videoView, with: snap.url)
-                                } else {
-                                    let videoView = self.createVideoView()
-                                    self.startPlayer(videoView: videoView, with: snap.url)
-                                }
+                                let videoView = self.createVideoView()
+                                self.startPlayer(videoView: videoView, with: snap.url)
                             }
                         }
+                    }
                 }
             }
         }
@@ -192,21 +192,20 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         snapView.translatesAutoresizingMaskIntoConstraints = false
         snapView.tag = snapIndex + snapViewTagIndicator
 
-        /**
-         Delete if there is any snapview/videoview already present in that frame location.
-         Because of snap delete functionality, snapview/videoview
-         can occupy different frames(created in 2nd position(frame),
-         when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
-         - If only snapViews are there, it will not create any issues.
-         - But if story contains both image and video snaps, there will be a chance in same position
-         both snapView and videoView gets created.
-         - That's why we need to remove if any snap exists on the same position.
-         */
+//         Delete if there is any snapview/videoview already present in that frame location.
+//         Because of snap delete functionality, snapview/videoview
+//         can occupy different frames(created in 2nd position(frame),
+//         when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
+//         - If only snapViews are there, it will not create any issues.
+//         - But if story contains both image and video snaps, there will be a chance in same position
+//         both snapView and videoView gets created.
+//         - That's why we need to remove if any snap exists on the same position.
+//
         scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
 
         scrollview.addSubview(snapView)
 
-        /// Setting constraints for snap view.
+        // Setting constraints for snap view.
         NSLayoutConstraint.activate([
 
             //snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
@@ -240,16 +239,15 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         videoView.tag = snapIndex + snapViewTagIndicator
         videoView.playerObserverDelegate = self
 
-        /**
-         Delete if there is any snapview/videoview already present in that frame location.
-         Because of snap delete functionality, snapview/videoview
-         can occupy different frames(created in 2nd position(frame),
-         when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
-         - If only snapViews are there, it will not create any issues.
-         - But if story contains both image and video snaps, there will be a chance
-         in same position both snapView and videoView gets created.
-         - That's why we need to remove if any snap exists on the same position.
-         */
+//         Delete if there is any snapview/videoview already present in that frame location.
+//         Because of snap delete functionality, snapview/videoview
+//         can occupy different frames(created in 2nd position(frame),
+//         when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
+//         - If only snapViews are there, it will not create any issues.
+//         - But if story contains both image and video snaps, there will be a chance
+//         in same position both snapView and videoView gets created.
+//         - That's why we need to remove if any snap exists on the same position.
+
         scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
 
         scrollview.addSubview(videoView)
@@ -282,15 +280,15 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return}
                 switch result {
-                    case .success:
-                        /// Start progressor only if handpickedSnapIndex matches with snapIndex
-                        /// and the requested image url should be matched with current snapIndex imageurl
-                        if strongSelf.handpickedSnapIndex == strongSelf.snapIndex
-                            && url == strongSelf.story!.items[strongSelf.snapIndex].url {
-                            strongSelf.startProgressors()
+                case .success:
+                    // Start progressor only if handpickedSnapIndex matches with snapIndex
+                    // and the requested image url should be matched with current snapIndex imageurl
+                    if strongSelf.handpickedSnapIndex == strongSelf.snapIndex
+                        && url == strongSelf.story!.items[strongSelf.snapIndex].url {
+                        strongSelf.startProgressors()
                     }
-                    case .failure:
-                        strongSelf.showRetryButton(with: url, for: snapView)
+                case .failure:
+                    strongSelf.showRetryButton(with: url, for: snapView)
                 }
             }
         }
@@ -328,15 +326,15 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 VisilabsVideoCacheManager.shared.getFile(for: url) { [weak self] (result) in
                     guard let strongSelf = self else { return }
                     switch result {
-                        case .success(let videoURL):
-                            /// Start progressor only if handpickedSnapIndex matches with snapIndex
-                            if strongSelf.handpickedSnapIndex == strongSelf.snapIndex {
-                                let videoResource = VideoResource(filePath: videoURL.absoluteString)
-                                videoView.play(with: videoResource)
+                    case .success(let videoURL):
+                        // Start progressor only if handpickedSnapIndex matches with snapIndex
+                        if strongSelf.handpickedSnapIndex == strongSelf.snapIndex {
+                            let videoResource = VideoResource(filePath: videoURL.absoluteString)
+                            videoView.play(with: videoResource)
                         }
-                        case .failure(let error):
-                            videoView.stopAnimating()
-                            debugPrint("Video error: \(error)")
+                    case .failure(let error):
+                        videoView.stopAnimating()
+                        debugPrint("Video error: \(error)")
                     }
                 }
             }
@@ -502,7 +500,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
     }
     private func clearLastPlayedSnaps(_ sIndex: Int) {
-        if let _ = self.getProgressIndicatorView(with: sIndex),
+        if self.getProgressIndicatorView(with: sIndex) != nil,
             let progressView = self.getProgressView(with: sIndex) {
             progressView.widthConstraint?.isActive = false
             progressView.widthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
@@ -611,7 +609,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         willDisplayCell(with: handpickedSnapIndex)
     }
     public func willDisplayCell(with sIndex: Int) {
-        //Todo:Make sure to move filling part and creating at one place
+        //TO_DO:Make sure to move filling part and creating at one place
         //Clear the progressor subviews before the creating new set of progressors.
         storyHeaderView.clearTheProgressorSubviews()
         storyHeaderView.createSnapProgressors()
@@ -620,6 +618,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         snapIndex = sIndex
 
         //Remove the previous observors
+        //swiftlint:disable notification_center_detachment
         NotificationCenter.default.removeObserver(self)
 
         // Add the observer to handle application from background to foreground

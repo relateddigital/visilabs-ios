@@ -10,9 +10,7 @@ import Foundation
 class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewController {
 
     var miniNotification: VisilabsInAppNotification! {
-        get {
-            return super.notification
-        }
+        return super.notification
     }
 
     @IBOutlet weak var circleLabel: UIView!
@@ -43,7 +41,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
         circleLabel.backgroundColor = UIColor(hex: "#000000", alpha: 0)
         circleLabel.layer.cornerRadius = self.circleLabel.frame.size.width / 2
-        circleLabel.clipsToBounds = false //TODO: burası true olsa ne olur
+        circleLabel.clipsToBounds = false //TO_DO: burası true olsa ne olur
         circleLabel.layer.borderWidth = 2.0
         circleLabel.layer.borderColor = UIColor.white.cgColor
 
@@ -55,6 +53,29 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan(gesture:)))
         window?.addGestureRecognizer(panGesture)
+    }
+
+    fileprivate func setWindowAndAddAnimation(_ animated: Bool) {
+        if let window = window {
+            window.windowLevel = UIWindow.Level.alert
+            window.clipsToBounds = true
+            window.rootViewController = self
+            window.layer.cornerRadius = 6
+
+            //TO_DO: bunları default set ediyorum doğru mudur?
+            window.layer.borderColor = UIColor.white.cgColor
+            window.layer.borderWidth = 1
+            window.isHidden = false
+        }
+
+        let duration = animated ? 0.1 : 0
+        UIView.animate(withDuration: duration, animations: {
+            self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                                + VisilabsInAppNotificationsConstants.miniBottomPadding)
+            self.canPan = true
+        }, completion: { _ in
+            self.position = self.window?.layer.position
+        })
     }
 
     override func show(animated: Bool) {
@@ -99,26 +120,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             window = UIWindow(frame: frame)
         }
 
-        if let window = window {
-            window.windowLevel = UIWindow.Level.alert
-            window.clipsToBounds = true
-            window.rootViewController = self
-            window.layer.cornerRadius = 6
-
-            //TODO: bunları default set ediyorum doğru mudur?
-            window.layer.borderColor = UIColor.white.cgColor
-            window.layer.borderWidth = 1
-            window.isHidden = false
-        }
-
-        let duration = animated ? 0.1 : 0
-        UIView.animate(withDuration: duration, animations: {
-            self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
-                                            + VisilabsInAppNotificationsConstants.miniBottomPadding)
-            self.canPan = true
-            }, completion: { _ in
-                self.position = self.window?.layer.position
-        })
+        setWindowAndAddAnimation(animated)
     }
 
     override func hide(animated: Bool, completion: @escaping () -> Void) {

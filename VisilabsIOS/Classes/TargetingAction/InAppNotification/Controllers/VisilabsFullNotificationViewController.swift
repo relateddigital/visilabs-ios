@@ -10,9 +10,7 @@ import Foundation
 class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewController {
 
     var fullNotification: VisilabsInAppNotification! {
-        get {
-            return super.notification
-        }
+        return super.notification
     }
 
     @IBOutlet weak var imageView: UIImageView!
@@ -165,7 +163,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         })
     }
 
-    //TODO: burada additionalTrackingProperties kısmında aksiyon id'si gönderilebilir.
+    //TO_DO: burada additionalTrackingProperties kısmında aksiyon id'si gönderilebilir.
     @objc func buttonTapped(_ sender: AnyObject) {
         delegate?.notificationShouldDismiss(controller: self,
                                             callToActionURL: fullNotification.callToActionUrl,

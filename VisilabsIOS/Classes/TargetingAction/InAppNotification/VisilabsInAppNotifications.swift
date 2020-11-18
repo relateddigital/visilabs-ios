@@ -73,7 +73,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         return true
     }
 
-    // TODO: bu gerekmeyecek sanırım
+    // TO_DO: bu gerekmeyecek sanırım
     func getTopView() -> UIView? {
         var topView: UIView?
         let window = UIApplication.shared.keyWindow
@@ -93,10 +93,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return nil
         }
-        for window in sharedUIApplication.windows {
-            if window.isKeyWindow {
-                return window.rootViewController
-            }
+        for window in sharedUIApplication.windows where window.isKeyWindow {
+            return window.rootViewController
         }
 
         return nil
@@ -118,7 +116,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         lock.write {
             VisilabsLogger.info("marking notification as seen: \(notification.actId)")
             currentlyShowingNotification = notification
-            // TODO: burada customEvent request'i atılmalı
+            // TO_DO: burada customEvent request'i atılmalı
         }
     }
 

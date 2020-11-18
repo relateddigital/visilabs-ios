@@ -61,7 +61,7 @@ public class VisilabsStoryHomeViewController: NSObject,
         }
         if self.storyAction.storyTemplate == .skinBased {
             DispatchQueue.main.async {
-                for (index, _) in self.storyAction.stories.enumerated() {
+                for index in self.storyAction.stories.indices {
                     self.storyAction.stories[index].lastPlayedSnapIndex = 0
                     self.storyAction.stories[index].isCompletelyVisible = false
                     self.storyAction.stories[index].isCancelledAbruptly = false
@@ -71,7 +71,7 @@ public class VisilabsStoryHomeViewController: NSObject,
                 storyPreviewScene.modalPresentationStyle = .fullScreen
                 let app = VisilabsInstance.sharedUIApplication()
                 app?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: nil)
-                //TODO: burada keywindow rootViewController yaklaşımı uygun mu?
+                //TO_DO: burada keywindow rootViewController yaklaşımı uygun mu?
             }
         } else {
 

@@ -21,7 +21,7 @@ public struct CubeAttributesAnimator: LayoutAttributesAnimator {
         self.perspective = perspective
         self.totalAngle = totalAngle
     }
-
+    //swiftlint:disable multiple_closures_with_trailing_closure
     public func animate(collectionView: UICollectionView, attributes: AnimatedCollectionViewLayoutAttributes) {
         let position = attributes.middleOffset
         if abs(position) >= 1 {

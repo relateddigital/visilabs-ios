@@ -144,6 +144,7 @@ public class VisilabsInAppNotification {
         setFonts()
     }
 
+    //swiftlint:disable function_body_length
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
             VisilabsLogger.error("notification json object should not be nil")

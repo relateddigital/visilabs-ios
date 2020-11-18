@@ -52,7 +52,8 @@ public class VisilabsPersistence {
         }
     }
 
-    //TODO: bunu ExceptionWrapper içine al
+    //TO_DO: bunu ExceptionWrapper içine al
+    //swiftlint:disable cyclomatic_complexity
     class func unarchiveUser() -> VisilabsUser {
         var visilabsUser = VisilabsUser()
         //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library
@@ -102,7 +103,7 @@ public class VisilabsPersistence {
             if let visitorData = props[VisilabsConstants.visitorData], !visitorData.isNilOrWhiteSpace {
                 visilabsUser.visitorData = visitorData
             }
-            //TODO: visilabsUserda ya üstteki kod gereksiz ya da alttaki yanlış
+            //TO_DO: visilabsUserda ya üstteki kod gereksiz ya da alttaki yanlış
             if let visitorData = props[VisilabsConstants.visitorCappingKey], !visitorData.isNilOrWhiteSpace {
                 visilabsUser.visitorData = visitorData
             }
@@ -116,13 +117,17 @@ public class VisilabsPersistence {
         return visilabsUser
     }
 
-    //TODO: burada date kısmı yanlış geliyor sanki
-    //TODO: buradaki encode işlemleri doğru mu kontrol et, archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
+    static func getDateStr() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter.string(from: Date())
+    }
+    //TO_DO: burada date kısmı yanlış geliyor sanki
+    //TO_DO: buradaki encode işlemleri doğru mu kontrol et;
+    //archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
     class func saveTargetParameters(_ parameters: [String: String]) {
         archiveQueueUtility.sync {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            let dateString = dateFormatter.string(from: Date())
+            let dateString = getDateStr()
             var targetParameters = readTargetParameters()
 
             for visilabsParameter in VisilabsConstants.visilabsTargetParameters() {
@@ -140,9 +145,7 @@ public class VisilabsPersistence {
                                     .trimmingCharacters(in: CharacterSet.whitespaces)
                                 parameterValueToStore += ("|")
                                 parameterValueToStore += (relatedKeyValue ?? "")
-                            } else {
-                                parameterValueToStore += ("|0")
-                            }
+                            } else { parameterValueToStore += ("|0") }
                             parameterValueToStore += "|" + dateString
                             targetParameters[storeKey] = parameterValueToStore
                         } else {
@@ -159,7 +162,7 @@ public class VisilabsPersistence {
                                     break
                                 }
                                 let decodedPreviousParameterValuePart = previousParameterValueParts[counter] as String
-                                //TODO:burayı kontrol et java'da "\\|" yapmak gerekiyordu.
+                                //TO_DO:burayı kontrol et java'da "\\|" yapmak gerekiyordu.
                                 let decodedPreviousParameterValuePartArray = decodedPreviousParameterValuePart
                                     .components(separatedBy: "|")
                                 if decodedPreviousParameterValuePartArray.count == 2 {

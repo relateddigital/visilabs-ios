@@ -71,14 +71,12 @@ class VisilabsRecommendation {
     private func getFiltersQueryStringValue(_ filters: [VisilabsRecommendationFilter]) -> String? {
         var queryStringValue: String?
         var abbrevatedFilters: [[String: String]] = []
-        for filter in filters {
-            if filter.value.count > 0 {
-                var abbrevatedFilter = [String: String]()
-                abbrevatedFilter["attr"] = filter.attribute.rawValue
-                abbrevatedFilter["ft"] = String(filter.filterType.rawValue)
-                abbrevatedFilter["fv"] = filter.value
-                abbrevatedFilters.append(abbrevatedFilter)
-            }
+        for filter in filters where filter.value.count > 0 {
+            var abbrevatedFilter = [String: String]()
+            abbrevatedFilter["attr"] = filter.attribute.rawValue
+            abbrevatedFilter["ft"] = String(filter.filterType.rawValue)
+            abbrevatedFilter["fv"] = filter.value
+            abbrevatedFilters.append(abbrevatedFilter)
         }
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: abbrevatedFilters, options: [])

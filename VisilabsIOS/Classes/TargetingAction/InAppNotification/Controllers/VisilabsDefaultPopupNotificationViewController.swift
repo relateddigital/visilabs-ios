@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//swiftlint:disable type_name
 final public class VisilabsDefaultPopupNotificationViewController: UIViewController {
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
@@ -44,7 +44,7 @@ public extension VisilabsDefaultPopupNotificationViewController {
         }
     }
 
-    //TODO: hideTitle ve hideMessage kaldırılabilir sanırım.
+    //TO_DO: hideTitle ve hideMessage kaldırılabilir sanırım.
     func hideTitle() {
         standardView.titleLabel.isHidden = true
     }

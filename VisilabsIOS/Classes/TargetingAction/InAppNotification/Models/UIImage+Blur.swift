@@ -29,8 +29,8 @@ public extension UIImage {
         let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
         let format = imageRendererFormat
         format.opaque = isOpaque
-        return UIGraphicsImageRenderer(size: canvas, format: format).image {
-            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        return UIGraphicsImageRenderer(size: canvas, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: canvas))
         }
     }
 
@@ -57,15 +57,13 @@ public extension UIImage {
             return nil
         }
 
-        for view in itemView.subviews {
-            if view is UIButton {
-                guard let button = view as? UIButton else {
-                    return nil
-                }
-                let image = button.imageView!.image!
-                image.withRenderingMode(renderingMode)
-                return image
+        for view in itemView.subviews where view is UIButton {
+            guard let button = view as? UIButton else {
+                return nil
             }
+            let image = button.imageView!.image!
+            image.withRenderingMode(renderingMode)
+            return image
         }
 
         return nil

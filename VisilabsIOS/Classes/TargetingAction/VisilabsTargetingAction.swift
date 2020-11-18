@@ -21,11 +21,11 @@ class VisilabsTargetingAction {
     var notificationsInstance: VisilabsInAppNotifications
 
     var inAppDelegate: VisilabsInAppNotificationsDelegate? {
-        set {
-            notificationsInstance.delegate = newValue
-        }
         get {
             return notificationsInstance.delegate
+        }
+        set {
+            notificationsInstance.delegate = newValue
         }
     }
 
@@ -53,7 +53,7 @@ class VisilabsTargetingAction {
             for rawNotif in result {
                 if let actionData = rawNotif["actiondata"] as? [String: Any] {
                     if let typeString = actionData["msg_type"] as? String,
-                       let _ = VisilabsInAppNotificationType(rawValue: typeString),
+                       VisilabsInAppNotificationType(rawValue: typeString) != nil,
                        let notification = VisilabsInAppNotification(JSONObject: rawNotif) {
                         notifications.append(notification)
                     }
@@ -158,13 +158,12 @@ class VisilabsTargetingAction {
         VisilabsRequest.sendMobileRequest(properties: props,
                                           headers: [String: String](),
                                           timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
-                                          completion: { (result: [String: Any]?,
-                                                         error: VisilabsError?, guid: String?) in
+                                          completion: {(result: [String: Any]?, error: VisilabsError?, guid: String?) in
             completion(self.parseStories(result, error, guid))
         }, guid: guid)
     }
-
-    //TODO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
+    //swiftlint:disable function_body_length cyclomatic_complexity
+    //TO_DO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
     private func parseStories(_ result: [String: Any]?,
                               _ error: VisilabsError?,
                               _ guid: String?) -> VisilabsStoryActionResponse {
@@ -226,7 +225,7 @@ class VisilabsTargetingAction {
     private func parseStoryReport(_ report: [String: Any?]?) -> ([String: String], [String: String]) {
         var clickItems = [String: String]()
         var impressionItems = [String: String]()
-        //clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TODO: OM.domain ne için gerekiyor?
+        //clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TO_DO: OM.domain ne için gerekiyor?
         if let rep = report {
             if let click = rep[VisilabsConstants.click] as? String {
                 let qsArr = click.components(separatedBy: "&")
@@ -293,7 +292,7 @@ class VisilabsTargetingAction {
                                                   buttonColor: buttonColor)
         return visilabsStoryItem
     }
-
+    //swiftlint:disable cyclomatic_complexity
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
         if let propStr = extendedPropsString, let extendedProps = propStr.urlDecode().convertJsonStringToDictionary() {

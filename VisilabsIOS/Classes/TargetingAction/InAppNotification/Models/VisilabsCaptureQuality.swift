@@ -5,7 +5,7 @@
 //  Created by Egemen on 12.06.2020.
 //
 
-//TODO: bu enum kaldırılabilir. sadece medium kullanılıyor.
+//TO_DO: bu enum kaldırılabilir. sadece medium kullanılıyor.
 public enum VisilabsCaptureQuality {
     case `default`
     case low

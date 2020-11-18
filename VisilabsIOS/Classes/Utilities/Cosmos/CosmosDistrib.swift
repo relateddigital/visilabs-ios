@@ -70,8 +70,6 @@ class CosmosLayerHelper {
 //
 // ----------------------------
 
-import UIKit
-
 /**
 
 Helper function to make sure bounds are big enought to be used as touch target.
@@ -100,9 +98,6 @@ struct CosmosTouchTarget {
 // RightToLeft.swift
 //
 // ----------------------------
-
-import UIKit
-
 /**
  
  Helper functions for dealing with right-to-left languages.
