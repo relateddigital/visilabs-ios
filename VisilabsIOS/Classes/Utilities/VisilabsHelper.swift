@@ -12,7 +12,7 @@ import UIKit
 
 internal class VisilabsHelper {
 
-    //TODO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
+    //TO_DO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
     static func distanceSquared(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
         let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
         let nauticalMilesPerLatitude = 60.00721
@@ -28,7 +28,7 @@ internal class VisilabsHelper {
         return res
     }
 
-    //TODO: props un boş gelme ihtimalini de düşün
+    //TO_DO: props un boş gelme ihtimalini de düşün
     static func buildUrl(url: String, props: [String: String] = [:], additionalQueryString: String = "") -> String {
         var qsKeyValues = [String]()
         props.forEach { (key, value) in
@@ -106,7 +106,7 @@ internal class VisilabsHelper {
         return UIImage(named: named, in: bundle, compatibleWith: nil)!
     }
 
-    /* TODO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
+    /* TO_DO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
     static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
         if let delegate = UIApplication.shared.delegate as? AppDelegate {
             delegate.orientationLock = orientation

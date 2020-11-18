@@ -48,7 +48,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var networkQueue: DispatchQueue!
     let readWriteLock: VisilabsReadWriteLock
 
-    // TODO: www.relateddigital.com ı değiştirmeli miyim?
+    // TO_DO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
 
     let visilabsEventInstance: VisilabsEvent
@@ -87,7 +87,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             VisilabsPersistence.saveVisilabsProfile(self.visilabsProfile)
         }
     }
-
+    //swiftlint:disable function_body_length
     init(organizationId: String,
          profileId: String,
          dataSource: String,
@@ -97,7 +97,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          geofenceEnabled: Bool,
          maxGeofenceCount: Int) {
 
-        //TODO: bu reachability doğru çalışıyor mu kontrol et
+        //TO_DO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil,
                                                        release: nil, copyDescription: nil)
@@ -124,7 +124,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                                requestTimeoutInSeconds: requestTimeoutInSeconds,
                                                geofenceEnabled: geofenceEnabled,
                                                inAppNotificationsEnabled: inAppNotificationsEnabled,
-                                               maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
+            maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
@@ -209,7 +209,7 @@ extension VisilabsInstance {
             }
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveTargetParameters(event)
-                if let _ = VisilabsBasePath.endpoints[.action],
+                if VisilabsBasePath.endpoints[.action] != nil,
                    self.visilabsProfile.inAppNotificationsEnabled,
                    pageName != VisilabsConstants.omEvtGif {
                     self.checkInAppNotification(properties: event)
@@ -253,7 +253,7 @@ extension VisilabsInstance {
 
     }
 
-    // TODO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
+    // TO_DO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() -> VisilabsUser {
         return VisilabsPersistence.unarchiveUser()
     }
@@ -297,7 +297,8 @@ extension VisilabsInstance {
 extension VisilabsInstance {
 
     public func getFavoriteAttributeActions(actionId: Int? = nil,
-                completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
+                                            completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse)
+                                                                   -> Void)) {
         self.targetingActionQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
                 guard let self = self else { return }

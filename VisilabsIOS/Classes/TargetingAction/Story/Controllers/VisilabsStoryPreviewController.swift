@@ -62,7 +62,7 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         // AppUtility.lockOrientation(.portrait)
         // Or to rotate and lock
         if UIDevice.current.userInterfaceIdiom == .phone {
-            //TODO: AppDelegate e ulaşamadığım için bunu yapamıyorum
+            //TO_DO: AppDelegate e ulaşamadığım için bunu yapamıyorum
             //IGAppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         }
         if !executeOnce {
@@ -80,7 +80,7 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         super.viewWillDisappear(animated)
         if UIDevice.current.userInterfaceIdiom == .phone {
             // Don't forget to reset when view is being removed
-            //TODO: AppDelegate e ulaşamadığım için bunu yapamıyorum
+            //TO_DO: AppDelegate e ulaşamadığım için bunu yapamıyorum
             //IGAppUtility.lockOrientation(.all)
         }
     }

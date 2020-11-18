@@ -21,7 +21,7 @@ class VisilabsGeofence {
     init?() {
         if let profile = VisilabsPersistence.readVisilabsProfile() {
             self.profile = profile
-            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)//TODO: bunu if içine almaya gerek var mı?
+            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)//TO_DO: bunu if içine almaya gerek var mı?
             self.activeGeofenceList = [VisilabsGeofenceEntity]()
             self.geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
             self.lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
@@ -82,7 +82,7 @@ class VisilabsGeofence {
         }
         return [VisilabsGeofenceEntity](geofencesToMonitor)
     }
-
+    //swiftlint:disable function_body_length cyclomatic_complexity
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
         if self.profile.geofenceEnabled
             && self.locationServicesEnabledForDevice
@@ -118,13 +118,11 @@ class VisilabsGeofence {
                    props[key] = value
                }
             }
-
+            //swiftlint:disable closure_parameter_position
             VisilabsRequest.sendGeofenceRequest(properties: props,
                                                 headers: [String: String](),
-                                            timeoutInterval: profile.requestTimeoutInterval) { [lastKnownLatitude,
-                                                                                                lastKnownLongitude,
-                                                                                                geofenceHistory, now]
-                (result, error) in
+                                            timeoutInterval: profile.requestTimeoutInterval) {
+                [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, error) in
 
                 if error != nil {
                     self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
@@ -235,7 +233,7 @@ class VisilabsGeofence2: NSObject, CLLocationManagerDelegate {
 
     internal var lastLocationManagerCreated: Date?
     internal var maximumDesiredLocationAccuracy: CLLocationAccuracy = 30
-    // TODO: yukarıda 30 yerine başka değer vermek doğru mu? önceden kCLLocationAccuracyHundredMeters kullanıyorduk.
+    // TO_DO: yukarıda 30 yerine başka değer vermek doğru mu? önceden kCLLocationAccuracyHundredMeters kullanıyorduk.
     let organizationId: String
     let siteId: String
 

@@ -86,22 +86,16 @@ public class VisilabsPopupDialogDefaultView: UIView {
         switch notification.type {
         case .imageButton, .fullImage:
             imageView.allEdges(to: self)
-            break
         case .imageTextButton:
             setupForImageTextButton()
-            break
         case .nps:
             setupForNps()
-            break
         case .smileRating:
             setupForSmileRating()
-            break
         case .emailForm:
             setupForEmailForm()
-            break
         default:
             setupForDefault()
-            break
         }
 
         imageHeightConstraint = NSLayoutConstraint(item: imageView,

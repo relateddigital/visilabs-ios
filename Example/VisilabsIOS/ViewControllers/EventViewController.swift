@@ -138,13 +138,13 @@ class EventViewController: FormViewController {
                              randomGender: randomGender)
     }
 
-    //swiftlint:disable todo
+    //swiftlint:disable TO_DO
     //swiftlint:disable cyclomatic_complexity
     //swiftlint:disable function_body_length
-    //TODO: favorites'lerde price göndermek gerekiyor mu?
-    //TODO: örnekte OM parametreleri mi olsun, utm mi?
-    //TODO: utm parametreleri geliyorsa bunları da targetpreferences içine kaydetmeli miyiz?
-    //TODO: birthday ve gender formatı doğru mu?
+    //TO_DO: favorites'lerde price göndermek gerekiyor mu?
+    //TO_DO: örnekte OM parametreleri mi olsun, utm mi?
+    //TO_DO: utm parametreleri geliyorsa bunları da targetpreferences içine kaydetmeli miyiz?
+    //TO_DO: birthday ve gender formatı doğru mu?
     private func customEvent(_ eventType: VisilabsEventType) {
         let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)!.value
                                     ?? "").trimmingCharacters(in: .whitespacesAndNewlines)

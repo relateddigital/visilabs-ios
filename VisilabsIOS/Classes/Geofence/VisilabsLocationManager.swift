@@ -16,7 +16,7 @@ class VisilabsLocationManager: NSObject {
     private var requestLocationAuthorizationCallback: ((CLAuthorizationStatus) -> Void)?
 
     var currentGeoLocationValue: CLLocationCoordinate2D?
-    var sentGeoLocationValue: CLLocationCoordinate2D? //TODO: ne işe yarayacak bu?
+    var sentGeoLocationValue: CLLocationCoordinate2D? //TO_DO: ne işe yarayacak bu?
     var sentGeoLocationTime: TimeInterval?
     //for calculate time delta to prevent too often location update notification send.
     var locationServiceEnabled = false
@@ -27,7 +27,7 @@ class VisilabsLocationManager: NSObject {
 
     deinit {
         locationManager?.delegate = nil
-        NotificationCenter.default.removeObserver(self)// TODO: buna gerek var mı tekrar kontrol et.
+        NotificationCenter.default.removeObserver(self)// TO_DO: buna gerek var mı tekrar kontrol et.
     }
 
     func stopMonitorRegions() {
@@ -66,7 +66,7 @@ class VisilabsLocationManager: NSObject {
             }
         #endif
         self.requestLocationAuthorization()
-        //TODO:bunu yayınlarken tekrar 100e çek
+        //TO_DO:bunu yayınlarken tekrar 100e çek
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest //kCLLocationAccuracyHundredMeters
         self.locationManager?.distanceFilter = CLLocationDistance(10)
         self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
@@ -105,7 +105,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
 
     // MARK: - CLLocationManagerDelegate implementation
 
-    //TODO: buna bak tekrardan
+    //TO_DO: buna bak tekrardan
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status)")
         //self.requestLocationAuthorizationCallback?(status)
@@ -135,7 +135,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             let geofenceId = elements[2]
             let targetEvent = elements[3]
             if targetEvent == VisilabsConstants.onEnter {
-                //TODO: burada isEnter false geçmişim neden?
+                //TO_DO: burada isEnter false geçmişim neden?
                 VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId,
                                                                      geofenceId: geofenceId,
                                                                      isDwell: false, isEnter: false)
@@ -176,7 +176,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         VisilabsLogger.error(errorMessage)
     }
 
-    //TODO: buna gerek yok sanırım
+    //TO_DO: buna gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         let infoMessage = "CLLocationManager didDetermineState: region identifier: \(region.identifier) state: \(state)"
         VisilabsLogger.info(infoMessage)

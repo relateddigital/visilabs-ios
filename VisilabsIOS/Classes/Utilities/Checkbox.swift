@@ -45,11 +45,11 @@ open class Checkbox: UIControl {
     /// **Default:** `CheckmarkStyle.square`
     dynamic public var checkmarkStyle: CheckmarkStyle = .square
     @IBInspectable private var checkmarkStyleIB: String {
-        set {
-            checkmarkStyle = CheckmarkStyle(rawValue: newValue) ?? .square
-        }
         get {
             return checkmarkStyle.rawValue
+        }
+        set {
+            checkmarkStyle = CheckmarkStyle(rawValue: newValue) ?? .square
         }
     }
 
@@ -60,11 +60,11 @@ open class Checkbox: UIControl {
     /// **Default:** `BorderStyle.square`
     dynamic public var borderStyle: BorderStyle = .square
     @IBInspectable private var borderStyleIB: String {
-        set {
-            borderStyle = BorderStyle(rawValue: newValue) ?? .square
-        }
         get {
             return borderStyle.rawValue
+        }
+        set {
+            borderStyle = BorderStyle(rawValue: newValue) ?? .square
         }
     }
 

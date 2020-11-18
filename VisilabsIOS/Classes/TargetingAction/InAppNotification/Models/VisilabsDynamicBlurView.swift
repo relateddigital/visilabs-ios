@@ -40,8 +40,8 @@ open class VisilabsDynamicBlurView: UIView {
     open var drawsAsynchronously: Bool = false
     /// Radius of blur.
     open var blurRadius: CGFloat {
-        set { blurLayer.blurRadius = newValue }
         get { return blurLayer.blurRadius }
+        set { blurLayer.blurRadius = newValue }
     }
     /// Default is none.
     open var trackingMode: VisilabsTrackingMode = .none {

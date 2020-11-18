@@ -270,11 +270,11 @@ Shows: ★★★★☆ (123)
   // MARK: - Touch recognition
 
   /// Closure will be called when user touches the cosmos view. The touch rating argument is passed to the closure.
-  open var didTouchCosmos: ((Double)->Void)?
+  open var didTouchCosmos: ((Double) -> Void)?
 
   /// Closure will be called when the user lifts finger from the cosmos view.
     /// The touch rating argument is passed to the closure.
-  open var didFinishTouchingCosmos: ((Double)->Void)?
+  open var didFinishTouchingCosmos: ((Double) -> Void)?
 
   /// Overriding the function to detect the first touch gesture.
   open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -469,5 +469,5 @@ Shows: ★★★★☆ (123)
 
     update()
   }
-//swiftlint:disable file_length
+    //swiftlint:disable file_length
 }

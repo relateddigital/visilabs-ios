@@ -8,8 +8,8 @@
 import Foundation
 
 enum VisilabsRequestMethod: String {
-    case get = "get"
-    case post = "post"
+    case get
+    case post
 }
 
 enum VisilabsEndpoint {
@@ -87,7 +87,7 @@ public enum VisilabsError: Codable {
 struct VisilabsBasePath {
     static var endpoints = [VisilabsEndpoint: String]()
 
-    //TODO: path parametresini kaldır
+    //TO_DO: path parametresini kaldır
     static func buildURL(visilabsEndpoint: VisilabsEndpoint, queryItems: [URLQueryItem]?) -> URL? {
         guard let endpoint = endpoints[visilabsEndpoint], let url = URL(string: endpoint) else {
             return nil
@@ -112,7 +112,7 @@ class VisilabsNetwork {
             return
         }
 
-        //TODO: burada cookie'leri düzgün handle edecek bir yöntem bul.
+        //TO_DO: burada cookie'leri düzgün handle edecek bir yöntem bul.
         URLSession.shared.dataTask(with: request) { (data, response, error) -> Void in
             guard let httpResponse = response as? HTTPURLResponse else {
 
@@ -124,7 +124,7 @@ class VisilabsNetwork {
                 return
             }
 
-            //TODO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201(created) de dönebiliyor. 304(Not modified)
+            //TO_DO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201(created) de dönebiliyor. 304(Not modified)
             guard httpResponse.statusCode == 200/*OK*/ else {
                 failure(.notOKStatusCode(statusCode: httpResponse.statusCode), data, response)
                 return
@@ -153,7 +153,7 @@ class VisilabsNetwork {
         var request = URLRequest(url: url)
         request.httpMethod = resource.method.rawValue
         request.httpBody = resource.requestBody
-        //TODO: timeoutInterval dışarıdan alınacak
+        //TO_DO: timeoutInterval dışarıdan alınacak
         request.timeoutInterval = 60
 
         for (key, value) in resource.headers {

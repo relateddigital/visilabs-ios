@@ -164,8 +164,7 @@ class VisilabsPlayerView: UIView {
         // Use a weak self variable to avoid a retain cycle in the block.
         timeObserverToken =
             player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100),
-                                    queue: DispatchQueue.main) {
-                [weak self] time in
+                                    queue: DispatchQueue.main) { [weak self] time in
                 let timeString = String(format: "%02.2f", CMTimeGetSeconds(time))
                 if let currentItem = self?.player?.currentItem {
                     let totalTimeString =  String(format: "%02.2f", CMTimeGetSeconds(currentItem.asset.duration))

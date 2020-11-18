@@ -24,7 +24,7 @@ JSON convenient categories on NSString
 */
 extension String {
 
-    //TODO:self as nsstring'e gerek var mı?
+    //TO_DO:self as nsstring'e gerek var mı?
     func stringBetweenString(start: String?, end: String?) -> String? {
         let startRange = (self as NSString).range(of: start ?? "")
         if startRange.location != NSNotFound {
@@ -49,7 +49,7 @@ extension String {
         return contains(string, options: [])
     }
 
-    //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
+    //TO_DO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
     func urlEncode() -> String {
         return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }

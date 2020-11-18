@@ -77,7 +77,7 @@ class VisilabsRequest {
 
     // MARK: - Recommendation
 
-    //TODO: completion Any mi olmalı, yoksa AnyObject mi?
+    //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
     class func sendRecommendationRequest(properties: [String: String],
                                          headers: [String: String],
                                          timeoutInterval: TimeInterval,
@@ -122,7 +122,7 @@ class VisilabsRequest {
 
     // MARK: - InAppNotification
 
-    //TODO: completion Any mi olmalı, yoksa AnyObject mi?
+    //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
     class func sendInAppNotificationRequest(properties: [String: String],
                                             headers: [String: String],
                                             timeoutInterval: TimeInterval,

@@ -79,7 +79,8 @@ struct CosmosRating {
   
   */
   static func displayedRatingFromPreciseRating(_ preciseRating: Double,
-    fillMode: StarFillMode, totalStars: Int) -> Double {
+                                               fillMode: StarFillMode,
+                                               totalStars: Int) -> Double {
 
     let starFloorNumber = floor(preciseRating)
     let singleStarRemainder = preciseRating - starFloorNumber
