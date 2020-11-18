@@ -455,4 +455,5 @@ extension VisilabsInstance {
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
         return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
     }
+    //swiftlint:disable file_length
 }

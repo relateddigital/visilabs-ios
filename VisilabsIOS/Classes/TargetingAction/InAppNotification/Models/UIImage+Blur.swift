@@ -53,11 +53,15 @@ public extension UIImage {
         bar.snapshotView(afterScreenUpdates: true)
 
         // got image from real uibutton
-        let itemView = tempItem.value(forKey: "view") as! UIView
+        guard let itemView = tempItem.value(forKey: "view") as? UIView else {
+            return nil
+        }
 
         for view in itemView.subviews {
             if view is UIButton {
-                let button = view as! UIButton
+                guard let button = view as? UIButton else {
+                    return nil
+                }
                 let image = button.imageView!.image!
                 image.withRenderingMode(renderingMode)
                 return image

@@ -15,6 +15,7 @@ class VisilabsEvent {
         self.visilabsProfile = visilabsProfile
     }
 
+    //swiftlint:disable large_tuple
     func customEvent(pageName: String,
                      properties: [String: String],
                      eventsQueue: Queue,

@@ -133,25 +133,25 @@ public class VisilabsPersistence {
                 if let parameterValue = parameters[key], parameterValue.count > 0 {
                     if count == 1 {
                         if relatedKeys != nil && relatedKeys!.count > 0 {
-                            var parameterValueToStore = parameterValue.copy() as! String
+                            var parameterValueToStore = parameterValue.copy() as? String ?? ""
                             let relatedKey = relatedKeys![0]
                             if parameters[relatedKey] != nil {
                                 let relatedKeyValue = (parameters[relatedKey])?
                                     .trimmingCharacters(in: CharacterSet.whitespaces)
-                                parameterValueToStore = parameterValueToStore + ("|")
-                                parameterValueToStore = parameterValueToStore + (relatedKeyValue ?? "")
+                                parameterValueToStore += ("|")
+                                parameterValueToStore += (relatedKeyValue ?? "")
                             } else {
-                                parameterValueToStore = parameterValueToStore + ("|0")
+                                parameterValueToStore += ("|0")
                             }
-                            parameterValueToStore = parameterValueToStore + "|" + dateString
+                            parameterValueToStore += "|" + dateString
                             targetParameters[storeKey] = parameterValueToStore
                         } else {
                             targetParameters[storeKey] = parameterValue
                         }
                     } else if count > 1 {
                         let previousParameterValue = targetParameters[storeKey]
-                        var parameterValueToStore = parameterValue.copy() as! String + ("|")
-                        parameterValueToStore = parameterValueToStore + (dateString)
+                        var parameterValueToStore = (parameterValue.copy() as? String ?? "") + ("|")
+                        parameterValueToStore += (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
                             let previousParameterValueParts = previousParameterValue!.components(separatedBy: "~")
                             for counter in 0..<previousParameterValueParts.count {
@@ -163,8 +163,8 @@ public class VisilabsPersistence {
                                 let decodedPreviousParameterValuePartArray = decodedPreviousParameterValuePart
                                     .components(separatedBy: "|")
                                 if decodedPreviousParameterValuePartArray.count == 2 {
-                                    parameterValueToStore = parameterValueToStore + ("~")
-                                    parameterValueToStore = parameterValueToStore + (decodedPreviousParameterValuePart )
+                                    parameterValueToStore += ("~")
+                                    parameterValueToStore += (decodedPreviousParameterValuePart)
                                 }
                             }
                         }

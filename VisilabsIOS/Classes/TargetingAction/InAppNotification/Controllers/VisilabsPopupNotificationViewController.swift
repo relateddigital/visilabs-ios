@@ -143,7 +143,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         panGestureDismissal: Bool = true,
         hideStatusBar: Bool = false,
         completion: (() -> Void)? = nil) {
-        self.viewController = viewController as! VisilabsDefaultPopupNotificationViewController
+        self.viewController = viewController as? VisilabsDefaultPopupNotificationViewController
+            ?? VisilabsDefaultPopupNotificationViewController()
         self.preferredWidth = preferredWidth
         self.hideStatusBar = hideStatusBar
         self.completion = completion

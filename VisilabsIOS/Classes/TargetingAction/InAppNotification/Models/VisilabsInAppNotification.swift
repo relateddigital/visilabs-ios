@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//swiftlint:disable type_body_length
 public class VisilabsInAppNotification {
 
     public enum PayloadKey {
@@ -229,7 +229,7 @@ public class VisilabsInAppNotification {
     private static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
         var size = style == .title2 ? 12 : 8
         if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
-            size = size + siz
+            size += siz
         }
         var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
                                size: CGFloat(size))

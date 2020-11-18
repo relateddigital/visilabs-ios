@@ -23,6 +23,7 @@ class VisilabsStoryPreviewView: UIView {
     // MARK: - iVars
     var layoutType: VisilabsLayoutType?
     /**Layout Animate options(ie.choose which kinda animation you want!)*/
+    //swiftlint:disable large_tuple
     lazy var layoutAnimator: (LayoutAttributesAnimator, Bool, Int, Int) = (layoutType!.animator, true, 1, 1)
     lazy var snapsCollectionViewFlowLayout: AnimatedCollectionViewLayout = {
         let flowLayout = AnimatedCollectionViewLayout()
