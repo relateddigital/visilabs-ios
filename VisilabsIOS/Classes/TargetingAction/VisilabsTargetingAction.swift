@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//swiftlint:disable type_body_length
 class VisilabsTargetingAction {
 
     let visilabsProfile: VisilabsProfile

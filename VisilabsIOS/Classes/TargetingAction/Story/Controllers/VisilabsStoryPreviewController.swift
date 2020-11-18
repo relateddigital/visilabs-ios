@@ -10,7 +10,8 @@ import UIKit
 final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognizerDelegate {
 
     // MARK: - Private Vars
-    private var _view: VisilabsStoryPreviewView {return view as! VisilabsStoryPreviewView}
+    private var _view: VisilabsStoryPreviewView {return view as? VisilabsStoryPreviewView
+        ?? VisilabsStoryPreviewView(frame: view.frame)}
     private var viewModel: VisilabsStoryPreviewModel?
 
     private(set) var stories: [VisilabsStory]
@@ -279,7 +280,7 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
         if number < stories.count {
             //Move to next story
             storyCopy = stories[nStoryIndex+handPickedStoryIndex]
-            nStoryIndex = nStoryIndex + 1
+            nStoryIndex += 1
             let nIndexPath = IndexPath.init(row: nStoryIndex, section: 0)
             //_view.snapsCollectionView.layer.speed = 0;
             _view.snapsCollectionView.scrollToItem(at: nIndexPath, at: .right, animated: true)
@@ -297,7 +298,7 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
         let number = nStoryIndex+1
         if number <= stories.count && number > 1 {
             storyCopy = stories[nStoryIndex+handPickedStoryIndex]
-            nStoryIndex = nStoryIndex - 1
+            nStoryIndex -= 1
             let nIndexPath = IndexPath.init(row: nStoryIndex, section: 0)
             _view.snapsCollectionView.scrollToItem(at: nIndexPath, at: .left, animated: true)
         } else {
@@ -313,8 +314,8 @@ extension Array {
      func sortedArrayByPosition() -> [Element] {
         return sorted(by: { (obj1: Element, obj2: Element) -> Bool in
 
-            let view1 = obj1 as! UIView
-            let view2 = obj2 as! UIView
+            let view1 = obj1 as? UIView ?? UIView()
+            let view2 = obj2 as? UIView ?? UIView()
 
             let x1Point = view1.frame.minX
             let y1Point = view1.frame.minY

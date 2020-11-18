@@ -14,6 +14,7 @@ open class VisilabsDynamicBlurView: UIView {
 
     private var staticImage: UIImage?
     private var displayLink: CADisplayLink?
+    //swiftlint:disable force_cast
     private var blurLayer: VisilabsBlurLayer {
         return layer as! VisilabsBlurLayer
     }

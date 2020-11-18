@@ -30,7 +30,7 @@ private func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
 protocol SliderStepDelegate: AnyObject {
     func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float)
 }
-
+//swiftlint:disable type_body_length
 class VisilabsSliderStep: UISlider {
 
     @IBInspectable var enableTap: Bool = true

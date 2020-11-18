@@ -20,6 +20,7 @@ enum SnapMovementDirectionState {
 //Identifiers
 private let snapViewTagIndicator: Int = 8
 
+//swiftlint:disable file_length type_body_length
 final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
 
     // MARK: - Delegate
@@ -192,9 +193,13 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         snapView.tag = snapIndex + snapViewTagIndicator
 
         /**
-         Delete if there is any snapview/videoview already present in that frame location. Because of snap delete functionality, snapview/videoview can occupy different frames(created in 2nd position(frame), when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
+         Delete if there is any snapview/videoview already present in that frame location.
+         Because of snap delete functionality, snapview/videoview
+         can occupy different frames(created in 2nd position(frame),
+         when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
          - If only snapViews are there, it will not create any issues.
-         - But if story contains both image and video snaps, there will be a chance in same position both snapView and videoView gets created.
+         - But if story contains both image and video snaps, there will be a chance in same position
+         both snapView and videoView gets created.
          - That's why we need to remove if any snap exists on the same position.
          */
         scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
@@ -207,7 +212,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             //snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
             //snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
 
-            snapView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ? scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
+            snapView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ?
+            scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
             snapView.igTopAnchor.constraint(equalTo: scrollview.igTopAnchor),
             snapView.widthAnchor.constraint(equalTo: scrollview.widthAnchor),
             snapView.heightAnchor.constraint(equalTo: scrollview.heightAnchor),
@@ -215,13 +221,15 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         ])
         if snapIndex != 0 {
             NSLayoutConstraint.activate([
-                snapView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor, constant: CGFloat(snapIndex)*scrollview.width)
+                snapView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor,
+                                                  constant: CGFloat(snapIndex)*scrollview.width)
             ])
         }
         return snapView
     }
     private func getSnapview() -> UIImageView? {
-        if let imageView = scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first as? UIImageView {
+        let view = scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first
+        if let imageView = view as? UIImageView {
             return imageView
         }
         return nil
@@ -233,16 +241,21 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         videoView.playerObserverDelegate = self
 
         /**
-         Delete if there is any snapview/videoview already present in that frame location. Because of snap delete functionality, snapview/videoview can occupy different frames(created in 2nd position(frame), when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
+         Delete if there is any snapview/videoview already present in that frame location.
+         Because of snap delete functionality, snapview/videoview
+         can occupy different frames(created in 2nd position(frame),
+         when 1st postion snap gets deleted, it will move to first position) which leads to weird issues.
          - If only snapViews are there, it will not create any issues.
-         - But if story contains both image and video snaps, there will be a chance in same position both snapView and videoView gets created.
+         - But if story contains both image and video snaps, there will be a chance
+         in same position both snapView and videoView gets created.
          - That's why we need to remove if any snap exists on the same position.
          */
         scrollview.subviews.filter({$0.tag == snapIndex + snapViewTagIndicator}).first?.removeFromSuperview()
 
         scrollview.addSubview(videoView)
         NSLayoutConstraint.activate([
-            videoView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ? scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
+            videoView.leadingAnchor.constraint(equalTo: (snapIndex == 0)
+            ? scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
             videoView.igTopAnchor.constraint(equalTo: scrollview.igTopAnchor),
             videoView.widthAnchor.constraint(equalTo: scrollview.widthAnchor),
             videoView.heightAnchor.constraint(equalTo: scrollview.heightAnchor),
@@ -250,13 +263,15 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         ])
         if snapIndex != 0 {
             NSLayoutConstraint.activate([
-                videoView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor, constant: CGFloat(snapIndex)*scrollview.width)
+                videoView.leadingAnchor.constraint(equalTo: scrollview.leadingAnchor,
+                                                   constant: CGFloat(snapIndex)*scrollview.width)
             ])
         }
         return videoView
     }
     private func getVideoView(with index: Int) -> VisilabsPlayerView? {
-        if let videoView = scrollview.subviews.filter({$0.tag == index + snapViewTagIndicator}).first as? VisilabsPlayerView {
+        let view = scrollview.subviews.filter({$0.tag == index + snapViewTagIndicator}).first
+        if let videoView = view as? VisilabsPlayerView {
             return videoView
         }
         return nil
@@ -268,8 +283,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 guard let strongSelf = self else { return}
                 switch result {
                     case .success:
-                        /// Start progressor only if handpickedSnapIndex matches with snapIndex and the requested image url should be matched with current snapIndex imageurl
-                        if strongSelf.handpickedSnapIndex == strongSelf.snapIndex && url == strongSelf.story!.items[strongSelf.snapIndex].url {
+                        /// Start progressor only if handpickedSnapIndex matches with snapIndex
+                        /// and the requested image url should be matched with current snapIndex imageurl
+                        if strongSelf.handpickedSnapIndex == strongSelf.snapIndex
+                            && url == strongSelf.story!.items[strongSelf.snapIndex].url {
                             strongSelf.startProgressors()
                     }
                     case .failure:
@@ -407,7 +424,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             }
             if story.items[snapIndex].targetUrl.count > 0, let snapUrl = URL(string: story.items[snapIndex].targetUrl) {
                 VisilabsLogger.info("opening CTA URL: \(snapUrl)")
-                VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: snapUrl, waitUntilDone: true)
+                VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread:
+                                    NSSelectorFromString("openURL:"), with: snapUrl, waitUntilDone: true)
             }
             delegate?.didTapCloseButton()
         }
@@ -464,7 +482,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         if let holderView = self.getProgressIndicatorView(with: sIndex),
             let progressView = self.getProgressView(with: sIndex) {
             progressView.widthConstraint?.isActive = false
-            progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor, multiplier: 1.0)
+            progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor,
+                                                                               multiplier: 1.0)
             progressView.widthConstraint?.isActive = true
         }
     }
@@ -475,7 +494,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 if let holderView = self.getProgressIndicatorView(with: counter),
                     let progressView = self.getProgressView(with: counter) {
                     progressView.widthConstraint?.isActive = false
-                    progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor, multiplier: 1.0)
+                    progressView.widthConstraint = progressView.widthAnchor.constraint(equalTo: holderView.widthAnchor,
+                                                                                       multiplier: 1.0)
                     progressView.widthConstraint?.isActive = true
                 }
             }
@@ -520,7 +540,9 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
 
             DispatchQueue.main.async {
                 if type == .photo {
-                    progressView.start(with: timeInterval, holderView: holderView, completion: {(_, snapIndex, isCancelledAbruptly) in
+                    progressView.start(with: timeInterval,
+                                       holderView: holderView,
+                                       completion: {(_, snapIndex, isCancelledAbruptly) in
                         print("Completed snapindex: \(snapIndex)")
                         if isCancelledAbruptly == false {
                             self.didCompleteProgress()
@@ -537,13 +559,19 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     func startProgressors() {
         DispatchQueue.main.async {
             if self.scrollview.subviews.count > 0 {
-                let imageView = self.scrollview.subviews.filter {view in view.tag == self.snapIndex + snapViewTagIndicator}.first as? UIImageView
+                let view = self.scrollview.subviews.filter {view in view.tag == self.snapIndex
+                    + snapViewTagIndicator}.first
+                let imageView = view as? UIImageView
                 if imageView?.image != nil && self.story?.isCompletelyVisible == true {
                     self.gearupTheProgressors(type: .photo)
                 } else {
-                    // Didend displaying will call this startProgressors method. After that only isCompletelyVisible get true. Then we have to start the video if that snap contains video.
+                    // Didend displaying will call this startProgressors method.
+                    // After that only isCompletelyVisible get true.
+                    // Then we have to start the video if that snap contains video.
                     if self.story?.isCompletelyVisible == true {
-                        let videoView = self.scrollview.subviews.filter {view in view.tag == self.snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
+                        let view = self.scrollview.subviews.filter {view in view.tag == self.snapIndex
+                            + snapViewTagIndicator}.first
+                        let videoView = view as? VisilabsPlayerView
                         let snap = self.story?.items[self.snapIndex]
                         if let view = videoView, self.story?.isCompletelyVisible == true {
                             self.startPlayer(videoView: view, with: snap!.url)
@@ -568,7 +596,9 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
     func getProgressIndicatorView(with index: Int) -> VisilabsSnapProgressIndicatorView? {
         let progressView = storyHeaderView.getProgressView
-        return progressView.subviews.filter({view in view.tag == index+progressIndicatorViewTag}).first as? VisilabsSnapProgressIndicatorView ?? nil
+        let indicatorView = progressView.subviews.filter({view in view.tag == index+progressIndicatorViewTag}).first
+            as? VisilabsSnapProgressIndicatorView
+        return indicatorView ?? nil
     }
     func adjustPreviousSnapProgressorsWidth(with index: Int) {
         fillupLastPlayedSnaps(index)
@@ -593,8 +623,12 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         NotificationCenter.default.removeObserver(self)
 
         // Add the observer to handle application from background to foreground
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterForeground),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
     }
     public func startSnapProgress(with sIndex: Int) {
         if let indicatorView = getProgressIndicatorView(with: sIndex),
@@ -642,7 +676,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
     public func pauseEntireSnap() {
         let progress = getProgressView(with: snapIndex)
-        let videoView = scrollview.subviews.filter {view in view.tag == snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
+        let view = scrollview.subviews.filter {view in view.tag == snapIndex + snapViewTagIndicator}.first
+        let videoView = view as? VisilabsPlayerView
         if videoView != nil {
             progress?.pause()
             videoView?.pause()
@@ -652,7 +687,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
     public func resumeEntireSnap() {
         let progress = getProgressView(with: snapIndex)
-        let videoView = scrollview.subviews.filter {view in view.tag == snapIndex + snapViewTagIndicator}.first as? VisilabsPlayerView
+        let view = scrollview.subviews.filter {view in view.tag == snapIndex + snapViewTagIndicator}.first
+        let videoView = view as? VisilabsPlayerView
         if videoView != nil {
             progress?.resume()
             videoView?.play()
@@ -698,7 +734,9 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
                     progressView.snapIndex = snapIndex
                     if let duration = videoView.currentItem?.asset.duration {
                         if Float(duration.value) > 0 {
-                            progressView.start(with: duration.seconds, holderView: holderView, completion: {(_, snapIndex, isCancelledAbruptly) in
+                            progressView.start(with: duration.seconds,
+                                               holderView: holderView,
+                                               completion: {(_, snapIndex, isCancelledAbruptly) in
                                 if isCancelledAbruptly == false {
                                     self.videoSnapIndex = snapIndex
                                     self.stopPlayer()
@@ -740,7 +778,8 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
 }
 
 extension VisilabsStoryPreviewCell: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UISwipeGestureRecognizer {
             return true
         }

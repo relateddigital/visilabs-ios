@@ -157,7 +157,8 @@ final class VisilabsStoryPreviewHeaderView: UIView {
     // MARK: - Public functions
     public func clearTheProgressorSubviews() {
         getProgressView.subviews.forEach { view in
-            view.subviews.forEach {view in (view as! VisilabsSnapProgressView).stop()}
+            view.subviews.forEach {view in (view as? VisilabsSnapProgressView ?? VisilabsSnapProgressView())
+                .stop()}
             view.removeFromSuperview()
         }
     }

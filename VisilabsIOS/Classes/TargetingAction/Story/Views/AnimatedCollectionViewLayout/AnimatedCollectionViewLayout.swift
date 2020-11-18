@@ -125,7 +125,8 @@ open class AnimatedCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     public var endOffset: CGFloat = 0
 
     open override func copy(with zone: NSZone? = nil) -> Any {
-        let copy = super.copy(with: zone) as! AnimatedCollectionViewLayoutAttributes
+        let copy = super.copy(with: zone) as? AnimatedCollectionViewLayoutAttributes
+            ?? AnimatedCollectionViewLayoutAttributes()
         copy.contentView = contentView
         copy.scrollDirection = scrollDirection
         copy.startOffset = startOffset
