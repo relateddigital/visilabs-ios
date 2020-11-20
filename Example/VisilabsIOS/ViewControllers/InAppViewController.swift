@@ -74,9 +74,6 @@ class InAppViewController: FormViewController {
             <<< addCloseButtonColorPickerInputRow()
             <<< addButtonTextColorTextRow()
             <<< addButtonColorTextRow()
-            <<< addSuccessMessageTextRow()
-            <<< addFailMessageTextRow()
-            <<< addPermissionLinkTextRow()
 
         +++ Section()
 
@@ -119,8 +116,6 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = false
     }
     /**
@@ -139,8 +134,6 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
     }
 
@@ -157,8 +150,6 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = true
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
     }
 
@@ -175,8 +166,7 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = true
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = true
+
         self.form.rowBy(tag: "miniIcon")?.hidden = true
     }
 
@@ -193,8 +183,6 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.successMessage)?.hidden = false
-        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.failMessage)?.hidden = false
         self.form.rowBy(tag: "miniIcon")?.hidden = true
     }
 }

@@ -33,12 +33,12 @@ class EventViewController: FormViewController {
 
     let inAppNotificationIds = ["mini": 139,
                                 "full": 140,
-                                "image_text_button": 153,
-                                "full_image": 154,
+                                "imageTextButton": 153,
+                                "fullImage": 154,
                                 "nps": 155,
-                                "image_button": 156,
-                                "smile_rating": 157,
-                                "email_form": 158]
+                                "imageButton": 156,
+                                "smileRating": 157,
+                                "emailForm": 158]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,7 +138,7 @@ class EventViewController: FormViewController {
                              randomGender: randomGender)
     }
 
-    //swiftlint:disable TO_DO
+    //swiftlint:disable todo
     //swiftlint:disable cyclomatic_complexity
     //swiftlint:disable function_body_length
     //TO_DO: favorites'lerde price göndermek gerekiyor mu?

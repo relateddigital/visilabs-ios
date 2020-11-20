@@ -213,9 +213,9 @@ extension VisilabsInstance {
                    self.visilabsProfile.inAppNotificationsEnabled,
                    pageName != VisilabsConstants.omEvtGif {
                     self.checkInAppNotification(properties: event)
+                    self.checkMailSubsForm(properties: event)
                 }
             }
-
             self.send()
         }
     }
@@ -337,6 +337,14 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
                         self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
                     }
                 })
+            }
+        }
+    }
+    
+    func checkMailSubsForm(properties: [String: String]) {
+        self.visilabsTargetingActionInstance.getEmailForm(visilabsUser: self.visilabsUser, guid: UUID().uuidString) { (model) in
+            if model == nil {
+                print("model is nil")
             }
         }
     }

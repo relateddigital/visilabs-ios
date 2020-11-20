@@ -29,9 +29,6 @@ public class VisilabsInAppNotification {
         public static let closeButtonColor = "close_button_color"
         public static let buttonTextColor = "button_text_color"
         public static let buttonColor = "button_color"
-        public static let permissionLink = "permission_link"
-        public static let successMessage = "success_message"
-        public static let failMessage = "fail_message"
     }
 
     let actId: Int
@@ -53,9 +50,6 @@ public class VisilabsInAppNotification {
     let closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?
-    let permissionLink: String?
-    let successMessage: String?
-    let failMessage: String?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -95,10 +89,7 @@ public class VisilabsInAppNotification {
                 backGround: String?,
                 closeButtonColor: String?,
                 buttonTextColor: String?,
-                buttonColor: String?,
-                permissionLink: String,
-                successMessage: String?,
-                failMessage: String) {
+                buttonColor: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -128,9 +119,6 @@ public class VisilabsInAppNotification {
         }
         self.buttonTextColor = UIColor(hex: buttonTextColor)
         self.buttonColor = UIColor(hex: buttonColor)
-        self.successMessage = successMessage
-        self.failMessage = failMessage
-        self.permissionLink = permissionLink
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
@@ -140,7 +128,6 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-
         setFonts()
     }
 
@@ -207,10 +194,6 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-
-        self.permissionLink = actionData[PayloadKey.permissionLink] as? String
-        self.successMessage = actionData[PayloadKey.successMessage] as? String
-        self.failMessage = actionData[PayloadKey.failMessage] as? String
 
         setFonts()
     }

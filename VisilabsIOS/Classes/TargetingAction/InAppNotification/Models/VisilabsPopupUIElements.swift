@@ -87,14 +87,37 @@ extension VisilabsPopupDialogDefaultView {
         return check
     }
 
+    internal func setPermitLabel() -> UILabel {
+        let label = UILabel(frame: .zero)
+        label.text = ""
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 12)
+        return label
+    }
+    
+    internal func setConsentLabel() -> UILabel {
+        let label = UILabel(frame: .zero)
+        label.text = ""
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 12)
+        return label
+    }
+
     internal func setTermsButton() -> UIButton {
         let button = UIButton(frame: .zero)
-        let text = "Kullanım koşullarını okuldum ve kabul ediyorum."
-        button.setTitle(text, for: .normal)
-        button.tintColor = .white
-        button.titleLabel?.textColor = .white
+        button.tintColor = .blue
+        button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.addTarget(self, action: #selector(termsButtonTapped(_:)), for: .touchUpInside)
+        return button
+    }
+
+    internal func setConsentButton() -> UIButton {
+        let button = UIButton(frame: .zero)
+        button.tintColor = .blue
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.addTarget(self, action: #selector(consentButtonTapped(_:)), for: .touchUpInside)
         return button
     }
 
@@ -226,30 +249,62 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(messageLabel)
         addSubview(emailTF)
         addSubview(termsButton)
-        addSubview(checkbox)
+        addSubview(firstCheckBox)
         addSubview(self.resultLabel)
-
+        var preTermsAdded = false
+        var postTermsAdded = false
+        let text = "Kullanım koşullarını <LINK>okuldum ve kabul</LINK> ediyorum."
+        let parsedConsent = text.parsePermissionText()
+        
+        if !parsedConsent.preLink.isEmpty {
+            addSubview(preTermsLabel)
+            preTermsLabel.text = parsedConsent.preLink
+            preTermsAdded = true
+        }
+        
+        if !parsedConsent.postLink.isEmpty {
+            addSubview(postTermsLabel)
+            postTermsLabel.text = parsedConsent.postLink
+            postTermsAdded = true
+        }
+        
+        termsButton.setTitle(parsedConsent.link, for: .normal)
+        
         resultLabel.isHidden = true
         messageLabel.textAlignment = .natural
         titleLabel.top(to: self, offset: 50)
         messageLabel.topToBottom(of: titleLabel, offset: 10)
         emailTF.topToBottom(of: messageLabel, offset: 20)
-        checkbox.topToBottom(of: emailTF, offset: 20)
-        termsButton.centerY(to: checkbox)
-        resultLabel.topToBottom(of: checkbox, offset: 10.0)
-        checkbox.bottom(to: self, offset: -80)
+        firstCheckBox.topToBottom(of: emailTF, offset: 20)
+        termsButton.centerY(to: firstCheckBox)
+        resultLabel.topToBottom(of: firstCheckBox, offset: 10.0)
+        firstCheckBox.bottom(to: self, offset: -80)
 
-        checkbox.size(CGSize(width: 20, height: 20))
+        firstCheckBox.size(CGSize(width: 20, height: 20))
 
-        checkbox.leading(to: self, offset: 20)
-        termsButton.leadingToTrailing(of: checkbox, offset: 10)
-        termsButton.trailing(to: self, offset: -12)
+        firstCheckBox.leading(to: self, offset: 20)
+        if preTermsAdded {
+            preTermsLabel.leadingToTrailing(of: firstCheckBox, offset: 10)
+            termsButton.leadingToTrailing(of: preTermsLabel)
+            preTermsLabel.centerY(to: firstCheckBox)
+        } else {
+            termsButton.leadingToTrailing(of: firstCheckBox, offset: 10)
+        }
+
+        if postTermsAdded {
+            postTermsLabel.leadingToTrailing(of: termsButton)
+            postTermsLabel.trailing(to: self, offset: -12)
+            postTermsLabel.centerY(to: firstCheckBox)
+        } else {
+            termsButton.trailing(to: self, offset: -12)
+        }
+        
         titleLabel.leading(to: self, offset: 20)
         messageLabel.leading(to: titleLabel)
         messageLabel.trailing(to: self, offset: -20)
         emailTF.leading(to: self, offset: 20)
         emailTF.trailing(to: self, offset: -20.0)
-        resultLabel.leading(to: self.checkbox)
+        resultLabel.leading(to: self.firstCheckBox)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.addGestureRecognizer(tapGesture)
