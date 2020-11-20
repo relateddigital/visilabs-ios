@@ -162,6 +162,52 @@ class VisilabsTargetingAction {
             completion(self.parseStories(result, error, guid))
         }, guid: guid)
     }
+
+    func getEmailForm(visilabsUser: VisilabsUser,
+                      guid: String, actionId: Int? = nil,
+                      completion: @escaping ((_ response: MailSubscriptionModel?) -> Void)) {
+    
+        var props = [String: String]()
+        props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
+        props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId
+        props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
+        props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
+        props[VisilabsConstants.tokenIdKey] = visilabsUser.tokenId
+        props[VisilabsConstants.appidKey] = visilabsUser.appId
+        props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
+        props[VisilabsConstants.actionType] = VisilabsConstants.mailSubscriptionForm
+        props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+
+        VisilabsRequest.sendMobileRequest(properties: props,
+                                          headers: [String : String](),
+                                          timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
+                                          completion: {(result: [String: Any]?, error: VisilabsError?, guid: String?) in
+                                            completion(self.parseMailForm(result, error, guid))
+
+        }, guid: guid)
+    }
+    
+    private func parseMailForm(_ result: [String: Any]?,
+                               _ error: VisilabsError?,
+                               _ guid: String?) -> MailSubscriptionModel? {
+        guard let result = result else { return nil }
+        guard let mailFormArr = result[VisilabsConstants.mailSubscriptionForm] as? [[String: Any?]] else { return nil }
+        guard let mailForm = mailFormArr.first else { return nil }
+        guard let actionData = mailForm[VisilabsConstants.actionData] else { return nil }
+        let encodedStr = mailForm[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+        let title = mailForm[VisilabsConstants.title] as? String ?? ""
+        let message = mailForm[VisilabsConstants.message] as? String ?? ""
+        let buttonText = mailForm[VisilabsConstants.buttonLabel] as? String ?? ""
+        let auth = mailForm[VisilabsConstants.authentication] as? String ?? ""
+        let consentText = mailForm[VisilabsConstants.consentText] as? String ?? ""
+        let successMsg = mailForm[VisilabsConstants.successMessage] as? String ?? ""
+        let invalidMsg = mailForm[VisilabsConstants.invalidEmailMessage] as? String ?? ""
+        let checkConsent = mailForm[VisilabsConstants.checkConsentMessage] as? String ?? ""
+        
+        return nil
+    }
+
     //swiftlint:disable function_body_length cyclomatic_complexity
     //TO_DO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
     private func parseStories(_ result: [String: Any]?,

@@ -230,30 +230,6 @@ extension InAppViewController {
         }
     }
 
-      func addSuccessMessageTextRow() -> TextRow {
-        return TextRow(VisilabsInAppNotification.PayloadKey.successMessage) {
-            $0.title = "Success Message"
-            $0.placeholder = "E-posta adresiniz kayıt edildi."
-            $0.value = "E-posta adresiniz kayıt edildi."
-        }
-    }
-
-      func addFailMessageTextRow() -> TextRow {
-        return TextRow(VisilabsInAppNotification.PayloadKey.failMessage) {
-            $0.title = "Fail Message"
-            $0.placeholder = "Lütfen geçerli bir e-posta adresi giriniz"
-            $0.value = "Lütfen geçerli bir e-posta adresi giriniz"
-        }
-    }
-
-      func addPermissionLinkTextRow() -> TextRow {
-        return TextRow(VisilabsInAppNotification.PayloadKey.permissionLink) {
-            $0.title = "Terms and Conditions Link"
-            $0.placeholder = "https://www.google.com"
-            $0.value = "https://www.google.com"
-        }
-    }
-
     func addShowNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
             $0.title = "showNotification"
@@ -271,8 +247,13 @@ extension InAppViewController {
         if errors.count > 0 {
             return
         }
-        let visilabsInAppNotification = createVisilabsInAppNotificationModel()
-        Visilabs.callAPI().showNotification(visilabsInAppNotification)
+        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
+        if value == "emailForm" {
+            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+        } else {
+            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
+            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+        }
     }
     //swiftlint:disable function_body_length
     func createVisilabsInAppNotificationModel() -> VisilabsInAppNotification {
@@ -312,15 +293,6 @@ extension InAppViewController {
 
         let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
 
-        tag = VisilabsInAppNotification.PayloadKey.permissionLink
-        let permissionLink = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
-        tag = VisilabsInAppNotification.PayloadKey.successMessage
-        let successMessage = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
-        tag = VisilabsInAppNotification.PayloadKey.failMessage
-        let failMessage = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
         var imageUrlString: String? = ""
         if messageType == .mini {
             imageUrlString = InAppHelper.miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon)
@@ -346,9 +318,6 @@ extension InAppViewController {
                                         backGround: backGround,
                                         closeButtonColor: closeButtonColor,
                                         buttonTextColor: buttonTextColor,
-                                        buttonColor: buttonColor,
-                                        permissionLink: permissionLink,
-                                        successMessage: successMessage,
-                                        failMessage: failMessage)
+                                        buttonColor: buttonColor)
     }
 }

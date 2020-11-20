@@ -17,9 +17,18 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var titleLabel = setTitleLabel()
     internal lazy var messageLabel = setMessageLabel()
     internal lazy var npsView = setNpsView()
+
     internal lazy var emailTF = setEmailTF()
-    internal lazy var checkbox = setCheckbox()
+    internal lazy var firstCheckBox = setCheckbox()
+    internal lazy var secondCheckBox = setCheckbox()
+    internal lazy var preTermsLabel = setPermitLabel()
     internal lazy var termsButton = setTermsButton()
+    internal lazy var postTermsLabel = setPermitLabel()
+
+    internal lazy var preConsentLabel = setConsentLabel()
+    internal lazy var consentButton = setConsentButton()
+    internal lazy var postConsentLabel = setConsentLabel()
+    
     internal lazy var resultLabel = setResultLabel()
     internal lazy var sliderStepRating = setSliderStepRating()
 
@@ -61,9 +70,10 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal var imageHeightConstraint: NSLayoutConstraint?
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
+    var emailForm: MailSubscriptionModel?
 
     // MARK: - CONSTRUCTOR
-    init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification) {
+    init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification, _ emailForm: MailSubscriptionModel? = nil) {
         self.visilabsInAppNotification = visilabsInAppNotification
         super.init(frame: frame)
         setupViews()
@@ -127,22 +137,17 @@ extension VisilabsPopupDialogDefaultView {
 
     func sendEmailButtonTapped() {
 
-        guard let notification = visilabsInAppNotification else { return }
-        DispatchQueue.main.async {
-            if self.checkbox.isChecked {
-                self.resultLabel.text = notification.successMessage
-                self.resultLabel.textColor = .green
-            } else {
-                self.resultLabel.text = notification.failMessage
-                self.resultLabel.textColor = .red
-            }
-            self.resultLabel.isHidden = false
-        }
     }
 
     @objc func termsButtonTapped(_ sender: UIButton) {
-        guard let permission = visilabsInAppNotification?.permissionLink else { return }
+        let permission = ""
         guard let url = URL(string: permission) else { return }
+        VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+    }
+
+    @objc func consentButtonTapped(_ sender: UIButton) {
+        let consent = ""
+        guard let url = URL(string: consent) else { return }
         VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
     }
 }
