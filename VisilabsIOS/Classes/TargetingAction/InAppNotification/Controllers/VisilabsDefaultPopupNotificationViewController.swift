@@ -10,11 +10,14 @@ import UIKit
 final public class VisilabsDefaultPopupNotificationViewController: UIViewController {
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
+    var mailForm: MailSubscriptionViewModel?
 
-    convenience init(visilabsInAppNotification: VisilabsInAppNotification) {
+    convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
+                     emailForm: MailSubscriptionViewModel? = nil) {
         self.init()
         self.visilabsInAppNotification = visilabsInAppNotification
-        if let image = visilabsInAppNotification.image {
+        self.mailForm = emailForm
+        if let image = visilabsInAppNotification?.image {
             self.image = UIImage(data: image)
         }
     }
@@ -25,7 +28,9 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
 
     override public func loadView() {
         super.loadView()
-        view = VisilabsPopupDialogDefaultView(frame: .zero, visilabsInAppNotification: visilabsInAppNotification!)
+        view = VisilabsPopupDialogDefaultView(frame: .zero,
+                                              visilabsInAppNotification: visilabsInAppNotification,
+                                              emailForm: mailForm)
     }
 }
 

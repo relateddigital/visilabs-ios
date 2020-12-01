@@ -19,6 +19,7 @@ enum VisilabsEndpoint {
     case action
     case geofence
     case mobile
+    case subsjson
 }
 
 struct VisilabsResource<A> {
@@ -95,11 +96,7 @@ struct VisilabsBasePath {
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
         //components?.path = path
         components?.queryItems = queryItems
-        if visilabsEndpoint == .mobile {
-            return URL(string: "http://s.visilabs.net/mobile?OM.cookieID=MJBBVMVPOOIBZANT20200507151239&OM.siteID=356467332F6533766975593D&OM.oid=676D325830564761676D453D&dat=Tue,%2021%20Jul%202020%2013:24:19%20GMT&OM.pvt=2020-07-21%2014%3A02%3A37&OM.pviv=1&OM.tvc=11&OM.th=31&OM.lvt=2020-07-21%2016%3A24%3A19&action_type=MailSubscriptionForm")
-        } else {
-            return components?.url
-        }
+        return components?.url
         
     }
 

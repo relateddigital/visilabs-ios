@@ -165,7 +165,7 @@ class VisilabsTargetingAction {
 
     func getEmailForm(visilabsUser: VisilabsUser,
                       guid: String, actionId: Int? = nil,
-                      completion: @escaping ((_ response: MailSubscriptionModel?) -> Void)) {
+                      completion: @escaping ((_ response: MailSubscriptionViewModel?) -> Void)) {
     
         var props = [String: String]()
         props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
@@ -189,23 +189,136 @@ class VisilabsTargetingAction {
     
     private func parseMailForm(_ result: [String: Any]?,
                                _ error: VisilabsError?,
-                               _ guid: String?) -> MailSubscriptionModel? {
+                               _ guid: String?) -> MailSubscriptionViewModel? {
         guard let result = result else { return nil }
         guard let mailFormArr = result[VisilabsConstants.mailSubscriptionForm] as? [[String: Any?]] else { return nil }
         guard let mailForm = mailFormArr.first else { return nil }
-        guard let actionData = mailForm[VisilabsConstants.actionData] else { return nil }
-        let encodedStr = mailForm[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let actionData = mailForm[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
         guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
-        let title = mailForm[VisilabsConstants.title] as? String ?? ""
-        let message = mailForm[VisilabsConstants.message] as? String ?? ""
-        let buttonText = mailForm[VisilabsConstants.buttonLabel] as? String ?? ""
-        let auth = mailForm[VisilabsConstants.authentication] as? String ?? ""
-        let consentText = mailForm[VisilabsConstants.consentText] as? String ?? ""
-        let successMsg = mailForm[VisilabsConstants.successMessage] as? String ?? ""
-        let invalidMsg = mailForm[VisilabsConstants.invalidEmailMessage] as? String ?? ""
-        let checkConsent = mailForm[VisilabsConstants.checkConsentMessage] as? String ?? ""
+        guard let report = actionData[VisilabsConstants.report] as? [String: Any] else { return nil }
+        let title = actionData[VisilabsConstants.title] as? String ?? ""
+        let message = actionData[VisilabsConstants.message] as? String ?? ""
+        let actid = mailForm[VisilabsConstants.actid] as? Int ?? 0
+        let type = actionData[VisilabsConstants.type] as? String ?? "subscription_email"
+        let buttonText = actionData[VisilabsConstants.buttonLabel] as? String ?? ""
+        let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
+        let consentText = actionData[VisilabsConstants.consentText] as? String
+        let successMsg = actionData[VisilabsConstants.successMessage] as? String ?? ""
+        let invalidMsg = actionData[VisilabsConstants.invalidEmailMessage] as? String ?? ""
+        let emailPermitText = actionData[VisilabsConstants.emailPermitText] as? String ?? ""
+        let checkConsent = actionData[VisilabsConstants.checkConsentMessage] as? String ?? ""
+        let placeholder = actionData[VisilabsConstants.placeholder] as? String ?? ""
+
+        let titleTextColor = extendedProps[VisilabsConstants.titleTextColor] as? String ?? ""
+        let titleFontFamily = extendedProps[VisilabsConstants.titleFontFamily] as? String ?? ""
+        let titleTextSize = extendedProps[VisilabsConstants.titleTextSize] as? String ?? ""
+        let textColor = extendedProps[VisilabsConstants.textColor] as? String ?? ""
+        let textFontFamily = extendedProps[VisilabsConstants.textFontFamily] as? String ?? ""
+        let textSize = extendedProps[VisilabsConstants.textSize] as? String ?? ""
+        let buttonColor = extendedProps[VisilabsInAppNotification.PayloadKey.buttonColor] as? String ?? ""
+        let buttonTextColor = extendedProps[VisilabsInAppNotification.PayloadKey.buttonTextColor] as? String ?? ""
+        let buttonTextSize = extendedProps[VisilabsConstants.buttonTextSize] as? String ?? ""
+        let buttonFontFamily = extendedProps[VisilabsConstants.buttonFontFamily] as? String ?? ""
+        let emailPermitTextSize = extendedProps[VisilabsConstants.emailPermitTextSize] as? String ?? ""
+        let emailPermitTextUrl = extendedProps[VisilabsConstants.emailPermitTextUrl] as? String ?? ""
+        let consentTextSize = extendedProps[VisilabsConstants.consentTextSize] as? String ?? ""
+        let consentTextUrl = extendedProps[VisilabsConstants.consentTextUrl] as? String ?? ""
+        let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? "black"
+        let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String ?? ""
+        let impression = report[VisilabsConstants.impression] as? String ?? ""
+        let click = report[VisilabsConstants.click] as? String ?? ""
+        let mailReport = MailReport(impression: impression, click: click)
+        let extendedProperties = MailSubscriptionExtendedProps(titleTextColor: titleTextColor,
+                                                               titleFontFamily: titleFontFamily,
+                                                               titleTextSize: titleTextSize,
+                                                               textColor: textColor,
+                                                               textFontFamily: textFontFamily,
+                                                               textSize: textSize,
+                                                               buttonColor: buttonColor,
+                                                               buttonTextColor: buttonTextColor,
+                                                               buttonTextSize: buttonTextSize,
+                                                               buttonFontFamily: buttonFontFamily,
+                                                               emailPermitTextSize: emailPermitTextSize,
+                                                               emailPermitTextUrl: emailPermitTextUrl,
+                                                               consentTextSize: consentTextSize,
+                                                               consentTextUrl: consentTextUrl,
+                                                               closeButtonColor: ButtonColor(rawValue: closeButtonColor) ?? ButtonColor.black,
+                                                               backgroundColor: backgroundColor)
         
-        return nil
+        let mailModel = MailSubscriptionModel(auth: auth,
+                                              title: title,
+                                              message: message,
+                                              actid: actid,
+                                              type: type,
+                                              placeholder: placeholder,
+                                              buttonTitle: buttonText,
+                                              consentText: consentText,
+                                              successMessage: successMsg,
+                                              invalidEmailMessage: invalidMsg,
+                                              emailPermitText: emailPermitText,
+                                              extendedProps: extendedProperties,
+                                              checkConsentMessage: checkConsent,
+                                              report: mailReport)
+        return convertJsonToEmailViewModel(emailForm: mailModel)
+    }
+    
+    private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {
+        var parsedConsent: ParsedPermissionString? = nil
+        if let consent = emailForm.consentText, !consent.isEmpty {
+            parsedConsent = consent.parsePermissionText()
+        }
+        let parsedPermit = emailForm.emailPermitText.parsePermissionText()
+        let titleFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.titleFontFamily,
+                                                          fontSize: emailForm.extendedProps.titleTextSize,
+                                                          style: .title2)
+        let messageFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.textFontFamily,
+                                                            fontSize: emailForm.extendedProps.textSize,
+                                                            style: .body)
+        let buttonFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.buttonFontFamily,
+                                                           fontSize: emailForm.extendedProps.buttonTextSize,
+                                                           style: .title2)
+        let closeButtonColor = getCloseButtonColor(from: emailForm.extendedProps.closeButtonColor)
+        let titleColor = UIColor(hex: emailForm.extendedProps.titleTextColor) ?? .white
+        let textColor = UIColor(hex: emailForm.extendedProps.textColor) ?? .white
+        let backgroundColor = UIColor(hex: emailForm.extendedProps.backgroundColor) ?? .black
+        let emailPermitUrl = URL(string: emailForm.extendedProps.emailPermitTextUrl)
+        let consentUrl = URL(string: emailForm.extendedProps.consentTextUrl)
+        let buttonTextColor = UIColor(hex: emailForm.extendedProps.buttonTextColor) ?? .white
+        let buttonColor = UIColor(hex: emailForm.extendedProps.buttonColor) ?? .black
+        let viewModel = MailSubscriptionViewModel(auth: emailForm.auth,
+                                                  actId: emailForm.actid,
+                                                  type: emailForm.type,
+                                                  title: emailForm.title,
+                                                  message: emailForm.message,
+                                                  placeholder: emailForm.placeholder,
+                                                  buttonTitle: emailForm.buttonTitle,
+                                                  consentText: parsedConsent,
+                                                  permitText: parsedPermit,
+                                                  successMessage: emailForm.successMessage,
+                                                  invalidEmailMessage: emailForm.invalidEmailMessage,
+                                                  checkConsentMessage: emailForm.checkConsentMessage,
+                                                  titleFont: titleFont,
+                                                  messageFont: messageFont,
+                                                  buttonFont: buttonFont,
+                                                  buttonTextColor: buttonTextColor,
+                                                  buttonColor: buttonColor,
+                                                  emailPermitUrl: emailPermitUrl,
+                                                  consentUrl: consentUrl,
+                                                  closeButtonColor: closeButtonColor,
+                                                  titleColor: titleColor,
+                                                  textColor: textColor,
+                                                  backgroundColor: backgroundColor,
+                                                  report: emailForm.report)
+        return viewModel
+    }
+    
+    func getCloseButtonColor(from buttonColor: ButtonColor) -> UIColor {
+        if buttonColor == .white {
+            return .white
+        } else {
+            return .black
+        }
     }
 
     //swiftlint:disable function_body_length cyclomatic_complexity

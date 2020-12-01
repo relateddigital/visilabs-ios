@@ -38,7 +38,7 @@ class EventViewController: FormViewController {
                                 "nps": 155,
                                 "imageButton": 156,
                                 "smileRating": 157,
-                                "emailForm": 158]
+                                "emailForm": 354]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,7 +138,6 @@ class EventViewController: FormViewController {
                              randomGender: randomGender)
     }
 
-    //swiftlint:disable todo
     //swiftlint:disable cyclomatic_complexity
     //swiftlint:disable function_body_length
     //TO_DO: favorites'lerde price göndermek gerekiyor mu?

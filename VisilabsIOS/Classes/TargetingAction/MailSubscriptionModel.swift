@@ -7,37 +7,75 @@
 
 import Foundation
 
-struct MailSubscriptionModel {
+public struct MailSubscriptionModel {
+    var auth: String
     var title: String
     var message: String
+    var actid: Int
+    var type: String
+    var placeholder: String
     var buttonTitle: String
-    var consentText: String 
+    var consentText: String?
     var successMessage: String
     var invalidEmailMessage: String
     var emailPermitText: String
     var extendedProps: MailSubscriptionExtendedProps
     var checkConsentMessage: String
+    var report: MailReport
 }
 
-struct MailSubscriptionExtendedProps {
-    var titleTextColor: String //Hex
+public struct MailSubscriptionExtendedProps {
+    var titleTextColor: String 
     var titleFontFamily: String
-    var titleFontSize: Int
-    var textColor: String //Hex
+    var titleTextSize: String
+    var textColor: String
     var textFontFamily: String
-    var textSize: Int
-    var buttonColor: String //Hex
+    var textSize: String
+    var buttonColor: String
+    var buttonTextColor: String
+    var buttonTextSize: String
     var buttonFontFamily: String
-    var buttonTextSize: Int
-    var emailPermitTextSize: Int
-    var emailPermitURL: String
-    var consentTextSize: Int
+    var emailPermitTextSize: String
+    var emailPermitTextUrl: String
+    var consentTextSize: String
     var consentTextUrl: String
     var closeButtonColor: ButtonColor
-    var backgroundColor: String //Hex
+    var backgroundColor: String
 }
 
-enum ButtonColor {
+public enum ButtonColor: String {
     case black
     case white
+}
+
+public struct MailSubscriptionViewModel {
+    var auth: String
+    var actId: Int
+    var type: String
+    var title: String
+    var message: String
+    var placeholder: String
+    var buttonTitle: String
+    var consentText: ParsedPermissionString?
+    var permitText: ParsedPermissionString
+    var successMessage: String
+    var invalidEmailMessage: String
+    var checkConsentMessage: String
+    var titleFont: UIFont
+    var messageFont: UIFont
+    var buttonFont: UIFont
+    var buttonTextColor: UIColor
+    var buttonColor: UIColor
+    var emailPermitUrl: URL?
+    var consentUrl: URL?
+    var closeButtonColor: UIColor
+    var titleColor: UIColor
+    var textColor: UIColor
+    var backgroundColor: UIColor
+    var report: MailReport
+}
+
+public struct MailReport {
+    var impression: String
+    var click: String
 }

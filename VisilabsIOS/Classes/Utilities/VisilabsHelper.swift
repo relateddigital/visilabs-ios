@@ -92,6 +92,7 @@ internal class VisilabsHelper {
         VisilabsBasePath.endpoints[.action] = "\(httpProtocol)://\(VisilabsConstants.actionEndPoint)"
         VisilabsBasePath.endpoints[.geofence] = "\(httpProtocol)://\(VisilabsConstants.geofenceEndPoint)"
         VisilabsBasePath.endpoints[.mobile] = "\(httpProtocol)://\(VisilabsConstants.mobileEndPoint)"
+        VisilabsBasePath.endpoints[.subsjson] = "\(httpProtocol)://\(VisilabsConstants.subsjsonEndpoint)"
     }
 
     static private let dateFormatter = DateFormatter()
