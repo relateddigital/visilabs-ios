@@ -70,13 +70,48 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal var imageHeightConstraint: NSLayoutConstraint?
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
-    var emailForm: MailSubscriptionModel?
-
+    var emailForm: MailSubscriptionViewModel?
+    var consentCheckboxAdded = false
     // MARK: - CONSTRUCTOR
-    init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification, _ emailForm: MailSubscriptionModel? = nil) {
+    init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification?, emailForm: MailSubscriptionViewModel? = nil) {
         self.visilabsInAppNotification = visilabsInAppNotification
+        self.emailForm = emailForm
         super.init(frame: frame)
-        setupViews()
+        if self.visilabsInAppNotification != nil {
+            setupViews()
+        } else {
+            setupInitialViewForEmailForm()
+        }
+    }
+    
+    func setupInitialViewForEmailForm() {
+        guard let model = self.emailForm else { return }
+        titleLabel.text = model.title
+        titleLabel.font = model.titleFont
+        titleLabel.textColor = model.titleColor
+        
+        messageLabel.text = model.message
+        messageLabel.font = model.messageFont
+        messageLabel.textColor = model.textColor
+        
+        closeButton.setTitleColor(model.closeButtonColor, for: .normal)
+        self.backgroundColor = model.backgroundColor
+        
+        self.addSubview(imageView)
+        self.addSubview(closeButton)
+        
+        var constraints = [NSLayoutConstraint]()
+        imageHeightConstraint = NSLayoutConstraint(item: imageView,
+            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+
+        if let imageHeightConstraint = imageHeightConstraint {
+            constraints.append(imageHeightConstraint)
+        }
+
+        closeButton.trailing(to: self, offset: -10.0)
+        NSLayoutConstraint.activate(constraints)
+        
+        setupForEmailForm()
     }
 
     required public init?(coder aDecoder: NSCoder) {

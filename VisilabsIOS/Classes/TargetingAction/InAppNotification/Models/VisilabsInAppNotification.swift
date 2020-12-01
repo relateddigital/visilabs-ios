@@ -210,7 +210,7 @@ public class VisilabsInAppNotification {
                                                                 style: .title2)
     }
 
-    private static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
+    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
         var size = style == .title2 ? 12 : 8
         if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
             size += siz

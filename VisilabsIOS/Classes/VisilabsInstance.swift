@@ -323,6 +323,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
         visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
     }
+    
+    public func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
+        visilabsTargetingActionInstance.notificationsInstance.showMailSubscriptionForm(model)
+    }
 
     func checkInAppNotification(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in
@@ -343,8 +347,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     
     func checkMailSubsForm(properties: [String: String]) {
         self.visilabsTargetingActionInstance.getEmailForm(visilabsUser: self.visilabsUser, guid: UUID().uuidString) { (model) in
-            if model == nil {
-                print("model is nil")
+            if let form = model {
+                self.showMailSubscriptionForm(form)
             }
         }
     }
@@ -465,4 +469,39 @@ extension VisilabsInstance {
         return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
     }
     //swiftlint:disable file_length
+}
+
+// MARK: - SUBSCRIPTION MAIL
+
+extension VisilabsInstance {
+    
+    public func subscribeMail(click: String, actid: String, auth: String, mail: String) {
+        if click.isEmpty {
+            VisilabsLogger.info("Notification or query string is nil or empty")
+            return
+        }
+        
+        var properties = [String: String]()
+        properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
+        properties["OM.zn"] = click.parseClick().omZn
+        properties["OM.zpc"] = click.parseClick().omZpc
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+        createSubsJsonRequest(actid: actid, auth: auth, mail: mail)
+    }
+    
+    
+    private func createSubsJsonRequest(actid: String, auth: String, mail: String) {
+        var props = [String: String]()
+        props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId//Om.oid
+        props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId//Om.siteId
+        props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
+        props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
+        props[VisilabsConstants.actionType] = VisilabsConstants.mailSubscriptionForm
+        props[VisilabsConstants.type] = "subscription_email"        
+        props[VisilabsConstants.actionId] = actid
+        props[VisilabsConstants.authentication] = auth
+        props[VisilabsConstants.subscribedEmail] = mail
+        
+        VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String : String](), timeOutInterval: self.visilabsProfile.requestTimeoutInterval)
+    }
 }

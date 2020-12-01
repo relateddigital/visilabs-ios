@@ -29,9 +29,9 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        titleLabel.text = notification.messageTitle
-        titleLabel.font = notification.messageTitleFont
-        if let image = notification.image {
+        titleLabel.text = notification!.messageTitle
+        titleLabel.font = notification!.messageTitleFont
+        if let image = notification!.image {
             imageView.image = UIImage(data: image)
         }
 

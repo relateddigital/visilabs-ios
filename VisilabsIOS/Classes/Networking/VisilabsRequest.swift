@@ -274,6 +274,44 @@ class VisilabsRequest {
                                  completion: { result, error, guid in completion(result, error, guid)})
 
     }
+    
+    class func sendSubsJsonRequest(properties: [String: String],
+                                   headers: [String: String],
+                                   timeOutInterval: TimeInterval,
+                                   guid: String? = nil) {
+        var queryItems = [URLQueryItem]()
+        for property in properties {
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
+        }
+        
+        let responseParser: (Data) -> [String: Any]? = { data in
+            var response: Any?
+            do {
+                response = try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                VisilabsLogger.error("exception decoding api data")
+            }
+            return response as? [String: Any]
+        }
+        
+        let resource  = VisilabsNetwork.buildResource(endPoint: .subsjson,
+                                                      method: .get,
+                                                      timeoutInterval: timeOutInterval,
+                                                      requestBody: nil,
+                                                      queryItems: queryItems,
+                                                      headers: headers,
+                                                      parse: responseParser,
+                                                      guid: guid)
+        VisilabsNetwork.apiRequest(resource: resource) { (error, _, _) in
+            VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error).")
+        } success: { (result, _) in
+            print("Successfully sent!")
+        }
+
+        
+    }
+    
+    //TODO: implement send subsjsonRequest
 
     private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>,
                                                 completion: @escaping ([String: Any]?,

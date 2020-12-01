@@ -71,7 +71,6 @@ extension VisilabsPopupDialogDefaultView {
         textField.textAlignment = .natural
         textField.font = .systemFont(ofSize: 14)
         textField.textColor = .white
-        textField.placeholder = "E-posta adresinizi giriniz."
         textField.borderStyle = .line
         textField.delegate = self
         return textField
@@ -91,7 +90,7 @@ extension VisilabsPopupDialogDefaultView {
         let label = UILabel(frame: .zero)
         label.text = ""
         label.textColor = .white
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 10)
         return label
     }
     
@@ -99,7 +98,7 @@ extension VisilabsPopupDialogDefaultView {
         let label = UILabel(frame: .zero)
         label.text = ""
         label.textColor = .white
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 10)
         return label
     }
 
@@ -107,7 +106,7 @@ extension VisilabsPopupDialogDefaultView {
         let button = UIButton(frame: .zero)
         button.tintColor = .blue
         button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.titleLabel?.font = .systemFont(ofSize: 10)
         button.addTarget(self, action: #selector(termsButtonTapped(_:)), for: .touchUpInside)
         return button
     }
@@ -116,7 +115,7 @@ extension VisilabsPopupDialogDefaultView {
         let button = UIButton(frame: .zero)
         button.tintColor = .blue
         button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
+        button.titleLabel?.font = .systemFont(ofSize: 10)
         button.addTarget(self, action: #selector(consentButtonTapped(_:)), for: .touchUpInside)
         return button
     }
@@ -124,7 +123,8 @@ extension VisilabsPopupDialogDefaultView {
     internal func setResultLabel() -> UILabel {
         let label = UILabel(frame: .zero)
         label.textAlignment = .natural
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 10)
+        label.textColor = .red
         return label
     }
 
@@ -250,41 +250,44 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(emailTF)
         addSubview(termsButton)
         addSubview(firstCheckBox)
-        addSubview(self.resultLabel)
+        addSubview(resultLabel)
+
+        self.emailTF.placeholder = emailForm?.placeholder ?? ""
         var preTermsAdded = false
         var postTermsAdded = false
-        let text = "Kullanım koşullarını <LINK>okuldum ve kabul</LINK> ediyorum."
-        let parsedConsent = text.parsePermissionText()
+
+        let parsedPermit = emailForm?.permitText ?? ParsedPermissionString(preLink: "", link: "Tap here for read terms.", postLink: "")
         
-        if !parsedConsent.preLink.isEmpty {
+        if !parsedPermit.preLink.isEmpty {
             addSubview(preTermsLabel)
-            preTermsLabel.text = parsedConsent.preLink
+            preTermsLabel.text = parsedPermit.preLink
             preTermsAdded = true
         }
-        
-        if !parsedConsent.postLink.isEmpty {
+
+        if !parsedPermit.postLink.isEmpty {
             addSubview(postTermsLabel)
-            postTermsLabel.text = parsedConsent.postLink
+            postTermsLabel.text = parsedPermit.postLink
             postTermsAdded = true
         }
         
-        termsButton.setTitle(parsedConsent.link, for: .normal)
-        
+        resultLabel.text = emailForm?.checkConsentMessage
+
+        termsButton.setTitle(parsedPermit.link, for: .normal)
+        termsButton.titleLabel?.leading(to: termsButton)
         resultLabel.isHidden = true
         messageLabel.textAlignment = .natural
         titleLabel.top(to: self, offset: 50)
         messageLabel.topToBottom(of: titleLabel, offset: 10)
         emailTF.topToBottom(of: messageLabel, offset: 20)
-        firstCheckBox.topToBottom(of: emailTF, offset: 20)
+        resultLabel.topToBottom(of: emailTF, offset: 10)
+        firstCheckBox.topToBottom(of: resultLabel, offset: 10)
         termsButton.centerY(to: firstCheckBox)
-        resultLabel.topToBottom(of: firstCheckBox, offset: 10.0)
-        firstCheckBox.bottom(to: self, offset: -80)
-
         firstCheckBox.size(CGSize(width: 20, height: 20))
-
         firstCheckBox.leading(to: self, offset: 20)
+
         if preTermsAdded {
             preTermsLabel.leadingToTrailing(of: firstCheckBox, offset: 10)
+            preTermsLabel.width(preTermsLabel.intrinsicContentSize.width)
             termsButton.leadingToTrailing(of: preTermsLabel)
             preTermsLabel.centerY(to: firstCheckBox)
         } else {
@@ -305,6 +308,54 @@ extension VisilabsPopupDialogDefaultView {
         emailTF.leading(to: self, offset: 20)
         emailTF.trailing(to: self, offset: -20.0)
         resultLabel.leading(to: self.firstCheckBox)
+
+        if let consent = emailForm?.consentText {
+            addSubview(secondCheckBox)
+            addSubview(preConsentLabel)
+            addSubview(consentButton)
+            addSubview(postConsentLabel)
+
+            preTermsAdded = false
+            postTermsAdded = false
+            consentCheckboxAdded = true
+            if !consent.preLink.isEmpty {
+                addSubview(preConsentLabel)
+                preConsentLabel.text = consent.preLink
+                preTermsAdded = true
+            }
+            
+            if !consent.postLink.isEmpty {
+                addSubview(postConsentLabel)
+                postConsentLabel.text = consent.postLink
+                postTermsAdded = true
+            }
+            consentButton.setTitle(consent.link, for: .normal)
+            consentButton.titleLabel?.leading(to: consentButton)
+            secondCheckBox.topToBottom(of: firstCheckBox, offset: 10)
+            secondCheckBox.leading(to: self, offset: 20)
+            secondCheckBox.size(CGSize(width: 20, height: 20))
+            secondCheckBox.bottom(to: self, offset: -40)
+            consentButton.centerY(to: secondCheckBox)
+            if preTermsAdded {
+                preConsentLabel.leadingToTrailing(of: secondCheckBox, offset: 10)
+                preConsentLabel.width(preConsentLabel.intrinsicContentSize.width)
+                consentButton.leadingToTrailing(of: preConsentLabel)
+                preConsentLabel.centerY(to: secondCheckBox)
+            } else {
+                consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
+            }
+
+            if postTermsAdded {
+                postConsentLabel.leadingToTrailing(of: consentButton)
+                postConsentLabel.trailing(to: self, offset: -12)
+                postConsentLabel.centerY(to: secondCheckBox)
+            } else {
+                consentButton.trailing(to: self, offset: -12)
+            }
+            
+        } else { //second checkbox and labels does not exist
+            firstCheckBox.bottom(to: self, offset: -60)
+        }
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.addGestureRecognizer(tapGesture)

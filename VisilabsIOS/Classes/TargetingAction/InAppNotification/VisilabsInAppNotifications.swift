@@ -23,6 +23,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     // var inAppNotifications = [VisilabsInAppNotification]()
     var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
+    var currentlyShowingMailForm: MailSubscriptionViewModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
 
     init(lock: VisilabsReadWriteLock) {
@@ -49,6 +50,22 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                 if shownNotification {
                     self.markNotificationShown(notification: notification)
                     self.delegate?.notificationDidShow(notification)
+                }
+            }
+        }
+    }
+    
+    func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
+        DispatchQueue.main.async {
+            if self.currentlyShowingNotification != nil
+                || self.currentlyShowingMailForm != nil {
+                VisilabsLogger.warn("already showing an notification")
+            } else {
+                var shown = false
+                shown = self.showMailPopup(model)
+                
+                if shown {
+                    self.markMailFormShown(model: model)
                 }
             }
         }
@@ -112,6 +129,18 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
 
+    func showMailPopup(_ model: MailSubscriptionViewModel) -> Bool {
+        let controller = VisilabsPopupNotificationViewController(mailForm: model)
+        controller.delegate = self
+
+        if let rootViewController = getRootViewController() {
+            rootViewController.present(controller, animated: false, completion: nil)
+            return true
+        } else {
+            return false
+        }
+    }
+
     func markNotificationShown(notification: VisilabsInAppNotification) {
         lock.write {
             VisilabsLogger.info("marking notification as seen: \(notification.actId)")
@@ -120,11 +149,18 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
 
+    func markMailFormShown(model: MailSubscriptionViewModel) {
+        lock.write {
+            currentlyShowingMailForm = model
+        }
+    }
+
     @discardableResult
     func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
                                    callToActionURL: URL?, shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool {
-        if currentlyShowingNotification?.actId != controller.notification.actId {
+
+        if currentlyShowingNotification?.actId != controller.notification?.actId {
             return false
         }
 
@@ -141,9 +177,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     properties!["OM.s_cat"] = additionalTrackingProperties!["OM.s_cat"]
                     properties!["OM.s_page"] = additionalTrackingProperties!["OM.s_page"]
                 }
-                self.delegate?.trackNotification(controller.notification, event: "event", properties: properties!)
+                if controller.notification != nil {
+                    self.delegate?.trackNotification(controller.notification!, event: "event", properties: properties!)
+                }
             }
             self.currentlyShowingNotification = nil
+            self.currentlyShowingMailForm = nil
         }
 
         if let callToActionURL = callToActionURL {
@@ -158,5 +197,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
 
         return true
+    }
+    
+    func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String) {
+        
     }
 }

@@ -13,11 +13,14 @@ protocol VisilabsNotificationViewControllerDelegate: AnyObject {
                                    callToActionURL: URL?,
                                    shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool
+    func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController,
+                               click: String)
 }
 
 class VisilabsBaseNotificationViewController: UIViewController {
 
-    var notification: VisilabsInAppNotification!
+    var notification: VisilabsInAppNotification?
+    var mailForm: MailSubscriptionViewModel?
     weak var delegate: VisilabsNotificationViewControllerDelegate?
     var window: UIWindow?
     var panStartPoint: CGPoint!

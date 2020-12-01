@@ -39,7 +39,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let notificationImage = notification.image, let image = UIImage(data: notificationImage, scale: 1) {
+        if let notificationImage = notification!.image, let image = UIImage(data: notificationImage, scale: 1) {
             imageView.image = image
             if let width = imageView.image?.size.width,
                width / UIScreen.main.bounds.width <= 0.6, let height = imageView.image?.size.height,

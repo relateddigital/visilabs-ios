@@ -24,6 +24,7 @@ struct VisilabsConstants {
     static var actionEndPoint = "s.visilabs.net/actjson"
     static var geofenceEndPoint = "s.visilabs.net/geojson"
     static var mobileEndPoint = "s.visilabs.net/mobile"
+    static var subsjsonEndpoint = "https://s.visilabs.net/subsjson"
 
     // MARK: - UserDefaults Keys
 
@@ -90,6 +91,7 @@ struct VisilabsConstants {
     static let apiverKey = "OM.apiver"
     static let geoIdKey = "OM.locationid"
     static let triggerEventKey = "OM.triggerevent"
+    static let subscribedEmail = "OM.subsemail"
 
     static let channelKey = "OM.vchannel"
     static let uriKey = "OM.uri"
@@ -142,6 +144,8 @@ struct VisilabsConstants {
     
     //Email form constants
     static let message = "message"
+    static let placeholder = "placeholder"
+    static let type = "type"
     static let buttonLabel = "button_label"
     static let consentText = "consent_text"
     static let successMessage = "success_message"
