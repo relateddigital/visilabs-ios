@@ -24,7 +24,7 @@ struct VisilabsConstants {
     static var actionEndPoint = "s.visilabs.net/actjson"
     static var geofenceEndPoint = "s.visilabs.net/geojson"
     static var mobileEndPoint = "s.visilabs.net/mobile"
-    static var subsjsonEndpoint = "https://s.visilabs.net/subsjson"
+    static var subsjsonEndpoint = "s.visilabs.net/subsjson"
 
     // MARK: - UserDefaults Keys
 
