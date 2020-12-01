@@ -284,14 +284,8 @@ class VisilabsRequest {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
         
-        let responseParser: (Data) -> [String: Any]? = { data in
-            var response: Any?
-            do {
-                response = try JSONSerialization.jsonObject(with: data, options: [])
-            } catch {
-                VisilabsLogger.error("exception decoding api data")
-            }
-            return response as? [String: Any]
+        let responseParser: (Data) -> String? = { data in
+            return String(data: data, encoding: .utf8)
         }
         
         let resource  = VisilabsNetwork.buildResource(endPoint: .subsjson,

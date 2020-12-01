@@ -498,7 +498,7 @@ extension VisilabsInstance {
         props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
         props[VisilabsConstants.actionType] = VisilabsConstants.mailSubscriptionForm
         props[VisilabsConstants.type] = "subscription_email"        
-        props[VisilabsConstants.actionId] = actid
+        props["actionid"] = actid
         props[VisilabsConstants.authentication] = auth
         props[VisilabsConstants.subscribedEmail] = mail
         
