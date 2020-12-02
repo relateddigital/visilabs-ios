@@ -33,11 +33,11 @@ class EventViewController: FormViewController {
 
     let inAppNotificationIds = ["mini": 139,
                                 "full": 140,
-                                "imageTextButton": 153,
-                                "fullImage": 154,
+                                "image_text_button": 153,
+                                "full_image": 154,
                                 "nps": 155,
-                                "imageButton": 156,
-                                "smileRating": 157,
+                                "image_button": 156,
+                                "smile_rating": 157,
                                 "emailForm": 354]
 
     override func viewDidLoad() {
