@@ -321,8 +321,9 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                      actid: "\(self.mailForm!.actId)",
                                                      auth: self.mailForm!.auth,
                                                      mail: mail)
+                    self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: [String : String]())
                     self.dismiss()
-                } else {
+            } else {
                     defaultView.resultLabel.isHidden = false
                 }
             }

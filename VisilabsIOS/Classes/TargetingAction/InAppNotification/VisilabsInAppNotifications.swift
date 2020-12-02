@@ -34,7 +34,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let notification = notification
 
         DispatchQueue.main.async {
-            if self.currentlyShowingNotification != nil {
+            if self.currentlyShowingNotification != nil || self.currentlyShowingMailForm != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
                 var shownNotification = false

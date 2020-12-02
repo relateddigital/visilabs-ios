@@ -496,7 +496,6 @@ extension VisilabsInstance {
         props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId//Om.siteId
         props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
         props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
-        props[VisilabsConstants.actionType] = VisilabsConstants.mailSubscriptionForm
         props[VisilabsConstants.type] = "subscription_email"        
         props["actionid"] = actid
         props[VisilabsConstants.authentication] = auth
