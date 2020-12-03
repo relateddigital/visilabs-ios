@@ -175,14 +175,12 @@ extension VisilabsPopupDialogDefaultView {
     }
 
     @objc func termsButtonTapped(_ sender: UIButton) {
-        let permission = ""
-        guard let url = URL(string: permission) else { return }
+        guard let url = emailForm?.emailPermitUrl else { return }
         VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
     }
 
     @objc func consentButtonTapped(_ sender: UIButton) {
-        let consent = ""
-        guard let url = URL(string: consent) else { return }
+        guard let url = emailForm?.consentUrl else { return }
         VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
     }
 }
