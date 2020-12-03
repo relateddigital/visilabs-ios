@@ -86,26 +86,8 @@ extension VisilabsPopupDialogDefaultView {
         return check
     }
 
-    internal func setPermitLabel() -> UILabel {
-        let label = UILabel(frame: .zero)
-        label.text = ""
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 10)
-        return label
-    }
-    
-    internal func setConsentLabel() -> UILabel {
-        let label = UILabel(frame: .zero)
-        label.text = ""
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 10)
-        return label
-    }
-
     internal func setTermsButton() -> UIButton {
         let button = UIButton(frame: .zero)
-        button.tintColor = .blue
-        button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 10)
         button.addTarget(self, action: #selector(termsButtonTapped(_:)), for: .touchUpInside)
         return button
@@ -113,8 +95,6 @@ extension VisilabsPopupDialogDefaultView {
 
     internal func setConsentButton() -> UIButton {
         let button = UIButton(frame: .zero)
-        button.tintColor = .blue
-        button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 10)
         button.addTarget(self, action: #selector(consentButtonTapped(_:)), for: .touchUpInside)
         return button
@@ -253,26 +233,10 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(resultLabel)
 
         self.emailTF.placeholder = emailForm?.placeholder ?? ""
-        var preTermsAdded = false
-        var postTermsAdded = false
-
-        let parsedPermit = emailForm?.permitText ?? ParsedPermissionString(preLink: "", link: "Tap here for read terms.", postLink: "")
         
-        if !parsedPermit.preLink.isEmpty {
-            addSubview(preTermsLabel)
-            preTermsLabel.text = parsedPermit.preLink
-            preTermsAdded = true
-        }
+        let parsedPermit = emailForm?.permitText ?? ParsedPermissionString(string: "Click here to read terms & conditions.", location: 5, length: 6)
 
-        if !parsedPermit.postLink.isEmpty {
-            addSubview(postTermsLabel)
-            postTermsLabel.text = parsedPermit.postLink
-            postTermsAdded = true
-        }
-        
         resultLabel.text = emailForm?.checkConsentMessage
-
-        termsButton.setTitle(parsedPermit.link, for: .normal)
         termsButton.titleLabel?.leading(to: termsButton)
         resultLabel.isHidden = true
         messageLabel.textAlignment = .natural
@@ -281,27 +245,17 @@ extension VisilabsPopupDialogDefaultView {
         emailTF.topToBottom(of: messageLabel, offset: 20)
         resultLabel.topToBottom(of: emailTF, offset: 10)
         firstCheckBox.topToBottom(of: resultLabel, offset: 10)
+        termsButton.leadingToTrailing(of: firstCheckBox, offset: 10)
         termsButton.centerY(to: firstCheckBox)
+        termsButton.trailing(to: self, offset: -12)
+        let attrStr = NSMutableAttributedString(string: parsedPermit.string)
+        attrStr.addAttribute(.link, value: emailForm?.emailPermitUrl?.absoluteString ?? "",
+                             range: NSRange(location: parsedPermit.location, length: parsedPermit.length))
+        termsButton.setAttributedTitle(attrStr, for: .normal)
+        termsButton.titleLabel?.font = .systemFont(ofSize: CGFloat(emailForm?.permitTextSize ?? 10))
         firstCheckBox.size(CGSize(width: 20, height: 20))
         firstCheckBox.leading(to: self, offset: 20)
 
-        if preTermsAdded {
-            preTermsLabel.leadingToTrailing(of: firstCheckBox, offset: 10)
-            preTermsLabel.width(preTermsLabel.intrinsicContentSize.width)
-            termsButton.leadingToTrailing(of: preTermsLabel)
-            preTermsLabel.centerY(to: firstCheckBox)
-        } else {
-            termsButton.leadingToTrailing(of: firstCheckBox, offset: 10)
-        }
-
-        if postTermsAdded {
-            postTermsLabel.leadingToTrailing(of: termsButton)
-            postTermsLabel.trailing(to: self, offset: -12)
-            postTermsLabel.centerY(to: firstCheckBox)
-        } else {
-            termsButton.trailing(to: self, offset: -12)
-        }
-        
         titleLabel.leading(to: self, offset: 20)
         messageLabel.leading(to: titleLabel)
         messageLabel.trailing(to: self, offset: -20)
@@ -311,48 +265,22 @@ extension VisilabsPopupDialogDefaultView {
 
         if let consent = emailForm?.consentText {
             addSubview(secondCheckBox)
-            addSubview(preConsentLabel)
             addSubview(consentButton)
-            addSubview(postConsentLabel)
 
-            preTermsAdded = false
-            postTermsAdded = false
-            consentCheckboxAdded = true
-            if !consent.preLink.isEmpty {
-                addSubview(preConsentLabel)
-                preConsentLabel.text = consent.preLink
-                preTermsAdded = true
-            }
-            
-            if !consent.postLink.isEmpty {
-                addSubview(postConsentLabel)
-                postConsentLabel.text = consent.postLink
-                postTermsAdded = true
-            }
-            consentButton.setTitle(consent.link, for: .normal)
             consentButton.titleLabel?.leading(to: consentButton)
             secondCheckBox.topToBottom(of: firstCheckBox, offset: 10)
             secondCheckBox.leading(to: self, offset: 20)
             secondCheckBox.size(CGSize(width: 20, height: 20))
             secondCheckBox.bottom(to: self, offset: -40)
+            consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
             consentButton.centerY(to: secondCheckBox)
-            if preTermsAdded {
-                preConsentLabel.leadingToTrailing(of: secondCheckBox, offset: 10)
-                preConsentLabel.width(preConsentLabel.intrinsicContentSize.width)
-                consentButton.leadingToTrailing(of: preConsentLabel)
-                preConsentLabel.centerY(to: secondCheckBox)
-            } else {
-                consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
-            }
-
-            if postTermsAdded {
-                postConsentLabel.leadingToTrailing(of: consentButton)
-                postConsentLabel.trailing(to: self, offset: -12)
-                postConsentLabel.centerY(to: secondCheckBox)
-            } else {
-                consentButton.trailing(to: self, offset: -12)
-            }
+            consentButton.trailing(to: self, offset: -12)
             
+            let attrConsent = NSMutableAttributedString(string: consent.string)
+            attrConsent.addAttribute(.link, value: emailForm?.consentUrl?.absoluteString ?? "",
+                                     range: NSRange(location: consent.location, length: consent.length))
+            consentButton.setAttributedTitle(attrConsent, for: .normal)
+            consentButton.titleLabel?.font = .systemFont(ofSize: CGFloat(emailForm?.consentTextSize ?? 10))
         } else { //second checkbox and labels does not exist
             firstCheckBox.bottom(to: self, offset: -60)
         }

@@ -315,15 +315,25 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                 second = defaultView.secondCheckBox.isChecked
             }
             let mail = defaultView.emailTF.text ?? ""
+            
             DispatchQueue.main.async {
-                if first && second {
+                if !VisilabsHelper.checkEmail(email: mail) {//If mail is not valid
+                    defaultView.resultLabel.text = self.mailForm?.invalidEmailMessage
+                    defaultView.resultLabel.isHidden = false
+                } else if first && second {//Mail valid and checkbox are checked
+                    defaultView.resultLabel.text = self.mailForm?.successMessage ?? "Succesful!"
+                    defaultView.resultLabel.textColor = .systemGreen
+                    defaultView.resultLabel.isHidden = false
                     Visilabs.callAPI().subscribeMail(click: self.mailForm!.report.click,
                                                      actid: "\(self.mailForm!.actId)",
                                                      auth: self.mailForm!.auth,
                                                      mail: mail)
                     self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: [String : String]())
-                    self.dismiss()
-            } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.dismiss()
+                    }
+                } else {//Mail is valid checkboxes are not checked
+                    defaultView.resultLabel.text = self.mailForm?.checkConsentMessage ?? ""
                     defaultView.resultLabel.isHidden = false
                 }
             }

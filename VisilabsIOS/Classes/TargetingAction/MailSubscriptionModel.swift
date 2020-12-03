@@ -72,6 +72,8 @@ public struct MailSubscriptionViewModel {
     var titleColor: UIColor
     var textColor: UIColor
     var backgroundColor: UIColor
+    var permitTextSize: Int
+    var consentTextSize: Int
     var report: MailReport
 }
 
