@@ -21,13 +21,9 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var emailTF = setEmailTF()
     internal lazy var firstCheckBox = setCheckbox()
     internal lazy var secondCheckBox = setCheckbox()
-    internal lazy var preTermsLabel = setPermitLabel()
-    internal lazy var termsButton = setTermsButton()
-    internal lazy var postTermsLabel = setPermitLabel()
 
-    internal lazy var preConsentLabel = setConsentLabel()
+    internal lazy var termsButton = setTermsButton()
     internal lazy var consentButton = setConsentButton()
-    internal lazy var postConsentLabel = setConsentLabel()
     
     internal lazy var resultLabel = setResultLabel()
     internal lazy var sliderStepRating = setSliderStepRating()

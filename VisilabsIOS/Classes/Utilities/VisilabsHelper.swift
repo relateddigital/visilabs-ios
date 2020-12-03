@@ -106,6 +106,12 @@ internal class VisilabsHelper {
         let bundle = Bundle(identifier: "com.relateddigital.visilabs")
         return UIImage(named: named, in: bundle, compatibleWith: nil)!
     }
+    
+    static func checkEmail(email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
 
     /* TO_DO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
     static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {

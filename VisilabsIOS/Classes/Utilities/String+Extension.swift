@@ -25,13 +25,18 @@ extension String {
               let endOfFirst = self.endIndex(of: "<LINK>"),
               let firstOfEnd = self.index(of: "</LINK>"),
               let endOfEnd = self.endIndex(of: "</LINK>") else {
-            return ParsedPermissionString(preLink: "", link: self, postLink: "")
+            return ParsedPermissionString(string: self, location: 0, length: self.count)
         }
-        
+
         let prelink = String(self[..<firstOfFirst])
         let link = String(self[endOfFirst..<firstOfEnd])
         let postLink = String(self[endOfEnd...])
-        return ParsedPermissionString(preLink: prelink, link: link, postLink: postLink)
+
+        let str = prelink + link + postLink
+        let location  = prelink.count
+        let length = link.count
+
+        return ParsedPermissionString(string: str, location: location, length: length)
     }
 
     func parseClick() -> ParsedClick {
@@ -52,9 +57,10 @@ extension String {
 }
 
 struct ParsedPermissionString {
-    var preLink: String
-    var link: String
-    var postLink: String
+    var string: String
+    var location: Int
+    var length: Int
+    
 }
 
 struct ParsedClick {
