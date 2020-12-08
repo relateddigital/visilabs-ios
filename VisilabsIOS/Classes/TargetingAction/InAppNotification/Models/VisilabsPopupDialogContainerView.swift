@@ -28,7 +28,7 @@ final public class VisilabsPopupDialogContainerView: UIView {
             container.layer.cornerRadius = radius
         }
     }
-    
+
     // MARK: Shadow related
 
     /// Enable / disable shadow rendering of the container
@@ -47,31 +47,31 @@ final public class VisilabsPopupDialogContainerView: UIView {
         }
         set { shadowContainer.layer.shadowColor = newValue?.cgColor }
     }
-    
+
     /// Radius of the container shadow
     @objc public dynamic var shadowRadius: CGFloat {
         get { return shadowContainer.layer.shadowRadius }
         set { shadowContainer.layer.shadowRadius = newValue }
     }
-    
+
     /// Opacity of the the container shadow
     @objc public dynamic var shadowOpacity: Float {
         get { return shadowContainer.layer.shadowOpacity }
         set { shadowContainer.layer.shadowOpacity = newValue }
     }
-    
+
     /// Offset of the the container shadow
     @objc public dynamic var shadowOffset: CGSize {
         get { return shadowContainer.layer.shadowOffset }
         set { shadowContainer.layer.shadowOffset = newValue }
     }
-    
+
     /// Path of the the container shadow
     @objc public dynamic var shadowPath: CGPath? {
         get { return shadowContainer.layer.shadowPath}
         set { shadowContainer.layer.shadowPath = newValue }
     }
-    
+
     // MARK: - Views
 
     /// The shadow container is the basic view of the PopupDialog
@@ -116,7 +116,7 @@ final public class VisilabsPopupDialogContainerView: UIView {
         stackView.spacing = 0
         return stackView
     }()
-    
+
     // The preferred width for iPads
     fileprivate let preferredWidth: CGFloat
 
@@ -126,7 +126,7 @@ final public class VisilabsPopupDialogContainerView: UIView {
     internal var centerYConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers
-    
+
     internal init(frame: CGRect, preferredWidth: CGFloat) {
         self.preferredWidth = preferredWidth
         super.init(frame: frame)
@@ -160,14 +160,27 @@ final public class VisilabsPopupDialogContainerView: UIView {
             shadowContainer.leading(to: self, offset: 10, relation: .equalOrGreater)
             shadowContainer.trailing(to: self, offset: -10, relation: .equalOrLess)
         }
-        
-        constraints += [NSLayoutConstraint(item: shadowContainer, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)]
-        centerYConstraint = NSLayoutConstraint(item: shadowContainer, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
-        
+
+        constraints += [NSLayoutConstraint(item: shadowContainer,
+                                           attribute: .centerX,
+                                           relatedBy: .equal,
+                                           toItem: self,
+                                           attribute: .centerX,
+                                           multiplier: 1,
+                                           constant: 0)]
+
+        centerYConstraint = NSLayoutConstraint(item: shadowContainer,
+                                               attribute: .centerY,
+                                               relatedBy: .equal,
+                                               toItem: self,
+                                               attribute: .centerY,
+                                               multiplier: 1,
+                                               constant: 0)
+
         if let centerYConstraint = centerYConstraint {
             constraints.append(centerYConstraint)
         }
-        
+
         container.allEdges(to: shadowContainer)
         stackView.allEdges(to: container)
 
@@ -175,4 +188,3 @@ final public class VisilabsPopupDialogContainerView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
 }
-

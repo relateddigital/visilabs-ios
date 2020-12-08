@@ -15,9 +15,9 @@ final internal class VisilabsPresentationController: UIPresentationController {
     }()
 
     override func presentationTransitionWillBegin() {
-        
+
         guard let containerView = containerView else { return }
-        
+
         overlay.frame = containerView.bounds
         containerView.insertSubview(overlay, at: 0)
 
@@ -41,4 +41,3 @@ final internal class VisilabsPresentationController: UIPresentationController {
     }
 
 }
-

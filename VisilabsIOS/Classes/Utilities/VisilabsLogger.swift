@@ -52,13 +52,17 @@ protocol VisilabsLogging {
 
 class VisilabsPrintLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        print("[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date())) - \(message.file) - func \(message.function)] : \(message.text)")
+        let msg = "[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date()))" +
+            " - \(message.file) - func \(message.function)] : \(message.text)"
+        print(msg)
     }
 }
 
 class VisilabsPrintDebugLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        debugPrint("[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date())) - \(message.file) - func \(message.function)] : \(message.text)")
+        let msg = "[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date()))" +
+            " - \(message.file) - func \(message.function)] : \(message.text)"
+        debugPrint(msg)
     }
 }
 
@@ -66,13 +70,13 @@ class VisilabsLogger {
     private static let readWriteLock: VisilabsReadWriteLock = VisilabsReadWriteLock(label: "visilabsLoggerLock")
     private static var enabledLevels = Set<VisilabsLogLevel>()
     private static var loggers = [VisilabsLogging]()
-    
+
     class func addLogging(_ logging: VisilabsLogging) {
         readWriteLock.write {
             loggers.append(logging)
         }
     }
-    
+
     class func enableLevel(_ level: VisilabsLogLevel) {
         readWriteLock.write {
             enabledLevels.insert(level)
@@ -84,7 +88,7 @@ class VisilabsLogger {
             enabledLevels.remove(level)
         }
     }
-    
+
     class func debug(_ message: @autoclosure() -> Any, _ path: String = #file, _ function: String = #function) {
        var enabledLevels = Set<VisilabsLogLevel>()
        readWriteLock.read {
@@ -120,14 +124,13 @@ class VisilabsLogger {
        guard enabledLevels.contains(.error) else { return }
        forwardLogMessage(VisilabsLogMessage(path: path, function: function, text: "\(message())", level: .error))
    }
-    
-    
+
     class private func forwardLogMessage(_ message: VisilabsLogMessage) {
         var loggers = [VisilabsLogging]()
         readWriteLock.read {
             loggers = self.loggers
         }
-        loggers.forEach() { $0.addMessage(message: message) }
+        loggers.forEach { $0.addMessage(message: message) }
     }
-    
+
 }

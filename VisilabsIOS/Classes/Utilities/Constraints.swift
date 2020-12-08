@@ -15,16 +15,16 @@ internal enum ConstraintRelation: Int {
 }
 
 internal extension Collection where Iterator.Element == Constraint {
-    
+
     func activate() {
-        
+
         if let constraints = self as? Constraints {
             Constraint.activate(constraints)
         }
     }
-    
+
     func deActivate() {
-        
+
         if let constraints = self as? Constraints {
             Constraint.deactivate(constraints)
         }
@@ -33,11 +33,11 @@ internal extension Collection where Iterator.Element == Constraint {
 
 internal extension Constraint {
     @objc
-    func with(_ p: LayoutPriority) -> Self {
-        priority = p
+    func with(_ priority: LayoutPriority) -> Self {
+        self.priority = priority
         return self
     }
-    
+
     func set(_ active: Bool) -> Self {
         isActive = active
         return self

@@ -13,64 +13,70 @@ class VisilabsRecommendation {
     init(visilabsProfile: VisilabsProfile) {
         self.visilabsProfile = visilabsProfile
     }
-    
-    func recommend(zoneID: String, productCode: String?, visilabsUser: VisilabsUser, channel: String, properties: [String : String] = [:], filters: [VisilabsRecommendationFilter] = [], completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)){
-        
+
+    func recommend(zoneID: String,
+                   productCode: String?,
+                   visilabsUser: VisilabsUser,
+                   channel: String,
+                   properties: [String: String] = [:],
+                   filters: [VisilabsRecommendationFilter] = [],
+                   completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+
         var props = cleanProperties(properties)
-        
+
         if filters.count > 0 {
-            props[VisilabsConstants.FILTER_KEY] = getFiltersQueryStringValue(filters)
+            props[VisilabsConstants.filterKey] = getFiltersQueryStringValue(filters)
         }
-        
-        props[VisilabsConstants.ORGANIZATIONID_KEY] = self.visilabsProfile.organizationId
-        props[VisilabsConstants.PROFILEID_KEY] = self.visilabsProfile.profileId
-        props[VisilabsConstants.COOKIEID_KEY] = visilabsUser.cookieId
-        props[VisilabsConstants.EXVISITORID_KEY] = visilabsUser.exVisitorId
-        props[VisilabsConstants.TOKENID_KEY] = visilabsUser.tokenId
-        props[VisilabsConstants.APPID_KEY] = visilabsUser.appId
-        props[VisilabsConstants.APIVER_KEY] = VisilabsConstants.APIVER_VALUE
-        
+
+        props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
+        props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId
+        props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
+        props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
+        props[VisilabsConstants.tokenIdKey] = visilabsUser.tokenId
+        props[VisilabsConstants.appidKey] = visilabsUser.appId
+        props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
+
         if zoneID.count > 0 {
-            props[VisilabsConstants.ZONE_ID_KEY] = zoneID
+            props[VisilabsConstants.zoneIdKey] = zoneID
         }
         if !productCode.isNilOrWhiteSpace {
-            props[VisilabsConstants.BODY_KEY] = productCode
+            props[VisilabsConstants.bodyKey] = productCode
         }
-        
+
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                 props[key] = value
             }
         }
-        
-        VisilabsRequest.sendRecommendationRequest(properties: props, headers: [String : String](), timeoutInterval: visilabsProfile.requestTimeoutInterval, completion: { (result: [Any]?, error: VisilabsError?) in
+
+        VisilabsRequest.sendRecommendationRequest(properties: props,
+                                                  headers: [String: String](),
+                                                  timeoutInterval: visilabsProfile.requestTimeoutInterval,
+                                                  completion: { (results: [Any]?, error: VisilabsError?) in
             var products = [VisilabsProduct]()
             if error != nil {
                 completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: error))
-            }else {
-                for r in result!{
-                    if let product = VisilabsProduct(JSONObject: r as? [String: Any?]) {
+            } else {
+                for result in results! {
+                    if let product = VisilabsProduct(JSONObject: result as? [String: Any?]) {
                         products.append(product)
                     }
                 }
-                
+
                 completion(VisilabsRecommendationResponse(products: products, error: nil))
             }
         })
     }
-    
-    
-    private func getFiltersQueryStringValue(_ filters: [VisilabsRecommendationFilter]) -> String?{
+
+    private func getFiltersQueryStringValue(_ filters: [VisilabsRecommendationFilter]) -> String? {
         var queryStringValue: String?
-        var abbrevatedFilters: [[String:String]] = []
-        for filter in filters {
-            if filter.value.count > 0 {
-                var abbrevatedFilter = [String : String]()
-                abbrevatedFilter["attr"] = filter.attribute.rawValue
-                abbrevatedFilter["ft"] = String(filter.filterType.rawValue)
-                abbrevatedFilter["fv"] = filter.value
-                abbrevatedFilters.append(abbrevatedFilter)
-            }
+        var abbrevatedFilters: [[String: String]] = []
+        for filter in filters where filter.value.count > 0 {
+            var abbrevatedFilter = [String: String]()
+            abbrevatedFilter["attr"] = filter.attribute.rawValue
+            abbrevatedFilter["ft"] = String(filter.filterType.rawValue)
+            abbrevatedFilter["fv"] = filter.value
+            abbrevatedFilters.append(abbrevatedFilter)
         }
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: abbrevatedFilters, options: [])
@@ -80,11 +86,20 @@ class VisilabsRecommendation {
         }
         return queryStringValue
     }
-    
-    private func cleanProperties(_ properties: [String : String]) -> [String : String] {
+
+    private func cleanProperties(_ properties: [String: String]) -> [String: String] {
         var props = properties
         for propKey in props.keys {
-            if !propKey.isEqual(VisilabsConstants.ORGANIZATIONID_KEY) && !propKey.isEqual(VisilabsConstants.PROFILEID_KEY) && !propKey.isEqual(VisilabsConstants.EXVISITORID_KEY) && !propKey.isEqual(VisilabsConstants.COOKIEID_KEY) && !propKey.isEqual(VisilabsConstants.ZONE_ID_KEY) && !propKey.isEqual(VisilabsConstants.BODY_KEY) && !propKey.isEqual(VisilabsConstants.TOKENID_KEY) && !propKey.isEqual(VisilabsConstants.APPID_KEY) && !propKey.isEqual(VisilabsConstants.APIVER_KEY) && !propKey.isEqual(VisilabsConstants.FILTER_KEY) {
+            if !propKey.isEqual(VisilabsConstants.organizationIdKey)
+                && !propKey.isEqual(VisilabsConstants.profileIdKey)
+                && !propKey.isEqual(VisilabsConstants.exvisitorIdKey)
+                && !propKey.isEqual(VisilabsConstants.cookieIdKey)
+                && !propKey.isEqual(VisilabsConstants.zoneIdKey)
+                && !propKey.isEqual(VisilabsConstants.bodyKey)
+                && !propKey.isEqual(VisilabsConstants.tokenIdKey)
+                && !propKey.isEqual(VisilabsConstants.appidKey)
+                && !propKey.isEqual(VisilabsConstants.apiverKey)
+                && !propKey.isEqual(VisilabsConstants.filterKey) {
                 continue
             } else {
                 props.removeValue(forKey: propKey)

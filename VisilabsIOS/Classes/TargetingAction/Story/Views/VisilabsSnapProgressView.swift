@@ -14,21 +14,26 @@ enum ProgressorState {
     case finished
 }
 protocol ViewAnimator {
-    func start(with duration: TimeInterval, holderView: UIView, completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int, _ isCancelledAbruptly: Bool) -> Void)
+    func start(with duration: TimeInterval, holderView: UIView,
+               completion: @escaping (_ storyIdentifier: String,
+                                      _ snapIndex: Int, _ isCancelledAbruptly: Bool) -> Void)
     func resume()
     func pause()
     func stop()
     func reset()
 }
+//swiftlint:disable multiple_closures_with_trailing_closure
 extension ViewAnimator where Self: VisilabsSnapProgressView {
-    func start(with duration: TimeInterval, holderView: UIView, completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int, _ isCancelledAbruptly: Bool) -> Void) {
+    func start(with duration: TimeInterval, holderView: UIView,
+               completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int,
+                                      _ isCancelledAbruptly: Bool) -> Void) {
         // Modifying the existing widthConstraint and setting the width equalTo holderView's widthAchor
         self.state = .running
         self.widthConstraint?.isActive = false
         self.widthConstraint = self.widthAnchor.constraint(equalToConstant: 0)
         self.widthConstraint?.isActive = true
         self.widthConstraint?.constant = holderView.width
-        
+
         UIView.animate(withDuration: duration, delay: 0.0, options: [.curveLinear], animations: {[weak self] in
             if let strongSelf = self {
                 strongSelf.superview?.layoutIfNeeded()
@@ -38,10 +43,13 @@ extension ViewAnimator where Self: VisilabsSnapProgressView {
             self?.state = .finished
             if finished == true {
                 if let strongSelf = self {
-                    return completion(strongSelf.story_identifier!, strongSelf.snapIndex!, strongSelf.story.isCancelledAbruptly)
+                    return completion(strongSelf.storyIdentifier!,
+                                      strongSelf.snapIndex!,
+                                      strongSelf.story.isCancelledAbruptly)
                 }
             } else {
-                return completion(self?.story_identifier ?? "Unknown", self?.snapIndex ?? 0, self?.story.isCancelledAbruptly ?? true)
+                return completion(self?.storyIdentifier ?? "Unknown",
+                                  self?.snapIndex ?? 0, self?.story.isCancelledAbruptly ?? true)
             }
         }
     }
@@ -75,7 +83,7 @@ extension ViewAnimator where Self: VisilabsSnapProgressView {
 }
 
 final class VisilabsSnapProgressView: UIView, ViewAnimator {
-    public var story_identifier: String?
+    public var storyIdentifier: String?
     public var snapIndex: Int?
     public var story: VisilabsStory!
     public var widthConstraint: NSLayoutConstraint?
@@ -87,4 +95,3 @@ final class VisilabsSnapProgressIndicatorView: UIView {
     public var leftConstraiant: NSLayoutConstraint?
      public var rightConstraiant: NSLayoutConstraint?
 }
-

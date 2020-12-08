@@ -41,7 +41,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     // MARK: Public
 
     /// The content view of the popup dialog
-    public var viewController: UIViewController
+    public var viewController: VisilabsDefaultPopupNotificationViewController
 
     // MARK: - Initializers
 
@@ -51,46 +51,91 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: self.notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: nil)
+            self.delegate?.notificationShouldDismiss(controller: self,
+                                                     callToActionURL: self.notification?.callToActionUrl,
+                                                     shouldTrack: true,
+                                                     additionalTrackingProperties: nil)
         }
     }
 
     @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+            self.delegate?.notificationShouldDismiss(controller: self,
+                                                     callToActionURL: nil,
+                                                     shouldTrack: false,
+                                                     additionalTrackingProperties: nil)
         }
     }
-    
-    func changeCloseButtonConstraints(){
-        
+
+    func changeCloseButtonConstraints() {
+
     }
 
-    public convenience init(notification: VisilabsInAppNotification) {
-        let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification)
-        self.init(notification: notification, viewController: viewController, buttonAlignment: .vertical, transitionStyle: .zoomIn, preferredWidth: 580, tapGestureDismissal: false, panGestureDismissal: false, hideStatusBar: false)
-        if notification.type != .full_image {
-           
-            let button = VisilabsPopupDialogButton(title: notification.buttonText!, font: notification.buttonTextFont, buttonTextColor: notification.buttonTextColor, buttonColor: notification.buttonColor, action: {
-                
+    fileprivate func initForInAppNotification(_ viewController: VisilabsDefaultPopupNotificationViewController) {
+        guard let notification = self.notification else { return }
+        if notification.type != .fullImage {
+
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!,
+                                                   font: notification.buttonTextFont,
+                                                   buttonTextColor: notification.buttonTextColor,
+                                                   buttonColor: notification.buttonColor, action: {
+
                 var additionalTrackingProperties = [String: String]()
-                           if notification.type == .smile_rating {
-                               additionalTrackingProperties["OM.s_point"] = String(Int(viewController.standardView.sliderStepRating.value))
+                           if notification.type == .smileRating {
+                               additionalTrackingProperties["OM.s_point"]
+                                = String(Int(viewController.standardView.sliderStepRating.value))
                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
                            } else if notification.type == .nps {
-                               additionalTrackingProperties["OM.s_point"] = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",", with: ".")
+                               additionalTrackingProperties["OM.s_point"]
+                                = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",",
+                                                                                                        with: ".")
                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
                            }
-                
-                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: notification.callToActionUrl, shouldTrack: true, additionalTrackingProperties: additionalTrackingProperties) })
+
+                self.delegate?.notificationShouldDismiss(controller: self,
+                                                         callToActionURL: notification.callToActionUrl,
+                                                         shouldTrack: true,
+                                                         additionalTrackingProperties: additionalTrackingProperties)})
             addButton(button)
         } else {
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                              action: #selector(imageTapped(tapGestureRecognizer:)))
             viewController.standardView.imageView.isUserInteractionEnabled = true
             viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
         }
-        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeButtonTapped(tapGestureRecognizer:)))
+    }
+
+    fileprivate func initForEmailForm(_ viewController: VisilabsDefaultPopupNotificationViewController) {
+        guard let mailForm = self.mailForm else { return }
+       
+        let button = VisilabsPopupDialogButton(title: mailForm.buttonTitle,
+                                                font: mailForm.buttonFont,
+                                                   buttonTextColor: mailForm.buttonTextColor,
+                                                   buttonColor: mailForm.buttonColor, action: nil)
+            addButton(button)
+    
+    }
+    
+    public convenience init(notification: VisilabsInAppNotification? = nil,
+                            mailForm: MailSubscriptionViewModel? = nil) {
+        
+        let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification,
+                                                                            emailForm: mailForm)
+        self.init(notification: notification,
+                  mailForm: mailForm,
+                  viewController: viewController,
+                  buttonAlignment: .vertical,
+                  transitionStyle: .zoomIn,
+                  preferredWidth: 580,
+                  tapGestureDismissal: false,
+                  panGestureDismissal: false,
+                  hideStatusBar: false)
+        initForInAppNotification(viewController)
+        initForEmailForm(viewController)
+        let closeTapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                        action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
     }
@@ -110,7 +155,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
      - returns: Popup dialog with a custom view controller
      */
     public init(
-        notification: VisilabsInAppNotification,
+        notification: VisilabsInAppNotification?,
+        mailForm: MailSubscriptionViewModel?,
         viewController: UIViewController,
         buttonAlignment: NSLayoutConstraint.Axis = .vertical,
         transitionStyle: PopupDialogTransitionStyle = .bounceUp,
@@ -119,12 +165,15 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         panGestureDismissal: Bool = true,
         hideStatusBar: Bool = false,
         completion: (() -> Void)? = nil) {
-        self.viewController = viewController
+
+        self.viewController = viewController as? VisilabsDefaultPopupNotificationViewController
+            ?? VisilabsDefaultPopupNotificationViewController()
         self.preferredWidth = preferredWidth
         self.hideStatusBar = hideStatusBar
         self.completion = completion
         super.init(nibName: nil, bundle: nil)
         self.notification = notification
+        self.mailForm = mailForm
         // Init the presentation manager
         presentationManager = VisilabsPresentationManager(transitionStyle: transitionStyle, interactor: interactor)
 
@@ -152,7 +201,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         }
         // Allow for dialog dismissal on dialog pan gesture
         if panGestureDismissal {
-            let panRecognizer = UIPanGestureRecognizer(target: interactor, action: #selector(VisilabsInteractiveTransition.handlePan))
+            let panRecognizer = UIPanGestureRecognizer(target: interactor,
+                                                       action: #selector(VisilabsInteractiveTransition.handlePan))
             panRecognizer.cancelsTouchesInView = false
             popupContainerView.stackView.addGestureRecognizer(panRecognizer)
         }
@@ -257,7 +307,37 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     /// Calls the action closure of the button instance tapped
     @objc fileprivate func buttonTapped(_ button: VisilabsPopupDialogButton) {
-        if button.dismissOnTap {
+        if self.mailForm != nil {
+            let defaultView = viewController.standardView
+            let first = defaultView.firstCheckBox.isChecked
+            var second = true
+            if defaultView.consentCheckboxAdded {
+                second = defaultView.secondCheckBox.isChecked
+            }
+            let mail = defaultView.emailTF.text ?? ""
+            
+            DispatchQueue.main.async {
+                if !VisilabsHelper.checkEmail(email: mail) {//If mail is not valid
+                    defaultView.resultLabel.text = self.mailForm?.invalidEmailMessage
+                    defaultView.resultLabel.isHidden = false
+                } else if first && second {//Mail valid and checkbox are checked
+                    defaultView.resultLabel.text = self.mailForm?.successMessage ?? "Succesful!"
+                    defaultView.resultLabel.textColor = .systemGreen
+                    defaultView.resultLabel.isHidden = false
+                    Visilabs.callAPI().subscribeMail(click: self.mailForm!.report.click,
+                                                     actid: "\(self.mailForm!.actId)",
+                                                     auth: self.mailForm!.auth,
+                                                     mail: mail)
+                    self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: [String : String]())
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.dismiss()
+                    }
+                } else {//Mail is valid checkboxes are not checked
+                    defaultView.resultLabel.text = self.mailForm?.checkConsentMessage ?? ""
+                    defaultView.resultLabel.isHidden = false
+                }
+            }
+        } else if button.dismissOnTap {
             dismiss({ button.buttonAction?() })
         } else {
             button.buttonAction?()
@@ -286,7 +366,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     /*
      convenience init(notification: VisilabsInAppNotification) {
-         self.init(notification: notification, nameOfClass: String(describing: VisilabsPopupNotificationViewController.self))
+         self.init(notification: notification,
+     nameOfClass: String(describing: VisilabsPopupNotificationViewController.self))
      }
      */
 }
@@ -309,15 +390,6 @@ extension VisilabsPopupNotificationViewController {
     @objc public var transitionStyle: PopupDialogTransitionStyle {
         get { return presentationManager.transitionStyle }
         set { presentationManager.transitionStyle = newValue }
-    }
-}
-
-// MARK: - Shake
-
-extension VisilabsPopupNotificationViewController {
-    /// Performs a shake animation on the dialog
-    @objc public func shake() {
-        popupContainerView.pv_shake()
     }
 }
 
@@ -347,25 +419,7 @@ internal extension VisilabsPopupNotificationViewController {
      - parameter notification: NSNotification
      */
     @objc fileprivate func orientationChanged(_ notification: Notification) {
-        // if keyboardShown { centerPopup() }
-        // centerPopup()
+
     }
 
-    /*
-     fileprivate func centerPopup() {
-
-         // Make sure keyboard should reposition on keayboard notifications
-         guard keyboardShiftsView else { return }
-
-         // Make sure a valid keyboard height is available
-         guard let keyboardHeight = keyboardHeight else { return }
-
-         // Calculate new center of shadow background
-         let popupCenter =  keyboardShown ? keyboardHeight / -2 : 0
-
-         // Reposition and animate
-         popupContainerView.centerYConstraint?.constant = popupCenter
-         popupContainerView.pv_layoutIfNeededAnimated()
-     }
-     */
 }

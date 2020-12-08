@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct VisilabsProfile : Codable {
+struct VisilabsProfile: Codable {
     var organizationId = "676D325830564761676D453D"
     var profileId = "356467332F6533766975593D"
     var dataSource = "visistore"

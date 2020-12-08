@@ -23,19 +23,21 @@ class VisilabsStoryItem {
     let buttonColor: UIColor
     var kind: MimeType {
         switch mimeType {
-            case MimeType.photo.rawValue:
-                return MimeType.photo
-            case MimeType.video.rawValue:
-                return MimeType.video
-            default:
-                return MimeType.unknown
+        case MimeType.photo.rawValue:
+            return MimeType.photo
+        case MimeType.video.rawValue:
+            return MimeType.video
+        default:
+            return MimeType.unknown
         }
     }
-    
-    init (fileType: String, displayTime: Int, fileSrc: String, targetUrl: String, buttonText: String, buttonTextColor: UIColor, buttonColor: UIColor) {
+
+    init (fileType: String, displayTime: Int, fileSrc: String,
+          targetUrl: String, buttonText: String, buttonTextColor: UIColor,
+          buttonColor: UIColor) {
         self.mimeType = fileType
-        self.displayTime = displayTime // TODO:
-        self.url = fileSrc // TODO:
+        self.displayTime = displayTime // TO_DO:
+        self.url = fileSrc // TO_DO:
         self.targetUrl = targetUrl
         self.buttonText = buttonText
         self.internalIdentifier = UUID().uuidString

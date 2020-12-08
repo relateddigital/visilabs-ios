@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIView {
-    
+
     var igLeftAnchor: NSLayoutXAxisAnchor {
         if #available(iOS 11.0, *) {
             return self.safeAreaLayoutGuide.leftAnchor
@@ -58,4 +58,3 @@ extension UIView {
         return frame.height
     }
 }
-

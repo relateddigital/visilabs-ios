@@ -11,7 +11,7 @@ import UIKit
 /// Base class for custom transition animations
 internal class VisilabsTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
-    var to: UIViewController!
+    var toViewController: UIViewController!
     var from: UIViewController!
     let inDuration: TimeInterval
     let outDuration: TimeInterval
@@ -31,21 +31,26 @@ internal class VisilabsTransitionAnimator: NSObject, UIViewControllerAnimatedTra
     internal func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         switch direction {
         case .in:
-            guard let to = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
-                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
-            
-            self.to = to
+            guard let toVC = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
+                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)
+            else {
+                return
+
+            }
+
+            self.toViewController = toVC
             self.from = from
 
             let container = transitionContext.containerView
-            container.addSubview(to.view)
+            container.addSubview(toVC.view)
         case .out:
-            guard let to = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
-                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
-            
-            self.to = to
+            guard let toVC = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
+                let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else {
+                return
+            }
+
+            self.toViewController = toVC
             self.from = from
         }
     }
 }
-

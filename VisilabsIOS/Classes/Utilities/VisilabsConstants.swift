@@ -8,208 +8,246 @@
 import Foundation
 
 struct VisilabsConstants {
-    
+
     static let HTTP = "http"
     static let HTTPS = "https"
-    
-    static let QUEUE_SIZE = 5000
-    static let GEOFENCE_HISTORY_MAX_COUNT = 500 //TODO: bunu sonra değiştir
-    static let GEOFENCE_HISTORY_ERROR_MAX_COUNT = 500 //TODO: bunu sonra değiştir
-    static let GEOFENCE_FETCH_TIME_INTERVAL = TimeInterval(60) //TODO: bunu sonra değiştir 15 dakika yap
-    
-    //TODO: bunlar https e çevirilecek
-    static var LOGGER_END_POINT = "lgr.visilabs.net"
-    static var REALTIME_END_POINT = "rt.visilabs.net"
-    static var RECOMMENDATION_END_POINT = "s.visilabs.net/json"
-    static var ACTION_END_POINT = "s.visilabs.net/actjson"
-    static var GEOFENCE_END_POINT = "s.visilabs.net/geojson"
-    static var MOBILE_END_POINT = "s.visilabs.net/mobile"
-    
-    
-    //MARK: -UserDefaults Keys
-    
-    static let USER_DEFAULTS_PROFILE_KEY = "Visilabs.profile"
-    static let USER_DEFAULTS_USER_KEY = "Visilabs.user"
-    static let USER_DEFAULTS_GEOFENCE_HISTORY_KEY = "Visilabs.geofenceHistory"
-    static let USER_DEFAULTS_TARGET_KEY = "Visilabs.target"
-    
-    //MARK: -Archive Keys
-    
 
-    static let GEOFENCE_HISTORY_ARCHIVE_KEY = "Visilabs.geofenceHistory"
-    static let USER_ARCHIVE_KEY = "Visilabs.user";
-    static let PROFILE_ARCHIVE_KEY = "Visilabs.profile";
-    
-    static let COOKIEID_ARCHIVE_KEY = "Visilabs.cookieId"; //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
-    static let IDENTITY_ARCHIVE_KEY = "Visilabs.identity";
-    static let EXVISITORID_ARCHIVE_KEY = "Visilabs.exVisitorId";
-    static let TOKENID_ARCHIVE_KEY = "Visilabs.tokenId";
-    static let APPID_ARCHIVE_KEY = "Visilabs.appId";
-    static let USERAGENT_ARCHIVE_KEY = "Visilabs.userAgent";
-    
+    static let queueSize = 5000
+    static let geofenceHistoryMaxCount = 500 //TO_DO: bunu sonra değiştir
+    static let geofenceHistoryErrorMaxCount = 500 //TO_DO: bunu sonra değiştir
+    static let geofenceFetchTimeInterval = TimeInterval(60) //TO_DO: bunu sonra değiştir 15 dakika yap
 
+    //TO_DO: bunlar https e çevirilecek
+    static var loggerEndPoint = "lgr.visilabs.net"
+    static var realtimeEndPoint = "rt.visilabs.net"
+    static var recommendationEndPoint = "s.visilabs.net/json"
+    static var actionEndPoint = "s.visilabs.net/actjson"
+    static var geofenceEndPoint = "s.visilabs.net/geojson"
+    static var mobileEndPoint = "s.visilabs.net/mobile"
+    static var subsjsonEndpoint = "s.visilabs.net/subsjson"
+
+    // MARK: - UserDefaults Keys
+
+    static let userDefaultsProfileKey = "Visilabs.profile"
+    static let userDefaultsUserKey = "Visilabs.user"
+    static let userDefaultsGeofenceHistoryKey = "Visilabs.geofenceHistory"
+    static let userDefaultsTargetKey = "Visilabs.target"
+
+    // MARK: - Archive Keys
+
+    static let geofenceHistoryArchiveKey = "Visilabs.geofenceHistory"
+    static let userArchiveKey = "Visilabs.user"
+    static let profileArchiveKey = "Visilabs.profile"
+
+    static let cookieidArchiveKey = "Visilabs.cookieId"
+    //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
+    static let identityArchiveKey = "Visilabs.identity"
+    static let exvisitorIdArchiveKey = "Visilabs.exVisitorId"
+    static let tokenidArchiveKey = "Visilabs.tokenId"
+    static let appidArchiveKey = "Visilabs.appId"
+    static let useragentArchiveKey = "Visilabs.userAgent"
+
+    static let maxGeofenceCountKey = "maxGeofenceCount"
+    static let inAppNotificaitionsKey = "inAppNotificationsEnabled"
+    static let geofenceEnabledKey = "geofenceEnabled"
+    static let requestTimeoutInSecondsKey = "requestTimeoutInSeconds"
+    static let dataSourceKey = "dataSource"
+    static let userAgentKey = "OM.userAgent"
+    static let visitorData = "visitorData"
+
+    static let lastGeofenceFetchTimeKey = "lastGeofenceFetchTime"
+    static let geofencesKey = "geofences"
+
+    static let mobileIdKey = "OM.m_adid"
+    static let mobileApplicationKey = "OM.mappl"
+
+    static let isTrue = "true"
+
+    static let ios = "IOS"
+    static let datKey = "dat"
+    static let omGif = "om.gif"
+    static let domainkey = "OM.domain"
+    static let visitCappingKey = "OM.vcap"
+    static let visitorCappingKey = "OM.viscap"
+    static let omEvtGif = "OM_evt.gif"
+
+    static let organizationIdKey = "OM.oid"
+    static let profileIdKey = "OM.siteID"
+    static let cookieIdKey = "OM.cookieID"
+    static let exvisitorIdKey = "OM.exVisitorID"
+    static let zoneIdKey = "OM.zid"
+    static let bodyKey = "OM.body"
+    static let latitudeKey = "OM.latitude"
+    static let longitudeKey = "OM.longitude"
+    static let actidKey = "actid"
+    static let actKey = "act"
+    static let tokenIdKey = "OM.sys.TokenID"
+    static let appidKey = "OM.sys.AppID"
+    static let loggerUrl = "lgr.visilabs.net"
+    static let realTimeUrl = "rt.visilabs.net"
+    static let loadBalancePrefix = "NSC"
+    static let om3Key = "OM.3rd"
+    static let filterKey = "OM.w.f"
+    static let apiverKey = "OM.apiver"
+    static let geoIdKey = "OM.locationid"
+    static let triggerEventKey = "OM.triggerevent"
+    static let subscribedEmail = "OM.subsemail"
+
+    static let channelKey = "OM.vchannel"
+    static let uriKey = "OM.uri"
+
+    static let utmSourceKey = "utm_source"
+    static let utmCampaignKey = "utm_campaign"
+    static let utmMediumKey = "utm_medium"
+    static let utmContentKey = "utm_content"
+
+    static let getList = "getlist"
+    static let processV2 = "processV2"
+    static let onEnter = "OnEnter"
+    static let onExit = "OnExit"
+    static let dwell = "Dwell"
+    static let apiverValue = "IOS"
+
+    static let actionType = "action_type"
+    static let favoriteAttributeAction = "FavoriteAttributeAction"
+    static let story = "Story"
+    static let mailSubscriptionForm = "MailSubscriptionForm"
+    static let actid = "actid"
+    static let actionId = "action_id"
+    static let actionData = "actiondata"
+    static let favorites = "favorites"
+    static let stories = "stories"
+    static let title = "title"
+    static let smallImg = "smallImg"
+    static let link = "link"
+    static let thumbnail = "thumbnail"
+    static let items = "items"
+    static let fileType = "fileType"
+    static let displayTime = "displayTime"
+    static let fileSrc = "fileSrc"
+    static let targetUrl = "targetUrl"
+    static let buttonText = "buttonText"
+    static let buttonTextColor = "buttonTextColor"
+    static let buttonColor = "buttonColor"
+    static let taTemplate = "taTemplate"
+    static let report = "report"
+    static let impression = "impression"
+    static let click = "click"
+    static let extendedProps = "ExtendedProps"
+    static let storylbImgBorderWidth = "storylb_img_borderWidth"
+    static let storylbImgBorderColor = "storylb_img_borderColor"
+    static let storylbImgBorderRadius = "storylb_img_borderRadius"
+    static let storylbImgBoxShadow = "storylb_img_boxShadow"
+    static let storylbLabelColor = "storylb_label_color"
+    static let storyzimgBorderColor = "storyz_img_borderColor"
+    static let storyzImgBorderRadius = "storyz_img_borderRadius"
     
-    static let MAXGEOFENCECOUNT_KEY = "maxGeofenceCount";
-    static let INAPPNOTIFICATIONSENABLED_KEY = "inAppNotificationsEnabled";
-    static let GEOFENCEENABLED_KEY = "geofenceEnabled";
-    static let REQUESTTIMEOUTINSECONDS_KEY = "requestTimeoutInSeconds";
-    static let DATASOURCE_KEY = "dataSource";
-    static let USERAGENT_KEY = "OM.userAgent";
-    static let VISITORDATA = "visitorData";
+    //Email form constants
+    static let message = "message"
+    static let placeholder = "placeholder"
+    static let type = "type"
+    static let buttonLabel = "button_label"
+    static let consentText = "consent_text"
+    static let successMessage = "success_message"
+    static let invalidEmailMessage = "invalid_email_message"
+    static let emailPermitText = "emailpermit_text"
+    static let checkConsentMessage = "check_consent_message"
+    static let authentication = "auth"
+    static let titleTextColor = "title_text_color"
+    static let titleFontFamily = "title_font_family"
+    static let titleTextSize = "title_text_size"
+    static let textColor = "text_color"
+    static let textFontFamily = "text_font_family"
+    static let textSize = "text_size"
+    static let buttonFontFamily = "button_font_family"
+    static let buttonTextSize = "button_text_size"
+    static let emailPermitTextSize = "emailpermit_text_size"
+    static let emailPermitTextUrl = "emailpermit_text_url"
+    static let consentTextSize = "consent_text_size"
+    static let consentTextUrl = "consent_text_url"
+    static let closeButtonColor = "close_button_color"
+    static let backgroundColor = "background_color"
     
-    
-    static let LAST_GEOFENCE_FETCH_TIME_KEY = "lastGeofenceFetchTime"
-    static let GEOFENCES_KEY = "geofences"
-    
-    
-    static let MOBILEADID_KEY = "OM.m_adid"
-    static let MOBILEAPPLICATION_KEY = "OM.mappl"
-    
-    static let TRUE = "true"
-    
-    static let IOS = "IOS"
-    static let DAT_KEY = "dat"
-    static let OM_GIF = "om.gif"
-    static let DOMAIN_KEY = "OM.domain"
-    static let VISIT_CAPPING_KEY = "OM.vcap"
-    static let VISITOR_CAPPING_KEY = "OM.viscap"
-    static let OM_EVT_GIF = "OM_evt.gif"
-    
-    
-    static let ORGANIZATIONID_KEY = "OM.oid"
-    static let PROFILEID_KEY = "OM.siteID"
-    static let COOKIEID_KEY = "OM.cookieID"
-    static let EXVISITORID_KEY = "OM.exVisitorID"
-    static let ZONE_ID_KEY = "OM.zid"
-    static let BODY_KEY = "OM.body"
-    static let LATITUDE_KEY = "OM.latitude"
-    static let LONGITUDE_KEY = "OM.longitude"
-    static let ACT_ID_KEY = "actid"
-    static let ACT_KEY = "act"
-    static let TOKENID_KEY = "OM.sys.TokenID"
-    static let APPID_KEY = "OM.sys.AppID"
-    static let LOGGER_URL = "lgr.visilabs.net"
-    static let REAL_TIME_URL = "rt.visilabs.net"
-    static let LOAD_BALANCE_PREFIX = "NSC"
-    static let OM_3_KEY = "OM.3rd"
-    static let FILTER_KEY = "OM.w.f"
-    static let APIVER_KEY = "OM.apiver"
-    static let GEO_ID_KEY = "OM.locationid"
-    static let TRIGGER_EVENT_KEY = "OM.triggerevent"
-    
-    static let CHANNEL_KEY = "OM.vchannel"
-    static let URI_KEY = "OM.uri"
-    
-    static let UTM_SOURCE_KEY = "utm_source"
-    static let UTM_CAMPAIGN_KEY = "utm_campaign"
-    static let UTM_MEDIUM_KEY = "utm_medium"
-    static let UTM_CONTENT_KEY = "utm_content"
-    
-    static let GET_LIST = "getlist"
-    static let PROCESSV2 = "processV2"
-    static let ON_ENTER = "OnEnter"
-    static let ON_EXIT = "OnExit"
-    static let DWELL = "Dwell"
-    static let APIVER_VALUE = "IOS"
-    
-    static let ACTION_TYPE = "action_type"
-    static let FAVORITE_ATTRIBUTE_ACTION = "FavoriteAttributeAction"
-    static let STORY = "Story"
-    static let ACTID = "actid"
-    static let ACTION_ID = "action_id"
-    static let ACTIONDATA = "actiondata"
-    static let FAVORITES = "favorites"
-    static let STORIES = "stories"
-    static let TITLE = "title"
-    static let SMALLIMG = "smallImg"
-    static let LINK = "link"
-    static let THUMBNAIL = "thumbnail"
-    static let ITEMS = "items"
-    static let FILETYPE = "fileType"
-    static let DISPLAYTIME = "displayTime"
-    static let FILESRC = "fileSrc"
-    static let TARGETURL = "targetUrl"
-    static let BUTTONTEXT = "buttonText"
-    static let BUTTONTEXTCOLOR = "buttonTextColor"
-    static let BUTTONCOLOR = "buttonColor"
-    static let TATEMPLATE = "taTemplate"
-    static let REPORT = "report"
-    static let IMPRESSION = "impression"
-    static let CLICK = "click"
-    static let EXTENDEDPROPS = "ExtendedProps"
-    static let storylb_img_borderWidth = "storylb_img_borderWidth"
-    static let storylb_img_borderColor = "storylb_img_borderColor"
-    static let storylb_img_borderRadius = "storylb_img_borderRadius"
-    static let storylb_img_boxShadow = "storylb_img_boxShadow"
-    static let storylb_label_color = "storylb_label_color"
-    static let storyz_img_borderColor = "storyz_img_borderColor"
-    static let storyz_img_borderRadius = "storyz_img_borderRadius"
-    
-    
-    private static let TARGET_PREF_VOSS_STORE_KEY = "OM.voss"
-    private static let TARGET_PREF_VCNAME_STORE_KEY = "OM.vcname"
-    private static let TARGET_PREF_VCMEDIUM_STORE_KEY = "OM.vcmedium"
-    private static let TARGET_PREF_VCSOURCE_STORE_KEY = "OM.vcsource"
-    private static let TARGET_PREF_VSEG1_STORE_KEY = "OM.vseg1"
-    private static let TARGET_PREF_VSEG2_STORE_KEY = "OM.vseg2"
-    private static let TARGET_PREF_VSEG3_STORE_KEY = "OM.vseg3"
-    private static let TARGET_PREF_VSEG4_STORE_KEY = "OM.vseg4"
-    private static let TARGET_PREF_VSEG5_STORE_KEY = "OM.vseg5"
-    private static let TARGET_PREF_BD_STORE_KEY = "OM.bd"
-    private static let TARGET_PREF_GN_STORE_KEY = "OM.gn"
-    private static let TARGET_PREF_LOC_STORE_KEY = "OM.loc"
-    private static let TARGET_PREF_VPV_STORE_KEY = "OM.vpv"
-    private static let TARGET_PREF_LPVS_STORE_KEY = "OM.lpvs"
-    private static let TARGET_PREF_LPP_STORE_KEY = "OM.lpp"
-    private static let TARGET_PREF_VQ_STORE_KEY = "OM.vq"
-    private static let TARGET_PREF_VRDOMAIN_STORE_KEY = "OM.vrDomain"
-    
-    private static let TARGET_PREF_VOSS_KEY = "OM.OSS"
-    private static let TARGET_PREF_VCNAME_KEY = "OM.cname"
-    private static let TARGET_PREF_VCMEDIUM_KEY = "OM.cmedium"
-    private static let TARGET_PREF_VCSOURCE_KEY = "OM.csource"
-    private static let TARGET_PREF_VSEG1_KEY = "OM.vseg1"
-    private static let TARGET_PREF_VSEG2_KEY = "OM.vseg2"
-    private static let TARGET_PREF_VSEG3_KEY = "OM.vseg3"
-    private static let TARGET_PREF_VSEG4_KEY = "OM.vseg4"
-    private static let TARGET_PREF_VSEG5_KEY = "OM.vseg5"
-    private static let TARGET_PREF_BD_KEY = "OM.bd"
-    private static let TARGET_PREF_GN_KEY = "OM.gn"
-    private static let TARGET_PREF_LOC_KEY = "OM.loc"
-    private static let TARGET_PREF_VPV_KEY = "OM.pv"
-    private static let TARGET_PREF_LPVS_KEY = "OM.pv"
-    private static let TARGET_PREF_LPP_KEY = "OM.pp"
-    private static let TARGET_PREF_VQ_KEY = "OM.q"
-    private static let TARGET_PREF_VRDOMAIN_KEY = "OM.rDomain"
-    private static let TARGET_PREF_PPR_KEY = "OM.ppr"
-    
+    private static let targetPrefVossStoreKey = "OM.voss"
+    private static let targetPrefVcnameStoreKey = "OM.vcname"
+    private static let targetPrefVcmediumStoreKey = "OM.vcmedium"
+    private static let targetPrefVcsourceStoreKey = "OM.vcsource"
+    private static let targetPrefVseg1StoreKey = "OM.vseg1"
+    private static let targetPrefVseg2StoreKey = "OM.vseg2"
+    private static let targetPrefVseg3StoreKey = "OM.vseg3"
+    private static let targetPrefVseg4StoreKey = "OM.vseg4"
+    private static let targetPrefVseg5StoreKey = "OM.vseg5"
+    private static let targetPrefBdStoreKey = "OM.bd"
+    private static let targetPrefGnStoreKey = "OM.gn"
+    private static let targetPrefLocStoreKey = "OM.loc"
+    private static let targetPrefVPVStoreKey = "OM.vpv"
+    private static let targetPrefLPVSStoreKey = "OM.lpvs"
+    private static let targetPrefLPPStoreKey = "OM.lpp"
+    private static let targetPrefVQStoreKey = "OM.vq"
+    private static let targetPrefVRStoreKey = "OM.vrDomain"
+
+    private static let targetPrefVossKey = "OM.OSS"
+    private static let targetPrefVcNameKey = "OM.cname"
+    private static let targetPrefVcmediumKey = "OM.cmedium"
+    private static let targetPrefVcsourceKey = "OM.csource"
+    private static let targetPrefVseg1Key = "OM.vseg1"
+    private static let targetPrefVseg2Key = "OM.vseg2"
+    private static let targetPrefVseg3Key = "OM.vseg3"
+    private static let targetPrefVseg4Key = "OM.vseg4"
+    private static let targetPrefVseg5Key = "OM.vseg5"
+    private static let targetPrefBDKey = "OM.bd"
+    private static let targetPrefGNKey = "OM.gn"
+    private static let targetPrefLOCKey = "OM.loc"
+    private static let targetPrefVPVKey = "OM.pv"
+    private static let targetPrefLPVSKey = "OM.pv"
+    private static let targetPrefLPPKey = "OM.pp"
+    private static let targetPrefVQKey = "OM.q"
+    private static let targetPrefVRDomainKey = "OM.rDomain"
+    private static let targetPrefPPRKey = "OM.ppr"
+
     private static var targetParameters = [VisilabsParameter]()
-    
+
     static func visilabsTargetParameters() -> [VisilabsParameter] {
         if targetParameters.count == 0 {
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VOSS_KEY, storeKey: TARGET_PREF_VOSS_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VCNAME_KEY, storeKey: TARGET_PREF_VCNAME_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VCMEDIUM_KEY, storeKey: TARGET_PREF_VCMEDIUM_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VCSOURCE_KEY, storeKey: TARGET_PREF_VCSOURCE_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG1_KEY, storeKey: TARGET_PREF_VSEG1_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG2_KEY, storeKey: TARGET_PREF_VSEG2_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG3_KEY, storeKey: TARGET_PREF_VSEG3_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG4_KEY, storeKey: TARGET_PREF_VSEG4_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VSEG5_KEY, storeKey: TARGET_PREF_VSEG5_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_BD_KEY, storeKey: TARGET_PREF_BD_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_GN_KEY, storeKey: TARGET_PREF_GN_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LOC_KEY, storeKey: TARGET_PREF_LOC_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VPV_KEY, storeKey: TARGET_PREF_VPV_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPVS_KEY, storeKey: TARGET_PREF_LPVS_STORE_KEY, count: 10, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_LPP_KEY, storeKey: TARGET_PREF_LPP_STORE_KEY, count: 1, relatedKeys: [TARGET_PREF_PPR_KEY]))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VQ_KEY, storeKey: TARGET_PREF_VQ_STORE_KEY, count: 1, relatedKeys: nil))
-            targetParameters.append(VisilabsParameter(key: TARGET_PREF_VRDOMAIN_KEY, storeKey: TARGET_PREF_VRDOMAIN_STORE_KEY, count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVossKey, storeKey: targetPrefVossStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVcNameKey, storeKey: targetPrefVcnameStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVcmediumKey, storeKey: targetPrefVcmediumStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVcsourceKey, storeKey: targetPrefVcsourceStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg1Key, storeKey: targetPrefVseg1StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg2Key, storeKey: targetPrefVseg2StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg3Key, storeKey: targetPrefVseg3StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg4Key, storeKey: targetPrefVseg4StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVseg5Key, storeKey: targetPrefVseg5StoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefBDKey, storeKey: targetPrefBdStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefGNKey, storeKey: targetPrefGnStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefLOCKey, storeKey: targetPrefLocStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVPVKey, storeKey: targetPrefVPVStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefLPVSKey, storeKey: targetPrefLPVSStoreKey,
+                                                      count: 10, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefLPPKey, storeKey: targetPrefLPPStoreKey,
+                                                      count: 1, relatedKeys: [targetPrefPPRKey]))
+            targetParameters.append(VisilabsParameter(key: targetPrefVQKey, storeKey: targetPrefVQStoreKey,
+                                                      count: 1, relatedKeys: nil))
+            targetParameters.append(VisilabsParameter(key: targetPrefVRDomainKey, storeKey: targetPrefVRStoreKey,
+                                                      count: 1, relatedKeys: nil))
         }
         return targetParameters
     }
-    
-}
 
+}
 
 struct VisilabsInAppNotificationsConstants {
     static let miniInAppHeight: CGFloat = 75

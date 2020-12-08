@@ -6,9 +6,9 @@
 //
 
 import Foundation
-
+//swiftlint:disable type_body_length
 public class VisilabsInAppNotification {
-    
+
     public enum PayloadKey {
         public static let actId = "actid"
         public static let actionData = "actiondata"
@@ -30,7 +30,7 @@ public class VisilabsInAppNotification {
         public static let buttonTextColor = "button_text_color"
         public static let buttonColor = "button_color"
     }
-    
+
     let actId: Int
     let messageType: String
     let type: VisilabsInAppNotificationType
@@ -50,7 +50,7 @@ public class VisilabsInAppNotification {
     let closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?
-    
+
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
@@ -63,13 +63,33 @@ public class VisilabsInAppNotification {
         }
         return data
     }()
-    
+
     let callToActionUrl: URL?
-    var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
-    var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
-    var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
-    
-    public init(actId: Int, type: VisilabsInAppNotificationType, messageTitle: String?, messageBody: String?, buttonText: String?, iosLink: String?, imageUrlString: String?, visitorData: String?, visitData: String?, queryString: String?, messageTitleColor: String?, messageBodyColor: String?, messageBodyTextSize: String?, fontFamily: String?, backGround: String?, closeButtonColor: String?, buttonTextColor: String?, buttonColor: String?) {
+    var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
+                                          size: CGFloat(12))
+    var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                         size: CGFloat(8))
+    var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                        size: CGFloat(8))
+
+    public init(actId: Int,
+                type: VisilabsInAppNotificationType,
+                messageTitle: String?,
+                messageBody: String?,
+                buttonText: String?,
+                iosLink: String?,
+                imageUrlString: String?,
+                visitorData: String?,
+                visitData: String?,
+                queryString: String?,
+                messageTitleColor: String?,
+                messageBodyColor: String?,
+                messageBodyTextSize: String?,
+                fontFamily: String?,
+                backGround: String?,
+                closeButtonColor: String?,
+                buttonTextColor: String?,
+                buttonColor: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -89,52 +109,51 @@ public class VisilabsInAppNotification {
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white
-            }
-            else if cBColor.lowercased() == "black" {
+            } else if cBColor.lowercased() == "black" {
                 self.closeButtonColor = UIColor.black
             } else {
                 self.closeButtonColor = UIColor(hex: cBColor)
             }
-        }else{
+        } else {
             self.closeButtonColor = nil
         }
         self.buttonTextColor = UIColor(hex: buttonTextColor)
         self.buttonColor = UIColor(hex: buttonColor)
-        
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
-        
+
         var callToActionUrl: URL?
         if let urlString = self.iosLink {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-        
         setFonts()
     }
-    
+
+    //swiftlint:disable function_body_length
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
             VisilabsLogger.error("notification json object should not be nil")
             return nil
         }
-        
+
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
             VisilabsLogger.error("invalid \(PayloadKey.actId)")
             return nil
         }
-        
+
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
             VisilabsLogger.error("invalid \(PayloadKey.actionData)")
             return nil
         }
-        
-        guard let messageType = actionData[PayloadKey.messageType] as? String, let type = VisilabsInAppNotificationType(rawValue: messageType) else {
+
+        guard let messageType = actionData[PayloadKey.messageType] as? String,
+              let type = VisilabsInAppNotificationType(rawValue: messageType) else {
             VisilabsLogger.error("invalid \(PayloadKey.messageType)")
             return nil
         }
-        
+
         self.actId = actId
         self.messageType = messageType
         self.type = type
@@ -154,58 +173,63 @@ public class VisilabsInAppNotification {
         if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white
-            }
-            else if cBColor.lowercased() == "black" {
+            } else if cBColor.lowercased() == "black" {
                 self.closeButtonColor = UIColor.black
             } else {
                 self.closeButtonColor = UIColor(hex: cBColor)
             }
-        }else{
+        } else {
             self.closeButtonColor = nil
         }
-        
+
         self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
         self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
-        
+
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
-        
+
         var callToActionUrl: URL?
         if let urlString = self.iosLink {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-        
+
         setFonts()
     }
-    
-    private func setFonts(){
-        self.messageTitleFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
-        self.messageBodyFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .body)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(font_family: self.fontFamily, font_size: self.messageBodyTextSize, style: .title2)
+
+    private func setFonts() {
+        self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+                                                                  fontSize: self.messageBodyTextSize,
+                                                                  style: .title2)
+        self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+                                                                 fontSize: self.messageBodyTextSize,
+                                                                 style: .body)
+        self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+                                                                fontSize: self.messageBodyTextSize,
+                                                                style: .title2)
     }
-    
-    
-    private static func getFont(font_family: String?, font_size: String?, style: UIFont.TextStyle) -> UIFont{
+
+    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
         var size = style == .title2 ? 12 : 8
-        if let fSize = font_size, let s = Int(fSize), s > 0 {
-            size = size + s
+        if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
+            size += siz
         }
-        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style), size: CGFloat(size))
-        if let font = font_family {
+        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
+                               size: CGFloat(size))
+        if let font = fontFamily {
             if #available(iOS 13.0, *) {
-                var systemDesign :UIFontDescriptor.SystemDesign  = .default
+                var systemDesign: UIFontDescriptor.SystemDesign  = .default
                 if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
                     systemDesign = .serif
                 } else if font.lowercased() == "monospace" {
                     systemDesign = .monospaced
                 }
-                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style).withDesign(systemDesign) {
+                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
+                    .withDesign(systemDesign) {
                     finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
                 }
-            }
-            else{
+            } else {
                 if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
                     let fontName = style == .title2 ? "GillSans-Bold": "GillSans"
                     finalFont = UIFont(name: fontName, size: CGFloat(size))!
@@ -217,16 +241,17 @@ public class VisilabsInAppNotification {
         }
         return finalFont
     }
-    
+
     private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
-        var imageUrl : URL?
+        var imageUrl: URL?
         var urlString = imageUrlString
-        if type == .mini{
+        if type == .mini {
             urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
         }
-        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
-            , let imageUrlComponents = URLComponents(string: escapedImageUrlString)
-            , let imageUrlParsed = imageUrlComponents.url{
+        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
+                                                                     NSCharacterSet.urlQueryAllowed),
+           let imageUrlComponents = URLComponents(string: escapedImageUrlString),
+           let imageUrlParsed = imageUrlComponents.url {
             imageUrl = imageUrlParsed
         }
         return imageUrl

@@ -10,8 +10,8 @@ import UIKit
 import VisilabsIOS
 
 class StoryViewController: UIViewController, UITextFieldDelegate {
-    
-    var actionIdTextField : UITextField = {
+
+    var actionIdTextField: UITextField = {
         let textField = UITextField()
         textField.keyboardType = .numberPad
         textField.placeholder = "Action Id(optional)"
@@ -22,8 +22,8 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         textField.text = "305"
         return textField
     }()
-    
-    var storyButton : UIButton = {
+
+    var storyButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
@@ -31,12 +31,9 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         button.addTarget(self, action: #selector(showStory), for: .touchUpInside)
         return button
     }()
-    
-    
-    
-    var storyHomeView : VisilabsStoryHomeView?
-    
-    
+
+    var storyHomeView: VisilabsStoryHomeView?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
@@ -47,21 +44,23 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         setupLayout()
     }
 
-    
-    private func setupLayout(){
+    private func setupLayout() {
         actionIdTextField.translatesAutoresizingMaskIntoConstraints = false
         actionIdTextField.widthAnchor.constraint(equalToConstant: 150).isActive = true
         actionIdTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        actionIdTextField.topAnchor.constraint(equalTo: view.saferAreaLayoutGuide.topAnchor, constant: 20).isActive = true
-        actionIdTextField.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
-        
+        actionIdTextField.topAnchor.constraint(equalTo: view.saferAreaLayoutGuide.topAnchor,
+                                               constant: 20).isActive = true
+        actionIdTextField.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,
+                                                   constant: 0).isActive = true
+
         storyButton.translatesAutoresizingMaskIntoConstraints = false
         storyButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
         storyButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         storyButton.topAnchor.constraint(equalTo: actionIdTextField.bottomAnchor, constant: 20).isActive = true
-        storyButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
+        storyButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,
+                                             constant: 0).isActive = true
     }
-    
+
     @objc private func textFieldFilter(_ textField: UITextField) {
         if let text = textField.text, let intText = Int(text), intText > 0 {
             if text.count > 4 {
@@ -73,12 +72,11 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
             textField.text = ""
         }
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-    
+
     @objc func showStory(sender: UIButton!) {
         storyHomeView?.removeFromSuperview()
         storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""))
@@ -88,17 +86,15 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         storyHomeView!.widthAnchor.constraint(equalTo: view.saferAreaLayoutGuide.widthAnchor).isActive = true
         storyHomeView!.heightAnchor.constraint(equalToConstant: 100).isActive = true
      }
-    
+
 }
 
 extension UIView {
     var saferAreaLayoutGuide: UILayoutGuide {
-        get {
             if #available(iOS 11.0, *) {
                 return self.safeAreaLayoutGuide
             } else {
                 return self.layoutMarginsGuide
             }
-        }
     }
 }

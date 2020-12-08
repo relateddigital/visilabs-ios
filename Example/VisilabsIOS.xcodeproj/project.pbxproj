@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FC76C91255E684E00851B9A /* InAppViewControllerFormElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC76C90255E684E00851B9A /* InAppViewControllerFormElements.swift */; };
+		2FC76CA2255EB64700851B9A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2FC76CA1255EB64700851B9A /* .swiftlint.yml */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -45,9 +47,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05A0A12AA7D6185DEC095E67 /* Pods-VisilabsIOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Tests.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Tests/Pods-VisilabsIOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		06EBC49C43D294D27D4A4EA5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		3A207F1AEB1DB0DC569D37CF /* Pods-VisilabsIOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Tests.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Tests/Pods-VisilabsIOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		2FC76C90255E684E00851B9A /* InAppViewControllerFormElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppViewControllerFormElements.swift; sourceTree = "<group>"; };
+		2FC76CA1255EB64700851B9A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		5973BE33E93D0BE4A9700F7E /* Pods-VisilabsIOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Tests.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Tests/Pods-VisilabsIOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* VisilabsIOS_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsIOS_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -58,6 +61,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7A945771F641BD121B160C85 /* VisilabsIOS.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = VisilabsIOS.podspec; path = ../VisilabsIOS.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		829265E3D18E646742B7CFD4 /* Pods-VisilabsIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
 		88007E2024A38CEE002A9132 /* RecommendationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationViewController.swift; sourceTree = "<group>"; };
 		88007E2324A3CED4002A9132 /* InAppHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppHelper.swift; sourceTree = "<group>"; };
 		8811477424EABCA0006848F9 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -80,9 +84,9 @@
 		8891608724B4AE3900752F03 /* VisilabsEventRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisilabsEventRequestTests.swift; sourceTree = "<group>"; };
 		88B2A47824A0D0FA00C153DC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		88B2A47A24A0DF7300C153DC /* GeofenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceViewController.swift; sourceTree = "<group>"; };
-		920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.release.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.release.xcconfig"; sourceTree = "<group>"; };
 		B385ECCB9E2126FDD8E95A19 /* Pods_VisilabsIOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsIOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE61694D1517D111E8015DA5 /* Pods-VisilabsIOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Tests.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Tests/Pods-VisilabsIOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		C626C330236EF50F12029D52 /* Pods-VisilabsIOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsIOS_Example.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsIOS_Example/Pods-VisilabsIOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		CD24D910F1E148C7F7197959 /* Pods_VisilabsIOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsIOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -106,16 +110,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		30B85F98B3F03037812F8A81 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C626C330236EF50F12029D52 /* Pods-VisilabsIOS_Example.debug.xcconfig */,
+				829265E3D18E646742B7CFD4 /* Pods-VisilabsIOS_Example.release.xcconfig */,
+				BE61694D1517D111E8015DA5 /* Pods-VisilabsIOS_Tests.debug.xcconfig */,
+				5973BE33E93D0BE4A9700F7E /* Pods-VisilabsIOS_Tests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				2FC76CA1255EB64700851B9A /* .swiftlint.yml */,
 				885BBDDC24E2DDA600F05769 /* VisilabsIOS_Example.entitlements */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for VisilabsIOS */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
-				C076CB6F01BD7D41A942D6F3 /* Pods */,
 				6A9ECCC10D2A16C5EDE02987 /* Frameworks */,
+				30B85F98B3F03037812F8A81 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,6 +230,7 @@
 				88B2A47A24A0DF7300C153DC /* GeofenceViewController.swift */,
 				8862E467247EDF5500C230DD /* HomeViewController.swift */,
 				8862E460247ED6D000C230DD /* InAppViewController.swift */,
+				2FC76C90255E684E00851B9A /* InAppViewControllerFormElements.swift */,
 				8874917F249A8FCD008816B9 /* ModalViewController.swift */,
 				88007E2024A38CEE002A9132 /* RecommendationViewController.swift */,
 				8858B7A524F52D2F00FDF378 /* StoryViewController.swift */,
@@ -229,17 +246,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		C076CB6F01BD7D41A942D6F3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */,
-				A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */,
-				05A0A12AA7D6185DEC095E67 /* Pods-VisilabsIOS_Tests.debug.xcconfig */,
-				3A207F1AEB1DB0DC569D37CF /* Pods-VisilabsIOS_Tests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -252,6 +258,7 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				C26DE9A8DFB0128017C5CD4D /* [CP] Embed Pods Frameworks */,
+				2FC76C8D255E617B00851B9A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -328,6 +335,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FC76CA2255EB64700851B9A /* .swiftlint.yml in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
@@ -344,6 +352,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2FC76C8D255E617B00851B9A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		704C9071A5EA5D6998A8C57B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -426,6 +451,7 @@
 				8811477524EABCA0006848F9 /* DataManager.swift in Sources */,
 				8862E46A247EE3FF00C230DD /* VisilabsProfile.swift in Sources */,
 				8862E462247ED6D000C230DD /* EventViewController.swift in Sources */,
+				2FC76C91255E684E00851B9A /* InAppViewControllerFormElements.swift in Sources */,
 				88B2A47924A0D0FA00C153DC /* Extensions.swift in Sources */,
 				88370C9424853675005645F5 /* FormHelper.swift in Sources */,
 				88B2A47B24A0DF7300C153DC /* GeofenceViewController.swift in Sources */,
@@ -590,7 +616,7 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 920404EDEE4645A2C7EA176C /* Pods-VisilabsIOS_Example.debug.xcconfig */;
+			baseConfigurationReference = C626C330236EF50F12029D52 /* Pods-VisilabsIOS_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = VisilabsIOS_Example.entitlements;
@@ -609,7 +635,7 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9B53F2EA189EB2E5F62DEBD /* Pods-VisilabsIOS_Example.release.xcconfig */;
+			baseConfigurationReference = 829265E3D18E646742B7CFD4 /* Pods-VisilabsIOS_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = VisilabsIOS_Example.entitlements;
@@ -628,7 +654,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05A0A12AA7D6185DEC095E67 /* Pods-VisilabsIOS_Tests.debug.xcconfig */;
+			baseConfigurationReference = BE61694D1517D111E8015DA5 /* Pods-VisilabsIOS_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -651,7 +677,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A207F1AEB1DB0DC569D37CF /* Pods-VisilabsIOS_Tests.release.xcconfig */;
+			baseConfigurationReference = 5973BE33E93D0BE4A9700F7E /* Pods-VisilabsIOS_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				FRAMEWORK_SEARCH_PATHS = (

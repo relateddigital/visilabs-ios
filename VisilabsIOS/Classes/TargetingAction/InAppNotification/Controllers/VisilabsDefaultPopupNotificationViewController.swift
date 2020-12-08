@@ -6,26 +6,31 @@
 //
 
 import UIKit
-
+//swiftlint:disable type_name
 final public class VisilabsDefaultPopupNotificationViewController: UIViewController {
 
-    weak var visilabsInAppNotification : VisilabsInAppNotification?
-    
-    convenience init(visilabsInAppNotification: VisilabsInAppNotification) {
+    weak var visilabsInAppNotification: VisilabsInAppNotification?
+    var mailForm: MailSubscriptionViewModel?
+
+    convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
+                     emailForm: MailSubscriptionViewModel? = nil) {
         self.init()
         self.visilabsInAppNotification = visilabsInAppNotification
-        if let image = visilabsInAppNotification.image {
+        self.mailForm = emailForm
+        if let image = visilabsInAppNotification?.image {
             self.image = UIImage(data: image)
         }
     }
-    
+
     public var standardView: VisilabsPopupDialogDefaultView {
        return view as! VisilabsPopupDialogDefaultView // swiftlint:disable:this force_cast
     }
 
     override public func loadView() {
         super.loadView()
-        view = VisilabsPopupDialogDefaultView(frame: .zero, visilabsInAppNotification: visilabsInAppNotification!)
+        view = VisilabsPopupDialogDefaultView(frame: .zero,
+                                              visilabsInAppNotification: visilabsInAppNotification,
+                                              emailForm: mailForm)
     }
 }
 
@@ -43,12 +48,12 @@ public extension VisilabsDefaultPopupNotificationViewController {
             standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
         }
     }
-    
-    //TODO: hideTitle ve hideMessage kaldırılabilir sanırım.
+
+    //TO_DO: hideTitle ve hideMessage kaldırılabilir sanırım.
     func hideTitle() {
         standardView.titleLabel.isHidden = true
     }
-    
+
     func hideMessage() {
         standardView.messageLabel.isHidden = true
     }
@@ -126,7 +131,7 @@ public extension VisilabsDefaultPopupNotificationViewController {
             standardView.pv_layoutIfNeededAnimated()
         }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
