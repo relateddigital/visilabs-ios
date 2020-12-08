@@ -70,8 +70,11 @@ extension VisilabsPopupDialogDefaultView {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textAlignment = .natural
         textField.font = .systemFont(ofSize: 14)
-        textField.textColor = .white
+        textField.textColor = .black
         textField.borderStyle = .line
+        textField.layer.borderColor = UIColor.systemGray.cgColor
+        textField.layer.borderWidth = 0.5
+        textField.tintColor = .systemGray
         textField.delegate = self
         return textField
     }
@@ -80,15 +83,16 @@ extension VisilabsPopupDialogDefaultView {
         let check = Checkbox(frame: .zero)
         check.checkmarkStyle = .tick
         check.borderStyle = .square
-        check.uncheckedBorderColor = .white
-        check.checkedBorderColor = .white
-        check.checkmarkColor = .white
+        check.uncheckedBorderColor = .systemGray
+        check.checkedBorderColor = .systemGray
+        check.checkmarkColor = .systemGray
         return check
     }
 
     internal func setTermsButton() -> UIButton {
         let button = UIButton(frame: .zero)
         button.titleLabel?.font = .systemFont(ofSize: 10)
+        button.titleLabel?.textColor = .systemGray
         button.addTarget(self, action: #selector(termsButtonTapped(_:)), for: .touchUpInside)
         return button
     }
@@ -232,8 +236,10 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(firstCheckBox)
         addSubview(resultLabel)
 
+        titleLabel.font = emailForm?.titleFont
+        messageLabel.font = emailForm?.messageFont
+
         self.emailTF.placeholder = emailForm?.placeholder ?? ""
-        
         let parsedPermit = emailForm?.permitText ?? ParsedPermissionString(string: "Click here to read terms & conditions.", location: 5, length: 6)
 
         resultLabel.text = emailForm?.checkConsentMessage
