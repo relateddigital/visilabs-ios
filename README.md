@@ -22,6 +22,7 @@
         - [Favorite Attribute Actions](#Favorite-Attribute-Actions)
         - [Story Actions](#Story-Actions)
         - [Geofencing](#Geofencing)
+        - [Mail Subscription Form](#Mail-Subscription-Form)
     - [Recommendation](#Recommendation)
 
 
@@ -441,6 +442,12 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
         return true
     }                                        
 ```
+
+### Mail Subscription Form
+
+After form is created at **RMC** panel, likewise **in-app message**, existence of mail subscription form is controlled by after each `customEvent` call. It is shown as follows;
+
+![mail-subscription-form](/Screenshots/InAppNotification/mail-subscription-form.png)
 
 ## Recommendation
 
