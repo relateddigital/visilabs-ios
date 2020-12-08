@@ -40,8 +40,9 @@ public class VisilabsRecommendationFilter {
     var attribute: VisilabsProductFilterAttribute
     var filterType: VisilabsRecommendationFilterType
     var value: String
-    
-    public init(attribute: VisilabsProductFilterAttribute, filterType: VisilabsRecommendationFilterType, value: String){
+
+    public init(attribute: VisilabsProductFilterAttribute,
+                filterType: VisilabsRecommendationFilterType, value: String) {
         self.attribute = attribute
         self.filterType = filterType
         self.value = value
@@ -49,12 +50,12 @@ public class VisilabsRecommendationFilter {
 }
 
 public class VisilabsProduct {
-    
+
     public enum PayloadKey {
         public static let code = "code"
         public static let title = "title"
         public static let img = "img"
-        public static let dest_url = "dest_url"
+        public static let destUrl = "dest_url"
         public static let brand = "brand"
         public static let price = "price"
         public static let dprice = "dprice"
@@ -71,11 +72,11 @@ public class VisilabsProduct {
         public static let attr4 = "attr4"
         public static let attr5 = "attr5"
     }
-    
+
     public var code: String
     public var title: String
     public var img: String
-    public var dest_url: String
+    public var destUrl: String
     public var brand: String
     public var price: Double = 0.0
     public var dprice: Double = 0.0
@@ -91,12 +92,31 @@ public class VisilabsProduct {
     public var attr3: String
     public var attr4: String
     public var attr5: String
-    
-    internal init(code: String, title: String, img: String, dest_url: String, brand: String, price: Double, dprice: Double, cur: String, dcur: String, freeshipping: Bool, samedayshipping: Bool, rating: Int, comment: Int, discount: Double, attr1: String, attr2: String, attr3: String, attr4: String, attr5: String) {
+
+    internal init(code: String,
+                  title: String,
+                  img: String,
+                  destUrl: String,
+                  brand: String,
+                  price: Double,
+                  dprice: Double,
+                  cur: String,
+                  dcur: String,
+                  freeshipping: Bool,
+                  samedayshipping: Bool,
+                  rating: Int,
+                  comment: Int,
+                  discount: Double,
+                  attr1: String,
+                  attr2: String,
+                  attr3: String,
+                  attr4: String,
+                  attr5: String) {
+
         self.code = code
         self.title = title
         self.img = img
-        self.dest_url = dest_url
+        self.destUrl = destUrl
         self.brand = brand
         self.price = price
         self.dprice = dprice
@@ -113,14 +133,14 @@ public class VisilabsProduct {
         self.attr4 = attr4
         self.attr5 = attr5
     }
-    
+
     internal init?(JSONObject: [String: Any?]?) {
-        
+
         guard let object = JSONObject else {
             VisilabsLogger.error("product json object should not be nil")
             return nil
         }
-        
+
         guard let code = object[PayloadKey.code] as? String else {
             VisilabsLogger.error("invalid \(PayloadKey.code)")
             return nil
@@ -129,7 +149,7 @@ public class VisilabsProduct {
         self.code = code
         self.title = object[PayloadKey.title] as? String ?? ""
         self.img = object[PayloadKey.img] as? String ?? ""
-        self.dest_url = object[PayloadKey.dest_url] as? String ?? ""
+        self.destUrl = object[PayloadKey.destUrl] as? String ?? ""
         self.brand = object[PayloadKey.brand] as? String ?? ""
         self.price = object[PayloadKey.price] as? Double ?? 0.0
         self.dprice = object[PayloadKey.dprice] as? Double ?? 0.0
@@ -151,7 +171,7 @@ public class VisilabsProduct {
 public class VisilabsRecommendationResponse {
     public var products: [VisilabsProduct]
     public var error: VisilabsError?
-    
+
     internal init(products: [VisilabsProduct], error: VisilabsError? = nil) {
         self.products = products
         self.error = error

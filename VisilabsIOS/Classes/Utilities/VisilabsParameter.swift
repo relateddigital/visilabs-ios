@@ -7,7 +7,7 @@
 
 import Foundation
 
-class VisilabsParameter{
+class VisilabsParameter {
     var key: String
     var storeKey: String
     var count: UInt8

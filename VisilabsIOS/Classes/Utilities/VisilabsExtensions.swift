@@ -23,8 +23,8 @@ extension Data {
 JSON convenient categories on NSString
 */
 extension String {
-    
-    //TODO:self as nsstring'e gerek var mı?
+
+    //TO_DO:self as nsstring'e gerek var mı?
     func stringBetweenString(start: String?, end: String?) -> String? {
         let startRange = (self as NSString).range(of: start ?? "")
         if startRange.location != NSNotFound {
@@ -48,43 +48,42 @@ extension String {
     func contains(_ string: String) -> Bool {
         return contains(string, options: [])
     }
-    
-    //TODO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
+
+    //TO_DO:bunu kontrol et: objective-c'de pointer'lı bir şeyler kullanıyorduk
     func urlEncode() -> String {
         return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
     }
-    
+
     func urlDecode() -> String {
         return self.removingPercentEncoding ?? ""
     }
-    
+
     func convertJsonStringToDictionary() -> [String: Any]? {
         if let data = self.data(using: .utf8) {
             return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
         }
         return nil
     }
-    
+
     var isEmptyOrWhitespace: Bool {
         return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
-    
-    
+
     /**
     Returns a Foundation object from the given JSON string.
      
     - returns: A Foundation object from the JSON string, or nil if an error occurs.
     */
-    
+
     func objectFromJsonString() -> Any? {
         let data = self.data(using: .utf8)
         return data?.objectFromJsonData()
     }
-    
+
     func getUrlWithoutExtension() -> String {
         return URL(fileURLWithPath: self).deletingPathExtension().absoluteString
     }
-    
+
     func getUrlExtension() -> String {
         return URL(fileURLWithPath: self).pathExtension
     }
@@ -95,13 +94,13 @@ JSON convenient extensions on NSArray
 */
 
 extension Array {
-    
+
     /**
     Returns JSON string from the given array.
     
     - returns: returns  a JSON String, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
     */
-    
+
     func jsonString() -> String? {
         let data = jsonData()
         if data != nil {
@@ -112,7 +111,7 @@ extension Array {
         }
         return nil
     }
-    
+
     /**
     Returns JSON data from the given array.
     
@@ -129,13 +128,13 @@ JSON convenient extensions on Dictionary
 */
 
 extension Dictionary {
-    
+
     /**
     Returns JSON string from the given dictionary.
     
     - returns: returns a JSON String, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
     */
-    
+
     func jsonString() -> String? {
         let data = jsonData()
         if data != nil {
@@ -146,7 +145,7 @@ extension Dictionary {
         }
         return nil
     }
-    
+
     /**
     Returns JSON data from the given dictionary.
     
@@ -167,7 +166,7 @@ extension Optional where Wrapped == String {
 }
 
 extension Optional where Wrapped == [String] {
-    mutating func mergeStringArray(_ newArray: [String]){
+    mutating func mergeStringArray(_ newArray: [String]) {
         self = self ?? [String]()
         for newArrayElement in newArray {
             if !self!.contains(newArrayElement) {

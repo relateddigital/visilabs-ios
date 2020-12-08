@@ -12,9 +12,23 @@ class VisilabsManager {
     init() {
         VisilabsLogger.addLogging(VisilabsPrintLogging())
     }
-
-    func initialize(organizationId: String, profileId: String, dataSource: String, inAppNotificationsEnabled: Bool, channel: String, requestTimeoutInSeconds: Int, geofenceEnabled: Bool, maxGeofenceCount: Int) -> VisilabsInstance {
-        let instance = VisilabsInstance(organizationId: organizationId, profileId: profileId, dataSource: dataSource, inAppNotificationsEnabled: inAppNotificationsEnabled, channel: channel, requestTimeoutInSeconds: requestTimeoutInSeconds, geofenceEnabled: geofenceEnabled, maxGeofenceCount: maxGeofenceCount)
+    //swiftlint:disable function_parameter_count
+    func initialize(organizationId: String,
+                    profileId: String,
+                    dataSource: String,
+                    inAppNotificationsEnabled: Bool,
+                    channel: String,
+                    requestTimeoutInSeconds: Int,
+                    geofenceEnabled: Bool,
+                    maxGeofenceCount: Int) -> VisilabsInstance {
+        let instance = VisilabsInstance(organizationId: organizationId,
+                                        profileId: profileId,
+                                        dataSource: dataSource,
+                                        inAppNotificationsEnabled: inAppNotificationsEnabled,
+                                        channel: channel,
+                                        requestTimeoutInSeconds: requestTimeoutInSeconds,
+                                        geofenceEnabled: geofenceEnabled,
+                                        maxGeofenceCount: maxGeofenceCount)
         self.instance = instance
         return instance
     }

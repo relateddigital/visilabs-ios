@@ -9,16 +9,16 @@
 import Foundation
 
 class DataManager {
-    
+
     static let visilabsProfileKey = "VisilabsProfile"
-    
+
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
         let encoder = JSONEncoder()
         if let encodedVisilabsProfile = try? encoder.encode(visilabsProfile) {
             save(visilabsProfileKey, withObject: encodedVisilabsProfile)
         }
     }
-    
+
     static func readVisilabsProfile() -> VisilabsProfile? {
         if let savedVisilabsProfile = read(visilabsProfileKey) as? Data {
             let decoder = JSONDecoder()
@@ -28,7 +28,7 @@ class DataManager {
         }
         return nil
     }
-    
+
     static func save(_ key: String, withObject value: Any?) {
         UserDefaults.standard.set(value, forKey: key)
         UserDefaults.standard.synchronize()
@@ -42,5 +42,5 @@ class DataManager {
         UserDefaults.standard.removeObject(forKey: key)
         UserDefaults.standard.synchronize()
     }
-    
+
 }

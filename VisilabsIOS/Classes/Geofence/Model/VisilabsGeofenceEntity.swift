@@ -6,7 +6,14 @@
 //
 
 public class VisilabsGeofenceEntity: Codable {
-    internal init(actId: Int, geofenceId: Int, latitude: Double, longitude: Double, radius: Double, durationInSeconds: Int, targetEvent: String, distanceFromCurrentLastKnownLocation: Double?) {
+    internal init(actId: Int,
+                  geofenceId: Int,
+                  latitude: Double,
+                  longitude: Double,
+                  radius: Double,
+                  durationInSeconds: Int,
+                  targetEvent: String,
+                  distanceFromCurrentLastKnownLocation: Double?) {
         self.actId = actId
         self.geofenceId = geofenceId
         self.latitude = latitude

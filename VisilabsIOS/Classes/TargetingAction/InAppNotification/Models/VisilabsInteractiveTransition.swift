@@ -21,14 +21,14 @@ class VisilabsInteractiveTransition: UIPercentDrivenInteractiveTransition {
 
     @objc func handlePan(_ sender: UIPanGestureRecognizer) {
 
-        guard let vc = viewController else { return }
+        guard let viewController = viewController else { return }
 
         guard let progress = calculateProgress(sender: sender) else { return }
 
         switch sender.state {
         case .began:
             hasStarted = true
-            vc.dismiss(animated: true, completion: nil)
+            viewController.dismiss(animated: true, completion: nil)
         case .changed:
             shouldFinish = progress > 0.3
             update(progress)
@@ -53,11 +53,11 @@ internal extension VisilabsInteractiveTransition {
      - returns: Progress
      */
     func calculateProgress(sender: UIPanGestureRecognizer) -> CGFloat? {
-        guard let vc = viewController else { return nil }
+        guard let viewController = viewController else { return nil }
 
         // http://www.thorntech.com/2016/02/ios-tutorial-close-modal-dragging/
-        let translation = sender.translation(in: vc.view)
-        let verticalMovement = translation.y / vc.view.bounds.height
+        let translation = sender.translation(in: viewController.view)
+        let verticalMovement = translation.y / viewController.view.bounds.height
         let downwardMovement = fmaxf(Float(verticalMovement), 0.0)
         let downwardMovementPercent = fminf(downwardMovement, 1.0)
         let progress = CGFloat(downwardMovementPercent)

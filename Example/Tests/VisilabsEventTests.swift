@@ -9,16 +9,12 @@
 import XCTest
 @testable import VisilabsIOS
 
-
 class VisilabsEventTests: VisilabsBaseTests {
-    
+
     func testExVisitorId() {
         var properties = [String: String]()
         properties[VisilabsConstants.EXVISITORID_KEY] = "TestVisitor"
         visilabs.customEvent("TestEvent", properties: properties)
-        
-        
-        
     }
-    
+
 }

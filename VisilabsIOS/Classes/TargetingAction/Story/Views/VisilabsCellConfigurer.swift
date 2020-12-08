@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol VisilabsCellConfigurer:class {
+protocol VisilabsCellConfigurer: class {
     static var reuseIdentifier: String {get}
 }
 
 extension VisilabsCellConfigurer {
-    static var reuseIdentifier: String{
+    static var reuseIdentifier: String {
         return String(describing: self)
     }
 }

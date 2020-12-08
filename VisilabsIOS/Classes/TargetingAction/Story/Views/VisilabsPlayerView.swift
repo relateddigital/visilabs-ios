@@ -39,8 +39,8 @@ protocol PlayerControls: class {
 }
 
 class VisilabsPlayerView: UIView {
-    
-    //MARK: - Private Vars
+
+    // MARK: - Private Vars
     private var timeObserverToken: AnyObject?
     private var playerItemStatusObserver: NSKeyValueObservation?
     private var playerTimeControlStatusObserver: NSKeyValueObservation?
@@ -53,12 +53,16 @@ class VisilabsPlayerView: UIView {
         }
         didSet {
             player?.replaceCurrentItem(with: playerItem)
-            playerItemStatusObserver = playerItem?.observe(\AVPlayerItem.status, options: [.new, .initial], changeHandler: { [weak self] (item, _) in
+            playerItemStatusObserver = playerItem?.observe(\AVPlayerItem.status,
+                                        options: [.new, .initial], changeHandler: { [weak self] (item, _) in
                 guard let strongSelf = self else { return }
                 if item.status == .failed {
                     strongSelf.activityIndicator.stopAnimating()
-                    if let item = strongSelf.player?.currentItem, let error = item.error, let url = item.asset as? AVURLAsset {
-                        strongSelf.playerObserverDelegate?.didFailed(withError: error.localizedDescription, for: url.url)
+                    if let item = strongSelf.player?.currentItem,
+                       let error = item.error,
+                       let url = item.asset as? AVURLAsset {
+                        strongSelf.playerObserverDelegate?.didFailed(withError: error.localizedDescription,
+                                                                     for: url.url)
                     } else {
                         strongSelf.playerObserverDelegate?.didFailed(withError: "Unknown error", for: nil)
                     }
@@ -66,8 +70,8 @@ class VisilabsPlayerView: UIView {
             })
         }
     }
-    
-    //MARK: - iVars
+
+    // MARK: - iVars
     var player: AVPlayer? {
         willSet {
             // Remove any previous KVO observer.
@@ -75,7 +79,8 @@ class VisilabsPlayerView: UIView {
             playerTimeControlStatusObserver.invalidate()
         }
         didSet {
-            playerTimeControlStatusObserver = player?.observe(\AVPlayer.timeControlStatus, options: [.new, .initial], changeHandler: { [weak self] (player, _) in
+            playerTimeControlStatusObserver = player?.observe(\AVPlayer.timeControlStatus,
+                                            options: [.new, .initial], changeHandler: { [weak self] (player, _) in
                 guard let strongSelf = self else { return }
                 if player.timeControlStatus == .playing {
                     //Started Playing
@@ -93,18 +98,18 @@ class VisilabsPlayerView: UIView {
         return player?.currentItem?.error
     }
     var activityIndicator: UIActivityIndicatorView!
-    
+
     var currentItem: AVPlayerItem? {
         return player?.currentItem
     }
     var currentTime: Float {
         return Float(self.player?.currentTime().value ?? 0)
     }
-    
-    //MARK: - Public Vars
+
+    // MARK: - Public Vars
     public weak var playerObserverDelegate: VisilabsPlayerObserver?
-    
-    //MARK:- Init methods
+
+    // MARK: - Init methods
     override init(frame: CGRect) {
         activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +129,7 @@ class VisilabsPlayerView: UIView {
             removeObservers()
         }
     }
-    
+
     // MARK: - Internal methods
     func setupActivityIndicator() {
         activityIndicator.hidesWhenStopped = true
@@ -155,11 +160,11 @@ class VisilabsPlayerView: UIView {
     func setupPlayerPeriodicTimeObserver() {
         // Only add the time observer if one hasn't been created yet.
         guard timeObserverToken == nil else { return }
-        
+
         // Use a weak self variable to avoid a retain cycle in the block.
         timeObserverToken =
-            player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100), queue: DispatchQueue.main) {
-                [weak self] time in
+            player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 100),
+                                    queue: DispatchQueue.main) { [weak self] time in
                 let timeString = String(format: "%02.2f", CMTimeGetSeconds(time))
                 if let currentItem = self?.player?.currentItem {
                     let totalTimeString =  String(format: "%02.2f", CMTimeGetSeconds(currentItem.asset.duration))
@@ -176,9 +181,9 @@ class VisilabsPlayerView: UIView {
 
 // MARK: - Protocol | PlayerControls
 extension VisilabsPlayerView: PlayerControls {
-    
+
     func play(with resource: VideoResource) {
-        
+
         guard let url = URL(string: resource.filePath) else {fatalError("Unable to form URL from resource")}
         if let existingPlayer = player {
             DispatchQueue.main.async { [weak self] in
@@ -216,7 +221,7 @@ extension VisilabsPlayerView: PlayerControls {
             DispatchQueue.main.async {[weak self] in
                 guard let strongSelf = self else { return }
                 existingPlayer.pause()
-                
+
                 //Remove observer if observer presents before setting player to nil
                 if existingPlayer.observationInfo != nil {
                     strongSelf.removeObservers()
@@ -231,8 +236,8 @@ extension VisilabsPlayerView: PlayerControls {
         }
     }
     var playerStatus: PlayerStatus {
-        if let p = player {
-            switch p.status {
+        if let plyr = player {
+            switch plyr.status {
             case .unknown: return .unknown
             case .readyToPlay: return .readyToPlay
             case .failed: return .failed

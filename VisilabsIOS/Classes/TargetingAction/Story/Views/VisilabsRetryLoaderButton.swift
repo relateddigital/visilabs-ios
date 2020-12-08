@@ -33,9 +33,9 @@ public class VisilabsRetryLoaderButton: UIButton {
 
 extension UIView {
     func removeRetryButton() {
-        self.subviews.forEach({v in
-            if(v.tag == 100){v.removeFromSuperview()}
+        self.subviews.forEach({view in
+            if view.tag == 100 {view.removeFromSuperview()}
         })
     }
-    
+
 }

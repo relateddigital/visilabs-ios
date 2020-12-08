@@ -7,22 +7,24 @@
 
 import Foundation
 
-
-protocol VisilabsNotificationViewControllerDelegate {
+protocol VisilabsNotificationViewControllerDelegate: AnyObject {
     @discardableResult
     func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
                                    callToActionURL: URL?,
                                    shouldTrack: Bool,
-                                   additionalTrackingProperties: [String:String]?) -> Bool
+                                   additionalTrackingProperties: [String: String]?) -> Bool
+    func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController,
+                               click: String)
 }
 
 class VisilabsBaseNotificationViewController: UIViewController {
 
-    var notification: VisilabsInAppNotification!
-    var delegate: VisilabsNotificationViewControllerDelegate?
+    var notification: VisilabsInAppNotification?
+    var mailForm: MailSubscriptionViewModel?
+    weak var delegate: VisilabsNotificationViewControllerDelegate?
     var window: UIWindow?
     var panStartPoint: CGPoint!
-    
+
     convenience init(notification: VisilabsInAppNotification, nameOfClass: String) {
         // avoiding `type(of: self)` as it doesn't work with Swift 4.0.3 compiler
         // perhaps due to `self` not being fully constructed at this point
@@ -30,7 +32,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
         self.init(nibName: nameOfClass, bundle: bundle)
         self.notification = notification
     }
-    
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .all
     }
@@ -41,56 +43,61 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
     func show(animated: Bool) {}
     func hide(animated: Bool, completion: @escaping () -> Void) {}
-    
-}
 
+}
 
 extension UIColor {
 
     convenience init?(hex: String?, alpha: CGFloat = 1.0) {
-        
+
         guard let hexString = hex else {
             return nil
         }
         var cString: String = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
 
-        if (cString.hasPrefix("#")) { cString.removeFirst() }
+        if cString.hasPrefix("#") { cString.removeFirst() }
 
-        if (cString.count != 6 && cString.count != 8) {
+        if cString.count != 6 && cString.count != 8 {
             return nil
         }
 
         var rgbValue: UInt64 = 0
         Scanner(string: cString).scanHexInt64(&rgbValue)
-        
+
         if cString.count == 6 {
             self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
                     green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
                     blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
                     alpha: alpha)
         } else {
-            let a = CGFloat((rgbValue & 0xff000000) >> 24) / 255
-            let r = CGFloat((rgbValue & 0x00ff0000) >> 16) / 255
-            let g = CGFloat((rgbValue & 0x0000ff00) >> 8) / 255
-            let b = CGFloat(rgbValue & 0x000000ff) / 255
-            self.init(red: r, green: g, blue: b, alpha: a)
+            let alpha = CGFloat((rgbValue & 0xff000000) >> 24) / 255
+            let red = CGFloat((rgbValue & 0x00ff0000) >> 16) / 255
+            let green = CGFloat((rgbValue & 0x0000ff00) >> 8) / 255
+            let blue = CGFloat(rgbValue & 0x000000ff) / 255
+            self.init(red: red, green: green, blue: blue, alpha: alpha)
         }
     }
-    
+
     convenience init?(rgbaString: String) {
-        let rgbaNumbersString = rgbaString.replacingOccurrences(of: "rgba(", with: "").replacingOccurrences(of: ")", with: "")
+        let rgbaNumbersString = rgbaString.replacingOccurrences(of: "rgba(", with: "")
+            .replacingOccurrences(of: ")", with: "")
         let rgbaParts = rgbaNumbersString.split(separator: ",")
         if rgbaParts.count == 4 {
-            guard let r = Float(rgbaParts[0]), let g = Float(rgbaParts[1]), let b = Float(rgbaParts[2]), let a = Float(rgbaParts[3]) else {
+            guard let red = Float(rgbaParts[0]),
+                  let green = Float(rgbaParts[1]),
+                  let blue = Float(rgbaParts[2]),
+                  let alpha = Float(rgbaParts[3]) else {
                return nil
             }
-            self.init(red: CGFloat(r / 255.0), green: CGFloat(g / 255.0), blue: CGFloat(b / 255.0), alpha: CGFloat(a))
-            
+            self.init(red: CGFloat(red / 255.0),
+                      green: CGFloat(green / 255.0),
+                      blue: CGFloat(blue / 255.0),
+                      alpha: CGFloat(alpha))
+
         } else {
             return nil
         }
     }
-    
 
     /**
      Add two colors together
@@ -109,10 +116,10 @@ extension UIColor {
         self.getRed(&bgR, green: &bgG, blue: &bgB, alpha: &bgA)
         overlay.getRed(&fgR, green: &fgG, blue: &fgB, alpha: &fgA)
 
-        let r = fgA * fgR + (1 - fgA) * bgR
-        let g = fgA * fgG + (1 - fgA) * bgG
-        let b = fgA * fgB + (1 - fgA) * bgB
+        let red = fgA * fgR + (1 - fgA) * bgR
+        let green = fgA * fgG + (1 - fgA) * bgG
+        let blue = fgA * fgB + (1 - fgA) * bgB
 
-        return UIColor(red: r, green: g, blue: b, alpha: 1.0)
+        return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
     }
 }

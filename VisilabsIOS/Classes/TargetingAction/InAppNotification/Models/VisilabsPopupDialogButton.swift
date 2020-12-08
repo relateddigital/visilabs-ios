@@ -20,10 +20,10 @@ open class VisilabsPopupDialogButton: UIButton {
         get { return titleLabel?.font }
         set { titleLabel?.font = newValue }
     }
-    
+
     /// The height of the button
     @objc open dynamic var buttonHeight: Int
-    
+
     /// The title color of the button
     @objc open dynamic var titleColor: UIColor? {
         get { return self.titleColor(for: UIControl.State()) }
@@ -91,20 +91,19 @@ open class VisilabsPopupDialogButton: UIButton {
 
      - returns: PopupDialogButton
      */
-    @objc public init(title: String, height: Int = 45, font: UIFont, buttonTextColor: UIColor?, buttonColor: UIColor?, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
+    @objc public init(title: String, height: Int = 45, font: UIFont, buttonTextColor: UIColor?,
+                      buttonColor: UIColor?, dismissOnTap: Bool = true, action: PopupDialogButtonAction?) {
 
         // Assign the button height
         buttonHeight = height
-        
+
         // Assign the button action
         buttonAction = action
-        
+
         defaultTitleFont = font
-        
-        
 
         super.init(frame: .zero)
-        
+
         if let bTextColor = buttonTextColor {
             self.titleColor = bTextColor
         }
@@ -143,11 +142,16 @@ open class VisilabsPopupDialogButton: UIButton {
         let views = ["separator": separator, "leftSeparator": leftSeparator, "button": self]
         let metrics = ["buttonHeight": buttonHeight]
         var constraints = [NSLayoutConstraint]()
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:[button(buttonHeight)]", options: [], metrics: metrics, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[separator]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[separator(1)]", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[leftSeparator(1)]", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[leftSeparator]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:[button(buttonHeight)]",
+                                                      options: [], metrics: metrics, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[separator]|",
+                                                      options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[separator(1)]",
+                                                      options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[leftSeparator(1)]",
+                                                      options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[leftSeparator]|",
+                                                      options: [], metrics: nil, views: views)
         NSLayoutConstraint.activate(constraints)
     }
 
@@ -157,4 +161,3 @@ open class VisilabsPopupDialogButton: UIButton {
         }
     }
 }
-

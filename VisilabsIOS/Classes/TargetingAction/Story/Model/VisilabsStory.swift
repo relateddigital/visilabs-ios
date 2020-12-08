@@ -8,7 +8,8 @@
 import Foundation
 
 class VisilabsStory {
-    internal init(title: String? = nil, smallImg: String? = nil, link: String? = nil, items: [VisilabsStoryItem]? = nil) {
+    internal init(title: String? = nil, smallImg: String? = nil,
+                  link: String? = nil, items: [VisilabsStoryItem]? = nil) {
         self.title = title
         self.smallImg = smallImg
         self.link = link

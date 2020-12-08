@@ -8,8 +8,8 @@
 import Foundation
 
 enum VisilabsRequestMethod: String {
-    case get = "get"
-    case post = "post"
+    case get
+    case post
 }
 
 enum VisilabsEndpoint {
@@ -19,6 +19,7 @@ enum VisilabsEndpoint {
     case action
     case geofence
     case mobile
+    case subsjson
 }
 
 struct VisilabsResource<A> {
@@ -27,7 +28,7 @@ struct VisilabsResource<A> {
     let timeoutInterval: TimeInterval
     let requestBody: Data?
     let queryItems: [URLQueryItem]?
-    let headers: [String:String]
+    let headers: [String: String]
     let parse: (Data) -> A?
     let guid: String?
 }
@@ -51,7 +52,7 @@ public enum VisilabsError: Codable {
             throw CodingError.unknownValue
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Key.self)
         switch self {
@@ -66,18 +67,18 @@ public enum VisilabsError: Codable {
             try container.encode(3, forKey: .rawValue)
             try container.encode(errorDescription, forKey: .associatedValue)
         }
-        
+
     }
-    
+
     enum Key: CodingKey {
         case rawValue
         case associatedValue
     }
-    
+
     enum CodingError: Error {
         case unknownValue
     }
-    
+
     case parseError
     case noData
     case notOKStatusCode(statusCode: Int)
@@ -85,9 +86,9 @@ public enum VisilabsError: Codable {
 }
 
 struct VisilabsBasePath {
-    static var endpoints = [VisilabsEndpoint : String]()
-    
-    //TODO: path parametresini kaldır
+    static var endpoints = [VisilabsEndpoint: String]()
+
+    //TO_DO: path parametresini kaldır
     static func buildURL(visilabsEndpoint: VisilabsEndpoint, queryItems: [URLQueryItem]?) -> URL? {
         guard let endpoint = endpoints[visilabsEndpoint], let url = URL(string: endpoint) else {
             return nil
@@ -96,6 +97,7 @@ struct VisilabsBasePath {
         //components?.path = path
         components?.queryItems = queryItems
         return components?.url
+        
     }
 
     static func getEndpoint(visilabsEndpoint: VisilabsEndpoint) -> String {
@@ -104,14 +106,15 @@ struct VisilabsBasePath {
 }
 
 class VisilabsNetwork {
-    
-    class func apiRequest<A>(resource: VisilabsResource<A>, failure: @escaping (VisilabsError, Data?, URLResponse?) -> (), success: @escaping (A, URLResponse?) -> ()) {
+
+    class func apiRequest<A>(resource: VisilabsResource<A>,
+                             failure: @escaping (VisilabsError, Data?, URLResponse?) -> Void,
+                             success: @escaping (A, URLResponse?) -> Void) {
         guard let request = buildURLRequest(resource: resource) else {
             return
         }
 
-        
-        //TODO: burada cookie'leri düzgün handle edecek bir yöntem bul.
+        //TO_DO: burada cookie'leri düzgün handle edecek bir yöntem bul.
         URLSession.shared.dataTask(with: request) { (data, response, error) -> Void in
             guard let httpResponse = response as? HTTPURLResponse else {
 
@@ -122,8 +125,8 @@ class VisilabsNetwork {
                 }
                 return
             }
-            
-            //TODO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201(created) de dönebiliyor. 304(Not modified)
+
+            //TO_DO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201(created) de dönebiliyor. 304(Not modified)
             guard httpResponse.statusCode == 200/*OK*/ else {
                 failure(.notOKStatusCode(statusCode: httpResponse.statusCode), data, response)
                 return
@@ -140,28 +143,43 @@ class VisilabsNetwork {
             success(result, response)
         }.resume()
     }
-    
+
     private class func buildURLRequest<A>(resource: VisilabsResource<A>) -> URLRequest? {
-        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint, queryItems: resource.queryItems) else {
+        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint,
+                                                  queryItems: resource.queryItems) else {
             return nil
         }
 
-        VisilabsLogger.debug("Fetching URL");
-        VisilabsLogger.debug(url.absoluteURL);
+        VisilabsLogger.debug("Fetching URL")
+        VisilabsLogger.debug(url.absoluteURL)
         var request = URLRequest(url: url)
         request.httpMethod = resource.method.rawValue
         request.httpBody = resource.requestBody
-        //TODO: timeoutInterval dışarıdan alınacak
+        //TO_DO: timeoutInterval dışarıdan alınacak
         request.timeoutInterval = 60
 
-        for (k, v) in resource.headers {
-            request.setValue(v, forHTTPHeaderField: k)
+        for (key, value) in resource.headers {
+            request.setValue(value, forHTTPHeaderField: key)
         }
         return request as URLRequest
     }
-    
-    class func buildResource<A>(endPoint: VisilabsEndpoint, method: VisilabsRequestMethod, timeoutInterval:TimeInterval, requestBody: Data? = nil, queryItems: [URLQueryItem]? = nil, headers: [String: String], parse: @escaping (Data) -> A?, guid: String? = nil) -> VisilabsResource<A> {
-        return VisilabsResource(endPoint: endPoint, method: method, timeoutInterval: timeoutInterval, requestBody: requestBody, queryItems: queryItems, headers: headers, parse: parse, guid: guid)
+
+    class func buildResource<A>(endPoint: VisilabsEndpoint,
+                                method: VisilabsRequestMethod,
+                                timeoutInterval: TimeInterval,
+                                requestBody: Data? = nil,
+                                queryItems: [URLQueryItem]? = nil,
+                                headers: [String: String],
+                                parse: @escaping (Data) -> A?,
+                                guid: String? = nil) -> VisilabsResource<A> {
+        return VisilabsResource(endPoint: endPoint,
+                                method: method,
+                                timeoutInterval: timeoutInterval,
+                                requestBody: requestBody,
+                                queryItems: queryItems,
+                                headers: headers,
+                                parse: parse,
+                                guid: guid)
     }
-    
+
 }

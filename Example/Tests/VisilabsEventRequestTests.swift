@@ -10,7 +10,7 @@ import XCTest
 @testable import VisilabsIOS
 
 class VisilabsEventRequestTests: XCTestCase {
-    
+
     /*
     func testLoggerCookies() {
         
@@ -22,7 +22,8 @@ class VisilabsEventRequestTests: XCTestCase {
         
         var cs: [String: String]?
         
-        VisilabsRequest.sendEventRequest(visilabsEndpoint: .logger, properties: properties, headers: headers, timeoutInterval: timeoutInterval) { (cookies) in
+        VisilabsRequest.sendEventRequest(visilabsEndpoint: .logger, properties: properties,
+     headers: headers, timeoutInterval: timeoutInterval) { (cookies) in
             
             cs = cookies
             promise.fulfill()
@@ -32,7 +33,6 @@ class VisilabsEventRequestTests: XCTestCase {
         XCTAssert(cs == nil || cs?.count == 0, "No cookies")
     }
  */
-    
 }
 
 //VisilabsEventRequest

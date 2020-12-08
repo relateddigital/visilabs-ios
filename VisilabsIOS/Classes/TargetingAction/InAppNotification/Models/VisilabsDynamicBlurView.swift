@@ -8,12 +8,13 @@
 import UIKit
 
 open class VisilabsDynamicBlurView: UIView {
-    open override class var layerClass : AnyClass {
+    open override class var layerClass: AnyClass {
         return VisilabsBlurLayer.self
     }
 
     private var staticImage: UIImage?
     private var displayLink: CADisplayLink?
+    //swiftlint:disable force_cast
     private var blurLayer: VisilabsBlurLayer {
         return layer as! VisilabsBlurLayer
     }
@@ -34,12 +35,13 @@ open class VisilabsDynamicBlurView: UIView {
     }
 
     /// When true, it captures displays image and blur it asynchronously. Try to set true if needs more performance.
-    /// Asynchronous drawing is possibly crash when needs to process on main thread that drawing with animation for example.
+    /// Asynchronous drawing is possibly crash when needs to process on main thread
+    /// that drawing with animation for example.
     open var drawsAsynchronously: Bool = false
     /// Radius of blur.
     open var blurRadius: CGFloat {
-        set { blurLayer.blurRadius = newValue }
         get { return blurLayer.blurRadius }
+        set { blurLayer.blurRadius = newValue }
     }
     /// Default is none.
     open var trackingMode: VisilabsTrackingMode = .none {
@@ -115,9 +117,14 @@ open class VisilabsDynamicBlurView: UIView {
 
     private func draw(_ image: UIImage, blurRadius radius: CGFloat, fixes isFixes: Bool, baseLayer: CALayer?) {
         async(on: globalQueue) { [weak self] in
-            if let me = self, let blurredImage = image.blurred(radius: radius, iterations: me.iterations, ratio: me.blurRatio, blendColor: me.blendColor, blendMode: me.blendMode) {
-                me.sync(on: me.mainQueue) {
-                    me.blurLayer.draw(blurredImage, fixes: isFixes, baseLayer: baseLayer)
+            if let blurView = self,
+               let blurredImage = image.blurred(radius: radius,
+                                                iterations: blurView.iterations,
+                                                ratio: blurView.blurRatio,
+                                                blendColor: blurView.blendColor,
+                                                blendMode: blurView.blendMode) {
+                blurView.sync(on: blurView.mainQueue) {
+                    blurView.blurLayer.draw(blurredImage, fixes: isFixes, baseLayer: baseLayer)
                 }
             }
         }
@@ -161,7 +168,8 @@ extension VisilabsDynamicBlurView {
 extension VisilabsDynamicBlurView {
     private func linkForDisplay() {
         displayLink?.invalidate()
-        displayLink = UIScreen.main.displayLink(withTarget: self, selector: #selector(VisilabsDynamicBlurView.displayDidRefresh(_:)))
+        displayLink = UIScreen.main.displayLink(withTarget: self,
+                    selector: #selector(VisilabsDynamicBlurView.displayDidRefresh(_:)))
         displayLink?.add(to: .main, forMode: RunLoop.Mode(rawValue: trackingMode.description))
     }
 
