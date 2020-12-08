@@ -286,8 +286,8 @@ class VisilabsTargetingAction {
         let consentUrl = URL(string: emailForm.extendedProps.consentTextUrl)
         let buttonTextColor = UIColor(hex: emailForm.extendedProps.buttonTextColor) ?? .white
         let buttonColor = UIColor(hex: emailForm.extendedProps.buttonColor) ?? .black
-        let permitTextSize = (Int(emailForm.extendedProps.emailPermitTextSize) ?? 0) + 8
-        let consentTextSize = (Int(emailForm.extendedProps.consentTextSize) ?? 0) + 8
+        let permitTextSize = (Int(emailForm.extendedProps.emailPermitTextSize) ?? 0) + 6
+        let consentTextSize = (Int(emailForm.extendedProps.consentTextSize) ?? 0) + 6
         let viewModel = MailSubscriptionViewModel(auth: emailForm.auth,
                                                   actId: emailForm.actid,
                                                   type: emailForm.type,
