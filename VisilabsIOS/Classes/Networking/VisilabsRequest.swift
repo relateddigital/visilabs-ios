@@ -296,11 +296,13 @@ class VisilabsRequest {
                                                       headers: headers,
                                                       parse: responseParser,
                                                       guid: guid)
-        VisilabsNetwork.apiRequest(resource: resource) { (error, _, _) in
-            VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error).")
-        } success: { (result, _) in
-            print("Successfully sent!")
-        }
+        
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (error, _, _) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+            }, success: { (_, _) in
+                print("Successfully sent!")
+            })
 
         
     }
