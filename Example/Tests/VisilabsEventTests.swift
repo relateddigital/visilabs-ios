@@ -13,7 +13,7 @@ class VisilabsEventTests: VisilabsBaseTests {
 
     func testExVisitorId() {
         var properties = [String: String]()
-        properties[VisilabsConstants.EXVISITORID_KEY] = "TestVisitor"
+        properties[VisilabsConstants.exvisitorIdKey] = "TestVisitor"
         visilabs.customEvent("TestEvent", properties: properties)
     }
 
