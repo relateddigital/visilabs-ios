@@ -16,7 +16,7 @@ class VisilabsEvent {
     }
 
     //swiftlint:disable large_tuple function_body_length cyclomatic_complexity
-    func customEvent(pageName: String,
+    func customEvent(pageName: String? = nil,
                      properties: [String: String],
                      eventsQueue: Queue,
                      visilabsUser: VisilabsUser,
@@ -78,7 +78,9 @@ class VisilabsEvent {
         props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId
         props[VisilabsConstants.cookieIdKey] = vUser.cookieId ?? ""
         props[VisilabsConstants.channelKey] = chan
-        props[VisilabsConstants.uriKey] = pageName
+        if let pageNm = pageName {
+            props[VisilabsConstants.uriKey] = pageNm
+        }
         props[VisilabsConstants.mobileApplicationKey] = VisilabsConstants.isTrue
         props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
         props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
