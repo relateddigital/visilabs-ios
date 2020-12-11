@@ -86,7 +86,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         titleLabel.font = model.titleFont
         titleLabel.textColor = model.titleColor
         
-        messageLabel.text = model.message
+        messageLabel.text = model.message.removeEscapingCharacters()
         messageLabel.font = model.messageFont
         messageLabel.textColor = model.textColor
         
