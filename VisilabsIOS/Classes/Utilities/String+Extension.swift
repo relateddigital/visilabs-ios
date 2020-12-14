@@ -54,6 +54,10 @@ extension String {
         click.omZn = znStr
         return click
     }
+
+    func removeEscapingCharacters() -> String {
+        return self.replacingOccurrences(of: "\\n", with: "\n")
+    }
 }
 
 struct ParsedPermissionString {
