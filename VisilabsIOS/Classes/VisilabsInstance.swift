@@ -219,6 +219,40 @@ extension VisilabsInstance {
             self.send()
         }
     }
+    
+    public func sendCampaignParameters(properties: [String: String]) {
+
+        trackingQueue.async { [weak self, properties] in
+            guard let strongSelf = self else { return }
+            var eQueue = Queue()
+            var vUser = VisilabsUser()
+            var chan = ""
+            strongSelf.readWriteLock.read {
+                eQueue = strongSelf.eventsQueue
+                vUser = strongSelf.visilabsUser
+                chan = strongSelf.visilabsProfile.channel
+            }
+            let result = strongSelf.visilabsEventInstance.customEvent(properties: properties,
+                                                                eventsQueue: eQueue,
+                                                                visilabsUser: vUser,
+                                                                channel: chan)
+            strongSelf.readWriteLock.write {
+                strongSelf.eventsQueue = result.eventsQueque
+                strongSelf.visilabsUser = result.visilabsUser
+                strongSelf.visilabsProfile.channel = result.channel
+            }
+            strongSelf.readWriteLock.read {
+                VisilabsPersistence.archiveUser(strongSelf.visilabsUser)
+                if result.clearUserParameters {
+                    VisilabsPersistence.clearTargetParameters()
+                }
+            }
+            if let event = strongSelf.eventsQueue.last {
+                VisilabsPersistence.saveTargetParameters(event)
+            }
+            strongSelf.send()
+        }
+    }
 
     public func login(exVisitorId: String, properties: [String: String] = [String: String]()) {
         if exVisitorId.isEmptyOrWhitespace {

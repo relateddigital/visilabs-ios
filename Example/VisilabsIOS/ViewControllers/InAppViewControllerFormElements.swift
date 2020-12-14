@@ -239,6 +239,7 @@ extension InAppViewController {
     }
 
     func showNotificationTapped() {
+
         let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
         print("Form erros count: \(errors.count)")
         for error in errors {
