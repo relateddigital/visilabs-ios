@@ -220,7 +220,7 @@ extension VisilabsInstance {
         }
     }
     
-    public func sendPropertiesWithoutPageName(properties: [String: String]) {
+    public func sendCampaignParameters(properties: [String: String]) {
 
         trackingQueue.async { [weak self, properties] in
             guard let strongSelf = self else { return }

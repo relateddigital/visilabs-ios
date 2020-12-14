@@ -239,31 +239,22 @@ extension InAppViewController {
     }
 
     func showNotificationTapped() {
-//        temp.. uncomment below lines!!!
-        
-//        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
-//        print("Form erros count: \(errors.count)")
-//        for error in errors {
-//            print(error.msg)
-//        }
-//        if errors.count > 0 {
-//            return
-//        }
-//        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
-//        if value == "emailForm" {
-//            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
-//        } else {
-//            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
-//            Visilabs.callAPI().showNotification(visilabsInAppNotification)
-//        }
-        var prop: [String: String] = [:]
-        prop["OM.zn"] = "111111"
-        prop["OM.zpc"] = "222222"
-        prop["utm_campaign"]  = "campaign test"
-        prop["utm_medium"] = "utm medium test"
-        prop["utm_source"] = "utm source test"
-        prop["OM.exVisitorID"] = "said@test.com"
-        Visilabs.callAPI().sendPropertiesWithoutPageName(properties: prop)
+
+        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
+        print("Form erros count: \(errors.count)")
+        for error in errors {
+            print(error.msg)
+        }
+        if errors.count > 0 {
+            return
+        }
+        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
+        if value == "emailForm" {
+            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+        } else {
+            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
+            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+        }
     }
     //swiftlint:disable function_body_length
     func createVisilabsInAppNotificationModel() -> VisilabsInAppNotification {
