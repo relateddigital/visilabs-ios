@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VisilabsIOS'
-  s.version          = '2.2.2'
+  s.version          = '2.2.3'
   s.summary          = 'Visilabs IOS SDK'
   s.description      = 'Visilabs IOS SDK'
   s.homepage         = 'https://www.relateddigital.com'
