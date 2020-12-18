@@ -82,7 +82,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     
     func setupInitialViewForEmailForm() {
         guard let model = self.emailForm else { return }
-        titleLabel.text = model.title
+        titleLabel.text = model.title.removeEscapingCharacters()
         titleLabel.font = model.titleFont
         titleLabel.textColor = model.titleColor
         
