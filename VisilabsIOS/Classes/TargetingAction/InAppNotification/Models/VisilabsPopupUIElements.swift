@@ -162,7 +162,7 @@ extension VisilabsPopupDialogDefaultView {
             self.backgroundColor = bgColor
         }
 
-        titleLabel.text = notification.messageTitle
+        titleLabel.text = notification.messageTitle?.removeEscapingCharacters()
         titleLabel.font = notification.messageTitleFont
         if let titleColor = notification.messageTitleColor {
             titleLabel.textColor = titleColor
