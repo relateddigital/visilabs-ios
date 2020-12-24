@@ -44,6 +44,18 @@ class VisilabsBaseNotificationViewController: UIViewController {
     func show(animated: Bool) {}
     func hide(animated: Bool, completion: @escaping () -> Void) {}
 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if self.mailForm != nil {
+            return
+        }
+        let touch = touches.first
+        if !(touch?.view is VisilabsPopupDialogDefaultView) {
+            print("___should dismiss")
+            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
+        } else {
+            print("___dont dismiss")
+        }
+    }
 }
 
 extension UIColor {
