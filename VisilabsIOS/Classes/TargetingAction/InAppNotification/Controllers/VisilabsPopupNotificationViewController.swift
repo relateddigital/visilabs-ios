@@ -46,6 +46,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     // MARK: - Initializers
 
     override func hide(animated: Bool, completion: @escaping () -> Void) {
+        dismiss(animated: true)
         completion()
     }
 
