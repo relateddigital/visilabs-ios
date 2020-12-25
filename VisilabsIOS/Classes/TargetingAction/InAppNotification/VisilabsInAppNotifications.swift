@@ -167,11 +167,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let completionBlock = {
             if shouldTrack {
                 var properties = additionalTrackingProperties
-                if (callToActionURL?.absoluteString) != nil {
-                    if properties == nil {
+                if properties == nil {
                         properties = [:]
                     }
-                }
                 if additionalTrackingProperties != nil {
                     properties!["OM.s_point"] = additionalTrackingProperties!["OM.s_point"]
                     properties!["OM.s_cat"] = additionalTrackingProperties!["OM.s_cat"]
