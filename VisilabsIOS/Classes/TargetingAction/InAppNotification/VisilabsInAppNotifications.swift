@@ -43,6 +43,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     shownNotification = self.showMiniNotification(notification)
                 case .full:
                     shownNotification = self.showFullNotification(notification)
+                case .alert:
+                    shownNotification = true
+                    self.showAlert(notification)
                 default:
                     shownNotification = self.showPopUp(notification)
                 }
@@ -88,6 +91,35 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         fullNotificationVC.delegate = self
         fullNotificationVC.show(animated: true)
         return true
+    }
+
+    func showAlert(_ notification: VisilabsInAppNotification) {
+        let title = notification.messageTitle?.removeEscapingCharacters()
+        let message = notification.messageBody?.removeEscapingCharacters()
+        let style: UIAlertController.Style = notification.alertType?.lowercased() ?? "" == "actionsheet" ? .actionSheet : .alert
+        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        
+        let buttonTxt = notification.buttonText
+        let urlStr = notification.iosLink ?? ""
+        let action = UIAlertAction(title: buttonTxt, style: .default) { (_) in
+            guard let url = URL(string: urlStr) else {
+                return
+            }
+            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        }
+        
+        let closeText = notification.closeButtonText ?? "Close"
+        let close = UIAlertAction(title: closeText, style: .destructive) { (_) in
+            print("dismiss tapped")
+        }
+        
+        alert.addAction(action)
+        alert.addAction(close)
+        
+        if let root = getRootViewController() {
+            root.present(alert, animated: true, completion: self.alertDismiss)
+        }
+        
     }
 
     // TO_DO: bu gerekmeyecek sanırım
@@ -199,5 +231,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
     func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String) {
         
+    }
+    
+    func alertDismiss() {
+        self.currentlyShowingNotification = nil
+        self.currentlyShowingMailForm = nil
     }
 }

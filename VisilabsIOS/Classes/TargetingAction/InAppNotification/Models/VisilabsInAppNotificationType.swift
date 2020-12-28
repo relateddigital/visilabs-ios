@@ -14,4 +14,5 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case imageButton = "image_button"
     case smileRating = "smile_rating"
     case emailForm
+    case alert
 }
