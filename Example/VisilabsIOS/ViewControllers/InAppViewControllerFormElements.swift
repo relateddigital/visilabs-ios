@@ -237,7 +237,22 @@ extension InAppViewController {
             self.showNotificationTapped()
         }
     }
-
+    func addCloseButtonTextTextRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.closeButtonText) {
+            $0.title = "Close Button Text"
+            $0.placeholder = "Close"
+            $0.value = "Close"
+        }
+    }
+    
+    func addAlertTypePickerInputRow() -> PickerInputRow<String> {
+        return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.alertType) {
+            $0.title = "Alert Type"
+            $0.options = ["NativeAlert", "ActionSheet"]
+            $0.value = "NativeAlert"
+        }
+    }
+    
     func showNotificationTapped() {
 
         let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
@@ -302,6 +317,12 @@ extension InAppViewController {
             imageUrlString = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
         }
 
+        tag = VisilabsInAppNotification.PayloadKey.closeButtonText
+        let closeButtonText = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
+
+        tag = VisilabsInAppNotification.PayloadKey.alertType
+        let alertType = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+
         return VisilabsInAppNotification(actId: 0,
                                         type: messageType,
                                         messageTitle: messageTitle,
@@ -319,6 +340,8 @@ extension InAppViewController {
                                         backGround: backGround,
                                         closeButtonColor: closeButtonColor,
                                         buttonTextColor: buttonTextColor,
-                                        buttonColor: buttonColor)
+                                        buttonColor: buttonColor,
+                                        alertType: alertType,
+                                        closeButtonText: closeButtonText)
     }
 }
