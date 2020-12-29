@@ -29,6 +29,8 @@ public class VisilabsInAppNotification {
         public static let closeButtonColor = "close_button_color"
         public static let buttonTextColor = "button_text_color"
         public static let buttonColor = "button_color"
+        public static let alertType = "alert_type"
+        public static let closeButtonText = "close_button_text"
     }
 
     let actId: Int
@@ -50,7 +52,9 @@ public class VisilabsInAppNotification {
     let closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?
-
+    let alertType: String?
+    let closeButtonText: String?
+    
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
@@ -89,7 +93,9 @@ public class VisilabsInAppNotification {
                 backGround: String?,
                 closeButtonColor: String?,
                 buttonTextColor: String?,
-                buttonColor: String?) {
+                buttonColor: String?,
+                alertType: String?,
+                closeButtonText: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -128,6 +134,8 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
+        self.alertType = alertType
+        self.closeButtonText = closeButtonText
         setFonts()
     }
 
@@ -194,7 +202,8 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-
+        self.alertType = actionData[PayloadKey.alertType] as? String
+        self.closeButtonText = actionData[PayloadKey.closeButtonText] as? String
         setFonts()
     }
 
