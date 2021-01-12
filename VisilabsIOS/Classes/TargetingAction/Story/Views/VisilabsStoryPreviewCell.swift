@@ -85,6 +85,9 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     public var snapIndex: Int = 0 {
         didSet {
             scrollview.isUserInteractionEnabled = true
+            if let st = story {
+                setStoryShown(story: st)
+            }
             switch direction {
             case .forward:
                 if snapIndex < story?.items.count ?? 0 {
@@ -94,6 +97,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                 startRequest(snapView: snapView, with: snap.url)
                             } else {
                                 let snapView = createSnapView()
+                                
                                 startRequest(snapView: snapView, with: snap.url)
                             }
                         } else {
@@ -115,8 +119,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                             }
                         } else {
                             if let videoView = getVideoView(with: snapIndex) {
-                                startPlayer(videoView: videoView, with: snap.url)
-                            } else {
+                                startPlayer(videoView: videoView, with: snap.url)                            } else {
                                 let videoView = self.createVideoView()
                                 self.startPlayer(videoView: videoView, with: snap.url)
                             }
@@ -704,6 +707,17 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             playerView.removeRetryButton()
             self.startPlayer(videoView: playerView, with: url)
         }
+    }
+    
+    private func setStoryShown(story: VisilabsStory) {
+        var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
+            as? [String: [String]] ?? [String: [String]]()
+        if shownStories["\(story.actid)"] != nil {
+            shownStories["\(story.actid)"]?.append(story.title ?? "")
+        } else {
+            shownStories["\(story.actid)"] = [story.title ?? ""]
+        }
+        UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
     }
 }
 

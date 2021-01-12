@@ -354,14 +354,14 @@ class VisilabsTargetingAction {
                                             visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.title]
                                                                                     as? String,
                                             smallImg: story[VisilabsConstants.thumbnail] as? String,
-                                            link: story[VisilabsConstants.link] as? String, items: storyItems))
+                                            link: story[VisilabsConstants.link] as? String, items: storyItems, actid: actionId))
                                         }
                                     }
                                 } else {
                                     visilabsStories.append(VisilabsStory(title: story[VisilabsConstants.title]
                                                                             as? String,
                                     smallImg: story[VisilabsConstants.smallImg] as? String,
-                                    link: story[VisilabsConstants.link] as? String))
+                                    link: story[VisilabsConstants.link] as? String, actid: actionId))
                                 }
                             }
                             let (clickQueryItems, impressionQueryItems)
