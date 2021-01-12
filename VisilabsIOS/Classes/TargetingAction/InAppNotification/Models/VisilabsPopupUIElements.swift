@@ -39,6 +39,17 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.font = .boldSystemFont(ofSize: 14)
         return titleLabel
     }
+    
+    internal func setCopyCodeText() -> UIButton {
+        let copyCodeText = UIButton(frame: .zero)
+        copyCodeText.translatesAutoresizingMaskIntoConstraints = false
+        copyCodeText.setTitle("DENEMEKUPON", for: .normal)
+        copyCodeText.backgroundColor = UIColor.white
+        copyCodeText.setTitleColor(.black, for: .normal)
+        copyCodeText.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
+        
+        return copyCodeText
+    }
 
     internal func setMessageLabel() -> UILabel {
         let messageLabel = UILabel(frame: .zero)
@@ -185,13 +196,18 @@ extension VisilabsPopupDialogDefaultView {
     internal func setupForImageTextButton() {
         addSubview(titleLabel)
         addSubview(messageLabel)
+        addSubview(copyCodeTextButton)
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-        messageLabel.bottom(to: self, offset: -10.0)
+        copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
+        copyCodeTextButton.bottom(to: self, offset: 0.0)
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
+        copyCodeTextButton.leading(to: self)
+        copyCodeTextButton.trailing(to: self)
     }
+    
 
     internal func setupForNps() {
         addSubview(titleLabel)
