@@ -73,7 +73,8 @@ public class VisilabsStoryHomeViewController: NSObject,
                 let actid = self.storyAction.actionId
                 
                 //Save UserDefaults as shown
-                var shownStories = UserDefaults.standard.dictionary(forKey: "shownStories") as? [String: [String]] ?? [String: [String]]()
+                var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
+                    as? [String: [String]] ?? [String: [String]]()
                 if shownStories["\(actid)"] != nil {
                     shownStories["\(actid)"]?.append(title)
                 } else {
