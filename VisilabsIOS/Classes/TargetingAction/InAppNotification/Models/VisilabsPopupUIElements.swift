@@ -50,6 +50,16 @@ extension VisilabsPopupDialogDefaultView {
         
         return copyCodeText
     }
+    
+    internal func setCopyCodeImage() -> UIButton {
+        let copyCodeImage = UIButton(frame: .zero)
+        let copyIconImage = UIImage(named: "RelatedCopyButton")
+        copyCodeImage.setImage(copyIconImage, for: .normal)
+        copyCodeImage.translatesAutoresizingMaskIntoConstraints = false
+        copyCodeImage.backgroundColor = UIColor.red
+        copyCodeImage.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
+        return copyCodeImage
+    }
 
     internal func setMessageLabel() -> UILabel {
         let messageLabel = UILabel(frame: .zero)
@@ -197,15 +207,21 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(titleLabel)
         addSubview(messageLabel)
         addSubview(copyCodeTextButton)
+        addSubview(copyCodeImageButton)
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
         copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
         copyCodeTextButton.bottom(to: self, offset: 0.0)
+        copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
+        copyCodeImageButton.bottom(to: self, offset: 0.0)
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
         copyCodeTextButton.leading(to: self)
-        copyCodeTextButton.trailing(to: self)
+        copyCodeTextButton.trailing(to: copyCodeImageButton, offset: 10.0)
+        copyCodeImageButton.leadingToTrailing(of: copyCodeTextButton, offset: 10.0)
+        copyCodeImageButton.width(75.0)
+        copyCodeImageButton.trailing(to: self, offset: 20.0)
     }
     
 

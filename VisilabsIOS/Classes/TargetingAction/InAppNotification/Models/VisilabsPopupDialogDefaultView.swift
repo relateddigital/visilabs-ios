@@ -16,6 +16,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var imageView = setImageView()
     internal lazy var titleLabel = setTitleLabel()
     internal lazy var copyCodeTextButton = setCopyCodeText()
+    internal lazy var copyCodeImageButton = setCopyCodeImage()
     internal lazy var messageLabel = setMessageLabel()
     internal lazy var npsView = setNpsView()
 
@@ -179,8 +180,8 @@ extension VisilabsPopupDialogDefaultView {
     @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
         let pasteboard = UIPasteboard.general
         pasteboard.string = copyCodeTextButton.currentTitle
-        let coupon = pasteboard.string
-        print(coupon ?? "kupon değil")
+        guard let coupon = pasteboard.string else { return }
+        print(coupon)
         
     }
 
