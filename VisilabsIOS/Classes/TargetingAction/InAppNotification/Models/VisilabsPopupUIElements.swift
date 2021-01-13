@@ -53,7 +53,7 @@ extension VisilabsPopupDialogDefaultView {
     
     internal func setCopyCodeImage() -> UIButton {
         let copyCodeImage = UIButton(frame: .zero)
-        let copyIconImage = UIImage(named: "RelatedCopyButton")
+        let copyIconImage = VisilabsHelper.getUIImage(named: "RelatedCopyButton@2x")
         copyCodeImage.setImage(copyIconImage, for: .normal)
         copyCodeImage.translatesAutoresizingMaskIntoConstraints = false
         copyCodeImage.backgroundColor = UIColor.red
@@ -214,14 +214,13 @@ extension VisilabsPopupDialogDefaultView {
         copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
         copyCodeTextButton.bottom(to: self, offset: 0.0)
         copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
-        copyCodeImageButton.bottom(to: self, offset: 0.0)
+        copyCodeImageButton.bottom(to: copyCodeTextButton)
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
         copyCodeTextButton.leading(to: self)
-        copyCodeTextButton.trailing(to: copyCodeImageButton, offset: 10.0)
-        copyCodeImageButton.leadingToTrailing(of: copyCodeTextButton, offset: 10.0)
-        copyCodeImageButton.width(75.0)
-        copyCodeImageButton.trailing(to: self, offset: 20.0)
+        copyCodeImageButton.width(50.0)
+        copyCodeImageButton.trailing(to: self)
+        copyCodeTextButton.trailingToLeading(of: copyCodeImageButton)
     }
     
 
