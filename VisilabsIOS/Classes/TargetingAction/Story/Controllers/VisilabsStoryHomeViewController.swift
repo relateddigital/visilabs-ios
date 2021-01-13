@@ -60,6 +60,10 @@ public class VisilabsStoryHomeViewController: NSObject,
         if self.storyAction.stories.count == 0 {
             return
         }
+        let title = self.storyAction.stories[indexPath.row].title ?? ""
+        let actid = self.storyAction.actionId
+        self.setStoryShown(title: title, actid: actid)
+
         if self.storyAction.storyTemplate == .skinBased {
             DispatchQueue.main.async {
                 for index in self.storyAction.stories.indices {
@@ -69,18 +73,6 @@ public class VisilabsStoryHomeViewController: NSObject,
                 }
                 let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories,
                                                 handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
-                let title = self.storyAction.stories[indexPath.row].title ?? ""
-                let actid = self.storyAction.actionId
-                
-                //Save UserDefaults as shown
-                var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
-                    as? [String: [String]] ?? [String: [String]]()
-                if shownStories["\(actid)"] != nil {
-                    shownStories["\(actid)"]?.append(title)
-                } else {
-                    shownStories["\(actid)"] = [title]
-                }
-                UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
                 
                 storyPreviewScene.modalPresentationStyle = .fullScreen
                 let app = VisilabsInstance.sharedUIApplication()
@@ -98,6 +90,7 @@ public class VisilabsStoryHomeViewController: NSObject,
                 let app = VisilabsInstance.sharedUIApplication()
                 app?.performSelector(onMainThread: NSSelectorFromString("openURL:"),
                                      with: storyUrl, waitUntilDone: true)
+                collectionView.reloadData()
             }
         }
     }
@@ -129,5 +122,17 @@ public class VisilabsStoryHomeViewController: NSObject,
             }
         }
         return notShownStories + shownStories
+    }
+    
+    private func setStoryShown(title: String, actid: Int) {
+        //Save UserDefaults as shown
+        var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
+            as? [String: [String]] ?? [String: [String]]()
+        if shownStories["\(actid)"] != nil {
+            shownStories["\(actid)"]?.append(title)
+        } else {
+            shownStories["\(actid)"] = [title]
+        }
+        UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
     }
 }
