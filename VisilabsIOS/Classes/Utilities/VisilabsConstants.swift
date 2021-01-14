@@ -141,7 +141,7 @@ struct VisilabsConstants {
     static let storylbLabelColor = "storylb_label_color"
     static let storyzimgBorderColor = "storyz_img_borderColor"
     static let storyzImgBorderRadius = "storyz_img_borderRadius"
-    
+    static let shownStories = "shownStories"
     //Email form constants
     static let message = "message"
     static let placeholder = "placeholder"
