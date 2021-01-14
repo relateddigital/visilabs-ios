@@ -9,7 +9,7 @@ import Foundation
 
 class VisilabsStory {
     internal init(title: String? = nil, smallImg: String? = nil,
-                  link: String? = nil, items: [VisilabsStoryItem]? = nil) {
+                  link: String? = nil, items: [VisilabsStoryItem]? = nil, actid: Int) {
         self.title = title
         self.smallImg = smallImg
         self.link = link
@@ -19,6 +19,7 @@ class VisilabsStory {
             self.items = [VisilabsStoryItem]()
         }
         self.internalIdentifier = UUID().uuidString
+        self.actid = actid
     }
     let title: String?
     let smallImg: String?
@@ -30,6 +31,7 @@ class VisilabsStory {
     var isCancelledAbruptly = false
     var clickQueryItems = [String: String]()
     var impressionQueryItems = [String: String]()
+    var actid: Int
 }
 
 extension VisilabsStory: Equatable {
