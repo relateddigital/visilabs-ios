@@ -22,6 +22,8 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var viewMask: UIView!
     @IBOutlet weak var fadingView: FadingView!
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
+    
+    var copyEnabled = true
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -90,21 +92,10 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: imageView.frame.size.width, height: inAppButton.frame.size.height))
-        button.backgroundColor = .black
-        button.setTitle("DENEMEKUPON", for: .normal)
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-
-        self.view.addSubview(button)
+        if (copyEnabled == false) {
+            setupCopyButton()
+        }
         
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: imageView.frame.size.width).isActive = true
-        button.heightAnchor.constraint(equalToConstant:  inAppButton.frame.size.height).isActive = true
-        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
-
     }
     
     @objc func buttonAction(sender: UIButton!) {
@@ -134,6 +125,23 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         buttonView.backgroundColor = buttonColor
         buttonView.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControl.Event.touchUpInside)
         buttonView.tag = 0
+    }
+    
+    func setupCopyButton() {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: imageView.frame.size.width, height: inAppButton.frame.size.height))
+        button.backgroundColor = .black
+        button.setTitle("DENEMEKUPON", for: .normal)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+
+        self.view.addSubview(button)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        button.widthAnchor.constraint(equalToConstant: imageView.frame.size.width).isActive = true
+        button.heightAnchor.constraint(equalToConstant:  inAppButton.frame.size.height).isActive = true
+        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
     }
 
     override func show(animated: Bool) {
