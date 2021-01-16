@@ -23,7 +23,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var fadingView: FadingView!
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
     
-    var copyEnabled = true
+    var isCopyEnabled = true
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -92,14 +92,14 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
-        if (copyEnabled == false) {
+        if isCopyEnabled {
             setupCopyButton()
         }
         
     }
     
     @objc func buttonAction(sender: UIButton!) {
-        Helper.showToast("Kupon kodu kopyalandı", delay: 1.5)
+        VisilabsHelper.showToast("Kupon kodu kopyalandı", delay: 1.5)
     }
 
     func setupButtonView(buttonView: UIButton) {
@@ -137,11 +137,11 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         self.view.addSubview(button)
         
         button.translatesAutoresizingMaskIntoConstraints = false
-
+        button.topAnchor.constraint(equalTo: self.bodyLabel.bottomAnchor, constant: 20).isActive = true
         button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         button.widthAnchor.constraint(equalToConstant: imageView.frame.size.width).isActive = true
         button.heightAnchor.constraint(equalToConstant:  inAppButton.frame.size.height).isActive = true
-        button.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -100).isActive = true
+        button.bottomAnchor.constraint(equalTo: self.inAppButton.topAnchor, constant: -20).isActive = true
     }
 
     override func show(animated: Bool) {

@@ -208,21 +208,27 @@ extension VisilabsPopupDialogDefaultView {
     internal func setupForImageTextButton() {
         addSubview(titleLabel)
         addSubview(messageLabel)
-        addSubview(copyCodeTextButton)
-        addSubview(copyCodeImageButton)
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-        copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
-        copyCodeTextButton.bottom(to: self, offset: 0.0)
-        copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
-        copyCodeImageButton.bottom(to: copyCodeTextButton)
+        var copyCodeEnabled = false
+        if copyCodeEnabled {
+            addSubview(copyCodeTextButton)
+            addSubview(copyCodeImageButton)
+            copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
+            copyCodeTextButton.bottom(to: self, offset: 0.0)
+            copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
+            copyCodeImageButton.bottom(to: copyCodeTextButton)
+            copyCodeTextButton.leading(to: self)
+            copyCodeImageButton.width(50.0)
+            copyCodeImageButton.trailing(to: self)
+            copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
+        } else {
+            messageLabel.bottom(to: self, offset: -10)
+        }
+        
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
-        copyCodeTextButton.leading(to: self)
-        copyCodeImageButton.width(50.0)
-        copyCodeImageButton.trailing(to: self)
-        copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
     }
     
 

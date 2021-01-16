@@ -180,7 +180,7 @@ extension VisilabsPopupDialogDefaultView {
     @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
         let pasteboard = UIPasteboard.general
         pasteboard.string = copyCodeTextButton.currentTitle
-        Helper.showToast("Kopyalandı", delay: 1.5)
+        VisilabsHelper.showToast("Kopyalandı", delay: 1.5)
     }
 
     @objc func consentButtonTapped(_ sender: UIButton) {
