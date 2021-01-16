@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 extension VisilabsPopupDialogDefaultView {
+    
+    
 
     internal func setCloseButton() -> UIButton {
         let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
