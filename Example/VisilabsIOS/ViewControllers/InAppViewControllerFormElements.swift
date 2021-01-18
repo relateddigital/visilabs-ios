@@ -252,7 +252,7 @@ extension InAppViewController {
             $0.value = "NativeAlert"
         }
     }
-    
+
     func showNotificationTapped() {
 
         let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)

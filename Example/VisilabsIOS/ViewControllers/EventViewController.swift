@@ -39,7 +39,8 @@ class EventViewController: FormViewController {
                                 "image_button": 156,
                                 "smile_rating": 157,
                                 "emailForm": 354,
-                                "alert": 395]
+                                "alert": 395,
+                                "number_rating": 999]
 
     override func viewDidLoad() {
         super.viewDidLoad()

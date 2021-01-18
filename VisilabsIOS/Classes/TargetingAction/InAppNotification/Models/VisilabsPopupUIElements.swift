@@ -111,6 +111,15 @@ extension VisilabsPopupDialogDefaultView {
         label.textColor = .red
         return label
     }
+    
+    internal func setNumberRating() -> UICollectionView {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.register(RatingCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        return cv
+    }
 
     internal func setSliderStepRating() -> VisilabsSliderStep {
 
@@ -206,6 +215,28 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
         npsView.centerX(to: self)
+    }
+
+    internal func setupForNumberRating() {
+        addSubview(titleLabel)
+        addSubview(messageLabel)
+        addSubview(numberRating)
+        
+        self.colors = UIColor.getGradientColorArray(.systemRed, .systemYellow, .systemGreen)
+        
+        imageView.allEdges(to: self, excluding: .bottom)
+        titleLabel.topToBottom(of: imageView, offset: 10.0)
+        messageLabel.topToBottom(of: titleLabel, offset: 8.0)
+        numberRating.topToBottom(of: messageLabel, offset: 10.0)
+        numberRating.height(50.0)
+        numberRating.leading(to: self, offset: 0)
+        numberRating.trailing(to: self, offset: 0)
+        numberRating.bottom(to: self, offset: -10.0)
+        numberRating.backgroundColor = .clear
+        titleLabel.centerX(to: self)
+        messageLabel.centerX(to: self)
+        numberRating.delegate = self
+        numberRating.dataSource = self
     }
 
     internal func setupForSmileRating() {
@@ -309,4 +340,37 @@ extension VisilabsPopupDialogDefaultView {
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
         messageLabel.bottom(to: self, offset: -10.0)
     }
+}
+
+extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RatingCollectionViewCell
+        if cell.isSelected {
+            return CGSize(width: 29.0, height: 29.0)
+        }
+        let nWidth = (self.numberRating.frame.width - 100) / 10
+        return CGSize(width: nWidth, height: nWidth)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RatingCollectionViewCell
+        cell.rating = indexPath.row + 1
+        cell.setGradient(colors: self.colors[indexPath.row])
+        return cell
+    }
+    
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
 }
