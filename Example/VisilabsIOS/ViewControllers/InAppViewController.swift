@@ -91,7 +91,7 @@ class InAppViewController: FormViewController {
         switch messageType {
         case .mini:
             setFormRowsForMini()
-        case .full, .imageTextButton, .smileRating, .nps:
+        case .full, .imageTextButton, .smileRating, .nps, .numberRating:
             setFormRowsForDefault()
         case.fullImage:
             setFormRowsForFullImage()
