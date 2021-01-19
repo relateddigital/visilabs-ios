@@ -23,7 +23,12 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var fadingView: FadingView!
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
     
-    var isCopyEnabled = true
+    @IBOutlet weak var buttonTopCC: NSLayoutConstraint!
+    @IBOutlet weak var bodyButtonCC: NSLayoutConstraint!
+    @IBOutlet weak var buttonTopNormal: NSLayoutConstraint!
+    @IBOutlet weak var bodyButtonNormal: NSLayoutConstraint!
+    
+    var isCopyEnabled = false
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -93,7 +98,11 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.layer.cornerRadius = 6
         }
         if isCopyEnabled {
-            setupCopyButton()
+            self.buttonTopCC.isActive = true
+            self.buttonTopCC.isActive = true
+            self.buttonTopNormal.isActive = false
+            self.bodyButtonNormal.isActive = false
+//            setupCopyButton()
         }
         
     }
@@ -134,14 +143,13 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         button.tintColor = .white
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
 
-        self.view.addSubview(button)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.topAnchor.constraint(equalTo: self.bodyLabel.bottomAnchor, constant: 20).isActive = true
-        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: imageView.frame.size.width).isActive = true
-        button.heightAnchor.constraint(equalToConstant:  inAppButton.frame.size.height).isActive = true
-        button.bottomAnchor.constraint(equalTo: self.inAppButton.topAnchor, constant: -20).isActive = true
+//        self.view.addSubview(button)
+//        
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.topAnchor.constraint(equalTo: self.bodyLabel.bottomAnchor, constant: -20.0).isActive = true
+//        button.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0).isActive = true
+//        button.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0).isActive = true
+//        button.heightAnchor.constraint(equalToConstant:  inAppButton.frame.size.height).isActive = true
     }
 
     override func show(animated: Bool) {
