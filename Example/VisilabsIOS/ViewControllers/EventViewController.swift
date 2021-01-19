@@ -202,7 +202,7 @@ class EventViewController: FormViewController {
             // Product1 Quantity;Product2 Quantity
             let price1 = (randomValues.randomProductPrice1 * Double(randomValues.randomProductQuantity1)).formatPrice()
             let price2 = (randomValues.randomProductPrice2 * Double(randomValues.randomProductQuantity2)).formatPrice()
-            properties["OM.ppr"] = "\(price1):\(price2)"
+            properties["OM.ppr"] = "\(price1);\(price2)"
             Visilabs.callAPI().customEvent("Cart", properties: properties)
             return
         case .productPurchase:
@@ -213,7 +213,7 @@ class EventViewController: FormViewController {
             // Product1 Quantity;Product2 Quantity
             let price1 = (randomValues.randomProductPrice1 * Double(randomValues.randomProductQuantity1)).formatPrice()
             let price2 = (randomValues.randomProductPrice2 * Double(randomValues.randomProductQuantity2)).formatPrice()
-            properties["OM.ppr"] = "\(price1):\(price2)"
+            properties["OM.ppr"] = "\(price1);\(price2)"
             Visilabs.callAPI().customEvent("Purchase", properties: properties)
             return
         case .productCategoryPageView:
