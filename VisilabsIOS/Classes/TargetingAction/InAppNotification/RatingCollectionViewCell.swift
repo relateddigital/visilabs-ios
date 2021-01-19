@@ -57,6 +57,12 @@ class RatingCollectionViewCell: UICollectionViewCell {
         self.gradientColors = colors
     }
     
+    func setBackgroundColor(_ color: UIColor) {
+        DispatchQueue.main.async {
+            self.contentView.backgroundColor = color
+        }
+    }
+    
     
 }
 
