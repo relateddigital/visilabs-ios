@@ -12,7 +12,7 @@ class RatingCollectionViewCell: UICollectionViewCell {
     
     let ratingLabel: UILabel = {
         let lbl = UILabel(frame: .zero)
-        lbl.font = UIFont.boldSystemFont(ofSize: 18)
+        lbl.font = UIFont.boldSystemFont(ofSize: 16)
         lbl.textColor = .white
         lbl.textAlignment = .center
         return lbl
@@ -30,7 +30,7 @@ class RatingCollectionViewCell: UICollectionViewCell {
         didSet {
             if isSelected {
                 self.contentView.layer.borderColor = UIColor.white.cgColor
-                self.contentView.layer.borderWidth = 2.0
+                self.contentView.layer.borderWidth = 1.8
             } else {
                 self.contentView.transform = CGAffineTransform(scaleX: 1, y: 1)
                 self.contentView.layer.borderWidth = 0.0
@@ -56,6 +56,7 @@ class RatingCollectionViewCell: UICollectionViewCell {
         }
         self.gradientColors = colors
     }
+    
     
 }
 
@@ -151,14 +152,6 @@ extension UIColor {
         let c3G = color3.rgba.green * 255
         let c3B = color3.rgba.blue * 255
 
-        var newR = c1R + ((c2R - c1R) / 10)
-        var newG = c1G + ((c2G - c1G) / 10)
-        var newB = c1B + ((c2B - c1B) / 10)
-
-        var newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
-
-        colors.append([oldColor.cgColor, newColor.cgColor])
-
         for i in 0 ..< 4 {
 
             let newR = c1R + ((c2R - c1R) / 5) * CGFloat(i+1)
@@ -173,21 +166,11 @@ extension UIColor {
 
         colors.append([oldColor.cgColor, color2.cgColor])
 
-        newR = c3R + ((c3R - c2R) / 10)
-        newG = c3G + ((c3G - c2G) / 10)
-        newB = c3B + ((c3B - c2B) / 10)
-
-        newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
-
-        colors.append([oldColor.cgColor, newColor.cgColor])
-        
-        oldColor = newColor
-
         for i in 0 ..< 4 {
 
-            let newR = c3R + ((c3R - c2R) / 5) * CGFloat(i+1)
-            let newG = c3G + ((c3G - c2G) / 5) * CGFloat(i+1)
-            let newB = c3B + ((c3B - c2B) / 5) * CGFloat(i+1)
+            let newR = c2R + ((c3R - c2R) / 5) * CGFloat(i+1)
+            let newG = c2G + ((c3G - c2G) / 5) * CGFloat(i+1)
+            let newB = c2B + ((c3B - c2B) / 5) * CGFloat(i+1)
 
             let newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
 
@@ -195,6 +178,7 @@ extension UIColor {
 
             oldColor = newColor
         }
+
         colors.append([oldColor.cgColor, color3.cgColor])
 
         return colors
