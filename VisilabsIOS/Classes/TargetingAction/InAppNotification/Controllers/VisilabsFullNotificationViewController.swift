@@ -22,13 +22,16 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var viewMask: UIView!
     @IBOutlet weak var fadingView: FadingView!
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
+    @IBOutlet weak var copyTextButton: UIButton!
+    @IBOutlet weak var copyImageButton: UIButton!
     
     @IBOutlet weak var buttonTopCC: NSLayoutConstraint!
     @IBOutlet weak var bodyButtonCC: NSLayoutConstraint!
     @IBOutlet weak var buttonTopNormal: NSLayoutConstraint!
     @IBOutlet weak var bodyButtonNormal: NSLayoutConstraint!
     
-    var isCopyEnabled = false
+    var isCopyEnabled = true
+    let pasteboard = UIPasteboard.general
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -77,6 +80,20 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         } else {
             bodyLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
         }
+        
+        if let promoTextColor = fullNotification.promotionTextColor {
+            copyTextButton.setTitleColor(promoTextColor, for: .normal)
+        } else {
+            copyTextButton.setTitleColor(UIColor(hex: "#FFFFFF", alpha: 1), for: .normal)
+        }
+        
+        if let promoBackColor = fullNotification.promotionBackgroundColor {
+            copyTextButton.backgroundColor = promoBackColor
+            copyImageButton.backgroundColor = promoBackColor
+        } else {
+            copyTextButton.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
+            copyImageButton.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
+        }
 
         let origImage = closeButton.image(for: UIControl.State.normal)
         let tintedImage = origImage?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
@@ -97,20 +114,37 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
-        if isCopyEnabled {
+        if fullNotification.promotionCode != nil || fullNotification.promotionCode?.isEmptyOrWhitespace != true {
             self.buttonTopCC.isActive = true
-            self.buttonTopCC.isActive = true
+            self.bodyButtonCC.isActive = true
             self.buttonTopNormal.isActive = false
             self.bodyButtonNormal.isActive = false
-//            setupCopyButton()
+            self.copyTextButton.isHidden = false
+            self.copyImageButton.isHidden = false
+            self.copyTextButton.setTitle(fullNotification.promotionCode, for: .normal)
+            
+        } else {
+            self.buttonTopCC.isActive = false
+            self.bodyButtonCC.isActive = false
+            self.buttonTopNormal.isActive = true
+            self.bodyButtonNormal.isActive = true
+            self.copyTextButton.isHidden = true
+            self.copyImageButton.isHidden = true
         }
         
     }
     
-    @objc func buttonAction(sender: UIButton!) {
+    
+    @IBAction func copyTextButtonTapped(_ sender: Any) {
+        pasteboard.string = copyTextButton.currentTitle
         VisilabsHelper.showToast("Kupon kodu kopyalandı", delay: 1.5)
     }
-
+    
+    @IBAction func copyImageButtonTapped(_ sender: Any) {
+        pasteboard.string = copyTextButton.currentTitle
+        VisilabsHelper.showToast("Kupon kodu kopyalandı", delay: 1.5)
+    }
+    
     func setupButtonView(buttonView: UIButton) {
         buttonView.setTitle(fullNotification.buttonText, for: UIControl.State.normal)
         buttonView.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -136,21 +170,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         buttonView.tag = 0
     }
     
-    func setupCopyButton() {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: imageView.frame.size.width, height: inAppButton.frame.size.height))
-        button.backgroundColor = .black
-        button.setTitle("DENEMEKUPON", for: .normal)
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-
-//        self.view.addSubview(button)
-//        
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.topAnchor.constraint(equalTo: self.bodyLabel.bottomAnchor, constant: -20.0).isActive = true
-//        button.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0).isActive = true
-//        button.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0).isActive = true
-//        button.heightAnchor.constraint(equalToConstant:  inAppButton.frame.size.height).isActive = true
-    }
 
     override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {

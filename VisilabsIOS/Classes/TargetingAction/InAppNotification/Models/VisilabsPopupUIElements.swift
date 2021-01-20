@@ -9,8 +9,6 @@ import Foundation
 import UIKit
 
 extension VisilabsPopupDialogDefaultView {
-    
-    
 
     internal func setCloseButton() -> UIButton {
         let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -45,9 +43,9 @@ extension VisilabsPopupDialogDefaultView {
     internal func setCopyCodeText() -> UIButton {
         let copyCodeText = UIButton(frame: .zero)
         copyCodeText.translatesAutoresizingMaskIntoConstraints = false
-        copyCodeText.setTitle("DENEMEKUPON", for: .normal)
-        copyCodeText.backgroundColor = UIColor.white
-        copyCodeText.setTitleColor(.black, for: .normal)
+        copyCodeText.setTitle(self.visilabsInAppNotification?.promotionCode, for: .normal)
+        copyCodeText.backgroundColor = self.visilabsInAppNotification?.promotionBackgroundColor
+        copyCodeText.setTitleColor(self.visilabsInAppNotification?.promotionTextColor, for: .normal)
         copyCodeText.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
         
         return copyCodeText
@@ -58,7 +56,7 @@ extension VisilabsPopupDialogDefaultView {
         let copyIconImage = VisilabsHelper.getUIImage(named: "RelatedCopyButton@2x")
         copyCodeImage.setImage(copyIconImage, for: .normal)
         copyCodeImage.translatesAutoresizingMaskIntoConstraints = false
-        copyCodeImage.backgroundColor = UIColor.white
+        copyCodeImage.backgroundColor = self.visilabsInAppNotification?.promotionBackgroundColor
         copyCodeImage.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
         return copyCodeImage
     }
@@ -211,8 +209,9 @@ extension VisilabsPopupDialogDefaultView {
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-        var copyCodeEnabled = false
-        if copyCodeEnabled {
+        
+        if self.visilabsInAppNotification?.promotionCode != nil || self.visilabsInAppNotification?.promotionCode?.isEmptyOrWhitespace != true || self.visilabsInAppNotification?.promotionCode != "" {
+            print(self.visilabsInAppNotification?.promotionCode ?? "asdasd")
             addSubview(copyCodeTextButton)
             addSubview(copyCodeImageButton)
             copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)

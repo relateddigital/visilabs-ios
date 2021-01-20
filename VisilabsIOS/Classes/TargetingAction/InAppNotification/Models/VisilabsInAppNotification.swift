@@ -31,6 +31,9 @@ public class VisilabsInAppNotification {
         public static let buttonColor = "button_color"
         public static let alertType = "alert_type"
         public static let closeButtonText = "close_button_text"
+        public static let promotionCode = "promotion_code"
+        public static let promotionTextColor = "promocode_text_color"
+        public static let promotionBackgroundColor = "promocode_background_color"
     }
 
     let actId: Int
@@ -54,6 +57,9 @@ public class VisilabsInAppNotification {
     let buttonColor: UIColor?
     let alertType: String?
     let closeButtonText: String?
+    let promotionCode: String?
+    let promotionTextColor: UIColor?
+    let promotionBackgroundColor: UIColor?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -95,7 +101,10 @@ public class VisilabsInAppNotification {
                 buttonTextColor: String?,
                 buttonColor: String?,
                 alertType: String?,
-                closeButtonText: String?) {
+                closeButtonText: String?,
+                promotionCode: String?,
+                promotionTextColor: String?,
+                promotionBackgroundColor: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -136,6 +145,9 @@ public class VisilabsInAppNotification {
         self.callToActionUrl = callToActionUrl
         self.alertType = alertType
         self.closeButtonText = closeButtonText
+        self.promotionCode = promotionCode
+        self.promotionTextColor = UIColor(hex: promotionTextColor)
+        self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
         setFonts()
     }
 
@@ -178,6 +190,9 @@ public class VisilabsInAppNotification {
         self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
         self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
+        self.promotionCode = actionData[PayloadKey.promotionCode] as? String
+        self.promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
+        self.promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
         if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white

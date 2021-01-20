@@ -63,6 +63,9 @@ class InAppViewController: FormViewController {
             <<< addMessageTitleTextRow()
             <<< addMessageBodyTextRow()
             <<< addButtonTextTextRow()
+            <<< addCopyCodeTextRow()
+            <<< addCopyCodeTextColor()
+            <<< addCopyCodeBackgroundColor()
             <<< addIosLinkUrlRow()
             <<< addImageUrlUrlRow()
             <<< addMiniIconPickerInputRow()
@@ -123,6 +126,9 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = true
     }
     /**
             Use for full, image text button, smile rating and nps
@@ -143,6 +149,9 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = false
     }
 
     func setFormRowsForFullImage() {
@@ -161,6 +170,9 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = true
     }
 
     func setFormRowsForImageButton() {
@@ -179,6 +191,9 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = true
     }
 
     func setFormRowsForEmail() {
@@ -197,6 +212,9 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = true
         self.form.rowBy(tag: "miniIcon")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = true
     }
 
     func setRowsForAlert() {
@@ -215,5 +233,8 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = false
         self.form.rowBy(tag: "miniIcon")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = true
     }
 }
