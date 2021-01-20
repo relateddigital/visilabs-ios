@@ -210,8 +210,7 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
         
-        if self.visilabsInAppNotification?.promotionCode != nil || self.visilabsInAppNotification?.promotionCode?.isEmptyOrWhitespace != true || self.visilabsInAppNotification?.promotionCode != "" {
-            print(self.visilabsInAppNotification?.promotionCode ?? "asdasd")
+        if let promo = self.visilabsInAppNotification?.promotionCode, !promo.isEmpty {
             addSubview(copyCodeTextButton)
             addSubview(copyCodeImageButton)
             copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)

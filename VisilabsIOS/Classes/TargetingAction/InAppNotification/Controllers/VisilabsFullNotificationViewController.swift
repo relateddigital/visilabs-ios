@@ -114,7 +114,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
-        if fullNotification.promotionCode != nil || fullNotification.promotionCode?.isEmptyOrWhitespace != true {
+        if let promo = self.fullNotification.promotionCode, !promo.isEmptyOrWhitespace {
             self.buttonTopCC.isActive = true
             self.bodyButtonCC.isActive = true
             self.buttonTopNormal.isActive = false
@@ -133,18 +133,13 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         }
         
     }
-    
-    
-    @IBAction func copyTextButtonTapped(_ sender: Any) {
+
+    @IBAction func promotionCodeCopied(_ sender: Any) {
         pasteboard.string = copyTextButton.currentTitle
-        VisilabsHelper.showToast("Kupon kodu kopyalandı", delay: 1.5)
+        VisilabsHelper.showCopiedClipboardMessage()
+
     }
-    
-    @IBAction func copyImageButtonTapped(_ sender: Any) {
-        pasteboard.string = copyTextButton.currentTitle
-        VisilabsHelper.showToast("Kupon kodu kopyalandı", delay: 1.5)
-    }
-    
+
     func setupButtonView(buttonView: UIButton) {
         buttonView.setTitle(fullNotification.buttonText, for: UIControl.State.normal)
         buttonView.titleLabel?.adjustsFontSizeToFitWidth = true

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -44,13 +44,13 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eYq-nb-bDI">
-                            <rect key="frame" x="35" y="90" width="344" height="617"/>
+                            <rect key="frame" x="35" y="90" width="344" height="637"/>
                             <subviews>
                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MgN-Di-l2U" customClass="FadingView" customModule="VisilabsIOS" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="344" height="617"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="344" height="637"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="yFj-Sb-VWy" userLabel="Notif Image View">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="617"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="637"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </imageView>
                                     </subviews>
@@ -74,13 +74,13 @@
                             </constraints>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" verticalCompressionResistancePriority="760" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="h51-dK-9V2">
-                            <rect key="frame" x="30" y="707" width="354" height="30.5"/>
+                            <rect key="frame" x="30" y="727" width="354" height="30.5"/>
                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="22"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8M-cd-GVv">
-                            <rect key="frame" x="30" y="747.5" width="354" height="23.5"/>
+                            <rect key="frame" x="30" y="767.5" width="354" height="23.5"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -114,23 +114,23 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KNq-UJ-jA5">
-                            <rect key="frame" x="35" y="779" width="324" height="34"/>
+                            <rect key="frame" x="35" y="799" width="324" height="34"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="34" id="212-vK-22I"/>
                             </constraints>
                             <state key="normal" title="Button"/>
                             <connections>
-                                <action selector="copyTextButtonTapped:" destination="-1" eventType="touchUpInside" id="ySj-ii-wGO"/>
+                                <action selector="promotionCodeCopied:" destination="-1" eventType="touchUpInside" id="ySj-ii-wGO"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NQw-hQ-lhI">
-                            <rect key="frame" x="359" y="779" width="25" height="34"/>
+                            <rect key="frame" x="359" y="799" width="25" height="34"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="34" id="Y5w-p4-DUS"/>
                             </constraints>
                             <state key="normal" image="RelatedCopyButton.png"/>
                             <connections>
-                                <action selector="copyImageButtonTapped:" destination="-1" eventType="touchUpInside" id="EiY-vP-0G0"/>
+                                <action selector="promotionCodeCopied:" destination="-1" eventType="touchUpInside" id="toV-mq-0fF"/>
                             </connections>
                         </button>
                     </subviews>
