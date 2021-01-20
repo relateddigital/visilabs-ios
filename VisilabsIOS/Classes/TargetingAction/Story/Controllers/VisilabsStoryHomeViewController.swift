@@ -48,8 +48,9 @@ public class VisilabsStoryHomeViewController: NSObject,
                     as? VisilabsStoryHomeViewCell else {
                 fatalError()
             }
+            self.storyAction.stories = sortStories(stories: self.storyAction.stories)
             cell.story = self.storyAction.stories[indexPath.row]
-            cell.setProperties(self.storyAction.extendedProperties)
+            cell.setProperties(self.storyAction.extendedProperties, self.storyAction.actionId)
             cell.layoutIfNeeded()
             return cell
         }
@@ -59,6 +60,10 @@ public class VisilabsStoryHomeViewController: NSObject,
         if self.storyAction.stories.count == 0 {
             return
         }
+        let title = self.storyAction.stories[indexPath.row].title ?? ""
+        let actid = self.storyAction.actionId
+        self.setStoryShown(title: title, actid: actid)
+
         if self.storyAction.storyTemplate == .skinBased {
             DispatchQueue.main.async {
                 for index in self.storyAction.stories.indices {
@@ -68,9 +73,10 @@ public class VisilabsStoryHomeViewController: NSObject,
                 }
                 let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories,
                                                 handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
+                
                 storyPreviewScene.modalPresentationStyle = .fullScreen
                 let app = VisilabsInstance.sharedUIApplication()
-                app?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: nil)
+                app?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: collectionView.reloadData)
                 //TO_DO: burada keywindow rootViewController yaklaşımı uygun mu?
             }
         } else {
@@ -84,6 +90,7 @@ public class VisilabsStoryHomeViewController: NSObject,
                 let app = VisilabsInstance.sharedUIApplication()
                 app?.performSelector(onMainThread: NSSelectorFromString("openURL:"),
                                      with: storyUrl, waitUntilDone: true)
+                collectionView.reloadData()
             }
         }
     }
@@ -92,5 +99,40 @@ public class VisilabsStoryHomeViewController: NSObject,
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 80, height: 100)
+    }
+    
+    //First not shown stories
+    private func sortStories(stories: [VisilabsStory]) -> [VisilabsStory] {
+        
+        var shownStories: [VisilabsStory] = []
+        var notShownStories: [VisilabsStory] = []
+        for story in stories {
+            var shown = false
+            //check story has shown
+            if let shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories) as? [String: [String]] {
+                if let shownStoriesWithAction = shownStories["\(self.storyAction.actionId)"], shownStoriesWithAction.contains(story.title ?? "-") {
+                    shown = true
+                }
+            }
+            
+            if shown {
+                shownStories.append(story)
+            } else {
+                notShownStories.append(story)
+            }
+        }
+        return notShownStories + shownStories
+    }
+    
+    private func setStoryShown(title: String, actid: Int) {
+        //Save UserDefaults as shown
+        var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
+            as? [String: [String]] ?? [String: [String]]()
+        if shownStories["\(actid)"] != nil {
+            shownStories["\(actid)"]?.append(title)
+        } else {
+            shownStories["\(actid)"] = [title]
+        }
+        UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
     }
 }
