@@ -174,6 +174,14 @@ internal class VisilabsHelper {
             })
         })
     }
+    
+    static func showCopiedClipboardMessage() {
+        if Locale.current.languageCode == "en" {
+            VisilabsHelper.showToast("Copied to clipboard", delay: 1.5)
+        } else {
+            VisilabsHelper.showToast("Panoya kopyalandı", delay: 1.5)
+        }
+    }
 
 }
 
