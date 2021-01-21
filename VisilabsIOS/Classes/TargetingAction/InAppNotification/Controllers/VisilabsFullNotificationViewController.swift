@@ -22,6 +22,16 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var viewMask: UIView!
     @IBOutlet weak var fadingView: FadingView!
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
+    @IBOutlet weak var copyTextButton: UIButton!
+    @IBOutlet weak var copyImageButton: UIButton!
+    
+    @IBOutlet weak var buttonTopCC: NSLayoutConstraint!
+    @IBOutlet weak var bodyButtonCC: NSLayoutConstraint!
+    @IBOutlet weak var buttonTopNormal: NSLayoutConstraint!
+    @IBOutlet weak var bodyButtonNormal: NSLayoutConstraint!
+    
+    var isCopyEnabled = true
+    let pasteboard = UIPasteboard.general
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -50,8 +60,8 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             VisilabsLogger.error("notification image failed to load from data")
         }
 
-        titleLabel.text = fullNotification.messageTitle
-        bodyLabel.text = fullNotification.messageBody
+        titleLabel.text = fullNotification.messageTitle?.removeEscapingCharacters()
+        bodyLabel.text = fullNotification.messageBody?.removeEscapingCharacters()
 
         if let bgColor = fullNotification.backGroundColor {
             viewMask.backgroundColor = bgColor.withAlphaComponent(0.8)
@@ -69,6 +79,20 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             bodyLabel.textColor = bColor
         } else {
             bodyLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
+        }
+        
+        if let promoTextColor = fullNotification.promotionTextColor {
+            copyTextButton.setTitleColor(promoTextColor, for: .normal)
+        } else {
+            copyTextButton.setTitleColor(UIColor(hex: "#FFFFFF", alpha: 1), for: .normal)
+        }
+        
+        if let promoBackColor = fullNotification.promotionBackgroundColor {
+            copyTextButton.backgroundColor = promoBackColor
+            copyImageButton.backgroundColor = promoBackColor
+        } else {
+            copyTextButton.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
+            copyImageButton.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
         }
 
         let origImage = closeButton.image(for: UIControl.State.normal)
@@ -90,6 +114,29 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
+        if let promo = self.fullNotification.promotionCode, !promo.isEmptyOrWhitespace {
+            self.buttonTopCC.isActive = true
+            self.bodyButtonCC.isActive = true
+            self.buttonTopNormal.isActive = false
+            self.bodyButtonNormal.isActive = false
+            self.copyTextButton.isHidden = false
+            self.copyImageButton.isHidden = false
+            self.copyTextButton.setTitle(fullNotification.promotionCode, for: .normal)
+            
+        } else {
+            self.buttonTopCC.isActive = false
+            self.bodyButtonCC.isActive = false
+            self.buttonTopNormal.isActive = true
+            self.bodyButtonNormal.isActive = true
+            self.copyTextButton.isHidden = true
+            self.copyImageButton.isHidden = true
+        }
+        
+    }
+
+    @IBAction func promotionCodeCopied(_ sender: Any) {
+        pasteboard.string = copyTextButton.currentTitle
+        VisilabsHelper.showCopiedClipboardMessage()
 
     }
 
@@ -117,6 +164,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         buttonView.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControl.Event.touchUpInside)
         buttonView.tag = 0
     }
+    
 
     override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {

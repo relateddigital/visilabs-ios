@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VisilabsFullNotificationViewController" customModule="VisilabsIOS" customModuleProvider="target">
             <connections>
                 <outlet property="backgroundImageView" destination="T8g-zh-2N3" id="HW3-2B-y47"/>
+                <outlet property="bodyButtonCC" destination="C5T-AI-9RK" id="769-gP-pEg"/>
+                <outlet property="bodyButtonNormal" destination="uum-RN-DHn" id="VJE-CE-xpR"/>
                 <outlet property="bodyLabel" destination="h8M-cd-GVv" id="RTh-XX-29j"/>
                 <outlet property="bottomImageSpacing" destination="pi1-uq-dJ5" id="lbf-ZA-ftZ"/>
+                <outlet property="buttonTopCC" destination="dB1-yS-DBB" id="y2I-7Z-hkD"/>
+                <outlet property="buttonTopNormal" destination="SDW-ee-tHH" id="k61-TE-THd"/>
                 <outlet property="closeButton" destination="6kd-pr-ub6" id="C0j-OA-gKE"/>
+                <outlet property="copyImageButton" destination="NQw-hQ-lhI" id="4ds-Of-2L7"/>
+                <outlet property="copyTextButton" destination="KNq-UJ-jA5" id="c6R-Au-9Rg"/>
                 <outlet property="fadingView" destination="MgN-Di-l2U" id="jz1-s3-jZT"/>
                 <outlet property="imageView" destination="yFj-Sb-VWy" id="mWn-B9-Ff8"/>
                 <outlet property="inAppButton" destination="1LO-WG-GYz" id="UHb-wU-YeH"/>
@@ -68,20 +74,20 @@
                             </constraints>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" verticalCompressionResistancePriority="760" text="Notification Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="h51-dK-9V2">
-                            <rect key="frame" x="30" y="707" width="354" height="30.5"/>
+                            <rect key="frame" x="30" y="727" width="354" height="30.5"/>
                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="22"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="252" text="Notification body" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8M-cd-GVv">
-                            <rect key="frame" x="30" y="747.5" width="354" height="23.5"/>
+                            <rect key="frame" x="30" y="767.5" width="354" height="23.5"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                             <size key="shadowOffset" width="0.0" height="1"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faI-kr-vfs">
-                            <rect key="frame" x="124" y="801" width="166" height="45"/>
+                            <rect key="frame" x="124" y="821" width="166" height="45"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1LO-WG-GYz" customClass="InAppButtonView" customModule="VisilabsIOS" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="166" height="45"/>
@@ -107,23 +113,50 @@
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="yLR-7A-bWT"/>
                             </constraints>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KNq-UJ-jA5">
+                            <rect key="frame" x="35" y="799" width="324" height="34"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="34" id="212-vK-22I"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <connections>
+                                <action selector="promotionCodeCopied:" destination="-1" eventType="touchUpInside" id="ySj-ii-wGO"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NQw-hQ-lhI">
+                            <rect key="frame" x="359" y="799" width="25" height="34"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="34" id="Y5w-p4-DUS"/>
+                            </constraints>
+                            <state key="normal" image="RelatedCopyButton.png"/>
+                            <connections>
+                                <action selector="promotionCodeCopied:" destination="-1" eventType="touchUpInside" id="toV-mq-0fF"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.78000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="eYq-nb-bDI" secondAttribute="trailing" constant="35" id="1nV-0g-lO7"/>
                         <constraint firstItem="eYq-nb-bDI" firstAttribute="top" secondItem="S9c-D7-A3k" secondAttribute="top" constant="90" id="2Hf-nL-rh6"/>
+                        <constraint firstItem="NQw-hQ-lhI" firstAttribute="leading" secondItem="KNq-UJ-jA5" secondAttribute="trailing" id="3zk-B6-5l5"/>
+                        <constraint firstItem="KNq-UJ-jA5" firstAttribute="top" secondItem="h8M-cd-GVv" secondAttribute="bottom" constant="8" id="4gn-jL-avs"/>
                         <constraint firstAttribute="trailing" secondItem="h51-dK-9V2" secondAttribute="trailing" constant="30" id="6T1-3j-Aev"/>
                         <constraint firstItem="h8M-cd-GVv" firstAttribute="leading" secondItem="S9c-D7-A3k" secondAttribute="leading" constant="30" id="Apc-LH-fMQ"/>
-                        <constraint firstAttribute="bottom" secondItem="faI-kr-vfs" secondAttribute="bottom" constant="50" id="IA3-OI-jVa"/>
+                        <constraint firstItem="faI-kr-vfs" firstAttribute="top" secondItem="h8M-cd-GVv" secondAttribute="bottom" constant="50" id="C5T-AI-9RK"/>
+                        <constraint firstItem="NQw-hQ-lhI" firstAttribute="top" secondItem="h8M-cd-GVv" secondAttribute="bottom" constant="8" id="JUQ-M6-Fqn"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="faI-kr-vfs" secondAttribute="trailing" constant="20" id="K32-oV-Lun"/>
                         <constraint firstItem="h8M-cd-GVv" firstAttribute="top" secondItem="h51-dK-9V2" secondAttribute="bottom" constant="10" id="Kcw-Ry-SXz"/>
+                        <constraint firstAttribute="bottom" secondItem="faI-kr-vfs" secondAttribute="bottom" constant="50" id="SDW-ee-tHH"/>
+                        <constraint firstAttribute="trailing" secondItem="NQw-hQ-lhI" secondAttribute="trailing" constant="30" id="TFQ-hV-cWQ"/>
                         <constraint firstAttribute="trailing" secondItem="h8M-cd-GVv" secondAttribute="trailing" constant="30" id="TwD-5n-5W5"/>
                         <constraint firstItem="faI-kr-vfs" firstAttribute="centerX" secondItem="S9c-D7-A3k" secondAttribute="centerX" id="VR7-Wg-G4x"/>
+                        <constraint firstAttribute="bottom" secondItem="faI-kr-vfs" secondAttribute="bottom" constant="30" id="dB1-yS-DBB"/>
                         <constraint firstItem="faI-kr-vfs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="S9c-D7-A3k" secondAttribute="leading" constant="20" id="eS1-qd-Pi4"/>
-                        <constraint firstItem="faI-kr-vfs" firstAttribute="top" secondItem="h8M-cd-GVv" secondAttribute="bottom" constant="30" id="kBX-tm-Wwv"/>
+                        <constraint firstItem="KNq-UJ-jA5" firstAttribute="leading" secondItem="S9c-D7-A3k" secondAttribute="leading" constant="35" id="hgY-nM-PLv"/>
                         <constraint firstItem="eYq-nb-bDI" firstAttribute="leading" secondItem="S9c-D7-A3k" secondAttribute="leading" constant="35" id="p35-VU-nXb"/>
-                        <constraint firstItem="h51-dK-9V2" firstAttribute="top" secondItem="eYq-nb-bDI" secondAttribute="bottom" constant="-20" id="pi1-uq-dJ5"/>
+                        <constraint firstItem="h51-dK-9V2" firstAttribute="top" secondItem="eYq-nb-bDI" secondAttribute="bottom" id="pi1-uq-dJ5"/>
                         <constraint firstItem="h51-dK-9V2" firstAttribute="leading" secondItem="S9c-D7-A3k" secondAttribute="leading" constant="30" id="qY7-LH-Gbj"/>
+                        <constraint firstItem="faI-kr-vfs" firstAttribute="top" secondItem="h8M-cd-GVv" secondAttribute="bottom" constant="30" id="uum-RN-DHn"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="topRight" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kd-pr-ub6" userLabel="Button - Close">
@@ -161,10 +194,11 @@
                 <constraint firstItem="T8g-zh-2N3" firstAttribute="height" secondItem="S9c-D7-A3k" secondAttribute="height" id="mpH-y4-6iN"/>
                 <constraint firstAttribute="trailing" secondItem="wCt-mw-zsC" secondAttribute="trailing" id="qTc-C1-IFM"/>
             </constraints>
-            <point key="canvasLocation" x="139" y="154"/>
+            <point key="canvasLocation" x="137.68115942028987" y="153.34821428571428"/>
         </view>
     </objects>
     <resources>
+        <image name="RelatedCopyButton.png" width="25" height="25"/>
         <image name="VisilabsCloseButton.png" width="25" height="25"/>
         <image name="placeholder.png" width="800" height="600"/>
     </resources>
