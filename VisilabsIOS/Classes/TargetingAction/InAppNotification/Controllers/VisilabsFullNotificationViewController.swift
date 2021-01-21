@@ -60,8 +60,8 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             VisilabsLogger.error("notification image failed to load from data")
         }
 
-        titleLabel.text = fullNotification.messageTitle
-        bodyLabel.text = fullNotification.messageBody
+        titleLabel.text = fullNotification.messageTitle?.removeEscapingCharacters()
+        bodyLabel.text = fullNotification.messageBody?.removeEscapingCharacters()
 
         if let bgColor = fullNotification.backGroundColor {
             viewMask.backgroundColor = bgColor.withAlphaComponent(0.8)
