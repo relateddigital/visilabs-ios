@@ -39,6 +39,27 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.font = .boldSystemFont(ofSize: 14)
         return titleLabel
     }
+    
+    internal func setCopyCodeText() -> UIButton {
+        let copyCodeText = UIButton(frame: .zero)
+        copyCodeText.translatesAutoresizingMaskIntoConstraints = false
+        copyCodeText.setTitle(self.visilabsInAppNotification?.promotionCode, for: .normal)
+        copyCodeText.backgroundColor = self.visilabsInAppNotification?.promotionBackgroundColor
+        copyCodeText.setTitleColor(self.visilabsInAppNotification?.promotionTextColor, for: .normal)
+        copyCodeText.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
+        
+        return copyCodeText
+    }
+    
+    internal func setCopyCodeImage() -> UIButton {
+        let copyCodeImage = UIButton(frame: .zero)
+        let copyIconImage = VisilabsHelper.getUIImage(named: "RelatedCopyButton@2x")
+        copyCodeImage.setImage(copyIconImage, for: .normal)
+        copyCodeImage.translatesAutoresizingMaskIntoConstraints = false
+        copyCodeImage.backgroundColor = self.visilabsInAppNotification?.promotionBackgroundColor
+        copyCodeImage.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
+        return copyCodeImage
+    }
 
     internal func setMessageLabel() -> UILabel {
         let messageLabel = UILabel(frame: .zero)
@@ -188,10 +209,26 @@ extension VisilabsPopupDialogDefaultView {
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-        messageLabel.bottom(to: self, offset: -10.0)
+        
+        if let promo = self.visilabsInAppNotification?.promotionCode, !promo.isEmpty {
+            addSubview(copyCodeTextButton)
+            addSubview(copyCodeImageButton)
+            copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
+            copyCodeTextButton.bottom(to: self, offset: 0.0)
+            copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
+            copyCodeImageButton.bottom(to: copyCodeTextButton)
+            copyCodeTextButton.leading(to: self)
+            copyCodeImageButton.width(50.0)
+            copyCodeImageButton.trailing(to: self)
+            copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
+        } else {
+            messageLabel.bottom(to: self, offset: -10)
+        }
+        
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
     }
+    
 
     internal func setupForNps() {
         addSubview(titleLabel)
