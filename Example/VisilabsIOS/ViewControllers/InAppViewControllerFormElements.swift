@@ -64,7 +64,7 @@ extension InAppViewController {
             $0.value = "Test Button Text"
         }
     }
-    
+
     func addCopyCodeTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.promotionCode) {
             $0.title = "Promotion Code"
@@ -72,7 +72,7 @@ extension InAppViewController {
             $0.value = "Promotion Code"
         }
     }
-    
+
     func addCopyCodeBackgroundColor() -> TextRow {
       return TextRow(VisilabsInAppNotification.PayloadKey.promotionBackgroundColor) {
           $0.title = "Promotion Code Background Color"
@@ -93,7 +93,7 @@ extension InAppViewController {
           self.present(modalVC, animated: true, completion: nil)
       }
   }
-    
+
     func addCopyCodeTextColor() -> TextRow {
       return TextRow(VisilabsInAppNotification.PayloadKey.promotionTextColor) {
           $0.title = "Promotion Code Text Color"
@@ -114,7 +114,6 @@ extension InAppViewController {
           self.present(modalVC, animated: true, completion: nil)
       }
   }
-    
 
       func addIosLinkUrlRow() -> URLRow {
         return URLRow(VisilabsInAppNotification.PayloadKey.iosLink) {
@@ -295,7 +294,7 @@ extension InAppViewController {
             $0.value = "Close"
         }
     }
-    
+
     func addAlertTypePickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.alertType) {
             $0.title = "Alert Type"
@@ -303,7 +302,7 @@ extension InAppViewController {
             $0.value = "NativeAlert"
         }
     }
-    
+
     func showNotificationTapped() {
 
         let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
@@ -322,6 +321,28 @@ extension InAppViewController {
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
         }
     }
+
+    func addNumberBGColor(_ colorId: String) -> TextRow {
+      return TextRow(VisilabsInAppNotification.PayloadKey.numberColors + colorId) {
+          $0.title = "Number Background Color" + colorId
+          $0.value = ""
+          $0.placeholder = "#000000"
+          $0.disabled = true
+      }.onCellSelection { _, row in
+          let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
+          guard let modalVC = viewController as? ModalViewController else {
+              return
+          }
+          modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+          modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+          if let selectedColor = UIColor(hex: row.value) {
+              modalVC.selectedColor = selectedColor
+          }
+          modalVC.headerText = row.title!
+          modalVC.textRow = row
+          self.present(modalVC, animated: true, completion: nil)
+      }
+  }
     //swiftlint:disable function_body_length
     func createVisilabsInAppNotificationModel() -> VisilabsInAppNotification {
         var tag = ""
@@ -373,16 +394,21 @@ extension InAppViewController {
 
         tag = VisilabsInAppNotification.PayloadKey.alertType
         let alertType = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
-        
+
         let promotionCode = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)
                             as TextRow?)!.value ?? ""
-        
+
         let promotionTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)
                                     as TextRow?)!.value!  as String
-        
+
         let promotionBackgroundColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)
                                     as TextRow?)!.value!  as String
 
+        tag = VisilabsInAppNotification.PayloadKey.numberColors
+        let numberBgColor1 = (self.form.rowBy(tag: tag+"1") as TextRow?)!.value! as String
+        let numberBgColor2 = (self.form.rowBy(tag: tag+"2") as TextRow?)!.value! as String
+        let numberBgColor3 = (self.form.rowBy(tag: tag+"3") as TextRow?)!.value! as String
+        let numberColors = [numberBgColor1, numberBgColor2, numberBgColor3]
         return VisilabsInAppNotification(actId: 0,
                                         type: messageType,
                                         messageTitle: messageTitle,
@@ -405,6 +431,7 @@ extension InAppViewController {
                                         closeButtonText: closeButtonText,
                                         promotionCode: promotionCode,
                                         promotionTextColor: promotionTextColor,
-                                        promotionBackgroundColor: promotionBackgroundColor)
+                                        promotionBackgroundColor: promotionBackgroundColor,
+                                        numberColors: numberColors)
     }
 }

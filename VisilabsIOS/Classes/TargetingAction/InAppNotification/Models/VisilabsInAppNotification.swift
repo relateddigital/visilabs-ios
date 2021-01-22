@@ -34,6 +34,7 @@ public class VisilabsInAppNotification {
         public static let promotionCode = "promotion_code"
         public static let promotionTextColor = "promocode_text_color"
         public static let promotionBackgroundColor = "promocode_background_color"
+        public static let numberColors = "number_colors"
     }
 
     let actId: Int
@@ -60,6 +61,7 @@ public class VisilabsInAppNotification {
     let promotionCode: String?
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
+    let numberColors: [UIColor]?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -104,7 +106,8 @@ public class VisilabsInAppNotification {
                 closeButtonText: String?,
                 promotionCode: String?,
                 promotionTextColor: String?,
-                promotionBackgroundColor: String?) {
+                promotionBackgroundColor: String?,
+                numberColors: [String]?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -148,6 +151,7 @@ public class VisilabsInAppNotification {
         self.promotionCode = promotionCode
         self.promotionTextColor = UIColor(hex: promotionTextColor)
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
+        self.numberColors = VisilabsHelper.convertColorArray(numberColors)
         setFonts()
     }
 
@@ -219,6 +223,11 @@ public class VisilabsInAppNotification {
         self.callToActionUrl = callToActionUrl
         self.alertType = actionData[PayloadKey.alertType] as? String
         self.closeButtonText = actionData[PayloadKey.closeButtonText] as? String
+        if let numColors = actionData[PayloadKey.numberColors] as? [String]? {
+            self.numberColors = VisilabsHelper.convertColorArray(numColors)
+        } else {
+            self.numberColors = nil
+        }
         setFonts()
     }
 
