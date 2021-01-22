@@ -32,7 +32,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var numberRating = setNumberRating()
 
     var colors: [[CGColor]] = []
-
+    var numberBgColor: UIColor = .black
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
         set { titleLabel.font = newValue }
@@ -140,8 +140,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
             setupForSmileRating()
         case .emailForm:
             setupForEmailForm()
-        case .numberRating:
-            setupForNumberRating()
+        case .npsWithNumbers:
+            setupForNpsWithNumbers()
         default:
             setupForDefault()
         }
