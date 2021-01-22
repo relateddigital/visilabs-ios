@@ -712,10 +712,11 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     private func setStoryShown(story: VisilabsStory) {
         var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
             as? [String: [String]] ?? [String: [String]]()
-        if shownStories["\(story.actid)"] != nil {
-            shownStories["\(story.actid)"]?.append(story.title ?? "")
-        } else {
+
+        if shownStories["\(story.actid)"] == nil {
             shownStories["\(story.actid)"] = [story.title ?? ""]
+        } else if let st = shownStories["\(story.actid)"], !st.contains(story.title ?? "-") {
+            shownStories["\(story.actid)"]?.append(story.title ?? "")
         }
         UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
     }

@@ -114,7 +114,6 @@ public class VisilabsStoryHomeViewController: NSObject,
                     shown = true
                 }
             }
-            
             if shown {
                 shownStories.append(story)
             } else {
@@ -128,10 +127,10 @@ public class VisilabsStoryHomeViewController: NSObject,
         //Save UserDefaults as shown
         var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
             as? [String: [String]] ?? [String: [String]]()
-        if shownStories["\(actid)"] != nil {
-            shownStories["\(actid)"]?.append(title)
-        } else {
+        if shownStories["\(actid)"] == nil {
             shownStories["\(actid)"] = [title]
+        } else if let st = shownStories["\(actid)"], !st.contains(title) {
+            shownStories["\(actid)"]?.append(title)
         }
         UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
     }
