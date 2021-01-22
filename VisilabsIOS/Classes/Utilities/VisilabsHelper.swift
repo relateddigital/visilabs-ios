@@ -183,6 +183,16 @@ internal class VisilabsHelper {
         }
     }
 
+    static func convertColorArray(_ strArr: [String]?) -> [UIColor]? {
+        guard let arr = strArr else {
+            return nil
+        }
+        var colorArr: [UIColor] = []
+        for hex in arr {
+            colorArr.append(UIColor(hex: hex) ?? UIColor.black)
+        }
+        return colorArr
+    }
 }
 
 class ToastLabel: UILabel {
