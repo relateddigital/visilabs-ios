@@ -15,6 +15,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var closeButton = setCloseButton()
     internal lazy var imageView = setImageView()
     internal lazy var titleLabel = setTitleLabel()
+    internal lazy var copyCodeTextButton = setCopyCodeText()
+    internal lazy var copyCodeImageButton = setCopyCodeImage()
     internal lazy var messageLabel = setMessageLabel()
     internal lazy var npsView = setNpsView()
 
@@ -178,6 +180,11 @@ extension VisilabsPopupDialogDefaultView {
     @objc func termsButtonTapped(_ sender: UIButton) {
         guard let url = emailForm?.emailPermitUrl else { return }
         VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+    }
+    
+    @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
+        UIPasteboard.general.string = copyCodeTextButton.currentTitle
+        VisilabsHelper.showCopiedClipboardMessage()
     }
 
     @objc func consentButtonTapped(_ sender: UIButton) {
