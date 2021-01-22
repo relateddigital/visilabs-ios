@@ -40,7 +40,7 @@ class EventViewController: FormViewController {
                                 "smile_rating": 157,
                                 "emailForm": 354,
                                 "alert": 395,
-                                "number_rating": 999]
+                                "nps_with_numbers": 411]
 
     override func viewDidLoad() {
         super.viewDidLoad()
