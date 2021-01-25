@@ -315,16 +315,16 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 
 The existence of a relevant **in-app message** for an event controlled by after each `customEvent` call. You can create and customize your **in-app messages** on https://intelligence.relateddigital.com/#Target/TargetingAction/TAList page of RMC administration panel.
 
-There are 7 types of **in-app messages**:
+There are 9 types of **in-app messages**:
 
 
 |               Pop-up - Image, Header, Text & Button              | Mini-icon&text                                                             | Full Screen-image                                                |
 |:----------------------------------------------------------------:|----------------------------------------------------------------------------|------------------------------------------------------------------|
 | ![full](/Screenshots/InAppNotification/full.png)                 | ![mini](/Screenshots/InAppNotification/mini.png)                           | ![full_image](/Screenshots/InAppNotification/full_image.png)     |
-| Full Screen-image&button                                         | Pop-up - Image, Header, Text & Button                                      | Pop-up-Survey                                                    |
+| Full Screen-image&button                                         | Pop-up - Image, Header, Text & Button                                      |                              Pop-up-Survey                       |
 | ![image_button](/Screenshots/InAppNotification/image_button.png) | ![image_text_button](/Screenshots/InAppNotification/image_text_button.png) | ![smile_rating](/Screenshots/InAppNotification/smile_rating.png) |
-| Pop-up - NPS with Text & Button                                  |                                                                            |                                                                  |
-| ![nps](/Screenshots/InAppNotification/nps.png)                   |                                                                            |                                                                  |
+| Pop-up - NPS with Text & Button                                  | Native Alert & Actionsheet                                                 |  NPS with numbers                                                   |
+| ![nps](/Screenshots/InAppNotification/nps.png)                   | ![nps_with_numbers](/Screenshots/InAppNotification/alert.png)   | ![nps_with_numbers](/Screenshots/InAppNotification/nps_with_numbers.png) |
 
 
 ### Favorite Attribute Actions
