@@ -380,7 +380,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     }
     
     func checkMailSubsForm(properties: [String: String]) {
-        self.visilabsTargetingActionInstance.getEmailForm(visilabsUser: self.visilabsUser, guid: UUID().uuidString) { (model) in
+        self.visilabsTargetingActionInstance.getEmailForm(properties: properties, visilabsUser: self.visilabsUser, guid: UUID().uuidString) { (model) in
             if let form = model {
                 self.showMailSubscriptionForm(form)
             }
