@@ -39,6 +39,13 @@ class VisilabsTargetingAction {
         var props = properties
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
+        
+        
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+           if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+               props[key] = value
+           }
+        }
 
         VisilabsRequest.sendInAppNotificationRequest(properties: props,
                                                      headers: headers,
@@ -96,6 +103,13 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.favoriteAttributeAction
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        
+        
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+           if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+               props[key] = value
+           }
+        }
 
         VisilabsRequest.sendMobileRequest(properties: props, headers: [String: String](),
                                           timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
@@ -154,6 +168,13 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.story
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        
+        
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+           if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+               props[key] = value
+           }
+        }
 
         VisilabsRequest.sendMobileRequest(properties: props,
                                           headers: [String: String](),
@@ -163,11 +184,12 @@ class VisilabsTargetingAction {
         }, guid: guid)
     }
 
-    func getEmailForm(visilabsUser: VisilabsUser,
+    func getEmailForm(properties: [String: String],
+                      visilabsUser: VisilabsUser,
                       guid: String, actionId: Int? = nil,
                       completion: @escaping ((_ response: MailSubscriptionViewModel?) -> Void)) {
     
-        var props = [String: String]()
+        var props = properties
         props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
         props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId
         props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
@@ -177,6 +199,13 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.mailSubscriptionForm
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        
+        
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+           if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+               props[key] = value
+           }
+        }
 
         VisilabsRequest.sendMobileRequest(properties: props,
                                           headers: [String : String](),
