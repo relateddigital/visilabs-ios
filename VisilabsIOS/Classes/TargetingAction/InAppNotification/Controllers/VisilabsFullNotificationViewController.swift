@@ -114,7 +114,10 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
-        if let promo = self.fullNotification.promotionCode, !promo.isEmptyOrWhitespace {
+        if let promo = self.fullNotification.promotionCode,
+           let _ = self.fullNotification.promotionBackgroundColor,
+           let _ = self.fullNotification.promotionTextColor,
+           !promo.isEmptyOrWhitespace {
             self.buttonTopCC.isActive = true
             self.bodyButtonCC.isActive = true
             self.buttonTopNormal.isActive = false
