@@ -33,6 +33,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
     var colors: [[CGColor]] = []
     var numberBgColor: UIColor = .black
+    var selectedNumber: Int? = nil
+
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
         set { titleLabel.font = newValue }
