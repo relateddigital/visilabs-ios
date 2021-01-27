@@ -93,6 +93,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                                                                         with: ".")
                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                           } else if notification.type == .npsWithNumbers {
+                                if let num = viewController.standardView.selectedNumber {
+                                    additionalTrackingProperties["OM.s_point"] = "\(num)"
+                                }
+                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
                            }
 
                 self.delegate?.notificationShouldDismiss(controller: self,
