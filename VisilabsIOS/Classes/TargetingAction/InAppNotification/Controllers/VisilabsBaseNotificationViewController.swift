@@ -49,7 +49,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
             return
         }
         let touch = touches.first
-        if !(touch?.view is VisilabsPopupDialogDefaultView) {
+        if !(touch?.view is VisilabsPopupDialogDefaultView) && !(touch?.view is CosmosView){
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
         } else {
 //            Dont dismiss on tap

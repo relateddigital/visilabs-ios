@@ -218,8 +218,12 @@ extension VisilabsPopupDialogDefaultView {
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-        
-        if let promo = self.visilabsInAppNotification?.promotionCode, !promo.isEmpty {
+
+        if let promo = self.visilabsInAppNotification?.promotionCode,
+           let _ = self.visilabsInAppNotification?.promotionBackgroundColor,
+           let _ = self.visilabsInAppNotification?.promotionTextColor,
+           !promo.isEmpty {
+
             addSubview(copyCodeTextButton)
             addSubview(copyCodeImageButton)
             copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
@@ -388,10 +392,6 @@ extension VisilabsPopupDialogDefaultView {
 extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RatingCollectionViewCell
-        if cell.isSelected {
-            return CGSize(width: 29.0, height: 29.0)
-        }
         let nWidth = (self.numberRating.frame.width - 100) / 10
         return CGSize(width: nWidth, height: nWidth)
     }
@@ -409,6 +409,17 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
             cell.setBackgroundColor(self.numberBgColor)
         }
         return cell
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RatingCollectionViewCell else {
+            return
+        }
+        if cell.isSelected {
+            self.selectedNumber = indexPath.row + 1
+        } else {
+            self.selectedNumber = 10
+        }
     }
     
     
