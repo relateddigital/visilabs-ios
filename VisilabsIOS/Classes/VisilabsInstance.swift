@@ -355,7 +355,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
     // This method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
-        visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
+//        visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
+        _ = visilabsTargetingActionInstance.notificationsInstance.showSpinToWin()
     }
     
     public func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
