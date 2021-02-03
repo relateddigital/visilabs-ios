@@ -171,15 +171,13 @@ SpinToWin.prototype.setContent = function() {
     this.titleElement.innerText = this.config.actiondata.spin_to_win_content.title;
     this.titleElement.style.color = this.config.actiondata.msg_title_color;
     this.titleElement.style.fontFamily = this.config.actiondata.msg_title_font_family;
-    this.titleElement.style.fonştSize = (this.config.actiondata.msg_title_textsize + 20) + "px";
+    this.titleElement.style.fontSize = (this.config.actiondata.msg_title_textsize + 20) + "px";
 
 
-    
     this.messageElement.innerText = this.config.actiondata.spin_to_win_content.message;
     this.messageElement.style.color = this.config.actiondata.msg_body_color;
     this.messageElement.style.fontFamily = this.config.actiondata.msg_body_font_family;
     this.messageElement.style.fontSize = (this.config.actiondata.msg_body_textsize + 10) + "px";
-
 
 
     this.submitButton.innerText = config.actiondata.spin_to_win_content.button_label;
