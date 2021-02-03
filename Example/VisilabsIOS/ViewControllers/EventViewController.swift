@@ -38,7 +38,7 @@ class EventViewController: FormViewController {
                                 "nps": 155,
                                 "image_button": 156,
                                 "smile_rating": 157,
-                                "emailForm": 354,
+                                "mailsubsform": 417,
                                 "alert": 395,
                                 "nps_with_numbers": 411]
 
