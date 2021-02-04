@@ -111,6 +111,8 @@ class InAppViewController: FormViewController {
             setFormRowsForEmail()
         case .alert:
             setRowsForAlert()
+        case .scratchToWin:
+            setRowsForScratchToWin()
         }
         self.form.allRows.forEach { (row) in
             row.evaluateHidden()
@@ -166,7 +168,7 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
     }
-    
+
     func setFormRowsForPromoCode() {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
@@ -286,7 +288,7 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
     }
-    
+
     func setFormRowsForNpsWithNumbers() {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
@@ -309,5 +311,29 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = false
+    }
+
+    func setRowsForScratchToWin() {
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.imageUrlString)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyTextSize)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.fontFamily)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.backGround)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonTextColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.closeButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.alertType)?.hidden = true
+        self.form.rowBy(tag: "miniIcon")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
     }
 }

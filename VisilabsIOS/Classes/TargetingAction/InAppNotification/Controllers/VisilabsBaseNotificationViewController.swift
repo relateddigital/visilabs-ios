@@ -21,6 +21,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
     var notification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
+    var scratchToWin: ScratchToWinModel?
     weak var delegate: VisilabsNotificationViewControllerDelegate?
     var window: UIWindow?
     var panStartPoint: CGPoint!

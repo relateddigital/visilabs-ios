@@ -74,16 +74,22 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
     var emailForm: MailSubscriptionViewModel?
+    var scratchToWin: ScratchToWinModel?
     var consentCheckboxAdded = false
     // MARK: - CONSTRUCTOR
-    init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification?, emailForm: MailSubscriptionViewModel? = nil) {
+    init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification?,
+                        emailForm: MailSubscriptionViewModel? = nil,
+                        scratchTW: ScratchToWinModel? = nil) {
         self.visilabsInAppNotification = visilabsInAppNotification
         self.emailForm = emailForm
+        self.scratchToWin = scratchTW
         super.init(frame: frame)
         if self.visilabsInAppNotification != nil {
             setupViews()
-        } else {
+        } else if self.emailForm != nil {
             setupInitialViewForEmailForm()
+        } else {
+            setupInitialForScratchToWin()
         }
     }
     
@@ -115,6 +121,35 @@ public class VisilabsPopupDialogDefaultView: UIView {
         NSLayoutConstraint.activate(constraints)
         
         setupForEmailForm()
+    }
+    
+    func setupInitialForScratchToWin() {
+        guard let model = self.scratchToWin else { return }
+        titleLabel.text = model.messageTitle?.removeEscapingCharacters()
+        titleLabel.font = model.messageTitleFont
+        titleLabel.textColor = model.messageTitleColor
+        
+        messageLabel.text = model.messageBody?.removeEscapingCharacters()
+        messageLabel.font = model.messageBodyFont
+        messageLabel.textColor = model.messageBodyColor
+        
+        closeButton.setTitleColor(model.closeButtonColor, for: .normal)
+        self.backgroundColor = model.backGroundColor
+        
+        self.addSubview(imageView)
+        self.addSubview(closeButton)
+        
+        var constraints = [NSLayoutConstraint]()
+        imageHeightConstraint = NSLayoutConstraint(item: imageView,
+            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+
+        if let imageHeightConstraint = imageHeightConstraint {
+            constraints.append(imageHeightConstraint)
+        }
+
+        closeButton.trailing(to: self, offset: -10.0)
+        NSLayoutConstraint.activate(constraints)
+        
     }
 
     required public init?(coder aDecoder: NSCoder) {
