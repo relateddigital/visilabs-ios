@@ -125,13 +125,27 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     
     }
     
+    fileprivate func initForScratchToWin(_ viewController: VisilabsDefaultPopupNotificationViewController) {
+        guard let scratchTW = self.scratchToWin else { return }
+       
+        let button = VisilabsPopupDialogButton(title: scratchTW.buttonText ?? "",
+                                                font: scratchTW.buttonTextFont,
+                                                   buttonTextColor: scratchTW.buttonTextColor,
+                                                   buttonColor: scratchTW.buttonColor, action: nil)
+            addButton(button)
+    
+    }
+    
     public convenience init(notification: VisilabsInAppNotification? = nil,
-                            mailForm: MailSubscriptionViewModel? = nil) {
+                            mailForm: MailSubscriptionViewModel? = nil,
+                            scratchToWin: ScratchToWinModel? = nil) {
         
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification,
-                                                                            emailForm: mailForm)
+                                                                            emailForm: mailForm,
+                                                                            scratchToWin: scratchToWin)
         self.init(notification: notification,
                   mailForm: mailForm,
+                  scratchToWin: scratchToWin,
                   viewController: viewController,
                   buttonAlignment: .vertical,
                   transitionStyle: .zoomIn,
@@ -141,6 +155,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                   hideStatusBar: false)
         initForInAppNotification(viewController)
         initForEmailForm(viewController)
+        initForScratchToWin(viewController)
         let closeTapGestureRecognizer = UITapGestureRecognizer(target: self,
                                         action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
@@ -164,6 +179,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public init(
         notification: VisilabsInAppNotification?,
         mailForm: MailSubscriptionViewModel?,
+        scratchToWin: ScratchToWinModel?,
         viewController: UIViewController,
         buttonAlignment: NSLayoutConstraint.Axis = .vertical,
         transitionStyle: PopupDialogTransitionStyle = .bounceUp,
@@ -181,6 +197,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         super.init(nibName: nil, bundle: nil)
         self.notification = notification
         self.mailForm = mailForm
+        self.scratchToWin = scratchToWin
         // Init the presentation manager
         presentationManager = VisilabsPresentationManager(transitionStyle: transitionStyle, interactor: interactor)
 

@@ -361,6 +361,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     public func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
         visilabsTargetingActionInstance.notificationsInstance.showMailSubscriptionForm(model)
     }
+    
+    public func showScratchToWin(_ model: ScratchToWinModel) {
+        visilabsTargetingActionInstance.notificationsInstance.showScratchToWinPopup(model)
+    }
 
     func checkInAppNotification(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in

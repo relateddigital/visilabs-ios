@@ -24,6 +24,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
     var currentlyShowingMailForm: MailSubscriptionViewModel?
+    var currentlyShowingSctw: ScratchToWinModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
 
     init(lock: VisilabsReadWriteLock) {
@@ -69,6 +70,23 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                 
                 if shown {
                     self.markMailFormShown(model: model)
+                }
+            }
+        }
+    }
+    
+    func showScratchToWinPopup(_ model: ScratchToWinModel) {
+        DispatchQueue.main.async {
+            if self.currentlyShowingNotification != nil
+                || self.currentlyShowingMailForm != nil
+                || self.currentlyShowingSctw != nil {
+                VisilabsLogger.warn("already showing an notification")
+            } else {
+                var shown = false
+                shown = self.showScratchToWin(model)
+                
+                if shown {
+                    self.markSctwShown(model: model)
                 }
             }
         }
@@ -173,6 +191,17 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
 
+    func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
+        let controller = VisilabsPopupNotificationViewController(scratchToWin: model)
+        controller.delegate = self
+        if let rootViewController = getRootViewController() {
+            rootViewController.present(controller, animated: false, completion: nil)
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func markNotificationShown(notification: VisilabsInAppNotification) {
         lock.write {
             VisilabsLogger.info("marking notification as seen: \(notification.actId)")
@@ -184,6 +213,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     func markMailFormShown(model: MailSubscriptionViewModel) {
         lock.write {
             currentlyShowingMailForm = model
+        }
+    }
+    
+    func markSctwShown(model: ScratchToWinModel) {
+        lock.write {
+            currentlyShowingSctw = model
         }
     }
 
@@ -213,6 +248,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             }
             self.currentlyShowingNotification = nil
             self.currentlyShowingMailForm = nil
+            self.currentlyShowingSctw = nil
         }
 
         if let callToActionURL = callToActionURL {

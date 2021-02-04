@@ -316,6 +316,9 @@ extension InAppViewController {
         let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
         if value == "emailForm" {
             Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+        } else if value == "scratchToWin" {
+            let sctw = createScratchToWinModel()
+            Visilabs.callAPI().showScratchToWin(sctw)
         } else {
             let visilabsInAppNotification = createVisilabsInAppNotificationModel()
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
@@ -434,4 +437,86 @@ extension InAppViewController {
                                         promotionBackgroundColor: promotionBackgroundColor,
                                         numberColors: numberColors)
     }
+    
+    //swiftlint:disable function_body_length
+    func createScratchToWinModel() -> ScratchToWinModel {
+        var tag = ""
+        let rawValue = self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?
+        let messageType = VisilabsInAppNotificationType.init(rawValue: rawValue!.value! as String)!
+        let messageTitle: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)
+                                        as TextRow?)!.value ?? ""
+        let messageBody: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)
+                                    as TextRow?)!.value ?? ""
+        let buttonText = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)
+                            as TextRow?)!.value ?? ""
+        let iosLink = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.iosLink)
+                        as URLRow?)?.value?.absoluteString
+        let messageTitleColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)
+                                    as TextRow?)!.value!  as String
+        let messageBodyColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)
+                                    as TextRow?)!.value!  as String
+
+        tag = VisilabsInAppNotification.PayloadKey.messageBodyTextSize
+        let messageBodyTextSize = "\((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)"
+
+        tag = VisilabsInAppNotification.PayloadKey.fontFamily
+        let fontFamily: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+
+        tag = VisilabsInAppNotification.PayloadKey.backGround
+        let backGround = ((self.form.rowBy(tag: tag) as? TextRow)?.value ?? "") as String
+
+        tag = VisilabsInAppNotification.PayloadKey.closeButtonColor
+        let closeButtonColor: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+
+        tag = VisilabsInAppNotification.PayloadKey.buttonTextColor
+        let buttonTextColor = (self.form.rowBy(tag: tag) as TextRow?)!.value!  as String
+
+        tag = VisilabsInAppNotification.PayloadKey.buttonColor
+        let buttonColor = (self.form.rowBy(tag: tag) as TextRow?)!.value!  as String
+
+        let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
+
+        var imageUrlString: String? = ""
+        if messageType == .mini {
+            imageUrlString = InAppHelper.miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon)
+        } else {
+            tag = VisilabsInAppNotification.PayloadKey.imageUrlString
+            imageUrlString = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
+        }
+
+        tag = VisilabsInAppNotification.PayloadKey.closeButtonText
+        let closeButtonText = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
+
+        let promotionCode = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)
+                            as TextRow?)!.value ?? ""
+
+        let promotionTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)
+                                    as TextRow?)!.value!  as String
+
+        let promotionBackgroundColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)
+                                    as TextRow?)!.value!  as String
+        return ScratchToWinModel(actId: 0,
+                                        type: messageType,
+                                        messageTitle: messageTitle,
+                                        messageBody: messageBody,
+                                        buttonText: buttonText,
+                                        iosLink: iosLink,
+                                        imageUrlString: imageUrlString,
+                                        visitorData: nil,
+                                        visitData: nil,
+                                        queryString: nil,
+                                        messageTitleColor: messageTitleColor,
+                                        messageBodyColor: messageBodyColor,
+                                        messageBodyTextSize: messageBodyTextSize,
+                                        fontFamily: fontFamily,
+                                        backGround: backGround,
+                                        closeButtonColor: closeButtonColor,
+                                        buttonTextColor: buttonTextColor,
+                                        buttonColor: buttonColor,
+                                        closeButtonText: closeButtonText,
+                                        promotionCode: promotionCode,
+                                        promotionTextColor: promotionTextColor,
+                                        promotionBackgroundColor: promotionBackgroundColor)
+    }
+    
 }

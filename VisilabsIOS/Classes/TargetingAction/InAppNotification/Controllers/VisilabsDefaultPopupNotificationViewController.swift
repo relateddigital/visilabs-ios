@@ -11,14 +11,20 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
+    var scratchToWin: ScratchToWinModel?
 
     convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
-                     emailForm: MailSubscriptionViewModel? = nil) {
+                     emailForm: MailSubscriptionViewModel? = nil,
+                     scratchToWin: ScratchToWinModel? = nil) {
         self.init()
         self.visilabsInAppNotification = visilabsInAppNotification
         self.mailForm = emailForm
+        self.scratchToWin = scratchToWin
         if let image = visilabsInAppNotification?.image {
             self.image = UIImage(data: image)
+        }
+        if let img = scratchToWin?.image {
+            self.image = UIImage(data: img)
         }
     }
 
@@ -30,7 +36,8 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
         super.loadView()
         view = VisilabsPopupDialogDefaultView(frame: .zero,
                                               visilabsInAppNotification: visilabsInAppNotification,
-                                              emailForm: mailForm)
+                                              emailForm: mailForm,
+                                              scratchTW: scratchToWin)
     }
 }
 
