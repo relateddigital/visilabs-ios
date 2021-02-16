@@ -30,10 +30,14 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var resultLabel = setResultLabel()
     internal lazy var sliderStepRating = setSliderStepRating()
     internal lazy var numberRating = setNumberRating()
-
+    internal var sctw: ScratchUIView!
+    internal var sctwButton: VisilabsPopupDialogButton!
+    
     var colors: [[CGColor]] = []
     var numberBgColor: UIColor = .black
     var selectedNumber: Int? = nil
+    var expanded = false
+    var delegate: VisilabsPopupDialogDefaultViewDelegate?
 
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
@@ -98,17 +102,17 @@ public class VisilabsPopupDialogDefaultView: UIView {
         titleLabel.text = model.title.removeEscapingCharacters()
         titleLabel.font = model.titleFont
         titleLabel.textColor = model.titleColor
-        
+
         messageLabel.text = model.message.removeEscapingCharacters()
         messageLabel.font = model.messageFont
         messageLabel.textColor = model.textColor
-        
+
         closeButton.setTitleColor(model.closeButtonColor, for: .normal)
         self.backgroundColor = model.backgroundColor
-        
+
         self.addSubview(imageView)
         self.addSubview(closeButton)
-        
+
         var constraints = [NSLayoutConstraint]()
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
             attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
@@ -128,28 +132,93 @@ public class VisilabsPopupDialogDefaultView: UIView {
         titleLabel.text = model.messageTitle?.removeEscapingCharacters()
         titleLabel.font = model.messageTitleFont
         titleLabel.textColor = model.messageTitleColor
-        
+
         messageLabel.text = model.messageBody?.removeEscapingCharacters()
         messageLabel.font = model.messageBodyFont
         messageLabel.textColor = model.messageBodyColor
-        
+
         closeButton.setTitleColor(model.closeButtonColor, for: .normal)
         self.backgroundColor = model.backGroundColor
-        
-        self.addSubview(imageView)
+
         self.addSubview(closeButton)
+        self.addSubview(titleLabel)
+        self.addSubview(messageLabel)
+
+        self.titleLabel.top(to: self, offset: 50)
+        self.titleLabel.leading(to: self)
+        self.titleLabel.trailing(to: self)
+        self.titleLabel.height(20)
+        self.messageLabel.topToBottom(of: titleLabel,offset: 10)
+        self.messageLabel.leading(to: self)
+        self.messageLabel.trailing(to: self)
+
+        let frame = CGRect(x: 0, y: 0, width: 280.0, height: 50.0)
+        let coupon = UIView(frame: frame)
+        coupon.backgroundColor = .red
+
+        let cpLabel = UILabel(frame: frame)
+        cpLabel.text = "coupon code"
+        cpLabel.textAlignment = .center
+        cpLabel.textColor = .white
+        coupon.addSubview(cpLabel)
+
+        let couponImg = coupon.asImage()
+
+        let maskView = UIView(frame: frame)
+        maskView.backgroundColor = .darkGray
+ 
+        let maskImg = maskView.asImage()
         
-        var constraints = [NSLayoutConstraint]()
-        imageHeightConstraint = NSLayoutConstraint(item: imageView,
-            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+        self.sctw = ScratchUIView(frame: frame, couponImage: couponImg, maskImage: maskImg, scratchWidth: 20.0)
+        sctw.delegate = self
+        self.addSubview(sctw)
 
-        if let imageHeightConstraint = imageHeightConstraint {
-            constraints.append(imageHeightConstraint)
-        }
+        sctw.topToBottom(of: messageLabel, offset: 20)
+        sctw.leading(to: self, offset: 10)
+        sctw.trailing(to: self, offset: -10)
+        sctw.height(50.0)    
+        
+        sctwButton = VisilabsPopupDialogButton(title: "Save & Scratch",
+                                               font: model.buttonTextFont,
+                                               buttonTextColor: model.buttonTextColor,
+                                               buttonColor: model.buttonColor, action: nil)
+        sctwButton.addTarget(self, action: #selector(collapseSctw), for: .touchDown)
+        
+        sctw.isUserInteractionEnabled = false
+        addSubview(sctwButton)
+        sctwButton.height(50.0)
+        sctwButton.allEdges(to: self, excluding: .top)
 
+        addSubview(firstCheckBox)
+        addSubview(secondCheckBox)
+        addSubview(emailTF)
+        addSubview(termsButton)
+        addSubview(consentButton)
+
+        emailTF.topToBottom(of: sctw, offset: 20)
+        emailTF.leading(to: self, offset: 10)
+        emailTF.trailing(to: self, offset: -10)
+        emailTF.height(25)
+        
+        firstCheckBox.topToBottom(of: emailTF, offset: 10)
+        firstCheckBox.leading(to: self, offset: 10)
+        firstCheckBox.size(CGSize(width: 20, height: 20))
+        termsButton.leadingToTrailing(of: firstCheckBox, offset: 10)
+        termsButton.centerY(to: firstCheckBox)
+
+        secondCheckBox.topToBottom(of: firstCheckBox, offset: 5)
+        secondCheckBox.leading(to: self, offset: 10)
+        secondCheckBox.size(CGSize(width: 20, height: 20))
+
+        consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
+        consentButton.centerY(to: secondCheckBox)
+
+        termsButton.setTitle("terms button ", for: .normal)
+        consentButton.setTitle("consent button", for: .normal)
+
+        sctwButton.topToBottom(of: secondCheckBox, offset: 10)
         closeButton.trailing(to: self, offset: -10.0)
         NSLayoutConstraint.activate(constraints)
-        
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -278,4 +347,35 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
         }
         return topView
     }
+    
+    @objc func collapseSctw() {
+        self.sctw.isUserInteractionEnabled = true
+        emailTF.removeFromSuperview()
+        termsButton.removeFromSuperview()
+        consentButton.removeFromSuperview()
+        firstCheckBox.removeFromSuperview()
+        secondCheckBox.removeFromSuperview()
+        sctwButton.removeFromSuperview()
+        sctw.bottom(to: self, offset: -20)
+        setNeedsLayout()
+        setNeedsDisplay()
+    }
+    
+    @objc func expandSctw() {
+        self.delegate?.viewExpanded()
+    }
+}
+
+extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
+    
+    public func scratchMoved(_ view: ScratchUIView) {
+        if !expanded && view.getScratchPercent() > 0.79 {
+            expanded = true
+            expandSctw()
+        }
+    }
+}
+
+protocol VisilabsPopupDialogDefaultViewDelegate {
+    func viewExpanded()
 }

@@ -33,6 +33,8 @@ public class ScratchToWinModel {
         public static let promotionCode = "promotion_code"
         public static let promotionTextColor = "promocode_text_color"
         public static let promotionBackgroundColor = "promocode_background_color"
+        public static let emailPermitText = "email_permit_text"
+        public static let consentText = "consent_text"
     }
 
     let actId: Int
@@ -58,6 +60,8 @@ public class ScratchToWinModel {
     let promotionCode: String?
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
+    let emailPermitText: String?
+    let consentText: String?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -101,7 +105,9 @@ public class ScratchToWinModel {
                 closeButtonText: String?,
                 promotionCode: String?,
                 promotionTextColor: String?,
-                promotionBackgroundColor: String?) {
+                promotionBackgroundColor: String?,
+                emailPermitText: String?,
+                consentText: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -144,6 +150,8 @@ public class ScratchToWinModel {
         self.promotionCode = promotionCode
         self.promotionTextColor = UIColor(hex: promotionTextColor)
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
+        self.emailPermitText = emailPermitText
+        self.consentText = consentText
         setFonts()
     }
 
@@ -214,6 +222,8 @@ public class ScratchToWinModel {
         }
         self.callToActionUrl = callToActionUrl
         self.closeButtonText = actionData[ScratchTWKey.closeButtonText] as? String
+        self.emailPermitText = actionData[ScratchTWKey.emailPermitText] as? String
+        self.consentText = actionData[ScratchTWKey.consentText] as? String
         setFonts()
     }
 

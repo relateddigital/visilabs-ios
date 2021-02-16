@@ -516,7 +516,9 @@ extension InAppViewController {
                                         closeButtonText: closeButtonText,
                                         promotionCode: promotionCode,
                                         promotionTextColor: promotionTextColor,
-                                        promotionBackgroundColor: promotionBackgroundColor)
+                                        promotionBackgroundColor: promotionBackgroundColor,
+                                        emailPermitText: nil,
+                                        consentText: nil)
     }
-    
+
 }
