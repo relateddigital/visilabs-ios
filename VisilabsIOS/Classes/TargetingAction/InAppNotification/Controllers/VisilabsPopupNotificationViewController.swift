@@ -121,19 +121,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                 font: mailForm.buttonFont,
                                                    buttonTextColor: mailForm.buttonTextColor,
                                                    buttonColor: mailForm.buttonColor, action: nil)
-            addButton(button)
+        addButton(button)
     
     }
     
     fileprivate func initForScratchToWin(_ viewController: VisilabsDefaultPopupNotificationViewController) {
-        guard let scratchTW = self.scratchToWin else { return }
-       
-        let button = VisilabsPopupDialogButton(title: scratchTW.buttonText ?? "",
-                                                font: scratchTW.buttonTextFont,
-                                                   buttonTextColor: scratchTW.buttonTextColor,
-                                                   buttonColor: scratchTW.buttonColor, action: nil)
-            addButton(button)
-    
+        viewController.standardView.delegate = self
     }
     
     public convenience init(notification: VisilabsInAppNotification? = nil,
@@ -446,4 +439,17 @@ internal extension VisilabsPopupNotificationViewController {
 
     }
 
+}
+
+extension VisilabsPopupNotificationViewController: VisilabsPopupDialogDefaultViewDelegate {
+    func viewExpanded() {
+        guard let scratchTW = self.scratchToWin else { return }
+        let button = VisilabsPopupDialogButton(title: "Copy Code",
+                                               font: scratchTW.buttonTextFont,
+                                                   buttonTextColor: scratchTW.buttonTextColor,
+                                                   buttonColor: scratchTW.buttonColor, action: nil)
+        addButton(button)
+        appendButtons()
+ 
+    }
 }
