@@ -166,7 +166,7 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
     }
-    
+
     func setFormRowsForPromoCode() {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false

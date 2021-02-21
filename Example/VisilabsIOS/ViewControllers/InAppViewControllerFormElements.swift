@@ -304,22 +304,33 @@ extension InAppViewController {
     }
 
     func showNotificationTapped() {
+        dummyFunc()
+//        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
+//        print("Form erros count: \(errors.count)")
+//        for error in errors {
+//            print(error.msg)
+//        }
+//        if errors.count > 0 {
+//            return
+//        }
+//        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
+//        if value == "emailForm" {
+//            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+//        } else {
+//            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
+//            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+//        }
+    }
 
-        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
-        print("Form erros count: \(errors.count)")
-        for error in errors {
-            print(error.msg)
-        }
-        if errors.count > 0 {
-            return
-        }
-        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
-        if value == "emailForm" {
-            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
-        } else {
-            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
-            Visilabs.callAPI().showNotification(visilabsInAppNotification)
-        }
+    func dummyFunc() {
+        let duration = SocialProofDuration.sec5
+        let location = SocialProofLocation.bottom
+        let model = SocialProofModel(text: "has viewed this product", number: "120",
+                                     location: location, duration: duration, backgroundColor: .blue,
+                                     textColor: .white, numberColor: .red,
+                                     textFont: .systemFont(ofSize: 12), numberFont: .boldSystemFont(ofSize: 14))
+        let vc = SocialProofViewController(model: model)
+        vc.showNow(animated: true)
     }
 
     func addNumberBGColor(_ colorId: String) -> TextRow {
