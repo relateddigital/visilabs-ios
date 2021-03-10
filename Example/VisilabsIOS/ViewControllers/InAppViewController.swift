@@ -107,10 +107,12 @@ class InAppViewController: FormViewController {
             setFormRowsForFullImage()
         case.imageButton:
             setFormRowsForImageButton()
-        case .emailForm:
-            setFormRowsForEmail()
         case .alert:
             setRowsForAlert()
+        case .emailForm:
+            setFormRowsForEmail()
+        case .spintowin:
+            setFormRowsForEmail()
         }
         self.form.allRows.forEach { (row) in
             row.evaluateHidden()
