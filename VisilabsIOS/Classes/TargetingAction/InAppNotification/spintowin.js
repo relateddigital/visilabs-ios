@@ -2,12 +2,8 @@
 //TODO: Close button color yapılacak
 //TODO: Gereksiz this'leri kaldır
 //TODO: çarkıfelek çevir butonuna bastıktan sonra sunucuya request atılacak.
-
 function SpinToWin(config) {
-
-
     this.container = document.getElementById("container");
-
     this.canvasContainer = document.getElementById("canvas-container");
     this.wheelCanvas = document.getElementById("wheel-canvas");
     this.arrowCanvas = document.getElementById("arrow-canvas");
@@ -16,26 +12,19 @@ function SpinToWin(config) {
     this.closeButton = document.getElementById("spin-to-win-box-close");
     this.titleElement = document.getElementById("form-title");
     this.messageElement = document.getElementById("form-message");
-    this.submitButton = document.getElementById("form-submit-btn");  
+    this.submitButton = document.getElementById("form-submit-btn");
     this.emailInput = document.getElementById("vl-form-input");
-
-
     this.consentContainer = document.getElementById("vl-form-consent");
     this.emailPermitContainer = document.getElementById("vl-permitform-email");
     this.consentCheckbox = document.getElementById("vl-form-checkbox");
     this.emailPermitCheckbox = document.getElementById("vl-form-checkbox-emailpermit");
     this.consentText = document.getElementById("vl-form-consent-text");
     this.emailPermitText = document.getElementById("vl-permitform-email-text");
-
-
     this.couponCode = document.getElementById("coupon-code");
-    this.copyButton = document.getElementById("form-copy-btn"); 
-    this.warning = document.getElementById("vl-warning"); 
-
-
+    this.copyButton = document.getElementById("form-copy-btn");
+    this.warning = document.getElementById("vl-warning");
     this.invalidEmailMessageLi = document.getElementById("invalid_email_message");
-
-    this.formValidation = {email: true, consent: true};
+    this.formValidation = { email: true, consent: true };
     this.spinCompleted = false;
 
 
@@ -124,47 +113,45 @@ function SpinToWin(config) {
 //promoAuth burada kullanılacak buna göre. hangi slice'in seçileceğine karar verilecek
 //response false döndüğü zaman ne yapılacak
 //_VTObjs["_VisilabsTarget_5"].Callback({"id":130,"success":false,"promocode":""})
-SpinToWin.prototype.miscJsonRequest = function() {
-    console.log("miscJsonRequest");
-    if(window.Android){
-        Android.miscJsonRequest(this.config.promoAuth);
+SpinToWin.prototype.promotionRequest = function () {
+    console.log("promotionRequest");
+    if (window.Android) {
+        Android.promotionRequest(this.config.promoAuth);
+    } else if (window.webkit.messageHandlers.eventHandler) {
+        window.webkit.messageHandlers.eventHandler.postMessage({ method: "promotionRequest", promoAuth: this.config.promoAuth });
     }
 };
 
-SpinToWin.prototype.clickRequest = function() {
+SpinToWin.prototype.clickRequest = function () {
     console.log("clickRequest");
-    if(window.Android){
+    if (window.Android) {
         Android.clickRequest(this.config.actid, "burada acttype da gönderilmeli");
     }
 };
 
 //auth burada kullanılacak.
-SpinToWin.prototype.subscribeMail = function() {
+SpinToWin.prototype.subscribeMail = function () {
     console.log("close button clicked");
-    if(window.Android){
+    if (window.Android) {
         Android.subscribeMail(this.emailInput.value.trim(), this.config.auth);
     }
 };
 
-SpinToWin.prototype.close = function() {
+SpinToWin.prototype.close = function () {
     console.log("close button clicked");
-    if(window.Android){
+    if (window.Android) {
         Android.closeButtonClicked();
     }
-//    else {
-//        window.webkit.messageHandlers.iosListener.postMessage("closeButtonClicked")
-//    }
-    
 };
 
-SpinToWin.prototype.copyToClipboard = function() {
+SpinToWin.prototype.copyToClipboard = function () {
     console.log("copyToClipboard button clicked : " + this.couponCode.innerText);
-    if(window.Android){
+    if (window.Android) {
         Android.copyToClipboard(this.couponCode.innerText);
-    } 
+    }
 };
 
-SpinToWin.prototype.setContent = function() {
+SpinToWin.prototype.setContent = function () {
 
     this.container.style.backgroundColor = this.config.actiondata.background_color;
 
@@ -174,10 +161,12 @@ SpinToWin.prototype.setContent = function() {
     this.titleElement.style.fontSize = (this.config.actiondata.msg_title_textsize + 20) + "px";
 
 
+
     this.messageElement.innerText = this.config.actiondata.spin_to_win_content.message;
     this.messageElement.style.color = this.config.actiondata.msg_body_color;
     this.messageElement.style.fontFamily = this.config.actiondata.msg_body_font_family;
     this.messageElement.style.fontSize = (this.config.actiondata.msg_body_textsize + 10) + "px";
+
 
 
     this.submitButton.innerText = config.actiondata.spin_to_win_content.button_label;
@@ -212,19 +201,19 @@ SpinToWin.prototype.setContent = function() {
     this.submitButton.addEventListener("click", this.submit);
     this.closeButton.addEventListener("click", evt => this.close());
     this.copyButton.addEventListener("click", evt => this.copyToClipboard());
-    
+
 };
 
-SpinToWin.prototype.validateForm = function() { 
-    var result = {email: true, consent: true};
-    if(!this.validateEmail(this.emailInput.value)) {
+SpinToWin.prototype.validateForm = function () {
+    var result = { email: true, consent: true };
+    if (!this.validateEmail(this.emailInput.value)) {
         result.email = false;
     }
-    if(!this.isNullOrWhitespace(this.consentText.innerText)) {
+    if (!this.isNullOrWhitespace(this.consentText.innerText)) {
         result.consent = this.consentCheckbox.checked;
     }
-    if(result.consent) {
-        if(!this.isNullOrWhitespace(this.emailPermitText.innerText)) {
+    if (result.consent) {
+        if (!this.isNullOrWhitespace(this.emailPermitText.innerText)) {
             result.consent = this.emailPermitCheckbox.checked;
         }
     }
@@ -233,7 +222,7 @@ SpinToWin.prototype.validateForm = function() {
 };
 
 
-SpinToWin.prototype.handleVisibility = function() { 
+SpinToWin.prototype.handleVisibility = function () {
 
     if (this.spinCompleted) {
         this.couponCode.style.display = "";
@@ -249,12 +238,12 @@ SpinToWin.prototype.handleVisibility = function() {
         this.copyButton.style.display = "none";
     }
 
-    
-    
+
+
     this.warning.style.display = "none";
 
-    if(this.config.mailFormEnabled) {
-        if(!this.formValidation.email || !this.formValidation.consent) {
+    if (this.config.mailFormEnabled) {
+        if (!this.formValidation.email || !this.formValidation.consent) {
             this.warning.style.display = "";
         } else {
             this.warning.style.display = "none";
@@ -270,7 +259,7 @@ SpinToWin.prototype.handleVisibility = function() {
 };
 
 //TODO: randomNumber çalışıyor mu bak?
-SpinToWin.prototype.colorsHandler = function() {
+SpinToWin.prototype.colorsHandler = function () {
     if (this.config.pickedColors.length == 0) {
         for (var i = 0; i < this.config.sliceCount; i++) {
             this.config.colors.push("rgb(" + randomInt(0, 256) + "," + randomInt(0, 256) + "," + randomInt(0, 256) + ")");
@@ -278,7 +267,7 @@ SpinToWin.prototype.colorsHandler = function() {
     } else if (this.config.pickedColors.length <= this.config.sliceCount) {
         for (var i = 0; i < this.config.sliceCount; i++) {
             if (i >= this.config.pickedColors.length) {
-               this.config.colors.push(this.config.pickedColors[i % this.config.pickedColors.length]);
+                this.config.colors.push(this.config.pickedColors[i % this.config.pickedColors.length]);
             } else {
                 this.config.colors.push(this.config.pickedColors[i]);
             }
@@ -286,7 +275,7 @@ SpinToWin.prototype.colorsHandler = function() {
     }
 };
 
-SpinToWin.prototype.textsHandler = function() {
+SpinToWin.prototype.textsHandler = function () {
     if (this.config.campaigns.length <= this.config.sliceCount) {
         for (var i = 0; i < this.config.sliceCount; i++) {
             if (i >= this.config.campaigns.length) {
@@ -298,9 +287,9 @@ SpinToWin.prototype.textsHandler = function() {
     }
 };
 
-SpinToWin.prototype.styleHandler = function() {
+SpinToWin.prototype.styleHandler = function () {
 
-    var wheelCanvasWidth  = (config.r * 2), wheelCanvasHeight = (config.r * 2);
+    var wheelCanvasWidth = (config.r * 2), wheelCanvasHeight = (config.r * 2);
     this.wheelCanvas.width = wheelCanvasWidth;
     this.wheelCanvas.height = wheelCanvasHeight;
     var wheelCanvasStyle = {};
@@ -314,12 +303,12 @@ SpinToWin.prototype.styleHandler = function() {
 
 
     this.canvasContainer.style.position = "absolute";
-    this.canvasContainer.style.bottom = (- wheelCanvasHeight / 2 )+ "px";
+    this.canvasContainer.style.bottom = (- wheelCanvasHeight / 2) + "px";
 
 
 
 
-    var arrowContainerTop = (config.r - (config.r /5.2)) + "px"; // R: 250 top: 205, R: 200 top: 162, R: 150 top: 121
+    var arrowContainerTop = (config.r - (config.r / 5.2)) + "px"; // R: 250 top: 205, R: 200 top: 162, R: 150 top: 121
     var styleEl = document.createElement("style"),
         titleStyle = config.htmlContent.title_style,
         textStyle = config.htmlContent.message_style,
@@ -378,7 +367,7 @@ SpinToWin.prototype.styleHandler = function() {
             //"#container{width:100%;top:unset;bottom:-" + config.r + "px;left:0px;height:auto}" +
             "#canvas-container{float:unset;width:100%;text-align:center;position:relative}" +
             "#wheel-container{width:" + (config.r * 2) + "px;margin:0 auto;float:unset;transform:rotate(-90deg)}" +
-            "#arrow-container{top:" +  arrowContainerTop + ";transform:rotate(45deg);left:calc(50% - 10px)}" +
+            "#arrow-container{top:" + arrowContainerTop + ";transform:rotate(45deg);left:calc(50% - 10px)}" +
             "#form-container{float:unset;width:100%;}" +
             "#form-container>div{transform:unset;top:unset;margin:20px;width:calc(100% - 40px)}" +
             "}";
@@ -396,7 +385,7 @@ SpinToWin.prototype.styleHandler = function() {
 
 };
 
-SpinToWin.prototype.createHtmlElements = function() {
+SpinToWin.prototype.createHtmlElements = function () {
     var containerDiv = document.getElementById("container");
     var formContainerDiv = this.createForm();
     containerDiv.appendChild(formContainerDiv);
@@ -405,11 +394,11 @@ SpinToWin.prototype.createHtmlElements = function() {
     document.body.appendChild(containerDiv);
 };
 
-SpinToWin.prototype.createForm = function() {
+SpinToWin.prototype.createForm = function () {
     var formContainerDiv = document.getElementById("form-container");
     var formContainerInnerDiv = document.getElementById("form-container-inner");
-    var titleDiv = this.createHtmlElement("div", "form-title", undefined, config.actiondata.spin_to_win_content.title, {fontSize : config.actiondata.font_size + "px"});
-    var messageDiv = this.createHtmlElement("div", "form-message", undefined, config.actiondata.spin_to_win_content.message, {fontSize : config.actiondata.font_size + "px"});
+    var titleDiv = this.createHtmlElement("div", "form-title", undefined, config.actiondata.spin_to_win_content.title, { fontSize: config.actiondata.font_size + "px" });
+    var messageDiv = this.createHtmlElement("div", "form-message", undefined, config.actiondata.spin_to_win_content.message, { fontSize: config.actiondata.font_size + "px" });
     var submitButtonContainerDiv = this.createHtmlElement("div", undefined, "center-container");
     this.submitButton = this.createHtmlElement("input", "form-submit-btn", "form-submit-btn", undefined, undefined, "button", config.actiondata.spin_to_win_content.button_label, evt => this.submit());
     this.closeButton = document.getElementById("spin-to-win-box-close");
@@ -418,7 +407,7 @@ SpinToWin.prototype.createForm = function() {
     formContainerInnerDiv.appendChild(titleDiv);
     formContainerInnerDiv.appendChild(messageDiv);
 
-    if(config.mailFormEnabled) {
+    if (config.mailFormEnabled) {
         var emailInputContainerDiv = this.createHtmlElement("div", undefined, "center-container");
         this.emailInput = this.createHtmlElement("input", "vl-form-input", undefined, undefined, undefined, "email", undefined, undefined, this.config.htmlContent.placeholder);
         emailInputContainerDiv.appendChild(this.emailInput);
@@ -437,7 +426,7 @@ SpinToWin.prototype.createForm = function() {
 
 
 //TODO: bunu css'e ekle
-SpinToWin.prototype.getWheelCanvasStyle = function() {
+SpinToWin.prototype.getWheelCanvasStyle = function () {
     var wheelCanvasStyle = {};
     wheelCanvasStyle.transform = "translateX(0px) rotate(" + this.randomInt(0, 360) + "deg)";
     wheelCanvasStyle.transitionProperty = "transform";
@@ -449,7 +438,7 @@ SpinToWin.prototype.getWheelCanvasStyle = function() {
 };
 
 
-SpinToWin.prototype.drawArrow = function() {
+SpinToWin.prototype.drawArrow = function () {
     this.arrowCanvasContext.beginPath();
     this.arrowCanvasContext.moveTo(0, 0);
     this.arrowCanvasContext.lineTo(config.centerX + 100, config.centerY);
@@ -462,18 +451,18 @@ SpinToWin.prototype.drawArrow = function() {
     this.arrowCanvasContext.fill();
 };
 
-SpinToWin.prototype.sliceDrawer = function(sliceNumber, sliceColor) {
+SpinToWin.prototype.sliceDrawer = function (sliceNumber, sliceColor) {
     this.wheelCanvasContext.beginPath();
     this.wheelCanvasContext.fillStyle = sliceColor;
     this.wheelCanvasContext.moveTo(config.centerX, config.centerY);
-    this.wheelCanvasContext.arc(config.centerX, config.centerY, config.r, config.angle * sliceNumber,  config.angle * (sliceNumber + 1));
+    this.wheelCanvasContext.arc(config.centerX, config.centerY, config.r, config.angle * sliceNumber, config.angle * (sliceNumber + 1));
     this.wheelCanvasContext.moveTo(config.centerX, config.centerY);
     this.wheelCanvasContext.fill();
     this.wheelCanvasContext.closePath();
 };
 
 
-SpinToWin.prototype.mobileTextTyper = function(sliceNumber, sliceText, sliceColor) {
+SpinToWin.prototype.mobileTextTyper = function (sliceNumber, sliceText, sliceColor) {
     var fontSize = config.font_size;
     this.wheelCanvasContext.save();
     this.wheelCanvasContext.translate(config.centerX + (Math.cos(sliceNumber * config.angle) * config.r), config.centerY + (Math.sin(sliceNumber * config.angle) * config.r));
@@ -498,7 +487,7 @@ SpinToWin.prototype.mobileTextTyper = function(sliceNumber, sliceText, sliceColo
     this.wheelCanvasContext.restore();
 };
 
-SpinToWin.prototype.midCircleDrawer = function(circleColor, circleRadius) {
+SpinToWin.prototype.midCircleDrawer = function (circleColor, circleRadius) {
     this.wheelCanvasContext.beginPath();
     this.wheelCanvasContext.fillStyle = circleColor;
     this.wheelCanvasContext.moveTo(config.centerX, config.centerY);
@@ -507,13 +496,13 @@ SpinToWin.prototype.midCircleDrawer = function(circleColor, circleRadius) {
     this.wheelCanvasContext.closePath();
 };
 
-SpinToWin.prototype.createWheel = function() {
+SpinToWin.prototype.createWheel = function () {
     var canvasContainerDiv = this.createHtmlElement("div", "canvas-container");
     var arrowContainerDiv = this.createHtmlElement("div", "arrow-container");
     var wheelContainerDiv = this.createHtmlElement("div", "wheel-container");
     this.arrowCanvas = this.createHtmlElement("canvas", "arrow-canvas", undefined, undefined);
     this.wheelCanvas = this.createHtmlElement("canvas", "wheel-canvas", undefined, undefined, this.getWheelCanvasStyle());
-    var wheelCanvasWidth  = (config.r * 2), wheelCanvasHeight = (config.r * 2);
+    var wheelCanvasWidth = (config.r * 2), wheelCanvasHeight = (config.r * 2);
     this.wheelCanvas.width = wheelCanvasWidth;
     this.wheelCanvas.height = wheelCanvasHeight;
     arrowContainerDiv.appendChild(this.arrowCanvas);
@@ -524,15 +513,15 @@ SpinToWin.prototype.createWheel = function() {
 
 };
 
-SpinToWin.prototype.submit = function() {
+SpinToWin.prototype.submit = function () {
     if (config.mailFormEnabled) {
 
         window.spinToWin.formValidation = window.spinToWin.validateForm();
-        if(!window.spinToWin.formValidation.email || !window.spinToWin.formValidation.consent) {
+        if (!window.spinToWin.formValidation.email || !window.spinToWin.formValidation.consent) {
             window.spinToWin.handleVisibility();
             return;
         }
-        
+
         //TODO: burası değişecek
         //TODO: burada neden 2 kez SendClickRequest çağırılmış? SendClickToGA niçin var?
         window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
@@ -545,7 +534,7 @@ SpinToWin.prototype.submit = function() {
         });
     }
     else {
-         window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
+        window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
         //VisilabsObject.SendClickRequest(27, window.visilabs_spin_to_win.id);
         //VisilabsObject.SendClickRequest(window.visilabs_spin_to_win.acttype, window.visilabs_spin_to_win.id);
         //var ga_value = JSON.parse(localStorage.getItem("act-" + this.config.id));
@@ -556,7 +545,7 @@ SpinToWin.prototype.submit = function() {
     }
 };
 
-SpinToWin.prototype.async_resultGenerator = function(spinToWinObject) {
+SpinToWin.prototype.async_resultGenerator = function (spinToWinObject) {
     var lastResult;
     return new Promise(function (resolve, reject) {
         if (config.promotionSlices.length > 0) {
@@ -637,9 +626,9 @@ SpinToWin.prototype.async_resultGenerator = function(spinToWinObject) {
     });
 };
 
-SpinToWin.prototype.spinHandler = function(result) {
+SpinToWin.prototype.spinHandler = function (result) {
     var spinHandler_R = window.spinToWin.r;
-    var spinHandler_isMobile =  true; //window.visilabs_spin_to_win.isMobile;
+    var spinHandler_isMobile = true; //window.visilabs_spin_to_win.isMobile;
     var vl_form_input = document.getElementById("vl-form-input");
     if (vl_form_input !== null)
         vl_form_input.setAttribute("disabled", "");
@@ -669,7 +658,7 @@ SpinToWin.prototype.spinHandler = function(result) {
 
 };
 
-SpinToWin.prototype.resultHandler = function(res) {
+SpinToWin.prototype.resultHandler = function (res) {
     console.log(res);
     var successMessage = "<strong>" + res.displayName.split("|").join(" ") + "</strong> kazandınız. Kupon kodunuz: ";
     var copyToClipboardButtonLabel = "KOPYALA";
@@ -699,7 +688,7 @@ SpinToWin.prototype.resultHandler = function(res) {
         + "<div style='text-align:center; padding: 5px; margin: 5px 0; border: 1px solid #ddd; background: #eee; font-weight: 700'>" + res.code + "</div>"
         + "<div class='center-container'>"
         + "<input class='vl-form-submit-btn' type='button' id='vl-copy' value='" + copyToClipboardButtonLabel + "' />"
-        + "</div>" ;
+        + "</div>";
 
     this.spinCompleted = true;
     this.couponCode.innerText = res.code;
@@ -710,11 +699,11 @@ SpinToWin.prototype.resultHandler = function(res) {
 
 //Helper functions
 
-SpinToWin.prototype.randomInt = function(min, max) {
+SpinToWin.prototype.randomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 };
 
-SpinToWin.prototype.lightOrDark = function(color) {
+SpinToWin.prototype.lightOrDark = function (color) {
     var r, g, b, hsp;
     if (color.indexOf("rgb") != -1) {
         color = color.replace("rgb(" || "rgba(", "");
@@ -744,30 +733,30 @@ SpinToWin.prototype.lightOrDark = function(color) {
     }
 };
 
-SpinToWin.prototype.createHtmlElement = function(tag, id, className, innerText, style, type, value, clickListener, placeholder) {
+SpinToWin.prototype.createHtmlElement = function (tag, id, className, innerText, style, type, value, clickListener, placeholder) {
     var element = document.createElement(tag);
-    if(id){
+    if (id) {
         element.id = id;
     }
-    if(innerText) {
+    if (innerText) {
         element.innerText = innerText;
     }
-    if(style) {
+    if (style) {
         Object.assign(element.style, style);
     }
-    if(className) {
+    if (className) {
         element.className = className;
     }
-    if(type) {
+    if (type) {
         element.type = type;
     }
-    if(value) {
+    if (value) {
         element.value = value;
     }
-    if(clickListener) {
+    if (clickListener) {
         element.addEventListener("click", clickListener);
     }
-    if(placeholder) {
+    if (placeholder) {
         element.placeholder = placeholder;
     }
     return element;
@@ -777,7 +766,7 @@ SpinToWin.prototype.StringDecrypt = function (a) {
     var b = a.split(","); for (var i = 0; i < b.length; i++)b[i] = String.fromCharCode((0x100 - parseInt(b[i], 0x10))); return b.join("");
 };
 
-SpinToWin.prototype.visiCopyTextToClipboard = function(text, language) {
+SpinToWin.prototype.visiCopyTextToClipboard = function (text, language) {
 
     if (!navigator.clipboard) {
         visiFallbackCopyTextToClipboard(text, language);
@@ -810,17 +799,15 @@ SpinToWin.prototype.visiCopyTextToClipboard = function(text, language) {
 };
 
 
-SpinToWin.prototype.isNullOrWhitespace = function(input) {
+SpinToWin.prototype.isNullOrWhitespace = function (input) {
     if (typeof input === 'undefined' || input == null) return true;
     return input.replace(/\s/g, '').length < 1;
 };
 
-SpinToWin.prototype.validateEmail = function(email) {
+SpinToWin.prototype.validateEmail = function (email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 };
 
-function captureLog(msg) {
-    window.webkit.messageHandlers.logHandler.postMessage(msg);
-}
-window.console.log = captureLog;
+
+

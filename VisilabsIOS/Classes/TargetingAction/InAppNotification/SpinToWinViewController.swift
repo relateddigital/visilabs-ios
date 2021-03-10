@@ -8,9 +8,18 @@
 import UIKit
 import WebKit
 
-class SpinToWinViewController: UIViewController {
+class SpinToWinViewController: VisilabsBaseNotificationViewController {
     
     var webView: WKWebView!
+    
+    init(_ spinToWin: SpinToWinViewModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.spinToWin = spinToWin
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,33 +30,69 @@ class SpinToWinViewController: UIViewController {
 
     
     func configureWebView() -> WKWebView {
-        let view = WKWebView(frame: .zero)
-        view.configuration.userContentController.add(self, name: "logHandler")
-        
+        let configuration = WKWebViewConfiguration()
+        let userContentController = WKUserContentController()
+        userContentController.add(self, name: "eventHandler")
+        configuration.userContentController = userContentController
+        let webView = WKWebView(frame: .zero, configuration: configuration)
         let bundle = Bundle(identifier: "com.relateddigital.visilabs")
         let htmlPath = bundle?.path(forResource: "spintowin", ofType: "html") ?? ""
         let url = URL(fileURLWithPath: htmlPath)
-        view.load(URLRequest(url: url))
-        view.backgroundColor = .clear
-        return view
+        webView.load(URLRequest(url: url))
+        webView.backgroundColor = .clear
+        return webView
     }
     
+    
+    /*
     func configureJS() -> SpinConfig?{
-//        let actionData: [String: Any] = [:]
-//
-//        return nil
         var config = SpinConfig(actid: "1", actionData: nil)
         let encoder = JSONEncoder()
         let jsonConf = try? encoder.encode(config)
-        self.webView.evaluateJavaScript("var config = \(jsonConf); var spinToWin = new SpinToWin(config);") { (<#Any?#>, <#Error?#>) in
-            <#code#>
+        self.webView.evaluateJavaScript("var config = \(jsonConf); var spinToWin = new SpinToWin(config);") { (data, err) in
+            
         }
+        return config;
     }
+    */
+    
+    
 }
 
 extension SpinToWinViewController: WKScriptMessageHandler {
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        
+        if message.name == "eventHandler" {
+            if let event = message.body as? [String: Any], let method = event["method"] as? String {
+                if method == "console.log", let message = event["message"] as? String {
+                    VisilabsLogger.info("console.log: \(message)")
+                }
+                if method == "initSpinToWin" {
+                    VisilabsLogger.info("initSpinToWin")
+                    if let json = try? JSONEncoder().encode(self.spinToWin), let jsonString = String(data: json, encoding: .utf8) {
+                        print(jsonString)
+                        self.webView.evaluateJavaScript("window.initSpinToWin(\(jsonString));") { (data, err) in
+                            if let error = err {
+                                VisilabsLogger.error(error.localizedDescription)
+                            }
+                        }
+                    }
+                }
+                
+                
+            }
+        }
+        
+        
+        /*
+        if message.name == "initSpinToWin" {
+            //TODO: buraya data gelecek
+            self.webView.evaluateJavaScript("initSpinToWin()") { (data, err) in
+                
+            }
+        }
+        
         print("*** \(message.name) === \(message.body)")
         if message.name == "logHandler" {
             print("LOG: \(message.body)")
@@ -61,6 +106,8 @@ extension SpinToWinViewController: WKScriptMessageHandler {
             VisilabsHelper.showCopiedClipboardMessage()
             self.dismiss(animated: true, completion: nil)
         }
+        */
+        
     }
 }
 

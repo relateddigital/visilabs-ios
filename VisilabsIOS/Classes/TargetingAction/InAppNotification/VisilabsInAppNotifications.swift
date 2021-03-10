@@ -23,7 +23,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     // var inAppNotifications = [VisilabsInAppNotification]()
     var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
-    var currentlyShowingMailForm: MailSubscriptionViewModel?
+    var currentlyShowingTargetingAction: TargetingActionViewModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
 
     init(lock: VisilabsReadWriteLock) {
@@ -34,7 +34,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let notification = notification
 
         DispatchQueue.main.async {
-            if self.currentlyShowingNotification != nil || self.currentlyShowingMailForm != nil {
+            if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
                 var shownNotification = false
@@ -58,21 +58,42 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
     
+    func showTargetingAction(_ model: TargetingActionViewModel) {
+        DispatchQueue.main.async {
+            if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
+                VisilabsLogger.warn("already showing an notification")
+            } else {
+                if model.targetingActionType == .mailSubscriptionForm, let mailSubscriptionForm = model as? MailSubscriptionViewModel {
+                    if self.showMailPopup(mailSubscriptionForm) {
+                        self.markTargetingActionShown(model: mailSubscriptionForm)
+                    }
+                }
+                else if model.targetingActionType == .spinToWin, let spinToWin = model as? SpinToWinViewModel {
+                    if self.showSpinToWin(spinToWin) {
+                        self.markTargetingActionShown(model: spinToWin)
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    /*
     func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
         DispatchQueue.main.async {
             if self.currentlyShowingNotification != nil
-                || self.currentlyShowingMailForm != nil {
+                || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an notification")
             } else {
                 var shown = false
                 shown = self.showMailPopup(model)
-                
                 if shown {
                     self.markMailFormShown(model: model)
                 }
             }
         }
     }
+ */
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
@@ -173,11 +194,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
     
-    func showSpinToWin() -> Bool {
-        let controller = SpinToWinViewController()
-        if let root = getRootViewController() {
-            controller.modalPresentationStyle = .fullScreen
-            root.present(controller, animated: true, completion: nil)
+    func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
+        let controller = SpinToWinViewController(model)
+        controller.delegate = self
+        if let rootViewController = getRootViewController() {
+            rootViewController.modalPresentationStyle = .fullScreen
+            rootViewController.present(controller, animated: true, completion: nil)
             return true
         }
         return false
@@ -192,9 +214,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
 
-    func markMailFormShown(model: MailSubscriptionViewModel) {
+    func markTargetingActionShown(model: TargetingActionViewModel) {
         lock.write {
-            currentlyShowingMailForm = model
+            self.currentlyShowingTargetingAction = model
         }
     }
 
@@ -223,7 +245,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                 }
             }
             self.currentlyShowingNotification = nil
-            self.currentlyShowingMailForm = nil
+            self.currentlyShowingTargetingAction = nil
         }
 
         if let callToActionURL = callToActionURL {
@@ -246,6 +268,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
     func alertDismiss() {
         self.currentlyShowingNotification = nil
-        self.currentlyShowingMailForm = nil
+        self.currentlyShowingTargetingAction = nil
     }
 }

@@ -38,9 +38,10 @@ class EventViewController: FormViewController {
                                 "nps": 155,
                                 "image_button": 156,
                                 "smile_rating": 157,
-                                "emailForm": 354,
                                 "alert": 395,
-                                "nps_with_numbers": 411]
+                                "nps_with_numbers": 411,
+                                "emailForm": 354,
+                                "spintowin": 130]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,6 +95,9 @@ class EventViewController: FormViewController {
     private func inAppEvent(_ visilabsInAppNotificationType: VisilabsInAppNotificationType) {
         var properties = [String: String]()
         properties["OM.inapptype"] = visilabsInAppNotificationType.rawValue
+        if visilabsInAppNotificationType == .emailForm {
+            properties["OM.inapptype"] = "mailsubsform"
+        }
         Visilabs.callAPI().customEvent("InAppTest", properties: properties)
     }
 
