@@ -27,6 +27,11 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         self.view.addSubview(webView)
         webView.allEdges(to: self.view)
     }
+    
+    override func hide(animated: Bool, completion: @escaping () -> Void) {
+        dismiss(animated: true)
+        completion()
+    }
 
     
     func configureWebView() -> WKWebView {
@@ -42,21 +47,6 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         webView.backgroundColor = .clear
         return webView
     }
-    
-    
-    /*
-    func configureJS() -> SpinConfig?{
-        var config = SpinConfig(actid: "1", actionData: nil)
-        let encoder = JSONEncoder()
-        let jsonConf = try? encoder.encode(config)
-        self.webView.evaluateJavaScript("var config = \(jsonConf); var spinToWin = new SpinToWin(config);") { (data, err) in
-            
-        }
-        return config;
-    }
-    */
-    
-    
 }
 
 extension SpinToWinViewController: WKScriptMessageHandler {
@@ -71,12 +61,34 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 if method == "initSpinToWin" {
                     VisilabsLogger.info("initSpinToWin")
                     if let json = try? JSONEncoder().encode(self.spinToWin), let jsonString = String(data: json, encoding: .utf8) {
+                        
                         print(jsonString)
+                        
                         self.webView.evaluateJavaScript("window.initSpinToWin(\(jsonString));") { (data, err) in
                             if let error = err {
+                                VisilabsLogger.error(error)
                                 VisilabsLogger.error(error.localizedDescription)
+                                
                             }
                         }
+                    }
+                }
+                
+                if method == "promotionRequest" {
+                    
+                }
+                
+                if method == "subscribeMail" {
+                    
+                }
+                
+                if method == "copyToClipboard" {
+                    
+                }
+                
+                if method == "close" {
+                    dismiss(animated: true) {
+                        self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
                     }
                 }
                 

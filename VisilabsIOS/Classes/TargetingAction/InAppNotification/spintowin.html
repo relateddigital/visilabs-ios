@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <script type="text/javascript" src="spintowin.js"></script>
     <style type="text/css">
         *,
@@ -441,8 +440,8 @@
             cursor: pointer;
             opacity: 0.7;
             z-index: 1;
-            width: 30px;
-            height: : 30px;
+            width: 20px;
+            height: : 20px;
         }
 
         #canvas-container {
@@ -500,9 +499,7 @@
                 <div class="wlo_form wlo_gpuac wlo_font_color">
                     <div class="wlo_enter_email wlo_gpuac">
 
-                        <img id="spin-to-win-box-close"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA/tJREFUeNqEVG1oW2UUfm9u7k1z89HU5TtiiW4Thpo4EzT+q7RiWf3XBn+0ds2fWJxzQ7aBFEbxAxWHq0OabhQrbcekUEqnFNaMgnUW29QfCitLi2hrVtKPZGvTmdwkPZ73zU0ZM9oDD/feN+c873NOzjkc+X9TIQSEWvkuIvLKs6Jx/3FehbAgDkqSdNBisVhVaPfQ0un073i+iLiL2EHAforMiGP19fUDQ0NDS6urq1lQbGtrqzA5ObkaCoW+FwShA/2eeEh9RTJXTU3NqcHBwSVKkM/n4Ub0Bly+chl6I71w/bvrcH/rPiOfnZ1Neb3eixhzRCnLv8yKdmZmZiZNA3r7euGo/wWwOKxgtpvhgM3M3p99/jno/qCbXba5uVkMBAJ9GHtIEbRnWp7nm8fHx+9SsrffPQFE4EBj0ILFaQXb4/YSXHbQmfSAofDasUbY3t6G5eXlHAo5hxyPPUz4VHNz8ygl+6LnIi0ytLwRhA8//gi0Rgn0NQaoNptApeHheKgDznefB8ITaA+1s/R7enp+xZiXyippUV+fmppKYgpgddqYgktfXYLyBRyqpZcE8ZJisQjzv8yDwWQElaiCWz/dgnQqnTcajSfRR6KEOrvdfpbW5Nq311igRhJBZ5Bg+OowI/30s0+gJdgChXwBYvMxcLocIIhq5vvOyRPMp66u7gptNapOcDqdNrVaTeJ37rD8eY4nclYmoY4Okstmydkz5wjGkB+npwkSk7W1NSJJWpKXCyQeX2QxtbW1tG+raM6cmrKhoYJSRXfxFl4guZxMotGbpQngOHJ74TZJJteIKIgEdkuueVkuieD5Ehc9S6VSaXrodLlKXpjMg+zfJNgSJF8PDJDpH6ZJIvEXCYffQsUyOX361N58WC1W9kwmk/fwkaPvIlrr4tJSJh6PQ5WoARWngjfb2tgfMDc3B+YDZjzjYHi4VNO+SB9oq7SshpFIBGRZ3nU4HO/jt748z96urq4Z6ny8vZ05Xvj8Ap0GsNtswBEOBLUAGlGEkZERiEajoNFo4OlDhyGTycDY2NifGNNAMy/3oQkXwHsrKyu59fV18Ho8jNRUXQ1qFQ86VCMhRCTVSzoQeDUY9Aa4icS0OzweDx1Bx6NzfBj/+m9QPiQSCXi1oQGUTYIKCagIt/f9pNsNExMTLP1wODyJZ/5K8ywijjY2Nl7d2NgoUOfR0VFoa22FlwMB8Pt80NTUxEqBW4fVt7Ozk5K9Um7oSqah28Ptdnf39/cv7OzsFOERKxQKtGZ/+Hy+LxVl0n4LllcG/QgO/Yt+v/8Z2rTYZxyWIh2LxRZwIfyMv/+GWFc2+L4bu0ysVVpBq5zRPssgHtA5qBT0jwADAKOeG2u13ga9AAAAAElFTkSuQmCC"
-                            ; />
+                    <img id="spin-to-win-box-close"/>
 
 
 
@@ -581,18 +578,22 @@
         var config = {};
         var spinToWin = {};
 
-        window.initSpinToWin = function (responseString) {
-            console.log(responseString);
-            config = JSON.parse(responseString);
+        window.initSpinToWin = function (responseConfig) {
+            config = responseConfig;
             spinToWin = new SpinToWin(config);
         };
 
         if (window.Android) {
-            config = initSpinToWin(Android.getResponse());;
+            config = JSON.parse(Android.getResponse());
+            initSpinToWin(config);;
         } else if (window.webkit.messageHandlers.eventHandler) {
             window.webkit.messageHandlers.eventHandler.postMessage({ method : "initSpinToWin" });
             window.console.log = function(message) {
-                window.webkit.messageHandlers.eventHandler.postMessage({ method: "console.log", message: message });
+                var stringMessage = message;
+                if(typeof message !== "string") {
+                    stringMessage = JSON.stringify(message);
+                }
+                window.webkit.messageHandlers.eventHandler.postMessage({ method: "console.log", message: stringMessage });
             };
         }
 

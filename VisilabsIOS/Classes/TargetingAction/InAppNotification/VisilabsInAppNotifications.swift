@@ -231,17 +231,14 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
         let completionBlock = {
             if shouldTrack {
-                var properties = additionalTrackingProperties
-                if properties == nil {
-                        properties = [:]
-                    }
+                var properties = additionalTrackingProperties ?? [String: String]()
                 if additionalTrackingProperties != nil {
-                    properties!["OM.s_point"] = additionalTrackingProperties!["OM.s_point"]
-                    properties!["OM.s_cat"] = additionalTrackingProperties!["OM.s_cat"]
-                    properties!["OM.s_page"] = additionalTrackingProperties!["OM.s_page"]
+                    properties["OM.s_point"] = additionalTrackingProperties!["OM.s_point"]
+                    properties["OM.s_cat"] = additionalTrackingProperties!["OM.s_cat"]
+                    properties["OM.s_page"] = additionalTrackingProperties!["OM.s_page"]
                 }
                 if controller.notification != nil {
-                    self.delegate?.trackNotification(controller.notification!, event: "event", properties: properties!)
+                    self.delegate?.trackNotification(controller.notification!, event: "event", properties: properties)
                 }
             }
             self.currentlyShowingNotification = nil
@@ -251,8 +248,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         if let callToActionURL = callToActionURL {
             controller.hide(animated: true) {
                 let app = VisilabsInstance.sharedUIApplication()
-                app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL,
-                                     waitUntilDone: true)
+                app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL, waitUntilDone: true)
                 completionBlock()
             }
         } else {

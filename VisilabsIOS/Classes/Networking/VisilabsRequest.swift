@@ -9,7 +9,7 @@ import Foundation
 
 class VisilabsRequest {
 
-    // MARK: - Event
+    // MARK: - EVENT
 
     class func sendEventRequest(visilabsEndpoint: VisilabsEndpoint,
                                 properties: [String: String],
@@ -75,7 +75,7 @@ class VisilabsRequest {
         return cookieKeyValues
     }
 
-    // MARK: - Recommendation
+    // MARK: - RECOMMENDATION
 
     //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
     class func sendRecommendationRequest(properties: [String: String],
@@ -119,59 +119,11 @@ class VisilabsRequest {
                 completion(result, nil)
             })
     }
-
-    // MARK: - InAppNotification
-
-    //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
-    class func sendInAppNotificationRequest(properties: [String: String],
-                                            headers: [String: String],
-                                            timeoutInterval: TimeInterval,
-                                            completion: @escaping ([[String: Any]]?) -> Void) {
-        var queryItems = [URLQueryItem]()
-        for property in properties {
-            queryItems.append(URLQueryItem(name: property.key, value: property.value))
-        }
-
-        let responseParser: (Data) -> [[String: Any]]? = { data in
-            var response: Any?
-            do {
-                response = try JSONSerialization.jsonObject(with: data, options: [])
-            } catch {
-                VisilabsLogger.error("exception decoding api data")
-            }
-            return response as? [[String: Any]]
-        }
-
-        let resource = VisilabsNetwork.buildResource(endPoint: .action,
-                                                     method: .get,
-                                                     timeoutInterval: timeoutInterval,
-                                                     requestBody: nil,
-                                                     queryItems: queryItems,
-                                                     headers: headers,
-                                                     parse: responseParser)
-
-        sendInAppNotificationRequestHandler(resource: resource, completion: { result in completion(result) })
-
-    }
-
-    private class func sendInAppNotificationRequestHandler(resource: VisilabsResource<[[String: Any]]>,
-                                                           completion: @escaping ([[String: Any]]?) -> Void) {
-        VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (error, _, _) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
-                completion(nil)
-            }, success: { (result, _) in
-                completion(result)
-            })
-    }
-
+    
+    // MARK: - TARGETING ACTIONS
+    
     // MARK: - Geofence
 
-    //https://s.visilabs.net/geojson?OM.oid=676D325830564761676D453D&OM
-    //.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM
-    //.exVisitorID=ogun.ozturk%40euromsg.com&act=getlist
-    //[{"actid":145,"trgevt":"OnEnter","dis":0,"geo":
-    //[{"id":4,"lat":41.0236665831979,"long":29.1222883408907,"rds":290.9502}]}]
     class func sendGeofenceRequest(properties: [String: String],
                                    headers: [String: String],
                                    timeoutInterval: TimeInterval,
@@ -233,14 +185,54 @@ class VisilabsRequest {
                 completion(result, nil)
             })
     }
+    
+    // MARK: - InAppNotification
+
+    //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
+    class func sendInAppNotificationRequest(properties: [String: String],
+                                            headers: [String: String],
+                                            timeoutInterval: TimeInterval,
+                                            completion: @escaping ([[String: Any]]?) -> Void) {
+        var queryItems = [URLQueryItem]()
+        for property in properties {
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
+        }
+
+        let responseParser: (Data) -> [[String: Any]]? = { data in
+            var response: Any?
+            do {
+                response = try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                VisilabsLogger.error("exception decoding api data")
+            }
+            return response as? [[String: Any]]
+        }
+
+        let resource = VisilabsNetwork.buildResource(endPoint: .action,
+                                                     method: .get,
+                                                     timeoutInterval: timeoutInterval,
+                                                     requestBody: nil,
+                                                     queryItems: queryItems,
+                                                     headers: headers,
+                                                     parse: responseParser)
+
+        sendInAppNotificationRequestHandler(resource: resource, completion: { result in completion(result) })
+
+    }
+
+    private class func sendInAppNotificationRequestHandler(resource: VisilabsResource<[[String: Any]]>,
+                                                           completion: @escaping ([[String: Any]]?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (error, _, _) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil)
+            }, success: { (result, _) in
+                completion(result)
+            })
+    }
 
     // MARK: - Mobile
-    //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM
-    //.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&OM
-    //.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
-    //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction":[{"actid":188,"title":"fav-test",
-    //"actiontype":"FavoriteAttributeAction","actiondata":{"attributes":["category","brand"],
-    //"favorites":{"category":["6","8","2"],"brand":["Kozmo","Luxury Room","OFS"]}}}]}
+    
     class func sendMobileRequest(properties: [String: String],
                                  headers: [String: String],
                                  timeoutInterval: TimeInterval,
@@ -275,6 +267,65 @@ class VisilabsRequest {
 
     }
     
+    private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>,
+                                                completion: @escaping ([String: Any]?,
+                                                                       VisilabsError?, String?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (error, _, _) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error, resource.guid)
+            }, success: { (result, _) in
+                completion(result, nil, resource.guid)
+            })
+    }
+    
+    class func sendPromotionCodeRequest(properties: [String: String],
+                                 headers: [String: String],
+                                 timeoutInterval: TimeInterval,
+                                 completion: @escaping ([String: Any]?, VisilabsError?, String?) -> Void,
+                                 guid: String? = nil) {
+        var queryItems = [URLQueryItem]()
+        for property in properties {
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
+        }
+
+        let responseParser: (Data) -> [String: Any]? = { data in
+            var response: Any?
+            do {
+                response = try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                VisilabsLogger.error("exception decoding api data")
+            }
+            return response as? [String: Any]
+        }
+
+        let resource = VisilabsNetwork.buildResource(endPoint: .promotion,
+                                                     method: .get,
+                                                     timeoutInterval: timeoutInterval,
+                                                     requestBody: nil,
+                                                     queryItems: queryItems,
+                                                     headers: headers,
+                                                     parse: responseParser,
+                                                     guid: guid)
+
+        sendPromotionCodeRequestHandler(resource: resource,
+                                 completion: { result, error, guid in completion(result, error, guid)})
+
+    }
+    
+    private class func sendPromotionCodeRequestHandler(resource: VisilabsResource<[String: Any]>,
+                                                completion: @escaping ([String: Any]?,
+                                                                       VisilabsError?, String?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (error, _, _) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error, resource.guid)
+            }, success: { (result, _) in
+                completion(result, nil, resource.guid)
+            })
+    }
+    
+    
     class func sendSubsJsonRequest(properties: [String: String],
                                    headers: [String: String],
                                    timeOutInterval: TimeInterval,
@@ -307,17 +358,5 @@ class VisilabsRequest {
         
     }
     
-    //TODO: implement send subsjsonRequest
-
-    private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>,
-                                                completion: @escaping ([String: Any]?,
-                                                                       VisilabsError?, String?) -> Void) {
-        VisilabsNetwork.apiRequest(resource: resource,
-            failure: { (error, _, _) in
-                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
-                completion(nil, error, resource.guid)
-            }, success: { (result, _) in
-                completion(result, nil, resource.guid)
-            })
-    }
+    
 }
