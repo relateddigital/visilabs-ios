@@ -3,6 +3,9 @@
 //TODO: Gereksiz this'leri kaldır
 //TODO: çarkıfelek çevir butonuna bastıktan sonra sunucuya request atılacak.
 function SpinToWin(config) {
+    
+    
+    
     this.container = document.getElementById("container");
     this.canvasContainer = document.getElementById("canvas-container");
     this.wheelCanvas = document.getElementById("wheel-canvas");
@@ -26,33 +29,30 @@ function SpinToWin(config) {
     this.invalidEmailMessageLi = document.getElementById("invalid_email_message");
     this.formValidation = { email: true, consent: true };
     this.spinCompleted = false;
-
-
-
-
-
-
-    var r = parseFloat(config.actiondata.circle_R);
+    
     this.config = config;
-    this.config.language = config.actiondata.language;
+    this.config.circle_R = window.innerWidth / 2;
+    var r = parseFloat(config.circle_R);
     this.config.windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     this.config.r = (r * 2) > this.config.windowWidth ? 150 : r;
+    this.config.language = "En";
     this.config.centerX = this.config.r;
     this.config.centerY = this.config.r;
-    this.config.auth = config.actiondata.auth;
-    this.config.promoAuth = config.actiondata.promoAuth;
-    this.config.sliceCount = config.actiondata.slice_count;
-    this.config.campaigns = config.actiondata.slices;
-    this.config.mailFormEnabled = config.actiondata.mail_subscription;
-    this.config.htmlContent = config.actiondata.spin_to_win_content;
+    
+    this.convertStringsToNumber();
+    this.setCloseButton();
+    
+    
+    this.config.campaigns = this.config.slices;
+    this.config.mailFormEnabled = config.mailSubscription;
     this.config.pickedColors = [];
     this.config.middleCircleR = this.config.r / 10;
     this.config.middleCircleColor = "#000";
-    this.config.fontFamily = "sans-serif";
-    this.config.font_size = config.actiondata.font_size;
+    this.config.fontFamily = "sans-serif"; // TODO: default gelirse ne yapılacak?
+    this.config.font_size = config.textSize + 10;
     this.config.isMobile = true;
     this.config.textDirection = "horizontal";
-    this.config.angle = 2 * Math.PI / this.config.sliceCount;
+    this.config.angle = 2 * Math.PI / config.sliceCount;
 
 
     /*Mail*/
@@ -60,13 +60,15 @@ function SpinToWin(config) {
     this.config.checkConsentMessage = "İzin Metnini onaylayınız.";
 
 
-    if (this.config.htmlContent.invalid_email_message && this.config.htmlContent.invalid_email_message !== "")
-        this.config.invalidEmailMessage = this.config.htmlContent.invalid_email_message;
+    if (this.config.invalid_email_message && this.config.invalid_email_message !== "")
+        this.config.invalidEmailMessage = this.config.invalidEmailMessage;
 
-    if (this.config.htmlContent.check_consent_message && this.config.htmlContent.check_consent_message !== "")
-        this.config.checkConsentMessage = this.config.htmlContent.check_consent_message;
+    if (this.config.checkConsentMessage && this.config.checkConsentMessage !== "")
+        this.config.checkConsentMessage = this.config.checkConsentMessage;
 
     /*Mail*/
+    
+    
 
     for (var i = 0; i < this.config.campaigns.length; i++) {
         this.config.pickedColors.push(this.config.campaigns[i].color);
@@ -90,7 +92,6 @@ function SpinToWin(config) {
 
     this.colorsHandler();
     this.textsHandler();
-    //this.createHtmlElements();
     this.styleHandler();
     //TODO: buna gerek olmayabilir, webview'de resize ihtimali var mı? kalmasında da zarar yok.
     window.onresize = function () {
@@ -138,9 +139,10 @@ SpinToWin.prototype.subscribeMail = function () {
 };
 
 SpinToWin.prototype.close = function () {
-    console.log("close button clicked");
     if (window.Android) {
-        Android.closeButtonClicked();
+        Android.close();
+    } else if (window.webkit.messageHandlers.eventHandler) {
+        window.webkit.messageHandlers.eventHandler.postMessage({ method : "close" });
     }
 };
 
@@ -151,46 +153,64 @@ SpinToWin.prototype.copyToClipboard = function () {
     }
 };
 
+SpinToWin.prototype.convertStringsToNumber = function() {
+    this.config.titleTextSize = isNaN(parseInt(this.config.titleTextSize)) ? 10 : parseInt(this.config.titleTextSize);
+    this.config.textSize = isNaN(parseInt(this.config.textSize)) ? 5 : parseInt(this.config.textSize);
+    this.config.buttonTextSize = isNaN(parseInt(this.config.buttonTextSize)) ? 20 : parseInt(this.config.buttonTextSize);
+    this.config.consentTextSize  = isNaN(parseInt(this.config.consentTextSize)) ? 5 : parseInt(this.config.consentTextSize);
+    this.config.copybuttonTextSize  = isNaN(parseInt(this.config.copybuttonTextSize)) ? 20 : parseInt(this.config.copybuttonTextSize);
+};
+
 SpinToWin.prototype.setContent = function () {
 
-    this.container.style.backgroundColor = this.config.actiondata.background_color;
+    this.container.style.backgroundColor = this.config.backgroundColor;
 
-    this.titleElement.innerText = this.config.actiondata.spin_to_win_content.title;
-    this.titleElement.style.color = this.config.actiondata.msg_title_color;
-    this.titleElement.style.fontFamily = this.config.actiondata.msg_title_font_family;
-    this.titleElement.style.fontSize = (this.config.actiondata.msg_title_textsize + 20) + "px";
-
-
-
-    this.messageElement.innerText = this.config.actiondata.spin_to_win_content.message;
-    this.messageElement.style.color = this.config.actiondata.msg_body_color;
-    this.messageElement.style.fontFamily = this.config.actiondata.msg_body_font_family;
-    this.messageElement.style.fontSize = (this.config.actiondata.msg_body_textsize + 10) + "px";
+    this.titleElement.innerText = this.config.title;
+    this.titleElement.style.color = this.config.titleTextColor;
+    this.titleElement.style.fontFamily = this.config.titleFontFamily;
+    this.titleElement.style.fontSize = (this.config.titleTextSize + 20) + "px";
 
 
 
-    this.submitButton.innerText = config.actiondata.spin_to_win_content.button_label;
-    this.submitButton.style.color = this.config.actiondata.button_text_color;
-    this.submitButton.style.backgroundColor = this.config.actiondata.button_color;
-    this.submitButton.style.fontFamily = this.config.actiondata.button_font_family;
-    this.submitButton.style.fontSize = (this.config.actiondata.button_textsize + 20) + "px";
-
-    this.emailInput.placeholder = config.htmlContent.placeholder;
+    this.messageElement.innerText = this.config.message;
+    this.messageElement.style.color = this.config.textColor;
+    this.messageElement.style.fontFamily = this.config.textFontFamily;
+    this.messageElement.style.fontSize = (this.config.textSize + 10) + "px";
 
 
-    this.consentText.innerText = this.config.actiondata.spin_to_win_content.consent_text;
-    this.consentText.style.fontSize = (this.config.actiondata.consent_text_textsize + 10) + "px";
-    this.consentText.style.fontFamily = this.config.actiondata.msg_body_font_family;
 
-    this.emailPermitText.innerText = this.config.actiondata.spin_to_win_content.emailpermit_text;
-    this.emailPermitText.style.fontSize = (this.config.actiondata.consent_text_textsize + 10) + "px";
-    this.emailPermitText.style.fontFamily = this.config.actiondata.msg_body_font_family;
+    this.submitButton.innerText = this.config.buttonLabel;
+    this.submitButton.style.color = this.config.buttonTextColor;
+    this.submitButton.style.backgroundColor = this.config.buttonColor;
+    this.submitButton.style.fontFamily = this.config.buttonFontFamily;
+    this.submitButton.style.fontSize = (this.config.buttonTextSize + 20) + "px";
 
-    this.copyButton.innerText = this.config.actiondata.copy_button_text;
-    this.copyButton.style.color = this.config.actiondata.copy_button_text_color;
-    this.copyButton.style.backgroundColor = this.config.actiondata.copy_button_color;
-    this.copyButton.style.fontFamily = this.config.actiondata.copy_button_font_family;
-    this.copyButton.style.fontSize = (this.config.actiondata.copy_button_textsize + 20) + "px";
+    this.emailInput.placeholder = this.config.placeholder;
+
+
+    this.consentText.innerText = this.config.consentText;
+    this.consentText.style.fontSize = (this.config.consentTextSize + 10) + "px";
+    this.consentText.style.fontFamily = this.config.textFontFamily;
+    
+    this.emailPermitText.innerText = this.config.emailPermitText;
+    this.emailPermitText.style.fontSize = (this.config.consentTextSize+ 10) + "px";
+    this.emailPermitText.style.fontFamily = this.config.textFontFamily;
+    
+    this.copyButton.innerText = this.config.copyButtonLabel;
+    this.copyButton.style.color = this.config.copybuttonTextColor;
+    this.copyButton.style.backgroundColor = this.config.copybuttonColor;
+    this.copyButton.style.fontFamily = this.config.copybuttonFontFamily;
+    this.copyButton.style.fontSize = (this.config.copybuttonTextSize + 20) + "px";
+    
+    //// TODO: BURADAYIM
+
+    
+    
+
+    
+    
+    
+    
 
 
     this.invalidEmailMessageLi.innerText = this.config.invalidEmailMessage;
@@ -310,16 +330,7 @@ SpinToWin.prototype.styleHandler = function () {
 
     var arrowContainerTop = (config.r - (config.r / 5.2)) + "px"; // R: 250 top: 205, R: 200 top: 162, R: 150 top: 121
     var styleEl = document.createElement("style"),
-        titleStyle = config.htmlContent.title_style,
-        textStyle = config.htmlContent.message_style,
-        buttonStyle = config.htmlContent.button_style,
-        containerStyle = config.htmlContent.container_style,
-        inputStyle = config.htmlContent.input_style,
-        consentTextContainerStyle = config.htmlContent.consent_text_container_style,
-        validationMessageStyle = config.htmlContent.validation_message_style,
-        successMessageStyle = config.htmlContent.success_message_style,
         styleString = "#lightbox-outer{}" +
-            //"#container{" + containerStyle + ";z-index:1000;border-radius: 10px;position:fixed;width:" + (config.r + 300) + "px;height:" + ((2 * config.r) + 40) + "px;top:calc(50% - " + ((2 * config.r) + 40) / 2 + "px);left:calc(50% - " + (config.r + 150) / 2 + "px);box-sizing:border-box}" +
             "#canvas-container{float:left;width:" + config.r + "px;height:" + (2 * config.r) + "px}" +
             "#wheel-container{float:left;height:" + (2 * config.r) + "px;width:" + config.r + "px;margin:20px 0;overflow:hidden}" +
             "#arrow-container{width:20px;height:30px;display:inline-block;position:absolute;box-sizing:border-box;top:calc(50% - 14px);left:" + (config.r - 10) + "px;z-index:1;transform:rotate(90deg)}" +
@@ -328,14 +339,8 @@ SpinToWin.prototype.styleHandler = function () {
             "#form-title{text-align:center;}" +
             "#form-message{text-align:center;}" +
             ".vl-successMessage{text-align:center;}" +
-            "#form-title{" + titleStyle + "}" +
-            "#form-desc{" + textStyle + "}" +
-            //"#vl-form-input{" + inputStyle + ";border: 1px solid #ccc;display:block;width:60%;box-sizing:border-box;height:35px;font-size:16px;margin-top:10px;outline-color:#3b99fc;padding-left:5px}" +
-            ".validationMessage{" + validationMessageStyle + "}" +
             "#warning{display:none; position: absolute; z-index: 3; background: #fcf6c1; font-size: 12px; border: 1px solid #ccc; top: 105%;width: 100%; box-sizing: border-box;}" +
             "#warning>ul{margin: 2px;padding-inline-start: 20px;}" +
-            ".successMessage{" + successMessageStyle + "}" +
-            ".consentText-container{" + consentTextContainerStyle + "}" +
             "#form-consent{font-size:12px;color:#555;width:100%;padding:5px 0;position:relative;}" +
             "#form-aggreement-link{color:#555;opacity:.75;text-decoration:none}" +
             "#form-consent input[type='checkbox']{opacity:0;position:absolute}" +
@@ -358,13 +363,10 @@ SpinToWin.prototype.styleHandler = function () {
             "#form-emailpermit input[type='checkbox']+label::after{content:none}" +
             "#form-emailpermit input[type='checkbox']:checked+label::after{content:''}" +
             "#form-emailpermit input[type='checkbox']:focus+label::before{outline:#3b99fc auto 5px}" +
-
-            ".form-submit-btn{" + buttonStyle + ";transition:.2s filter ease-in-out;}" +
+            ".form-submit-btn{transition:.2s filter ease-in-out;}" +
             ".form-submit-btn:hover{filter: brightness(110%);transition:.2s filter ease-in-out;}" +
             ".form-submit-btn.disabled{filter: grayscale(100%);transition:.2s filter ease-in-out;}" +
             "@media only screen and (max-width:2500px){" +
-            //"#container{width:100%;top:unset;bottom:-" + config.r + "px;left:unset;height:auto}" +
-            //"#container{width:100%;top:unset;bottom:-" + config.r + "px;left:0px;height:auto}" +
             "#canvas-container{float:unset;width:100%;text-align:center;position:relative}" +
             "#wheel-container{width:" + (config.r * 2) + "px;margin:0 auto;float:unset;transform:rotate(-90deg)}" +
             "#arrow-container{top:" + arrowContainerTop + ";transform:rotate(45deg);left:calc(50% - 10px)}" +
@@ -385,43 +387,6 @@ SpinToWin.prototype.styleHandler = function () {
 
 };
 
-SpinToWin.prototype.createHtmlElements = function () {
-    var containerDiv = document.getElementById("container");
-    var formContainerDiv = this.createForm();
-    containerDiv.appendChild(formContainerDiv);
-    var wheelContainerDiv = this.createWheel();
-    containerDiv.appendChild(wheelContainerDiv);
-    document.body.appendChild(containerDiv);
-};
-
-SpinToWin.prototype.createForm = function () {
-    var formContainerDiv = document.getElementById("form-container");
-    var formContainerInnerDiv = document.getElementById("form-container-inner");
-    var titleDiv = this.createHtmlElement("div", "form-title", undefined, config.actiondata.spin_to_win_content.title, { fontSize: config.actiondata.font_size + "px" });
-    var messageDiv = this.createHtmlElement("div", "form-message", undefined, config.actiondata.spin_to_win_content.message, { fontSize: config.actiondata.font_size + "px" });
-    var submitButtonContainerDiv = this.createHtmlElement("div", undefined, "center-container");
-    this.submitButton = this.createHtmlElement("input", "form-submit-btn", "form-submit-btn", undefined, undefined, "button", config.actiondata.spin_to_win_content.button_label, evt => this.submit());
-    this.closeButton = document.getElementById("spin-to-win-box-close");
-    this.closeButton.addEventListener("click", this.close);
-
-    formContainerInnerDiv.appendChild(titleDiv);
-    formContainerInnerDiv.appendChild(messageDiv);
-
-    if (config.mailFormEnabled) {
-        var emailInputContainerDiv = this.createHtmlElement("div", undefined, "center-container");
-        this.emailInput = this.createHtmlElement("input", "vl-form-input", undefined, undefined, undefined, "email", undefined, undefined, this.config.htmlContent.placeholder);
-        emailInputContainerDiv.appendChild(this.emailInput);
-        formContainerInnerDiv.appendChild(emailInputContainerDiv);
-    }
-
-
-
-
-    submitButtonContainerDiv.appendChild(this.submitButton);
-    formContainerInnerDiv.appendChild(submitButtonContainerDiv);
-    formContainerDiv.appendChild(formContainerInnerDiv);
-    return formContainerDiv;
-};
 
 
 
@@ -808,6 +773,19 @@ SpinToWin.prototype.validateEmail = function (email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 };
+                                
+SpinToWin.prototype.setCloseButton = function () {
+        
+        if(this.config.closeButtonColor == "black") {
+        
+    this.closeButton.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABvUlEQVRoQ+2Z4U0DMQyFfYsxRIEN2AomQEjMgBisKG0jRac0sf2ec1ZF//Qkkvh9fo4vDZtcP08i8nN7Ll9b85zx8dyIKtp/i+BXEfnsqM0K00JU2S9FbO8PdUA2mLtaZyCZymyU8MteGA64WXO0M1ONVeB04IENQKWtzbRqwuIWpta0Lxn1xAVAJi292jctEARk1nBvE5sXIgK5Yo+6kWtBEMgdc9ZW3Qs7gKBYM5CiBwqgBIJjaECiYWAI6/GDEnDnEG1NrSM1Pi0wu2StIKwyYybkkmQPCApDh0BAvDAhECiIFSYMggGihdG8TrxlDu2RvTBNtkcwEATLEUtr7sHAEGwQT5lRICJALDA0iH+Qwa61bnqaK7SFlGen9Jvd6sQeCE4ovADgBBUGBdE4seQSEAGxQFhemi5NrknKclp61eQB8TjhOZuZtJkGg06EwlhAGE6EwWhBIiCoDUADEglBg5mBrICgwDz8JfZKJygN4GH/0XOkE5AzrSOZIMwNYMnJVHOpBf7q3ApIRifMZaYBmb1rwISrpw8TPgPJAjHdM0Xou4i8dfKSDWIE81HFfonIcwOTFaIH8y0ipz/jH10bOlDCXQAAAABJRU5ErkJggg==";
+        } else {
+    this.closeButton.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABwklEQVRoQ+2aa24CMQyE7QuUM7YHK2csF0i1qJF2A0lszxiiVfkDEnnM52fCoiIipZRvEfncPm8vVdX6ecX3UkrZ6bqq6pe2EKvDNBBV7nUD2dMdHLCaZ4ZaR1+uFGZTnbMBK8CYNP4leze83p0zJoh9DlgnvLKKeTQdyqxnYjaQV8tDv/AukAEU0fC08UUWYgFF9+528OiCCBCy5/AogizsBUL3mp6p0A0sQIw9piDZfYYBcW/aFotlwbAgXCBsGCaEG4QFw4YIgaAwGRBhkChMFgQE4oXJhIBBrDCWyojeRs3ldyTGYu3RfBSC4pEqMArDgKCCRMKMBUEH8cAwIf5BeonrzROmVyhVyxNSrRFYMBQQrycyYGAQFKJCoZ6BQCwQVaBnrOUk8ODVyCRrTrRWzoQJeQQRhMwdHnO8HmEIYawBhRZTAHMtV2dnbxzNs14EmXIkA8JzaraU5ilIJgQT5vw/mb7CE228I3ue97ECYhVvT0KuA20BON+jtxU8geTM3SMrQnhL8/AvHKy7Apo7JkPPBlm6KirUMn+qczRgFQhLmG2h9SMiHxn3aIulvWM6hr/VZD/ArOaJSTW7qerlF9bSa7Pl7TDpAAAAAElFTkSuQmCC";
+        }
 
+};
+
+                                   
+                                   
 
 
