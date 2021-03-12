@@ -132,7 +132,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                                                                             selectedIndex = -1
                                                                         }
                                                                         DispatchQueue.main.async {
-                                                                            self.webView.evaluateJavaScript("window.selectSlice(\(selectedIndex), '\(selectedPromoCode)');") { (data, err) in
+                                                                            self.webView.evaluateJavaScript("window.chooseSlice(\(selectedIndex), '\(selectedPromoCode)');") { (data, err) in
                                                                                 if let error = err {
                                                                                     VisilabsLogger.error(error)
                                                                                     VisilabsLogger.error(error.localizedDescription)
