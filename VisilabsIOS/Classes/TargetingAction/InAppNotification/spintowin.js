@@ -22,6 +22,9 @@ function SpinToWin(config) {
   this.warning = document.getElementById("vl-warning");
   this.invalidEmailMessageLi = document.getElementById("invalid-email-message");
   this.checkConsentMessageLi = document.getElementById("check-consent-message");
+    
+  this.successMessageElement = document.getElementById("success-message");
+    
   this.formValidation = {
     email: true,
     consent: true
@@ -189,6 +192,9 @@ SpinToWin.prototype.setContent = function() {
   this.couponCode.style.fontFamily = this.config.copybuttonFontFamily;
   this.couponCode.style.fontSize = (this.config.copybuttonTextSize + 20) + "px";
     
+  this.successMessageElement.innerHTML = this.config.successMessage;
+  this.successMessageElement.style.color = "green";
+    
   this.submitButton.addEventListener("click", this.submit);
   this.closeButton.addEventListener("click", evt => this.close());
   this.copyButton.addEventListener("click", evt => this.copyToClipboard());
@@ -225,10 +231,12 @@ SpinToWin.prototype.handleVisibility = function() {
     this.consentContainer.style.display = "none";
     this.emailPermitContainer.style.display = "none";
     this.warning.style.display = "none";
+    this.successMessageElement.style.display = "";
     return;
   } else {
     this.couponCode.style.display = "none";
     this.copyButton.style.display = "none";
+    this.successMessageElement.style.display = "none";
   }
 
   this.warning.style.display = "none";
@@ -317,7 +325,7 @@ SpinToWin.prototype.styleHandler = function() {
     "#form-container>div{position:absolute;top:50%;transform:translateY(-50%);margin:0 30px;width: 240px;}" +
     "#form-title{text-align:center;}" +
     "#form-message{text-align:center;}" +
-    ".vl-successMessage{text-align:center;}" +
+    "#success-message{text-align:center;}" +
     "#warning{display:none; position: absolute; z-index: 3; background: #fcf6c1; font-size: 12px; border: 1px solid #ccc; top: 105%;width: 100%; box-sizing: border-box;}" +
     "#warning>ul{margin: 2px;padding-inline-start: 20px;}" +
     "#form-consent{font-size:12px;color:#555;width:100%;padding:5px 0;position:relative;}" +
@@ -500,6 +508,11 @@ SpinToWin.prototype.resultHandler = function(res) {
 
 
 //Helper functions
+                                 
+SpinToWin.prototype.prepareCheckboxHtmls(text, url) {
+      
+};
+                                 
 
 SpinToWin.prototype.randomInt = function(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -532,38 +545,6 @@ SpinToWin.prototype.lightOrDark = function(color) {
     return 'dark';
   }
 };
-
-SpinToWin.prototype.visiCopyTextToClipboard = function(text, language) {
-
-  if (!navigator.clipboard) {
-    visiFallbackCopyTextToClipboard(text, language);
-    return;
-  }
-
-  navigator.clipboard.writeText(text).then(function() {
-
-    var copiedToClipboardMessage = "Panoya kopyalandı.";
-
-    if (language && language !== "") {
-      switch (language) {
-        case "En":
-          copiedToClipboardMessage = "Copied to clipboard.";
-          break;
-        case "Tr":
-          copiedToClipboardMessage = "Panoya kopyalandı.";
-          break;
-          //case "De":
-          //    break;
-        default:
-          break;
-      }
-    }
-
-    alert(copiedToClipboardMessage);
-
-  }, function(err) {});
-};
-
 
 SpinToWin.prototype.isNullOrWhitespace = function(input) {
   if (typeof input === 'undefined' || input == null) return true;
