@@ -24,6 +24,7 @@ function SpinToWin(config) {
   this.checkConsentMessageLi = document.getElementById("check-consent-message");
     
   this.successMessageElement = document.getElementById("success-message");
+  this.promocodeTitleElement = document.getElementById("promocode-title");
     
   this.formValidation = {
     email: true,
@@ -151,6 +152,7 @@ SpinToWin.prototype.convertStringsToNumber = function() {
   this.config.buttonTextSize = isNaN(parseInt(this.config.buttonTextSize)) ? 20 : parseInt(this.config.buttonTextSize);
   this.config.consentTextSize = isNaN(parseInt(this.config.consentTextSize)) ? 5 : parseInt(this.config.consentTextSize);
   this.config.copybuttonTextSize = isNaN(parseInt(this.config.copybuttonTextSize)) ? 20 : parseInt(this.config.copybuttonTextSize);
+  this.config.promocodeTitleTextSize = isNaN(parseInt(this.config.promocodeTitleTextSize)) ? 20 : parseInt(this.config.promocodeTitleTextSize);
 };
 
 SpinToWin.prototype.setContent = function() {
@@ -195,6 +197,11 @@ SpinToWin.prototype.setContent = function() {
   this.successMessageElement.innerHTML = this.config.successMessage;
   this.successMessageElement.style.color = "green";
     
+  this.promocodeTitleElement.innerHTML = this.config.promocodeTitle;
+  this.promocodeTitleElement.style.color = this.config.promocodeTitleTextColor;
+  this.promocodeTitleElement.style.fontFamily = this.config.promocodeTitleFontFamily;
+  this.promocodeTitleElement.style.fontSize = (this.config.promocodeTitleTextSize + 20) + "px";
+    
   this.submitButton.addEventListener("click", this.submit);
   this.closeButton.addEventListener("click", evt => this.close());
   this.copyButton.addEventListener("click", evt => this.copyToClipboard());
@@ -232,11 +239,13 @@ SpinToWin.prototype.handleVisibility = function() {
     this.emailPermitContainer.style.display = "none";
     this.warning.style.display = "none";
     this.successMessageElement.style.display = "";
+    this.promocodeTitleElement.style.display = "";
     return;
   } else {
     this.couponCode.style.display = "none";
     this.copyButton.style.display = "none";
     this.successMessageElement.style.display = "none";
+    this.promocodeTitleElement.style.display = "none";
   }
 
   this.warning.style.display = "none";
@@ -313,8 +322,6 @@ SpinToWin.prototype.styleHandler = function() {
   this.canvasContainer.style.bottom = (-wheelCanvasHeight / 2) + "px";
 
 
-
-
   var arrowContainerTop = (config.r - (config.r / 5.2)) + "px"; // R: 250 top: 205, R: 200 top: 162, R: 150 top: 121
   var styleEl = document.createElement("style"),
     styleString = "#lightbox-outer{}" +
@@ -323,9 +330,7 @@ SpinToWin.prototype.styleHandler = function() {
     "#arrow-container{width:20px;height:30px;display:inline-block;position:absolute;box-sizing:border-box;top:calc(50% - 14px);left:" + (config.r - 10) + "px;z-index:1;transform:rotate(90deg)}" +
     "#form-container{width:300px;box-sizing:border-box;float:right}" +
     "#form-container>div{position:absolute;top:50%;transform:translateY(-50%);margin:0 30px;width: 240px;}" +
-    "#form-title{text-align:center;}" +
-    "#form-message{text-align:center;}" +
-    "#success-message{text-align:center;}" +
+    "#form-title, #form-message, #success-message, #promocode-title{text-align:center;}" +
     "#warning{display:none; position: absolute; z-index: 3; background: #fcf6c1; font-size: 12px; border: 1px solid #ccc; top: 105%;width: 100%; box-sizing: border-box;}" +
     "#warning>ul{margin: 2px;padding-inline-start: 20px;}" +
     "#form-consent{font-size:12px;color:#555;width:100%;padding:5px 0;position:relative;}" +
