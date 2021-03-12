@@ -23,15 +23,19 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.automaticallyAdjustsScrollViewInsets = false
+        //self.automaticallyAdjustsScrollViewInsets = false
         webView = configureWebView()
         self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = true
         webView.allEdges(to: self.view)
+        /*
         if #available(iOS 11.0, *) {
             webView.scrollView.contentInsetAdjustmentBehavior = .never
         }
+        */
     }
+    
+    
     
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         dismiss(animated: true)
