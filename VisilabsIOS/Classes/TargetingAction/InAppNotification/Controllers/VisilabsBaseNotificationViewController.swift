@@ -48,6 +48,9 @@ class VisilabsBaseNotificationViewController: UIViewController {
         if self.mailForm != nil {
             return
         }
+        if let not = self.notification, not.type == .fullImage {
+            return
+        }
         let touch = touches.first
         if !(touch?.view is VisilabsPopupDialogDefaultView) && !(touch?.view is CosmosView){
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
