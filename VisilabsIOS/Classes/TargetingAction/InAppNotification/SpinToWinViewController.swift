@@ -23,16 +23,27 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.webView = configureWebView()
+        self.automaticallyAdjustsScrollViewInsets = false
+        webView = configureWebView()
         self.view.addSubview(webView)
+        webView.translatesAutoresizingMaskIntoConstraints = true
         webView.allEdges(to: self.view)
+        if #available(iOS 11.0, *) {
+            webView.scrollView.contentInsetAdjustmentBehavior = .never
+        }
     }
     
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         dismiss(animated: true)
         completion()
     }
-
+    
+    /*
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+ */
+    
     
     func configureWebView() -> WKWebView {
         let configuration = WKWebViewConfiguration()
@@ -45,12 +56,13 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         let url = URL(fileURLWithPath: htmlPath)
         webView.load(URLRequest(url: url))
         webView.backgroundColor = .clear
+        webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }
 }
 
 extension SpinToWinViewController: WKScriptMessageHandler {
-
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         if message.name == "eventHandler" {
@@ -60,9 +72,9 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 }
                 if method == "initSpinToWin" {
                     VisilabsLogger.info("initSpinToWin")
-                    if let json = try? JSONEncoder().encode(self.spinToWin), let jsonString = String(data: json, encoding: .utf8) {
+                    if let json = try? JSONEncoder().encode(self.spinToWin!), let jsonString = String(data: json, encoding: .utf8) {
                         
-                        print(jsonString)
+                        print(jsonString) // TODO: KALDIR
                         
                         self.webView.evaluateJavaScript("window.initSpinToWin(\(jsonString));") { (data, err) in
                             if let error = err {
@@ -74,13 +86,73 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     }
                 }
                 
-                if method == "promotionRequest" {
-                    
+                if method == "subscribeEmail" {
+                    if let email = event["email"] as? String {
+                        Visilabs.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
+                    }
                 }
                 
-                if method == "subscribeMail" {
+                if method == "getPromotionCode" {
+                    var promotionIndexCodes = [Int: String]()
+                    var index = 0
                     
+                    for slice in spinToWin!.slices {
+                        if slice.type == "promotion" {
+                            promotionIndexCodes[index] = slice.code
+                        }
+                        index += 1
+                    }
+                    
+                    if !promotionIndexCodes.isEmpty {
+                        if let randomIndex = promotionIndexCodes.keys.randomElement(), let randomCode = promotionIndexCodes[randomIndex] {
+                            var props = [String: String]()
+                            props[VisilabsConstants.organizationIdKey] = Visilabs.callAPI().visilabsProfile.organizationId
+                            props[VisilabsConstants.profileIdKey] = Visilabs.callAPI().visilabsProfile.profileId
+                            props[VisilabsConstants.cookieIdKey] = Visilabs.callAPI().visilabsUser.cookieId
+                            props[VisilabsConstants.exvisitorIdKey] = Visilabs.callAPI().visilabsUser.exVisitorId
+                            props["actionid"] = "\(self.spinToWin!.actId)"
+                            props["promotionid"] = randomCode
+                            props["promoauth"] = "\(self.spinToWin!.promoAuth)"
+                            
+                            VisilabsRequest.sendPromotionCodeRequest(properties: props,
+                                                                     headers: [String: String](),
+                                                                     timeoutInterval: Visilabs.callAPI().visilabsProfile.requestTimeoutInterval,
+                                                                     completion: { (result: [String: Any]?, error: VisilabsError?) in
+                                                                        
+                                                                        var selectedIndex = randomIndex
+                                                                        var selectedPromoCode = ""
+                                                                        
+                                                                        if error == nil, let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String, !promocode.isEmptyOrWhitespace {
+                                                                            selectedPromoCode = promocode
+                                                                        } else {
+                                                                            selectedIndex = -1
+                                                                        }
+                                                                        DispatchQueue.main.async {
+                                                                            self.webView.evaluateJavaScript("window.selectSlice(\(selectedIndex), '\(selectedPromoCode)');") { (data, err) in
+                                                                                if let error = err {
+                                                                                    VisilabsLogger.error(error)
+                                                                                    VisilabsLogger.error(error.localizedDescription)
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                     })
+                            
+                        }
+                        
+                        
+                        
+                    } else {
+                        self.webView.evaluateJavaScript("window.chooseSlice(-1, undefined);") { (data, err) in
+                            if let error = err {
+                                VisilabsLogger.error(error)
+                                VisilabsLogger.error(error.localizedDescription)
+                                
+                            }
+                        }
+                    }
                 }
+                
+                
                 
                 if method == "copyToClipboard" {
                     
@@ -98,27 +170,27 @@ extension SpinToWinViewController: WKScriptMessageHandler {
         
         
         /*
-        if message.name == "initSpinToWin" {
-            //TODO: buraya data gelecek
-            self.webView.evaluateJavaScript("initSpinToWin()") { (data, err) in
-                
-            }
-        }
-        
-        print("*** \(message.name) === \(message.body)")
-        if message.name == "logHandler" {
-            print("LOG: \(message.body)")
-        }
-        guard let body = message.body as? String else {
-            return
-        }
-        if body == "close button clicked" {
-            self.dismiss(animated: true, completion: nil)
-        } else if body.contains("copyToClipboard button clicked") {
-            VisilabsHelper.showCopiedClipboardMessage()
-            self.dismiss(animated: true, completion: nil)
-        }
-        */
+         if message.name == "initSpinToWin" {
+         //TODO: buraya data gelecek
+         self.webView.evaluateJavaScript("initSpinToWin()") { (data, err) in
+         
+         }
+         }
+         
+         print("*** \(message.name) === \(message.body)")
+         if message.name == "logHandler" {
+         print("LOG: \(message.body)")
+         }
+         guard let body = message.body as? String else {
+         return
+         }
+         if body == "close button clicked" {
+         self.dismiss(animated: true, completion: nil)
+         } else if body.contains("copyToClipboard button clicked") {
+         VisilabsHelper.showCopiedClipboardMessage()
+         self.dismiss(animated: true, completion: nil)
+         }
+         */
         
     }
 }
@@ -129,10 +201,10 @@ struct SpinConfig: Codable {
 }
 
 struct ConfigAction: Codable {
-
+    
     var background_color: String
     var close_button_color: String
-
+    
     var msg_title_color: String
     var msg_title_font_family: String
     var msg_title_textsize: Int
@@ -160,7 +232,7 @@ struct ConfigAction: Codable {
     var view_type: String
     var mail_subscription: Bool
     var spin_to_win_content: SpinTWContent
-
+    
     var font_size: Int
     var circle_R: Float
     var auth: String

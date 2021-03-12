@@ -25,6 +25,7 @@ struct VisilabsConstants {
     static var geofenceEndPoint = "s.visilabs.net/geojson"
     static var mobileEndPoint = "s.visilabs.net/mobile"
     static var subsjsonEndpoint = "s.visilabs.net/subsjson"
+    static var promotionEndpoint = "s.visilabs.net/promotion"
 
     // MARK: - UserDefaults Keys
 
@@ -214,6 +215,7 @@ struct VisilabsConstants {
     static let color = "color"
     static let code = "code"
     //static let type = "type" // varmış zaten
+
 
     
     private static let targetPrefVossStoreKey = "OM.voss"

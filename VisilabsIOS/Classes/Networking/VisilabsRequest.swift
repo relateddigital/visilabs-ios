@@ -282,8 +282,7 @@ class VisilabsRequest {
     class func sendPromotionCodeRequest(properties: [String: String],
                                  headers: [String: String],
                                  timeoutInterval: TimeInterval,
-                                 completion: @escaping ([String: Any]?, VisilabsError?, String?) -> Void,
-                                 guid: String? = nil) {
+                                 completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -305,23 +304,22 @@ class VisilabsRequest {
                                                      requestBody: nil,
                                                      queryItems: queryItems,
                                                      headers: headers,
-                                                     parse: responseParser,
-                                                     guid: guid)
+                                                     parse: responseParser)
 
         sendPromotionCodeRequestHandler(resource: resource,
-                                 completion: { result, error, guid in completion(result, error, guid)})
+                                 completion: { result, error in completion(result, error)})
 
     }
     
     private class func sendPromotionCodeRequestHandler(resource: VisilabsResource<[String: Any]>,
                                                 completion: @escaping ([String: Any]?,
-                                                                       VisilabsError?, String?) -> Void) {
+                                                                       VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (error, _, _) in
                 VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
-                completion(nil, error, resource.guid)
+                completion(nil, error)
             }, success: { (result, _) in
-                completion(result, nil, resource.guid)
+                completion(result, nil)
             })
     }
     

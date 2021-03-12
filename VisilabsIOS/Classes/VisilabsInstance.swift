@@ -357,15 +357,8 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     // This method added for test purposes
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
         visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
-        //_ = visilabsTargetingActionInstance.notificationsInstance.showSpinToWin()
     }
     
-    /*
-    public func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
-        visilabsTargetingActionInstance.notificationsInstance.showMailSubscriptionForm(model)
-    }
-    */
-
     func checkInAppNotification(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
@@ -381,50 +374,6 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             }
         }
     }
-    
-    
-    public func showTargetingAction(_ model: TargetingActionViewModel) {
-        visilabsTargetingActionInstance.notificationsInstance.showTargetingAction(model)
-    }
-    
-    
-    //İleride inapp de s.visilabs.net/mobile üzerinden geldiğinde sadece bu metod kullanılacak
-    //checkInAppNotification metodu kaldırılacak.
-    func checkTargetingActions(properties: [String: String]) {
-        trackingQueue.async { [weak self, properties] in
-            guard let self = self else { return }
-            self.networkQueue.async { [weak self, properties] in
-                guard let self = self else { return }
-                self.visilabsTargetingActionInstance.checkTargetingActions(properties: properties, visilabsUser: self.visilabsUser, completion: { (model) in
-                    
-                    if let targetingAction = model {
-                        self.showTargetingAction(targetingAction)
-                    }
-                    
-                    /*
-                    if let targetingAction = model, targetingAction.targetingActionType == .mailSubscriptionForm , let form = targetingAction as? MailSubscriptionViewModel {
-                        self.showMailSubscriptionForm(form)
-                    }
-                    else if let targetingAction = model, targetingAction.targetingActionType == .spinToWin , let form = targetingAction as? SpinToWinViewModel {
-                        //self.showMailSubscriptionForm(form)
-                    }
-                    */
-                    
-                })
-            }
-        }
-    }
-    
-    
-    /*
-    func checkMailSubsForm(properties: [String: String]) {
-        self.visilabsTargetingActionInstance.getEmailForm(properties: properties, visilabsUser: self.visilabsUser, guid: UUID().uuidString) { (model) in
-            if let targetingAction = model, targetingAction.targetingActionType == .mailSubscriptionForm , let form = targetingAction as? MailSubscriptionViewModel {
-                self.showMailSubscriptionForm(form)
-            }
-        }
-    }
-     */
 
     func notificationDidShow(_ notification: VisilabsInAppNotification) {
         visilabsUser.visitData = notification.visitData
@@ -445,6 +394,34 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
+    
+    func showTargetingAction(_ model: TargetingActionViewModel) {
+        visilabsTargetingActionInstance.notificationsInstance.showTargetingAction(model)
+    }
+    
+    //İleride inapp de s.visilabs.net/mobile üzerinden geldiğinde sadece bu metod kullanılacak
+    //checkInAppNotification metodu kaldırılacak.
+    func checkTargetingActions(properties: [String: String]) {
+        trackingQueue.async { [weak self, properties] in
+            guard let self = self else { return }
+            self.networkQueue.async { [weak self, properties] in
+                guard let self = self else { return }
+                self.visilabsTargetingActionInstance.checkTargetingActions(properties: properties, visilabsUser: self.visilabsUser, completion: { (model) in
+                    if let targetingAction = model {
+                        self.showTargetingAction(targetingAction)
+                    }
+                })
+            }
+        }
+    }
+    
+    func subscribeSpinToWinMail(actid: String, auth: String, mail: String) {
+        createSubsJsonRequest(actid: actid, auth: auth, mail: mail, type: "spin_to_win_email")
+    }
+    
+    
+    
+    
 
 }
 
@@ -563,17 +540,16 @@ extension VisilabsInstance {
     }
     
     
-    private func createSubsJsonRequest(actid: String, auth: String, mail: String) {
+    private func createSubsJsonRequest(actid: String, auth: String, mail: String, type: String = "subscription_email") {
         var props = [String: String]()
         props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId//Om.oid
         props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId//Om.siteId
         props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
         props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
-        props[VisilabsConstants.type] = "subscription_email"        
+        props[VisilabsConstants.type] = type
         props["actionid"] = actid
         props[VisilabsConstants.authentication] = auth
         props[VisilabsConstants.subscribedEmail] = mail
-        
         VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String : String](), timeOutInterval: self.visilabsProfile.requestTimeoutInterval)
     }
 }
