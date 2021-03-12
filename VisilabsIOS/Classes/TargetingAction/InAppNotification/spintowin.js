@@ -169,10 +169,10 @@ SpinToWin.prototype.setContent = function() {
   this.submitButton.style.fontFamily = this.config.buttonFontFamily;
   this.submitButton.style.fontSize = (this.config.buttonTextSize + 20) + "px";
   this.emailInput.placeholder = this.config.placeholder;
-  this.consentText.innerHTML = this.config.consentText;
+  this.consentText.innerHTML = this.prepareCheckboxHtmls(this.config.consentText, this.config.consentTextUrl);
   this.consentText.style.fontSize = (this.config.consentTextSize + 10) + "px";
   this.consentText.style.fontFamily = this.config.textFontFamily;
-  this.emailPermitText.innerHTML = this.config.emailPermitText;
+  this.emailPermitText.innerHTML = this.prepareCheckboxHtmls(this.config.emailPermitText, this.config.emailpermitTextUrl);
   this.emailPermitText.style.fontSize = (this.config.consentTextSize + 10) + "px";
   this.emailPermitText.style.fontFamily = this.config.textFontFamily;
   this.copyButton.innerHTML = this.config.copyButtonLabel;
@@ -508,9 +508,14 @@ SpinToWin.prototype.resultHandler = function(res) {
 
 
 //Helper functions
-                                 
-SpinToWin.prototype.prepareCheckboxHtmls(text, url) {
-      
+                      
+//TODO: burada href olmamalı. ios ya da android'deki native tarayıca yönlendirme yapılmalı
+SpinToWin.prototype.prepareCheckboxHtmls = function(text, url) {
+      if(this.isNullOrWhitespace(url)) {
+          return text;
+      } else if(!text.includes("<LINK>")) {
+          return '<a href="' + url + '">'  + text + '</a>';
+      }
 };
                                  
 
