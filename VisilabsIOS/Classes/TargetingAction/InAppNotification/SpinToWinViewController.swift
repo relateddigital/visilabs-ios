@@ -154,8 +154,9 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 
                 
                 
-                if method == "copyToClipboard" {
-                    
+                if method == "copyToClipboard", let couponCode = event["couponCode"] as? String  {
+                    UIPasteboard.general.string = couponCode
+                    VisilabsHelper.showCopiedClipboardMessage()
                 }
                 
                 if method == "close" {
