@@ -1,5 +1,8 @@
 function SpinToWin(config) {
-
+  this.config = config;
+  if (window.Android) {
+      this.convertConfigJson();
+  } 
   this.container = document.getElementById("container");
   this.canvasContainer = document.getElementById("canvas-container");
   this.wheelCanvas = document.getElementById("wheel-canvas");
@@ -31,7 +34,6 @@ function SpinToWin(config) {
     consent: true
   };
   this.spinCompleted = false;
-  this.config = config;
   this.config.circle_R = window.innerWidth / 2;
   var r = parseFloat(config.circle_R);
   this.config.windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -100,9 +102,56 @@ function SpinToWin(config) {
   window.spinToWin = this;
 }
 
-//promoAuth burada kullanılacak buna göre. hangi slice'in seçileceğine karar verilecek
-//response false döndüğü zaman ne yapılacak
-//_VTObjs["_VisilabsTarget_5"].Callback({"id":130,"success":false,"promocode":""})
+SpinToWin.prototype.convertConfigJson = function() {
+  //actiondata
+  this.config.mailSubscription = this.config.actiondata.mail_subscription;
+  this.config.sliceCount = this.config.actiondata.slice_count;
+  this.config.slices = this.config.actiondata.slices;
+  
+  //spin_to_win_content
+  this.config.title = this.config.actiondata.spin_to_win_content.title;
+  this.config.message = this.config.actiondata.spin_to_win_content.message;
+  this.config.placeholder = this.config.actiondata.spin_to_win_content.placeholder;
+  this.config.buttonLabel = this.config.actiondata.spin_to_win_content.button_label;
+  this.config.consentText = this.config.actiondata.spin_to_win_content.consent_text;
+  this.config.emailPermitText = this.config.actiondata.spin_to_win_content.emailpermit_text;
+  this.config.successMessage = this.config.actiondata.spin_to_win_content.success_message;
+  this.config.invalidEmailMessage = this.config.actiondata.spin_to_win_content.invalid_email_message;
+  this.config.checkConsentMessage = this.config.actiondata.spin_to_win_content.check_consent_message;
+  this.config.promocodeTitle = this.config.actiondata.spin_to_win_content.promocode_title;
+  this.config.copyButtonLabel = this.config.actiondata.spin_to_win_content.copybutton_label;
+
+  var extendedProps = JSON.parse(decodeURIComponent(this.config.actiondata.ExtendedProps));
+  this.config.displaynameTextColor = extendedProps.displayname_text_color;
+  this.config.displaynameFontFamily = extendedProps.displayname_font_family;
+  this.config.displaynameTextSize = extendedProps.displayname_text_size;
+  this.config.titleTextColor = extendedProps.title_text_color;
+  this.config.titleFontFamily = extendedProps.title_font_family;
+  this.config.titleTextSize = extendedProps.title_text_size;
+  this.config.textColor = extendedProps.text_color;
+  this.config.textFontFamily = extendedProps.text_font_family;
+  this.config.textSize = extendedProps.text_size;
+  this.config.buttonColor = extendedProps.button_color;
+  this.config.buttonTextColor = extendedProps.button_text_color;
+  this.config.buttonFontFamily = extendedProps.button_font_family;
+  this.config.buttonTextSize = extendedProps.button_text_size;
+  this.config.promocodeTitleTextColor = extendedProps.promocode_title_text_color;
+  this.config.promocodeTitleFontFamily = extendedProps.promocode_title_font_family;
+  this.config.promocodeTitleTextSize = extendedProps.promocode_title_text_size;
+  this.config.promocodeBackgroundColor = extendedProps.promocode_background_color;
+  this.config.promocodeTextColor = extendedProps.promocode_text_color;
+  this.config.copybuttonColor = extendedProps.copybutton_color;
+  this.config.copybuttonTextColor = extendedProps.copybutton_text_color;
+  this.config.copybuttonFontFamily = extendedProps.copybutton_font_family;
+  this.config.copybuttonTextSize = extendedProps.copybutton_text_size;
+  this.config.emailpermitTextSize = extendedProps.emailpermit_text_size;
+  this.config.emailpermitTextUrl = extendedProps.emailpermit_text_url;
+  this.config.consentTextSize = extendedProps.consent_text_size;
+  this.config.consentTextUrl = extendedProps.consent_text_url;
+  this.config.closeButtonColor = extendedProps.close_button_color;
+  this.config.backgroundColor = extendedProps.background_color;
+}
+
 SpinToWin.prototype.getPromotionCode = function() {
   if (window.Android) {
     Android.getPromotionCode();
@@ -113,7 +162,6 @@ SpinToWin.prototype.getPromotionCode = function() {
   }
 };
 
-//auth burada kullanılacak.
 SpinToWin.prototype.subscribeEmail = function() {
   if (window.Android) {
     Android.subscribeEmail(this.emailInput.value.trim());
