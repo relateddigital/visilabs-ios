@@ -1,9 +1,6 @@
-//TODO: Arayüzde tanımlanan "Consent Text Not Checked Message" json'da gelmiyor.
-//TODO: Close button color yapılacak
 //TODO: Gereksiz this'leri kaldır
 //TODO: çarkıfelek çevir butonuna bastıktan sonra sunucuya request atılacak.
 function SpinToWin(config) {
-    
     
     
     this.container = document.getElementById("container");
@@ -26,10 +23,10 @@ function SpinToWin(config) {
     this.couponCode = document.getElementById("coupon-code");
     this.copyButton = document.getElementById("form-copy-btn");
     this.warning = document.getElementById("vl-warning");
-    this.invalidEmailMessageLi = document.getElementById("invalid_email_message");
+    this.invalidEmailMessageLi = document.getElementById("invalid-email-message");
+    this.checkConsentMessageLi = document.getElementById("check-consent-message");
     this.formValidation = { email: true, consent: true };
     this.spinCompleted = false;
-    
     this.config = config;
     this.config.circle_R = window.innerWidth / 2;
     var r = parseFloat(config.circle_R);
@@ -38,6 +35,8 @@ function SpinToWin(config) {
     this.config.language = "En";
     this.config.centerX = this.config.r;
     this.config.centerY = this.config.r;
+    this.config.selectedPromotionCode = "";
+    this.config.selectedSlice = {};
     
     this.convertStringsToNumber();
     this.setCloseButton();
@@ -53,20 +52,6 @@ function SpinToWin(config) {
     this.config.isMobile = true;
     this.config.textDirection = "horizontal";
     this.config.angle = 2 * Math.PI / config.sliceCount;
-
-
-    /*Mail*/
-    this.config.invalidEmailMessage = "Geçerli bir email adresi yazınız.";
-    this.config.checkConsentMessage = "İzin Metnini onaylayınız.";
-
-
-    if (this.config.invalid_email_message && this.config.invalid_email_message !== "")
-        this.config.invalidEmailMessage = this.config.invalidEmailMessage;
-
-    if (this.config.checkConsentMessage && this.config.checkConsentMessage !== "")
-        this.config.checkConsentMessage = this.config.checkConsentMessage;
-
-    /*Mail*/
     
     
 
@@ -114,27 +99,20 @@ function SpinToWin(config) {
 //promoAuth burada kullanılacak buna göre. hangi slice'in seçileceğine karar verilecek
 //response false döndüğü zaman ne yapılacak
 //_VTObjs["_VisilabsTarget_5"].Callback({"id":130,"success":false,"promocode":""})
-SpinToWin.prototype.promotionRequest = function () {
-    console.log("promotionRequest");
+SpinToWin.prototype.getPromotionCode = function () {
     if (window.Android) {
-        Android.promotionRequest(this.config.promoAuth);
+        Android.getPromotionCode();
     } else if (window.webkit.messageHandlers.eventHandler) {
-        window.webkit.messageHandlers.eventHandler.postMessage({ method: "promotionRequest", promoAuth: this.config.promoAuth });
-    }
-};
-
-SpinToWin.prototype.clickRequest = function () {
-    console.log("clickRequest");
-    if (window.Android) {
-        Android.clickRequest(this.config.actid, "burada acttype da gönderilmeli");
+        window.webkit.messageHandlers.eventHandler.postMessage({ method: "getPromotionCode"});
     }
 };
 
 //auth burada kullanılacak.
-SpinToWin.prototype.subscribeMail = function () {
-    console.log("close button clicked");
+SpinToWin.prototype.subscribeEmail = function () {
     if (window.Android) {
-        Android.subscribeMail(this.emailInput.value.trim(), this.config.auth);
+        Android.subscribeEmail(this.emailInput.value.trim());
+    } else if (window.webkit.messageHandlers.eventHandler) {
+        window.webkit.messageHandlers.eventHandler.postMessage({ method : "subscribeEmail", email: this.emailInput.value.trim() });
     }
 };
 
@@ -147,10 +125,12 @@ SpinToWin.prototype.close = function () {
 };
 
 SpinToWin.prototype.copyToClipboard = function () {
-    console.log("copyToClipboard button clicked : " + this.couponCode.innerText);
     if (window.Android) {
         Android.copyToClipboard(this.couponCode.innerText);
+    }else if (window.webkit.messageHandlers.eventHandler) {
+        window.webkit.messageHandlers.eventHandler.postMessage({ method : "copyToClipboard" });
     }
+    
 };
 
 SpinToWin.prototype.convertStringsToNumber = function() {
@@ -162,66 +142,41 @@ SpinToWin.prototype.convertStringsToNumber = function() {
 };
 
 SpinToWin.prototype.setContent = function () {
-
     this.container.style.backgroundColor = this.config.backgroundColor;
-
-    this.titleElement.innerText = this.config.title;
+    this.titleElement.innerHTML = this.config.title.replace(/\\n/g,'<br/>');
     this.titleElement.style.color = this.config.titleTextColor;
     this.titleElement.style.fontFamily = this.config.titleFontFamily;
     this.titleElement.style.fontSize = (this.config.titleTextSize + 20) + "px";
-
-
-
-    this.messageElement.innerText = this.config.message;
+    this.messageElement.innerHTML = this.config.message.replace(/\\n/g,'<br/>');
     this.messageElement.style.color = this.config.textColor;
     this.messageElement.style.fontFamily = this.config.textFontFamily;
     this.messageElement.style.fontSize = (this.config.textSize + 10) + "px";
-
-
-
-    this.submitButton.innerText = this.config.buttonLabel;
+    this.submitButton.innerHTML = this.config.buttonLabel;
     this.submitButton.style.color = this.config.buttonTextColor;
     this.submitButton.style.backgroundColor = this.config.buttonColor;
     this.submitButton.style.fontFamily = this.config.buttonFontFamily;
     this.submitButton.style.fontSize = (this.config.buttonTextSize + 20) + "px";
-
     this.emailInput.placeholder = this.config.placeholder;
-
-
-    this.consentText.innerText = this.config.consentText;
+    this.consentText.innerHTML = this.config.consentText;
     this.consentText.style.fontSize = (this.config.consentTextSize + 10) + "px";
     this.consentText.style.fontFamily = this.config.textFontFamily;
-    
-    this.emailPermitText.innerText = this.config.emailPermitText;
+    this.emailPermitText.innerHTML = this.config.emailPermitText;
     this.emailPermitText.style.fontSize = (this.config.consentTextSize+ 10) + "px";
     this.emailPermitText.style.fontFamily = this.config.textFontFamily;
-    
-    this.copyButton.innerText = this.config.copyButtonLabel;
+    this.copyButton.innerHTML = this.config.copyButtonLabel;
     this.copyButton.style.color = this.config.copybuttonTextColor;
     this.copyButton.style.backgroundColor = this.config.copybuttonColor;
     this.copyButton.style.fontFamily = this.config.copybuttonFontFamily;
     this.copyButton.style.fontSize = (this.config.copybuttonTextSize + 20) + "px";
-    
-    //// TODO: BURADAYIM
-
-    
-    
-
-    
-    
-    
-    
-
-
-    this.invalidEmailMessageLi.innerText = this.config.invalidEmailMessage;
-
-
-
-
+    this.invalidEmailMessageLi.innerHTML = this.config.invalidEmailMessage;
+    this.invalidEmailMessageLi.style.fontSize = (this.config.consentTextSize+ 10) + "px";
+    this.invalidEmailMessageLi.style.fontFamily = this.config.textFontFamily;
+    this.checkConsentMessageLi.innerHTML = this.config.checkConsentMessage;
+    this.checkConsentMessageLi.style.fontSize = (this.config.consentTextSize+ 10) + "px";
+    this.checkConsentMessageLi.style.fontFamily = this.config.textFontFamily;
     this.submitButton.addEventListener("click", this.submit);
     this.closeButton.addEventListener("click", evt => this.close());
     this.copyButton.addEventListener("click", evt => this.copyToClipboard());
-
 };
 
 SpinToWin.prototype.validateForm = function () {
@@ -257,25 +212,30 @@ SpinToWin.prototype.handleVisibility = function () {
         this.couponCode.style.display = "none";
         this.copyButton.style.display = "none";
     }
-
-
-
+    
     this.warning.style.display = "none";
 
     if (this.config.mailFormEnabled) {
         if (!this.formValidation.email || !this.formValidation.consent) {
             this.warning.style.display = "";
+            if(this.formValidation.email) {
+                this.invalidEmailMessageLi.style.display = "none";
+            } else {
+                this.invalidEmailMessageLi.style.display = "";
+            }
+            if(this.formValidation.consent) {
+                this.checkConsentMessageLi.style.display = "none";
+            } else {
+                this.checkConsentMessageLi.style.display = "";
+            }
         } else {
             this.warning.style.display = "none";
         }
-
-
     } else {
         this.emailInput.style.display = "none";
         this.consentContainer.style.display = "none";
         this.emailPermitContainer.style.display = "none";
     }
-
 };
 
 //TODO: randomNumber çalışıyor mu bak?
@@ -352,7 +312,6 @@ SpinToWin.prototype.styleHandler = function () {
             "#form-consent input[type='checkbox']+label::after{content:none}" +
             "#form-consent input[type='checkbox']:checked+label::after{content:''}" +
             "#form-consent input[type='checkbox']:focus+label::before{outline:#3b99fc auto 5px}" +
-
             "#form-emailpermit{font-size:12px;color:#555;width:100%;padding:5px 0;position:relative;}" +
             "#form-emailpermit input[type='checkbox']{opacity:0;position:absolute}" +
             "#form-emailpermit label{position:relative;display:inline-block;padding-left:18px}" +
@@ -381,14 +340,7 @@ SpinToWin.prototype.styleHandler = function () {
     } else {
         document.getElementById("vl-styles").innerHTML = styleString;
     }
-    //var formEl = document.querySelector("#form-container>div"), formHeight = parseFloat(getComputedStyle(formEl).height);
-    //formEl.parentNode.style.height = formHeight + 250 + "px";
-    //formEl.parentNode.style.height = formHeight + 450 + "px"; //TODO: eski hali
-
 };
-
-
-
 
 //TODO: bunu css'e ekle
 SpinToWin.prototype.getWheelCanvasStyle = function () {
@@ -461,137 +413,35 @@ SpinToWin.prototype.midCircleDrawer = function (circleColor, circleRadius) {
     this.wheelCanvasContext.closePath();
 };
 
-SpinToWin.prototype.createWheel = function () {
-    var canvasContainerDiv = this.createHtmlElement("div", "canvas-container");
-    var arrowContainerDiv = this.createHtmlElement("div", "arrow-container");
-    var wheelContainerDiv = this.createHtmlElement("div", "wheel-container");
-    this.arrowCanvas = this.createHtmlElement("canvas", "arrow-canvas", undefined, undefined);
-    this.wheelCanvas = this.createHtmlElement("canvas", "wheel-canvas", undefined, undefined, this.getWheelCanvasStyle());
-    var wheelCanvasWidth = (config.r * 2), wheelCanvasHeight = (config.r * 2);
-    this.wheelCanvas.width = wheelCanvasWidth;
-    this.wheelCanvas.height = wheelCanvasHeight;
-    arrowContainerDiv.appendChild(this.arrowCanvas);
-    wheelContainerDiv.appendChild(this.wheelCanvas);
-    canvasContainerDiv.appendChild(arrowContainerDiv);
-    canvasContainerDiv.appendChild(wheelContainerDiv);
-    return canvasContainerDiv;
-
-};
-
 SpinToWin.prototype.submit = function () {
     if (config.mailFormEnabled) {
-
-        window.spinToWin.formValidation = window.spinToWin.validateForm();
+        this.formValidation = window.spinToWin.validateForm();
         if (!window.spinToWin.formValidation.email || !window.spinToWin.formValidation.consent) {
             window.spinToWin.handleVisibility();
             return;
         }
-
-        //TODO: burası değişecek
-        //TODO: burada neden 2 kez SendClickRequest çağırılmış? SendClickToGA niçin var?
-        window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
-        //VisilabsObject.SendClickRequest(27, window.visilabs_spin_to_win.id);
-        //VisilabsObject.SendClickRequest(window.visilabs_spin_to_win.acttype, window.visilabs_spin_to_win.id);
-        //var ga_value = JSON.parse(localStorage.getItem("act-" + this.config.id));
-        //VisilabsObject.SendClickToGA(window.visilabs_spin_to_win.id, ga_value);
-        window.spinToWin.async_resultGenerator(window.spinToWin).then(function (data) {
-            window.spinToWin.spinHandler(data);
-        });
+        window.spinToWin.subscribeEmail();
     }
-    else {
-        window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
-        //VisilabsObject.SendClickRequest(27, window.visilabs_spin_to_win.id);
-        //VisilabsObject.SendClickRequest(window.visilabs_spin_to_win.acttype, window.visilabs_spin_to_win.id);
-        //var ga_value = JSON.parse(localStorage.getItem("act-" + this.config.id));
-        //VisilabsObject.SendClickToGA(window.visilabs_spin_to_win.id, ga_value);
-        window.spinToWin.async_resultGenerator(window.spinToWin).then(function (data) {
-            window.spinToWin.spinHandler(data);
-        });
+    window.spinToWin.handleVisibility();
+    window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
+    window.spinToWin.getPromotionCode();
+};
+ 
+SpinToWin.prototype.spin = function (sliceIndex, promotionCode) {
+    if(sliceIndex > -1) {
+        window.spinToWin.config.selectedSlice = window.spinToWin.config.slices[sliceIndex];
+        window.spinToWin.config.selectedSlice.code = promotionCode;
+    } else {
+        sliceIndex = window.spinToWin.randomInt(0, window.spinToWin.config.staticCodeSlices.length);
+        window.spinToWin.config.selectedSlice = window.spinToWin.config.staticCodeSlices[window.spinToWin.randomInt(0, window.spinToWin.config.staticCodeSlices.length)];
     }
+    window.spinToWin.spinHandler(sliceIndex);
 };
+                                             
 
-SpinToWin.prototype.async_resultGenerator = function (spinToWinObject) {
-    var lastResult;
-    return new Promise(function (resolve, reject) {
-        if (config.promotionSlices.length > 0) {
-            var firstResult = config.promotionSlices[spinToWinObject.randomInt(0, config.promotionSlices.length)];
-            var promotionCode;
-
-            var prom = undefined; // TODO:
-
-            if (prom !== undefined && prom.success) {
-                promotionCode = prom.promocode;
-                lastResult = firstResult;
-            }
-            else {
-                lastResult = config.staticCodeSlices[spinToWinObject.randomInt(0, config.staticCodeSlices.length)];
-            }
-
-
-            lastResult = config.staticCodeSlices[spinToWinObject.randomInt(0, config.staticCodeSlices.length)];
-
-            var finalResult = undefined; // TODO:
-
-            var index;
-            for (var i = 0; i < config.slices.length; i++) {
-                if (config.slices[i] === lastResult) {
-                    finalResult = lastResult;
-                    if (promotionCode === undefined)
-                        config.slices[i].code = spinToWinObject.StringDecrypt(lastResult.code);
-                    else
-                        config.slices[i].code = promotionCode;
-                    index = i;
-                    break;
-                }
-            }
-            resolve(index);
-
-
-            //TODO: visilabs_object.AddParameter ne işe yarıyor bak
-            visilabs_object.AddParameter("promoAuth", promoAuth);
-            visilabs_object.AddParameter("promotionId", firstResult.code);
-            visilabs_object.AddParameter("actionid", actid);
-            visilabs_object.GetPromo(function (prom) {
-                var promotionCode;
-                if (prom !== undefined && prom.success) {
-                    promotionCode = prom.promocode;
-                    lastResult = firstResult;
-                }
-                else {
-                    lastResult = window.visilabs_spin_to_win.staticCodeSlices[randomInt(0, window.visilabs_spin_to_win.staticCodeSlices.length)];
-                }
-                var index;
-                for (var i = 0; i < window.visilabs_spin_to_win.slices.length; i++) {
-                    if (window.visilabs_spin_to_win.slices[i] === lastResult) {
-                        finalResult = lastResult;
-                        if (promotionCode === undefined)
-                            window.visilabs_spin_to_win.slices[i].code = visilabs_object.StringDecrypt(lastResult.code);
-                        else
-                            window.visilabs_spin_to_win.slices[i].code = promotionCode;
-                        index = i;
-                        break;
-                    }
-                }
-                resolve(index);
-            });
-
-        }
-        else {
-            lastResult = window.visilabs_spin_to_win.staticCodeSlices[randomInt(0, window.visilabs_spin_to_win.staticCodeSlices.length)];
-            var index;
-            for (var i = 0; i < window.visilabs_spin_to_win.slices.length; i++) {
-                if (window.visilabs_spin_to_win.slices[i] === lastResult) {
-                    window.visilabs_spin_to_win.slices[i].code = visilabs_object.StringDecrypt(lastResult.code);
-                    index = i;
-                    break;
-                }
-            }
-            resolve(index);
-        }
-    });
-};
 
 SpinToWin.prototype.spinHandler = function (result) {
+
     var spinHandler_R = window.spinToWin.r;
     var spinHandler_isMobile = true; //window.visilabs_spin_to_win.isMobile;
     var vl_form_input = document.getElementById("vl-form-input");
@@ -643,8 +493,8 @@ SpinToWin.prototype.resultHandler = function (res) {
         }
     }
 
-    if (window.spinToWin.config.htmlContent.success_message && window.spinToWin.config.htmlContent.success_message !== "")
-        successMessage = window.spinToWin.config.htmlContent.success_message.replace("<%PromotionDisplayName%>", res.displayName.split("|").join(" "));
+    if (window.spinToWin.config.successMessage && window.spinToWin.config.successMessage !== "")
+        successMessage = window.spinToWin.config.successMessage.replace("<%PromotionDisplayName%>", res.displayName.split("|").join(" "));
 
     var resultText = "<div class='vl-successMessage' style='width: 100%'>"
         + successMessage
@@ -696,39 +546,6 @@ SpinToWin.prototype.lightOrDark = function (color) {
     else {
         return 'dark';
     }
-};
-
-SpinToWin.prototype.createHtmlElement = function (tag, id, className, innerText, style, type, value, clickListener, placeholder) {
-    var element = document.createElement(tag);
-    if (id) {
-        element.id = id;
-    }
-    if (innerText) {
-        element.innerText = innerText;
-    }
-    if (style) {
-        Object.assign(element.style, style);
-    }
-    if (className) {
-        element.className = className;
-    }
-    if (type) {
-        element.type = type;
-    }
-    if (value) {
-        element.value = value;
-    }
-    if (clickListener) {
-        element.addEventListener("click", clickListener);
-    }
-    if (placeholder) {
-        element.placeholder = placeholder;
-    }
-    return element;
-};
-
-SpinToWin.prototype.StringDecrypt = function (a) {
-    var b = a.split(","); for (var i = 0; i < b.length; i++)b[i] = String.fromCharCode((0x100 - parseInt(b[i], 0x10))); return b.join("");
 };
 
 SpinToWin.prototype.visiCopyTextToClipboard = function (text, language) {

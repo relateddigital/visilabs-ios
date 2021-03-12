@@ -514,7 +514,7 @@
                         <div class="wlo_toast enter_email_toast toast_animate_out">Please enter a valid email</div>
 
                         <div id="wl_custom_fields_holder" class="wlo_invert_input">
-                            <input class="wlo_email_input wlo_input" id="vl-form-input" name="vl-form-input" type="text"
+                            <input class="wlo_email_input wlo_input" id="vl-form-input" name="vl-form-input" type="email"
                                 placeholder="Email" data-field-name="email" maxlength="99">
 
                             <div id="vl-form-consent" class="wlo_invert_input">
@@ -547,11 +547,10 @@
                         <div class="wlo_btn wlo_try_luck_btn form-submit-btn" id="form-copy-btn"
                             style="background-color: #000000; color: #FFFFFF;">Copy</div>
 
-                        <div id="vl-warning" class="vl-validationMessage" style="display: block;">
-                            <ul style="padding-inline-start: 0px;">
-                                <li id="invalid_email_message" style="display: block;">Please enter a valid E-Mail
-                                    Address.</li>
-                                <li style="display: block;">Please check consent.</li>
+                        <div id="vl-warning" class="vl-validationMessage" style="display: block; color:red;">
+                            <ul style="padding-inline-start: 0px; list-style-type: none;">
+                                <li id="invalid-email-message" style="display: block;">Please enter a valid E-Mail Address.</li>
+                                <li id="check-consent-message" style="display: block;">Please check consent.</li>
                             </ul>
                         </div>
 
@@ -582,11 +581,17 @@
             config = responseConfig;
             spinToWin = new SpinToWin(config);
         };
+        
+        window.selectSlice = function(sliceIndex, promotionCode) {
+            console.log("selectSlice");
+            console.log(sliceIndex + " : " + promotionCode);
+            window.spinToWin.spin(sliceIndex, promotionCode);
+        };
 
         if (window.Android) {
             config = JSON.parse(Android.getResponse());
-            initSpinToWin(config);;
-        } else if (window.webkit.messageHandlers.eventHandler) {
+            initSpinToWin(config);
+        } else if (window.webkit && window.webkit.messageHandlers.eventHandler) {
             window.webkit.messageHandlers.eventHandler.postMessage({ method : "initSpinToWin" });
             window.console.log = function(message) {
                 var stringMessage = message;
