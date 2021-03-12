@@ -138,7 +138,8 @@ class VisilabsTargetingAction {
         guard let spinToWinContent = actionData[VisilabsConstants.spinToWinContent] as? [String: Any] else { return nil }
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
         guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
-        guard let report = actionData[VisilabsConstants.report] as? [String: Any] else { return nil }
+        //guard let report = actionData[VisilabsConstants.report] as? [String: Any] else { return nil } //mail_subscription false olduğu zaman report gelmiyor.
+        let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
         let actid = spinToWin[VisilabsConstants.actid] as? Int ?? 0
         let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
         let promoAuth = actionData[VisilabsConstants.promoAuth] as? String ?? ""
