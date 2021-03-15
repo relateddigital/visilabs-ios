@@ -196,14 +196,13 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
         let controller = SpinToWinViewController(model)
+        controller.modalPresentationStyle = .fullScreen
         controller.delegate = self
         if let rootViewController = getRootViewController() {
-            rootViewController.modalPresentationStyle = .fullScreen
             rootViewController.present(controller, animated: true, completion: nil)
             return true
         }
         return false
-        
     }
 
     func markNotificationShown(notification: VisilabsInAppNotification) {
