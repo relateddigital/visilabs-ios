@@ -1,8 +1,31 @@
+var PIXEL_RATIO = (function () {
+  var ctx = document.createElement("canvas").getContext("2d"),
+      dpr = window.devicePixelRatio || 1,
+      bsr = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1;
+
+  return dpr / bsr;
+})();
+
+var setHiDPICanvas = function(canvas, w, h, ratio) {
+  if (!ratio) { ratio = PIXEL_RATIO; }
+  var can = canvas;
+  can.width = w * ratio;
+  can.height = h * ratio;
+  can.style.width = w + "px";
+  can.style.height = h + "px";
+  can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+};
+
 function SpinToWin(config) {
   this.config = config;
   if (window.Android) {
     this.convertConfigJson();
   }
+
   this.container = document.getElementById("container");
   this.canvasContainer = document.getElementById("canvas-container");
   this.wheelCanvas = document.getElementById("wheel-canvas");
@@ -359,6 +382,10 @@ SpinToWin.prototype.styleHandler = function () {
   this.wheelCanvas.width = wheelCanvasWidth;
   this.wheelCanvas.height = wheelCanvasHeight;
   var wheelCanvasStyle = {};
+
+  setHiDPICanvas(this.wheelCanvas, wheelCanvasWidth, wheelCanvasHeight, PIXEL_RATIO);    
+
+
   wheelCanvasStyle.transform = "translateX(0px) rotate(" + this.randomInt(0, 360) + "deg)";
   wheelCanvasStyle.transitionProperty = "transform";
   wheelCanvasStyle.transitionDuration = "0s";
@@ -467,6 +494,7 @@ SpinToWin.prototype.mobileTextTyper = function (sliceNumber, sliceText, sliceCol
   var fontFamily = this.config.displaynameFontFamily;
 
   this.wheelCanvasContext.save();
+
   this.wheelCanvasContext.translate(config.centerX + (Math.cos(sliceNumber * config.angle) * config.r), config.centerY + (Math.sin(sliceNumber * config.angle) * config.r));
   this.wheelCanvasContext.moveTo(config.centerX, config.centerY);
   this.wheelCanvasContext.rotate((config.angle * sliceNumber + config.angle / 2) + (Math.PI / 2));
