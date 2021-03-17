@@ -1,16 +1,16 @@
 var PIXEL_RATIO = (function () {
   var ctx = document.createElement("canvas").getContext("2d"),
-      dpr = window.devicePixelRatio || 1,
-      bsr = ctx.webkitBackingStorePixelRatio ||
-            ctx.mozBackingStorePixelRatio ||
-            ctx.msBackingStorePixelRatio ||
-            ctx.oBackingStorePixelRatio ||
-            ctx.backingStorePixelRatio || 1;
+    dpr = window.devicePixelRatio || 1,
+    bsr = ctx.webkitBackingStorePixelRatio ||
+      ctx.mozBackingStorePixelRatio ||
+      ctx.msBackingStorePixelRatio ||
+      ctx.oBackingStorePixelRatio ||
+      ctx.backingStorePixelRatio || 1;
 
   return dpr / bsr;
 })();
 
-var setHiDPICanvas = function(canvas, w, h, ratio) {
+var setHiDPICanvas = function (canvas, w, h, ratio) {
   if (!ratio) { ratio = PIXEL_RATIO; }
   var can = canvas;
   can.width = w * ratio;
@@ -22,7 +22,7 @@ var setHiDPICanvas = function(canvas, w, h, ratio) {
 
 function SpinToWin(config) {
   this.config = config;
-  if (window.Android) {
+  if (window.Android || window.BrowserTest) {
     this.convertConfigJson();
   }
 
@@ -30,6 +30,7 @@ function SpinToWin(config) {
   this.canvasContainer = document.getElementById("canvas-container");
   this.wheelCanvas = document.getElementById("wheel-canvas");
   this.arrowCanvas = document.getElementById("arrow-canvas");
+
   this.wheelCanvasContext = this.wheelCanvas.getContext("2d");
   this.arrowCanvasContext = this.arrowCanvas.getContext("2d");
   this.closeButton = document.getElementById("spin-to-win-box-close");
@@ -61,7 +62,6 @@ function SpinToWin(config) {
   var r = parseFloat(config.circle_R);
   this.config.windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   this.config.r = (r * 2) > this.config.windowWidth ? 150 : r;
-  this.config.language = "En";
   this.config.centerX = this.config.r;
   this.config.centerY = this.config.r;
   this.config.selectedPromotionCode = "";
@@ -74,8 +74,7 @@ function SpinToWin(config) {
   this.config.campaigns = this.config.slices;
   this.config.mailFormEnabled = config.mailSubscription;
   this.config.pickedColors = [];
-  this.config.middleCircleR = this.config.r / 10;
-  this.config.middleCircleColor = "#000";
+  this.config.middleCircleR = this.config.r / 5;
   this.config.fontFamily = "sans-serif"; // TODO: default gelirse ne yapılacak?
   this.config.isMobile = true;
   this.config.textDirection = "horizontal";
@@ -111,16 +110,20 @@ function SpinToWin(config) {
     window.spinToWin.styleHandler();
   }
 
-  this.drawArrow();
+  
 
 
-  this.midCircleDrawer(this.config.middleCircleColor, this.config.middleCircleR);
+  
 
   for (var i = 0; i < config.sliceCount; i++) {
     this.sliceDrawer(i, config.colors[i]);
-    this.mobileTextTyper(i, config.slices[i].displayName, config.colors[i]);
+    this.mobileTextTyper(i, config.slices[i].displayName);
   }
-  
+
+  this.midCircleDrawer("#000000", this.config.middleCircleR);
+
+  this.drawArrow();
+
   this.handleVisibility();
 
   window.spinToWin = this;
@@ -179,17 +182,19 @@ SpinToWin.prototype.convertConfigJson = function () {
 SpinToWin.prototype.getPromotionCode = function () {
   if (window.Android) {
     Android.getPromotionCode();
-  } else if (window.webkit.messageHandlers.eventHandler) {
+  } else if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.eventHandler.postMessage({
       method: "getPromotionCode"
     });
+  } else {
+    window.BrowserTest.getPromotionCode();
   }
 };
 
 SpinToWin.prototype.subscribeEmail = function () {
   if (window.Android) {
     Android.subscribeEmail(this.emailInput.value.trim());
-  } else if (window.webkit.messageHandlers.eventHandler) {
+  } else if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.eventHandler.postMessage({
       method: "subscribeEmail",
       email: this.emailInput.value.trim()
@@ -200,7 +205,7 @@ SpinToWin.prototype.subscribeEmail = function () {
 SpinToWin.prototype.close = function () {
   if (window.Android) {
     Android.close();
-  } else if (window.webkit.messageHandlers.eventHandler) {
+  } else if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.eventHandler.postMessage({
       method: "close"
     });
@@ -214,6 +219,16 @@ SpinToWin.prototype.copyToClipboard = function () {
     window.webkit.messageHandlers.eventHandler.postMessage({
       method: "copyToClipboard",
       couponCode: this.couponCode.innerText
+    });
+  }
+};
+
+SpinToWin.prototype.sendReport  = function () {
+  if (window.Android) {
+    Android.sendReport();
+  } else if (window.webkit && window.webkit.messageHandlers) {
+    window.webkit.messageHandlers.eventHandler.postMessage({
+      method: "sendReport"
     });
   }
 };
@@ -300,7 +315,6 @@ SpinToWin.prototype.validateForm = function () {
   return result;
 };
 
-
 SpinToWin.prototype.handleVisibility = function () {
 
   if (this.spinCompleted) {
@@ -383,7 +397,8 @@ SpinToWin.prototype.styleHandler = function () {
   this.wheelCanvas.height = wheelCanvasHeight;
   var wheelCanvasStyle = {};
 
-  setHiDPICanvas(this.wheelCanvas, wheelCanvasWidth, wheelCanvasHeight, PIXEL_RATIO);    
+  setHiDPICanvas(this.wheelCanvas, wheelCanvasWidth, wheelCanvasHeight, PIXEL_RATIO);
+  setHiDPICanvas(this.arrowCanvas, wheelCanvasWidth, wheelCanvasHeight, PIXEL_RATIO);
 
 
   wheelCanvasStyle.transform = "translateX(0px) rotate(" + this.randomInt(0, 360) + "deg)";
@@ -398,13 +413,11 @@ SpinToWin.prototype.styleHandler = function () {
   this.canvasContainer.style.position = "absolute";
   this.canvasContainer.style.bottom = (-wheelCanvasHeight / 2) + "px";
 
-
-  var arrowContainerTop = (config.r - (config.r / 5.2)) + "px"; // R: 250 top: 205, R: 200 top: 162, R: 150 top: 121
   var styleEl = document.createElement("style"),
     styleString = "#lightbox-outer{}" +
       "#canvas-container{float:left;width:" + config.r + "px;height:" + (2 * config.r) + "px}" +
+      "#arrow-container{float:left;height:" + (2 * config.r) + "px;width:" + config.r + "px;margin:20px 0;overflow:hidden}" +
       "#wheel-container{float:left;height:" + (2 * config.r) + "px;width:" + config.r + "px;margin:20px 0;overflow:hidden}" +
-      "#arrow-container{width:20px;height:30px;display:inline-block;position:absolute;box-sizing:border-box;top:calc(50% - 14px);left:" + (config.r - 10) + "px;z-index:1;transform:rotate(90deg)}" +
       "#form-container{width:300px;box-sizing:border-box;float:right}" +
       "#form-container>div{position:absolute;top:50%;transform:translateY(-50%);margin:0 30px;width: 240px;}" +
       "#form-title, #form-message, #success-message, #promocode-title{text-align:center;}" +
@@ -437,7 +450,7 @@ SpinToWin.prototype.styleHandler = function () {
       "@media only screen and (max-width:2500px){" +
       "#canvas-container{float:unset;width:100%;text-align:center;position:relative}" +
       "#wheel-container{width:" + (config.r * 2) + "px;margin:0 auto;float:unset;transform:rotate(-90deg)}" +
-      "#arrow-container{top:" + arrowContainerTop + ";transform:rotate(45deg);left:calc(50% - 10px)}" +
+      "#arrow-container{width:" + (config.r * 2) + "px;margin:0 auto;float:unset;}" +
       "#form-container{float:unset;width:100%;}" +
       "#form-container>div{transform:unset;top:unset;margin:20px;width:calc(100% - 40px)}" +
       "}";
@@ -451,29 +464,19 @@ SpinToWin.prototype.styleHandler = function () {
   }
 };
 
-//TODO: bunu css'e ekle
-SpinToWin.prototype.getWheelCanvasStyle = function () {
-  var wheelCanvasStyle = {};
-  wheelCanvasStyle.transform = "translateX(0px) rotate(" + this.randomInt(0, 360) + "deg)";
-  wheelCanvasStyle.transitionProperty = "transform";
-  wheelCanvasStyle.transitionDuration = "0s";
-  wheelCanvasStyle.transitionTimingFunction = "ease-out";
-  wheelCanvasStyle.transitionDelay = "0s";
-  wheelCanvasStyle.borderRadius = "50%";
-  return wheelCanvasStyle;
-};
-
-
 SpinToWin.prototype.drawArrow = function () {
+  this.arrowCanvasContext.fillStyle = '#000000';
   this.arrowCanvasContext.beginPath();
-  this.arrowCanvasContext.moveTo(0, 0);
-  this.arrowCanvasContext.lineTo(config.centerX + 100, config.centerY);
-  this.arrowCanvasContext.lineTo(config.centerX, config.centerY + 100);
+  console.log(config.centerX);
+  console.log(config.centerY);
+  var triangleHeight = config.centerY / 3 ;
+  var triangleHalfBase = config.centerY / 7 ;
+  this.arrowCanvasContext.moveTo(config.centerX - triangleHalfBase, config.centerY);
+  this.arrowCanvasContext.lineTo(config.centerX, config.centerY - triangleHeight);
+  this.arrowCanvasContext.lineTo(config.centerX + triangleHalfBase, config.centerY);
+  this.arrowCanvasContext.lineTo(config.centerX - triangleHalfBase, config.centerY);
   this.arrowCanvasContext.closePath();
-  this.arrowCanvasContext.lineWidth = 30;
-  this.arrowCanvasContext.strokeStyle = '#000000';
   this.arrowCanvasContext.stroke();
-  this.arrowCanvasContext.fillStyle = "#000000";
   this.arrowCanvasContext.fill();
 };
 
@@ -488,13 +491,11 @@ SpinToWin.prototype.sliceDrawer = function (sliceNumber, sliceColor) {
 };
 
 
-SpinToWin.prototype.mobileTextTyper = function (sliceNumber, sliceText, sliceColor) {
+SpinToWin.prototype.mobileTextTyper = function (sliceNumber, sliceText) {
   var fontSize = this.config.displaynameTextSize + 10;
   var fontColor = this.config.displaynameTextColor;
   var fontFamily = this.config.displaynameFontFamily;
-
   this.wheelCanvasContext.save();
-
   this.wheelCanvasContext.translate(config.centerX + (Math.cos(sliceNumber * config.angle) * config.r), config.centerY + (Math.sin(sliceNumber * config.angle) * config.r));
   this.wheelCanvasContext.moveTo(config.centerX, config.centerY);
   this.wheelCanvasContext.rotate((config.angle * sliceNumber + config.angle / 2) + (Math.PI / 2));
@@ -505,12 +506,12 @@ SpinToWin.prototype.mobileTextTyper = function (sliceNumber, sliceText, sliceCol
   if (textWidth < arcValue) {
     this.wheelCanvasContext.textAlign = "center";
     sliceText = sliceText.split("|").join(" ");
-    this.wheelCanvasContext.fillText(sliceText, Math.PI * (config.r - fontSize) / config.sliceCount, 10)
+    this.wheelCanvasContext.fillText(sliceText, Math.PI * (config.r - fontSize) / config.sliceCount, 20)
   } else {
     this.wheelCanvasContext.textAlign = "center";
     var lines = sliceText.split("|");
     for (var j = 0; j < lines.length; j++) {
-      this.wheelCanvasContext.fillText(lines[j], Math.PI * (config.r) / config.sliceCount, (j * fontSize) + 10);
+      this.wheelCanvasContext.fillText(lines[j], Math.PI * (config.r) / config.sliceCount, (j * fontSize) + 20);
     }
   }
   this.wheelCanvasContext.restore();
@@ -534,6 +535,7 @@ SpinToWin.prototype.submit = function () {
     }
     window.spinToWin.subscribeEmail();
   }
+  window.spinToWin.sendReport();
   window.spinToWin.handleVisibility();
   window.spinToWin.submitButton.removeEventListener("click", window.spinToWin.submit);
   window.spinToWin.getPromotionCode();
@@ -619,12 +621,9 @@ SpinToWin.prototype.validateEmail = function (email) {
 };
 
 SpinToWin.prototype.setCloseButton = function () {
-
   if (this.config.closeButtonColor == "black") {
-
     this.closeButton.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABvUlEQVRoQ+2Z4U0DMQyFfYsxRIEN2AomQEjMgBisKG0jRac0sf2ec1ZF//Qkkvh9fo4vDZtcP08i8nN7Ll9b85zx8dyIKtp/i+BXEfnsqM0K00JU2S9FbO8PdUA2mLtaZyCZymyU8MteGA64WXO0M1ONVeB04IENQKWtzbRqwuIWpta0Lxn1xAVAJi292jctEARk1nBvE5sXIgK5Yo+6kWtBEMgdc9ZW3Qs7gKBYM5CiBwqgBIJjaECiYWAI6/GDEnDnEG1NrSM1Pi0wu2StIKwyYybkkmQPCApDh0BAvDAhECiIFSYMggGihdG8TrxlDu2RvTBNtkcwEATLEUtr7sHAEGwQT5lRICJALDA0iH+Qwa61bnqaK7SFlGen9Jvd6sQeCE4ovADgBBUGBdE4seQSEAGxQFhemi5NrknKclp61eQB8TjhOZuZtJkGg06EwlhAGE6EwWhBIiCoDUADEglBg5mBrICgwDz8JfZKJygN4GH/0XOkE5AzrSOZIMwNYMnJVHOpBf7q3ApIRifMZaYBmb1rwISrpw8TPgPJAjHdM0Xou4i8dfKSDWIE81HFfonIcwOTFaIH8y0ipz/jH10bOlDCXQAAAABJRU5ErkJggg==";
   } else {
     this.closeButton.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAABwklEQVRoQ+2aa24CMQyE7QuUM7YHK2csF0i1qJF2A0lszxiiVfkDEnnM52fCoiIipZRvEfncPm8vVdX6ecX3UkrZ6bqq6pe2EKvDNBBV7nUD2dMdHLCaZ4ZaR1+uFGZTnbMBK8CYNP4leze83p0zJoh9DlgnvLKKeTQdyqxnYjaQV8tDv/AukAEU0fC08UUWYgFF9+528OiCCBCy5/AogizsBUL3mp6p0A0sQIw9piDZfYYBcW/aFotlwbAgXCBsGCaEG4QFw4YIgaAwGRBhkChMFgQE4oXJhIBBrDCWyojeRs3ldyTGYu3RfBSC4pEqMArDgKCCRMKMBUEH8cAwIf5BeonrzROmVyhVyxNSrRFYMBQQrycyYGAQFKJCoZ6BQCwQVaBnrOUk8ODVyCRrTrRWzoQJeQQRhMwdHnO8HmEIYawBhRZTAHMtV2dnbxzNs14EmXIkA8JzaraU5ilIJgQT5vw/mb7CE228I3ue97ECYhVvT0KuA20BON+jtxU8geTM3SMrQnhL8/AvHKy7Apo7JkPPBlm6KirUMn+qczRgFQhLmG2h9SMiHxn3aIulvWM6hr/VZD/ArOaJSTW7qerlF9bSa7Pl7TDpAAAAAElFTkSuQmCC";
   }
-
 };

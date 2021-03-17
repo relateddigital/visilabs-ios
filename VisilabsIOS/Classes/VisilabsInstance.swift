@@ -419,6 +419,13 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         createSubsJsonRequest(actid: actid, auth: auth, mail: mail, type: "spin_to_win_email")
     }
     
+    func trackSpinToWinClick(spinToWinReport: SpinToWinReport) {
+        var properties = [String: String]()
+        properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
+        properties["OM.zn"] = spinToWinReport.click.parseClick().omZn
+        properties["OM.zpc"] = spinToWinReport.click.parseClick().omZpc
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
     
     
     
