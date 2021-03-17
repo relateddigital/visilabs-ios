@@ -156,7 +156,9 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     }
                 }
                 
-                
+                if method == "sendReport" {
+                    Visilabs.callAPI().trackSpinToWinClick(spinToWinReport: self.spinToWin!.report)
+                }
                 
                 if method == "copyToClipboard", let couponCode = event["couponCode"] as? String  {
                     UIPasteboard.general.string = couponCode
@@ -172,31 +174,6 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 
             }
         }
-        
-        
-        /*
-         if message.name == "initSpinToWin" {
-         //TODO: buraya data gelecek
-         self.webView.evaluateJavaScript("initSpinToWin()") { (data, err) in
-         
-         }
-         }
-         
-         print("*** \(message.name) === \(message.body)")
-         if message.name == "logHandler" {
-         print("LOG: \(message.body)")
-         }
-         guard let body = message.body as? String else {
-         return
-         }
-         if body == "close button clicked" {
-         self.dismiss(animated: true, completion: nil)
-         } else if body.contains("copyToClipboard button clicked") {
-         VisilabsHelper.showCopiedClipboardMessage()
-         self.dismiss(animated: true, completion: nil)
-         }
-         */
-        
     }
 }
 

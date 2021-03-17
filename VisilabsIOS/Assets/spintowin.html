@@ -457,26 +457,21 @@
             position: relative;
         }
 
+        /*
         #arrow-container {
-            width: 20px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             display: inline-block;
             position: absolute;
             box-sizing: border-box;
             top: calc(50% - 14px);
             left: 197px;
             z-index: 1;
-            transform: rotate(90deg);
-        }
+            /* transform: rotate(90deg); */
+        }*/
 
-        #arrow-container {
-            top: 167.19230769230768px;
-            transform: rotate(45deg);
-            left: calc(50% - 10px);
-        }
-
-        #wheel-container {
-            float: left;
+        #wheel-container, #arrow-container {
+            float: unset;
             height: 414px;
             width: 207px;
             margin: 20px 0;
@@ -486,7 +481,6 @@
         #wheel-container {
             width: 414px;
             margin: 0 auto;
-            float: unset;
             transform: rotate(-90deg);
         }
 
@@ -569,12 +563,20 @@
                 </div>
             </div>
 
+            
+
+
             <div id="canvas-container">
-                <div id="arrow-container"><canvas id="arrow-canvas"></canvas></div>
+                <div id="arrow-container" style="position:absolute;z-index:1;">
+                    <!-- <img style="position: absolute; bottom: 0px; width: 50px; height: 50px;z-index: 2;display: block;" src="cone.png" /> -->
+                    <canvas id="arrow-canvas"></canvas>
+                </div>
                 <div id="wheel-container"><canvas id="wheel-canvas"
                         style="transform: translateX(0px) rotate(42deg); transition: transform 0s ease-out 0s; border-radius: 50%;"></canvas>
                 </div>
             </div>
+
+            
 
         </div>
 
@@ -610,7 +612,6 @@
                 window.webkit.messageHandlers.eventHandler.postMessage({ method: "console.log", message: stringMessage });
             };
         }
-
     </script>
 </body>
 
