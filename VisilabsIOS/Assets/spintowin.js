@@ -294,10 +294,16 @@ SpinToWin.prototype.setContent = function () {
   this.successMessageElement.innerHTML = this.config.successMessage;
   this.successMessageElement.style.color = "green";
 
-  this.promocodeTitleElement.innerHTML = this.config.promocodeTitle;
+  this.promocodeTitleElement.innerHTML = this.config.promocodeTitle.replace(/\\n/g, '<br/>');
   this.promocodeTitleElement.style.color = this.config.promocodeTitleTextColor;
   this.promocodeTitleElement.style.fontFamily = this.config.promocodeTitleFontFamily;
   this.promocodeTitleElement.style.fontSize = (this.config.promocodeTitleTextSize + 20) + "px";
+
+  this.container.addEventListener("click", function(event) {
+    if(event.target.tagName != "INPUT") {
+      document.activeElement.blur();
+    }
+  } );
 
   this.submitButton.addEventListener("click", this.submit);
   this.closeButton.addEventListener("click", evt => this.close());
