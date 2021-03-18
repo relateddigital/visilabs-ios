@@ -76,10 +76,8 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     }
                 }
                 
-                if method == "subscribeEmail" {
-                    if let email = event["email"] as? String {
-                        Visilabs.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
-                    }
+                if method == "subscribeEmail", let email = event["email"] as? String  {
+                    Visilabs.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
                 }
                 
                 if method == "getPromotionCode" {
