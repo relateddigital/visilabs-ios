@@ -110,10 +110,10 @@ function SpinToWin(config) {
     window.spinToWin.styleHandler();
   }
 
-  
 
 
-  
+
+
 
   for (var i = 0; i < config.sliceCount; i++) {
     this.sliceDrawer(i, config.colors[i]);
@@ -223,12 +223,21 @@ SpinToWin.prototype.copyToClipboard = function () {
   }
 };
 
-SpinToWin.prototype.sendReport  = function () {
+SpinToWin.prototype.sendReport = function () {
   if (window.Android) {
     Android.sendReport();
   } else if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.eventHandler.postMessage({
       method: "sendReport"
+    });
+  }
+};
+
+SpinToWin.prototype.openUrl = function (url) {
+  if (window.webkit && window.webkit.messageHandlers) {
+    window.webkit.messageHandlers.eventHandler.postMessage({
+      method: "openUrl",
+      url : url
     });
   }
 };
@@ -353,6 +362,17 @@ SpinToWin.prototype.handleVisibility = function () {
     } else {
       this.warning.style.display = "none";
     }
+
+    if (this.isNullOrWhitespace(this.consentText.innerHTML)) {
+      this.consentCheckbox.style.display = "none";
+      this.consentContainer.style.display = "none";
+    }
+
+    if (this.isNullOrWhitespace(this.emailPermitText.innerHTML)) {
+      this.emailPermitCheckbox.style.display = "none";
+      this.emailPermitContainer.style.display = "none";
+    }
+
   } else {
     this.emailInput.style.display = "none";
     this.consentContainer.style.display = "none";
@@ -414,8 +434,7 @@ SpinToWin.prototype.styleHandler = function () {
   this.canvasContainer.style.bottom = (-wheelCanvasHeight / 2) + "px";
 
   var styleEl = document.createElement("style"),
-    styleString = "#lightbox-outer{}" +
-      "#canvas-container{float:left;width:" + config.r + "px;height:" + (2 * config.r) + "px}" +
+    styleString = "#canvas-container{float:left;width:" + config.r + "px;height:" + (2 * config.r) + "px}" +
       "#arrow-container{float:left;height:" + (2 * config.r) + "px;width:" + config.r + "px;margin:20px 0;overflow:hidden}" +
       "#wheel-container{float:left;height:" + (2 * config.r) + "px;width:" + config.r + "px;margin:20px 0;overflow:hidden}" +
       "#form-container{width:300px;box-sizing:border-box;float:right}" +
@@ -424,7 +443,6 @@ SpinToWin.prototype.styleHandler = function () {
       "#warning{display:none; position: absolute; z-index: 3; background: #fcf6c1; font-size: 12px; border: 1px solid #ccc; top: 105%;width: 100%; box-sizing: border-box;}" +
       "#warning>ul{margin: 2px;padding-inline-start: 20px;}" +
       "#form-consent{font-size:12px;color:#555;width:100%;padding:5px 0;position:relative;}" +
-      "#form-aggreement-link{color:#555;opacity:.75;text-decoration:none}" +
       "#form-consent input[type='checkbox']{opacity:0;position:absolute}" +
       "#form-consent label{position:relative;display:inline-block;padding-left:18px}" +
       "#form-consent label::before," +
@@ -434,16 +452,6 @@ SpinToWin.prototype.styleHandler = function () {
       "#form-consent input[type='checkbox']+label::after{content:none}" +
       "#form-consent input[type='checkbox']:checked+label::after{content:''}" +
       "#form-consent input[type='checkbox']:focus+label::before{outline:#3b99fc auto 5px}" +
-      "#form-emailpermit{font-size:12px;color:#555;width:100%;padding:5px 0;position:relative;}" +
-      "#form-emailpermit input[type='checkbox']{opacity:0;position:absolute}" +
-      "#form-emailpermit label{position:relative;display:inline-block;padding-left:18px}" +
-      "#form-emailpermit label::before," +
-      "#form-emailpermit label::after{position:absolute;content:'';display:inline-block;cursor:pointer}" +
-      "#form-emailpermit label::before{height:12px;width:12px;border:1px solid;left:0;top:0}" +
-      "#form-emailpermit label::after{height:4px;width:8.5px;border-left:2px solid;border-bottom:2px solid;transform:rotate(-45deg);left:2px;top:2px}" +
-      "#form-emailpermit input[type='checkbox']+label::after{content:none}" +
-      "#form-emailpermit input[type='checkbox']:checked+label::after{content:''}" +
-      "#form-emailpermit input[type='checkbox']:focus+label::before{outline:#3b99fc auto 5px}" +
       ".form-submit-btn{transition:.2s filter ease-in-out;}" +
       ".form-submit-btn:hover{filter: brightness(110%);transition:.2s filter ease-in-out;}" +
       ".form-submit-btn.disabled{filter: grayscale(100%);transition:.2s filter ease-in-out;}" +
@@ -469,8 +477,8 @@ SpinToWin.prototype.drawArrow = function () {
   this.arrowCanvasContext.beginPath();
   console.log(config.centerX);
   console.log(config.centerY);
-  var triangleHeight = config.centerY / 3 ;
-  var triangleHalfBase = config.centerY / 7 ;
+  var triangleHeight = config.centerY / 3;
+  var triangleHalfBase = config.centerY / 7;
   this.arrowCanvasContext.moveTo(config.centerX - triangleHalfBase, config.centerY);
   this.arrowCanvasContext.lineTo(config.centerX, config.centerY - triangleHeight);
   this.arrowCanvasContext.lineTo(config.centerX + triangleHalfBase, config.centerY);
@@ -552,12 +560,7 @@ SpinToWin.prototype.spin = function (sliceIndex, promotionCode) {
   window.spinToWin.spinHandler(sliceIndex);
 };
 
-
-
 SpinToWin.prototype.spinHandler = function (result) {
-
-  var spinHandler_R = window.spinToWin.r;
-  var spinHandler_isMobile = true; //window.visilabs_spin_to_win.isMobile;
   var vl_form_input = document.getElementById("vl-form-input");
   if (vl_form_input !== null)
     vl_form_input.setAttribute("disabled", "");
@@ -567,7 +570,7 @@ SpinToWin.prototype.spinHandler = function (result) {
   var vl_form_checkbox_emailpermit = document.getElementById("vl-form-checkbox-emailpermit");
   if (vl_form_checkbox_emailpermit !== null)
     vl_form_checkbox_emailpermit.setAttribute("disabled", "");
-  var vl_form_submit_btn = document.getElementsByClassName("form-submit-btn"); // document.getElementsByClassName("vl-form-submit-btn");
+  var vl_form_submit_btn = document.getElementsByClassName("form-submit-btn");
   if (vl_form_submit_btn !== null)
     vl_form_submit_btn[0].classList.add("disabled");
   var currentAngle = Math.round((parseFloat(this.wheelCanvas.style.transform.split("(")[2]) % 360));
@@ -577,14 +580,13 @@ SpinToWin.prototype.spinHandler = function (result) {
   var spinDeg = (spinCount * 360) + (startSlice - result) * sliceDeg;
   var spinDuration = parseFloat((spinDeg / 360).toFixed(2));
   spinDuration = spinDuration > 7.5 ? 7.5 : spinDuration;
-  this.wheelCanvas.style.transform = "translateX(" + (spinHandler_isMobile ? 0 : -spinHandler_R) + "px) rotate(" + (spinDeg + currentAngle) + "deg)";
+  this.wheelCanvas.style.transform = "translateX(0px) rotate(" + (spinDeg + currentAngle) + "deg)";
   this.wheelCanvas.style.transitionDuration = spinDuration + "s";
   setTimeout(function () {
-    window.spinToWin.wheelCanvas.style.transform = "translateX(" + (spinHandler_isMobile ? 0 : -spinHandler_R) + "px) rotate(" + (spinDeg + currentAngle) % 360 + "deg)";
+    window.spinToWin.wheelCanvas.style.transform = "translateX(0px) rotate(" + (spinDeg + currentAngle) % 360 + "deg)";
     window.spinToWin.wheelCanvas.style.transitionDuration = "0s";
     window.spinToWin.resultHandler(window.spinToWin.config.slices[result]);
   }, spinDuration * 1000);
-
 };
 
 SpinToWin.prototype.resultHandler = function (res) {
@@ -597,12 +599,34 @@ SpinToWin.prototype.resultHandler = function (res) {
 
 //Helper functions
 
-//TODO: burada href olmamalı. ios ya da android'deki native tarayıca yönlendirme yapılmalı
 SpinToWin.prototype.prepareCheckboxHtmls = function (text, url) {
-  if (this.isNullOrWhitespace(url)) {
+  if (this.isNullOrWhitespace(text)) {
+    return "";
+  }
+  else if (this.isNullOrWhitespace(url)) {
+    return text.replaceAll('<LINK>', '').replaceAll('</LINK>', '');
+  }
+  else if (!text.includes("<LINK>")) {
+    if (window.webkit && window.webkit.messageHandlers.eventHandler) {
+      return '<a href="javascript:window.spinToWin.openUrl(\'' + url + '\')">' + text +  '</a>';
+    } else {
+      return '<a href="' + url + '">' + text + '</a>';
+    }
+  } else {
+    var linkRegex = /<LINK>(.*?)<\/LINK>/g;
+    var regexResult;
+    while((regexResult = linkRegex.exec(text)) !== null) {
+      var outerHtml = regexResult[0];
+      var innerHtml = regexResult[1];
+      if (window.webkit && window.webkit.messageHandlers.eventHandler) {
+        var link = '<a href="javascript:window.spinToWin.openUrl(\'' + url + '\')">' + innerHtml +  '</a>';
+        text = text.replace(outerHtml, link);
+      } else {
+        var link = '<a href="' + url + '">' + innerHtml +  '</a>';
+        text = text.replace(outerHtml, link);
+      }
+    }
     return text;
-  } else if (!text.includes("<LINK>")) {
-    return '<a href="' + url + '">' + text + '</a>';
   }
 };
 
