@@ -611,7 +611,83 @@
                 }
                 window.webkit.messageHandlers.eventHandler.postMessage({ method: "console.log", message: stringMessage });
             };
+        } else {
+            window.BrowserTest = {
+                getPromotionCode: function() {
+                    window.chooseSlice(0, 'asd');
+                },
+                sendReport: function() {
+                    
+                }
+            };
+            config = {
+                "actid": 130,
+                "title": "Spin-To-Win Test",
+                "actiontype": "SpinToWin",
+                "actiondata": {
+                    "slices": [
+                        {
+                            "displayName": "Promotion1",
+                            "color": "#dc246d",
+                            "code": "190708hopa",
+                            "type": "promotion"
+                        },
+                        {
+                            "displayName": "Promotion2",
+                            "color": "#1ddeea",
+                            "code": "190708hopa",
+                            "type": "promotion"
+                        },
+                        {
+                            "displayName": "Static1",
+                            "color": "#d824dc",
+                            "code": "123456",
+                            "type": "staticcode"
+                        },
+                        {
+                            "displayName": "Pass1",
+                            "color": "#f5f400",
+                            "code": "",
+                            "type": "pass"
+                        },
+                        {
+                            "displayName": "Pass2",
+                            "color": "#f5a200",
+                            "code": "",
+                            "type": "pass"
+                        }
+                    ],
+                    "mail_subscription": true,
+                    "spin_to_win_content": {
+                        "title": "Title",
+                        "message": "Body Text",
+                        "placeholder": "Your e-mail",
+                        "button_label": "START",
+                        "consent_text": "I've read and accept.<LINK> url1 </LINK> Consent Text <LINK> url2  </LINK> asdfas",
+                        "invalid_email_message": "Invalid Email Message",
+                        "success_message": "Success Message",
+                        "emailpermit_text": "Email Permit Text",
+                        "check_consent_message": "Consent Text Not Checked",
+                        "promocode_title": "Promotion Code",
+                        "copybutton_label": "Copy to Clipboard"
+                    },
+                    "font_size": 0,
+                    "circle_R": 0,
+                    "waiting_time": 0,
+                    "promoAuth": "9AF019D4A6DA3AA668EE459D286F331BF271920C7BD190F2175F8CAB261CE7EE",
+                    "slice_count": "7",
+                    "sendemail": false,
+                    "courseofaction": "GetExistingPromoCode",
+                    "ExtendedProps": "%7B%22displayname_text_color%22%3A%22%230029ff%22%2C%22displayname_font_family%22%3A%22sansserif%22%2C%22displayname_text_size%22%3A%2210%22%2C%22title_text_color%22%3A%22%23301fb4%22%2C%22title_font_family%22%3A%22default%22%2C%22title_text_size%22%3A%2210%22%2C%22text_color%22%3A%22%237771e2%22%2C%22text_font_family%22%3A%22serif%22%2C%22text_size%22%3A%224%22%2C%22button_color%22%3A%22%233047bf%22%2C%22button_text_color%22%3A%22%23e1ebf0%22%2C%22button_font_family%22%3A%22default%22%2C%22button_text_size%22%3A%221%22%2C%22promocode_title_text_color%22%3A%22%233fd077%22%2C%22promocode_title_font_family%22%3A%22serif%22%2C%22promocode_title_text_size%22%3A%227%22%2C%22promocode_background_color%22%3A%22%23f4f2f3%22%2C%22promocode_text_color%22%3A%22%23000000%22%2C%22copybutton_color%22%3A%22%232da656%22%2C%22copybutton_text_color%22%3A%22%23f7f7f4%22%2C%22copybutton_font_family%22%3A%22sansserif%22%2C%22copybutton_text_size%22%3A%223%22%2C%22emailpermit_text_size%22%3A%225%22%2C%22emailpermit_text_url%22%3A%22https%3A%2F%2Fapp.visilabs.net%2F%22%2C%22consent_text_size%22%3A%222%22%2C%22consent_text_url%22%3A%22https%3A%2F%2Fapp.visilabs.net%2F%22%2C%22close_button_color%22%3A%22black%22%2C%22background_color%22%3A%22%23c6edee%22%7D",
+                    "report": {
+                        "impression": "",
+                        "click": "OM.zpc=acttype-27&OM.zn=act-130"
+                    }
+                }
+            };
+            initSpinToWin(config);
         }
+
     </script>
 </body>
 
