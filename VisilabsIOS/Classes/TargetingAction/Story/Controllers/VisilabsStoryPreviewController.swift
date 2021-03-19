@@ -43,6 +43,8 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         }
         return self._view.snapsCollectionView.cellForItem(at: indexPath) as? VisilabsStoryPreviewCell
     }
+    
+    weak var storyUrlDelegate: VisilabsStoryURLDelegate? = nil
 
     // MARK: - Overriden functions
     override func loadView() {
@@ -129,6 +131,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDataSource {
         let story = viewModel?.cellForItemAtIndexPath(indexPath)
         cell.story = story
         cell.delegate = self
+        cell.storyUrlDelegate = self.storyUrlDelegate
         currentIndexPath = indexPath
         nStoryIndex = indexPath.item
         return cell

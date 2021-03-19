@@ -80,6 +80,8 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
     @objc func showStory(sender: UIButton!) {
         storyHomeView?.removeFromSuperview()
         storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""))
+        //If you want to handle URL, you can call as following
+//        storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""), urlDelegate: self)
         self.view.addSubview(storyHomeView!)
         storyHomeView!.translatesAutoresizingMaskIntoConstraints = false
         storyHomeView!.topAnchor.constraint(equalTo: storyButton.bottomAnchor, constant: 20).isActive = true
@@ -96,5 +98,11 @@ extension UIView {
             } else {
                 return self.layoutMarginsGuide
             }
+    }
+}
+
+extension StoryViewController: VisilabsStoryURLDelegate {
+    func urlClicked(_ url: URL) {
+        print("You can handle url as you like!")
     }
 }
