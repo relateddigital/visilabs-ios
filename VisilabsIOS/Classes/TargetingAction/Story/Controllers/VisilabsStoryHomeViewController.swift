@@ -19,6 +19,8 @@ public class VisilabsStoryHomeViewController: NSObject,
             collectionView.delegate = self
         }
     }
+    
+    public weak var urlDelegate: VisilabsStoryURLDelegate? = nil
 
     var storyAction: VisilabsStoryAction!
     var storiesLoaded = false
@@ -48,7 +50,9 @@ public class VisilabsStoryHomeViewController: NSObject,
                     as? VisilabsStoryHomeViewCell else {
                 fatalError()
             }
-            self.storyAction.stories = sortStories(stories: self.storyAction.stories)
+            if self.storyAction.extendedProperties.moveShownToEnd {
+                self.storyAction.stories = sortStories(stories: self.storyAction.stories)
+            }
             cell.story = self.storyAction.stories[indexPath.row]
             cell.setProperties(self.storyAction.extendedProperties, self.storyAction.actionId)
             cell.layoutIfNeeded()
@@ -73,7 +77,7 @@ public class VisilabsStoryHomeViewController: NSObject,
                 }
                 let storyPreviewScene = VisilabsStoryPreviewController.init(stories: self.storyAction.stories,
                                                 handPickedStoryIndex: indexPath.row, handPickedSnapIndex: 0)
-                
+                storyPreviewScene.storyUrlDelegate = self.urlDelegate
                 storyPreviewScene.modalPresentationStyle = .fullScreen
                 let app = VisilabsInstance.sharedUIApplication()
                 app?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: collectionView.reloadData)
@@ -134,4 +138,8 @@ public class VisilabsStoryHomeViewController: NSObject,
         }
         UserDefaults.standard.setValue(shownStories, forKey: VisilabsConstants.shownStories)
     }
+}
+
+public protocol VisilabsStoryURLDelegate: class {
+    func urlClicked( _ url: URL)
 }

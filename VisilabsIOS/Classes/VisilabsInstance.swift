@@ -413,10 +413,11 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
 extension VisilabsInstance {
 
-    public func getStoryView(actionId: Int? = nil) -> VisilabsStoryHomeView {
+    public func getStoryView(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil) -> VisilabsStoryHomeView {
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
         let storyHomeViewController = VisilabsStoryHomeViewController()
+        storyHomeViewController.urlDelegate = urlDelegate
         storyHomeView.controller = storyHomeViewController
         self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid] = storyHomeViewController
         self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] = storyHomeView
