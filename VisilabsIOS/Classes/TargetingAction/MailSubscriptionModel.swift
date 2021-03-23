@@ -48,7 +48,8 @@ public enum ButtonColor: String {
     case white
 }
 
-public struct MailSubscriptionViewModel {
+public struct MailSubscriptionViewModel : TargetingActionViewModel {
+    public var targetingActionType: TargetingActionType
     var auth: String
     var actId: Int
     var type: String
