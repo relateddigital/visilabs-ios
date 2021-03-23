@@ -44,8 +44,8 @@ class InAppViewController: FormViewController {
 
     func initializeForm() {
 
-        VisilabsInAppNotificationType.allCases.forEach {
-            notificationTypes.append($0.rawValue)
+        for counter in 0..<10 {
+            notificationTypes.append(VisilabsInAppNotificationType.allCases[counter].rawValue)
         }
 
         LabelRow.defaultCellUpdate = { cell, _ in
@@ -168,7 +168,7 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
     }
-    
+
     func setFormRowsForPromoCode() {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)?.hidden = false

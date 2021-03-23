@@ -49,6 +49,11 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         return webView
     }
     
+    private func close() {
+        dismiss(animated: true) {
+            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+        }
+    }
 }
 
 extension SpinToWinViewController: WKScriptMessageHandler {
@@ -147,12 +152,11 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 if method == "copyToClipboard", let couponCode = event["couponCode"] as? String  {
                     UIPasteboard.general.string = couponCode
                     VisilabsHelper.showCopiedClipboardMessage()
+                    self.close()
                 }
                 
                 if method == "close" {
-                    dismiss(animated: true) {
-                        self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
-                    }
+                    self.close()
                 }
                 
                 if method == "openUrl", let urlString = event["url"] as? String, let url = URL(string: urlString)  {
