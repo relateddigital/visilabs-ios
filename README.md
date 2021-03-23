@@ -23,6 +23,7 @@
         - [Story Actions](#Story-Actions)
         - [Geofencing](#Geofencing)
         - [Mail Subscription Form](#Mail-Subscription-Form)
+        - [Spin To Win](#Spin-To-Win)
     - [Recommendation](#Recommendation)
 
 
@@ -458,6 +459,12 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 After form is created at **RMC** panel, likewise **in-app message**, existence of mail subscription form is controlled by after each `customEvent` call. It is shown as follows;
 
 ![mail-subscription-form](/Screenshots/InAppNotification/mail-subscription-form.png)
+
+### Spin To Win
+
+After form is created at **RMC** panel, likewise **in-app message**, existence of spin to win is controlled by after each `customEvent` call. It opens a WebViewController. It is shown as follows;
+
+![spin-to-win](/Screenshots/half_spin.png)
 
 ## Recommendation
 
