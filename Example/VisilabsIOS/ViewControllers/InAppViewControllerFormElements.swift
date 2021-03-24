@@ -142,7 +142,7 @@ extension InAppViewController {
             $0.options = InAppHelper.miniIcons
             $0.value = InAppHelper.miniIcons.first!
         }.cellSetup { cell, _ in
-            cell.imageView?.image = InAppHelper.miniIconImages.first!.value
+            cell.imageView?.image = InAppHelper.miniIconImages.first?.value
         }.cellUpdate { cell, row in
             cell.imageView?.image = InAppHelper.miniIconImages[row.value!]
         }
