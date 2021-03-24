@@ -414,6 +414,23 @@ let storyView = Visilabs.callAPI().getStoryView(actionId: 67)
 view.addSubview(storyHomeView)
 ```
 
+If you add a clickable URL, framework handle to open it on browser (or direct by deeplink). However, if you want to handle by yourself, extend your class that conforms VisilabsStoryURLDelegate, as following;
+
+```swift
+extension StoryViewController: VisilabsStoryURLDelegate {
+    func urlClicked(_ url: URL) {
+        //TO DO
+    }
+}
+```
+After you add this, you can set urlDelegate self.
+
+```swift
+let storyView = Visilabs.callAPI().getStoryView(actionId: 67, urlDelegate: self)
+view.addSubview(storyHomeView)
+```
+If you set delegate, then clickable URL will not be handled by SDK!
+
 ### Geofencing
 
 To enable location services in your application first of all you need to add the following keys to your `Info.plist` file.
