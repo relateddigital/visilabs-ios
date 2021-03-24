@@ -144,6 +144,7 @@ struct VisilabsConstants {
     static let storyzimgBorderColor = "storyz_img_borderColor"
     static let storyzImgBorderRadius = "storyz_img_borderRadius"
     static let shownStories = "shownStories"
+    static let moveShownToEnd = "moveShownToEnd"
     //Email form constants
     static let message = "message"
     static let placeholder = "placeholder"

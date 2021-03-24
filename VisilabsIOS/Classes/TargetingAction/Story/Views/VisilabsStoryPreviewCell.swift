@@ -27,6 +27,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     public weak var delegate: VisilabsStoryPreviewProtocol? {
         didSet { storyHeaderView.delegate = self }
     }
+    
+    weak var storyUrlDelegate: VisilabsStoryURLDelegate? = nil
 
     // MARK: - Private iVars
     private lazy var storyHeaderView: VisilabsStoryPreviewHeaderView = {
@@ -423,7 +425,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             if story.clickQueryItems.count > 0 {
                 Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: story.clickQueryItems)
             }
-            if story.items[snapIndex].targetUrl.count > 0, let snapUrl = URL(string: story.items[snapIndex].targetUrl) {
+            if let del = self.storyUrlDelegate, let url = URL(string: story.items[snapIndex].targetUrl) {
+                del.urlClicked(url)
+                VisilabsLogger.info("Opening Story URL is delegated!! Url: \(url)")
+            } else if story.items[snapIndex].targetUrl.count > 0, let snapUrl = URL(string: story.items[snapIndex].targetUrl) {
                 VisilabsLogger.info("opening CTA URL: \(snapUrl)")
                 VisilabsInstance.sharedUIApplication()?.performSelector(onMainThread:
                                     NSSelectorFromString("openURL:"), with: snapUrl, waitUntilDone: true)

@@ -42,4 +42,5 @@ class VisilabsStoryActionExtendedProperties {
     //var imageBoxShadow: String? // "rgba(0,0,0,0.4) 5px 5px 10px" // TO_DO: buna sonra bak
     var imageBorderColor = UIColor.clear //"#cc3a3a"
     var labelColor = UIColor.black //"#a83c3c"
+    var moveShownToEnd = true
 }
