@@ -646,6 +646,12 @@ class VisilabsTargetingAction {
                boxShadowString.count > 0 {
                 props.imageBoxShadow = true
             }
+            
+            if let moveEnd = extendedProps[VisilabsConstants.moveShownToEnd] as? String, moveEnd.lowercased() == "false" {
+                props.moveShownToEnd = false
+            } else {
+                props.moveShownToEnd = true
+            }
         }
         return props
     }
