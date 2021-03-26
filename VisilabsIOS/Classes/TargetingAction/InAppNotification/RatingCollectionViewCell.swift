@@ -23,13 +23,13 @@ class RatingCollectionViewCell: UICollectionViewCell {
             self.ratingLabel.text = "\(rating)"
         }
     }
-    
+    var borderColor: UIColor = .white
     var gradientColors: [CGColor] = [UIColor.blue.cgColor, UIColor.red.cgColor]
     
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                self.contentView.layer.borderColor = UIColor.white.cgColor
+                self.contentView.layer.borderColor = borderColor.cgColor
                 self.contentView.layer.borderWidth = 1.8
             } else {
                 self.contentView.transform = CGAffineTransform(scaleX: 1, y: 1)
