@@ -135,7 +135,8 @@ extension VisilabsPopupDialogDefaultView {
     
     internal func setNumberRating() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 60.0
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.register(RatingCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -262,6 +263,7 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(titleLabel)
         addSubview(messageLabel)
         addSubview(numberRating)
+        self.numberBorderColor = self.setBorderColorOfCell()
         guard let numberColors = self.visilabsInAppNotification?.numberColors else { return }
         if numberColors.count == 3 {
             self.colors = UIColor.getGradientColorArray(numberColors[0], numberColors[1], numberColors[2])
@@ -387,6 +389,19 @@ extension VisilabsPopupDialogDefaultView {
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
         messageLabel.bottom(to: self, offset: -10.0)
     }
+    
+    private func setBorderColorOfCell() -> UIColor {
+        guard let bgColor = self.backgroundColor else { return .white }
+        let red = bgColor.rgba.red
+        let green = bgColor.rgba.green
+        let blue = bgColor.rgba.blue
+        let tot = red + green + blue
+        if tot < 2.7 {
+            return .white
+        } else {
+            return .black
+        }
+    }
 }
 
 extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -403,6 +418,7 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RatingCollectionViewCell
         cell.rating = indexPath.row + 1
+        cell.borderColor = self.numberBorderColor
         if self.colors.count == 10 {
             cell.setGradient(colors: self.colors[indexPath.row])
         } else {
@@ -428,7 +444,7 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 10
     }
     
 }
