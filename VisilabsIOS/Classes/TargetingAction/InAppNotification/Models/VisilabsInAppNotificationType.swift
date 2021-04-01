@@ -5,6 +5,8 @@
 //  Created by Egemen on 14.07.2020.
 //
 
+//Spin to win is not a in-app however it should be in this list
+//It must be at the end of the list
 public enum VisilabsInAppNotificationType: String, CaseIterable {
     case mini
     case full
@@ -16,5 +18,6 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case emailForm = "mailsubsform"
     case alert
     case npsWithNumbers = "nps_with_numbers"
+    case carousel = "carousel"
     case spintowin
 }

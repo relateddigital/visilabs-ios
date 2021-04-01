@@ -44,7 +44,7 @@ class InAppViewController: FormViewController {
 
     func initializeForm() {
 
-        for counter in 0..<10 {
+        for counter in 0..<11 {
             notificationTypes.append(VisilabsInAppNotificationType.allCases[counter].rawValue)
         }
 
@@ -97,7 +97,7 @@ class InAppViewController: FormViewController {
         switch messageType {
         case .mini:
             setFormRowsForMini()
-        case .full, .imageTextButton:
+        case .full, .imageTextButton, .carousel:
             setFormRowsForDefault()
         case .nps, .smileRating:
             setFormRowsForPromoCode()

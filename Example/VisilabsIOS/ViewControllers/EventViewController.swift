@@ -41,7 +41,8 @@ class EventViewController: FormViewController {
                                 "mailsubsform": 417,
                                 "alert": 395,
                                 "nps_with_numbers": 493,
-                                "spintowin": 130]
+                                "spintowin": 130,
+                                "carousel": 999]
 
     override func viewDidLoad() {
         super.viewDidLoad()

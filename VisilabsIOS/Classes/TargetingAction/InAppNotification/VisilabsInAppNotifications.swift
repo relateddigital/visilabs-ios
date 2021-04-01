@@ -43,6 +43,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     shownNotification = self.showMiniNotification(notification)
                 case .full:
                     shownNotification = self.showFullNotification(notification)
+                case .carousel:
+                    shownNotification = self.showCarouselNotification(notification)
                 case .alert:
                     shownNotification = true
                     self.showAlert(notification)
@@ -113,6 +115,14 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         fullNotificationVC.show(animated: true)
         return true
     }
+
+    func showCarouselNotification(_ notification: VisilabsInAppNotification) -> Bool {
+        let carouselVC = VisilabsCarouselNotificationViewController(notification: notification)
+        carouselVC.delegate = self
+        carouselVC.show(animated: true)
+        return true
+    }
+    
 
     func showAlert(_ notification: VisilabsInAppNotification) {
         let title = notification.messageTitle?.removeEscapingCharacters()

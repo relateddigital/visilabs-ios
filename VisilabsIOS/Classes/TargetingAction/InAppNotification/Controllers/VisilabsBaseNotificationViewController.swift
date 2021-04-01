@@ -50,7 +50,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
         if self.mailForm != nil || self.spinToWin != nil {
             return
         }
-        if let not = self.notification, not.type == .fullImage {
+        if let not = self.notification, not.type == .fullImage || not.type == .carousel {
             return
         }
         let touch = touches.first
