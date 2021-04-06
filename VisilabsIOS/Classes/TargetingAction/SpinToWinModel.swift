@@ -35,6 +35,8 @@ public struct SpinToWinViewModel : TargetingActionViewModel, Codable {
     var sliceCount: String
     var slices: [SpinToWinSliceViewModel]
     var report: SpinToWinReport
+    var taTemplate: String
+    var img: String
     
     
     //ExtendedProps
