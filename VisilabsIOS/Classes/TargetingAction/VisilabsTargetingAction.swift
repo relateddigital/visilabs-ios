@@ -139,6 +139,12 @@ class VisilabsTargetingAction {
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
         guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
         //guard let report = actionData[VisilabsConstants.report] as? [String: Any] else { return nil } //mail_subscription false olduğu zaman report gelmiyor.
+       
+        let taTemplate = actionData[VisilabsConstants.taTemplate] as? String ?? "half_spin"
+        let img = actionData[VisilabsConstants.img] as? String ?? ""
+        
+        
+        
         let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
         let actid = spinToWin[VisilabsConstants.actid] as? Int ?? 0
         let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
@@ -213,7 +219,7 @@ class VisilabsTargetingAction {
                            , message: message, placeholder: placeholder, buttonLabel: buttonLabel, consentText: consentText, emailPermitText: emailPermitText
                            , successMessage: successMessage, invalidEmailMessage: invalidEmailMessage, checkConsentMessage: checkConsentMessage
                            , promocodeTitle: promocodeTitle, copyButtonLabel: copybuttonLabel, mailSubscription: mailSubscription, sliceCount: sliceCount
-                           , slices: sliceArray, report: spinToWinReport, displaynameTextColor: displaynameTextColor
+                           , slices: sliceArray, report: spinToWinReport, taTemplate: taTemplate, img: img, displaynameTextColor: displaynameTextColor
                            , displaynameFontFamily: displaynameFontFamily, displaynameTextSize: displaynameTextSize, titleTextColor: titleTextColor
                            , titleFontFamily: titleFontFamily, titleTextSize: titleTextSize, textColor: textColor, textFontFamily: textFontFamily
                            , textSize: textSize, buttonColor: button_color, buttonTextColor: button_text_color, buttonFontFamily: buttonFontFamily
