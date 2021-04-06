@@ -304,22 +304,24 @@ extension InAppViewController {
     }
 
     func showNotificationTapped() {
-
-        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
-        print("Form erros count: \(errors.count)")
-        for error in errors {
-            print(error.msg)
-        }
-        if errors.count > 0 {
-            return
-        }
-        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
-        if value == "emailForm" {
-            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
-        } else {
-            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
-            Visilabs.callAPI().showNotification(visilabsInAppNotification)
-        }
+        let vc = ShakeToWinViewController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+//        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
+//        print("Form erros count: \(errors.count)")
+//        for error in errors {
+//            print(error.msg)
+//        }
+//        if errors.count > 0 {
+//            return
+//        }
+//        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
+//        if value == "emailForm" {
+//            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+//        } else {
+//            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
+//            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+//        }
     }
 
     func addNumberBGColor(_ colorId: String) -> TextRow {
