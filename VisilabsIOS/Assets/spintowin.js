@@ -29,7 +29,7 @@
                         letterSpacing: 0,
                         textColor: '#fff',
                         centerWidth: 45,
-                        shadow: '#fff0',
+                        shadow: '', // '#fff0', // egemen
                         shadowOpacity: 0,
                         centerLineWidth: 5,
                         centerLineColor: '#424242',
@@ -193,38 +193,7 @@
                 //var linesGroup = $('<g/>'); // egemen
                 var smallCirclesGroup = $('<g/>');
                 slicesGroup.addClass('ew-slicesGroup').appendTo(Layersvg);
-                
-                if (typeof self.o.shadow === 'string' && $.trim(self.o.shadow) !== '') {
-                    var radialGradient = $(self.SVG('radialGradient', {
-                        'id': 'SVGID_1_',
-                        'cx': '50%',
-                        'cy': '50%',
-                        'r': '50%',
-                        'gradientUnits': 'userSpaceOnUse',
-                    })).appendTo(Layersvg);
-                    var LayerStop = self.SVG('stop', {
-                        'offset': '0.1676',
-                        'style': 'stop-color:' + self.o.shadow + ';stop-opacity:1'
-                    }).outerHTML + self.SVG('stop', {
-                        'offset': '0.5551',
-                        'style': 'stop-color:' + self.o.shadow + ';stop-opacity:1'
-                    }).outerHTML + self.SVG('stop', {
-                        'offset': '0.6189',
-                        'style': 'stop-color:' + self.o.shadow + ';stop-opacity:1'
-                    }).outerHTML + self.SVG('stop', {
-                        'offset': '1',
-                        'style': 'stop-color:' + self.o.shadow + ';stop-opacity:0'
-                    }).outerHTML;
-                    $(LayerStop).appendTo(radialGradient);
-                    $(self.SVG('circle', {
-                        'cx': '50%',
-                        'cy': '50%',
-                        'r': '50%',
-                        'stroke-width': '0',
-                        'fill-opacity': parseInt(self.o.shadowOpacity) < 9 ? '0.' + parseInt(self.o.shadowOpacity) : 1,
-                        'fill': 'url(#SVGID_1_)'
-                    })).appendTo(Layersvg);
-                }
+
                 //linesGroup.appendTo(Layersvg); // egemen
                 if (self.o.textLine === 'v' || self.o.textLine === 'vertical') {
                     var Layertext = $('<div/>');
@@ -293,22 +262,6 @@
                         'data-fill': item.color,
                         'd': arcD
                     }));
-                    
-                    /*egemen
-                    linesGroup.append(self.SVG('path', {
-                        'stroke-width': 0,
-                        'fill': self.o.sliceLineColor,
-                        'd': self.annularSector({
-                            centerX: 100,
-                            centerY: 100,
-                            startDegrees: pEnd + 0.2,
-                            endDegrees: pEnd - 0.2,
-                            innerRadius: parseInt(self.o.centerWidth),
-                            outerRadius: 100.5 - parseInt(self.o.outerLineWidth)
-                        }, true)
-                    }));
-                    */
-
 
                     var smallCirclePosition = self.getSmallCirclePosition({
                         centerX: 100,
@@ -319,8 +272,8 @@
                         outerRadius: 100.5 - (parseInt(self.o.outerLineWidth) / 1.5)
                     });
 
-                    var rectWidth = 20;
-                    var rectHeight = 10;
+                    var rectWidth = 10;
+                    var rectHeight = 3;
                     var rectRotate = rotate + (360 / self.items.length);
 
                     smallCirclesGroup.append(
@@ -331,8 +284,8 @@
                             'ry': 5,
                             'width': rectWidth,
                             'height': rectHeight,
-                            'transform': 'rotate(' + rectRotate + ' ' + smallCirclePosition[0] + ' ' +  smallCirclePosition[1] +  ')',
                             'style': 'fill:rgb(255,255,255);fill-opacity:1;',
+                            'transform': 'rotate(' + rectRotate + ' ' + smallCirclePosition[0] + ' ' +  smallCirclePosition[1] +  ')',
                         })
                     );
                     
@@ -417,6 +370,8 @@
                 });
                 $(outerLine).appendTo(Layersvg);
                 smallCirclesGroup.addClass('ew-smallCirclesGroup').appendTo(Layersvg);
+                console.log(Layerbg);
+                console.log(Layerbg.html());
                 Layerbg.html(Layerbg.html());
             };
             EasyWheel.prototype.toNumber = function(e) {
@@ -811,7 +766,6 @@
             };
         }));
 
-
                         function SpinToWin(config) {
                           this.config = config;
                           if (window.Android || window.BrowserTest) {
@@ -850,13 +804,12 @@
                           this.config.windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
                           this.config.statusBarHeight = window.screen.height - window.innerHeight;
                           this.config.r = (r * 2) > this.config.windowWidth ? 150 : r;
-                          
+
                           this.config.wheelContainerWidth = this.config.windowWidth;
-                          
+
                           this.config.centerX = this.config.r;
                           this.config.centerY = this.config.r;
                           this.config.selectedPromotionCode = "";
-                          this.config.selectedSlice = {};
                           this.convertStringsToNumber();
                           this.setCloseButton();
 
@@ -882,7 +835,7 @@
                         }
 
 
-                        SpinToWin.prototype.arrangeSliceDisplayNameLength = function() {
+                        SpinToWin.prototype.arrangeSliceDisplayNameLength = function () {
 
                         };
 
@@ -914,13 +867,13 @@
                           $('#wheel-container').easyWheel({
                             items: window.spinToWin.config.items, duration: 1, rotates: 4, frame: 6, easing: "easyWheel", type: "spin"
                             , width: window.spinToWin.config.wheelContainerWidth, fontSize: window.spinToWin.config.displaynameTextSize + 10
-                            , textOffset: 10, letterSpacing: 0, textLine: "v", textArc: true, shadowOpacity: 3, outerLineWidth: 5
-                            , centerImage : window.spinToWin.config.img, centerWidth: 20, centerLineWidth: 5, centerImageWidth: 20
+                            , textOffset: 10, letterSpacing: 0, textLine: "v", textArc: true, outerLineWidth: 5
+                            , centerImage: window.spinToWin.config.img, centerWidth: 20, centerLineWidth: 5, centerImageWidth: 20
                             , textColor: window.spinToWin.config.displaynameTextColor, markerColor: window.spinToWin.config.buttonColor
                             , centerLineColor: "#ffffff", centerBackground: "#ffffff", sliceLineColor: "#ffffff", outerLineColor: "#ffffff",
-                            onStep: function(item, slicePercent, circlePercent) {
-                              if(window.spinToWin.easyWheelInitialized) {
-                                if (typeof window.spinToWin.config.tickAudio.currentTime !== 'undefined'){
+                            onStep: function (item, slicePercent, circlePercent) {
+                              if (window.spinToWin.easyWheelInitialized) {
+                                if (typeof window.spinToWin.config.tickAudio.currentTime !== 'undefined') {
                                   window.spinToWin.config.tickAudio.currentTime = 0;
                                 }
                                 window.spinToWin.config.tickAudio.play();
@@ -929,12 +882,13 @@
                             onStart: function (results, spinCount, now) {
                             },
                             onComplete: function (results, count, now) {
-                              if(!window.spinToWin.easyWheelInitialized) {
+                              if (!window.spinToWin.easyWheelInitialized) {
                                 window.spinToWin.easyWheelInitialized = true;
                                 window.easyWheel.items[0].win = false;
                                 window.easyWheel.o.duration = 6000;
+                              } else {
+                                window.spinToWin.resultHandler(results);
                               }
-                              console.log(results, count, now);
                             }
                           });
                           window.easyWheel.items[0].win = true;
@@ -962,7 +916,7 @@
                           this.config.checkConsentMessage = this.config.actiondata.spin_to_win_content.check_consent_message;
                           this.config.promocodeTitle = this.config.actiondata.spin_to_win_content.promocode_title;
                           this.config.copyButtonLabel = this.config.actiondata.spin_to_win_content.copybutton_label;
-                          
+
 
                           var extendedProps = JSON.parse(decodeURIComponent(this.config.actiondata.ExtendedProps));
                           this.config.displaynameTextColor = extendedProps.displayname_text_color;
@@ -1209,7 +1163,7 @@
 
                           //TODO:yüksekliği burası belirliyor.
                           //this.wheelContainer.style.bottom = (-wheelCanvasHeight / 2) + "px";
-                          this.wheelContainer.style.bottom = ((-wheelCanvasHeight / 2) + this.config.statusBarHeight ) + "px";
+                          this.wheelContainer.style.bottom = ((-wheelCanvasHeight / 2) + this.config.statusBarHeight) + "px";
 
                           var styleEl = document.createElement("style"),
                             styleString = "#wheel-container{float:left;width:" + config.r + "px;height:" + (2 * config.r) + "px}" +
@@ -1232,7 +1186,6 @@
                           }
                         };
 
-
                         SpinToWin.prototype.submit = function () {
                           if (config.mailFormEnabled) {
                             this.formValidation = window.spinToWin.validateForm();
@@ -1250,15 +1203,26 @@
 
                         SpinToWin.prototype.spin = function (sliceIndex, promotionCode) {
                           if (sliceIndex > -1) {
-                            window.spinToWin.config.selectedSlice = window.spinToWin.config.slices[sliceIndex];
-                            window.spinToWin.config.selectedSlice.code = promotionCode;
+                            window.spinToWin.config.items[sliceIndex].win = true;
+                            window.spinToWin.config.items[sliceIndex].code = promotionCode;
                           } else {
-
-                            //TODO:
-                            //sliceIndex = window.spinToWin.randomInt(0, window.spinToWin.config.staticCodeSlices.length);
-                           //TODO:
-                           sliceIndex = 1;
-                            //window.spinToWin.config.selectedSlice = window.spinToWin.config.staticCodeSlices[window.spinToWin.randomInt(0, window.spinToWin.config.staticCodeSlices.length)];
+                            var staticCodeSliceIndexes = [];
+                            for (var i = 0; i < window.spinToWin.config.items.length; i++) {
+                              if (window.spinToWin.config.items.type = 'staticcode') {
+                                staticCodeSliceIndexes.push(i);
+                              }
+                            }
+                            if (staticCodeSliceIndexes.length > 0) {
+                              sliceIndex = staticCodeSliceIndexes[this.randomInt(0, staticCodeSliceIndexes.length)];
+                            } else {
+                              var passSliceIndexes = [];
+                              for (var i = 0; i < window.spinToWin.config.items.length; i++) {
+                                if (window.spinToWin.config.items.type = 'pass') {
+                                  passSliceIndexes.push(i);
+                                }
+                              }
+                              sliceIndex = passSliceIndexes[this.randomInt(0, passSliceIndexes.length)];
+                            }
                           }
                           window.spinToWin.spinHandler(sliceIndex);
                         };
@@ -1277,9 +1241,9 @@
                           if (vl_form_submit_btn !== null)
                             vl_form_submit_btn[0].classList.add("disabled");
 
-                            window.spinToWin.config.items[result].win = true;
-                            window.easyWheel.items[result].win = true;
-                            window.easyWheel.start();
+                          window.spinToWin.config.items[result].win = true;
+                          window.easyWheel.items[result].win = true;
+                          window.easyWheel.start();
                         };
 
                         SpinToWin.prototype.resultHandler = function (res) {
@@ -1288,7 +1252,6 @@
                           this.couponCode.value = res.code;
                           this.handleVisibility();
                         };
-
 
                         //Helper functions
 
