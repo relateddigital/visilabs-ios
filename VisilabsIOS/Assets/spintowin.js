@@ -1170,14 +1170,14 @@ SpinToWin.prototype.styleHandler = function () {
         this.wheelContainer.style.marginTop = this.getWheelContainerMarginTop();
       //this.wheelContainer.style.bottom = window.innerHeight > 600 ? (10 + this.config.wheelContainerMarginLeft) + "px" : "5px";
     } else {
-      this.wheelContainer.style.bottom = (- this.config.r * 2) + "px";
+      this.wheelContainer.style.bottom = (- this.config.r ) + "px";
     }
   } else {
     if (this.config.taTemplate == "full_spin") {
         this.wheelContainer.style.marginTop = this.getWheelContainerMarginTop();
       //this.wheelContainer.style.bottom = window.innerHeight > 600 ? (this.config.statusBarHeight + this.config.wheelContainerMarginLeft) + "px" : "10px";
     } else {
-      this.wheelContainer.style.bottom = ((- this.config.r * 2) + this.config.statusBarHeight) + "px";
+      this.wheelContainer.style.bottom = ((- this.config.r) + this.config.statusBarHeight) + "px";
     }
   }
 
