@@ -807,7 +807,7 @@ function SpinToWin(config) {
   this.config.windowHeightWidthRatio = window.innerHeight / window.innerWidth;
 
   if (this.config.taTemplate == "full_spin") {
-    this.config.wheelContainerMarginLeft = this.config.windowHeightWidthRatio > 1.5 ? window.innerWidth / 6 : window.innerWidth / 4;
+    this.config.wheelContainerMarginLeft = this.config.windowHeightWidthRatio > 1.6 ? window.innerWidth / 6 : window.innerWidth / 5;
     this.config.r = parseFloat(window.innerWidth / 2) - this.config.wheelContainerMarginLeft;
     this.config.wheelContainerWidth = this.config.windowWidth - this.config.wheelContainerMarginLeft * 2;
   } else {
@@ -830,7 +830,7 @@ function SpinToWin(config) {
   this.createItems();
   this.createEasyWheel();
   this.handleVisibility();
-}
+};
 
 
 SpinToWin.prototype.createItems = function () {
@@ -858,7 +858,7 @@ SpinToWin.prototype.createItems = function () {
 
 SpinToWin.prototype.createEasyWheel = function () {
   $('#wheel-container').easyWheel({
-    items: window.spinToWin.config.items, duration: 1, rotates: 4, frame: 6, easing: "easyWheel", type: "spin"
+    items: window.spinToWin.config.items, duration: 1, rotates: 4, frame: 20, easing: "easyWheel", type: "spin"
     , width: window.spinToWin.config.wheelContainerWidth, fontSize: window.spinToWin.config.displaynameTextSize + 8
     , textOffset: 8, letterSpacing: 0, textLine: "v", textArc: true, outerLineWidth: 5
     , centerImage: window.spinToWin.config.img, centerWidth: 20, centerLineWidth: 5, centerImageWidth: 20
@@ -1148,17 +1148,37 @@ SpinToWin.prototype.handleVisibility = function () {
   }
 };
 
+SpinToWin.prototype.getWheelContainerMarginTop = function() {
+  if(window.innerHeight < 750) {
+    return "10px";
+  } else if(window.innerHeight < 1000) {
+    return "30px";
+  } else {
+    return "50px";
+  }
+};
+
 SpinToWin.prototype.styleHandler = function () {
 
   this.wheelContainer.style.position = "absolute";
   this.wheelContainer.style.fontFamily = this.config.displaynameFontFamily;
 
-  if (this.config.taTemplate == "full_spin") {
-    this.wheelContainer.style.marginLeft = this.config.wheelContainerMarginLeft + "px";
-    this.wheelContainer.style.bottom = window.innerHeight > 600 ? (this.config.statusBarHeight + this.config.wheelContainerMarginLeft) + "px" : "10px";
+  this.wheelContainer.style.marginLeft = this.config.wheelContainerMarginLeft + "px";
+
+  if (window.Android) {
+    if (this.config.taTemplate == "full_spin") {
+        this.wheelContainer.style.marginTop = this.getWheelContainerMarginTop();
+      //this.wheelContainer.style.bottom = window.innerHeight > 600 ? (10 + this.config.wheelContainerMarginLeft) + "px" : "5px";
+    } else {
+      this.wheelContainer.style.bottom = (- this.config.r * 2) + "px";
+    }
   } else {
-    this.wheelContainer.style.marginLeft = this.config.wheelContainerMarginLeft + "px";
-    this.wheelContainer.style.bottom = ((- (this.config.r * 2) / 2) + this.config.statusBarHeight) + "px";
+    if (this.config.taTemplate == "full_spin") {
+        this.wheelContainer.style.marginTop = this.getWheelContainerMarginTop();
+      //this.wheelContainer.style.bottom = window.innerHeight > 600 ? (this.config.statusBarHeight + this.config.wheelContainerMarginLeft) + "px" : "10px";
+    } else {
+      this.wheelContainer.style.bottom = ((- this.config.r * 2) + this.config.statusBarHeight) + "px";
+    }
   }
 
   var styleEl = document.createElement("style"),
