@@ -483,7 +483,7 @@ After form is created at **RMC** panel, likewise **in-app message**, existence o
 
 |               Spin to Win Full                                   |                        Spin to Win Half                                    |
 |:----------------------------------------------------------------:|----------------------------------------------------------------------------|
-| ![spin-to-win-full](/Screenshots/spin_to_win_full.jpeg)          | ![spin-to-win-half](/Screenshots/spin_to_win_half.jpeg)                    |
+| ![spin-to-win-full](/Screenshots/spin_to_win_full_en.jpeg)          | ![spin-to-win-half](/Screenshots/spin_to_win_half_en.jpeg)                    |
 
 
 
