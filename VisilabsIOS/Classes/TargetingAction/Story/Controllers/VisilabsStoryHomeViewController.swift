@@ -140,6 +140,8 @@ public class VisilabsStoryHomeViewController: NSObject,
     }
 }
 
-public protocol VisilabsStoryURLDelegate: class {
+@objc
+public protocol VisilabsStoryURLDelegate: NSObjectProtocol {
+    @objc
     func urlClicked( _ url: URL)
 }
