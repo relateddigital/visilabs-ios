@@ -4,6 +4,8 @@
 //
 // Created by Egemen on 29.06.2020.
 //
+
+@objc
 public enum VisilabsRecommendationFilterType: Int {
     case equals = 0
     case notEquals = 1
@@ -17,7 +19,8 @@ public enum VisilabsRecommendationFilterType: Int {
     static let exclude = notLike
 }
 
-public enum VisilabsProductFilterAttribute: String {
+@objc
+public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
     case PRODUCTNAME
     case COLOR
     case AGEGROUP
@@ -33,13 +36,89 @@ public enum VisilabsProductFilterAttribute: String {
     case SHIPPINGONSAMEDAY
     case FREESHIPPING
     case ISDISCOUNTED
+    
+    public typealias RawValue = String
+
+        public var rawValue: RawValue {
+            switch self {
+                case .PRODUCTNAME:
+                    return "PRODUCTNAME"
+                case .COLOR:
+                    return "COLOR"
+                case .AGEGROUP:
+                    return "AGEGROUP"
+                case .BRAND:
+                    return "BRAND"
+                case .CATEGORY:
+                    return "CATEGORY"
+                case .GENDER:
+                    return "GENDER"
+                case .MATERIAL:
+                    return "MATERIAL"
+                case .ATTRIBUTE1:
+                    return "ATTRIBUTE1"
+                case .ATTRIBUTE2:
+                    return "ATTRIBUTE2"
+                case .ATTRIBUTE3:
+                    return "ATTRIBUTE3"
+                case .ATTRIBUTE4:
+                    return "ATTRIBUTE4"
+                case .ATTRIBUTE5:
+                    return "ATTRIBUTE5"
+                case .SHIPPINGONSAMEDAY:
+                    return "SHIPPINGONSAMEDAY"
+                case .FREESHIPPING:
+                    return "FREESHIPPING"
+                case .ISDISCOUNTED:
+                    return "ISDISCOUNTED"
+            }
+        }
+
+        public init?(rawValue: RawValue) {
+            switch rawValue {
+                case "PRODUCTNAME":
+                    self = .PRODUCTNAME
+                case "COLOR":
+                    self = .COLOR
+                case "AGEGROUP":
+                    self = .AGEGROUP
+                case "BRAND":
+                    self = .BRAND
+                case "CATEGORY":
+                    self = .CATEGORY
+                case "GENDER":
+                    self = .GENDER
+                case "MATERIAL":
+                    self = .MATERIAL
+                case "ATTRIBUTE1":
+                    self = .ATTRIBUTE1
+                case "ATTRIBUTE2":
+                    self = .ATTRIBUTE2
+                case "ATTRIBUTE3":
+                    self = .ATTRIBUTE3
+                case "ATTRIBUTE4":
+                    self = .ATTRIBUTE4
+                case "ATTRIBUTE5":
+                    self = .ATTRIBUTE5
+                case "SHIPPINGONSAMEDAY":
+                    self = .SHIPPINGONSAMEDAY
+                case "FREESHIPPING":
+                    self = .FREESHIPPING
+                case "ISDISCOUNTED":
+                    self = .ISDISCOUNTED
+                default:
+                    return nil
+            }
+        }
 }
 
-public class VisilabsRecommendationFilter {
+@objc
+public class VisilabsRecommendationFilter : NSObject {
     var attribute: VisilabsProductFilterAttribute
     var filterType: VisilabsRecommendationFilterType
     var value: String
 
+    @objc
     public init(attribute: VisilabsProductFilterAttribute,
                 filterType: VisilabsRecommendationFilterType, value: String) {
         self.attribute = attribute
