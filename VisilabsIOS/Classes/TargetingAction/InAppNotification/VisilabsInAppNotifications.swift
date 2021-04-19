@@ -32,12 +32,17 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
 
     func showNotification(_ notification: VisilabsInAppNotification) {
+        let firstRoot = getRootViewController()
+        print("getRoot 1: ", firstRoot as Any)
         let notification = notification
         let delayTime = notification.delay ?? 0
         DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
+            let secondRoot = self.getRootViewController()
+            print("getRoot 2: ", secondRoot as Any)
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
+                if (firstRoot == secondRoot) {
                 var shownNotification = false
                 switch notification.type {
                 case .mini:
@@ -55,6 +60,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     self.markNotificationShown(notification: notification)
                     self.delegate?.notificationDidShow(notification)
                 }
+            }
             }
         })
     }
@@ -176,6 +182,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         } else if vc is UITabBarController {
             return getVisibleViewController((vc as? UITabBarController)?.selectedViewController)
         } else {
+            
             if let pvc = vc?.presentedViewController {
                 return getVisibleViewController(pvc.presentedViewController)
             } else {
