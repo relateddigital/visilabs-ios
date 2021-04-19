@@ -29,30 +29,34 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
     }
+    
 
     func showNotification(_ notification: VisilabsInAppNotification) {
         let notification = notification
+        print("InApp will show after \(notification.delay ?? 0) seconds")
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(notification.delay ?? 0), repeats: false) { _ in
+            DispatchQueue.main.async {
+                if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
+                    VisilabsLogger.warn("already showing an in-app notification")
+                } else {
+                    print("InApp showed")
+                    var shownNotification = false
+                    switch notification.type {
+                    case .mini:
+                        shownNotification = self.showMiniNotification(notification)
+                    case .full:
+                        shownNotification = self.showFullNotification(notification)
+                    case .alert:
+                        shownNotification = true
+                        self.showAlert(notification)
+                    default:
+                        shownNotification = self.showPopUp(notification)
+                    }
 
-        DispatchQueue.main.async {
-            if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
-                VisilabsLogger.warn("already showing an in-app notification")
-            } else {
-                var shownNotification = false
-                switch notification.type {
-                case .mini:
-                    shownNotification = self.showMiniNotification(notification)
-                case .full:
-                    shownNotification = self.showFullNotification(notification)
-                case .alert:
-                    shownNotification = true
-                    self.showAlert(notification)
-                default:
-                    shownNotification = self.showPopUp(notification)
-                }
-
-                if shownNotification {
-                    self.markNotificationShown(notification: notification)
-                    self.delegate?.notificationDidShow(notification)
+                    if shownNotification {
+                        self.markNotificationShown(notification: notification)
+                        self.delegate?.notificationDidShow(notification)
+                    }
                 }
             }
         }
