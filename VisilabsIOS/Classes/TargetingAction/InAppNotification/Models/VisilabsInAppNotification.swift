@@ -63,7 +63,7 @@ public class VisilabsInAppNotification {
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
     let numberColors: [UIColor]?
-    let delay: Int?
+    let delay: DispatchTime?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -110,7 +110,7 @@ public class VisilabsInAppNotification {
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
                 numberColors: [String]?,
-                delay: Int?) {
+                delay: DispatchTime?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -232,7 +232,7 @@ public class VisilabsInAppNotification {
         } else {
             self.numberColors = nil
         }
-        self.delay = 5
+        self.delay = .now() + 5
         setFonts()
     }
 
