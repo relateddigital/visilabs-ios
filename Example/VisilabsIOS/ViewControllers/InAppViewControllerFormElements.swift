@@ -433,6 +433,6 @@ extension InAppViewController {
                                         promotionTextColor: promotionTextColor,
                                         promotionBackgroundColor: promotionBackgroundColor,
                                         numberColors: numberColors,
-                                        delay: .now() + 5)
+                                        delay: 5)
     }
 }
