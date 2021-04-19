@@ -25,23 +25,23 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     var currentlyShowingNotification: VisilabsInAppNotification?
     var currentlyShowingTargetingAction: TargetingActionViewModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
+    weak var currentViewController: UIViewController?
 
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
     }
-    
 
     func showNotification(_ notification: VisilabsInAppNotification) {
         let notification = notification
         let delayTime = notification.delay ?? 0
         DispatchQueue.main.async {
-            let firstRoot = self.getRootViewController()
-            DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
-                let secondRoot = self.getRootViewController()
-                if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
-                    VisilabsLogger.warn("already showing an in-app notification")
-                } else {
-                    if (firstRoot == secondRoot) {
+            self.currentViewController = self.getRootViewController()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
+            if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
+                VisilabsLogger.warn("already showing an in-app notification")
+            } else {
+                if self.currentViewController == self.getRootViewController() {
                     var shownNotification = false
                     switch notification.type {
                     case .mini:
@@ -60,12 +60,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         self.delegate?.notificationDidShow(notification)
                     }
                 }
-                }
-            })
-        }
-        
+            }
+        })
     }
-    
+
     func showTargetingAction(_ model: TargetingActionViewModel) {
         DispatchQueue.main.async {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
@@ -75,33 +73,31 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showMailPopup(mailSubscriptionForm) {
                         self.markTargetingActionShown(model: mailSubscriptionForm)
                     }
-                }
-                else if model.targetingActionType == .spinToWin, let spinToWin = model as? SpinToWinViewModel {
+                } else if model.targetingActionType == .spinToWin, let spinToWin = model as? SpinToWinViewModel {
                     if self.showSpinToWin(spinToWin) {
                         self.markTargetingActionShown(model: spinToWin)
                     }
                 }
-                
             }
         }
     }
-    
+
     /*
-    func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
-        DispatchQueue.main.async {
-            if self.currentlyShowingNotification != nil
-                || self.currentlyShowingTargetingAction != nil {
-                VisilabsLogger.warn("already showing an notification")
-            } else {
-                var shown = false
-                shown = self.showMailPopup(model)
-                if shown {
-                    self.markMailFormShown(model: model)
+        func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
+            DispatchQueue.main.async {
+                if self.currentlyShowingNotification != nil
+                    || self.currentlyShowingTargetingAction != nil {
+                    VisilabsLogger.warn("already showing an notification")
+                } else {
+                    var shown = false
+                    shown = self.showMailPopup(model)
+                    if shown {
+                        self.markMailFormShown(model: model)
+                    }
                 }
             }
         }
-    }
- */
+     */
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
@@ -127,28 +123,27 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let message = notification.messageBody?.removeEscapingCharacters()
         let style: UIAlertController.Style = notification.alertType?.lowercased() ?? "" == "actionsheet" ? .actionSheet : .alert
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
-        
+
         let buttonTxt = notification.buttonText
         let urlStr = notification.iosLink ?? ""
-        let action = UIAlertAction(title: buttonTxt, style: .default) { (_) in
+        let action = UIAlertAction(title: buttonTxt, style: .default) { _ in
             guard let url = URL(string: urlStr) else {
                 return
             }
             VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
         }
-        
+
         let closeText = notification.closeButtonText ?? "Close"
-        let close = UIAlertAction(title: closeText, style: .destructive) { (_) in
+        let close = UIAlertAction(title: closeText, style: .destructive) { _ in
             print("dismiss tapped")
         }
-        
+
         alert.addAction(action)
         alert.addAction(close)
-        
+
         if let root = getRootViewController() {
-            root.present(alert, animated: true, completion: self.alertDismiss)
+            root.present(alert, animated: true, completion: alertDismiss)
         }
-        
     }
 
     // TO_DO: bu gerekmeyecek sanırım
@@ -176,14 +171,13 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
         return nil
     }
-    
+
     private func getVisibleViewController(_ vc: UIViewController?) -> UIViewController? {
         if vc is UINavigationController {
             return getVisibleViewController((vc as? UINavigationController)?.visibleViewController)
         } else if vc is UITabBarController {
             return getVisibleViewController((vc as? UITabBarController)?.selectedViewController)
         } else {
-            
             if let pvc = vc?.presentedViewController {
                 return getVisibleViewController(pvc.presentedViewController)
             } else {
@@ -191,7 +185,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             }
         }
     }
-    
 
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)
@@ -216,7 +209,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             return false
         }
     }
-    
+
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
         let controller = SpinToWinViewController(model)
         controller.modalPresentationStyle = .fullScreen
@@ -246,7 +239,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
                                    callToActionURL: URL?, shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool {
-
         if currentlyShowingNotification?.actId != controller.notification?.actId {
             return false
         }
@@ -279,13 +271,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
         return true
     }
-    
+
     func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String) {
-        
     }
-    
+
     func alertDismiss() {
-        self.currentlyShowingNotification = nil
-        self.currentlyShowingTargetingAction = nil
+        currentlyShowingNotification = nil
+        currentlyShowingTargetingAction = nil
     }
 }
