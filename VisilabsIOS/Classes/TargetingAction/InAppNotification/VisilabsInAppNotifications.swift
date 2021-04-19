@@ -32,37 +32,40 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
 
     func showNotification(_ notification: VisilabsInAppNotification) {
-        let firstRoot = getRootViewController()
-        print("getRoot 1: ", firstRoot as Any)
         let notification = notification
         let delayTime = notification.delay ?? 0
-        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
-            let secondRoot = self.getRootViewController()
-            print("getRoot 2: ", secondRoot as Any)
-            if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
-                VisilabsLogger.warn("already showing an in-app notification")
-            } else {
-                if (firstRoot == secondRoot) {
-                var shownNotification = false
-                switch notification.type {
-                case .mini:
-                    shownNotification = self.showMiniNotification(notification)
-                case .full:
-                    shownNotification = self.showFullNotification(notification)
-                case .alert:
-                    shownNotification = true
-                    self.showAlert(notification)
-                default:
-                    shownNotification = self.showPopUp(notification)
-                }
+        DispatchQueue.main.async {
+            let firstRoot = self.getRootViewController()
+            print("getRoot 1: ", firstRoot as Any)
+            DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
+                let secondRoot = self.getRootViewController()
+                print("getRoot 2: ", secondRoot as Any)
+                if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
+                    VisilabsLogger.warn("already showing an in-app notification")
+                } else {
+                    if (firstRoot == secondRoot) {
+                    var shownNotification = false
+                    switch notification.type {
+                    case .mini:
+                        shownNotification = self.showMiniNotification(notification)
+                    case .full:
+                        shownNotification = self.showFullNotification(notification)
+                    case .alert:
+                        shownNotification = true
+                        self.showAlert(notification)
+                    default:
+                        shownNotification = self.showPopUp(notification)
+                    }
 
-                if shownNotification {
-                    self.markNotificationShown(notification: notification)
-                    self.delegate?.notificationDidShow(notification)
+                    if shownNotification {
+                        self.markNotificationShown(notification: notification)
+                        self.delegate?.notificationDidShow(notification)
+                    }
                 }
-            }
-            }
-        })
+                }
+            })
+        }
+        
     }
     
     func showTargetingAction(_ model: TargetingActionViewModel) {
