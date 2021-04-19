@@ -481,7 +481,11 @@ After form is created at **RMC** panel, likewise **in-app message**, existence o
 
 After form is created at **RMC** panel, likewise **in-app message**, existence of spin to win is controlled by after each `customEvent` call. It opens a WebViewController. It is shown as follows;
 
-![spin-to-win](/Screenshots/half_spin.png)
+|               Spin to Win Full                                   |                        Spin to Win Half                                    |
+|:----------------------------------------------------------------:|----------------------------------------------------------------------------|
+| ![spin-to-win-full](/Screenshots/spin_to_win_full_en.jpeg)          | ![spin-to-win-half](/Screenshots/spin_to_win_half_en.jpeg)                    |
+
+
 
 ## Recommendation
 

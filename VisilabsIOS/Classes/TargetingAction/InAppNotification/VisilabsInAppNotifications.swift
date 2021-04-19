@@ -163,12 +163,26 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return nil
         }
-        for window in sharedUIApplication.windows where window.isKeyWindow {
-            return window.rootViewController
+        if let rootViewController = sharedUIApplication.keyWindow?.rootViewController {
+            return getVisibleViewController(rootViewController)
         }
-
         return nil
     }
+    
+    private func getVisibleViewController(_ vc: UIViewController?) -> UIViewController? {
+        if vc is UINavigationController {
+            return getVisibleViewController((vc as? UINavigationController)?.visibleViewController)
+        } else if vc is UITabBarController {
+            return getVisibleViewController((vc as? UITabBarController)?.selectedViewController)
+        } else {
+            if let pvc = vc?.presentedViewController {
+                return getVisibleViewController(pvc.presentedViewController)
+            } else {
+                return vc
+            }
+        }
+    }
+    
 
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)
