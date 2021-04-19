@@ -33,7 +33,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
 
     func showNotification(_ notification: VisilabsInAppNotification) {
         let notification = notification
-        DispatchQueue.main.asyncAfter(deadline: notification.delay ?? .now(), execute: {
+        let delayTime = notification.delay ?? 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
