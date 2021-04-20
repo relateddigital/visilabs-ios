@@ -232,7 +232,7 @@ public class VisilabsInAppNotification {
         } else {
             self.numberColors = nil
         }
-        self.delay = 5
+        self.delay = 0
         setFonts()
     }
 

@@ -41,7 +41,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
-                if self.currentViewController == self.getRootViewController() {
+                if (notification.delay ?? 0 == 0 || self.currentViewController == self.getRootViewController()) {
                     var shownNotification = false
                     switch notification.type {
                     case .mini:
