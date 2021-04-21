@@ -68,6 +68,7 @@ class InAppViewController: FormViewController {
             <<< addCopyCodeBackgroundColor()
             <<< addIosLinkUrlRow()
             <<< addImageUrlUrlRow()
+            <<< addDelayPickerInputRow()
             <<< addMiniIconPickerInputRow()
             <<< addMessageTitleColorRow()
             <<< addMessageBodyColorRow()
