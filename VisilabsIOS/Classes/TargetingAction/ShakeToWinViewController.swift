@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import AVFoundation
 
 public class ShakeToWinViewController: UIViewController {
     
     lazy var model: ShakeToWinViewModel? = createDummyModel()
     let scrollView = UIScrollView()
-
+    weak var player: AVPlayer? = nil
     var openedSecondPage = false {
         didSet {
             self.deviceDidntShake()
@@ -24,12 +25,6 @@ public class ShakeToWinViewController: UIViewController {
         }
     }
 
-    lazy var closeButton: UIButton = {
-       let button = UIButton()
-        button.setImage(getUIImage(named: "VisilabsCloseButton@3x"), for: .normal)
-        return button
-    }()
-    
     lazy var mainButton: UIButton = {
         let button = UIButton()
         button.setTitle(model?.firstPage.buttonText, for: .normal)
@@ -42,10 +37,14 @@ public class ShakeToWinViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(scrollView)
-        
-        closeButton.addTarget(self, action: #selector(closeButtonTapped(_:)), for: .touchUpInside)
     }
-
+    
+    public override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake && openedSecondPage && !didShake {
+            self.didShake = true
+        }
+    }
+    
     public override func viewDidLayoutSubviews() {
         scrollView.frame = self.view.frame
         if scrollView.subviews.count == 2 {
@@ -59,7 +58,8 @@ public class ShakeToWinViewController: UIViewController {
         scrollView.isScrollEnabled = false
         
         scrollView.addSubview(prepareFirstPage())
-        
+        scrollView.addSubview(prepareSecondPage())
+        scrollView.addSubview(prepareThirdPage())
     }
     
     @objc func closeButtonTapped(_ sender: UIButton) {
@@ -81,7 +81,11 @@ public class ShakeToWinViewController: UIViewController {
     
     func openThirdPage(_ delay: Int) {
         DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delay)) {
-            
+            self.scrollView.setContentOffset(CGPoint(x: self.view.frame.size.width*2, y: 0.0), animated: true)
+            if let p = self.player {
+                p.pause()
+                self.player = nil
+            }
         }
     }
     
@@ -91,24 +95,105 @@ public class ShakeToWinViewController: UIViewController {
                                         width: view.frame.width,
                                         height: view.frame.height))
         
+        var imageView = UIImageView(frame: .zero)
+        
         if let firstPage = model?.firstPage {
             var imageAdded = false
             if let img = firstPage.image {
-                let imageView = UIImageView(frame: .zero)
+                imageView = UIImageView(frame: .zero)
                 imageView.image = img
+                page.addSubview(imageView)
                 imageView.top(to: page, offset: 20)
                 imageView.centerX(to: page)
+                imageView.height(imageView.image?.size.height ?? 0.0)
+                imageView.width(imageView.image?.size.width ?? 0.0)
+                page.bringSubviewToFront(imageView)
                 imageAdded = true
             }
+            let title = UILabel(frame: .zero)
+            title.text = model?.firstPage.title
+            title.textColor = model?.firstPage.titleColor
+            title.font = model?.firstPage.titleFont
+            title.numberOfLines = 0
+            page.addSubview(title)
+            title.height(40.0)
+            title.centerX(to: page)
+            if imageAdded {
+                title.topToBottom(of: imageView, offset: 10)
+            } else {
+                title.top(to: page, offset: 20)
+            }
+            
+            let message = UILabel(frame: .zero)
+            message.text = model?.firstPage.message
+            message.textColor = model?.firstPage.messageColor
+            message.font = model?.firstPage.messageFont
+            message.numberOfLines = 0
+            page.addSubview(message)
+            
+            message.centerX(to: page)
+            message.topToBottom(of: title, offset: 5)
+            message.height(40.0)
+            
+            let button = UIButton(frame: .zero)
+            button.setTitle(model?.firstPage.buttonText, for: .normal)
+            button.setTitleColor(model?.firstPage.buttonTextColor, for: .normal)
+            button.titleLabel?.font = model?.firstPage.buttonFont
+            button.backgroundColor = model?.firstPage.buttonBgColor
+            page.addSubview(button)
+            
+            button.height(60.0)
+            button.centerX(to: page)
+            button.topToBottom(of: message, offset: 10)
+            button.bottom(to: page, offset: -20)
+            button.width(120.0)
+            
+            button.addTarget(self, action: #selector(goSecondPage), for: .touchUpInside)
         }
         
         page.backgroundColor = .red
-        page.addSubview(closeButton)
-        closeButton.top(to: page, offset: 40)
-        closeButton.trailing(to: page, offset: -40)
-        closeButton.width(40)
-        closeButton.height(40)
+        let close = getCloseButton(.black)
+        page.addSubview(close)
+        close.top(to: page, offset: 40)
+        close.trailing(to: page, offset: -20)
+        close.width(40)
+        close.height(40)
         
+        return page
+    }
+    
+    func prepareSecondPage() -> UIView {
+        let page = UIView(frame: CGRect(x: view.frame.width,
+                                        y: 0,
+                                        width: view.frame.width,
+                                        height: view.frame.height))
+        
+    
+        page.backgroundColor = .green
+        let close = getCloseButton(.white)
+        page.addSubview(close)
+        close.top(to: page, offset: 40)
+        close.trailing(to: page, offset: -20)
+        close.width(40)
+        close.height(40)
+        close.addTarget(self, action: #selector(closeButtonTapped(_:)), for: .touchUpInside)
+        
+        if let videoUrl = model?.secondPage.videoURL {
+            let player = AVPlayer(url: videoUrl)
+            let playerLayer = AVPlayerLayer(player: player)
+            playerLayer.frame = page.bounds
+            page.layer.addSublayer(playerLayer)
+            self.player = player
+        }
+        return page
+    }
+    
+    func prepareThirdPage() -> UIView {
+        let page = UIView(frame: CGRect(x: view.frame.width*2,
+                                        y: 0,
+                                        width: view.frame.width,
+                                        height: view.frame.height))
+        page.backgroundColor = .blue
         return page
     }
 }
@@ -116,6 +201,42 @@ public class ShakeToWinViewController: UIViewController {
 extension ShakeToWinViewController {
     
     func createDummyModel() -> ShakeToWinViewModel? {
-        return nil
+        var img: UIImage? = nil
+        if let data = getImageDataOfUrl(URL(string: "https://placekitten.com/300/500")) {
+            img = UIImage(data: data)
+        }
+        return ShakeToWinViewModel(firstPage: ShakeToWinFirstPage(image: img, title: "shtw first page", titleFont: .boldSystemFont(ofSize: 16), titleColor: .yellow, message: "shtw message \n message can be plural", messageColor: .white, messageFont: .systemFont(ofSize: 12), buttonText: "hit me for next", buttonTextColor: .blue, buttonFont: .boldSystemFont(ofSize: 16), buttonBgColor: .white, backgroundColor: .green, closeButtonColor: .white),
+                                   secondPage: ShakeToWinSecondPage(waitSeconds: 8, videoURL: URL(string: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4"), closeButtonColor: .white),
+                                   thirdPage: ShakeToWinThirdPage(image: nil, title: "third page", titleFont: .boldSystemFont(ofSize: 16), titleColor: .darkGray, message: "shtw message \n message can be plural", messageColor: .blue, messageFont: .italicSystemFont(ofSize: 12), buttonText: "finish", buttonTextColor: .white, buttonFont: .boldSystemFont(ofSize: 16), buttonBgColor: .black, backgroundColor: .systemPink, closeButtonColor: .white))
+    }
+    
+    @objc func goSecondPage() {
+        scrollView.setContentOffset(CGPoint(x: view.frame.size.width, y: 0.0), animated: true)
+        self.openedSecondPage = true
+        if let p = self.player {
+            p.play()
+        }
+    }
+    
+    func getCloseButton(_ color: ButtonColor) -> UIButton  {
+        let button = UIButton()
+        button.setImage(getUIImage(named: "VisilabsCloseButton@3x"), for: .normal)
+        button.addTarget(self, action: #selector(closeButtonTapped(_:)), for: .touchUpInside)
+        if color == .black {
+            button.setImage(getUIImage(named: "VisilabsCloseButtonBlack@3x"), for: .normal)
+        }
+        return button
+    }
+    
+    func getImageDataOfUrl(_ url: URL?) -> Data? {
+        var data: Data? = nil
+        if let iUrl = url {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            }
+        }
+        return data
     }
 }
