@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VisilabsIOS'
-  s.version          = '2.3.0'
+  s.version          = '2.5.4'
   s.summary          = 'Visilabs IOS SDK'
   s.description      = 'Visilabs IOS SDK'
   s.homepage         = 'https://www.relateddigital.com'
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/relateddigital/visilabs-ios.git', :tag => s.version.to_s }
   s.ios.deployment_target = '10.0'
   s.source_files = 'VisilabsIOS/Classes/**/*'
-  s.resources     = 'VisilabsIOS/Assets/Images/**/*'
+  s.resources     = 'VisilabsIOS/Assets/**/*'
   #s.info_plist = { 'CFBundleIdentifier' => 'com.relateddigital.visilabs' }
   s.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'com.relateddigital.visilabs' }
 end

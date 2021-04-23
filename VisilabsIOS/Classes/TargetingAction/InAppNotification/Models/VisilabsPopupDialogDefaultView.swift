@@ -35,6 +35,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     
     var colors: [[CGColor]] = []
     var numberBgColor: UIColor = .black
+    var numberBorderColor: UIColor = .white
     var selectedNumber: Int? = nil
     var expanded = false
     var delegate: VisilabsPopupDialogDefaultViewDelegate?

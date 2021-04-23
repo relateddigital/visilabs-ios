@@ -142,7 +142,7 @@ extension InAppViewController {
             $0.options = InAppHelper.miniIcons
             $0.value = InAppHelper.miniIcons.first!
         }.cellSetup { cell, _ in
-            cell.imageView?.image = InAppHelper.miniIconImages.first!.value
+            cell.imageView?.image = InAppHelper.miniIconImages.first?.value
         }.cellUpdate { cell, row in
             cell.imageView?.image = InAppHelper.miniIconImages[row.value!]
         }
@@ -318,7 +318,7 @@ extension InAppViewController {
             Visilabs.callAPI().customEvent("mail", properties: [String: String]())
         } else if value == "scratchToWin" {
             let sctw = createScratchToWinModel()
-            Visilabs.callAPI().showScratchToWin(sctw)
+            Visilabs.callAPI().showTargetingAction(sctw)
         } else {
             let visilabsInAppNotification = createVisilabsInAppNotificationModel()
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
@@ -435,7 +435,8 @@ extension InAppViewController {
                                         promotionCode: promotionCode,
                                         promotionTextColor: promotionTextColor,
                                         promotionBackgroundColor: promotionBackgroundColor,
-                                        numberColors: numberColors)
+                                        numberColors: numberColors,
+                                        delay: 0)
     }
     
     //swiftlint:disable function_body_length

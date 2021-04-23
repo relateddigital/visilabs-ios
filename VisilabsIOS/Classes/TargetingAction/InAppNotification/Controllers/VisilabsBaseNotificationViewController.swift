@@ -13,8 +13,9 @@ protocol VisilabsNotificationViewControllerDelegate: AnyObject {
                                    callToActionURL: URL?,
                                    shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool
-    func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController,
-                               click: String)
+    
+    // kullanılmıyor
+    //func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String)
 }
 
 class VisilabsBaseNotificationViewController: UIViewController {
@@ -22,6 +23,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
     var notification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
     var scratchToWin: ScratchToWinModel?
+    var spinToWin: SpinToWinViewModel?
     weak var delegate: VisilabsNotificationViewControllerDelegate?
     var window: UIWindow?
     var panStartPoint: CGPoint!
@@ -46,7 +48,10 @@ class VisilabsBaseNotificationViewController: UIViewController {
     func hide(animated: Bool, completion: @escaping () -> Void) {}
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if self.mailForm != nil {
+        if self.mailForm != nil || self.spinToWin != nil {
+            return
+        }
+        if let not = self.notification, not.type == .fullImage {
             return
         }
         let touch = touches.first

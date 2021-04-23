@@ -7,7 +7,7 @@
 
 import Foundation
 //swiftlint:disable type_body_length
-public class ScratchToWinModel {
+public class ScratchToWinModel: TargetingActionViewModel {
 
     public enum ScratchTWKey {
         public static let actId = "actid"
@@ -37,6 +37,7 @@ public class ScratchToWinModel {
         public static let consentText = "consent_text"
     }
 
+    public var targetingActionType: TargetingActionType = .scratchToWin
     let actId: Int
     let messageType: String
     let type: VisilabsInAppNotificationType
