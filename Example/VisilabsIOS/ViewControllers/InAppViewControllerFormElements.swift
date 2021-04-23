@@ -135,6 +135,17 @@ extension InAppViewController {
             $0.value = URL(string: str)
         }
     }
+    
+    func addDelayPickerInputRow() -> PickerInputRow<Int> {
+        return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.waitingTime) {
+            $0.title = "Waiting Time"
+            $0.options = []
+            for counter in 0...60 {
+                $0.options.append(counter)
+            }
+            $0.value = 0
+        }
+    }
 
       func addMiniIconPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>("miniIcon") {
@@ -409,6 +420,9 @@ extension InAppViewController {
         let numberBgColor2 = (self.form.rowBy(tag: tag+"2") as TextRow?)!.value! as String
         let numberBgColor3 = (self.form.rowBy(tag: tag+"3") as TextRow?)!.value! as String
         let numberColors = [numberBgColor1, numberBgColor2, numberBgColor3]
+        
+        tag = VisilabsInAppNotification.PayloadKey.waitingTime
+        let waitingTime = ((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)
         return VisilabsInAppNotification(actId: 0,
                                         type: messageType,
                                         messageTitle: messageTitle,
@@ -433,6 +447,6 @@ extension InAppViewController {
                                         promotionTextColor: promotionTextColor,
                                         promotionBackgroundColor: promotionBackgroundColor,
                                         numberColors: numberColors,
-                                        delay: 0)
+                                        waitingTime: waitingTime)
     }
 }
