@@ -43,9 +43,9 @@ class InAppViewController: FormViewController {
     let closeButtonColors = ["black", "white"]
 
     func initializeForm() {
-
-        VisilabsInAppNotificationType.allCases.forEach {
-            notificationTypes.append($0.rawValue)
+        //Not add spintowin as a type
+        for counter in 0..<11 {
+            notificationTypes.append(VisilabsInAppNotificationType.allCases[counter].rawValue)
         }
 
         LabelRow.defaultCellUpdate = { cell, _ in
@@ -107,12 +107,14 @@ class InAppViewController: FormViewController {
             setFormRowsForFullImage()
         case.imageButton:
             setFormRowsForImageButton()
-        case .emailForm:
-            setFormRowsForEmail()
         case .alert:
             setRowsForAlert()
         case .scratchToWin:
             setRowsForScratchToWin()
+        case .emailForm:
+            setFormRowsForEmail()
+        case .spintowin:
+            setFormRowsForEmail()
         }
         self.form.allRows.forEach { (row) in
             row.evaluateHidden()

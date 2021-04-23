@@ -20,6 +20,7 @@ enum VisilabsEndpoint {
     case geofence
     case mobile
     case subsjson
+    case promotion
 }
 
 struct VisilabsResource<A> {

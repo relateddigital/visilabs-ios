@@ -23,6 +23,7 @@
         - [Story Actions](#Story-Actions)
         - [Geofencing](#Geofencing)
         - [Mail Subscription Form](#Mail-Subscription-Form)
+        - [Spin To Win](#Spin-To-Win)
     - [Recommendation](#Recommendation)
 
 
@@ -413,6 +414,23 @@ let storyView = Visilabs.callAPI().getStoryView(actionId: 67)
 view.addSubview(storyHomeView)
 ```
 
+If you add a clickable URL, framework handle to open it on browser (or direct by deeplink). However, if you want to handle by yourself, extend your class that conforms VisilabsStoryURLDelegate, as following;
+
+```swift
+extension StoryViewController: VisilabsStoryURLDelegate {
+    func urlClicked(_ url: URL) {
+        //TO DO
+    }
+}
+```
+After you add this, you can set urlDelegate self.
+
+```swift
+let storyView = Visilabs.callAPI().getStoryView(actionId: 67, urlDelegate: self)
+view.addSubview(storyHomeView)
+```
+If you set delegate, then clickable URL will not be handled by SDK!
+
 ### Geofencing
 
 To enable location services in your application first of all you need to add the following keys to your `Info.plist` file.
@@ -458,6 +476,16 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 After form is created at **RMC** panel, likewise **in-app message**, existence of mail subscription form is controlled by after each `customEvent` call. It is shown as follows;
 
 ![mail-subscription-form](/Screenshots/InAppNotification/mail-subscription-form.png)
+
+### Spin To Win
+
+After form is created at **RMC** panel, likewise **in-app message**, existence of spin to win is controlled by after each `customEvent` call. It opens a WebViewController. It is shown as follows;
+
+|               Spin to Win Full                                   |                        Spin to Win Half                                    |
+|:----------------------------------------------------------------:|----------------------------------------------------------------------------|
+| ![spin-to-win-full](/Screenshots/spin_to_win_full_en.jpeg)          | ![spin-to-win-half](/Screenshots/spin_to_win_half_en.jpeg)                    |
+
+
 
 ## Recommendation
 

@@ -17,4 +17,5 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case alert
     case npsWithNumbers = "nps_with_numbers"
     case scratchToWin
+    case spintowin
 }

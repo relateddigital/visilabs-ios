@@ -25,6 +25,7 @@ struct VisilabsConstants {
     static var geofenceEndPoint = "s.visilabs.net/geojson"
     static var mobileEndPoint = "s.visilabs.net/mobile"
     static var subsjsonEndpoint = "s.visilabs.net/subsjson"
+    static var promotionEndpoint = "s.visilabs.net/promotion"
 
     // MARK: - UserDefaults Keys
 
@@ -112,6 +113,7 @@ struct VisilabsConstants {
     static let favoriteAttributeAction = "FavoriteAttributeAction"
     static let story = "Story"
     static let mailSubscriptionForm = "MailSubscriptionForm"
+    static let spinToWin = "SpinToWin"
     static let actid = "actid"
     static let actionId = "action_id"
     static let actionData = "actiondata"
@@ -142,6 +144,7 @@ struct VisilabsConstants {
     static let storyzimgBorderColor = "storyz_img_borderColor"
     static let storyzImgBorderRadius = "storyz_img_borderRadius"
     static let shownStories = "shownStories"
+    static let moveShownToEnd = "moveShownToEnd"
     //Email form constants
     static let message = "message"
     static let placeholder = "placeholder"
@@ -167,6 +170,55 @@ struct VisilabsConstants {
     static let consentTextUrl = "consent_text_url"
     static let closeButtonColor = "close_button_color"
     static let backgroundColor = "background_color"
+    
+    
+    //SpinToWin constants
+    static let slices = "slices"
+    static let promoAuth = "promoAuth"
+    static let mailSubscription = "mail_subscription"
+    static let sliceCount = "slice_count"
+    static let spinToWinContent = "spin_to_win_content"
+    static let promocodeTitle = "promocode_title"
+    static let copybuttonLabel = "copybutton_label"
+    static let img = "img"
+    
+    //SpinToWin extended properties
+    static let displaynameTextColor = "displayname_text_color"
+    static let displaynameFontFamily = "displayname_font_family"
+    static let displaynameTextSize = "displayname_text_size"
+    //static let titleTextColor = "title_text_color" // varmış zaten
+    //static let titleFontFamily = "title_font_family" // varmış zaten
+    //static let titleTextSize = "title_text_size" // varmış zaten
+    //static let textColor = "text_color" // varmış zaten
+    //static let textFontFamily = "text_font_family" // varmış zaten
+    //static let textSize = "text_size" // varmış zaten
+    static let button_color = "button_color"
+    static let button_text_color = "button_text_color"
+    //static let buttonFontFamily = "button_font_family" // varmış zaten
+    //static let buttonTextSize = "button_text_size" // varmış zaten
+    static let promocodeTitleTextColor = "promocode_title_text_color"
+    static let promocodeTitleFontFamily = "promocode_title_font_family"
+    static let promocodeTitleTextSize = "promocode_title_text_size"
+    static let promocodeBackgroundColor = "promocode_background_color"
+    static let promocodeTextColor = "promocode_text_color"
+    static let copybuttonColor = "copybutton_color"
+    static let copybuttonTextColor = "copybutton_text_color"
+    static let copybuttonFontFamily = "copybutton_font_family"
+    static let copybuttonTextSize = "copybutton_text_size"
+    static let emailpermitTextSize = "emailpermit_text_size"
+    static let emailpermitTextUrl = "emailpermit_text_url"
+    //static let consentTextSize = "consent_text_size" // varmış zaten
+    //static let consentTextUrl = "consent_text_url" // varmış zaten
+    //static let closeButtonColor = "close_button_color" // varmış zaten
+    //static let backgroundColor = "background_color" // varmış zaten
+    
+    //SpinToWin slices
+    static let displayName = "displayName"
+    static let color = "color"
+    static let code = "code"
+    //static let type = "type" // varmış zaten
+
+
     
     private static let targetPrefVossStoreKey = "OM.voss"
     private static let targetPrefVcnameStoreKey = "OM.vcname"
