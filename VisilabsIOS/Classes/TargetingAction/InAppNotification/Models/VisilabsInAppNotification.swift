@@ -35,7 +35,7 @@ public class VisilabsInAppNotification {
         public static let promotionTextColor = "promocode_text_color"
         public static let promotionBackgroundColor = "promocode_background_color"
         public static let numberColors = "number_colors"
-        public static let delay = "delay"
+        public static let waitingTime = "waiting_time"
     }
 
     let actId: Int
@@ -63,7 +63,7 @@ public class VisilabsInAppNotification {
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
     let numberColors: [UIColor]?
-    let delay: Int?
+    let waitingTime: Int?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -110,7 +110,7 @@ public class VisilabsInAppNotification {
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
                 numberColors: [String]?,
-                delay: Int?) {
+                waitingTime: Int?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -155,7 +155,7 @@ public class VisilabsInAppNotification {
         self.promotionTextColor = UIColor(hex: promotionTextColor)
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
         self.numberColors = VisilabsHelper.convertColorArray(numberColors)
-        self.delay = delay
+        self.waitingTime = waitingTime
         setFonts()
     }
 
@@ -232,7 +232,7 @@ public class VisilabsInAppNotification {
         } else {
             self.numberColors = nil
         }
-        self.delay = 0
+        self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
         setFonts()
     }
 
