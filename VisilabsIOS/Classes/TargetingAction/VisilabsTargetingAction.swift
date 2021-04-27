@@ -143,8 +143,6 @@ class VisilabsTargetingAction {
         let taTemplate = actionData[VisilabsConstants.taTemplate] as? String ?? "half_spin"
         let img = actionData[VisilabsConstants.img] as? String ?? ""
         
-        
-        
         let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
         let actid = spinToWin[VisilabsConstants.actid] as? Int ?? 0
         let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
@@ -169,9 +167,8 @@ class VisilabsTargetingAction {
         let successMessage = spinToWinContent[VisilabsConstants.successMessage] as? String ?? ""
         let emailPermitText = spinToWinContent[VisilabsConstants.emailPermitText] as? String ?? ""
         let checkConsentMessage = spinToWinContent[VisilabsConstants.checkConsentMessage] as? String ?? ""
-        let promocodeTitle = spinToWinContent[VisilabsConstants.promocodeTitle] as? String ?? ""
-        let copybuttonLabel = spinToWinContent[VisilabsConstants.copybuttonLabel] as? String ?? ""
-        
+        let promocodeTitle = actionData[VisilabsConstants.promocodeTitle] as? String ?? ""
+        let copybuttonLabel = actionData[VisilabsConstants.copybuttonLabel] as? String ?? ""
         
         // extended properties
         let displaynameTextColor = extendedProps[VisilabsConstants.displaynameTextColor] as? String ?? ""

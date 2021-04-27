@@ -135,7 +135,7 @@ extension InAppViewController {
             $0.value = URL(string: str)
         }
     }
-    
+
     func addDelayPickerInputRow() -> PickerInputRow<Int> {
         return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.waitingTime) {
             $0.title = "Waiting Time"
