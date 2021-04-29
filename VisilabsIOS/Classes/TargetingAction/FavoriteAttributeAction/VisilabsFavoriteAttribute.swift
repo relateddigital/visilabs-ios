@@ -5,7 +5,7 @@
 //  Created by Egemen on 25.08.2020.
 //
 
-public enum VisilabsFavoriteAttribute: String {
+public enum VisilabsFavoriteAttribute: String, Encodable {
     case ageGroup
     case attr1
     case attr2
