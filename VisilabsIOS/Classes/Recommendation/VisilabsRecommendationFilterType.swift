@@ -127,7 +127,7 @@ public class VisilabsRecommendationFilter : NSObject {
     }
 }
 
-public class VisilabsProduct {
+public class VisilabsProduct: Encodable {
 
     public enum PayloadKey {
         public static let code = "code"
