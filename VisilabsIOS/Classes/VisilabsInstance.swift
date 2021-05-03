@@ -95,7 +95,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          channel: String,
          requestTimeoutInSeconds: Int,
          geofenceEnabled: Bool,
-         maxGeofenceCount: Int) {
+         maxGeofenceCount: Int,
+         isIDFAEnabled: Bool = true) {
 
         //TO_DO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
@@ -124,7 +125,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                                requestTimeoutInSeconds: requestTimeoutInSeconds,
                                                geofenceEnabled: geofenceEnabled,
                                                inAppNotificationsEnabled: inAppNotificationsEnabled,
-            maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
+                                               maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
@@ -142,8 +143,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         self.visilabsUser = self.unarchive()
         self.visilabsTargetingActionInstance.inAppDelegate = self
 
-        if let idfa = VisilabsHelper.getIDFA() {
-            visilabsUser.identifierForAdvertising = idfa
+        if isIDFAEnabled {
+            VisilabsHelper.getIDFA { uuid in
+                if let idfa = uuid {
+                    self.visilabsUser.identifierForAdvertising = idfa
+                }
+            }
         }
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {

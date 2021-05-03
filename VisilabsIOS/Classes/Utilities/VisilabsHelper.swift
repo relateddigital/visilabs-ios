@@ -9,6 +9,7 @@ import Foundation
 import AdSupport
 import WebKit
 import UIKit
+import AppTrackingTransparency
 
 internal class VisilabsHelper {
 
@@ -58,12 +59,24 @@ internal class VisilabsHelper {
         }
     }
 
-    static func getIDFA() -> String? {
-        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
-            let IDFA = ASIdentifierManager.shared().advertisingIdentifier
-            return IDFA.uuidString
+    static func getIDFA(completion: @escaping (String?) -> ()) {
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                if status == .authorized {
+                    let IDFA = ASIdentifierManager.shared().advertisingIdentifier
+                    completion(IDFA.uuidString)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+                let IDFA = ASIdentifierManager.shared().advertisingIdentifier
+                completion(IDFA.uuidString)
+            } else {
+                completion(nil)
+            }
         }
-        return nil
     }
 
     static private var webView: WKWebView?
