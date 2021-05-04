@@ -74,7 +74,8 @@ class HomeViewController: FormViewController {
                                channel: visilabsProfile.channel,
                                requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
                                geofenceEnabled: visilabsProfile.geofenceEnabled,
-                               maxGeofenceCount: visilabsProfile.maxGeofenceCount)
+                               maxGeofenceCount: visilabsProfile.maxGeofenceCount,
+                               isIDFAEnabled: visilabsProfile.isIDFAEnabled)
             Visilabs.callAPI().loggingEnabled = true
             Visilabs.callAPI().useInsecureProtocol = true
             self.configureEuromessage()
@@ -105,6 +106,13 @@ class HomeViewController: FormViewController {
         return SwitchRow("geofenceEnabled") {
             $0.title = "geofenceEnabled"
             $0.value = visilabsProfile.geofenceEnabled
+        }
+    }
+
+    func addIDFASwitchRow() -> SwitchRow {
+        return SwitchRow("isIDFAEnabled") {
+            $0.title = "isIDFAEnabled"
+            $0.value = visilabsProfile.isIDFAEnabled
         }
     }
 
@@ -228,6 +236,7 @@ class HomeViewController: FormViewController {
             <<< addGeofenceSwitchRow()
             <<< addGeofencePickerInputRow()
             <<< addAppAliasTextRow()
+            <<< addIDFASwitchRow()
 
             +++ Section()
             <<< addCreateApiButtonRow()
