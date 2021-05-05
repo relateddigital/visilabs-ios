@@ -23,7 +23,8 @@ public class Visilabs {
                                 channel: String = "IOS",
                                 requestTimeoutInSeconds: Int = 30,
                                 geofenceEnabled: Bool = false,
-                                maxGeofenceCount: Int = 20) -> VisilabsInstance {
+                                maxGeofenceCount: Int = 20,
+                                isIDFAEnabled: Bool = true) -> VisilabsInstance {
 
         VisilabsManager.sharedInstance.initialize(organizationId: organizationId,
                                                   profileId: profileId,
@@ -32,6 +33,7 @@ public class Visilabs {
                                                   channel: channel,
                                                   requestTimeoutInSeconds: requestTimeoutInSeconds,
                                                   geofenceEnabled: geofenceEnabled,
-                                                  maxGeofenceCount: maxGeofenceCount)
+                                                  maxGeofenceCount: maxGeofenceCount,
+                                                  isIDFAEnabled: isIDFAEnabled)
     }
 }
