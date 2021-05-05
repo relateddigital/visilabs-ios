@@ -21,4 +21,5 @@ struct VisilabsProfile: Codable {
     var appToken = ""
     var userKey = "userKey"
     var userEmail = "user@mail.com"
+    var isIDFAEnabled = true
 }

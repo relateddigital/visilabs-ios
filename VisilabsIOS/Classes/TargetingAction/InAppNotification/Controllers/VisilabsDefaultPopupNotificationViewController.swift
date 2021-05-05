@@ -20,11 +20,17 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
         self.visilabsInAppNotification = visilabsInAppNotification
         self.mailForm = emailForm
         self.scratchToWin = scratchToWin
+
         if let image = visilabsInAppNotification?.image {
             self.image = UIImage(data: image)
         }
+
         if let img = scratchToWin?.image {
             self.image = UIImage(data: img)
+        }
+
+        if let secondImage = visilabsInAppNotification?.secondImage2 {
+            self.secondImage = UIImage(data: secondImage)
         }
     }
 
@@ -53,6 +59,14 @@ public extension VisilabsDefaultPopupNotificationViewController {
         set {
             standardView.imageView.image = newValue
             standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
+        }
+    }
+    /// Second Image View
+    var secondImage: UIImage? {
+        get { return standardView.secondImageView.image }
+        set {
+            standardView.secondImageView.image = newValue
+            standardView.secondImageHeight?.constant = standardView.imageView.pv_heightForImageView()
         }
     }
 
@@ -142,5 +156,7 @@ public extension VisilabsDefaultPopupNotificationViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
+        standardView.secondImageHeight?.constant = standardView.secondImageView.pv_heightForImageView()
+        standardView.sctw.centerX(to: standardView)
     }
 }

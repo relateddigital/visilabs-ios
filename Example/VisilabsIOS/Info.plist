@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,6 +33,8 @@
 	<string>We will use your location always!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We will use your location when app is open!</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We use advertising identifier!</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

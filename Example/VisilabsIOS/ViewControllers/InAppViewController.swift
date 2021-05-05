@@ -9,6 +9,7 @@
 import VisilabsIOS
 import Eureka
 
+//swiftlint:disable type_body_length
 class InAppViewController: FormViewController {
 
     override func viewDidLoad() {
@@ -39,13 +40,18 @@ class InAppViewController: FormViewController {
     }
 
     var notificationTypes = [String]()
+    var secondPopupTypes = [String]()
     let fonts = ["Monospace", "sansserif", "serif", "DefaultFont"]
     let closeButtonColors = ["black", "white"]
 
     func initializeForm() {
-        //Not add spintowin as a type
-        for counter in 0..<11 {
+        //change when added new inapp type
+        for counter in 0..<12 {
             notificationTypes.append(VisilabsInAppNotificationType.allCases[counter].rawValue)
+        }
+
+        for type in VisilabsSecondPopupType.allCases {
+            secondPopupTypes.append(type.rawValue)
         }
 
         LabelRow.defaultCellUpdate = { cell, _ in
@@ -68,6 +74,7 @@ class InAppViewController: FormViewController {
             <<< addCopyCodeBackgroundColor()
             <<< addIosLinkUrlRow()
             <<< addImageUrlUrlRow()
+            <<< addDelayPickerInputRow()
             <<< addMiniIconPickerInputRow()
             <<< addMessageTitleColorRow()
             <<< addMessageBodyColorRow()
@@ -82,6 +89,14 @@ class InAppViewController: FormViewController {
             <<< addNumberBGColor("1")
             <<< addNumberBGColor("2")
             <<< addNumberBGColor("3")
+            <<< addSecondNotificationPickerInputRow()
+            <<< addSecondPopupTitleTextRow()
+            <<< addSecondPopupBodyTextRow()
+            <<< addSecondMessageBodyTextSizePickerInputRow()
+            <<< addSecondButtonTextTextRow()
+            <<< addSecondImageUrl1UrlRow()
+            <<< addSecondImageUrl2UrlRow()
+            <<< addSecondPopupMinTextRow()
 
         +++ Section()
 
@@ -113,6 +128,8 @@ class InAppViewController: FormViewController {
             setRowsForScratchToWin()
         case .emailForm:
             setFormRowsForEmail()
+        case .secondNps, .feedbackForm, .imageButtonImage:
+            setFormRowsForSecondPopup()
         case .spintowin:
             setFormRowsForEmail()
         }
@@ -143,6 +160,14 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupTitle)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
     /**
             Use for full, image text button, smile rating and nps
@@ -169,6 +194,13 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
 
     func setFormRowsForPromoCode() {
@@ -193,6 +225,25 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
+    }
+
+    func setFormRowsForSecondPopup() {
+        setFormRowsForPromoCode()
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupTitle)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = false
     }
 
     func setFormRowsForFullImage() {
@@ -217,6 +268,13 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
 
     func setFormRowsForImageButton() {
@@ -241,6 +299,13 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
 
     func setFormRowsForEmail() {
@@ -265,6 +330,13 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
 
     func setRowsForAlert() {
@@ -289,6 +361,13 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = true
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
 
     func setFormRowsForNpsWithNumbers() {
@@ -313,6 +392,13 @@ class InAppViewController: FormViewController {
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"1")?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"2")?.hidden = false
         self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.numberColors+"3")?.hidden = false
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupType)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBody)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupButtonText)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString1)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondImageUrlString2)?.hidden = true
+        self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupMinPoint)?.hidden = true
     }
 
     func setRowsForScratchToWin() {

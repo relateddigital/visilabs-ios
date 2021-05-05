@@ -74,44 +74,60 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     fileprivate func initForInAppNotification(_ viewController: VisilabsDefaultPopupNotificationViewController) {
         guard let notification = self.notification else { return }
-        if notification.type != .fullImage {
+        if notification.type == .secondNps {
+            let button = VisilabsPopupDialogButton(title: notification.buttonText!,
+                                                   font: notification.buttonTextFont,
+                                                   buttonTextColor: notification.buttonTextColor,
+                                                   buttonColor: notification.buttonColor,
+                                                   action: openSecondPopup)
+            addButton(button)
+        } else if notification.type != .fullImage && notification.type != .imageButtonImage {
 
             let button = VisilabsPopupDialogButton(title: notification.buttonText!,
                                                    font: notification.buttonTextFont,
                                                    buttonTextColor: notification.buttonTextColor,
-                                                   buttonColor: notification.buttonColor, action: {
-
-                var additionalTrackingProperties = [String: String]()
-                           if notification.type == .smileRating {
-                               additionalTrackingProperties["OM.s_point"]
-                                = String(Int(viewController.standardView.sliderStepRating.value))
-                               additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                               additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-                           } else if notification.type == .nps {
-                               additionalTrackingProperties["OM.s_point"]
-                                = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",",
-                                                                                                        with: ".")
-                               additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                               additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-                           } else if notification.type == .npsWithNumbers {
-                                if let num = viewController.standardView.selectedNumber {
-                                    additionalTrackingProperties["OM.s_point"] = "\(num)"
-                                }
-                                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-                           }
-
-                self.delegate?.notificationShouldDismiss(controller: self,
-                                                         callToActionURL: notification.callToActionUrl,
-                                                         shouldTrack: true,
-                                                         additionalTrackingProperties: additionalTrackingProperties)})
+                                                   buttonColor: notification.buttonColor, action: commonButtonAction)
             addButton(button)
         } else {
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                              action: #selector(imageTapped(tapGestureRecognizer:)))
-            viewController.standardView.imageView.isUserInteractionEnabled = true
-            viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
+            if notification.type != .imageButtonImage {
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                  action: #selector(imageTapped(tapGestureRecognizer:)))
+                viewController.standardView.imageView.isUserInteractionEnabled = true
+                viewController.standardView.imageView.addGestureRecognizer(tapGestureRecognizer)
+            }
         }
+    }
+    
+    func commonButtonAction() {
+        guard let notification = self.notification else { return }
+        var additionalTrackingProperties = [String: String]()
+                   if notification.type == .smileRating {
+                       additionalTrackingProperties["OM.s_point"]
+                        = String(Int(viewController.standardView.sliderStepRating.value))
+                       additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                       additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                   } else if notification.type == .nps {
+                       additionalTrackingProperties["OM.s_point"]
+                        = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",",
+                                                                                                with: ".")
+                       additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                       additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                   } else if notification.type == .npsWithNumbers {
+                        if let num = viewController.standardView.selectedNumber {
+                            additionalTrackingProperties["OM.s_point"] = "\(num)"
+                        }
+                        additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                        additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                   }
+        //Check if second popup coming
+        var callToActionURL: URL? = notification.callToActionUrl
+        if notification.type == .secondNps {
+            callToActionURL = nil
+        }
+        self.delegate?.notificationShouldDismiss(controller: self,
+                                                 callToActionURL: callToActionURL,
+                                                 shouldTrack: true,
+                                                 additionalTrackingProperties: additionalTrackingProperties)
     }
 
     fileprivate func initForEmailForm(_ viewController: VisilabsDefaultPopupNotificationViewController) {
@@ -153,6 +169,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                         action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
+        viewController.standardView.imgButtonDelegate = self
     }
 
     /*!
@@ -225,6 +242,25 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         }
 
         // addCloseButton()
+    }
+
+    func openSecondPopup() {
+        commonButtonAction()
+        guard let type = self.notification?.secondPopupType else { return }
+        var not: VisilabsInAppNotification? = nil
+        switch type {
+        case .feedback:
+            let threshold = Double(self.notification?.secondPopupMinPoint ?? "3.0") ?? 3.0
+            let userRating = viewController.standardView.npsView.rating
+            if userRating < threshold {
+                not = createSecondPopup()
+            }
+        default:
+            not = createSecondPopup()
+        }
+        if let n = not {
+            Visilabs.callAPI().showNotification(n)
+        }
     }
 
     // Init with coder not implemented
@@ -438,7 +474,51 @@ internal extension VisilabsPopupNotificationViewController {
     @objc fileprivate func orientationChanged(_ notification: Notification) {
 
     }
+    //Creates a second popup with first popup properties
+    func createSecondPopup() -> VisilabsInAppNotification? {
+        if let not = self.notification {
+            var promo: String? = nil
+            if not.secondPopupType == .imageTextButton {
+                promo = not.promotionCode
+            }
+            //Convert Second Type To First
+            var type: VisilabsInAppNotificationType = .imageTextButton
+            switch not.secondPopupType {
+            case .feedback:
+                type = .feedbackForm
+            case .imageButtonImage:
+                type = .imageButtonImage
+            default:
+                type = .imageTextButton
+            }
+            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, backGround: not.backGroundColor?.toHexString(), closeButtonColor: not.closeButtonColor?.toHexString(), buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil)
+        }
+        return nil
+    }
 
+}
+extension VisilabsPopupNotificationViewController: ImageButtonImageDelegate {
+    func imageButtonTapped() {
+        self.commonButtonAction()
+    }
+}
+
+extension UIColor {
+    func toHexString() -> String {
+        let components = self.cgColor.components
+        guard let c = components, c.count > 3 else {
+            return "FFFFFF"
+        }
+        let red: CGFloat = components?[0] ?? 0.0
+        let green: CGFloat = components?[1] ?? 0.0
+        let blue: CGFloat = components?[2] ?? 0.0
+
+        let hexString = String.init(format: "#%02lX%02lX%02lX",
+                                    lroundf(Float(red * 255)),
+                                    lroundf(Float(green * 255)),
+                                    lroundf(Float(blue * 255)))
+        return hexString
+    }
 }
 
 extension VisilabsPopupNotificationViewController: VisilabsPopupDialogDefaultViewDelegate {

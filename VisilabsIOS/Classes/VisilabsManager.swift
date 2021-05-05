@@ -20,7 +20,8 @@ class VisilabsManager {
                     channel: String,
                     requestTimeoutInSeconds: Int,
                     geofenceEnabled: Bool,
-                    maxGeofenceCount: Int) -> VisilabsInstance {
+                    maxGeofenceCount: Int,
+                    isIDFAEnabled: Bool) -> VisilabsInstance {
         let instance = VisilabsInstance(organizationId: organizationId,
                                         profileId: profileId,
                                         dataSource: dataSource,
@@ -28,7 +29,8 @@ class VisilabsManager {
                                         channel: channel,
                                         requestTimeoutInSeconds: requestTimeoutInSeconds,
                                         geofenceEnabled: geofenceEnabled,
-                                        maxGeofenceCount: maxGeofenceCount)
+                                        maxGeofenceCount: maxGeofenceCount,
+                                        isIDFAEnabled: isIDFAEnabled)
         self.instance = instance
         return instance
     }

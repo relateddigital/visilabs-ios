@@ -56,12 +56,14 @@ class HomeViewController: FormViewController {
             let channelRow: TextRow? = self.form.rowBy(tag: "channel")
             let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
             let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
+            let idfaRow: SwitchRow? = self.form.rowBy(tag: "isIDFAEnabled")
             let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
             let appAliasRow: TextRow? = self.form.rowBy(tag: "appAlias")
             visilabsProfile.organizationId = orgIdRow!.value!
             visilabsProfile.profileId = profileIdRow!.value!
             visilabsProfile.dataSource = dataSourceRow!.value!
             visilabsProfile.geofenceEnabled = geofenceEnabledRow?.value ?? false
+            visilabsProfile.isIDFAEnabled = idfaRow?.value ?? false
             visilabsProfile.channel = channelRow!.value!
             visilabsProfile.requestTimeoutInSeconds = requestTimeoutInSecondsRow!.value!
             visilabsProfile.inAppNotificationsEnabled = inAppNotificationsEnabledRow?.value ?? false
@@ -74,7 +76,8 @@ class HomeViewController: FormViewController {
                                channel: visilabsProfile.channel,
                                requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
                                geofenceEnabled: visilabsProfile.geofenceEnabled,
-                               maxGeofenceCount: visilabsProfile.maxGeofenceCount)
+                               maxGeofenceCount: visilabsProfile.maxGeofenceCount,
+                               isIDFAEnabled: visilabsProfile.isIDFAEnabled)
             Visilabs.callAPI().loggingEnabled = true
             Visilabs.callAPI().useInsecureProtocol = true
             self.configureEuromessage()
@@ -105,6 +108,13 @@ class HomeViewController: FormViewController {
         return SwitchRow("geofenceEnabled") {
             $0.title = "geofenceEnabled"
             $0.value = visilabsProfile.geofenceEnabled
+        }
+    }
+
+    func addIDFASwitchRow() -> SwitchRow {
+        return SwitchRow("isIDFAEnabled") {
+            $0.title = "isIDFAEnabled"
+            $0.value = visilabsProfile.isIDFAEnabled
         }
     }
 
@@ -228,6 +238,7 @@ class HomeViewController: FormViewController {
             <<< addGeofenceSwitchRow()
             <<< addGeofencePickerInputRow()
             <<< addAppAliasTextRow()
+            <<< addIDFASwitchRow()
 
             +++ Section()
             <<< addCreateApiButtonRow()
