@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2CFFDC19DC134D2852109B29 /* Pods_VisilabsIOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD24D910F1E148C7F7197959 /* Pods_VisilabsIOS_Example.framework */; };
 		2FC76C91255E684E00851B9A /* InAppViewControllerFormElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC76C90255E684E00851B9A /* InAppViewControllerFormElements.swift */; };
 		2FC76CA2255EB64700851B9A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2FC76CA1255EB64700851B9A /* .swiftlint.yml */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
@@ -94,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CFFDC19DC134D2852109B29 /* Pods_VisilabsIOS_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
