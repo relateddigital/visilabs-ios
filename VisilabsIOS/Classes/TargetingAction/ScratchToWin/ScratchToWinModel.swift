@@ -1,15 +1,15 @@
 //
-//  VisilabsInAppNotification.swift
+//  ScratchToWinModel.swift
 //  VisilabsIOS
 //
-//  Created by Egemen on 10.05.2020.
+//  Created by Said Alır on 04.02.2021.
 //
 
 import Foundation
 //swiftlint:disable type_body_length
-public class VisilabsInAppNotification {
+public class ScratchToWinModel: TargetingActionViewModel {
 
-    public enum PayloadKey {
+    public enum ScratchTWKey {
         public static let actId = "actid"
         public static let actionData = "actiondata"
         public static let messageType = "msg_type"
@@ -29,23 +29,15 @@ public class VisilabsInAppNotification {
         public static let closeButtonColor = "close_button_color"
         public static let buttonTextColor = "button_text_color"
         public static let buttonColor = "button_color"
-        public static let alertType = "alert_type"
         public static let closeButtonText = "close_button_text"
         public static let promotionCode = "promotion_code"
         public static let promotionTextColor = "promocode_text_color"
         public static let promotionBackgroundColor = "promocode_background_color"
-        public static let numberColors = "number_colors"
-        public static let waitingTime = "waiting_time"
-        public static let secondPopupType = "secondPopup_type"
-        public static let secondPopupMinPoint = "secondPopup_feedbackform_minpoint"
-        public static let secondPopupTitle = "secondPopup_msg_title"
-        public static let secondPopupBody = "secondPopup_msg_body"
-        public static let secondPopupBodyTextSize = "secondPopup_msg_body_textsize"
-        public static let secondPopupButtonText = "secondPopup_btn_text"
-        public static let secondImageUrlString1 = "secondPopup_image1"
-        public static let secondImageUrlString2 = "secondPopup_image2"
+        public static let emailPermitText = "email_permit_text"
+        public static let consentText = "consent_text"
     }
 
+    public var targetingActionType: TargetingActionType = .scratchToWin
     let actId: Int
     let messageType: String
     let type: VisilabsInAppNotificationType
@@ -65,52 +57,17 @@ public class VisilabsInAppNotification {
     let closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?
-    let alertType: String?
     let closeButtonText: String?
     let promotionCode: String?
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
-    let numberColors: [UIColor]?
-    let waitingTime: Int?
-    let secondPopupType: VisilabsSecondPopupType?
-    let secondPopupTitle: String?
-    let secondPopupBody: String?
-    let secondPopupBodyTextSize: String?
-    let secondPopupButtonText: String?
-    let secondImageUrlString1: String?
-    let secondImageUrlString2: String?
-    let secondPopupMinPoint: String?
-
+    let emailPermitText: String?
+    let consentText: String?
+    
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
         if let iUrl = self.imageUrl {
-            do {
-                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
-            } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
-            }
-        }
-        return data
-    }()
-    ///Second Popup First Image
-    var secondImageUrl1: URL?
-    lazy var secondImage1: Data? = {
-        var data: Data?
-        if let iUrl = self.secondImageUrl1 {
-            do {
-                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
-            } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
-            }
-        }
-        return data
-    }()
-    ///Second Popup Second Image
-    var secondImageUrl2: URL?
-    lazy var secondImage2: Data? = {
-        var data: Data?
-        if let iUrl = self.secondImageUrl2 {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
@@ -146,22 +103,12 @@ public class VisilabsInAppNotification {
                 closeButtonColor: String?,
                 buttonTextColor: String?,
                 buttonColor: String?,
-                alertType: String?,
                 closeButtonText: String?,
                 promotionCode: String?,
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
-                numberColors: [String]?,
-                waitingTime: Int?,
-                secondPopupType: VisilabsSecondPopupType?,
-                secondPopupTitle: String?,
-                secondPopupBody: String?,
-                secondPopupBodyTextSize: String?,
-                secondPopupButtonText: String?,
-                secondImageUrlString1: String?,
-                secondImageUrlString2: String?,
-                secondPopupMinPoint: String?) {
-
+                emailPermitText: String?,
+                consentText: String?) {
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -192,7 +139,7 @@ public class VisilabsInAppNotification {
         self.buttonTextColor = UIColor(hex: buttonTextColor)
         self.buttonColor = UIColor(hex: buttonColor)
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+            self.imageUrl = ScratchToWinModel.getImageUrl(imageUrlString!, type: self.type)
         }
 
         var callToActionUrl: URL?
@@ -200,28 +147,12 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-        self.alertType = alertType
         self.closeButtonText = closeButtonText
         self.promotionCode = promotionCode
         self.promotionTextColor = UIColor(hex: promotionTextColor)
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
-        self.numberColors = VisilabsHelper.convertColorArray(numberColors)
-        self.waitingTime = waitingTime
-        self.secondPopupType = secondPopupType
-        self.secondPopupTitle = secondPopupTitle
-        self.secondPopupBody = secondPopupBody
-        self.secondPopupBodyTextSize = secondPopupBodyTextSize
-        self.secondPopupButtonText = secondPopupButtonText
-        self.secondImageUrlString1 = secondImageUrlString1
-        self.secondImageUrlString2 = secondImageUrlString2
-        self.secondPopupMinPoint = secondPopupMinPoint
-        if !secondImageUrlString1.isNilOrWhiteSpace {
-            self.secondImageUrl1 = VisilabsInAppNotification.getImageUrl(secondImageUrlString1!, type: self.type)
-        }
-        if !secondImageUrlString2.isNilOrWhiteSpace {
-            self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(secondImageUrlString2!, type: self.type)
-        }
-
+        self.emailPermitText = emailPermitText
+        self.consentText = consentText
         setFonts()
     }
 
@@ -232,42 +163,42 @@ public class VisilabsInAppNotification {
             return nil
         }
 
-        guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
-            VisilabsLogger.error("invalid \(PayloadKey.actId)")
+        guard let actId = object[ScratchTWKey.actId] as? Int, actId > 0 else {
+            VisilabsLogger.error("invalid \(ScratchTWKey.actId)")
             return nil
         }
 
-        guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
-            VisilabsLogger.error("invalid \(PayloadKey.actionData)")
+        guard let actionData = object[ScratchTWKey.actionData] as? [String: Any?] else {
+            VisilabsLogger.error("invalid \(ScratchTWKey.actionData)")
             return nil
         }
 
-        guard let messageType = actionData[PayloadKey.messageType] as? String,
+        guard let messageType = actionData[ScratchTWKey.messageType] as? String,
               let type = VisilabsInAppNotificationType(rawValue: messageType) else {
-            VisilabsLogger.error("invalid \(PayloadKey.messageType)")
+            VisilabsLogger.error("invalid \(ScratchTWKey.messageType)")
             return nil
         }
 
         self.actId = actId
         self.messageType = messageType
         self.type = type
-        self.messageTitle = actionData[PayloadKey.messageTitle] as? String
-        self.messageBody = actionData[PayloadKey.messageBody] as? String
-        self.buttonText = actionData[PayloadKey.buttonText] as? String
-        self.iosLink = actionData[PayloadKey.iosLink] as? String
-        self.imageUrlString = actionData[PayloadKey.imageUrlString] as? String
-        self.visitorData = actionData[PayloadKey.visitorData] as? String
-        self.visitData = actionData[PayloadKey.visitData] as? String
-        self.queryString = actionData[PayloadKey.queryString] as? String
-        self.messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
-        self.messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
-        self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
-        self.fontFamily = actionData[PayloadKey.fontFamily] as? String
-        self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
-        self.promotionCode = actionData[PayloadKey.promotionCode] as? String
-        self.promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
-        self.promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
-        if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
+        self.messageTitle = actionData[ScratchTWKey.messageTitle] as? String
+        self.messageBody = actionData[ScratchTWKey.messageBody] as? String
+        self.buttonText = actionData[ScratchTWKey.buttonText] as? String
+        self.iosLink = actionData[ScratchTWKey.iosLink] as? String
+        self.imageUrlString = actionData[ScratchTWKey.imageUrlString] as? String
+        self.visitorData = actionData[ScratchTWKey.visitorData] as? String
+        self.visitData = actionData[ScratchTWKey.visitData] as? String
+        self.queryString = actionData[ScratchTWKey.queryString] as? String
+        self.messageTitleColor = UIColor(hex: actionData[ScratchTWKey.messageTitleColor] as? String)
+        self.messageBodyColor = UIColor(hex: actionData[ScratchTWKey.messageBodyColor] as? String)
+        self.messageBodyTextSize = actionData[ScratchTWKey.messageBodyTextSize] as? String
+        self.fontFamily = actionData[ScratchTWKey.fontFamily] as? String
+        self.backGroundColor = UIColor(hex: actionData[ScratchTWKey.backGround] as? String)
+        self.promotionCode = actionData[ScratchTWKey.promotionCode] as? String
+        self.promotionTextColor = UIColor(hex: actionData[ScratchTWKey.promotionTextColor] as? String)
+        self.promotionBackgroundColor = UIColor(hex: actionData[ScratchTWKey.promotionBackgroundColor] as? String)
+        if let cBColor = actionData[ScratchTWKey.closeButtonColor] as? String {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white
             } else if cBColor.lowercased() == "black" {
@@ -279,11 +210,11 @@ public class VisilabsInAppNotification {
             self.closeButtonColor = nil
         }
 
-        self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
-        self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
+        self.buttonTextColor = UIColor(hex: actionData[ScratchTWKey.buttonTextColor] as? String)
+        self.buttonColor = UIColor(hex: actionData[ScratchTWKey.buttonColor] as? String)
 
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+            self.imageUrl = ScratchToWinModel.getImageUrl(imageUrlString!, type: self.type)
         }
 
         var callToActionUrl: URL?
@@ -291,35 +222,9 @@ public class VisilabsInAppNotification {
             callToActionUrl = URL(string: urlString)
         }
         self.callToActionUrl = callToActionUrl
-        self.alertType = actionData[PayloadKey.alertType] as? String
-        self.closeButtonText = actionData[PayloadKey.closeButtonText] as? String
-        if let numColors = actionData[PayloadKey.numberColors] as? [String]? {
-            self.numberColors = VisilabsHelper.convertColorArray(numColors)
-        } else {
-            self.numberColors = nil
-        }
-        self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
-
-        //Second Popup Variables
-        if let secondType = actionData[PayloadKey.secondPopupType] as? String {
-            self.secondPopupType = VisilabsSecondPopupType.init(rawValue: secondType)
-        } else {
-            self.secondPopupType = nil
-        }
-        self.secondPopupTitle = actionData[PayloadKey.secondPopupTitle] as? String
-        self.secondPopupBody = actionData[PayloadKey.secondPopupBody] as? String
-        self.secondPopupBodyTextSize = actionData[PayloadKey.secondPopupBodyTextSize] as? String
-        self.secondPopupButtonText = actionData[PayloadKey.secondPopupButtonText] as? String
-        self.secondImageUrlString1 = actionData[PayloadKey.secondImageUrlString1] as? String
-        self.secondImageUrlString2 = actionData[PayloadKey.secondImageUrlString2] as? String
-        if !secondImageUrlString1.isNilOrWhiteSpace {
-            self.secondImageUrl1 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
-        }
-        if !secondImageUrlString2.isNilOrWhiteSpace {
-            self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
-        }
-        self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
-
+        self.closeButtonText = actionData[ScratchTWKey.closeButtonText] as? String
+        self.emailPermitText = actionData[ScratchTWKey.emailPermitText] as? String
+        self.consentText = actionData[ScratchTWKey.consentText] as? String
         setFonts()
     }
 

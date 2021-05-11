@@ -77,27 +77,15 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showSpinToWin(spinToWin) {
                         self.markTargetingActionShown(model: spinToWin)
                     }
-                }
-            }
-        }
-    }
-
-    /*
-        func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
-            DispatchQueue.main.async {
-                if self.currentlyShowingNotification != nil
-                    || self.currentlyShowingTargetingAction != nil {
-                    VisilabsLogger.warn("already showing an notification")
-                } else {
-                    var shown = false
-                    shown = self.showMailPopup(model)
-                    if shown {
-                        self.markMailFormShown(model: model)
+                } else if model.targetingActionType == .scratchToWin, let sctw = model as? ScratchToWinModel {
+                    if self.showScratchToWin(sctw) {
+                        self.markTargetingActionShown(model: sctw)
                     }
                 }
             }
         }
-     */
+    }
+    
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
@@ -210,6 +198,17 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         }
     }
 
+    func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
+        let controller = VisilabsPopupNotificationViewController(scratchToWin: model)
+        controller.delegate = self
+        if let rootViewController = getRootViewController() {
+            rootViewController.present(controller, animated: false, completion: nil)
+            return true
+        } else {
+            return false
+        }
+    }
+    
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
         let controller = SpinToWinViewController(model)
         controller.modalPresentationStyle = .fullScreen
@@ -234,6 +233,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             self.currentlyShowingTargetingAction = model
         }
     }
+    
 
     @discardableResult
     func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,

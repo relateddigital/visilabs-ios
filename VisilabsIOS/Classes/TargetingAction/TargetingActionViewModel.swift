@@ -10,6 +10,7 @@ import Foundation
 public enum TargetingActionType: String, Codable {
     case mailSubscriptionForm = "MailSubscriptionForm"
     case spinToWin = "SpinToWin"
+    case scratchToWin = "ScratchToWin"
 }
 
 public protocol TargetingActionViewModel {

@@ -22,6 +22,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
     var notification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
+    var scratchToWin: ScratchToWinModel?
     var spinToWin: SpinToWinViewModel?
     weak var delegate: VisilabsNotificationViewControllerDelegate?
     var window: UIWindow?
@@ -50,11 +51,16 @@ class VisilabsBaseNotificationViewController: UIViewController {
         if self.mailForm != nil || self.spinToWin != nil {
             return
         }
-        if let not = self.notification, not.type == .full {
+        if let not = self.notification,
+            not.type == .full ||
+            not.type == .feedbackForm {
             return
         }
         let touch = touches.first
-        if !(touch?.view is VisilabsPopupDialogDefaultView) && !(touch?.view is CosmosView){
+        if !(touch?.view is VisilabsPopupDialogDefaultView)
+            && !(touch?.view is CosmosView) &&
+            !(touch?.view is UIImageView) &&
+            !(touch?.view is ScratchUIView) {
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
         } else {
 //            Dont dismiss on tap
