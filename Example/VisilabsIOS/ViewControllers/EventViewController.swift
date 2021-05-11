@@ -27,6 +27,8 @@ enum VisilabsEventType: String, CaseIterable {
     case removeFromFavorites = "Remove from Favorites"
     case sendingCampaignParameters = "Sending Campaign Parameters"
     case pushMessage = "Push Message"
+    case getExVisitorId = "Get exVisitor ID"
+    case logout = "Logout"
 }
 
 class EventViewController: FormViewController {
@@ -71,7 +73,13 @@ class EventViewController: FormViewController {
             section.append(ButtonRow {
                 $0.title = eventType.rawValue
             }
-            .onCellSelection { _, _ in
+            .onCellSelection { _, row in
+                if row.title == VisilabsEventType.logout.rawValue {
+                    Visilabs.callAPI().logout()
+                    print("log out!!")
+                } else if row.title == VisilabsEventType.getExVisitorId.rawValue {
+                    print(Visilabs.callAPI().getExVisitorId())
+                }
                 self.customEvent(eventType)
             })
         }
@@ -256,6 +264,8 @@ class EventViewController: FormViewController {
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
             Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
+            return
+        default:
             return
         }
     }
