@@ -161,6 +161,7 @@ public class VisilabsInAppNotification {
                 secondImageUrlString1: String?,
                 secondImageUrlString2: String?,
                 secondPopupMinPoint: String?) {
+
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -220,6 +221,7 @@ public class VisilabsInAppNotification {
         if !secondImageUrlString2.isNilOrWhiteSpace {
             self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(secondImageUrlString2!, type: self.type)
         }
+
         setFonts()
     }
 
@@ -297,6 +299,7 @@ public class VisilabsInAppNotification {
             self.numberColors = nil
         }
         self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
+
         //Second Popup Variables
         if let secondType = actionData[PayloadKey.secondPopupType] as? String {
             self.secondPopupType = VisilabsSecondPopupType.init(rawValue: secondType)
@@ -316,6 +319,7 @@ public class VisilabsInAppNotification {
             self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
         self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
+
         setFonts()
     }
 

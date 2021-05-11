@@ -52,7 +52,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
             return
         }
         if let not = self.notification,
-           not.type == .full ||
+            not.type == .full ||
             not.type == .feedbackForm {
             return
         }

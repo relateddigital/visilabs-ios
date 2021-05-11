@@ -157,6 +157,8 @@ public extension VisilabsDefaultPopupNotificationViewController {
         super.viewDidLayoutSubviews()
         standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
         standardView.secondImageHeight?.constant = standardView.secondImageView.pv_heightForImageView()
-        standardView.sctw.centerX(to: standardView)
+        if let _ = self.scratchToWin {
+            standardView.sctw.centerX(to: standardView)
+        }
     }
 }

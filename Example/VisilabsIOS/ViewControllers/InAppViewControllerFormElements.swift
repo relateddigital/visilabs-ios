@@ -643,6 +643,7 @@ extension InAppViewController {
                                         promotionBackgroundColor: promotionBackgroundColor,
                                         emailPermitText: nil,
                                         consentText: nil)
+
     }
 
 }
