@@ -219,7 +219,6 @@ extension VisilabsInstance {
                    pageName != VisilabsConstants.omEvtGif {
                     self.checkInAppNotification(properties: event)
                     self.checkTargetingActions(properties: event)
-                    //self.checkMailSubsForm(properties: event)
                 }
             }
             self.send()
@@ -376,6 +375,10 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
     }
     
+    public func showTargetingAction(_ model: TargetingActionViewModel) {
+        visilabsTargetingActionInstance.notificationsInstance.showTargetingAction(model)
+    }
+
     func checkInAppNotification(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
@@ -410,10 +413,6 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
-    }
-    
-    func showTargetingAction(_ model: TargetingActionViewModel) {
-        visilabsTargetingActionInstance.notificationsInstance.showTargetingAction(model)
     }
     
     //İleride inapp de s.visilabs.net/mobile üzerinden geldiğinde sadece bu metod kullanılacak

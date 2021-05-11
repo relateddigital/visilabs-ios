@@ -29,6 +29,14 @@ extension VisilabsPopupDialogDefaultView {
         imageView.clipsToBounds = true
         return imageView
     }
+    
+    internal func setSecondImageView() -> UIImageView {
+        let imageView = UIImageView(frame: .zero)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }
 
     internal func setTitleLabel() -> UILabel {
         let titleLabel = UILabel(frame: .zero)
@@ -143,6 +151,30 @@ extension VisilabsPopupDialogDefaultView {
         return cv
     }
 
+    internal func setFeedbackTF() -> UITextField {
+        let tf = UITextField(frame: .zero)
+        tf.placeholder = "Please let us know what did make you unhappy."
+        tf.font = .systemFont(ofSize: 11)
+        tf.backgroundColor = .white
+        tf.textColor = .black
+        tf.delegate = self
+        return tf
+    }
+
+    internal func setImageButton() -> UIButton {
+        let button = UIButton(frame: .zero)
+        button.backgroundColor = self.visilabsInAppNotification?.buttonColor ?? .black
+        button.setTitle(self.visilabsInAppNotification?.buttonText, for: .normal)
+        button.setTitleColor(self.visilabsInAppNotification?.buttonTextColor, for: .normal)
+        button.addTarget(self, action: #selector(imageButtonTapped), for: .touchUpInside)
+        return button
+    }
+
+    @objc func imageButtonTapped() {
+        print("image button tapped.. should dismiss")
+        self.imgButtonDelegate?.imageButtonTapped()
+    }
+
     internal func setSliderStepRating() -> VisilabsSliderStep {
 
         let sliderStepRating = VisilabsSliderStep()
@@ -213,13 +245,13 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(closeButton)
     }
 
-    internal func setupForImageTextButton() {
+    internal func setupForImageTextButton(_ withFeedback: Bool = false) {
         addSubview(titleLabel)
         addSubview(messageLabel)
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-
+    
         if let promo = self.visilabsInAppNotification?.promotionCode,
            let _ = self.visilabsInAppNotification?.promotionBackgroundColor,
            let _ = self.visilabsInAppNotification?.promotionTextColor,
@@ -235,10 +267,42 @@ extension VisilabsPopupDialogDefaultView {
             copyCodeImageButton.width(50.0)
             copyCodeImageButton.trailing(to: self)
             copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
-        } else {
+        } else if withFeedback == false {
             messageLabel.bottom(to: self, offset: -10)
+        } else {
+            addSubview(feedbackTF)
+            feedbackTF.topToBottom(of: messageLabel, offset: 10)
+            feedbackTF.leading(to: self, offset: 10)
+            feedbackTF.trailing(to: self, offset: -10)
+            feedbackTF.bottom(to: self, offset: -10)
+            feedbackTF.height(60)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                                   name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                                   name: UIResponder.keyboardWillHideNotification, object: nil)
         }
+
+        titleLabel.centerX(to: self)
+        messageLabel.centerX(to: self)
+    }
+    
+    internal func setupForImageButtonImage() {
+        addSubview(titleLabel)
+        addSubview(messageLabel)
+        addSubview(imageButton)
+        addSubview(secondImageView)
+    
+        imageView.allEdges(to: self, excluding: .bottom)
+        titleLabel.topToBottom(of: imageView, offset: 10.0)
+        messageLabel.topToBottom(of: titleLabel, offset: 8.0)
         
+        imageButton.topToBottom(of: messageLabel, offset: 10.0)
+        imageButton.leading(to: self)
+        imageButton.trailing(to: self)
+        imageButton.height(50.0)
+        
+        secondImageView.topToBottom(of: imageButton)
+        secondImageView.allEdges(to: self, excluding: .top)
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
     }

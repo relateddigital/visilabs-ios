@@ -43,6 +43,8 @@ class EventViewController: FormViewController {
                                 "mailsubsform": 417,
                                 "alert": 540,
                                 "nps_with_numbers": 493,
+                                "scratchToWin": 999,
+                                "nps_with_secondpopup": 999,
                                 "spintowin": 130]
 
     override func viewDidLoad() {
@@ -88,13 +90,14 @@ class EventViewController: FormViewController {
 
     private func  getInAppSection() -> Section {
         let section = Section("In App Notification Types".uppercased(with: Locale(identifier: "en_US")))
-        for visilabsInAppNotificationType in VisilabsInAppNotificationType.allCases {
+        //change when added new inapp type
+        for counter in 0..<12 {
             section.append(ButtonRow {
-                let notId = String(inAppNotificationIds[visilabsInAppNotificationType.rawValue]!)
-                $0.title = visilabsInAppNotificationType.rawValue + " ID: " + notId
+                let notId = String(inAppNotificationIds[VisilabsInAppNotificationType.allCases[counter].rawValue]!)
+                $0.title = VisilabsInAppNotificationType.allCases[counter].rawValue + " ID: " + notId
             }
             .onCellSelection { _, _ in
-                self.inAppEvent(visilabsInAppNotificationType)
+                self.inAppEvent(VisilabsInAppNotificationType.allCases[counter])
             })
         }
         return section
