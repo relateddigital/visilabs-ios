@@ -282,6 +282,18 @@ extension VisilabsInstance {
         props["OM.b_sgnp"] = "SignUp"
         customEvent("SignUpPage", properties: props)
     }
+    
+    public func getExVisitorId() -> String? {
+        return self.visilabsUser.exVisitorId
+    }
+
+    public func logout() {
+        VisilabsPersistence.clearUserDefaults()
+        self.visilabsUser.cookieId = nil
+        self.visilabsUser.exVisitorId = nil
+        visilabsUser.cookieId = VisilabsHelper.generateCookieId()
+        VisilabsPersistence.archiveUser(visilabsUser)
+    }
 }
 
 // MARK: - PERSISTENCE

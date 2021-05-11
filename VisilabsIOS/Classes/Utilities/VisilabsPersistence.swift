@@ -208,6 +208,13 @@ public class VisilabsPersistence {
         UserDefaults.standard.synchronize()
     }
 
+    static func clearUserDefaults() {
+        let ud = UserDefaults.standard
+        ud.removeObject(forKey: VisilabsConstants.cookieIdKey)
+        ud.removeObject(forKey: VisilabsConstants.exvisitorIdKey)
+        ud.synchronize()
+    }
+
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
         let encoder = JSONEncoder()
         if let encodedVisilabsProfile = try? encoder.encode(visilabsProfile) {
@@ -248,4 +255,5 @@ public class VisilabsPersistence {
     public static func clearVisilabsGeofenceHistory() {
         removeUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey)
     }
+    
 }
