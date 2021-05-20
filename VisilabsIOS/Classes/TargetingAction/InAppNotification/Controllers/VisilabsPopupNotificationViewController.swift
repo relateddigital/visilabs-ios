@@ -101,24 +101,37 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     func commonButtonAction() {
         guard let notification = self.notification else { return }
         var additionalTrackingProperties = [String: String]()
-                   if notification.type == .smileRating {
-                       additionalTrackingProperties["OM.s_point"]
-                        = String(Int(viewController.standardView.sliderStepRating.value))
-                       additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                       additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-                   } else if notification.type == .nps {
-                       additionalTrackingProperties["OM.s_point"]
-                        = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",",
-                                                                                                with: ".")
-                       additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                       additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-                   } else if notification.type == .npsWithNumbers {
-                        if let num = viewController.standardView.selectedNumber {
-                            additionalTrackingProperties["OM.s_point"] = "\(num)"
-                        }
-                        additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
-                        additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-                   }
+        if notification.type == .smileRating {
+            additionalTrackingProperties["OM.s_point"]
+                = String(Int(viewController.standardView.sliderStepRating.value))
+            additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+            additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+        } else if notification.type == .nps {
+            additionalTrackingProperties["OM.s_point"]
+                = String(viewController.standardView.npsView.rating).replacingOccurrences(of: ",",
+                                                                                          with: ".")
+            additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+            additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+        } else if notification.type == .npsWithNumbers {
+            if let num = viewController.standardView.selectedNumber {
+                additionalTrackingProperties["OM.s_point"] = "\(num)"
+            }
+            additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+            additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+        } else if notification.previousPopupPoint != nil {
+            additionalTrackingProperties["OM.s_point"] = String(notification.previousPopupPoint ?? 0.0)
+            additionalTrackingProperties["OM.s_cat"] = "nps_with_secondpopup"
+            additionalTrackingProperties["OM.s_feed"]  = viewController.standardView.feedbackTF.text ?? ""
+            additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+        } else if notification.type == .secondNps { //works iff second popup wont show
+            let threshold = Double(self.notification?.secondPopupMinPoint ?? "3.0") ?? 3.0
+            let userRating = viewController.standardView.npsView.rating
+            if userRating >= threshold {
+                additionalTrackingProperties["OM.s_point"] = String(notification.previousPopupPoint ?? 0.0)
+                additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
+                additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+            }
+        }
         //Check if second popup coming
         var callToActionURL: URL? = notification.callToActionUrl
         if notification.type == .secondNps {
@@ -477,6 +490,7 @@ internal extension VisilabsPopupNotificationViewController {
     //Creates a second popup with first popup properties
     func createSecondPopup() -> VisilabsInAppNotification? {
         if let not = self.notification {
+            let point = viewController.standardView.npsView.rating
             var promo: String? = nil
             if not.secondPopupType == .imageTextButton {
                 promo = not.promotionCode
@@ -491,7 +505,7 @@ internal extension VisilabsPopupNotificationViewController {
             default:
                 type = .imageTextButton
             }
-            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, backGround: not.backGroundColor?.toHexString(), closeButtonColor: not.closeButtonColor?.toHexString(), buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil)
+            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, backGround: not.backGroundColor?.toHexString(), closeButtonColor: not.closeButtonColor?.toHexString(), buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil, previousPopupPoint: point)
         }
         return nil
     }
