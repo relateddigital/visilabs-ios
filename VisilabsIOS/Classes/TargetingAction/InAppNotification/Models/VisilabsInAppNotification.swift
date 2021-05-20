@@ -80,6 +80,7 @@ public class VisilabsInAppNotification {
     let secondImageUrlString1: String?
     let secondImageUrlString2: String?
     let secondPopupMinPoint: String?
+    let previousPopupPoint: Double?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -160,7 +161,8 @@ public class VisilabsInAppNotification {
                 secondPopupButtonText: String?,
                 secondImageUrlString1: String?,
                 secondImageUrlString2: String?,
-                secondPopupMinPoint: String?) {
+                secondPopupMinPoint: String?,
+                previousPopupPoint: Double? = nil) {
 
         self.actId = actId
         self.messageType = type.rawValue
@@ -221,7 +223,7 @@ public class VisilabsInAppNotification {
         if !secondImageUrlString2.isNilOrWhiteSpace {
             self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(secondImageUrlString2!, type: self.type)
         }
-
+        self.previousPopupPoint = previousPopupPoint
         setFonts()
     }
 
@@ -319,7 +321,7 @@ public class VisilabsInAppNotification {
             self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
         self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
-
+        self.previousPopupPoint = nil
         setFonts()
     }
 
