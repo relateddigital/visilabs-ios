@@ -114,6 +114,7 @@ struct VisilabsConstants {
     static let story = "Story"
     static let mailSubscriptionForm = "MailSubscriptionForm"
     static let spinToWin = "SpinToWin"
+    static let scratchToWin = "ScratchToWin"
     static let actid = "actid"
     static let actionId = "action_id"
     static let actionData = "actiondata"
@@ -186,16 +187,8 @@ struct VisilabsConstants {
     static let displaynameTextColor = "displayname_text_color"
     static let displaynameFontFamily = "displayname_font_family"
     static let displaynameTextSize = "displayname_text_size"
-    //static let titleTextColor = "title_text_color" // varmış zaten
-    //static let titleFontFamily = "title_font_family" // varmış zaten
-    //static let titleTextSize = "title_text_size" // varmış zaten
-    //static let textColor = "text_color" // varmış zaten
-    //static let textFontFamily = "text_font_family" // varmış zaten
-    //static let textSize = "text_size" // varmış zaten
     static let button_color = "button_color"
     static let button_text_color = "button_text_color"
-    //static let buttonFontFamily = "button_font_family" // varmış zaten
-    //static let buttonTextSize = "button_text_size" // varmış zaten
     static let promocodeTitleTextColor = "promocode_title_text_color"
     static let promocodeTitleFontFamily = "promocode_title_font_family"
     static let promocodeTitleTextSize = "promocode_title_text_size"
@@ -207,18 +200,28 @@ struct VisilabsConstants {
     static let copybuttonTextSize = "copybutton_text_size"
     static let emailpermitTextSize = "emailpermit_text_size"
     static let emailpermitTextUrl = "emailpermit_text_url"
-    //static let consentTextSize = "consent_text_size" // varmış zaten
-    //static let consentTextUrl = "consent_text_url" // varmış zaten
-    //static let closeButtonColor = "close_button_color" // varmış zaten
-    //static let backgroundColor = "background_color" // varmış zaten
     
     //SpinToWin slices
     static let displayName = "displayName"
     static let color = "color"
     static let code = "code"
-    //static let type = "type" // varmış zaten
-
-
+    
+    //Scratch To Win constants
+    static let scratchColor = "scratch_color"
+    static let waitingTime = "waiting_time"
+    static let sendEmail = "send_email"
+    static let promotionCode = "promotion_code"
+    static let contentTitle = "content_title"
+    static let contentBody = "content_body"
+    static let contentTitleTextColor = "content_title_text_color"
+    static let contentTitleFontFamily = "content_title_font_family"
+    static let contentTitleTextSize = "content_title_text_size"
+    static let contentBodyTextColor = "content_body_text_color"
+    static let contentBodyTextFontFamily = "content_body_text_font_family"
+    static let contentBodyTextSize = "content_body_text_size"
+    static let promocodeFontFamily = "promocode_font_family"
+    static let promocodeTextSize = "promocode_text_size"
+    
     
     private static let targetPrefVossStoreKey = "OM.voss"
     private static let targetPrefVcnameStoreKey = "OM.vcname"

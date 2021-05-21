@@ -9,60 +9,42 @@ import Foundation
 //swiftlint:disable type_body_length
 public class ScratchToWinModel: TargetingActionViewModel {
 
-    public enum ScratchTWKey {
-        public static let actId = "actid"
-        public static let actionData = "actiondata"
-        public static let messageType = "msg_type"
-        public static let messageTitle = "msg_title"
-        public static let messageBody = "msg_body"
-        public static let buttonText = "btn_text"
-        public static let iosLink = "ios_lnk"
-        public static let imageUrlString = "img"
-        public static let visitorData = "visitor_data"
-        public static let visitData = "visit_data"
-        public static let queryString = "qs"
-        public static let messageTitleColor = "msg_title_color"
-        public static let messageBodyColor = "msg_body_color"
-        public static let messageBodyTextSize = "msg_body_textsize"
-        public static let fontFamily = "font_family"
-        public static let backGround = "background"
-        public static let closeButtonColor = "close_button_color"
-        public static let buttonTextColor = "button_text_color"
-        public static let buttonColor = "button_color"
-        public static let closeButtonText = "close_button_text"
-        public static let promotionCode = "promotion_code"
-        public static let promotionTextColor = "promocode_text_color"
-        public static let promotionBackgroundColor = "promocode_background_color"
-        public static let emailPermitText = "email_permit_text"
-        public static let consentText = "consent_text"
-    }
-
     public var targetingActionType: TargetingActionType = .scratchToWin
     let actId: Int
-    let messageType: String
-    let type: VisilabsInAppNotificationType
-    let messageTitle: String?
-    let messageBody: String?
-    let buttonText: String?
-    let iosLink: String?
+    let hasMailForm: Bool
+    let scratchColor: UIColor?
+    var waitingTime: Int = 0
+    let promocode: String?
+    let sendMail: Bool?
+    let copyButtonText: String?
     let imageUrlString: String?
-    let visitorData: String?
-    let visitData: String?
-    let queryString: String?
-    let messageTitleColor: UIColor?
-    let messageBodyColor: UIColor?
-    let messageBodyTextSize: String?
-    let fontFamily: String?
-    let backGroundColor: UIColor?
-    let closeButtonColor: UIColor?
-    let buttonTextColor: UIColor?
-    let buttonColor: UIColor?
-    let closeButtonText: String?
-    let promotionCode: String?
-    let promotionTextColor: UIColor?
-    let promotionBackgroundColor: UIColor?
-    let emailPermitText: String?
-    let consentText: String?
+    let title: String?
+    let message: String?
+    let placeholder: String?
+    let mailButtonText: String?
+    let consentText: ParsedPermissionString?
+    let permitText: ParsedPermissionString?
+    let invalidEmailMessage: String?
+    let successMessage: String?
+    let checkConsentText: String?
+    let titleTextColor: UIColor?
+    let titleFont: UIFont?
+    let messageTextColor: UIColor?
+    let messageFont: UIFont?
+    let mailButtonColor: UIColor?
+    let mailButtonTextColor: UIColor?
+    let mailButtonFont: UIFont?
+    let promoTextColor: UIColor?
+    let promoFont: UIFont?
+    let copyButtonColor: UIColor?
+    let copyButtonTextColor: UIColor?
+    let copyButtonTextFont: UIFont?
+    let emailPermitTextFont: UIFont?
+    let consentTextFont: UIFont?
+    var closeButtonColor: UIColor = .black
+    let backgroundColor: UIColor?
+    let consentUrl: URL?
+    let permitUrl: URL?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -77,7 +59,6 @@ public class ScratchToWinModel: TargetingActionViewModel {
         return data
     }()
 
-    let callToActionUrl: URL?
     var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
                                           size: CGFloat(12))
     var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
@@ -85,159 +66,107 @@ public class ScratchToWinModel: TargetingActionViewModel {
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
 
-    public init(actId: Int,
-                type: VisilabsInAppNotificationType,
-                messageTitle: String?,
-                messageBody: String?,
-                buttonText: String?,
-                iosLink: String?,
-                imageUrlString: String?,
-                visitorData: String?,
-                visitData: String?,
-                queryString: String?,
-                messageTitleColor: String?,
-                messageBodyColor: String?,
-                messageBodyTextSize: String?,
-                fontFamily: String?,
-                backGround: String?,
-                closeButtonColor: String?,
-                buttonTextColor: String?,
-                buttonColor: String?,
-                closeButtonText: String?,
-                promotionCode: String?,
-                promotionTextColor: String?,
-                promotionBackgroundColor: String?,
+    public init(type: VisilabsInAppNotificationType,
+                actid: Int,
+                hasMailForm: Bool,
+                scratchColor: String,
+                waitingTime: Int,
+                promocode: String,
+                sendMail: Bool,
+                copyButtonText: String,
+                imageUrlString: String,
+                title: String,
+                message: String,
+                mailPlaceholder: String?,
+                mailButtonText: String?,
+                consentText: String?,
+                invalidEmailMsg: String?,
+                successMessage: String?,
                 emailPermitText: String?,
-                consentText: String?) {
-        self.actId = actId
-        self.messageType = type.rawValue
-        self.type = type
-        self.messageTitle = messageTitle
-        self.messageBody = messageBody
-        self.buttonText = buttonText
-        self.iosLink = iosLink
-        self.imageUrlString = imageUrlString
-        self.visitorData = visitorData
-        self.visitData = visitData
-        self.queryString = queryString
-        self.messageTitleColor =  UIColor(hex: messageTitleColor)
-        self.messageBodyColor = UIColor(hex: messageBodyColor)
-        self.messageBodyTextSize = messageBodyTextSize
-        self.fontFamily = fontFamily
-        self.backGroundColor = UIColor(hex: backGround)
+                checkConsentMessage: String?,
+                titleTextColor: String?,
+                titleFontFamily: String?,
+                titleTextSize: String?,
+                messageTextColor: String?,
+                messageFontFamily: String?,
+                messageTextSize: String?,
+                mailButtonColor: String?,
+                mailButtonTextColor: String?,
+                mailButtonFontFamily: String?,
+                mailButtonTextSize: String?,
+                promocodeTextColor: String?,
+                promocodeTextFamily: String?,
+                promocodeTextSize: String?,
+                copyButtonColor: String?,
+                copyButtonTextColor: String?,
+                copyButtonFontFamily: String?,
+                copyButtonTextSize: String?,
+                emailPermitTextSize: String?,
+                emailPermitUrl: String?,
+                consentTextSize: String?,
+                consentUrl: String?,
+                closeButtonColor: String?,
+                backgroundColor: String?) {
+
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white
             } else if cBColor.lowercased() == "black" {
                 self.closeButtonColor = UIColor.black
             } else {
-                self.closeButtonColor = UIColor(hex: cBColor)
+                self.closeButtonColor = UIColor(hex: cBColor) ?? .black
             }
-        } else {
-            self.closeButtonColor = nil
         }
-        self.buttonTextColor = UIColor(hex: buttonTextColor)
-        self.buttonColor = UIColor(hex: buttonColor)
-        if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = ScratchToWinModel.getImageUrl(imageUrlString!, type: self.type)
+        self.actId = actid
+        self.hasMailForm = hasMailForm
+        self.scratchColor = UIColor(hex: scratchColor)
+        self.waitingTime = waitingTime
+        self.promocode = promocode
+        self.sendMail = sendMail
+        self.copyButtonText = copyButtonText
+        self.imageUrlString = imageUrlString
+        self.title = title
+        self.message = message
+        self.placeholder = mailPlaceholder
+        self.mailButtonText = mailButtonText
+        self.consentText = consentText?.parsePermissionText()
+        self.permitText = emailPermitText?.parsePermissionText()
+        self.invalidEmailMessage = invalidEmailMsg
+        self.successMessage = successMessage
+        self.checkConsentText = checkConsentMessage
+        self.titleTextColor = UIColor(hex: titleTextColor)
+        self.messageTextColor = UIColor(hex: messageTextColor)
+        self.mailButtonTextColor = UIColor(hex: mailButtonTextColor)
+        self.mailButtonColor = UIColor(hex: mailButtonColor)
+        self.promoTextColor = UIColor(hex: promocodeTextColor)
+        self.copyButtonTextColor = UIColor(hex: copyButtonTextColor)
+        self.copyButtonColor = UIColor(hex: copyButtonColor)
+        self.backgroundColor = UIColor(hex: backgroundColor)
+        self.consentUrl = URL(string: consentUrl ?? "")
+        self.permitUrl = URL(string: emailPermitUrl ?? "")
+        if !self.imageUrlString.isNilOrWhiteSpace {
+            self.imageUrl = ScratchToWinModel.getImageUrl(self.imageUrlString!, type: .full)
         }
-
-        var callToActionUrl: URL?
-        if let urlString = self.iosLink {
-            callToActionUrl = URL(string: urlString)
-        }
-        self.callToActionUrl = callToActionUrl
-        self.closeButtonText = closeButtonText
-        self.promotionCode = promotionCode
-        self.promotionTextColor = UIColor(hex: promotionTextColor)
-        self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
-        self.emailPermitText = emailPermitText
-        self.consentText = consentText
-        setFonts()
-    }
-
-    //swiftlint:disable function_body_length
-    init?(JSONObject: [String: Any]?) {
-        guard let object = JSONObject else {
-            VisilabsLogger.error("notification json object should not be nil")
-            return nil
-        }
-
-        guard let actId = object[ScratchTWKey.actId] as? Int, actId > 0 else {
-            VisilabsLogger.error("invalid \(ScratchTWKey.actId)")
-            return nil
-        }
-
-        guard let actionData = object[ScratchTWKey.actionData] as? [String: Any?] else {
-            VisilabsLogger.error("invalid \(ScratchTWKey.actionData)")
-            return nil
-        }
-
-        guard let messageType = actionData[ScratchTWKey.messageType] as? String,
-              let type = VisilabsInAppNotificationType(rawValue: messageType) else {
-            VisilabsLogger.error("invalid \(ScratchTWKey.messageType)")
-            return nil
-        }
-
-        self.actId = actId
-        self.messageType = messageType
-        self.type = type
-        self.messageTitle = actionData[ScratchTWKey.messageTitle] as? String
-        self.messageBody = actionData[ScratchTWKey.messageBody] as? String
-        self.buttonText = actionData[ScratchTWKey.buttonText] as? String
-        self.iosLink = actionData[ScratchTWKey.iosLink] as? String
-        self.imageUrlString = actionData[ScratchTWKey.imageUrlString] as? String
-        self.visitorData = actionData[ScratchTWKey.visitorData] as? String
-        self.visitData = actionData[ScratchTWKey.visitData] as? String
-        self.queryString = actionData[ScratchTWKey.queryString] as? String
-        self.messageTitleColor = UIColor(hex: actionData[ScratchTWKey.messageTitleColor] as? String)
-        self.messageBodyColor = UIColor(hex: actionData[ScratchTWKey.messageBodyColor] as? String)
-        self.messageBodyTextSize = actionData[ScratchTWKey.messageBodyTextSize] as? String
-        self.fontFamily = actionData[ScratchTWKey.fontFamily] as? String
-        self.backGroundColor = UIColor(hex: actionData[ScratchTWKey.backGround] as? String)
-        self.promotionCode = actionData[ScratchTWKey.promotionCode] as? String
-        self.promotionTextColor = UIColor(hex: actionData[ScratchTWKey.promotionTextColor] as? String)
-        self.promotionBackgroundColor = UIColor(hex: actionData[ScratchTWKey.promotionBackgroundColor] as? String)
-        if let cBColor = actionData[ScratchTWKey.closeButtonColor] as? String {
-            if cBColor.lowercased() == "white" {
-                self.closeButtonColor = UIColor.white
-            } else if cBColor.lowercased() == "black" {
-                self.closeButtonColor = UIColor.black
-            } else {
-                self.closeButtonColor = UIColor(hex: cBColor)
-            }
-        } else {
-            self.closeButtonColor = nil
-        }
-
-        self.buttonTextColor = UIColor(hex: actionData[ScratchTWKey.buttonTextColor] as? String)
-        self.buttonColor = UIColor(hex: actionData[ScratchTWKey.buttonColor] as? String)
-
-        if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = ScratchToWinModel.getImageUrl(imageUrlString!, type: self.type)
-        }
-
-        var callToActionUrl: URL?
-        if let urlString = self.iosLink {
-            callToActionUrl = URL(string: urlString)
-        }
-        self.callToActionUrl = callToActionUrl
-        self.closeButtonText = actionData[ScratchTWKey.closeButtonText] as? String
-        self.emailPermitText = actionData[ScratchTWKey.emailPermitText] as? String
-        self.consentText = actionData[ScratchTWKey.consentText] as? String
-        setFonts()
-    }
-
-    private func setFonts() {
-        self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
-                                                                  fontSize: self.messageBodyTextSize,
+        
+        titleFont = VisilabsInAppNotification.getFont(fontFamily: titleFontFamily,
+                                                                  fontSize: titleTextSize,
                                                                   style: .title2)
-        self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
-                                                                 fontSize: self.messageBodyTextSize,
-                                                                 style: .body)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
-                                                                fontSize: self.messageBodyTextSize,
-                                                                style: .title2)
+        messageFont = VisilabsInAppNotification.getFont(fontFamily: messageFontFamily,
+                                                        fontSize: messageTextSize,
+                                                        style: .body)
+        mailButtonFont = VisilabsInAppNotification.getFont(fontFamily: mailButtonFontFamily,
+                                                           fontSize: mailButtonTextSize,
+                                                           style: .title2)
+        promoFont = VisilabsInAppNotification.getFont(fontFamily: promocodeTextFamily,
+                                                      fontSize: promocodeTextSize,
+                                                      style: .title2)
+        copyButtonTextFont = VisilabsInAppNotification.getFont(fontFamily: copyButtonFontFamily,
+                                                              fontSize: copyButtonTextSize,
+                                                              style: .title2)
+        emailPermitTextFont = UIFont.systemFont(ofSize: CGFloat(6 + (Int(emailPermitTextSize ?? "0") ?? 0)))
+        consentTextFont = UIFont.systemFont(ofSize: CGFloat(6 + (Int(consentTextSize ?? "0") ?? 0)))
+        
+        
     }
 
     static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {

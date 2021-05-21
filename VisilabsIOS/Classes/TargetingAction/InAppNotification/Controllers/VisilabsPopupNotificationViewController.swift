@@ -538,10 +538,11 @@ extension UIColor {
 extension VisilabsPopupNotificationViewController: VisilabsPopupDialogDefaultViewDelegate {
     func viewExpanded() {
         guard let scratchTW = self.scratchToWin else { return }
-        let button = VisilabsPopupDialogButton(title: "Copy Code",
-                                               font: scratchTW.buttonTextFont,
-                                                   buttonTextColor: scratchTW.buttonTextColor,
-                                                   buttonColor: scratchTW.buttonColor, action: nil)
+        let button = VisilabsPopupDialogButton(title: scratchTW.copyButtonText ?? "",
+                                               font: scratchTW.copyButtonTextFont ?? .systemFont(ofSize: 20 ),
+                                                   buttonTextColor: scratchTW.copyButtonTextColor,
+                                                   buttonColor: scratchTW.copyButtonColor,
+                                                   action: nil)
         addButton(button)
         appendButtons()
  

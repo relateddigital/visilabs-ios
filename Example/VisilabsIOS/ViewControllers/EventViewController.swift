@@ -43,7 +43,7 @@ class EventViewController: FormViewController {
                                 "mailsubsform": 417,
                                 "alert": 540,
                                 "nps_with_numbers": 493,
-                                "scratchToWin": 999,
+                                "scratchtowin": 80,
                                 "nps_with_secondpopup": 87,
                                 "spintowin": 130]
 

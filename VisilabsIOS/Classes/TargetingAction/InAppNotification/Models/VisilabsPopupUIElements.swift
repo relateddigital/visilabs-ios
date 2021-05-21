@@ -280,6 +280,8 @@ extension VisilabsPopupDialogDefaultView {
                                                    name: UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                    name: UIResponder.keyboardWillHideNotification, object: nil)
+            let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+            self.addGestureRecognizer(tap)
         }
 
         titleLabel.centerX(to: self)
