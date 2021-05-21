@@ -94,7 +94,7 @@ class VisilabsTargetingAction {
         var props = properties
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)"
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -125,6 +125,8 @@ class VisilabsTargetingAction {
             return parseMailForm(mailForm)
         } else if let spinToWinArr = result[VisilabsConstants.spinToWin] as? [[String: Any?]], let spinToWin = spinToWinArr.first {
             return parseSpinToWin(spinToWin)
+        } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
+            return parseScratchToWin(sctw)
         }
         return nil
     }
@@ -301,6 +303,107 @@ class VisilabsTargetingAction {
                                               checkConsentMessage: checkConsent,
                                               report: mailReport)
         return convertJsonToEmailViewModel(emailForm: mailModel)
+    }
+    
+    private func parseScratchToWin(_ scratchToWin: [String: Any?]) -> ScratchToWinModel? {
+        guard let actionData = scratchToWin[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+
+        let actid = scratchToWin[VisilabsConstants.actid] as? Int ?? 0
+        let hasMailForm = actionData[VisilabsConstants.mailSubscription] as? Bool ?? false
+        let scratchColor = actionData[VisilabsConstants.scratchColor] as? String ?? "000000"
+        let waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
+        let promotionCode = actionData[VisilabsConstants.code] as? String ?? ""
+        let sendMail = actionData[VisilabsConstants.sendEmail] as? Bool ?? false
+        let copyButtonText = actionData[VisilabsConstants.copybuttonLabel] as? String ?? ""
+        let img = actionData[VisilabsConstants.img] as? String ?? ""
+        let title = actionData[VisilabsConstants.contentTitle] as? String ?? ""
+        let message = actionData[VisilabsConstants.contentBody] as? String ?? ""
+        //Email parameters
+        var mailPlaceholder: String? = nil
+        var mailButtonTxt: String? = nil
+        var consentText: String? = nil
+        var invalidEmailMsg: String? = nil
+        var successMsg: String? = nil
+        var emailPermitTxt: String? = nil
+        var checkConsentMsg: String? = nil
+
+        if let mailForm = actionData[VisilabsConstants.mailSubscriptionForm] as? [String: Any] {
+            mailPlaceholder = mailForm[VisilabsConstants.placeholder] as? String
+            mailButtonTxt = mailForm[VisilabsConstants.buttonLabel] as? String
+            consentText = mailForm[VisilabsConstants.consentText] as? String
+            invalidEmailMsg = mailForm[VisilabsConstants.invalidEmailMessage] as? String
+            successMsg = mailForm[VisilabsConstants.successMessage] as? String
+            emailPermitTxt = mailForm[VisilabsConstants.emailPermitText] as? String
+            checkConsentMsg = mailForm[VisilabsConstants.checkConsentMessage] as? String
+        }
+
+        //extended props
+        let titleTextColor = extendedProps[VisilabsConstants.contentTitleTextColor] as? String
+        let titleFontFamily = extendedProps[VisilabsConstants.contentTitleFontFamily] as? String
+        let titleTextSize = extendedProps[VisilabsConstants.contentTitleTextSize] as? String
+        let messageTextColor = extendedProps[VisilabsConstants.contentBodyTextColor] as? String
+        let messageTextSize = extendedProps[VisilabsConstants.contentBodyTextSize] as? String
+        let messageTextFontFamily = extendedProps[VisilabsConstants.contentBodyTextFontFamily] as? String
+        let mailButtonColor = extendedProps[VisilabsConstants.buttonColor] as? String
+        let mailButtonTextColor = extendedProps[VisilabsConstants.buttonTextColor] as? String
+        let mailButtonFontFamily = extendedProps[VisilabsConstants.buttonFontFamily] as? String
+        let mailButtonTextSize = extendedProps[VisilabsConstants.buttonTextSize] as? String
+        let promocodeTextColor = extendedProps[VisilabsConstants.promocodeTextColor] as? String
+        let promocodeFontFamily = extendedProps[VisilabsConstants.promocodeFontFamily] as? String
+        let promocodeTextSize = extendedProps[VisilabsConstants.promocodeTextSize] as? String
+        let copyButtonColor = extendedProps[VisilabsConstants.copybuttonColor] as? String
+        let copyButtonTextColor = extendedProps[VisilabsConstants.copybuttonTextColor] as? String
+        let copyButtonFontFamily = extendedProps[VisilabsConstants.copybuttonFontFamily] as? String
+        let copyButtonTextSize = extendedProps[VisilabsConstants.copybuttonTextSize] as? String
+        let emailPermitTextSize = extendedProps[VisilabsConstants.emailPermitTextSize] as? String
+        let emailPermitTextUrl = extendedProps[VisilabsConstants.emailPermitTextUrl] as? String
+        let consentTextSize = extendedProps[VisilabsConstants.consentTextSize] as? String
+        let consentTextUrl = extendedProps[VisilabsConstants.consentTextUrl] as? String
+        let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String
+        let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String
+        return ScratchToWinModel(type: .scratchToWin,
+                                 actid: actid,
+                                 hasMailForm: hasMailForm,
+                                 scratchColor: scratchColor,
+                                 waitingTime: waitingTime,
+                                 promocode: promotionCode,
+                                 sendMail: sendMail,
+                                 copyButtonText: copyButtonText,
+                                 imageUrlString: img,
+                                 title: title,
+                                 message: message,
+                                 mailPlaceholder: mailPlaceholder,
+                                 mailButtonText: mailButtonTxt,
+                                 consentText: consentText,
+                                 invalidEmailMsg: invalidEmailMsg,
+                                 successMessage: successMsg,
+                                 emailPermitText: emailPermitTxt,
+                                 checkConsentMessage: checkConsentMsg,
+                                 titleTextColor: titleTextColor,
+                                 titleFontFamily: titleFontFamily,
+                                 titleTextSize: titleTextSize,
+                                 messageTextColor: messageTextColor,
+                                 messageFontFamily: messageTextFontFamily,
+                                 messageTextSize: messageTextSize,
+                                 mailButtonColor: mailButtonColor,
+                                 mailButtonTextColor: mailButtonTextColor,
+                                 mailButtonFontFamily: mailButtonFontFamily,
+                                 mailButtonTextSize: mailButtonTextSize,
+                                 promocodeTextColor: promocodeTextColor,
+                                 promocodeTextFamily: promocodeFontFamily,
+                                 promocodeTextSize: promocodeTextSize,
+                                 copyButtonColor: copyButtonColor,
+                                 copyButtonTextColor: copyButtonTextColor,
+                                 copyButtonFontFamily: copyButtonFontFamily,
+                                 copyButtonTextSize: copyButtonTextSize,
+                                 emailPermitTextSize: emailPermitTextSize,
+                                 emailPermitUrl: emailPermitTextUrl,
+                                 consentTextSize: consentTextSize,
+                                 consentUrl: consentTextUrl,
+                                 closeButtonColor: closeButtonColor,
+                                 backgroundColor: backgroundColor)
     }
     
     private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {

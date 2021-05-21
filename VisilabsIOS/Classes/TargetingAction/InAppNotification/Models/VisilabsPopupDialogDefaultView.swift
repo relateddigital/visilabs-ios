@@ -142,16 +142,16 @@ public class VisilabsPopupDialogDefaultView: UIView {
             imageView.allEdges(to: self, excluding: .bottom)
             imageAdded = true
         }
-        titleLabel.text = model.messageTitle?.removeEscapingCharacters()
+        titleLabel.text = model.title?.removeEscapingCharacters()
         titleLabel.font = model.messageTitleFont
-        titleLabel.textColor = model.messageTitleColor
+        titleLabel.textColor = model.titleTextColor
 
-        messageLabel.text = model.messageBody?.removeEscapingCharacters()
+        messageLabel.text = model.message?.removeEscapingCharacters()
         messageLabel.font = model.messageBodyFont
-        messageLabel.textColor = model.messageBodyColor
+        messageLabel.textColor = model.messageTextColor
 
         closeButton.setTitleColor(model.closeButtonColor, for: .normal)
-        self.backgroundColor = model.backGroundColor
+        self.backgroundColor = model.backgroundColor
 
         self.addSubview(closeButton)
         self.addSubview(titleLabel)
@@ -193,10 +193,10 @@ public class VisilabsPopupDialogDefaultView: UIView {
         sctw.width(280.0)
         sctw.height(50.0)
         
-        sctwButton = VisilabsPopupDialogButton(title: "Save & Scratch",
-                                               font: model.buttonTextFont,
-                                               buttonTextColor: model.buttonTextColor,
-                                               buttonColor: model.buttonColor, action: nil)
+        sctwButton = VisilabsPopupDialogButton(title: model.mailButtonText ?? "",
+                                               font: model.mailButtonFont ?? .systemFont(ofSize: 20),
+                                               buttonTextColor: model.mailButtonTextColor,
+                                               buttonColor: model.mailButtonColor, action: nil)
         sctwButton.addTarget(self, action: #selector(collapseSctw), for: .touchDown)
         
         sctw.isUserInteractionEnabled = false
@@ -402,14 +402,18 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     @objc func expandSctw() {
         self.delegate?.viewExpanded()
         let model = self.scratchToWin!
-        sctwButton = VisilabsPopupDialogButton(title: "Copy Code",
-                                                            font: model.buttonTextFont,
-                                                            buttonTextColor: model.buttonTextColor,
-                                                            buttonColor: model.buttonColor, action: nil)
+        sctwButton = VisilabsPopupDialogButton(title: model.copyButtonText ?? "",
+                                               font: model.copyButtonTextFont ?? .systemFont(ofSize: 20),
+                                                            buttonTextColor: model.copyButtonTextColor,
+                                                            buttonColor: model.copyButtonColor, action: nil)
         addSubview(sctwButton)
         sctwButton.allEdges(to: self, excluding:.top)
         sctwButton.height(50)
 
+    }
+    
+    @objc func dismissKeyboard() {
+        self.endEditing(true)
     }
 }
 
