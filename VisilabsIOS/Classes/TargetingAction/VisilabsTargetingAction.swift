@@ -329,7 +329,7 @@ class VisilabsTargetingAction {
         var emailPermitTxt: String? = nil
         var checkConsentMsg: String? = nil
 
-        if let mailForm = actionData[VisilabsConstants.mailSubscriptionForm] as? [String: Any] {
+        if let mailForm = actionData[VisilabsConstants.sctwMailSubscriptionForm] as? [String: Any] {
             mailPlaceholder = mailForm[VisilabsConstants.placeholder] as? String
             mailButtonTxt = mailForm[VisilabsConstants.buttonLabel] as? String
             consentText = mailForm[VisilabsConstants.consentText] as? String
@@ -346,8 +346,8 @@ class VisilabsTargetingAction {
         let messageTextColor = extendedProps[VisilabsConstants.contentBodyTextColor] as? String
         let messageTextSize = extendedProps[VisilabsConstants.contentBodyTextSize] as? String
         let messageTextFontFamily = extendedProps[VisilabsConstants.contentBodyTextFontFamily] as? String
-        let mailButtonColor = extendedProps[VisilabsConstants.buttonColor] as? String
-        let mailButtonTextColor = extendedProps[VisilabsConstants.buttonTextColor] as? String
+        let mailButtonColor = extendedProps[VisilabsConstants.button_color] as? String
+        let mailButtonTextColor = extendedProps[VisilabsConstants.button_text_color] as? String
         let mailButtonFontFamily = extendedProps[VisilabsConstants.buttonFontFamily] as? String
         let mailButtonTextSize = extendedProps[VisilabsConstants.buttonTextSize] as? String
         let promocodeTextColor = extendedProps[VisilabsConstants.promocodeTextColor] as? String

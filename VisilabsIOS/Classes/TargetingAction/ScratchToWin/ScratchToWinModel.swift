@@ -169,38 +169,6 @@ public class ScratchToWinModel: TargetingActionViewModel {
         
     }
 
-    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
-        var size = style == .title2 ? 12 : 8
-        if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
-            size += siz
-        }
-        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
-                               size: CGFloat(size))
-        if let font = fontFamily {
-            if #available(iOS 13.0, *) {
-                var systemDesign: UIFontDescriptor.SystemDesign  = .default
-                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    systemDesign = .serif
-                } else if font.lowercased() == "monospace" {
-                    systemDesign = .monospaced
-                }
-                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
-                    .withDesign(systemDesign) {
-                    finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
-                }
-            } else {
-                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    let fontName = style == .title2 ? "GillSans-Bold": "GillSans"
-                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
-                } else if font.lowercased() == "monospace" {
-                    let fontName = style == .title2 ? "CourierNewPS-BoldMT": "CourierNewPSMT"
-                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
-                }
-            }
-        }
-        return finalFont
-    }
-
     private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
         var imageUrl: URL?
         var urlString = imageUrlString

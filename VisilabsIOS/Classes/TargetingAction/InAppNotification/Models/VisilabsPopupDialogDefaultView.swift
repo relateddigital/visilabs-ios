@@ -143,11 +143,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
             imageAdded = true
         }
         titleLabel.text = model.title?.removeEscapingCharacters()
-        titleLabel.font = model.messageTitleFont
+        titleLabel.font = model.titleFont
         titleLabel.textColor = model.titleTextColor
 
         messageLabel.text = model.message?.removeEscapingCharacters()
-        messageLabel.font = model.messageBodyFont
+        messageLabel.font = model.messageFont
         messageLabel.textColor = model.messageTextColor
 
         closeButton.setTitleColor(model.closeButtonColor, for: .normal)
@@ -156,6 +156,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         self.addSubview(closeButton)
         self.addSubview(titleLabel)
         self.addSubview(messageLabel)
+
         if imageAdded {
             self.titleLabel.topToBottom(of: imageView, offset: 10)
         } else {
@@ -170,18 +171,19 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
         let frame = CGRect(x: 0, y: 0, width: 280.0, height: 50.0)
         let coupon = UIView(frame: frame)
-        coupon.backgroundColor = .red
+        coupon.backgroundColor = .white
 
         let cpLabel = UILabel(frame: frame)
-        cpLabel.text = "coupon code"
+        cpLabel.font = model.promoFont
+        cpLabel.text = model.promocode
         cpLabel.textAlignment = .center
-        cpLabel.textColor = .white
+        cpLabel.textColor = model.promoTextColor
         coupon.addSubview(cpLabel)
 
         let couponImg = coupon.asImage()
 
         let maskView = UIView(frame: frame)
-        maskView.backgroundColor = .darkGray
+        maskView.backgroundColor = model.scratchColor
  
         let maskImg = maskView.asImage()
         
@@ -407,6 +409,7 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
                                                             buttonTextColor: model.copyButtonTextColor,
                                                             buttonColor: model.copyButtonColor, action: nil)
         addSubview(sctwButton)
+        sctwButton.addTarget(self, action: #selector(copyCodeAndDismiss), for: .touchDown)
         sctwButton.allEdges(to: self, excluding:.top)
         sctwButton.height(50)
 
@@ -414,6 +417,12 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     
     @objc func dismissKeyboard() {
         self.endEditing(true)
+    }
+    
+    @objc func copyCodeAndDismiss() {
+        UIPasteboard.general.string = scratchToWin?.promocode
+        VisilabsHelper.showCopiedClipboardMessage()
+        self.delegate?.dismissSctw()
     }
 }
 
@@ -429,6 +438,7 @@ extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
 
 protocol VisilabsPopupDialogDefaultViewDelegate {
     func viewExpanded()
+    func dismissSctw()
 }
 
 protocol ImageButtonImageDelegate {

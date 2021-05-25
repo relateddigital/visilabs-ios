@@ -20,12 +20,12 @@ struct VisilabsConstants {
     //TO_DO: bunlar https e çevirilecek
     static var loggerEndPoint = "lgr.visilabs.net"
     static var realtimeEndPoint = "rt.visilabs.net"
-    static var recommendationEndPoint = "s.visilabs.net/json"
-    static var actionEndPoint = "s.visilabs.net/actjson"
-    static var geofenceEndPoint = "s.visilabs.net/geojson"
-    static var mobileEndPoint = "s.visilabs.net/mobile"
-    static var subsjsonEndpoint = "s.visilabs.net/subsjson"
-    static var promotionEndpoint = "s.visilabs.net/promotion"
+    static var recommendationEndPoint = "tests.visilabs.net/json"
+    static var actionEndPoint = "tests.visilabs.net/actjson"
+    static var geofenceEndPoint = "tests.visilabs.net/geojson"
+    static var mobileEndPoint = "tests.visilabs.net/mobile"
+    static var subsjsonEndpoint = "tests.visilabs.net/subsjson"
+    static var promotionEndpoint = "tests.visilabs.net/promotion"
 
     // MARK: - UserDefaults Keys
 
@@ -221,7 +221,7 @@ struct VisilabsConstants {
     static let contentBodyTextSize = "content_body_text_size"
     static let promocodeFontFamily = "promocode_font_family"
     static let promocodeTextSize = "promocode_text_size"
-    
+    static let sctwMailSubscriptionForm = "mail_subscription_form"
     
     private static let targetPrefVossStoreKey = "OM.voss"
     private static let targetPrefVcnameStoreKey = "OM.vcname"
