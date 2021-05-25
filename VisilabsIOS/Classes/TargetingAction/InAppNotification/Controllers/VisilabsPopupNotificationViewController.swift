@@ -547,4 +547,9 @@ extension VisilabsPopupNotificationViewController: VisilabsPopupDialogDefaultVie
         appendButtons()
  
     }
+    
+    func dismissSctw() {
+        guard let sctw = self.scratchToWin else { return }
+        self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
+    }
 }
