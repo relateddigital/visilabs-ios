@@ -153,7 +153,6 @@ extension VisilabsPopupDialogDefaultView {
 
     internal func setFeedbackTF() -> UITextField {
         let tf = UITextField(frame: .zero)
-        tf.placeholder = "Please let us know what did make you unhappy."
         tf.font = .systemFont(ofSize: 11)
         tf.backgroundColor = .white
         tf.textColor = .black
@@ -280,8 +279,6 @@ extension VisilabsPopupDialogDefaultView {
                                                    name: UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                    name: UIResponder.keyboardWillHideNotification, object: nil)
-            let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-            self.addGestureRecognizer(tap)
         }
 
         titleLabel.centerX(to: self)
