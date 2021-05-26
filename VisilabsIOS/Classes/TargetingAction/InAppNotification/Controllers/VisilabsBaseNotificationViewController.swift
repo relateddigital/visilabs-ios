@@ -48,6 +48,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
     func hide(animated: Bool, completion: @escaping () -> Void) {}
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
         if self.mailForm != nil || self.spinToWin != nil {
             return
         }
