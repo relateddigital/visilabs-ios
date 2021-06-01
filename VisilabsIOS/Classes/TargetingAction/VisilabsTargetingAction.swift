@@ -270,7 +270,7 @@ class VisilabsTargetingAction {
         let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String ?? ""
         let impression = report[VisilabsConstants.impression] as? String ?? ""
         let click = report[VisilabsConstants.click] as? String ?? ""
-        let mailReport = MailReport(impression: impression, click: click)
+        let mailReport = TargetingActionReport(impression: impression, click: click)
         let extendedProperties = MailSubscriptionExtendedProps(titleTextColor: titleTextColor,
                                                                titleFontFamily: titleFontFamily,
                                                                titleTextSize: titleTextSize,
@@ -311,6 +311,7 @@ class VisilabsTargetingAction {
         guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
 
         let actid = scratchToWin[VisilabsConstants.actid] as? Int ?? 0
+        let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
         let hasMailForm = actionData[VisilabsConstants.mailSubscription] as? Bool ?? false
         let scratchColor = actionData[VisilabsConstants.scratchColor] as? String ?? "000000"
         let waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
@@ -363,8 +364,18 @@ class VisilabsTargetingAction {
         let consentTextUrl = extendedProps[VisilabsConstants.consentTextUrl] as? String
         let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String
         let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String
+        
+        var click = ""
+        var impression = ""
+        if let report = actionData[VisilabsConstants.report] as? [String: Any] {
+            click = report[VisilabsConstants.click] as? String ?? ""
+            impression = report[VisilabsConstants.impression] as? String ?? ""
+        }
+        let rep = TargetingActionReport(impression: impression, click: click)
+
         return ScratchToWinModel(type: .scratchToWin,
                                  actid: actid,
+                                 auth: auth,
                                  hasMailForm: hasMailForm,
                                  scratchColor: scratchColor,
                                  waitingTime: waitingTime,
@@ -403,7 +414,8 @@ class VisilabsTargetingAction {
                                  consentTextSize: consentTextSize,
                                  consentUrl: consentTextUrl,
                                  closeButtonColor: closeButtonColor,
-                                 backgroundColor: backgroundColor)
+                                 backgroundColor: backgroundColor,
+                                 report: rep)
     }
     
     private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {
