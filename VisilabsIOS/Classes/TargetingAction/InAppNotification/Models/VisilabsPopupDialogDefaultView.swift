@@ -43,6 +43,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     var selectedNumber: Int? = nil
     var expanded = false
     var delegate: VisilabsPopupDialogDefaultViewDelegate?
+    var sctwMail: String = ""
 
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
@@ -134,6 +135,92 @@ public class VisilabsPopupDialogDefaultView: UIView {
         setupForEmailForm()
     }
     
+    fileprivate func createSctwAndAddSubview(_ model: ScratchToWinModel) {
+        let frame = CGRect(x: 0, y: 0, width: 280.0, height: 50.0)
+        let coupon = UIView(frame: frame)
+        coupon.backgroundColor = .white
+        
+        let cpLabel = UILabel(frame: frame)
+        cpLabel.font = model.promoFont
+        cpLabel.text = model.promocode
+        cpLabel.textAlignment = .center
+        cpLabel.textColor = model.promoTextColor
+        coupon.addSubview(cpLabel)
+        
+        let couponImg = coupon.asImage()
+        
+        let maskView = UIView(frame: frame)
+        maskView.backgroundColor = model.scratchColor
+        
+        let maskImg = maskView.asImage()
+        
+        self.sctw = ScratchUIView(frame: frame, couponImage: couponImg, maskImage: maskImg, scratchWidth: 20.0)
+        sctw.delegate = self
+        self.addSubview(sctw)
+    }
+    
+    fileprivate func addSctwMailForm(_ model: ScratchToWinModel) {
+        sctwButton = VisilabsPopupDialogButton(title: model.mailButtonText ?? "",
+                                               font: model.mailButtonFont ?? .systemFont(ofSize: 20),
+                                               buttonTextColor: model.mailButtonTextColor,
+                                               buttonColor: model.mailButtonColor, action: nil)
+        sctwButton.addTarget(self, action: #selector(collapseSctw), for: .touchDown)
+        
+        sctw.isUserInteractionEnabled = false
+        addSubview(sctwButton)
+        sctwButton.height(50.0)
+        sctwButton.allEdges(to: self, excluding: .top)
+        
+        addSubview(firstCheckBox)
+        addSubview(secondCheckBox)
+        addSubview(emailTF)
+        addSubview(termsButton)
+        addSubview(consentButton)
+        addSubview(resultLabel)
+
+        emailTF.topToBottom(of: sctw, offset: 20)
+        emailTF.leading(to: self, offset: 10)
+        emailTF.trailing(to: self, offset: -10)
+        emailTF.height(25)
+        
+        resultLabel.topToBottom(of: emailTF, offset: 8.0)
+        resultLabel.leading(to: self, offset: 10)
+        resultLabel.trailing(to: self, offset: -10)
+        resultLabel.height(12)
+        
+        firstCheckBox.topToBottom(of: resultLabel, offset: 8.0)
+        firstCheckBox.leading(to: self, offset: 10)
+        firstCheckBox.size(CGSize(width: 20, height: 20))
+        termsButton.leadingToTrailing(of: firstCheckBox, offset: 10)
+        termsButton.centerY(to: firstCheckBox)
+        
+        secondCheckBox.topToBottom(of: firstCheckBox, offset: 5)
+        secondCheckBox.leading(to: self, offset: 10)
+        secondCheckBox.size(CGSize(width: 20,  height: 20))
+        
+        consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
+        consentButton.centerY(to: secondCheckBox)
+        
+        let parsedPermit = model.permitText ?? ParsedPermissionString(string: "Click here to read terms & conditions.", location: 5, length: 6)
+        let parsedConsent = model.consentText ?? ParsedPermissionString(string: "Click here to read terms & conditions.", location: 5, length: 6)
+        let attrPermit = NSMutableAttributedString(string: parsedPermit.string)
+        let attrCon = NSMutableAttributedString(string: parsedConsent.string)
+        attrPermit.addAttribute(.link, value: model.permitUrl ?? "",
+                             range: NSRange(location: parsedPermit.location, length: parsedPermit.length))
+        attrCon.addAttribute(.link, value: model.consentUrl ?? "",
+                             range: NSRange(location: parsedConsent.location, length: parsedConsent.length))
+
+        termsButton.setAttributedTitle(attrPermit, for: .normal)
+        termsButton.setTitle(parsedPermit.string, for: .normal)
+        termsButton.titleLabel?.font = model.emailPermitTextFont ?? .systemFont(ofSize: 12)
+        consentButton.setAttributedTitle(attrCon, for: .normal)
+        consentButton.setTitle(parsedConsent.string, for: .normal)
+        consentButton.titleLabel?.font = model.consentTextFont ?? .systemFont(ofSize: 12)
+        
+        sctwButton.topToBottom(of: secondCheckBox, offset: 10)
+        closeButton.trailing(to: self, offset: -10.0)
+    }
+    
     func setupInitialForScratchToWin() {
         guard let model = self.scratchToWin else { return }
         var imageAdded = false
@@ -164,77 +251,21 @@ public class VisilabsPopupDialogDefaultView: UIView {
         }
         self.titleLabel.leading(to: self)
         self.titleLabel.trailing(to: self)
-        self.titleLabel.height(20)
         self.messageLabel.topToBottom(of: titleLabel,offset: 10)
         self.messageLabel.leading(to: self)
         self.messageLabel.trailing(to: self)
 
-        let frame = CGRect(x: 0, y: 0, width: 280.0, height: 50.0)
-        let coupon = UIView(frame: frame)
-        coupon.backgroundColor = .white
-
-        let cpLabel = UILabel(frame: frame)
-        cpLabel.font = model.promoFont
-        cpLabel.text = model.promocode
-        cpLabel.textAlignment = .center
-        cpLabel.textColor = model.promoTextColor
-        coupon.addSubview(cpLabel)
-
-        let couponImg = coupon.asImage()
-
-        let maskView = UIView(frame: frame)
-        maskView.backgroundColor = model.scratchColor
- 
-        let maskImg = maskView.asImage()
-        
-        self.sctw = ScratchUIView(frame: frame, couponImage: couponImg, maskImage: maskImg, scratchWidth: 20.0)
-        sctw.delegate = self
-        self.addSubview(sctw)
+        createSctwAndAddSubview(model)
 
         sctw.topToBottom(of: messageLabel, offset: 20)
         sctw.width(280.0)
         sctw.height(50.0)
-        
-        sctwButton = VisilabsPopupDialogButton(title: model.mailButtonText ?? "",
-                                               font: model.mailButtonFont ?? .systemFont(ofSize: 20),
-                                               buttonTextColor: model.mailButtonTextColor,
-                                               buttonColor: model.mailButtonColor, action: nil)
-        sctwButton.addTarget(self, action: #selector(collapseSctw), for: .touchDown)
-        
-        sctw.isUserInteractionEnabled = false
-        addSubview(sctwButton)
-        sctwButton.height(50.0)
-        sctwButton.allEdges(to: self, excluding: .top)
 
-        addSubview(firstCheckBox)
-        addSubview(secondCheckBox)
-        addSubview(emailTF)
-        addSubview(termsButton)
-        addSubview(consentButton)
-
-        emailTF.topToBottom(of: sctw, offset: 20)
-        emailTF.leading(to: self, offset: 10)
-        emailTF.trailing(to: self, offset: -10)
-        emailTF.height(25)
-        
-        firstCheckBox.topToBottom(of: emailTF, offset: 10)
-        firstCheckBox.leading(to: self, offset: 10)
-        firstCheckBox.size(CGSize(width: 20, height: 20))
-        termsButton.leadingToTrailing(of: firstCheckBox, offset: 10)
-        termsButton.centerY(to: firstCheckBox)
-
-        secondCheckBox.topToBottom(of: firstCheckBox, offset: 5)
-        secondCheckBox.leading(to: self, offset: 10)
-        secondCheckBox.size(CGSize(width: 20, height: 20))
-
-        consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
-        consentButton.centerY(to: secondCheckBox)
-
-        termsButton.setTitle("terms button ", for: .normal)
-        consentButton.setTitle("consent button", for: .normal)
-
-        sctwButton.topToBottom(of: secondCheckBox, offset: 10)
-        closeButton.trailing(to: self, offset: -10.0)
+        if model.hasMailForm {
+            addSctwMailForm(model)
+        } else {
+            sctw.bottom(to: self, offset: -60)
+        }
         
         var constraints = [NSLayoutConstraint]()
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
@@ -316,13 +347,13 @@ extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
 //Email form extension
 extension VisilabsPopupDialogDefaultView {
 
-    func sendEmailButtonTapped() {
-
-    }
-
     @objc func termsButtonTapped(_ sender: UIButton) {
-        guard let url = emailForm?.emailPermitUrl else { return }
-        VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        if let url = scratchToWin?.permitUrl {
+            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        }
+        if let url = emailForm?.emailPermitUrl {
+            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        }
     }
     
     @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
@@ -331,8 +362,12 @@ extension VisilabsPopupDialogDefaultView {
     }
 
     @objc func consentButtonTapped(_ sender: UIButton) {
-        guard let url = emailForm?.consentUrl else { return }
-        VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        if let url = scratchToWin?.consentUrl {
+            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        }
+        if let url = emailForm?.consentUrl {
+            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+        }
     }
 }
 
@@ -390,16 +425,42 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     }
     
     @objc func collapseSctw() {
-        self.sctw.isUserInteractionEnabled = true
-        emailTF.removeFromSuperview()
-        termsButton.removeFromSuperview()
-        consentButton.removeFromSuperview()
-        firstCheckBox.removeFromSuperview()
-        secondCheckBox.removeFromSuperview()
-        sctwButton.removeFromSuperview()
-        sctw.bottom(to: self, offset: -60)
-        setNeedsLayout()
-        setNeedsDisplay()
+        DispatchQueue.main.async { [self] in
+            let email = self.emailTF.text ?? ""
+            
+            if !VisilabsHelper.checkEmail(email: email) {
+                self.resultLabel.text = self.scratchToWin?.invalidEmailMessage
+                self.resultLabel.isHidden = false
+            } else if !self.firstCheckBox.isChecked || !self.secondCheckBox.isChecked {
+                self.resultLabel.text = self.scratchToWin?.checkConsentText
+                self.resultLabel.isHidden = false
+            } else {
+                self.sctwMail = emailTF.text ?? ""
+                self.resultLabel.text = self.scratchToWin?.successMessage
+                self.resultLabel.textColor = .green
+                self.resultLabel.topToBottom(of: self.sctw, offset: 10.0)
+                self.resultLabel.isHidden = false
+                self.hideResultLabel()
+                self.sctw.isUserInteractionEnabled = true
+                self.emailTF.removeFromSuperview()
+                self.termsButton.removeFromSuperview()
+                self.consentButton.removeFromSuperview()
+                self.firstCheckBox.removeFromSuperview()
+                self.secondCheckBox.removeFromSuperview()
+                self.sctwButton.removeFromSuperview()
+                self.sctw.bottom(to: self, offset: -60)
+                self.setNeedsLayout()
+                self.setNeedsDisplay()
+            }
+        }
+    }
+    
+    func hideResultLabel() {
+        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+            self.resultLabel.removeFromSuperview()
+            self.setNeedsLayout()
+            self.setNeedsDisplay()
+        }
     }
     
     @objc func expandSctw() {
@@ -411,6 +472,9 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
                                                             buttonColor: model.copyButtonColor, action: nil)
         addSubview(sctwButton)
         sctwButton.addTarget(self, action: #selector(copyCodeAndDismiss), for: .touchDown)
+        let actid = String(scratchToWin?.actId ?? 0)
+        let auth = scratchToWin?.auth ?? ""
+        Visilabs.callAPI().subscribeSpinToWinMail(actid: actid, auth: auth, mail: sctwMail)
         sctwButton.allEdges(to: self, excluding:.top)
         sctwButton.height(50)
 

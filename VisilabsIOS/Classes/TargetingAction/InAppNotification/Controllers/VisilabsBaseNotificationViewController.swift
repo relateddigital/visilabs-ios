@@ -49,7 +49,9 @@ class VisilabsBaseNotificationViewController: UIViewController {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-        if self.mailForm != nil || self.spinToWin != nil {
+        if self.mailForm != nil ||
+            self.spinToWin != nil ||
+            self.scratchToWin != nil {
             return
         }
         if let not = self.notification,
@@ -60,8 +62,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
         let touch = touches.first
         if !(touch?.view is VisilabsPopupDialogDefaultView)
             && !(touch?.view is CosmosView) &&
-            !(touch?.view is UIImageView) &&
-            !(touch?.view is ScratchUIView) {
+            !(touch?.view is UIImageView) {
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
         } else {
 //            Dont dismiss on tap

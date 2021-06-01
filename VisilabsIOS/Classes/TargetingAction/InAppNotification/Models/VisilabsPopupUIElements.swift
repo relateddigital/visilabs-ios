@@ -121,7 +121,7 @@ extension VisilabsPopupDialogDefaultView {
     internal func setTermsButton() -> UIButton {
         let button = UIButton(frame: .zero)
         button.titleLabel?.font = .systemFont(ofSize: 10)
-        button.titleLabel?.textColor = .systemGray
+        button.titleLabel?.textColor = .darkGray
         button.addTarget(self, action: #selector(termsButtonTapped(_:)), for: .touchUpInside)
         return button
     }
@@ -129,6 +129,7 @@ extension VisilabsPopupDialogDefaultView {
     internal func setConsentButton() -> UIButton {
         let button = UIButton(frame: .zero)
         button.titleLabel?.font = .systemFont(ofSize: 10)
+        button.titleLabel?.textColor = .darkGray
         button.addTarget(self, action: #selector(consentButtonTapped(_:)), for: .touchUpInside)
         return button
     }

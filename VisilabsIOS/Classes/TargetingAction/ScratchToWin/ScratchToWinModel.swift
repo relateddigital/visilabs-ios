@@ -11,6 +11,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
 
     public var targetingActionType: TargetingActionType = .scratchToWin
     let actId: Int
+    let auth: String
     let hasMailForm: Bool
     let scratchColor: UIColor?
     var waitingTime: Int = 0
@@ -45,6 +46,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
     let backgroundColor: UIColor?
     let consentUrl: URL?
     let permitUrl: URL?
+    let report: TargetingActionReport?
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -68,6 +70,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
 
     public init(type: VisilabsInAppNotificationType,
                 actid: Int,
+                auth: String,
                 hasMailForm: Bool,
                 scratchColor: String,
                 waitingTime: Int,
@@ -106,7 +109,8 @@ public class ScratchToWinModel: TargetingActionViewModel {
                 consentTextSize: String?,
                 consentUrl: String?,
                 closeButtonColor: String?,
-                backgroundColor: String?) {
+                backgroundColor: String?,
+                report: TargetingActionReport?) {
 
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
@@ -118,6 +122,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
             }
         }
         self.actId = actid
+        self.auth = auth
         self.hasMailForm = hasMailForm
         self.scratchColor = UIColor(hex: scratchColor)
         self.waitingTime = waitingTime
@@ -147,7 +152,8 @@ public class ScratchToWinModel: TargetingActionViewModel {
         if !self.imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = ScratchToWinModel.getImageUrl(self.imageUrlString!, type: .full)
         }
-        
+        self.report = report
+
         titleFont = VisilabsInAppNotification.getFont(fontFamily: titleFontFamily,
                                                                   fontSize: titleTextSize,
                                                                   style: .title2)
@@ -163,8 +169,8 @@ public class ScratchToWinModel: TargetingActionViewModel {
         copyButtonTextFont = VisilabsInAppNotification.getFont(fontFamily: copyButtonFontFamily,
                                                               fontSize: copyButtonTextSize,
                                                               style: .title2)
-        emailPermitTextFont = UIFont.systemFont(ofSize: CGFloat(6 + (Int(emailPermitTextSize ?? "0") ?? 0)))
-        consentTextFont = UIFont.systemFont(ofSize: CGFloat(6 + (Int(consentTextSize ?? "0") ?? 0)))
+        emailPermitTextFont = UIFont.systemFont(ofSize: CGFloat(8 + (Int(emailPermitTextSize ?? "0") ?? 0)))
+        consentTextFont = UIFont.systemFont(ofSize: CGFloat(8 + (Int(consentTextSize ?? "0") ?? 0)))
         
         
     }
