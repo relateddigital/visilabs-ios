@@ -178,6 +178,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
         addSubview(consentButton)
         addSubview(resultLabel)
 
+        emailTF.placeholder = model.placeholder
+        emailTF.delegate = self
         emailTF.topToBottom(of: sctw, offset: 20)
         emailTF.leading(to: self, offset: 10)
         emailTF.trailing(to: self, offset: -10)
@@ -218,7 +220,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
         consentButton.titleLabel?.font = model.consentTextFont ?? .systemFont(ofSize: 12)
         
         sctwButton.topToBottom(of: secondCheckBox, offset: 10)
-        closeButton.trailing(to: self, offset: -10.0)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func setupInitialForScratchToWin() {
@@ -267,6 +273,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
             sctw.bottom(to: self, offset: -60)
         }
         
+        self.closeButton.trailing(to: self, offset: -10)
+
         var constraints = [NSLayoutConstraint]()
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
             attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
