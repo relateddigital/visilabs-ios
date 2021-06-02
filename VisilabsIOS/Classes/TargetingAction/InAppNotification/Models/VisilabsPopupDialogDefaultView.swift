@@ -502,7 +502,7 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
 extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
     
     public func scratchMoved(_ view: ScratchUIView) {
-        if !expanded && view.getScratchPercent() > 0.79 {
+        if !expanded && view.getScratchPercent() > 0.69 {
             expanded = true
             expandSctw()
         }
