@@ -105,6 +105,7 @@ class VisilabsGeofence {
             props[VisilabsConstants.actKey] = VisilabsConstants.getList
             props[VisilabsConstants.tokenIdKey] = user.tokenId
             props[VisilabsConstants.appidKey] = user.appId
+            props[VisilabsConstants.channelKey] = profile.channel
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                 props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
                 props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
