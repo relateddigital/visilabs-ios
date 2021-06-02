@@ -35,7 +35,7 @@ class VisilabsRecommendation {
         props[VisilabsConstants.tokenIdKey] = visilabsUser.tokenId
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
-
+        props[VisilabsConstants.channelKey] = self.visilabsProfile.channel
         if zoneID.count > 0 {
             props[VisilabsConstants.zoneIdKey] = zoneID
         }

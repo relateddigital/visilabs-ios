@@ -573,6 +573,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.story
+        props[VisilabsConstants.channelKey] = self.visilabsProfile.channel
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
         
         

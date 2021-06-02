@@ -574,6 +574,7 @@ extension VisilabsInstance {
         props["actionid"] = actid
         props[VisilabsConstants.authentication] = auth
         props[VisilabsConstants.subscribedEmail] = mail
+        props[VisilabsConstants.channelKey] = visilabsProfile.channel
         VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String : String](), timeOutInterval: self.visilabsProfile.requestTimeoutInterval)
     }
 }
