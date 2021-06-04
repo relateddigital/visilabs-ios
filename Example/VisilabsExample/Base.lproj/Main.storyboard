@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MG0-Qd-noS">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--InApp-->
+        <scene sceneID="1Fj-qt-1Qg">
+            <objects>
+                <viewController title="InApp" id="wh7-fN-UuX" customClass="InAppViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Qyy-tp-JC4"/>
+                        <viewControllerLayoutGuide type="bottom" id="nzV-gv-bV8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1v5-5e-Slk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="In App" image="InApp" id="psb-aS-5c5"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="60P-61-meT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="153" y="86"/>
+        </scene>
+        <!--Event-->
+        <scene sceneID="N2M-ks-SOm">
+            <objects>
+                <viewController storyboardIdentifier="eventview" title="Event" id="mdL-Fq-e14" customClass="EventViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1b3-iq-mnL"/>
+                        <viewControllerLayoutGuide type="bottom" id="Rqc-JL-tQu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1kO-9e-nw0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Event" image="Event" id="KQy-rB-DLV"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6EO-Kk-Kt7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-810" y="-330"/>
+        </scene>
+        <!--Story View Controller-->
+        <scene sceneID="q6R-At-eBt">
+            <objects>
+                <viewController title="Story View Controller" id="EDY-ws-PEW" customClass="StoryViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5hd-s8-akZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="zWs-ab-8YE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jjC-Ch-dU0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Story" image="STORY" id="lCi-Hy-rvx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BTx-6H-uWB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2052" y="935"/>
+        </scene>
+        <!--Recommendation View Controller-->
+        <scene sceneID="Zmr-Sr-bc6">
+            <objects>
+                <viewController title="Recommendation View Controller" id="dvx-e3-EjW" customClass="RecommendationViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wJz-Ds-1nZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="WfJ-ZJ-6aI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qGn-Z5-aj3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Recommendation" image="Recommendation" id="ar5-kL-6k9"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r2M-fO-Xqr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1289" y="828"/>
+        </scene>
+        <!--Geofence View Controller-->
+        <scene sceneID="v2z-cA-gvT">
+            <objects>
+                <viewController title="Geofence View Controller" id="uRA-XH-yfi" customClass="GeofenceViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rqc-Ie-tNM"/>
+                        <viewControllerLayoutGuide type="bottom" id="aVI-eY-rph"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mQU-Yb-VmJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Geofence" image="Geofence" id="L0b-Dd-bdu"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sPH-z7-f1k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-538" y="537"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="9Fx-GK-1bn">
+            <objects>
+                <viewController storyboardIdentifier="homeview" title="Home View Controller" id="MG0-Qd-noS" customClass="HomeViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dUi-CX-tEq"/>
+                        <viewControllerLayoutGuide type="bottom" id="9h4-F6-VHL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="sHs-zK-Cu7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kt2-r1-Irj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2345" y="-466"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="h0r-5Y-zac">
+            <objects>
+                <tabBarController storyboardIdentifier="tabbarcontroller" title="Tab Bar Controller" id="1aN-6y-aOa" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h7Q-lq-jhM">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="mdL-Fq-e14" kind="relationship" relationship="viewControllers" id="4cF-Q9-uvY"/>
+                        <segue destination="wh7-fN-UuX" kind="relationship" relationship="viewControllers" id="8CX-iy-9gh"/>
+                        <segue destination="EDY-ws-PEW" kind="relationship" relationship="viewControllers" id="9hv-fj-aOP"/>
+                        <segue destination="uRA-XH-yfi" kind="relationship" relationship="viewControllers" id="6at-ew-ZuQ"/>
+                        <segue destination="dvx-e3-EjW" kind="relationship" relationship="viewControllers" id="jKA-Y3-u95"/>
+                        <segue destination="gxJ-w2-02E" kind="relationship" relationship="viewControllers" id="PLH-5t-R6f"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vam-ZM-pWX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1665" y="-70"/>
+        </scene>
+        <!--Favorite View Controller-->
+        <scene sceneID="ncc-YS-XkA">
+            <objects>
+                <viewController title="Favorite View Controller" id="gxJ-w2-02E" customClass="FavoriteViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OBc-Ir-2r6"/>
+                        <viewControllerLayoutGuide type="bottom" id="j45-AN-1i3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="evk-eU-Lhu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Favorite" image="Favorite" id="ysV-0e-Gxt"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yaq-JF-br2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2655" y="294"/>
+        </scene>
+        <!--Modal View Controller-->
+        <scene sceneID="BFe-dD-VEE">
+            <objects>
+                <viewController storyboardIdentifier="modalview" id="KA9-NP-RUo" customClass="ModalViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HxN-II-vAL"/>
+                        <viewControllerLayoutGuide type="bottom" id="eTM-eb-ay6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZU1-0B-OSt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MY8-n1-sSL">
+                                <rect key="frame" x="30" y="200" width="315" height="316"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Header" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mix-5W-zqR">
+                                        <rect key="frame" x="15" y="15" width="285" height="21.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Di4-pe-VQs" customClass="ColorPicker" customModule="Colorful">
+                                        <rect key="frame" x="15" y="66.5" width="285" height="199.5"/>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="stx-gS-Chl">
+                                        <rect key="frame" x="135.5" y="276" width="44" height="30"/>
+                                        <state key="normal" title="Select"/>
+                                        <connections>
+                                            <action selector="handleSelect:" destination="KA9-NP-RUo" eventType="touchUpInside" id="ihd-XS-yKV"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="mix-5W-zqR" firstAttribute="leading" secondItem="MY8-n1-sSL" secondAttribute="leading" constant="15" id="3qu-tC-4EI"/>
+                                    <constraint firstItem="stx-gS-Chl" firstAttribute="centerX" secondItem="Di4-pe-VQs" secondAttribute="centerX" id="Asv-lA-6uB"/>
+                                    <constraint firstItem="stx-gS-Chl" firstAttribute="top" secondItem="Di4-pe-VQs" secondAttribute="bottom" constant="10" id="Llm-lL-Icb"/>
+                                    <constraint firstItem="Di4-pe-VQs" firstAttribute="top" secondItem="mix-5W-zqR" secondAttribute="bottom" constant="30" id="bTd-pM-9Ht"/>
+                                    <constraint firstAttribute="bottom" secondItem="stx-gS-Chl" secondAttribute="bottom" constant="10" id="d5i-hk-b4g"/>
+                                    <constraint firstItem="mix-5W-zqR" firstAttribute="trailing" secondItem="Di4-pe-VQs" secondAttribute="trailing" id="ifl-0U-YhB"/>
+                                    <constraint firstItem="mix-5W-zqR" firstAttribute="leading" secondItem="Di4-pe-VQs" secondAttribute="leading" id="jNn-wZ-tcs"/>
+                                    <constraint firstItem="mix-5W-zqR" firstAttribute="top" secondItem="MY8-n1-sSL" secondAttribute="top" constant="15" id="jQt-bA-rog"/>
+                                    <constraint firstItem="mix-5W-zqR" firstAttribute="centerX" secondItem="MY8-n1-sSL" secondAttribute="centerX" id="whl-Co-uyX"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="MY8-n1-sSL" firstAttribute="centerX" secondItem="ZU1-0B-OSt" secondAttribute="centerX" id="3Z5-BL-U4W"/>
+                            <constraint firstItem="MY8-n1-sSL" firstAttribute="leading" secondItem="ZU1-0B-OSt" secondAttribute="leadingMargin" constant="14" id="PkK-lU-Ok1"/>
+                            <constraint firstItem="MY8-n1-sSL" firstAttribute="top" secondItem="HxN-II-vAL" secondAttribute="bottom" constant="200" id="aRg-Fo-bhe"/>
+                            <constraint firstItem="eTM-eb-ay6" firstAttribute="top" secondItem="MY8-n1-sSL" secondAttribute="bottom" constant="151" id="syr-49-WS1"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="colorPickerView" destination="Di4-pe-VQs" id="Ocw-gl-9yr"/>
+                        <outlet property="headerLabel" destination="mix-5W-zqR" id="C6N-JF-kst"/>
+                        <outlet property="popupView" destination="MY8-n1-sSL" id="cqQ-In-WRp"/>
+                        <outlet property="selectButton" destination="stx-gS-Chl" id="CrK-Yr-aOH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pn7-qS-6lS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2656.8000000000002" y="323.38830584707648"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Event" width="25" height="25"/>
+        <image name="Favorite" width="25" height="25"/>
+        <image name="Geofence" width="25" height="25"/>
+        <image name="InApp" width="25" height="25"/>
+        <image name="Recommendation" width="25" height="25"/>
+        <image name="STORY" width="25" height="25"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
