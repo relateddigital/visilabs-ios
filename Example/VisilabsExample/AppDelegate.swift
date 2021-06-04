@@ -20,6 +20,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        
+        //TODO: bundle için bu metodları kullan
+        //https://github.com/ky1vstar/imgly-sdk-ios-2
+        var bundle = Bundle(for: AppDelegate.self)
+        var bundleString = bundle.bundleURL.absoluteString
+        print(bundle.bundleIdentifier)
+        print(bundleString)
+        
+        
         Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: false)
         InAppHelper.downloadMiniIconImagesAndSave()
 
