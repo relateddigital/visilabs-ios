@@ -1,0 +1,514 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		88EC49BF2646FACD009C6DDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49BE2646FACD009C6DDB /* AppDelegate.swift */; };
+		88EC49C12646FACD009C6DDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49C02646FACD009C6DDB /* SceneDelegate.swift */; };
+		88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88EC49C42646FACD009C6DDB /* Main.storyboard */; };
+		88EC49C82646FACF009C6DDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88EC49C72646FACF009C6DDB /* Assets.xcassets */; };
+		88EC49CB2646FACF009C6DDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88EC49C92646FACF009C6DDB /* LaunchScreen.storyboard */; };
+		88EC49E32647045E009C6DDB /* VisilabsProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49D32647045E009C6DDB /* VisilabsProfile.swift */; };
+		88EC49E42647045E009C6DDB /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49D52647045E009C6DDB /* EventViewController.swift */; };
+		88EC49E52647045E009C6DDB /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49D62647045E009C6DDB /* FavoriteViewController.swift */; };
+		88EC49E62647045E009C6DDB /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49D72647045E009C6DDB /* ModalViewController.swift */; };
+		88EC49E72647045E009C6DDB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49D82647045E009C6DDB /* HomeViewController.swift */; };
+		88EC49E82647045E009C6DDB /* StoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49D92647045E009C6DDB /* StoryViewController.swift */; };
+		88EC49E92647045E009C6DDB /* RecommendationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49DA2647045E009C6DDB /* RecommendationViewController.swift */; };
+		88EC49EA2647045E009C6DDB /* GeofenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49DB2647045E009C6DDB /* GeofenceViewController.swift */; };
+		88EC49EB2647045E009C6DDB /* InAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49DC2647045E009C6DDB /* InAppViewController.swift */; };
+		88EC49EC2647045E009C6DDB /* InAppViewControllerFormElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49DD2647045E009C6DDB /* InAppViewControllerFormElements.swift */; };
+		88EC49ED2647045E009C6DDB /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49DF2647045E009C6DDB /* DataManager.swift */; };
+		88EC49EE2647045E009C6DDB /* InAppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49E02647045E009C6DDB /* InAppHelper.swift */; };
+		88EC49EF2647045E009C6DDB /* FormHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49E12647045E009C6DDB /* FormHelper.swift */; };
+		88EC49F02647045E009C6DDB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49E22647045E009C6DDB /* Extensions.swift */; };
+		D7BA7B2E7EC9913E34B55D73 /* Pods_VisilabsExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8D4D4C39C17F534180035BA /* Pods_VisilabsExample.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		88EC49FD26470814009C6DDB /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		88EC49BB2646FACD009C6DDB /* VisilabsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		88EC49BE2646FACD009C6DDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		88EC49C02646FACD009C6DDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		88EC49C52646FACD009C6DDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		88EC49C72646FACF009C6DDB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		88EC49CA2646FACF009C6DDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		88EC49CC2646FACF009C6DDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		88EC49D32647045E009C6DDB /* VisilabsProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisilabsProfile.swift; sourceTree = "<group>"; };
+		88EC49D52647045E009C6DDB /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		88EC49D62647045E009C6DDB /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		88EC49D72647045E009C6DDB /* ModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
+		88EC49D82647045E009C6DDB /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		88EC49D92647045E009C6DDB /* StoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryViewController.swift; sourceTree = "<group>"; };
+		88EC49DA2647045E009C6DDB /* RecommendationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationViewController.swift; sourceTree = "<group>"; };
+		88EC49DB2647045E009C6DDB /* GeofenceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeofenceViewController.swift; sourceTree = "<group>"; };
+		88EC49DC2647045E009C6DDB /* InAppViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppViewController.swift; sourceTree = "<group>"; };
+		88EC49DD2647045E009C6DDB /* InAppViewControllerFormElements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppViewControllerFormElements.swift; sourceTree = "<group>"; };
+		88EC49DF2647045E009C6DDB /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		88EC49E02647045E009C6DDB /* InAppHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppHelper.swift; sourceTree = "<group>"; };
+		88EC49E12647045E009C6DDB /* FormHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormHelper.swift; sourceTree = "<group>"; };
+		88EC49E22647045E009C6DDB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		91DC3A323117E96F302519EB /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
+		A02DB26B7C96A57C0F115E12 /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8D4D4C39C17F534180035BA /* Pods_VisilabsExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA471184E187F3C37E6331BB /* Pods-VisilabsExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsExample.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample.debug.xcconfig"; sourceTree = "<group>"; };
+		C5C5B88503D47C871E50B1B4 /* Pods-VisilabsExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsExample.release.xcconfig"; path = "Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample.release.xcconfig"; sourceTree = "<group>"; };
+		D48B6AA369E1D873BD381DDD /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		88EC49B82646FACD009C6DDB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7BA7B2E7EC9913E34B55D73 /* Pods_VisilabsExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		77C4A723C4FC04B816E56650 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A02DB26B7C96A57C0F115E12 /* Pods_NotificationService.framework */,
+				B8D4D4C39C17F534180035BA /* Pods_VisilabsExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		878A97BC0616987035D28322 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BA471184E187F3C37E6331BB /* Pods-VisilabsExample.debug.xcconfig */,
+				C5C5B88503D47C871E50B1B4 /* Pods-VisilabsExample.release.xcconfig */,
+				D48B6AA369E1D873BD381DDD /* Pods-NotificationService.debug.xcconfig */,
+				91DC3A323117E96F302519EB /* Pods-NotificationService.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		88EC49B22646FACD009C6DDB = {
+			isa = PBXGroup;
+			children = (
+				88EC49BD2646FACD009C6DDB /* VisilabsExample */,
+				88EC49BC2646FACD009C6DDB /* Products */,
+				878A97BC0616987035D28322 /* Pods */,
+				77C4A723C4FC04B816E56650 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		88EC49BC2646FACD009C6DDB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				88EC49BB2646FACD009C6DDB /* VisilabsExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		88EC49BD2646FACD009C6DDB /* VisilabsExample */ = {
+			isa = PBXGroup;
+			children = (
+				88EC49BE2646FACD009C6DDB /* AppDelegate.swift */,
+				88EC49C02646FACD009C6DDB /* SceneDelegate.swift */,
+				88EC49C42646FACD009C6DDB /* Main.storyboard */,
+				88EC49C72646FACF009C6DDB /* Assets.xcassets */,
+				88EC49C92646FACF009C6DDB /* LaunchScreen.storyboard */,
+				88EC49DE2647045E009C6DDB /* Helpers */,
+				88EC49D22647045E009C6DDB /* Models */,
+				88EC49D42647045E009C6DDB /* ViewControllers */,
+				88EC49CC2646FACF009C6DDB /* Info.plist */,
+			);
+			path = VisilabsExample;
+			sourceTree = "<group>";
+		};
+		88EC49D22647045E009C6DDB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				88EC49D32647045E009C6DDB /* VisilabsProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		88EC49D42647045E009C6DDB /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				88EC49D52647045E009C6DDB /* EventViewController.swift */,
+				88EC49D62647045E009C6DDB /* FavoriteViewController.swift */,
+				88EC49D72647045E009C6DDB /* ModalViewController.swift */,
+				88EC49D82647045E009C6DDB /* HomeViewController.swift */,
+				88EC49D92647045E009C6DDB /* StoryViewController.swift */,
+				88EC49DA2647045E009C6DDB /* RecommendationViewController.swift */,
+				88EC49DB2647045E009C6DDB /* GeofenceViewController.swift */,
+				88EC49DC2647045E009C6DDB /* InAppViewController.swift */,
+				88EC49DD2647045E009C6DDB /* InAppViewControllerFormElements.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		88EC49DE2647045E009C6DDB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				88EC49DF2647045E009C6DDB /* DataManager.swift */,
+				88EC49E02647045E009C6DDB /* InAppHelper.swift */,
+				88EC49E12647045E009C6DDB /* FormHelper.swift */,
+				88EC49E22647045E009C6DDB /* Extensions.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		88EC49BA2646FACD009C6DDB /* VisilabsExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 88EC49CF2646FACF009C6DDB /* Build configuration list for PBXNativeTarget "VisilabsExample" */;
+			buildPhases = (
+				0BF10222769D459D4C6B8BA6 /* [CP] Check Pods Manifest.lock */,
+				88EC49B72646FACD009C6DDB /* Sources */,
+				88EC49B82646FACD009C6DDB /* Frameworks */,
+				88EC49B92646FACD009C6DDB /* Resources */,
+				88EC49FD26470814009C6DDB /* Embed App Extensions */,
+				6201D47CB1383D0CA374ED3D /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VisilabsExample;
+			productName = VisilabsExample;
+			productReference = 88EC49BB2646FACD009C6DDB /* VisilabsExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		88EC49B32646FACD009C6DDB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					88EC49BA2646FACD009C6DDB = {
+						CreatedOnToolsVersion = 12.5;
+					};
+				};
+			};
+			buildConfigurationList = 88EC49B62646FACD009C6DDB /* Build configuration list for PBXProject "VisilabsExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 88EC49B22646FACD009C6DDB;
+			productRefGroup = 88EC49BC2646FACD009C6DDB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				88EC49BA2646FACD009C6DDB /* VisilabsExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		88EC49B92646FACD009C6DDB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88EC49CB2646FACF009C6DDB /* LaunchScreen.storyboard in Resources */,
+				88EC49C82646FACF009C6DDB /* Assets.xcassets in Resources */,
+				88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0BF10222769D459D4C6B8BA6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VisilabsExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6201D47CB1383D0CA374ED3D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		88EC49B72646FACD009C6DDB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88EC49E32647045E009C6DDB /* VisilabsProfile.swift in Sources */,
+				88EC49E42647045E009C6DDB /* EventViewController.swift in Sources */,
+				88EC49BF2646FACD009C6DDB /* AppDelegate.swift in Sources */,
+				88EC49E92647045E009C6DDB /* RecommendationViewController.swift in Sources */,
+				88EC49EC2647045E009C6DDB /* InAppViewControllerFormElements.swift in Sources */,
+				88EC49C12646FACD009C6DDB /* SceneDelegate.swift in Sources */,
+				88EC49EF2647045E009C6DDB /* FormHelper.swift in Sources */,
+				88EC49EE2647045E009C6DDB /* InAppHelper.swift in Sources */,
+				88EC49E82647045E009C6DDB /* StoryViewController.swift in Sources */,
+				88EC49EB2647045E009C6DDB /* InAppViewController.swift in Sources */,
+				88EC49E62647045E009C6DDB /* ModalViewController.swift in Sources */,
+				88EC49F02647045E009C6DDB /* Extensions.swift in Sources */,
+				88EC49E72647045E009C6DDB /* HomeViewController.swift in Sources */,
+				88EC49EA2647045E009C6DDB /* GeofenceViewController.swift in Sources */,
+				88EC49ED2647045E009C6DDB /* DataManager.swift in Sources */,
+				88EC49E52647045E009C6DDB /* FavoriteViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		88EC49C42646FACD009C6DDB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				88EC49C52646FACD009C6DDB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		88EC49C92646FACF009C6DDB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				88EC49CA2646FACF009C6DDB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		88EC49CD2646FACF009C6DDB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		88EC49CE2646FACF009C6DDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		88EC49D02646FACF009C6DDB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA471184E187F3C37E6331BB /* Pods-VisilabsExample.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5M383PCDJZ;
+				INFOPLIST_FILE = VisilabsExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.relateddigital.visilabsexample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		88EC49D12646FACF009C6DDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C5C5B88503D47C871E50B1B4 /* Pods-VisilabsExample.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5M383PCDJZ;
+				INFOPLIST_FILE = VisilabsExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.relateddigital.visilabsexample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		88EC49B62646FACD009C6DDB /* Build configuration list for PBXProject "VisilabsExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88EC49CD2646FACF009C6DDB /* Debug */,
+				88EC49CE2646FACF009C6DDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		88EC49CF2646FACF009C6DDB /* Build configuration list for PBXNativeTarget "VisilabsExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88EC49D02646FACF009C6DDB /* Debug */,
+				88EC49D12646FACF009C6DDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 88EC49B32646FACD009C6DDB /* Project object */;
+}
