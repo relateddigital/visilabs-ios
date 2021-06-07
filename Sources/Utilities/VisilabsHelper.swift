@@ -117,7 +117,11 @@ internal class VisilabsHelper {
     }
 
     static func getUIImage(named: String) -> UIImage? {
-        let bundle = Bundle(for: VisilabsHelper.self)
+        #if SWIFT_PACKAGE
+        let bundle = Bundle.module
+        #else
+        let bundle = Bundle(for: type(of: self))
+        #endif
         return UIImage(named: named, in: bundle, compatibleWith: nil)!
     }
 

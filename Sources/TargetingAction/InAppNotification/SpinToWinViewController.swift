@@ -39,7 +39,11 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         userContentController.add(self, name: "eventHandler")
         configuration.userContentController = userContentController
         let webView = WKWebView(frame: .zero, configuration: configuration)
+        #if SWIFT_PACKAGE
+        let bundle = Bundle.module
+        #else
         let bundle = Bundle(for: type(of: self))
+        #endif
         let htmlPath = bundle.path(forResource: "spintowin", ofType: "html") ?? ""
         let url = URL(fileURLWithPath: htmlPath)
         webView.load(URLRequest(url: url))
