@@ -29,9 +29,12 @@ class VisilabsBaseNotificationViewController: UIViewController {
     var panStartPoint: CGPoint!
 
     convenience init(notification: VisilabsInAppNotification, nameOfClass: String) {
-        // avoiding `type(of: self)` as it doesn't work with Swift 4.0.3 compiler
-        // perhaps due to `self` not being fully constructed at this point
+                
+        #if SWIFT_PACKAGE
+        let bundle = Bundle.module
+        #else
         let bundle = Bundle(for: type(of: self))
+        #endif
         self.init(nibName: nameOfClass, bundle: bundle)
         self.notification = notification
     }
