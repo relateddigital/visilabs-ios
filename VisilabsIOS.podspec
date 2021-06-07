@@ -15,8 +15,3 @@ Pod::Spec.new do |s|
   s.ios.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'com.relateddigital.visilabs'}
   s.requires_arc     = true
 end
-
-
-if !NSKeyedArchiver.archiveRootObject(userDic, toFile: path) {
-                VisilabsLogger.error("failed to archive user")
-            }

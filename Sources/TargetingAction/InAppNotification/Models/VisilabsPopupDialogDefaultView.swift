@@ -509,11 +509,11 @@ extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
     }
 }
 
-protocol VisilabsPopupDialogDefaultViewDelegate {
+protocol VisilabsPopupDialogDefaultViewDelegate: AnyObject {
     func viewExpanded()
     func dismissSctw()
 }
 
-protocol ImageButtonImageDelegate {
+protocol ImageButtonImageDelegate: AnyObject {
     func imageButtonTapped()
 }
