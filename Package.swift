@@ -7,14 +7,12 @@ let package = Package(
     name: "VisilabsIOS",
     platforms: [.iOS(.v10)],
     products: [
-        .library(
-            name: "VisilabsIOS",
-            targets: ["VisilabsIOS"])
+        .library(name: "VisilabsIOS", targets: ["VisilabsIOS"])
     ],
     targets: [
         .target(
             name: "VisilabsIOS",
             path: "Sources",
-	   resources: [.process("Assets")])
+	        resources: [.copy("Assets")])
     ]
 )
