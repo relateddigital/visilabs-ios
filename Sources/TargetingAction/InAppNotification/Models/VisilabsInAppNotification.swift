@@ -373,7 +373,7 @@ public class VisilabsInAppNotification {
         var imageUrl: URL?
         var urlString = imageUrlString
         if type == .mini {
-            urlString = imageUrlString.getUrlWithoutExtension() + "." + imageUrlString.getUrlExtension()
+            urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
         }
         if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
                                                                      NSCharacterSet.urlQueryAllowed),
