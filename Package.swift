@@ -15,6 +15,6 @@ let package = Package(
         .target(
             name: "VisilabsIOS",
             path: "Sources",
-	   resources: .process("Assets"))
+	   resources: [.process("Assets")])
     ]
 )
