@@ -10,8 +10,8 @@ Pod::Spec.new do |s|
   s.author           = { 'Related Digital' => 'developer@relateddigital.com' }
   s.source           = { git: 'https://github.com/relateddigital/visilabs-ios.git', tag: s.version.to_s }
   s.ios.deployment_target = '10.0'
-  s.source_files  = ['Sources/**/*.{swift,h,m}']
-  s.resources    = ['Sources/Assets/**/*.{html,js,png,xib}']
+  s.source_files  = ['Sources/**/*.{swift,h,m,xib}']
+  s.resources    = ['Sources/Assets/**/*.{html,js,png}']
   s.ios.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'com.relateddigital.visilabs'}
   s.requires_arc     = true
 end

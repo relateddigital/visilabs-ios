@@ -152,12 +152,12 @@
 				88EC49D52647045E009C6DDB /* EventViewController.swift */,
 				88EC49D62647045E009C6DDB /* FavoriteViewController.swift */,
 				88EC49D72647045E009C6DDB /* ModalViewController.swift */,
-				88EC49D82647045E009C6DDB /* HomeViewController.swift */,
-				88EC49D92647045E009C6DDB /* StoryViewController.swift */,
-				88EC49DA2647045E009C6DDB /* RecommendationViewController.swift */,
 				88EC49DB2647045E009C6DDB /* GeofenceViewController.swift */,
+				88EC49D82647045E009C6DDB /* HomeViewController.swift */,
 				88EC49DC2647045E009C6DDB /* InAppViewController.swift */,
 				88EC49DD2647045E009C6DDB /* InAppViewControllerFormElements.swift */,
+				88EC49DA2647045E009C6DDB /* RecommendationViewController.swift */,
+				88EC49D92647045E009C6DDB /* StoryViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -166,9 +166,9 @@
 			isa = PBXGroup;
 			children = (
 				88EC49DF2647045E009C6DDB /* DataManager.swift */,
-				88EC49E02647045E009C6DDB /* InAppHelper.swift */,
-				88EC49E12647045E009C6DDB /* FormHelper.swift */,
 				88EC49E22647045E009C6DDB /* Extensions.swift */,
+				88EC49E12647045E009C6DDB /* FormHelper.swift */,
+				88EC49E02647045E009C6DDB /* InAppHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";

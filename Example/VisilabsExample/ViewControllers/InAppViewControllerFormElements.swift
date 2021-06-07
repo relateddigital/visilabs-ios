@@ -10,11 +10,11 @@ import VisilabsIOS
 import Eureka
 
 /**
-        This extension is written to handle form elements functions
+ This extension is written to handle form elements functions
  */
 extension InAppViewController {
 
-      func addNotificationTypePickerInputRow() -> PickerInputRow<String> {
+    func addNotificationTypePickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.messageType) {
             $0.title = "Type"
             $0.options = notificationTypes
@@ -24,7 +24,15 @@ extension InAppViewController {
         }
     }
 
-      func addMessageTitleTextRow() -> TextRow {
+    func addSecondNotificationPickerInputRow() -> PickerInputRow<String> {
+        return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.secondPopupType) {
+            $0.title = "Second Popup Type"
+            $0.options = secondPopupTypes
+            $0.value = secondPopupTypes.first
+        }
+    }
+
+    func addMessageTitleTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageTitle) {
             $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
             $0.title = "Title"
@@ -49,7 +57,7 @@ extension InAppViewController {
         }
     }
 
-      func addMessageBodyTextRow() -> TextRow {
+    func addMessageBodyTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageBody) {
             $0.title = "Body"
             $0.placeholder = "Body"
@@ -57,7 +65,7 @@ extension InAppViewController {
         }
     }
 
-      func addButtonTextTextRow() -> TextRow {
+    func addButtonTextTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.buttonText) {
             $0.title = "Button Text"
             $0.placeholder = "Button Text"
@@ -74,48 +82,48 @@ extension InAppViewController {
     }
 
     func addCopyCodeBackgroundColor() -> TextRow {
-      return TextRow(VisilabsInAppNotification.PayloadKey.promotionBackgroundColor) {
-          $0.title = "Promotion Code Background Color"
-          $0.value = "#ffffff"
-          $0.disabled = true
-      }.onCellSelection { _, row in
-          let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
-          guard let modalVC = viewController as? ModalViewController else {
-              return
-          }
-          modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-          modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-          if let selectedColor = UIColor(hex: row.value) {
-              modalVC.selectedColor = selectedColor
-          }
-          modalVC.headerText = row.title!
-          modalVC.textRow = row
-          self.present(modalVC, animated: true, completion: nil)
-      }
-  }
+        return TextRow(VisilabsInAppNotification.PayloadKey.promotionBackgroundColor) {
+            $0.title = "Promotion Code Background Color"
+            $0.value = "#ffffff"
+            $0.disabled = true
+        }.onCellSelection { _, row in
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
+            guard let modalVC = viewController as? ModalViewController else {
+                return
+            }
+            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value) {
+                modalVC.selectedColor = selectedColor
+            }
+            modalVC.headerText = row.title!
+            modalVC.textRow = row
+            self.present(modalVC, animated: true, completion: nil)
+        }
+    }
 
     func addCopyCodeTextColor() -> TextRow {
-      return TextRow(VisilabsInAppNotification.PayloadKey.promotionTextColor) {
-          $0.title = "Promotion Code Text Color"
-          $0.value = "#000000"
-          $0.disabled = true
-      }.onCellSelection { _, row in
-          let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
-          guard let modalVC = viewController as? ModalViewController else {
-              return
-          }
-          modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-          modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-          if let selectedColor = UIColor(hex: row.value) {
-              modalVC.selectedColor = selectedColor
-          }
-          modalVC.headerText = row.title!
-          modalVC.textRow = row
-          self.present(modalVC, animated: true, completion: nil)
-      }
-  }
+        return TextRow(VisilabsInAppNotification.PayloadKey.promotionTextColor) {
+            $0.title = "Promotion Code Text Color"
+            $0.value = "#000000"
+            $0.disabled = true
+        }.onCellSelection { _, row in
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
+            guard let modalVC = viewController as? ModalViewController else {
+                return
+            }
+            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value) {
+                modalVC.selectedColor = selectedColor
+            }
+            modalVC.headerText = row.title!
+            modalVC.textRow = row
+            self.present(modalVC, animated: true, completion: nil)
+        }
+    }
 
-      func addIosLinkUrlRow() -> URLRow {
+    func addIosLinkUrlRow() -> URLRow {
         return URLRow(VisilabsInAppNotification.PayloadKey.iosLink) {
             $0.title = "IOS Link"
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
@@ -125,7 +133,7 @@ extension InAppViewController {
         }
     }
 
-      func addImageUrlUrlRow() -> URLRow {
+    func addImageUrlUrlRow() -> URLRow {
         return URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
             $0.title = "Image URL"
             $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
@@ -147,7 +155,7 @@ extension InAppViewController {
         }
     }
 
-      func addMiniIconPickerInputRow() -> PickerInputRow<String> {
+    func addMiniIconPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>("miniIcon") {
             $0.title = "Mini Icon"
             $0.options = InAppHelper.miniIcons
@@ -159,7 +167,7 @@ extension InAppViewController {
         }
     }
 
-      func addMessageTitleColorRow() -> TextRow {
+    func addMessageTitleColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageTitleColor) {
             $0.title = "Message Title Color"
             $0.value = "#000000"
@@ -180,7 +188,7 @@ extension InAppViewController {
         }
     }
 
-      func addMessageBodyColorRow() -> TextRow {
+    func addMessageBodyColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageBodyColor) {
             $0.title = "Message Body Color"
             $0.value = "#000000"
@@ -201,7 +209,7 @@ extension InAppViewController {
         }
     }
 
-      func addMessageBodyTextSizePickerInputRow() -> PickerInputRow<Int> {
+    func addMessageBodyTextSizePickerInputRow() -> PickerInputRow<Int> {
         return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.messageBodyTextSize) {
             $0.title = "Text Size"
             $0.options = []
@@ -212,7 +220,7 @@ extension InAppViewController {
         }
     }
 
-      func addFontFamilyPickerInputRow() -> PickerInputRow<String> {
+    func addFontFamilyPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.fontFamily) {
             $0.title = "Font Family"
             $0.options = fonts
@@ -220,7 +228,7 @@ extension InAppViewController {
         }
     }
 
-      func addBackgroundColorRow() -> TextRow {
+    func addBackgroundColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.backGround) {
             $0.title = "Background Color"
             $0.value = "#A7A7A7"
@@ -241,7 +249,7 @@ extension InAppViewController {
         }
     }
 
-      func addCloseButtonColorPickerInputRow() -> PickerInputRow<String> {
+    func addCloseButtonColorPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.closeButtonColor) {
             $0.title = "Close Button Color"
             $0.options = closeButtonColors
@@ -249,7 +257,7 @@ extension InAppViewController {
         }
     }
 
-      func addButtonTextColorTextRow() -> TextRow {
+    func addButtonTextColorTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.buttonTextColor) {
             $0.title = "Button Text Color"
             $0.value = "#FFFFFF"
@@ -270,7 +278,7 @@ extension InAppViewController {
         }
     }
 
-      func addButtonColorTextRow() -> TextRow {
+    func addButtonColorTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.buttonColor) {
             $0.title = "Button Color"
             $0.value = "#000000"
@@ -298,6 +306,7 @@ extension InAppViewController {
             self.showNotificationTapped()
         }
     }
+
     func addCloseButtonTextTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.closeButtonText) {
             $0.title = "Close Button Text"
@@ -313,9 +322,73 @@ extension InAppViewController {
             $0.value = "NativeAlert"
         }
     }
+    
+    func addSecondPopupTitleTextRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupTitle) {
+            $0.title = "Second Popup Title"
+            $0.placeholder = "Second Title"
+            $0.value = "Second Title"
+        }
+    }
+
+    func addSecondPopupBodyTextRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupBody) {
+            $0.title = "Second Popup Body"
+            $0.placeholder = "Second Body"
+            $0.value = "Second Body"
+        }
+    }
+
+    func addSecondMessageBodyTextSizePickerInputRow() -> PickerInputRow<Int> {
+        return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize) {
+            $0.title = "Second Body Text Size"
+            $0.options = []
+            for counter in 1...10 {
+                $0.options.append(counter)
+            }
+            $0.value = 2
+        }
+    }
+
+    func addSecondButtonTextTextRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupButtonText) {
+            $0.title = "Second Button Text"
+            $0.placeholder = "SecondButton Text"
+            $0.value = "Second Test Button Text"
+        }
+    }
+    
+    func addSecondImageUrl1UrlRow() -> URLRow {
+        return URLRow(VisilabsInAppNotification.PayloadKey.secondImageUrlString1) {
+            $0.title = "Second Popup Image URL 1"
+            $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
+            $0.placeholder = "Image URL"
+            $0.validationOptions = .validatesOnDemand
+            let str = "https://raw.githubusercontent.com/relateddigital/visilabs-ios/master/Screenshots/attention.png"
+            $0.value = URL(string: str)
+        }
+    }
+
+    func addSecondImageUrl2UrlRow() -> URLRow {
+        return URLRow(VisilabsInAppNotification.PayloadKey.secondImageUrlString2) {
+            $0.title = "Second Popup Image URL 2"
+            $0.add(rule: RuleURL(msg: "\($0.tag!) is not a valid url"))
+            $0.placeholder = "Image URL"
+            $0.validationOptions = .validatesOnDemand
+            let str = "https://raw.githubusercontent.com/relateddigital/visilabs-ios/master/Screenshots/attention.png"
+            $0.value = URL(string: str)
+        }
+    }
+
+    func addSecondPopupMinTextRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupMinPoint) {
+            $0.title = "Second Popup Survey Min Point"
+            $0.placeholder = "2.5"
+            $0.value = "2.5"
+        }
+    }
 
     func showNotificationTapped() {
-
         let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
         print("Form erros count: \(errors.count)")
         for error in errors {
@@ -327,6 +400,9 @@ extension InAppViewController {
         let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
         if value == "emailForm" {
             Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+        } else if value == "scratchToWin" {
+//            let sctw = createScratchToWinModel()
+//            Visilabs.callAPI().showTargetingAction(sctw)
         } else {
             let visilabsInAppNotification = createVisilabsInAppNotificationModel()
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
@@ -334,31 +410,32 @@ extension InAppViewController {
     }
 
     func addNumberBGColor(_ colorId: String) -> TextRow {
-      return TextRow(VisilabsInAppNotification.PayloadKey.numberColors + colorId) {
-          $0.title = "Number Background Color" + colorId
-          $0.value = ""
-          $0.placeholder = "#000000"
-          $0.disabled = true
-      }.onCellSelection { _, row in
-          let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
-          guard let modalVC = viewController as? ModalViewController else {
-              return
-          }
-          modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-          modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-          if let selectedColor = UIColor(hex: row.value) {
-              modalVC.selectedColor = selectedColor
-          }
-          modalVC.headerText = row.title!
-          modalVC.textRow = row
-          self.present(modalVC, animated: true, completion: nil)
-      }
-  }
+        return TextRow(VisilabsInAppNotification.PayloadKey.numberColors + colorId) {
+            $0.title = "Number Background Color" + colorId
+            $0.value = ""
+            $0.placeholder = "#000000"
+            $0.disabled = true
+        }.onCellSelection { _, row in
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
+            guard let modalVC = viewController as? ModalViewController else {
+                return
+            }
+            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value) {
+                modalVC.selectedColor = selectedColor
+            }
+            modalVC.headerText = row.title!
+            modalVC.textRow = row
+            self.present(modalVC, animated: true, completion: nil)
+        }
+    }
     //swiftlint:disable function_body_length
     func createVisilabsInAppNotificationModel() -> VisilabsInAppNotification {
         var tag = ""
-        let rawValue = self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType) as PickerInputRow<String>?
-        let messageType = VisilabsInAppNotificationType.init(rawValue: rawValue!.value! as String)!
+        var rawValue = (((self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType)
+                            as PickerInputRow<String>?)?.value)! as String)
+        let messageType = VisilabsInAppNotificationType.init(rawValue: rawValue)!
         let messageTitle: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)
                                         as TextRow?)!.value ?? ""
         let messageBody: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)
@@ -407,46 +484,88 @@ extension InAppViewController {
         let alertType = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
 
         let promotionCode = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)
-                            as TextRow?)!.value ?? ""
+                                as TextRow?)!.value ?? ""
 
         let promotionTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)
                                     as TextRow?)!.value!  as String
 
-        let promotionBackgroundColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionBackgroundColor)
-                                    as TextRow?)!.value!  as String
+        tag = VisilabsInAppNotification.PayloadKey.promotionBackgroundColor
+        let promotionBackgroundColor = (self.form.rowBy(tag: tag)
+                                            as TextRow?)!.value!  as String
 
         tag = VisilabsInAppNotification.PayloadKey.numberColors
         let numberBgColor1 = (self.form.rowBy(tag: tag+"1") as TextRow?)!.value! as String
         let numberBgColor2 = (self.form.rowBy(tag: tag+"2") as TextRow?)!.value! as String
         let numberBgColor3 = (self.form.rowBy(tag: tag+"3") as TextRow?)!.value! as String
         let numberColors = [numberBgColor1, numberBgColor2, numberBgColor3]
-        
+
         tag = VisilabsInAppNotification.PayloadKey.waitingTime
         let waitingTime = ((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)
+
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupType
+        rawValue = ((self.form.rowBy(tag: tag) as PickerInputRow<String>?)!.value!)
+        let secondPopupType = VisilabsSecondPopupType.init(rawValue: rawValue)
+
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupTitle
+        let secondPopupTitle = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
+
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupBody
+        let secondBody = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
+
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize
+        let secondBodyTextSize = "\((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)"
+
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupButtonText
+        let secondPopupButtonText = (self.form.rowBy(tag: tag) as TextRow?)!.value ?? ""
+
+        tag = VisilabsInAppNotification.PayloadKey.secondImageUrlString1
+        let secondImg1 = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
+
+        tag = VisilabsInAppNotification.PayloadKey.secondImageUrlString2
+        let secondImg2 = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
+
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupMinPoint
+        let minPoint = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
+
         return VisilabsInAppNotification(actId: 0,
-                                        type: messageType,
-                                        messageTitle: messageTitle,
-                                        messageBody: messageBody,
-                                        buttonText: buttonText,
-                                        iosLink: iosLink,
-                                        imageUrlString: imageUrlString,
-                                        visitorData: nil,
-                                        visitData: nil,
-                                        queryString: nil,
-                                        messageTitleColor: messageTitleColor,
-                                        messageBodyColor: messageBodyColor,
-                                        messageBodyTextSize: messageBodyTextSize,
-                                        fontFamily: fontFamily,
-                                        backGround: backGround,
-                                        closeButtonColor: closeButtonColor,
-                                        buttonTextColor: buttonTextColor,
-                                        buttonColor: buttonColor,
-                                        alertType: alertType,
-                                        closeButtonText: closeButtonText,
-                                        promotionCode: promotionCode,
-                                        promotionTextColor: promotionTextColor,
-                                        promotionBackgroundColor: promotionBackgroundColor,
-                                        numberColors: numberColors,
-                                        waitingTime: waitingTime)
+                                         type: messageType,
+                                         messageTitle: messageTitle,
+                                         messageBody: messageBody,
+                                         buttonText: buttonText,
+                                         iosLink: iosLink,
+                                         imageUrlString: imageUrlString,
+                                         visitorData: nil,
+                                         visitData: nil,
+                                         queryString: nil,
+                                         messageTitleColor: messageTitleColor,
+                                         messageBodyColor: messageBodyColor,
+                                         messageBodyTextSize: messageBodyTextSize,
+                                         fontFamily: fontFamily,
+                                         backGround: backGround,
+                                         closeButtonColor: closeButtonColor,
+                                         buttonTextColor: buttonTextColor,
+                                         buttonColor: buttonColor,
+                                         alertType: alertType,
+                                         closeButtonText: closeButtonText,
+                                         promotionCode: promotionCode,
+                                         promotionTextColor: promotionTextColor,
+                                         promotionBackgroundColor: promotionBackgroundColor,
+                                         numberColors: numberColors,
+                                         waitingTime: waitingTime,
+                                         secondPopupType: secondPopupType,
+                                         secondPopupTitle: secondPopupTitle,
+                                         secondPopupBody: secondBody,
+                                         secondPopupBodyTextSize: secondBodyTextSize,
+                                         secondPopupButtonText: secondPopupButtonText,
+                                         secondImageUrlString1: secondImg1,
+                                         secondImageUrlString2: secondImg2,
+                                         secondPopupMinPoint: minPoint)
     }
+
+    //swiftlint:disable function_body_length
+    func createScratchToWinModel() -> ScratchToWinModel? {
+        
+        return nil
+    }
+
 }

@@ -27,6 +27,8 @@ enum VisilabsEventType: String, CaseIterable {
     case removeFromFavorites = "Remove from Favorites"
     case sendingCampaignParameters = "Sending Campaign Parameters"
     case pushMessage = "Push Message"
+    case getExVisitorId = "Get exVisitor ID"
+    case logout = "Logout"
 }
 
 class EventViewController: FormViewController {
@@ -41,6 +43,8 @@ class EventViewController: FormViewController {
                                 "mailsubsform": 417,
                                 "alert": 540,
                                 "nps_with_numbers": 493,
+                                "scratchToWin": 591,
+                                "nps_with_secondpopup": 584,
                                 "spintowin": 130]
 
     override func viewDidLoad() {
@@ -71,7 +75,13 @@ class EventViewController: FormViewController {
             section.append(ButtonRow {
                 $0.title = eventType.rawValue
             }
-            .onCellSelection { _, _ in
+            .onCellSelection { _, row in
+                if row.title == VisilabsEventType.logout.rawValue {
+                    Visilabs.callAPI().logout()
+                    print("log out!!")
+                } else if row.title == VisilabsEventType.getExVisitorId.rawValue {
+                    print(Visilabs.callAPI().getExVisitorId())
+                }
                 self.customEvent(eventType)
             })
         }
@@ -80,13 +90,14 @@ class EventViewController: FormViewController {
 
     private func  getInAppSection() -> Section {
         let section = Section("In App Notification Types".uppercased(with: Locale(identifier: "en_US")))
-        for visilabsInAppNotificationType in VisilabsInAppNotificationType.allCases {
+        //change when added new inapp type
+        for counter in 0..<12 {
             section.append(ButtonRow {
-                let notId = String(inAppNotificationIds[visilabsInAppNotificationType.rawValue]!)
-                $0.title = visilabsInAppNotificationType.rawValue + " ID: " + notId
+                let notId = String(inAppNotificationIds[VisilabsInAppNotificationType.allCases[counter].rawValue]!)
+                $0.title = VisilabsInAppNotificationType.allCases[counter].rawValue + " ID: " + notId
             }
             .onCellSelection { _, _ in
-                self.inAppEvent(visilabsInAppNotificationType)
+                self.inAppEvent(VisilabsInAppNotificationType.allCases[counter])
             })
         }
         return section
@@ -256,6 +267,8 @@ class EventViewController: FormViewController {
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
             Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
+            return
+        default:
             return
         }
     }
