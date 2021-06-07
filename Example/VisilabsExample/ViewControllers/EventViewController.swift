@@ -91,9 +91,12 @@ class EventViewController: FormViewController {
     private func  getInAppSection() -> Section {
         let section = Section("In App Notification Types".uppercased(with: Locale(identifier: "en_US")))
         //change when added new inapp type
-        for counter in 0..<12 {
+        for counter in 0..<15 {
+            guard let _ = inAppNotificationIds[VisilabsInAppNotificationType.allCases[counter].rawValue]  else {
+                continue
+            }
+            let notId = String(inAppNotificationIds[VisilabsInAppNotificationType.allCases[counter].rawValue]!)
             section.append(ButtonRow {
-                let notId = String(inAppNotificationIds[VisilabsInAppNotificationType.allCases[counter].rawValue]!)
                 $0.title = VisilabsInAppNotificationType.allCases[counter].rawValue + " ID: " + notId
             }
             .onCellSelection { _, _ in
