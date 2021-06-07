@@ -22,7 +22,7 @@ protocol ViewAnimator {
     func stop()
     func reset()
 }
-//swiftlint:disable multiple_closures_with_trailing_closure
+// swiftlint:disable multiple_closures_with_trailing_closure
 extension ViewAnimator where Self: VisilabsSnapProgressView {
     func start(with duration: TimeInterval, holderView: UIView,
                completion: @escaping (_ storyIdentifier: String, _ snapIndex: Int,

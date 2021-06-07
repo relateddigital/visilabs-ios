@@ -110,7 +110,7 @@ open class Checkbox: UIControl {
 
     /// Sets the corner radius for the checkbox border.
     ///
-    ///**Default:** `0.0`
+    /// **Default:** `0.0`
     /// - Note: Only applies to checkboxes with `BorderStyle.square`
     @IBInspectable public var borderCornerRadius: CGFloat = 0.0
 

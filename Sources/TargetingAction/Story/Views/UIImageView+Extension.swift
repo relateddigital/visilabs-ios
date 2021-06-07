@@ -9,8 +9,8 @@ import UIKit
 
 extension UIImageView {
 
-    //Responsiblity: to holds the List of Activity Indicator for ImageView
-    //DataSource: UI-Level
+    // Responsiblity: to holds the List of Activity Indicator for ImageView
+    // DataSource: UI-Level
     struct ActivityIndicator {
         static var isEnabled = false
         static var style = myStyle

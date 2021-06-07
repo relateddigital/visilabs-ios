@@ -16,17 +16,17 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
 
     private(set) var stories: [VisilabsStory]
     /** This index will tell you which Story, user has picked*/
-    private(set) var handPickedStoryIndex: Int //starts with(i)
+    private(set) var handPickedStoryIndex: Int // starts with(i)
     /** This index will tell you which Snap, user has picked*/
-    private(set) var handPickedSnapIndex: Int //starts with(i)
+    private(set) var handPickedSnapIndex: Int // starts with(i)
     /** This index will help you simply iterate the story one by one*/
 
-    private var nStoryIndex: Int = 0 //iteration(i+1)
+    private var nStoryIndex: Int = 0 // iteration(i+1)
     private var storyCopy: VisilabsStory?
     private(set) var layoutType: VisilabsLayoutType
     private(set) var executeOnce = false
 
-    //check whether device rotation is happening or not
+    // check whether device rotation is happening or not
     private(set) var isTransitioning = false
     private(set) var currentIndexPath: IndexPath?
 
@@ -43,8 +43,8 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         }
         return self._view.snapsCollectionView.cellForItem(at: indexPath) as? VisilabsStoryPreviewCell
     }
-    
-    weak var storyUrlDelegate: VisilabsStoryURLDelegate? = nil
+
+    weak var storyUrlDelegate: VisilabsStoryURLDelegate?
 
     // MARK: - Overriden functions
     override func loadView() {
@@ -64,8 +64,8 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         // AppUtility.lockOrientation(.portrait)
         // Or to rotate and lock
         if UIDevice.current.userInterfaceIdiom == .phone {
-            //TO_DO: AppDelegate e ulaşamadığım için bunu yapamıyorum
-            //IGAppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+            // TO_DO: AppDelegate e ulaşamadığım için bunu yapamıyorum
+            // IGAppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         }
         if !executeOnce {
             DispatchQueue.main.async {
@@ -82,8 +82,8 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         super.viewWillDisappear(animated)
         if UIDevice.current.userInterfaceIdiom == .phone {
             // Don't forget to reset when view is being removed
-            //TO_DO: AppDelegate e ulaşamadığım için bunu yapamıyorum
-            //IGAppUtility.lockOrientation(.all)
+            // TO_DO: AppDelegate e ulaşamadığım için bunu yapamıyorum
+            // IGAppUtility.lockOrientation(.all)
         }
     }
     override func didReceiveMemoryWarning() {
@@ -147,7 +147,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
             return
         }
 
-        //Taking Previous(Visible) cell to store previous story
+        // Taking Previous(Visible) cell to store previous story
         let visibleCells = collectionView.visibleCells.sortedArrayByPosition()
         let visibleCell = visibleCells.first as? VisilabsStoryPreviewCell
         if let vCell = visibleCell {
@@ -155,7 +155,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDelegate {
             vCell.pauseSnapProgressors(with: (vCell.story?.lastPlayedSnapIndex)!)
             storyCopy = vCell.story
         }
-        //Prepare the setup for first time story launch
+        // Prepare the setup for first time story launch
         if storyCopy == nil {
             cell.willDisplayCellForZerothIndex(with: cell.story?.lastPlayedSnapIndex ?? 0,
                                                handpickedSnapIndex: handPickedSnapIndex)
@@ -281,11 +281,11 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
     func didCompletePreview() {
         let number = handPickedStoryIndex+nStoryIndex+1
         if number < stories.count {
-            //Move to next story
+            // Move to next story
             storyCopy = stories[nStoryIndex+handPickedStoryIndex]
             nStoryIndex += 1
             let nIndexPath = IndexPath.init(row: nStoryIndex, section: 0)
-            //_view.snapsCollectionView.layer.speed = 0;
+            // _view.snapsCollectionView.layer.speed = 0;
             _view.snapsCollectionView.scrollToItem(at: nIndexPath, at: .right, animated: true)
             /**@Note:
              Here we are navigating to next snap explictly, So we need to handle the isCompletelyVisible.
@@ -297,7 +297,7 @@ extension VisilabsStoryPreviewController: VisilabsStoryPreviewProtocol {
         }
     }
     func moveToPreviousStory() {
-        //let n = handPickedStoryIndex+nStoryIndex+1
+        // let n = handPickedStoryIndex+nStoryIndex+1
         let number = nStoryIndex+1
         if number <= stories.count && number > 1 {
             storyCopy = stories[nStoryIndex+handPickedStoryIndex]

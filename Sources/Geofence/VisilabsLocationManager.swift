@@ -16,9 +16,9 @@ class VisilabsLocationManager: NSObject {
     private var requestLocationAuthorizationCallback: ((CLAuthorizationStatus) -> Void)?
 
     var currentGeoLocationValue: CLLocationCoordinate2D?
-    var sentGeoLocationValue: CLLocationCoordinate2D? //TO_DO: ne işe yarayacak bu?
+    var sentGeoLocationValue: CLLocationCoordinate2D? // TO_DO: ne işe yarayacak bu?
     var sentGeoLocationTime: TimeInterval?
-    //for calculate time delta to prevent too often location update notification send.
+    // for calculate time delta to prevent too often location update notification send.
     var locationServiceEnabled = false
 
     override init() {
@@ -41,7 +41,7 @@ class VisilabsLocationManager: NSObject {
         }
     }
 
-    //notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
+    // notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
     var locationServiceStateStatus: CLAuthorizationStatus {
         return CLLocationManager.authorizationStatus()
     }
@@ -66,14 +66,14 @@ class VisilabsLocationManager: NSObject {
             }
         #endif
         self.requestLocationAuthorization()
-        //TO_DO:bunu yayınlarken tekrar 100e çek
-        self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest //kCLLocationAccuracyHundredMeters
+        // TO_DO:bunu yayınlarken tekrar 100e çek
+        self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest // kCLLocationAccuracyHundredMeters
         self.locationManager?.distanceFilter = CLLocationDistance(10)
         self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationTime = 0
 
-        //Significant Location Change Monitoring is only available when using cell tower.
+        // Significant Location Change Monitoring is only available when using cell tower.
         //https://stackoverflow.com/questions/5885293/hows-does-significant-location-change-work
         if CLLocationManager.significantLocationChangeMonitoringAvailable() {
             VisilabsLogger.info("Start significant location update.")
@@ -105,10 +105,10 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
 
     // MARK: - CLLocationManagerDelegate implementation
 
-    //TO_DO: buna bak tekrardan
+    // TO_DO: buna bak tekrardan
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status)")
-        //self.requestLocationAuthorizationCallback?(status)
+        // self.requestLocationAuthorizationCallback?(status)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -135,7 +135,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             let geofenceId = elements[2]
             let targetEvent = elements[3]
             if targetEvent == VisilabsConstants.onEnter {
-                //TO_DO: burada isEnter false geçmişim neden?
+                // TO_DO: burada isEnter false geçmişim neden?
                 VisilabsGeofence.sharedManager?.sendPushNotification(actionId: actionId,
                                                                      geofenceId: geofenceId,
                                                                      isDwell: false, isEnter: false)
@@ -176,7 +176,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         VisilabsLogger.error(errorMessage)
     }
 
-    //TO_DO: buna gerek yok sanırım
+    // TO_DO: buna gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         let infoMessage = "CLLocationManager didDetermineState: region identifier: \(region.identifier) state: \(state)"
         VisilabsLogger.info(infoMessage)

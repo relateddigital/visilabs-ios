@@ -87,7 +87,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             VisilabsPersistence.saveVisilabsProfile(self.visilabsProfile)
         }
     }
-    //swiftlint:disable function_body_length
+    // swiftlint:disable function_body_length
     init(organizationId: String,
          profileId: String,
          dataSource: String,
@@ -98,7 +98,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          maxGeofenceCount: Int,
          isIDFAEnabled: Bool = true) {
 
-        //TO_DO: bu reachability doğru çalışıyor mu kontrol et
+        // TO_DO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil,
                                                        release: nil, copyDescription: nil)
@@ -219,13 +219,12 @@ extension VisilabsInstance {
                    pageName != VisilabsConstants.omEvtGif {
                     self.checkInAppNotification(properties: event)
                     self.checkTargetingActions(properties: event)
-                    //self.checkMailSubsForm(properties: event)
                 }
             }
             self.send()
         }
     }
-    
+
     public func sendCampaignParameters(properties: [String: String]) {
 
         trackingQueue.async { [weak self, properties] in
@@ -282,6 +281,18 @@ extension VisilabsInstance {
         props["SignUp"] = exVisitorId
         props["OM.b_sgnp"] = "SignUp"
         customEvent("SignUpPage", properties: props)
+    }
+
+    public func getExVisitorId() -> String? {
+        return self.visilabsUser.exVisitorId
+    }
+
+    public func logout() {
+        VisilabsPersistence.clearUserDefaults()
+        self.visilabsUser.cookieId = nil
+        self.visilabsUser.exVisitorId = nil
+        visilabsUser.cookieId = VisilabsHelper.generateCookieId()
+        VisilabsPersistence.archiveUser(visilabsUser)
     }
 }
 
@@ -363,7 +374,11 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
     public func showNotification(_ visilabsInAppNotification: VisilabsInAppNotification) {
         visilabsTargetingActionInstance.notificationsInstance.showNotification(visilabsInAppNotification)
     }
-    
+
+    public func showTargetingAction(_ model: TargetingActionViewModel) {
+        visilabsTargetingActionInstance.notificationsInstance.showTargetingAction(model)
+    }
+
     func checkInAppNotification(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
@@ -399,13 +414,9 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
-    
-    func showTargetingAction(_ model: TargetingActionViewModel) {
-        visilabsTargetingActionInstance.notificationsInstance.showTargetingAction(model)
-    }
-    
-    //İleride inapp de s.visilabs.net/mobile üzerinden geldiğinde sadece bu metod kullanılacak
-    //checkInAppNotification metodu kaldırılacak.
+
+    // İleride inapp de s.visilabs.net/mobile üzerinden geldiğinde sadece bu metod kullanılacak
+    // checkInAppNotification metodu kaldırılacak.
     func checkTargetingActions(properties: [String: String]) {
         trackingQueue.async { [weak self, properties] in
             guard let self = self else { return }
@@ -419,11 +430,11 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
             }
         }
     }
-    
+
     func subscribeSpinToWinMail(actid: String, auth: String, mail: String) {
         createSubsJsonRequest(actid: actid, auth: auth, mail: mail, type: "spin_to_win_email")
     }
-    
+
     func trackSpinToWinClick(spinToWinReport: SpinToWinReport) {
         var properties = [String: String]()
         properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
@@ -431,9 +442,6 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = spinToWinReport.click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
-    
-    
-    
 
 }
 
@@ -531,19 +539,19 @@ extension VisilabsInstance {
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
         return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
     }
-    //swiftlint:disable file_length
+    // swiftlint:disable file_length
 }
 
 // MARK: - SUBSCRIPTION MAIL
 
 extension VisilabsInstance {
-    
+
     public func subscribeMail(click: String, actid: String, auth: String, mail: String) {
         if click.isEmpty {
             VisilabsLogger.info("Notification or query string is nil or empty")
             return
         }
-        
+
         var properties = [String: String]()
         properties["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = click.parseClick().omZn
@@ -551,18 +559,18 @@ extension VisilabsInstance {
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
         createSubsJsonRequest(actid: actid, auth: auth, mail: mail)
     }
-    
-    
+
     private func createSubsJsonRequest(actid: String, auth: String, mail: String, type: String = "subscription_email") {
         var props = [String: String]()
-        props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId//Om.oid
-        props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId//Om.siteId
+        props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId// Om.oid
+        props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId// Om.siteId
         props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
         props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
         props[VisilabsConstants.type] = type
         props["actionid"] = actid
         props[VisilabsConstants.authentication] = auth
         props[VisilabsConstants.subscribedEmail] = mail
-        VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String : String](), timeOutInterval: self.visilabsProfile.requestTimeoutInterval)
+        props[VisilabsConstants.channelKey] = visilabsProfile.channel
+        VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String: String](), timeOutInterval: self.visilabsProfile.requestTimeoutInterval)
     }
 }

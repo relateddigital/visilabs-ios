@@ -7,7 +7,7 @@
 
 import UIKit
 
-//TO_DO: bu enum kaldırılabilir. sadece medium kullanılıyor.
+// TO_DO: bu enum kaldırılabilir. sadece medium kullanılıyor.
 public enum VisilabsCaptureQuality {
     case `default`
     case low

@@ -19,8 +19,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     var showNotificationOnActive = true
     var miniNotificationPresentationTime = 6.0
     var shownNotifications = Set<Int>()
-    // var triggeredNotifications = [VisilabsInAppNotification]()
-    // var inAppNotifications = [VisilabsInAppNotification]()
     var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
     var currentlyShowingTargetingAction: TargetingActionViewModel?
@@ -41,7 +39,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
-                if (notification.waitingTime ?? 0 == 0 || self.currentViewController == self.getRootViewController()) {
+                if notification.waitingTime ?? 0 == 0 || self.currentViewController == self.getRootViewController() {
                     var shownNotification = false
                     switch notification.type {
                     case .mini:
@@ -77,27 +75,14 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showSpinToWin(spinToWin) {
                         self.markTargetingActionShown(model: spinToWin)
                     }
-                }
-            }
-        }
-    }
-
-    /*
-        func showMailSubscriptionForm(_ model: MailSubscriptionViewModel) {
-            DispatchQueue.main.async {
-                if self.currentlyShowingNotification != nil
-                    || self.currentlyShowingTargetingAction != nil {
-                    VisilabsLogger.warn("already showing an notification")
-                } else {
-                    var shown = false
-                    shown = self.showMailPopup(model)
-                    if shown {
-                        self.markMailFormShown(model: model)
+                } else if model.targetingActionType == .scratchToWin, let sctw = model as? ScratchToWinModel {
+                    if self.showScratchToWin(sctw) {
+                        self.markTargetingActionShown(model: sctw)
                     }
                 }
             }
         }
-     */
+    }
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
@@ -202,6 +187,17 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let controller = VisilabsPopupNotificationViewController(mailForm: model)
         controller.delegate = self
 
+        if let rootViewController = getRootViewController() {
+            rootViewController.present(controller, animated: false, completion: nil)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
+        let controller = VisilabsPopupNotificationViewController(scratchToWin: model)
+        controller.delegate = self
         if let rootViewController = getRootViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
             return true

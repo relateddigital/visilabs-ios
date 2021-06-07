@@ -21,7 +21,7 @@ class VisilabsGeofence {
     init?() {
         if let profile = VisilabsPersistence.readVisilabsProfile() {
             self.profile = profile
-            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)//TO_DO: bunu if içine almaya gerek var mı?
+            VisilabsHelper.setEndpoints(dataSource: self.profile.dataSource)// TO_DO: bunu if içine almaya gerek var mı?
             self.activeGeofenceList = [VisilabsGeofenceEntity]()
             self.geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
             self.lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
@@ -35,7 +35,7 @@ class VisilabsGeofence {
         return VisilabsLocationManager.sharedManager.locationServicesEnabledForDevice
     }
 
-    //notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
+    // notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
     var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
         return VisilabsCLAuthorizationStatus(rawValue:
                             VisilabsLocationManager.sharedManager.locationServiceStateStatus.rawValue) ?? .none
@@ -82,7 +82,7 @@ class VisilabsGeofence {
         }
         return [VisilabsGeofenceEntity](geofencesToMonitor)
     }
-    //swiftlint:disable function_body_length cyclomatic_complexity
+    // swiftlint:disable function_body_length cyclomatic_complexity
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
         if self.profile.geofenceEnabled
             && self.locationServicesEnabledForDevice
@@ -105,6 +105,7 @@ class VisilabsGeofence {
             props[VisilabsConstants.actKey] = VisilabsConstants.getList
             props[VisilabsConstants.tokenIdKey] = user.tokenId
             props[VisilabsConstants.appidKey] = user.appId
+            props[VisilabsConstants.channelKey] = profile.channel
             if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                 props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
                 props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
@@ -118,7 +119,7 @@ class VisilabsGeofence {
                    props[key] = value
                }
             }
-            //swiftlint:disable closure_parameter_position
+            // swiftlint:disable closure_parameter_position
             VisilabsRequest.sendGeofenceRequest(properties: props,
                                                 headers: [String: String](),
                                             timeoutInterval: profile.requestTimeoutInterval) {
@@ -184,7 +185,7 @@ class VisilabsGeofence {
                         self.geofenceHistory.fetchHistory[key] = nil
                     }
                 }
-                //self.geofenceHistory = geofenceHistory
+                // self.geofenceHistory = geofenceHistory
                 VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
                 self.startMonitorGeofences(geofences: fetchedGeofences)
             }
@@ -261,7 +262,7 @@ class VisilabsGeofence2: NSObject, CLLocationManagerDelegate {
     public func recreateTheLocationManager() {
 
         // don't recreate location managers too often
-        //if let last = lastLocationManagerCreated, last.age! < .oneMinute { return }
+        // if let last = lastLocationManagerCreated, last.age! < .oneMinute { return }
 
         if let llmc = lastLocationManagerCreated, llmc > Date().addingTimeInterval(-TimeInterval(60)) {
             return

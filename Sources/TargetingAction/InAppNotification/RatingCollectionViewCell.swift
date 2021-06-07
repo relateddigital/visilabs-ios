@@ -7,9 +7,8 @@
 
 import UIKit
 
-
 class RatingCollectionViewCell: UICollectionViewCell {
-    
+
     let ratingLabel: UILabel = {
         let lbl = UILabel(frame: .zero)
         lbl.font = UIFont.boldSystemFont(ofSize: 16)
@@ -17,7 +16,7 @@ class RatingCollectionViewCell: UICollectionViewCell {
         lbl.textAlignment = .center
         return lbl
     }()
-    
+
     var rating: Int = 0 {
         didSet {
             self.ratingLabel.text = "\(rating)"
@@ -25,7 +24,7 @@ class RatingCollectionViewCell: UICollectionViewCell {
     }
     var borderColor: UIColor = .white
     var gradientColors: [CGColor] = [UIColor.blue.cgColor, UIColor.red.cgColor]
-    
+
     override var isSelected: Bool {
         didSet {
             if isSelected {
@@ -37,7 +36,7 @@ class RatingCollectionViewCell: UICollectionViewCell {
             }
         }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .white
@@ -49,26 +48,24 @@ class RatingCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     func setGradient(colors: [CGColor]) {
         DispatchQueue.main.async {
             self.contentView.addGradientBackground(colors: colors)
         }
         self.gradientColors = colors
     }
-    
+
     func setBackgroundColor(_ color: UIColor) {
         DispatchQueue.main.async {
             self.contentView.backgroundColor = color
         }
     }
-    
-    
+
 }
 
+extension UIView {
 
-extension UIView{
-    
     func removeGradient() {
         if let sublayers = self.layer.sublayers {
             for layer in sublayers where layer.name == "gradient" {
@@ -76,8 +73,7 @@ extension UIView{
             }
         }
     }
-    
-    
+
     func addGradientBackground(colors: [CGColor]) {
         clipsToBounds = true
         let gradientLayer = CAGradientLayer()
@@ -100,47 +96,46 @@ extension UIColor {
 
         return (red, green, blue, alpha)
     }
-    
+
     static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor) -> [[CGColor]] {
-        
+
         var colors: [[CGColor]] = []
         var oldColor = color1
-        
+
         let c1R = color1.rgba.red * 255
         let c1G = color1.rgba.green * 255
         let c1B = color1.rgba.blue * 255
-        
+
         let c2R = color2.rgba.red * 255
         let c2G = color2.rgba.green * 255
         let c2B = color2.rgba.blue * 255
-        
-        
+
         let newR = c1R + ((c2R - c1R) / 10)
         let newG = c1G + ((c2G - c1G) / 10)
         let newB = c1B + ((c2B - c1B) / 10)
-        
+
         let newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
-        
+
         colors.append([oldColor.cgColor, newColor.cgColor])
-        
+
         for i in 0 ..< 8 {
-            
+
             let newR = c1R + ((c2R - c1R) / 10) * CGFloat(i+1)
             let newG = c1G + ((c2G - c1G) / 10) * CGFloat(i+1)
             let newB = c1B + ((c2B - c1B) / 10) * CGFloat(i+1)
-            
+
             let newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
-            
+
             colors.append([oldColor.cgColor, newColor.cgColor])
-            
+
             oldColor = newColor
         }
-        
+
         colors.append([oldColor.cgColor, color2.cgColor])
-        
+
         return colors
     }
-    
+
     static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ color3: UIColor) -> [[CGColor]] {
 
         var colors: [[CGColor]] = []
@@ -191,9 +186,8 @@ extension UIColor {
     }
 }
 
-
 extension CALayer {
-    
+
     func addShadow() {
         self.shadowOffset = .zero
         self.shadowOpacity = 0.2
@@ -204,19 +198,19 @@ extension CALayer {
             addShadowWithRoundedCorners()
         }
     }
-    
+
     func roundCorners(radius: CGFloat) {
         self.cornerRadius = radius
         if shadowOpacity != 0 {
             addShadowWithRoundedCorners()
         }
     }
-    
+
     private func addShadowWithRoundedCorners() {
         if let contents = self.contents {
             masksToBounds = false
-            sublayers?.filter{ $0.frame.equalTo(self.bounds) }
-                .forEach{ $0.roundCorners(radius: self.cornerRadius) }
+            sublayers?.filter { $0.frame.equalTo(self.bounds) }
+                .forEach { $0.roundCorners(radius: self.cornerRadius) }
             self.contents = nil
             if let sublayer = sublayers?.first, sublayer.name == "said" {
                 sublayer.removeFromSuperlayer()

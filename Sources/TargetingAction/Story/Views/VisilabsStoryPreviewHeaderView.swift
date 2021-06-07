@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol StoryPreviewHeaderProtocol: class {func didTapCloseButton()}
+protocol StoryPreviewHeaderProtocol: AnyObject {func didTapCloseButton()}
 
 private let maxSnaps = 30
 
-//Identifiers
+// Identifiers
 public let progressIndicatorViewTag = 88
 public let progressViewTag = 99
 
@@ -49,8 +49,8 @@ final class VisilabsStoryPreviewHeaderView: UIView {
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        //TO_DO: server'dan siyah ya da beyaz seçeneği gelecek.
-        if let closeButtonImage = VisilabsHelper.getUIImage(named: "VisilabsCloseButton@3x") {
+        // TO_DO: server'dan siyah ya da beyaz seçeneği gelecek.
+        if let closeButtonImage = VisilabsHelper.getUIImage(named: "VisilabsCloseButton") {
             button.setImage(closeButtonImage, for: .normal)
         }
         button.addTarget(self, action: #selector(didTapClose(_:)), for: .touchUpInside)
@@ -89,7 +89,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         addSubview(closeButton)
     }
     private func installLayoutConstraints() {
-        //Setting constraints for progressView
+        // Setting constraints for progressView
         let prgView = getProgressView
         NSLayoutConstraint.activate([
             prgView.igLeftAnchor.constraint(equalTo: self.igLeftAnchor),
@@ -98,7 +98,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             prgView.heightAnchor.constraint(equalToConstant: 10)
             ])
 
-        //Setting constraints for snapperImageView
+        // Setting constraints for snapperImageView
         NSLayoutConstraint.activate([
             snaperImageView.widthAnchor.constraint(equalToConstant: 40),
             snaperImageView.heightAnchor.constraint(equalToConstant: 40),
@@ -106,9 +106,9 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             snaperImageView.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
             detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 10)
             ])
-        layoutIfNeeded() //To make snaperImageView round. Adding this to somewhere else will create constraint warnings.
+        layoutIfNeeded() // To make snaperImageView round. Adding this to somewhere else will create constraint warnings.
 
-        //Setting constraints for detailView
+        // Setting constraints for detailView
         NSLayoutConstraint.activate([
             detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 10),
             detailView.igCenterYAnchor.constraint(equalTo: snaperImageView.igCenterYAnchor),
@@ -116,7 +116,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 10)
             ])
 
-        //Setting constraints for closeButton
+        // Setting constraints for closeButton
         NSLayoutConstraint.activate([
             closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 10),
             closeButton.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
@@ -125,7 +125,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
             closeButton.heightAnchor.constraint(equalToConstant: 80)
             ])
 
-        //Setting constraints for snapperNameLabel
+        // Setting constraints for snapperNameLabel
         NSLayoutConstraint.activate([
             snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
             snaperNameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 100),
@@ -244,7 +244,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
 
     public func createSnapProgressors() {
         print("Progressor count: \(getProgressView.subviews.count)")
-        let padding: CGFloat = 8 //GUI-Padding
+        let padding: CGFloat = 8 // GUI-Padding
         let height: CGFloat = 3
         var pvIndicatorArray: [VisilabsSnapProgressIndicatorView] = []
         var pvArray: [VisilabsSnapProgressView] = []

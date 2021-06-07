@@ -13,11 +13,11 @@ import AppTrackingTransparency
 
 internal class VisilabsHelper {
 
-    //TO_DO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
+    // TO_DO: buradaki değerleri VisilabsConfig e aktar, metersPerNauticalMile niye var?
     static func distanceSquared(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
         let radius = 0.0174532925199433 // 3.14159265358979323846 / 180.0
         let nauticalMilesPerLatitude = 60.00721
-        //let nauticalMilesPerLongitude = 60.10793
+        // let nauticalMilesPerLongitude = 60.10793
         let metersPerNauticalMile = 1852.00
         let nauticalMilesPerLongitudeDividedByTwo = 30.053965
         // simple pythagorean formula - for efficiency
@@ -29,7 +29,7 @@ internal class VisilabsHelper {
         return res
     }
 
-    //TO_DO: props un boş gelme ihtimalini de düşün
+    // TO_DO: props un boş gelme ihtimalini de düşün
     static func buildUrl(url: String, props: [String: String] = [:], additionalQueryString: String = "") -> String {
         var qsKeyValues = [String]()
         props.forEach { (key, value) in
@@ -59,7 +59,7 @@ internal class VisilabsHelper {
         }
     }
 
-    static func getIDFA(completion: @escaping (String?) -> ()) {
+    static func getIDFA(completion: @escaping (String?) -> Void) {
         if #available(iOS 14, *) {
             ATTrackingManager.requestTrackingAuthorization { status in
                 if status == .authorized {
@@ -117,13 +117,13 @@ internal class VisilabsHelper {
     }
 
     static func getUIImage(named: String) -> UIImage? {
-        let bundle = Bundle(identifier: "com.relateddigital.visilabs")
+        let bundle = Bundle(for: VisilabsHelper.self)
         return UIImage(named: named, in: bundle, compatibleWith: nil)!
     }
-    
+
     static func checkEmail(email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
 
@@ -188,7 +188,7 @@ internal class VisilabsHelper {
             })
         })
     }
-    
+
     static func showCopiedClipboardMessage() {
         if Locale.current.languageCode == "en" {
             VisilabsHelper.showToast("Copied to clipboard", delay: 1.5)
@@ -226,5 +226,3 @@ class ToastLabel: UILabel {
         super.drawText(in: rect.inset(by: textInsets))
     }
 }
-
-

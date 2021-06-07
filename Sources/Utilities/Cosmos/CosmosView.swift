@@ -469,5 +469,5 @@ Shows: ★★★★☆ (123)
 
     update()
   }
-    //swiftlint:disable file_length
+    // swiftlint:disable file_length
 }

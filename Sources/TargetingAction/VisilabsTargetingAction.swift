@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//swiftlint:disable type_body_length
+// swiftlint:disable type_body_length
 class VisilabsTargetingAction {
 
     let visilabsProfile: VisilabsProfile
@@ -15,7 +15,7 @@ class VisilabsTargetingAction {
         self.notificationsInstance = VisilabsInAppNotifications(lock: lock)
         self.visilabsProfile = visilabsProfile
     }
-    
+
     private func prepareHeaders(_ visilabsUser: VisilabsUser) -> [String: String] {
         var headers = [String: String]()
         headers["User-Agent"] = visilabsUser.userAgent
@@ -34,7 +34,7 @@ class VisilabsTargetingAction {
             notificationsInstance.delegate = newValue
         }
     }
-    
+
     func checkInAppNotification(properties: [String: String],
                                 visilabsUser: VisilabsUser,
                                 completion: @escaping ((_ response: VisilabsInAppNotification?) -> Void)) {
@@ -44,8 +44,7 @@ class VisilabsTargetingAction {
         var props = properties
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
-        
-        
+
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                props[key] = value
@@ -81,21 +80,20 @@ class VisilabsTargetingAction {
         self.notificationsInstance.inAppNotification = notifications.first
         completion(notifications.first)
     }
-    
-    
+
     // MARK: - Targeting Actions
-    
+
     func checkTargetingActions(properties: [String: String],
                                 visilabsUser: VisilabsUser,
                                 completion: @escaping ((_ response: TargetingActionViewModel?) -> Void)) {
-        
+
         let semaphore = DispatchSemaphore(value: 0)
         var targetingActionViewModel: TargetingActionViewModel?
         var props = properties
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)"
-        
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)"
+
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                props[key] = value
@@ -105,7 +103,7 @@ class VisilabsTargetingAction {
         VisilabsRequest.sendMobileRequest(properties: props,
                                           headers: prepareHeaders(visilabsUser),
                                           timeoutInterval: self.visilabsProfile.requestTimeoutInterval,
-                                          completion: {(result: [String: Any]?, error: VisilabsError?, guid: String?) in
+                                          completion: {(result: [String: Any]?, _: VisilabsError?, _: String?) in
             guard let result = result else {
                 semaphore.signal()
                 completion(nil)
@@ -117,32 +115,32 @@ class VisilabsTargetingAction {
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)
         completion(targetingActionViewModel)
     }
-    
-    
+
     func parseTargetingAction(_ result: [String: Any]?) -> TargetingActionViewModel? {
         guard let result = result else { return nil }
         if let mailFormArr = result[VisilabsConstants.mailSubscriptionForm] as? [[String: Any?]], let mailForm = mailFormArr.first {
             return parseMailForm(mailForm)
         } else if let spinToWinArr = result[VisilabsConstants.spinToWin] as? [[String: Any?]], let spinToWin = spinToWinArr.first {
             return parseSpinToWin(spinToWin)
+        } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
+            return parseScratchToWin(sctw)
         }
         return nil
     }
-    
-    
+
     // MARK: SpinToWin
-    
+
     private func parseSpinToWin(_ spinToWin: [String: Any?]) -> SpinToWinViewModel? {
         guard let actionData = spinToWin[VisilabsConstants.actionData] as? [String: Any] else { return nil }
         guard let slices = actionData[VisilabsConstants.slices] as? [[String: Any]] else { return nil }
         guard let spinToWinContent = actionData[VisilabsConstants.spinToWinContent] as? [String: Any] else { return nil }
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
         guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
-        //guard let report = actionData[VisilabsConstants.report] as? [String: Any] else { return nil } //mail_subscription false olduğu zaman report gelmiyor.
-       
+        // guard let report = actionData[VisilabsConstants.report] as? [String: Any] else { return nil } //mail_subscription false olduğu zaman report gelmiyor.
+
         let taTemplate = actionData[VisilabsConstants.taTemplate] as? String ?? "half_spin"
         let img = actionData[VisilabsConstants.img] as? String ?? ""
-        
+
         let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
         let actid = spinToWin[VisilabsConstants.actid] as? Int ?? 0
         let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
@@ -150,13 +148,12 @@ class VisilabsTargetingAction {
         let type = actionData[VisilabsConstants.type] as? String ?? "spin_to_win_email"
         let mailSubscription = actionData[VisilabsConstants.mailSubscription] as? Bool ?? false
         let sliceCount = actionData[VisilabsConstants.sliceCount] as? String ?? ""
-        
-        
+
         // report
         let impression = report[VisilabsConstants.impression] as? String ?? ""
         let click = report[VisilabsConstants.click] as? String ?? ""
         let spinToWinReport = SpinToWinReport(impression: impression, click: click)
-        
+
         // spin_to_win_content
         let title = spinToWinContent[VisilabsConstants.title] as? String ?? ""
         let message = spinToWinContent[VisilabsConstants.message] as? String ?? ""
@@ -169,7 +166,7 @@ class VisilabsTargetingAction {
         let checkConsentMessage = spinToWinContent[VisilabsConstants.checkConsentMessage] as? String ?? ""
         let promocodeTitle = actionData[VisilabsConstants.promocodeTitle] as? String ?? ""
         let copybuttonLabel = actionData[VisilabsConstants.copybuttonLabel] as? String ?? ""
-        
+
         // extended properties
         let displaynameTextColor = extendedProps[VisilabsConstants.displaynameTextColor] as? String ?? ""
         let displaynameFontFamily = extendedProps[VisilabsConstants.displaynameFontFamily] as? String ?? ""
@@ -195,14 +192,14 @@ class VisilabsTargetingAction {
         let copybuttonTextSize = extendedProps[VisilabsConstants.copybuttonTextSize] as? String ?? ""
         let emailpermitTextSize = extendedProps[VisilabsConstants.emailpermitTextSize] as? String ?? ""
         let emailpermitTextUrl = extendedProps[VisilabsConstants.emailpermitTextUrl] as? String ?? ""
-        
+
         let consentTextSize = extendedProps[VisilabsConstants.consentTextSize] as? String ?? ""
         let consentTextUrl = extendedProps[VisilabsConstants.consentTextUrl] as? String ?? ""
         let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? ""
         let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String ?? ""
-        
+
         var sliceArray = [SpinToWinSliceViewModel]()
-        
+
         for slice in slices {
             let displayName = slice[VisilabsConstants.displayName] as? String ?? ""
             let color = slice[VisilabsConstants.color] as? String ?? ""
@@ -211,27 +208,14 @@ class VisilabsTargetingAction {
             let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type)
             sliceArray.append(spinToWinSliceViewModel)
         }
-        
-        let model = SpinToWinViewModel(targetingActionType: .spinToWin, actId: actid, auth: auth, promoAuth: promoAuth, type: type, title: title
-                           , message: message, placeholder: placeholder, buttonLabel: buttonLabel, consentText: consentText, emailPermitText: emailPermitText
-                           , successMessage: successMessage, invalidEmailMessage: invalidEmailMessage, checkConsentMessage: checkConsentMessage
-                           , promocodeTitle: promocodeTitle, copyButtonLabel: copybuttonLabel, mailSubscription: mailSubscription, sliceCount: sliceCount
-                           , slices: sliceArray, report: spinToWinReport, taTemplate: taTemplate, img: img, displaynameTextColor: displaynameTextColor
-                           , displaynameFontFamily: displaynameFontFamily, displaynameTextSize: displaynameTextSize, titleTextColor: titleTextColor
-                           , titleFontFamily: titleFontFamily, titleTextSize: titleTextSize, textColor: textColor, textFontFamily: textFontFamily
-                           , textSize: textSize, buttonColor: button_color, buttonTextColor: button_text_color, buttonFontFamily: buttonFontFamily
-                           , buttonTextSize: buttonTextSize, promocodeTitleTextColor: promocodeTitleTextColor, promocodeTitleFontFamily: promocodeTitleFontFamily
-                           , promocodeTitleTextSize: promocodeTitleTextSize, promocodeBackgroundColor: promocodeBackgroundColor, promocodeTextColor: promocodeTextColor
-                           , copybuttonColor: copybuttonColor, copybuttonTextColor: copybuttonTextColor, copybuttonFontFamily: copybuttonFontFamily
-                           , copybuttonTextSize: copybuttonTextSize, emailpermitTextSize: emailpermitTextSize, emailpermitTextUrl: emailpermitTextUrl
-                           , consentTextSize: consentTextSize, consentTextUrl: consentTextUrl, closeButtonColor: closeButtonColor, backgroundColor: backgroundColor)
-        
+
+        let model = SpinToWinViewModel(targetingActionType: .spinToWin, actId: actid, auth: auth, promoAuth: promoAuth, type: type, title: title, message: message, placeholder: placeholder, buttonLabel: buttonLabel, consentText: consentText, emailPermitText: emailPermitText, successMessage: successMessage, invalidEmailMessage: invalidEmailMessage, checkConsentMessage: checkConsentMessage, promocodeTitle: promocodeTitle, copyButtonLabel: copybuttonLabel, mailSubscription: mailSubscription, sliceCount: sliceCount, slices: sliceArray, report: spinToWinReport, taTemplate: taTemplate, img: img, displaynameTextColor: displaynameTextColor, displaynameFontFamily: displaynameFontFamily, displaynameTextSize: displaynameTextSize, titleTextColor: titleTextColor, titleFontFamily: titleFontFamily, titleTextSize: titleTextSize, textColor: textColor, textFontFamily: textFontFamily, textSize: textSize, buttonColor: button_color, buttonTextColor: button_text_color, buttonFontFamily: buttonFontFamily, buttonTextSize: buttonTextSize, promocodeTitleTextColor: promocodeTitleTextColor, promocodeTitleFontFamily: promocodeTitleFontFamily, promocodeTitleTextSize: promocodeTitleTextSize, promocodeBackgroundColor: promocodeBackgroundColor, promocodeTextColor: promocodeTextColor, copybuttonColor: copybuttonColor, copybuttonTextColor: copybuttonTextColor, copybuttonFontFamily: copybuttonFontFamily, copybuttonTextSize: copybuttonTextSize, emailpermitTextSize: emailpermitTextSize, emailpermitTextUrl: emailpermitTextUrl, consentTextSize: consentTextSize, consentTextUrl: consentTextUrl, closeButtonColor: closeButtonColor, backgroundColor: backgroundColor)
+
         return model
     }
-    
-    
+
     // MARK: MailSubscriptionForm
-    
+
     private func parseMailForm(_ mailForm: [String: Any?]) -> MailSubscriptionViewModel? {
         guard let actionData = mailForm[VisilabsConstants.actionData] as? [String: Any] else { return nil }
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
@@ -268,7 +252,7 @@ class VisilabsTargetingAction {
         let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String ?? ""
         let impression = report[VisilabsConstants.impression] as? String ?? ""
         let click = report[VisilabsConstants.click] as? String ?? ""
-        let mailReport = MailReport(impression: impression, click: click)
+        let mailReport = TargetingActionReport(impression: impression, click: click)
         let extendedProperties = MailSubscriptionExtendedProps(titleTextColor: titleTextColor,
                                                                titleFontFamily: titleFontFamily,
                                                                titleTextSize: titleTextSize,
@@ -285,7 +269,7 @@ class VisilabsTargetingAction {
                                                                consentTextUrl: consentTextUrl,
                                                                closeButtonColor: ButtonColor(rawValue: closeButtonColor) ?? ButtonColor.black,
                                                                backgroundColor: backgroundColor)
-        
+
         let mailModel = MailSubscriptionModel(auth: auth,
                                               title: title,
                                               message: message,
@@ -302,9 +286,122 @@ class VisilabsTargetingAction {
                                               report: mailReport)
         return convertJsonToEmailViewModel(emailForm: mailModel)
     }
-    
+
+    private func parseScratchToWin(_ scratchToWin: [String: Any?]) -> ScratchToWinModel? {
+        guard let actionData = scratchToWin[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+
+        let actid = scratchToWin[VisilabsConstants.actid] as? Int ?? 0
+        let auth = actionData[VisilabsConstants.authentication] as? String ?? ""
+        let hasMailForm = actionData[VisilabsConstants.mailSubscription] as? Bool ?? false
+        let scratchColor = actionData[VisilabsConstants.scratchColor] as? String ?? "000000"
+        let waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
+        let promotionCode = actionData[VisilabsConstants.code] as? String ?? ""
+        let sendMail = actionData[VisilabsConstants.sendEmail] as? Bool ?? false
+        let copyButtonText = actionData[VisilabsConstants.copybuttonLabel] as? String ?? ""
+        let img = actionData[VisilabsConstants.img] as? String ?? ""
+        let title = actionData[VisilabsConstants.contentTitle] as? String ?? ""
+        let message = actionData[VisilabsConstants.contentBody] as? String ?? ""
+        // Email parameters
+        var mailPlaceholder: String?
+        var mailButtonTxt: String?
+        var consentText: String?
+        var invalidEmailMsg: String?
+        var successMsg: String?
+        var emailPermitTxt: String?
+        var checkConsentMsg: String?
+
+        if let mailForm = actionData[VisilabsConstants.sctwMailSubscriptionForm] as? [String: Any] {
+            mailPlaceholder = mailForm[VisilabsConstants.placeholder] as? String
+            mailButtonTxt = mailForm[VisilabsConstants.buttonLabel] as? String
+            consentText = mailForm[VisilabsConstants.consentText] as? String
+            invalidEmailMsg = mailForm[VisilabsConstants.invalidEmailMessage] as? String
+            successMsg = mailForm[VisilabsConstants.successMessage] as? String
+            emailPermitTxt = mailForm[VisilabsConstants.emailPermitText] as? String
+            checkConsentMsg = mailForm[VisilabsConstants.checkConsentMessage] as? String
+        }
+
+        // extended props
+        let titleTextColor = extendedProps[VisilabsConstants.contentTitleTextColor] as? String
+        let titleFontFamily = extendedProps[VisilabsConstants.contentTitleFontFamily] as? String
+        let titleTextSize = extendedProps[VisilabsConstants.contentTitleTextSize] as? String
+        let messageTextColor = extendedProps[VisilabsConstants.contentBodyTextColor] as? String
+        let messageTextSize = extendedProps[VisilabsConstants.contentBodyTextSize] as? String
+        let messageTextFontFamily = extendedProps[VisilabsConstants.contentBodyTextFontFamily] as? String
+        let mailButtonColor = extendedProps[VisilabsConstants.button_color] as? String
+        let mailButtonTextColor = extendedProps[VisilabsConstants.button_text_color] as? String
+        let mailButtonFontFamily = extendedProps[VisilabsConstants.buttonFontFamily] as? String
+        let mailButtonTextSize = extendedProps[VisilabsConstants.buttonTextSize] as? String
+        let promocodeTextColor = extendedProps[VisilabsConstants.promocodeTextColor] as? String
+        let promocodeFontFamily = extendedProps[VisilabsConstants.promocodeFontFamily] as? String
+        let promocodeTextSize = extendedProps[VisilabsConstants.promocodeTextSize] as? String
+        let copyButtonColor = extendedProps[VisilabsConstants.copybuttonColor] as? String
+        let copyButtonTextColor = extendedProps[VisilabsConstants.copybuttonTextColor] as? String
+        let copyButtonFontFamily = extendedProps[VisilabsConstants.copybuttonFontFamily] as? String
+        let copyButtonTextSize = extendedProps[VisilabsConstants.copybuttonTextSize] as? String
+        let emailPermitTextSize = extendedProps[VisilabsConstants.emailPermitTextSize] as? String
+        let emailPermitTextUrl = extendedProps[VisilabsConstants.emailPermitTextUrl] as? String
+        let consentTextSize = extendedProps[VisilabsConstants.consentTextSize] as? String
+        let consentTextUrl = extendedProps[VisilabsConstants.consentTextUrl] as? String
+        let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String
+        let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String
+
+        var click = ""
+        var impression = ""
+        if let report = actionData[VisilabsConstants.report] as? [String: Any] {
+            click = report[VisilabsConstants.click] as? String ?? ""
+            impression = report[VisilabsConstants.impression] as? String ?? ""
+        }
+        let rep = TargetingActionReport(impression: impression, click: click)
+
+        return ScratchToWinModel(type: .scratchToWin,
+                                 actid: actid,
+                                 auth: auth,
+                                 hasMailForm: hasMailForm,
+                                 scratchColor: scratchColor,
+                                 waitingTime: waitingTime,
+                                 promocode: promotionCode,
+                                 sendMail: sendMail,
+                                 copyButtonText: copyButtonText,
+                                 imageUrlString: img,
+                                 title: title,
+                                 message: message,
+                                 mailPlaceholder: mailPlaceholder,
+                                 mailButtonText: mailButtonTxt,
+                                 consentText: consentText,
+                                 invalidEmailMsg: invalidEmailMsg,
+                                 successMessage: successMsg,
+                                 emailPermitText: emailPermitTxt,
+                                 checkConsentMessage: checkConsentMsg,
+                                 titleTextColor: titleTextColor,
+                                 titleFontFamily: titleFontFamily,
+                                 titleTextSize: titleTextSize,
+                                 messageTextColor: messageTextColor,
+                                 messageFontFamily: messageTextFontFamily,
+                                 messageTextSize: messageTextSize,
+                                 mailButtonColor: mailButtonColor,
+                                 mailButtonTextColor: mailButtonTextColor,
+                                 mailButtonFontFamily: mailButtonFontFamily,
+                                 mailButtonTextSize: mailButtonTextSize,
+                                 promocodeTextColor: promocodeTextColor,
+                                 promocodeTextFamily: promocodeFontFamily,
+                                 promocodeTextSize: promocodeTextSize,
+                                 copyButtonColor: copyButtonColor,
+                                 copyButtonTextColor: copyButtonTextColor,
+                                 copyButtonFontFamily: copyButtonFontFamily,
+                                 copyButtonTextSize: copyButtonTextSize,
+                                 emailPermitTextSize: emailPermitTextSize,
+                                 emailPermitUrl: emailPermitTextUrl,
+                                 consentTextSize: consentTextSize,
+                                 consentUrl: consentTextUrl,
+                                 closeButtonColor: closeButtonColor,
+                                 backgroundColor: backgroundColor,
+                                 report: rep)
+    }
+
     private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {
-        var parsedConsent: ParsedPermissionString? = nil
+        var parsedConsent: ParsedPermissionString?
         if let consent = emailForm.consentText, !consent.isEmpty {
             parsedConsent = consent.parsePermissionText()
         }
@@ -357,7 +454,7 @@ class VisilabsTargetingAction {
                                                   report: emailForm.report)
         return viewModel
     }
-    
+
     func getCloseButtonColor(from buttonColor: ButtonColor) -> UIColor {
         if buttonColor == .white {
             return .white
@@ -365,22 +462,14 @@ class VisilabsTargetingAction {
             return .black
         }
     }
-    
-    
-    
-    
-
-
-
-    
 
     // MARK: - Favorites
 
-    //class func sendMobileRequest(properties: [String : String],
-    //headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
+    // class func sendMobileRequest(properties: [String : String],
+    // headers: [String : String], timeoutInterval: TimeInterval, completion: @escaping ([String: Any]?) -> Void) {
     //https://s.visilabs.net/mobile?OM.oid=676D325830564761676D453D&OM
-    //.siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&
-    //OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
+    // .siteID=356467332F6533766975593D&OM.cookieID=B220EC66-A746-4130-93FD-53543055E406&
+    // OM.exVisitorID=ogun.ozturk%40euromsg.com&action_id=188&action_type=FavoriteAttributeAction&OM.apiver=IOS
     func getFavorites(visilabsUser: VisilabsUser, actionId: Int? = nil,
                       completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse) -> Void)) {
 
@@ -394,8 +483,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.favoriteAttributeAction
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
-        
-        
+
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                props[key] = value
@@ -409,10 +497,10 @@ class VisilabsTargetingAction {
         })
     }
 
-    //{"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction:
-    //[{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction",
-    //"actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],
-    //"brand":["Kozmo","Luxury Room","OFS"]}}}]}
+    // {"capping":"{\"data\":{}}","VERSION":1,"FavoriteAttributeAction:
+    // [{"actid":188,"title":"fav-test","actiontype":"FavoriteAttributeAction",
+    // "actiondata":{"attributes":["category","brand"],"favorites":{"category":["6","8","2"],
+    // "brand":["Kozmo","Luxury Room","OFS"]}}}]}
     private func parseFavoritesResponse(_ result: [String: Any]?,
                                         _ error: VisilabsError?) -> VisilabsFavoriteAttributeActionResponse {
         var favoritesResponse = [VisilabsFavoriteAttribute: [String]]()
@@ -458,9 +546,9 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.story
+        props[VisilabsConstants.channelKey] = self.visilabsProfile.channel
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
-        
-        
+
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
                props[key] = value
@@ -474,11 +562,9 @@ class VisilabsTargetingAction {
             completion(self.parseStories(result, error, guid))
         }, guid: guid)
     }
-    
 
-
-    //swiftlint:disable function_body_length cyclomatic_complexity
-    //TO_DO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
+    // swiftlint:disable function_body_length cyclomatic_complexity
+    // TO_DO: burada storiesResponse kısmı değiştirilmeli. aynı requestte birden fazla story action'ı gelebilir.
     private func parseStories(_ result: [String: Any]?,
                               _ error: VisilabsError?,
                               _ guid: String?) -> VisilabsStoryActionResponse {
@@ -540,7 +626,7 @@ class VisilabsTargetingAction {
     private func parseStoryReport(_ report: [String: Any?]?) -> ([String: String], [String: String]) {
         var clickItems = [String: String]()
         var impressionItems = [String: String]()
-        //clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TO_DO: OM.domain ne için gerekiyor?
+        // clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TO_DO: OM.domain ne için gerekiyor?
         if let rep = report {
             if let click = rep[VisilabsConstants.click] as? String {
                 let qsArr = click.components(separatedBy: "&")
@@ -607,8 +693,8 @@ class VisilabsTargetingAction {
                                                   buttonColor: buttonColor)
         return visilabsStoryItem
     }
-    
-    //swiftlint:disable cyclomatic_complexity
+
+    // swiftlint:disable cyclomatic_complexity
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
         if let propStr = extendedPropsString, let extendedProps = propStr.urlDecode().convertJsonStringToDictionary() {
@@ -649,7 +735,7 @@ class VisilabsTargetingAction {
                boxShadowString.count > 0 {
                 props.imageBoxShadow = true
             }
-            
+
             if let moveEnd = extendedProps[VisilabsConstants.moveShownToEnd] as? String, moveEnd.lowercased() == "false" {
                 props.moveShownToEnd = false
             } else {

@@ -39,30 +39,18 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.visitorData] = visilabsUser.visitorData
             userDic[VisilabsConstants.mobileIdKey] = visilabsUser.identifierForAdvertising
 
-            
-            /* TODO: düzelt burayı
-            VisilabsExceptionWrapper.try({ [cObject = userDic, cPath = path] in
-                if !NSKeyedArchiver.archiveRootObject(cObject, toFile: cPath) {
-                    VisilabsLogger.error("failed to archive user")
-                    return
-                }
-            }, catch: { (error) in
-                VisilabsLogger.error("failed to archive user due to an uncaught exception")
-                VisilabsLogger.error(error.debugDescription)
-                return
-            }, finally: {})
-            */
-            
-            
+            if !NSKeyedArchiver.archiveRootObject(userDic, toFile: path) {
+                VisilabsLogger.error("failed to archive user")
+            }
         }
     }
 
-    //TO_DO: bunu ExceptionWrapper içine al
-    //swiftlint:disable cyclomatic_complexity
+    // TO_DO: bunu ExceptionWrapper içine al
+    // swiftlint:disable cyclomatic_complexity
     class func unarchiveUser() -> VisilabsUser {
         var visilabsUser = VisilabsUser()
-        //Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library
-        //we added this control.
+        // Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library
+        // we added this control.
         if let cidfp = filePath(filename: VisilabsConstants.identityArchiveKey),
            let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
             visilabsUser.cookieId = cid
@@ -108,7 +96,7 @@ public class VisilabsPersistence {
             if let visitorData = props[VisilabsConstants.visitorData], !visitorData.isNilOrWhiteSpace {
                 visilabsUser.visitorData = visitorData
             }
-            //TO_DO: visilabsUserda ya üstteki kod gereksiz ya da alttaki yanlış
+            // TO_DO: visilabsUserda ya üstteki kod gereksiz ya da alttaki yanlış
             if let visitorData = props[VisilabsConstants.visitorCappingKey], !visitorData.isNilOrWhiteSpace {
                 visilabsUser.visitorData = visitorData
             }
@@ -127,9 +115,9 @@ public class VisilabsPersistence {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter.string(from: Date())
     }
-    //TO_DO: burada date kısmı yanlış geliyor sanki
-    //TO_DO: buradaki encode işlemleri doğru mu kontrol et;
-    //archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
+    // TO_DO: burada date kısmı yanlış geliyor sanki
+    // TO_DO: buradaki encode işlemleri doğru mu kontrol et;
+    // archiveQueue.sync { yerine archiveQueue.sync {[parameters] in
     class func saveTargetParameters(_ parameters: [String: String]) {
         archiveQueueUtility.sync {
             let dateString = getDateStr()
@@ -167,7 +155,7 @@ public class VisilabsPersistence {
                                     break
                                 }
                                 let decodedPreviousParameterValuePart = previousParameterValueParts[counter] as String
-                                //TO_DO:burayı kontrol et java'da "\\|" yapmak gerekiyordu.
+                                // TO_DO:burayı kontrol et java'da "\\|" yapmak gerekiyordu.
                                 let decodedPreviousParameterValuePartArray = decodedPreviousParameterValuePart
                                     .components(separatedBy: "|")
                                 if decodedPreviousParameterValuePartArray.count == 2 {
@@ -213,6 +201,13 @@ public class VisilabsPersistence {
         UserDefaults.standard.synchronize()
     }
 
+    static func clearUserDefaults() {
+        let ud = UserDefaults.standard
+        ud.removeObject(forKey: VisilabsConstants.cookieIdKey)
+        ud.removeObject(forKey: VisilabsConstants.exvisitorIdKey)
+        ud.synchronize()
+    }
+
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
         let encoder = JSONEncoder()
         if let encodedVisilabsProfile = try? encoder.encode(visilabsProfile) {
@@ -253,4 +248,5 @@ public class VisilabsPersistence {
     public static func clearVisilabsGeofenceHistory() {
         removeUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey)
     }
+
 }

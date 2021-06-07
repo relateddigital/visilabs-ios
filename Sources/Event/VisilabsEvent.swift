@@ -15,7 +15,7 @@ class VisilabsEvent {
         self.visilabsProfile = visilabsProfile
     }
 
-    //swiftlint:disable large_tuple function_body_length cyclomatic_complexity
+    // swiftlint:disable large_tuple function_body_length cyclomatic_complexity
     func customEvent(pageName: String? = nil,
                      properties: [String: String],
                      eventsQueue: Queue,
@@ -43,7 +43,7 @@ class VisilabsEvent {
                 clearUserParameters = true
             }
             if vUser.exVisitorId != nil && vUser.exVisitorId != exVisitorId {
-                //TO_DO: burada cookieId generate etmek doğru mu tekrar kontrol et
+                // TO_DO: burada cookieId generate etmek doğru mu tekrar kontrol et
                 vUser.cookieId = VisilabsHelper.generateCookieId()
             }
             vUser.exVisitorId = exVisitorId
@@ -60,7 +60,7 @@ class VisilabsEvent {
             props.removeValue(forKey: VisilabsConstants.appidKey)
         }
 
-        //TO_DO: Dışarıdan mobile ad id gelince neden siliyoruz?
+        // TO_DO: Dışarıdan mobile ad id gelince neden siliyoruz?
         if props.keys.contains(VisilabsConstants.mobileIdKey) {
             props.removeValue(forKey: VisilabsConstants.mobileIdKey)
         }
@@ -105,7 +105,7 @@ class VisilabsEvent {
         if eQueue.count > VisilabsConstants.queueSize {
             eQueue.remove(at: 0)
         }
-        //TO_DO: VisilabsPersistentTargetManager.saveParameters dışarıda yapılacak
+        // TO_DO: VisilabsPersistentTargetManager.saveParameters dışarıda yapılacak
 
         return (eQueue, vUser, clearUserParameters, chan)
     }

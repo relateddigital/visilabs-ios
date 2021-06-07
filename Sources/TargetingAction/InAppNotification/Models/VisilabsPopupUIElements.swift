@@ -30,6 +30,14 @@ extension VisilabsPopupDialogDefaultView {
         return imageView
     }
 
+    internal func setSecondImageView() -> UIImageView {
+        let imageView = UIImageView(frame: .zero)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }
+
     internal func setTitleLabel() -> UILabel {
         let titleLabel = UILabel(frame: .zero)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +47,7 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.font = .boldSystemFont(ofSize: 14)
         return titleLabel
     }
-    
+
     internal func setCopyCodeText() -> UIButton {
         let copyCodeText = UIButton(frame: .zero)
         copyCodeText.translatesAutoresizingMaskIntoConstraints = false
@@ -47,13 +55,13 @@ extension VisilabsPopupDialogDefaultView {
         copyCodeText.backgroundColor = self.visilabsInAppNotification?.promotionBackgroundColor
         copyCodeText.setTitleColor(self.visilabsInAppNotification?.promotionTextColor, for: .normal)
         copyCodeText.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
-        
+
         return copyCodeText
     }
-    
+
     internal func setCopyCodeImage() -> UIButton {
         let copyCodeImage = UIButton(frame: .zero)
-        let copyIconImage = VisilabsHelper.getUIImage(named: "RelatedCopyButton@2x")
+        let copyIconImage = VisilabsHelper.getUIImage(named: "RelatedCopyButton")
         copyCodeImage.setImage(copyIconImage, for: .normal)
         copyCodeImage.translatesAutoresizingMaskIntoConstraints = false
         copyCodeImage.backgroundColor = self.visilabsInAppNotification?.promotionBackgroundColor
@@ -132,7 +140,7 @@ extension VisilabsPopupDialogDefaultView {
         label.textColor = .red
         return label
     }
-    
+
     internal func setNumberRating() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -141,6 +149,30 @@ extension VisilabsPopupDialogDefaultView {
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.register(RatingCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         return cv
+    }
+
+    internal func setFeedbackTF() -> UITextField {
+        let tf = UITextField(frame: .zero)
+        tf.placeholder = "Please let us know what did make you unhappy."
+        tf.font = .systemFont(ofSize: 11)
+        tf.backgroundColor = .white
+        tf.textColor = .black
+        tf.delegate = self
+        return tf
+    }
+
+    internal func setImageButton() -> UIButton {
+        let button = UIButton(frame: .zero)
+        button.backgroundColor = self.visilabsInAppNotification?.buttonColor ?? .black
+        button.setTitle(self.visilabsInAppNotification?.buttonText, for: .normal)
+        button.setTitleColor(self.visilabsInAppNotification?.buttonTextColor, for: .normal)
+        button.addTarget(self, action: #selector(imageButtonTapped), for: .touchUpInside)
+        return button
+    }
+
+    @objc func imageButtonTapped() {
+        print("image button tapped.. should dismiss")
+        self.imgButtonDelegate?.imageButtonTapped()
     }
 
     internal func setSliderStepRating() -> VisilabsSliderStep {
@@ -168,7 +200,7 @@ extension VisilabsPopupDialogDefaultView {
         sliderStepRating.sliderStepDelegate = self
         sliderStepRating.translatesAutoresizingMaskIntoConstraints = false
 
-        sliderStepRating.contentMode = .redraw //enable redraw on rotation (calls setNeedsDisplay)
+        sliderStepRating.contentMode = .redraw // enable redraw on rotation (calls setNeedsDisplay)
 
         if sliderStepRating.enableTap {
             let tap = UITapGestureRecognizer(target: sliderStepRating,
@@ -184,7 +216,7 @@ extension VisilabsPopupDialogDefaultView {
     }
 
     private func getUIImage(named: String) -> UIImage? {
-        let bundle = Bundle(identifier: "com.relateddigital.visilabs")
+        let bundle = Bundle(for: type(of: self))
         return UIImage(named: named, in: bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
     }
 
@@ -213,7 +245,7 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(closeButton)
     }
 
-    internal func setupForImageTextButton() {
+    internal func setupForImageTextButton(_ withFeedback: Bool = false) {
         addSubview(titleLabel)
         addSubview(messageLabel)
         imageView.allEdges(to: self, excluding: .bottom)
@@ -235,14 +267,45 @@ extension VisilabsPopupDialogDefaultView {
             copyCodeImageButton.width(50.0)
             copyCodeImageButton.trailing(to: self)
             copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
-        } else {
+        } else if withFeedback == false {
             messageLabel.bottom(to: self, offset: -10)
+        } else {
+            addSubview(feedbackTF)
+            feedbackTF.topToBottom(of: messageLabel, offset: 10)
+            feedbackTF.leading(to: self, offset: 10)
+            feedbackTF.trailing(to: self, offset: -10)
+            feedbackTF.bottom(to: self, offset: -10)
+            feedbackTF.height(60)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                                   name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                                   name: UIResponder.keyboardWillHideNotification, object: nil)
         }
-        
+
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
     }
-    
+
+    internal func setupForImageButtonImage() {
+        addSubview(titleLabel)
+        addSubview(messageLabel)
+        addSubview(imageButton)
+        addSubview(secondImageView)
+
+        imageView.allEdges(to: self, excluding: .bottom)
+        titleLabel.topToBottom(of: imageView, offset: 10.0)
+        messageLabel.topToBottom(of: titleLabel, offset: 8.0)
+
+        imageButton.topToBottom(of: messageLabel, offset: 10.0)
+        imageButton.leading(to: self)
+        imageButton.trailing(to: self)
+        imageButton.height(50.0)
+
+        secondImageView.topToBottom(of: imageButton)
+        secondImageView.allEdges(to: self, excluding: .top)
+        titleLabel.centerX(to: self)
+        messageLabel.centerX(to: self)
+    }
 
     internal func setupForNps() {
         addSubview(titleLabel)
@@ -272,7 +335,7 @@ extension VisilabsPopupDialogDefaultView {
         } else {
             self.numberBgColor = numberColors.first ?? .black
         }
-        
+
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
@@ -361,13 +424,13 @@ extension VisilabsPopupDialogDefaultView {
             consentButton.leadingToTrailing(of: secondCheckBox, offset: 10)
             consentButton.centerY(to: secondCheckBox)
             consentButton.trailing(to: self, offset: -12)
-            
+
             let attrConsent = NSMutableAttributedString(string: consent.string)
             attrConsent.addAttribute(.link, value: emailForm?.consentUrl?.absoluteString ?? "",
                                      range: NSRange(location: consent.location, length: consent.length))
             consentButton.setAttributedTitle(attrConsent, for: .normal)
             consentButton.titleLabel?.font = .systemFont(ofSize: CGFloat(emailForm?.consentTextSize ?? 10))
-        } else { //second checkbox and labels does not exist
+        } else { // second checkbox and labels does not exist
             firstCheckBox.bottom(to: self, offset: -60)
         }
 
@@ -389,7 +452,7 @@ extension VisilabsPopupDialogDefaultView {
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
         messageLabel.bottom(to: self, offset: -10.0)
     }
-    
+
     private func setBorderColorOfCell() -> UIColor {
         guard let bgColor = self.backgroundColor else { return .white }
         let red = bgColor.rgba.red
@@ -410,11 +473,11 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
         let nWidth = (self.numberRating.frame.width - 100) / 10
         return CGSize(width: nWidth, height: nWidth)
     }
-    
+
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
-    
+
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RatingCollectionViewCell
         cell.rating = indexPath.row + 1
@@ -426,7 +489,7 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
         }
         return cell
     }
-    
+
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RatingCollectionViewCell else {
             return
@@ -437,14 +500,13 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
             self.selectedNumber = 10
         }
     }
-    
-    
+
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
     }
-    
+
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
-    
+
 }

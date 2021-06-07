@@ -22,7 +22,7 @@ class VisilabsStoryPreviewView: UIView {
 
     // MARK: - iVars
     var layoutType: VisilabsLayoutType?
-    //swiftlint:disable large_tuple
+    // swiftlint:disable large_tuple
     /**Layout Animate options(ie.choose which kinda animation you want!)*/
     lazy var layoutAnimator: (LayoutAttributesAnimator, Bool, Int, Int) = (layoutType!.animator, true, 1, 1)
     lazy var snapsCollectionViewFlowLayout: AnimatedCollectionViewLayout = {
@@ -70,7 +70,7 @@ class VisilabsStoryPreviewView: UIView {
         addSubview(snapsCollectionView)
     }
     private func installLayoutConstraints() {
-        //Setting constraints for snapsCollectionview
+        // Setting constraints for snapsCollectionview
         NSLayoutConstraint.activate([
             igLeftAnchor.constraint(equalTo: snapsCollectionView.igLeftAnchor),
             igTopAnchor.constraint(equalTo: snapsCollectionView.igTopAnchor),

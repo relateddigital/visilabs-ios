@@ -41,7 +41,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
         circleLabel.backgroundColor = UIColor(hex: "#000000", alpha: 0)
         circleLabel.layer.cornerRadius = self.circleLabel.frame.size.width / 2
-        circleLabel.clipsToBounds = false //TO_DO: burası true olsa ne olur
+        circleLabel.clipsToBounds = false // TO_DO: burası true olsa ne olur
         circleLabel.layer.borderWidth = 2.0
         circleLabel.layer.borderColor = UIColor.white.cgColor
 
@@ -62,7 +62,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             window.rootViewController = self
             window.layer.cornerRadius = 6
 
-            //TO_DO: bunları default set ediyorum doğru mudur?
+            // TO_DO: bunları default set ediyorum doğru mudur?
             window.layer.borderColor = UIColor.white.cgColor
             window.layer.borderWidth = 1
             window.isHidden = false

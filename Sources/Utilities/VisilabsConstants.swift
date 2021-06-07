@@ -13,11 +13,11 @@ struct VisilabsConstants {
     static let HTTPS = "https"
 
     static let queueSize = 5000
-    static let geofenceHistoryMaxCount = 500 //TO_DO: bunu sonra değiştir
-    static let geofenceHistoryErrorMaxCount = 500 //TO_DO: bunu sonra değiştir
-    static let geofenceFetchTimeInterval = TimeInterval(60) //TO_DO: bunu sonra değiştir 15 dakika yap
+    static let geofenceHistoryMaxCount = 500 // TO_DO: bunu sonra değiştir
+    static let geofenceHistoryErrorMaxCount = 500 // TO_DO: bunu sonra değiştir
+    static let geofenceFetchTimeInterval = TimeInterval(60) // TO_DO: bunu sonra değiştir 15 dakika yap
 
-    //TO_DO: bunlar https e çevirilecek
+    // TO_DO: bunlar https e çevirilecek
     static var loggerEndPoint = "lgr.visilabs.net"
     static var realtimeEndPoint = "rt.visilabs.net"
     static var recommendationEndPoint = "s.visilabs.net/json"
@@ -41,7 +41,7 @@ struct VisilabsConstants {
     static let profileArchiveKey = "Visilabs.profile"
 
     static let cookieidArchiveKey = "Visilabs.cookieId"
-    //"Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
+    // "Visilabs.identity" idi cookieID olarak değiştirmek nasıl sorunlara sebep olur düşün.
     static let identityArchiveKey = "Visilabs.identity"
     static let exvisitorIdArchiveKey = "Visilabs.exVisitorId"
     static let tokenidArchiveKey = "Visilabs.tokenId"
@@ -114,6 +114,7 @@ struct VisilabsConstants {
     static let story = "Story"
     static let mailSubscriptionForm = "MailSubscriptionForm"
     static let spinToWin = "SpinToWin"
+    static let scratchToWin = "ScratchToWin"
     static let actid = "actid"
     static let actionId = "action_id"
     static let actionData = "actiondata"
@@ -145,7 +146,7 @@ struct VisilabsConstants {
     static let storyzImgBorderRadius = "storyz_img_borderRadius"
     static let shownStories = "shownStories"
     static let moveShownToEnd = "moveShownToEnd"
-    //Email form constants
+    // Email form constants
     static let message = "message"
     static let placeholder = "placeholder"
     static let type = "type"
@@ -170,9 +171,8 @@ struct VisilabsConstants {
     static let consentTextUrl = "consent_text_url"
     static let closeButtonColor = "close_button_color"
     static let backgroundColor = "background_color"
-    
-    
-    //SpinToWin constants
+
+    // SpinToWin constants
     static let slices = "slices"
     static let promoAuth = "promoAuth"
     static let mailSubscription = "mail_subscription"
@@ -181,21 +181,13 @@ struct VisilabsConstants {
     static let promocodeTitle = "promocode_title"
     static let copybuttonLabel = "copybutton_label"
     static let img = "img"
-    
-    //SpinToWin extended properties
+
+    // SpinToWin extended properties
     static let displaynameTextColor = "displayname_text_color"
     static let displaynameFontFamily = "displayname_font_family"
     static let displaynameTextSize = "displayname_text_size"
-    //static let titleTextColor = "title_text_color" // varmış zaten
-    //static let titleFontFamily = "title_font_family" // varmış zaten
-    //static let titleTextSize = "title_text_size" // varmış zaten
-    //static let textColor = "text_color" // varmış zaten
-    //static let textFontFamily = "text_font_family" // varmış zaten
-    //static let textSize = "text_size" // varmış zaten
     static let button_color = "button_color"
     static let button_text_color = "button_text_color"
-    //static let buttonFontFamily = "button_font_family" // varmış zaten
-    //static let buttonTextSize = "button_text_size" // varmış zaten
     static let promocodeTitleTextColor = "promocode_title_text_color"
     static let promocodeTitleFontFamily = "promocode_title_font_family"
     static let promocodeTitleTextSize = "promocode_title_text_size"
@@ -207,19 +199,29 @@ struct VisilabsConstants {
     static let copybuttonTextSize = "copybutton_text_size"
     static let emailpermitTextSize = "emailpermit_text_size"
     static let emailpermitTextUrl = "emailpermit_text_url"
-    //static let consentTextSize = "consent_text_size" // varmış zaten
-    //static let consentTextUrl = "consent_text_url" // varmış zaten
-    //static let closeButtonColor = "close_button_color" // varmış zaten
-    //static let backgroundColor = "background_color" // varmış zaten
-    
-    //SpinToWin slices
+
+    // SpinToWin slices
     static let displayName = "displayName"
     static let color = "color"
     static let code = "code"
-    //static let type = "type" // varmış zaten
 
+    // Scratch To Win constants
+    static let scratchColor = "scratch_color"
+    static let waitingTime = "waiting_time"
+    static let sendEmail = "send_email"
+    static let promotionCode = "promotion_code"
+    static let contentTitle = "content_title"
+    static let contentBody = "content_body"
+    static let contentTitleTextColor = "content_title_text_color"
+    static let contentTitleFontFamily = "content_title_font_family"
+    static let contentTitleTextSize = "content_title_text_size"
+    static let contentBodyTextColor = "content_body_text_color"
+    static let contentBodyTextFontFamily = "content_body_text_font_family"
+    static let contentBodyTextSize = "content_body_text_size"
+    static let promocodeFontFamily = "promocode_font_family"
+    static let promocodeTextSize = "promocode_text_size"
+    static let sctwMailSubscriptionForm = "mail_subscription_form"
 
-    
     private static let targetPrefVossStoreKey = "OM.voss"
     private static let targetPrefVcnameStoreKey = "OM.vcname"
     private static let targetPrefVcmediumStoreKey = "OM.vcmedium"

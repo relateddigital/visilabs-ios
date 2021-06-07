@@ -21,16 +21,16 @@ enum PlayerStatus {
     case readyToPlay
 }
 
-//Move Implementation on ViewController or cell which ever the UIElement
-//CALL BACK
-protocol VisilabsPlayerObserver: class {
+// Move Implementation on ViewController or cell which ever the UIElement
+// CALL BACK
+protocol VisilabsPlayerObserver: AnyObject {
     func didStartPlaying()
     func didCompletePlay()
     func didTrack(progress: Float)
     func didFailed(withError error: String, for url: URL?)
 }
 
-protocol PlayerControls: class {
+protocol PlayerControls: AnyObject {
     func play(with resource: VideoResource)
     func play()
     func pause()
@@ -83,7 +83,7 @@ class VisilabsPlayerView: UIView {
                                             options: [.new, .initial], changeHandler: { [weak self] (player, _) in
                 guard let strongSelf = self else { return }
                 if player.timeControlStatus == .playing {
-                    //Started Playing
+                    // Started Playing
                     strongSelf.activityIndicator.stopAnimating()
                     strongSelf.playerObserverDelegate?.didStartPlaying()
                 } else if player.timeControlStatus == .paused {
@@ -133,7 +133,7 @@ class VisilabsPlayerView: UIView {
     // MARK: - Internal methods
     func setupActivityIndicator() {
         activityIndicator.hidesWhenStopped = true
-        //backgroundColor = UIColor.rgb(from: 0xEDF0F1)
+        // backgroundColor = UIColor.rgb(from: 0xEDF0F1)
         backgroundColor = .black
         self.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
@@ -206,7 +206,7 @@ extension VisilabsPlayerView: PlayerControls {
         player?.play()
     }
     func play() {
-        //We have used this for long press gesture
+        // We have used this for long press gesture
         if let existingPlayer = player {
             existingPlayer.play()
         }
@@ -222,7 +222,7 @@ extension VisilabsPlayerView: PlayerControls {
                 guard let strongSelf = self else { return }
                 existingPlayer.pause()
 
-                //Remove observer if observer presents before setting player to nil
+                // Remove observer if observer presents before setting player to nil
                 if existingPlayer.observationInfo != nil {
                     strongSelf.removeObservers()
                 }
@@ -230,9 +230,9 @@ extension VisilabsPlayerView: PlayerControls {
                 strongSelf.player = nil
                 strongSelf.playerLayer?.removeFromSuperlayer()
             }
-            //player got deallocated
+            // player got deallocated
         } else {
-            //player was already deallocated
+            // player was already deallocated
         }
     }
     var playerStatus: PlayerStatus {

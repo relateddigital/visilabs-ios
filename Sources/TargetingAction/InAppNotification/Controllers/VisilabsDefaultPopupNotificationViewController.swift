@@ -6,19 +6,31 @@
 //
 
 import UIKit
-//swiftlint:disable type_name
+// swiftlint:disable type_name
 final public class VisilabsDefaultPopupNotificationViewController: UIViewController {
 
     weak var visilabsInAppNotification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
+    var scratchToWin: ScratchToWinModel?
 
     convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
-                     emailForm: MailSubscriptionViewModel? = nil) {
+                     emailForm: MailSubscriptionViewModel? = nil,
+                     scratchToWin: ScratchToWinModel? = nil) {
         self.init()
         self.visilabsInAppNotification = visilabsInAppNotification
         self.mailForm = emailForm
+        self.scratchToWin = scratchToWin
+
         if let image = visilabsInAppNotification?.image {
             self.image = UIImage(data: image)
+        }
+
+        if let img = scratchToWin?.image {
+            self.image = UIImage(data: img)
+        }
+
+        if let secondImage = visilabsInAppNotification?.secondImage2 {
+            self.secondImage = UIImage(data: secondImage)
         }
     }
 
@@ -30,7 +42,8 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
         super.loadView()
         view = VisilabsPopupDialogDefaultView(frame: .zero,
                                               visilabsInAppNotification: visilabsInAppNotification,
-                                              emailForm: mailForm)
+                                              emailForm: mailForm,
+                                              scratchTW: scratchToWin)
     }
 }
 
@@ -48,8 +61,16 @@ public extension VisilabsDefaultPopupNotificationViewController {
             standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
         }
     }
+    /// Second Image View
+    var secondImage: UIImage? {
+        get { return standardView.secondImageView.image }
+        set {
+            standardView.secondImageView.image = newValue
+            standardView.secondImageHeight?.constant = standardView.imageView.pv_heightForImageView()
+        }
+    }
 
-    //TO_DO: hideTitle ve hideMessage kaldırılabilir sanırım.
+    // TO_DO: hideTitle ve hideMessage kaldırılabilir sanırım.
     func hideTitle() {
         standardView.titleLabel.isHidden = true
     }
@@ -135,5 +156,9 @@ public extension VisilabsDefaultPopupNotificationViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
+        standardView.secondImageHeight?.constant = standardView.secondImageView.pv_heightForImageView()
+        if let _ = self.scratchToWin {
+            standardView.sctw.centerX(to: standardView)
+        }
     }
 }

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//import DynamicBlurView
+// import DynamicBlurView
 
 /// The (blurred) overlay view below the popup dialog
 final public class VisilabsPopupDialogOverlayView: UIView {
@@ -101,7 +101,7 @@ extension VisilabsPopupDialogOverlayView {
 
     /// Whether the blur view should allow for
     /// dynamic rendering of the background
-    //swiftlint:disable line_length
+    // swiftlint:disable line_length
     @available(*, deprecated, message: "liveBlur has been deprecated and will be removed with future versions of PopupDialog. Please use isLiveBlurEnabled instead.")
     @objc public dynamic var liveBlur: Bool {
         get { return liveBlurEnabled }

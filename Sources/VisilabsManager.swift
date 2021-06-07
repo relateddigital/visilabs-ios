@@ -12,7 +12,7 @@ class VisilabsManager {
     init() {
         VisilabsLogger.addLogging(VisilabsPrintLogging())
     }
-    //swiftlint:disable function_parameter_count
+    // swiftlint:disable function_parameter_count
     func initialize(organizationId: String,
                     profileId: String,
                     dataSource: String,
