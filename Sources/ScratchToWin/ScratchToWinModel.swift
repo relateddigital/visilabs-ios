@@ -176,8 +176,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
 
     private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
         var imageUrl: URL?
-        var urlString = imageUrlString
-        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
+        if let escapedImageUrlString = imageUrlString.addingPercentEncoding(withAllowedCharacters:
                                                                      NSCharacterSet.urlQueryAllowed),
            let imageUrlComponents = URLComponents(string: escapedImageUrlString),
            let imageUrlParsed = imageUrlComponents.url {
