@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol RetryBtnDelegate: class {
+protocol RetryBtnDelegate: AnyObject {
     func retryButtonTapped()
 }
 
@@ -19,7 +19,7 @@ public class VisilabsRetryLoaderButton: UIButton {
         self.init()
         self.backgroundColor = .white
         self.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
-        if let closeButtonImage = VisilabsHelper.getUIImage(named: "VisilabsRetryButton@3x") {
+        if let closeButtonImage = VisilabsHelper.getUIImage(named: "VisilabsRetryButton") {
             self.setImage(closeButtonImage, for: .normal)
         }
         self.addTarget(self, action: #selector(didTapRetryBtn), for: .touchUpInside)

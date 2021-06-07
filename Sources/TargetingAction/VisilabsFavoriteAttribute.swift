@@ -5,6 +5,8 @@
 //  Created by Egemen on 25.08.2020.
 //
 
+import Foundation
+
 public enum VisilabsFavoriteAttribute: String, Encodable {
     case ageGroup
     case attr1

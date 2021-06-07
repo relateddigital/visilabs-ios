@@ -14,10 +14,10 @@ protocol VisilabsSendDelegate: AnyObject {
 
 class VisilabsSend {
 
-    //TO_DO: bu delegate kullanılmıyor. kaldır.
+    // TO_DO: bu delegate kullanılmıyor. kaldır.
     weak var delegate: VisilabsSendDelegate?
 
-    //TO_DO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
+    // TO_DO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
     func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser,
                          visilabsCookie: VisilabsCookie, timeoutInterval: TimeInterval) -> VisilabsCookie {
         var mutableCookie = visilabsCookie
@@ -33,11 +33,11 @@ class VisilabsSend {
 
             let loggerSemaphore = DispatchSemaphore(value: 0)
             let realTimeSemaphore = DispatchSemaphore(value: 0)
-            //delegate?.updateNetworkActivityIndicator(true)
+            // delegate?.updateNetworkActivityIndicator(true)
             VisilabsRequest.sendEventRequest(visilabsEndpoint: .logger, properties: event,
                                              headers: loggerHeaders, timeoutInterval: timeoutInterval,
                                              completion: { [loggerSemaphore] cookies in
-                                        //self.delegate?.updateNetworkActivityIndicator(false)
+                                        // self.delegate?.updateNetworkActivityIndicator(false)
                                         if let cookies = cookies {
                                             for cookie in cookies {
                                                 if cookie.key.contains(VisilabsConstants.loadBalancePrefix,
@@ -57,7 +57,7 @@ class VisilabsSend {
             VisilabsRequest.sendEventRequest(visilabsEndpoint: .realtime, properties: event,
                                              headers: realTimeHeaders, timeoutInterval: timeoutInterval,
                                              completion: { [realTimeSemaphore] cookies in
-                                        //self.delegate?.updateNetworkActivityIndicator(false)
+                                        // self.delegate?.updateNetworkActivityIndicator(false)
                                         if let cookies = cookies {
                                             for cookie in cookies {
                                                 if cookie.key.contains(VisilabsConstants.loadBalancePrefix,
@@ -101,7 +101,7 @@ class VisilabsSend {
             if let om3rdValue = visilabsCookie.loggerOM3rdCookieValue {
                 if !cookieString.isNilOrWhiteSpace {
                     cookieString = cookieString! + ";"
-                } else { //TO_DO: bu kısmı güzelleştir
+                } else { // TO_DO: bu kısmı güzelleştir
                     cookieString = ""
                 }
                 cookieString = cookieString! + "\(VisilabsConstants.om3Key)=\(om3rdValue)"
@@ -114,7 +114,7 @@ class VisilabsSend {
             if let om3rdValue = visilabsCookie.realTimeOM3rdCookieValue {
                 if !cookieString.isNilOrWhiteSpace {
                     cookieString = cookieString! + ";"
-                } else { //TO_DO: bu kısmı güzelleştir
+                } else { // TO_DO: bu kısmı güzelleştir
                     cookieString = ""
                 }
                 cookieString = cookieString! + "\(VisilabsConstants.om3Key)=\(om3rdValue)"

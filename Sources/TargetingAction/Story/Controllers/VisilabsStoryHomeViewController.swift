@@ -19,8 +19,8 @@ public class VisilabsStoryHomeViewController: NSObject,
             collectionView.delegate = self
         }
     }
-    
-    public weak var urlDelegate: VisilabsStoryURLDelegate? = nil
+
+    public weak var urlDelegate: VisilabsStoryURLDelegate?
 
     var storyAction: VisilabsStoryAction!
     var storiesLoaded = false
@@ -81,7 +81,7 @@ public class VisilabsStoryHomeViewController: NSObject,
                 storyPreviewScene.modalPresentationStyle = .fullScreen
                 let app = VisilabsInstance.sharedUIApplication()
                 app?.keyWindow?.rootViewController?.present(storyPreviewScene, animated: true, completion: collectionView.reloadData)
-                //TO_DO: burada keywindow rootViewController yaklaşımı uygun mu?
+                // TO_DO: burada keywindow rootViewController yaklaşımı uygun mu?
             }
         } else {
 
@@ -104,15 +104,15 @@ public class VisilabsStoryHomeViewController: NSObject,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 80, height: 100)
     }
-    
-    //First not shown stories
+
+    // First not shown stories
     private func sortStories(stories: [VisilabsStory]) -> [VisilabsStory] {
-        
+
         var shownStories: [VisilabsStory] = []
         var notShownStories: [VisilabsStory] = []
         for story in stories {
             var shown = false
-            //check story has shown
+            // check story has shown
             if let shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories) as? [String: [String]] {
                 if let shownStoriesWithAction = shownStories["\(self.storyAction.actionId)"], shownStoriesWithAction.contains(story.title ?? "-") {
                     shown = true
@@ -126,9 +126,9 @@ public class VisilabsStoryHomeViewController: NSObject,
         }
         return notShownStories + shownStories
     }
-    
+
     private func setStoryShown(title: String, actid: Int) {
-        //Save UserDefaults as shown
+        // Save UserDefaults as shown
         var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
             as? [String: [String]] ?? [String: [String]]()
         if shownStories["\(actid)"] == nil {

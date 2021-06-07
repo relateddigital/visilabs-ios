@@ -8,18 +8,18 @@
 import Foundation
 
 extension StringProtocol {
-    
+
     func index<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
         range(of: string, options: options)?.lowerBound
     }
-    
+
     func endIndex<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
         range(of: string, options: options)?.upperBound
     }
 }
 
 extension String {
-    
+
     func parsePermissionText() -> ParsedPermissionString {
         guard let firstOfFirst = self.index(of: "<LINK>"),
               let endOfFirst = self.endIndex(of: "<LINK>"),
@@ -64,7 +64,7 @@ struct ParsedPermissionString {
     var string: String
     var location: Int
     var length: Int
-    
+
 }
 
 struct ParsedClick {

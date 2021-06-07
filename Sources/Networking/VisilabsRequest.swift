@@ -77,7 +77,7 @@ class VisilabsRequest {
 
     // MARK: - RECOMMENDATION
 
-    //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
+    // TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
     class func sendRecommendationRequest(properties: [String: String],
                                          headers: [String: String],
                                          timeoutInterval: TimeInterval,
@@ -119,9 +119,9 @@ class VisilabsRequest {
                 completion(result, nil)
             })
     }
-    
+
     // MARK: - TARGETING ACTIONS
-    
+
     // MARK: - Geofence
 
     class func sendGeofenceRequest(properties: [String: String],
@@ -185,10 +185,10 @@ class VisilabsRequest {
                 completion(result, nil)
             })
     }
-    
+
     // MARK: - InAppNotification
 
-    //TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
+    // TO_DO: completion Any mi olmalı, yoksa AnyObject mi?
     class func sendInAppNotificationRequest(properties: [String: String],
                                             headers: [String: String],
                                             timeoutInterval: TimeInterval,
@@ -232,7 +232,7 @@ class VisilabsRequest {
     }
 
     // MARK: - Mobile
-    
+
     class func sendMobileRequest(properties: [String: String],
                                  headers: [String: String],
                                  timeoutInterval: TimeInterval,
@@ -266,7 +266,7 @@ class VisilabsRequest {
                                  completion: { result, error, guid in completion(result, error, guid)})
 
     }
-    
+
     private class func sendMobileRequestHandler(resource: VisilabsResource<[String: Any]>,
                                                 completion: @escaping ([String: Any]?,
                                                                        VisilabsError?, String?) -> Void) {
@@ -278,7 +278,7 @@ class VisilabsRequest {
                 completion(result, nil, resource.guid)
             })
     }
-    
+
     class func sendPromotionCodeRequest(properties: [String: String],
                                  headers: [String: String],
                                  timeoutInterval: TimeInterval,
@@ -310,7 +310,7 @@ class VisilabsRequest {
                                  completion: { result, error in completion(result, error)})
 
     }
-    
+
     private class func sendPromotionCodeRequestHandler(resource: VisilabsResource<[String: Any]>,
                                                 completion: @escaping ([String: Any]?,
                                                                        VisilabsError?) -> Void) {
@@ -322,8 +322,7 @@ class VisilabsRequest {
                 completion(result, nil)
             })
     }
-    
-    
+
     class func sendSubsJsonRequest(properties: [String: String],
                                    headers: [String: String],
                                    timeOutInterval: TimeInterval,
@@ -332,11 +331,11 @@ class VisilabsRequest {
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
         }
-        
+
         let responseParser: (Data) -> String? = { data in
             return String(data: data, encoding: .utf8)
         }
-        
+
         let resource  = VisilabsNetwork.buildResource(endPoint: .subsjson,
                                                       method: .get,
                                                       timeoutInterval: timeOutInterval,
@@ -345,7 +344,7 @@ class VisilabsRequest {
                                                       headers: headers,
                                                       parse: responseParser,
                                                       guid: guid)
-        
+
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (error, _, _) in
                 VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
@@ -353,8 +352,6 @@ class VisilabsRequest {
                 print("Successfully sent!")
             })
 
-        
     }
-    
-    
+
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol VisilabsCellConfigurer: class {
+protocol VisilabsCellConfigurer: AnyObject {
     static var reuseIdentifier: String {get}
 }
 

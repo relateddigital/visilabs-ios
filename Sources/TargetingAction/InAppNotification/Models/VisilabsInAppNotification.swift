@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//swiftlint:disable type_body_length
+// swiftlint:disable type_body_length
 public class VisilabsInAppNotification {
 
     public enum PayloadKey {
@@ -36,6 +36,14 @@ public class VisilabsInAppNotification {
         public static let promotionBackgroundColor = "promocode_background_color"
         public static let numberColors = "number_colors"
         public static let waitingTime = "waiting_time"
+        public static let secondPopupType = "secondPopup_type"
+        public static let secondPopupMinPoint = "secondPopup_feedbackform_minpoint"
+        public static let secondPopupTitle = "secondPopup_msg_title"
+        public static let secondPopupBody = "secondPopup_msg_body"
+        public static let secondPopupBodyTextSize = "secondPopup_msg_body_textsize"
+        public static let secondPopupButtonText = "secondPopup_btn_text"
+        public static let secondImageUrlString1 = "secondPopup_image1"
+        public static let secondImageUrlString2 = "secondPopup_image2"
     }
 
     let actId: Int
@@ -64,11 +72,46 @@ public class VisilabsInAppNotification {
     let promotionBackgroundColor: UIColor?
     let numberColors: [UIColor]?
     let waitingTime: Int?
-    
+    let secondPopupType: VisilabsSecondPopupType?
+    let secondPopupTitle: String?
+    let secondPopupBody: String?
+    let secondPopupBodyTextSize: String?
+    let secondPopupButtonText: String?
+    let secondImageUrlString1: String?
+    let secondImageUrlString2: String?
+    let secondPopupMinPoint: String?
+    let previousPopupPoint: Double?
+
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
         if let iUrl = self.imageUrl {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            }
+        }
+        return data
+    }()
+    /// Second Popup First Image
+    var secondImageUrl1: URL?
+    lazy var secondImage1: Data? = {
+        var data: Data?
+        if let iUrl = self.secondImageUrl1 {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            }
+        }
+        return data
+    }()
+    /// Second Popup Second Image
+    var secondImageUrl2: URL?
+    lazy var secondImage2: Data? = {
+        var data: Data?
+        if let iUrl = self.secondImageUrl2 {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
@@ -110,7 +153,17 @@ public class VisilabsInAppNotification {
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
                 numberColors: [String]?,
-                waitingTime: Int?) {
+                waitingTime: Int?,
+                secondPopupType: VisilabsSecondPopupType?,
+                secondPopupTitle: String?,
+                secondPopupBody: String?,
+                secondPopupBodyTextSize: String?,
+                secondPopupButtonText: String?,
+                secondImageUrlString1: String?,
+                secondImageUrlString2: String?,
+                secondPopupMinPoint: String?,
+                previousPopupPoint: Double? = nil) {
+
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -156,10 +209,25 @@ public class VisilabsInAppNotification {
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
         self.numberColors = VisilabsHelper.convertColorArray(numberColors)
         self.waitingTime = waitingTime
+        self.secondPopupType = secondPopupType
+        self.secondPopupTitle = secondPopupTitle
+        self.secondPopupBody = secondPopupBody
+        self.secondPopupBodyTextSize = secondPopupBodyTextSize
+        self.secondPopupButtonText = secondPopupButtonText
+        self.secondImageUrlString1 = secondImageUrlString1
+        self.secondImageUrlString2 = secondImageUrlString2
+        self.secondPopupMinPoint = secondPopupMinPoint
+        if !secondImageUrlString1.isNilOrWhiteSpace {
+            self.secondImageUrl1 = VisilabsInAppNotification.getImageUrl(secondImageUrlString1!, type: self.type)
+        }
+        if !secondImageUrlString2.isNilOrWhiteSpace {
+            self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(secondImageUrlString2!, type: self.type)
+        }
+        self.previousPopupPoint = previousPopupPoint
         setFonts()
     }
-
-    //swiftlint:disable function_body_length
+    
+    // swiftlint:disable function_body_length disable cyclomatic_complexity
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
             VisilabsLogger.error("notification json object should not be nil")
@@ -233,6 +301,27 @@ public class VisilabsInAppNotification {
             self.numberColors = nil
         }
         self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
+
+        // Second Popup Variables
+        if let secondType = actionData[PayloadKey.secondPopupType] as? String {
+            self.secondPopupType = VisilabsSecondPopupType.init(rawValue: secondType)
+        } else {
+            self.secondPopupType = nil
+        }
+        self.secondPopupTitle = actionData[PayloadKey.secondPopupTitle] as? String
+        self.secondPopupBody = actionData[PayloadKey.secondPopupBody] as? String
+        self.secondPopupBodyTextSize = actionData[PayloadKey.secondPopupBodyTextSize] as? String
+        self.secondPopupButtonText = actionData[PayloadKey.secondPopupButtonText] as? String
+        self.secondImageUrlString1 = actionData[PayloadKey.secondImageUrlString1] as? String
+        self.secondImageUrlString2 = actionData[PayloadKey.secondImageUrlString2] as? String
+        if !secondImageUrlString1.isNilOrWhiteSpace {
+            self.secondImageUrl1 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+        }
+        if !secondImageUrlString2.isNilOrWhiteSpace {
+            self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+        }
+        self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
+        self.previousPopupPoint = nil
         setFonts()
     }
 
@@ -284,7 +373,7 @@ public class VisilabsInAppNotification {
         var imageUrl: URL?
         var urlString = imageUrlString
         if type == .mini {
-            urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
+            urlString = imageUrlString.getUrlWithoutExtension() + "." + imageUrlString.getUrlExtension()
         }
         if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
                                                                      NSCharacterSet.urlQueryAllowed),

@@ -39,7 +39,7 @@ class VisilabsVideoCacheManager {
             return
         }
 
-        //return file path if already exists in cache directory
+        // return file path if already exists in cache directory
         guard !fileManager.fileExists(atPath: file.path) else {
             completionHandler(Result.success(file))
             return

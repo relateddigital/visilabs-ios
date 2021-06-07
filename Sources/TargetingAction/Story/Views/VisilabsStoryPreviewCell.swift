@@ -8,7 +8,7 @@
 import UIKit
 import AVKit
 
-protocol VisilabsStoryPreviewProtocol: class {
+protocol VisilabsStoryPreviewProtocol: AnyObject {
     func didCompletePreview()
     func moveToPreviousStory()
     func didTapCloseButton()
@@ -17,18 +17,18 @@ enum SnapMovementDirectionState {
     case forward
     case backward
 }
-//Identifiers
+// Identifiers
 private let snapViewTagIndicator: Int = 8
 
-//swiftlint:disable file_length type_body_length
+// swiftlint:disable file_length type_body_length
 final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
 
     // MARK: - Delegate
     public weak var delegate: VisilabsStoryPreviewProtocol? {
         didSet { storyHeaderView.delegate = self }
     }
-    
-    weak var storyUrlDelegate: VisilabsStoryURLDelegate? = nil
+
+    weak var storyUrlDelegate: VisilabsStoryURLDelegate?
 
     // MARK: - Private iVars
     private lazy var storyHeaderView: VisilabsStoryPreviewHeaderView = {
@@ -99,7 +99,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                 startRequest(snapView: snapView, with: snap.url)
                             } else {
                                 let snapView = createSnapView()
-                                
+
                                 startRequest(snapView: snapView, with: snap.url)
                             }
                         } else {
@@ -172,7 +172,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         scrollview.addGestureRecognizer(tapGesture)
     }
     private func installLayoutConstraints() {
-        //Setting constraints for scrollview
+        // Setting constraints for scrollview
         NSLayoutConstraint.activate([
             scrollview.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
             contentView.igRightAnchor.constraint(equalTo: scrollview.igRightAnchor),
@@ -213,8 +213,8 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         // Setting constraints for snap view.
         NSLayoutConstraint.activate([
 
-            //snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
-            //snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
+            // snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
+            // snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor),
 
             snapView.leadingAnchor.constraint(equalTo: (snapIndex == 0) ?
             scrollview.leadingAnchor : scrollview.subviews[previousSnapIndex].trailingAnchor),
@@ -365,13 +365,13 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
              * Based on the tap gesture(X) setting the direction to either forward or backward
              */
             if let snap = story?.items[snpIndex], snap.kind == .photo, getSnapview()?.image == nil {
-                //Remove retry button if tap forward or backward if it exists
+                // Remove retry button if tap forward or backward if it exists
                 if let snapView = getSnapview(), let btn = retryBtn, snapView.subviews.contains(btn) {
                     snapView.removeRetryButton()
                 }
                 fillupLastPlayedSnap(snpIndex)
             } else {
-                //Remove retry button if tap forward or backward if it exists
+                // Remove retry button if tap forward or backward if it exists
                 if let videoView = getVideoView(with: snpIndex), let btn = retryBtn, videoView.subviews.contains(btn) {
                     videoView.removeRetryButton()
                 }
@@ -392,7 +392,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 }
             } else {
                 if snapIndex >= 0 && snapIndex <= snapCount {
-                    //Stopping the current running progressors
+                    // Stopping the current running progressors
                     stopSnapProgressors(with: snpIndex)
                     direction = .forward
                     snpIndex += 1
@@ -440,7 +440,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     private func willMoveToPreviousOrNextSnap(index: Int) {
         if let count = story?.items.count {
             if index < count {
-                //Move to next or previous snap based on index n
+                // Move to next or previous snap based on index n
                 let xPoint = index.toFloat * frame.width
                 let offset = CGPoint(x: xPoint, y: 0)
                 scrollview.setContentOffset(offset, animated: false)
@@ -456,7 +456,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         let index = snapIndex + 1
         if let count = story?.items.count {
             if index < count {
-                //Move to next snap
+                // Move to next snap
                 let xPoint = index.toFloat * frame.width
                 let offset = CGPoint(x: xPoint, y: 0)
                 scrollview.setContentOffset(offset, animated: false)
@@ -479,7 +479,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             scrollview.contentOffset = CGPoint(x: xValue, y: 0)
         }
     }
-    //Before progress view starts we have to fill the progressView
+    // Before progress view starts we have to fill the progressView
     private func fillupLastPlayedSnap(_ sIndex: Int) {
         if let snap = story?.items[sIndex], snap.kind == .video {
             videoSnapIndex = sIndex
@@ -494,7 +494,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
     }
     private func fillupLastPlayedSnaps(_ sIndex: Int) {
-        //Coz, we are ignoring the first.snap
+        // Coz, we are ignoring the first.snap
         if sIndex != 0 {
             for counter in 0..<sIndex {
                 if let holderView = self.getProgressIndicatorView(with: counter),
@@ -555,7 +555,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                         }
                     })
                 } else {
-                    //Handled in delegate methods for videos
+                    // Handled in delegate methods for videos
                 }
             }
         }
@@ -617,16 +617,16 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         willDisplayCell(with: handpickedSnapIndex)
     }
     public func willDisplayCell(with sIndex: Int) {
-        //TO_DO:Make sure to move filling part and creating at one place
-        //Clear the progressor subviews before the creating new set of progressors.
+        // TO_DO:Make sure to move filling part and creating at one place
+        // Clear the progressor subviews before the creating new set of progressors.
         storyHeaderView.clearTheProgressorSubviews()
         storyHeaderView.createSnapProgressors()
         fillUpMissingImageViews(sIndex)
         fillupLastPlayedSnaps(sIndex)
         snapIndex = sIndex
 
-        //Remove the previous observors
-        //swiftlint:disable notification_center_detachment
+        // Remove the previous observors
+        // swiftlint:disable notification_center_detachment
         NotificationCenter.default.removeObserver(self)
 
         // Add the observer to handle application from background to foreground
@@ -670,7 +670,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             getVideoView(with: videoSnapIndex)?.player?.replaceCurrentItem(with: nil)
         }
         videoView?.stop()
-        //getVideoView(with: videoSnapIndex)?.player = nil
+        // getVideoView(with: videoSnapIndex)?.player = nil
     }
     public func resumePlayer(with sIndex: Int) {
         getVideoView(with: sIndex)?.play()
@@ -703,7 +703,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             progress?.resume()
         }
     }
-    //Used the below function for image retry option
+    // Used the below function for image retry option
     public func retryRequest(view: UIView, with url: String) {
         if let imgView = view as? UIImageView {
             imgView.removeRetryButton()
@@ -713,7 +713,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             self.startPlayer(videoView: playerView, with: url)
         }
     }
-    
+
     private func setStoryShown(story: VisilabsStory) {
         var shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories)
             as? [String: [String]] ?? [String: [String]]()
@@ -788,11 +788,11 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
         }
     }
     func didCompletePlay() {
-        //Video completed
+        // Video completed
     }
 
     func didTrack(progress: Float) {
-        //Delegate already handled. If we just print progress, it will print the player current running time
+        // Delegate already handled. If we just print progress, it will print the player current running time
     }
 }
 

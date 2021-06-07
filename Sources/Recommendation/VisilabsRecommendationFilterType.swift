@@ -38,84 +38,85 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
     case SHIPPINGONSAMEDAY
     case FREESHIPPING
     case ISDISCOUNTED
-    
+
     public typealias RawValue = String
 
-        public var rawValue: RawValue {
-            switch self {
-                case .PRODUCTNAME:
-                    return "PRODUCTNAME"
-                case .COLOR:
-                    return "COLOR"
-                case .AGEGROUP:
-                    return "AGEGROUP"
-                case .BRAND:
-                    return "BRAND"
-                case .CATEGORY:
-                    return "CATEGORY"
-                case .GENDER:
-                    return "GENDER"
-                case .MATERIAL:
-                    return "MATERIAL"
-                case .ATTRIBUTE1:
-                    return "ATTRIBUTE1"
-                case .ATTRIBUTE2:
-                    return "ATTRIBUTE2"
-                case .ATTRIBUTE3:
-                    return "ATTRIBUTE3"
-                case .ATTRIBUTE4:
-                    return "ATTRIBUTE4"
-                case .ATTRIBUTE5:
-                    return "ATTRIBUTE5"
-                case .SHIPPINGONSAMEDAY:
-                    return "SHIPPINGONSAMEDAY"
-                case .FREESHIPPING:
-                    return "FREESHIPPING"
-                case .ISDISCOUNTED:
-                    return "ISDISCOUNTED"
-            }
+    public var rawValue: RawValue {
+        switch self {
+        case .PRODUCTNAME:
+            return "PRODUCTNAME"
+        case .COLOR:
+            return "COLOR"
+        case .AGEGROUP:
+            return "AGEGROUP"
+        case .BRAND:
+            return "BRAND"
+        case .CATEGORY:
+            return "CATEGORY"
+        case .GENDER:
+            return "GENDER"
+        case .MATERIAL:
+            return "MATERIAL"
+        case .ATTRIBUTE1:
+            return "ATTRIBUTE1"
+        case .ATTRIBUTE2:
+            return "ATTRIBUTE2"
+        case .ATTRIBUTE3:
+            return "ATTRIBUTE3"
+        case .ATTRIBUTE4:
+            return "ATTRIBUTE4"
+        case .ATTRIBUTE5:
+            return "ATTRIBUTE5"
+        case .SHIPPINGONSAMEDAY:
+            return "SHIPPINGONSAMEDAY"
+        case .FREESHIPPING:
+            return "FREESHIPPING"
+        case .ISDISCOUNTED:
+            return "ISDISCOUNTED"
         }
+    }
 
-        public init?(rawValue: RawValue) {
-            switch rawValue {
-                case "PRODUCTNAME":
-                    self = .PRODUCTNAME
-                case "COLOR":
-                    self = .COLOR
-                case "AGEGROUP":
-                    self = .AGEGROUP
-                case "BRAND":
-                    self = .BRAND
-                case "CATEGORY":
-                    self = .CATEGORY
-                case "GENDER":
-                    self = .GENDER
-                case "MATERIAL":
-                    self = .MATERIAL
-                case "ATTRIBUTE1":
-                    self = .ATTRIBUTE1
-                case "ATTRIBUTE2":
-                    self = .ATTRIBUTE2
-                case "ATTRIBUTE3":
-                    self = .ATTRIBUTE3
-                case "ATTRIBUTE4":
-                    self = .ATTRIBUTE4
-                case "ATTRIBUTE5":
-                    self = .ATTRIBUTE5
-                case "SHIPPINGONSAMEDAY":
-                    self = .SHIPPINGONSAMEDAY
-                case "FREESHIPPING":
-                    self = .FREESHIPPING
-                case "ISDISCOUNTED":
-                    self = .ISDISCOUNTED
-                default:
-                    return nil
-            }
+    // swiftlint:disable cyclomatic_complexity
+    public init?(rawValue: RawValue) {
+        switch rawValue {
+        case "PRODUCTNAME":
+            self = .PRODUCTNAME
+        case "COLOR":
+            self = .COLOR
+        case "AGEGROUP":
+            self = .AGEGROUP
+        case "BRAND":
+            self = .BRAND
+        case "CATEGORY":
+            self = .CATEGORY
+        case "GENDER":
+            self = .GENDER
+        case "MATERIAL":
+            self = .MATERIAL
+        case "ATTRIBUTE1":
+            self = .ATTRIBUTE1
+        case "ATTRIBUTE2":
+            self = .ATTRIBUTE2
+        case "ATTRIBUTE3":
+            self = .ATTRIBUTE3
+        case "ATTRIBUTE4":
+            self = .ATTRIBUTE4
+        case "ATTRIBUTE5":
+            self = .ATTRIBUTE5
+        case "SHIPPINGONSAMEDAY":
+            self = .SHIPPINGONSAMEDAY
+        case "FREESHIPPING":
+            self = .FREESHIPPING
+        case "ISDISCOUNTED":
+            self = .ISDISCOUNTED
+        default:
+            return nil
         }
+    }
 }
 
 @objc
-public class VisilabsRecommendationFilter : NSObject {
+public class VisilabsRecommendationFilter: NSObject {
     var attribute: VisilabsProductFilterAttribute
     var filterType: VisilabsRecommendationFilterType
     var value: String

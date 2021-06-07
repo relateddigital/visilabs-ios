@@ -14,7 +14,7 @@ public struct SpinToWinSliceViewModel: Codable {
     var type: String
 }
 
-public struct SpinToWinViewModel : TargetingActionViewModel, Codable {
+public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     public var targetingActionType: TargetingActionType
     var actId: Int
     var auth: String
@@ -37,9 +37,8 @@ public struct SpinToWinViewModel : TargetingActionViewModel, Codable {
     var report: SpinToWinReport
     var taTemplate: String
     var img: String
-    
-    
-    //ExtendedProps
+
+    // ExtendedProps
     var displaynameTextColor: String
     var displaynameFontFamily: String
     var displaynameTextSize: String
@@ -74,4 +73,3 @@ public struct SpinToWinReport: Codable {
     var impression: String
     var click: String
 }
-

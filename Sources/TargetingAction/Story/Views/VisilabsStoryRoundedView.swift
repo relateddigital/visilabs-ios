@@ -7,7 +7,7 @@
 
 import UIKit
 
-//@note:Recommended Size: CGSize(width:70,height:70)
+// @note:Recommended Size: CGSize(width:70,height:70)
 struct Attributes {
     let borderWidth: CGFloat = 0.0 // 2.0
     let borderColor = UIColor.clear// UIColor.white

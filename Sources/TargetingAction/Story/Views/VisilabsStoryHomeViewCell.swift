@@ -17,7 +17,7 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
     func setProperties(_ properties: VisilabsStoryActionExtendedProperties, _ actId: Int) {
         self.profileNameLabel.textColor = properties.labelColor
         var shown = false
-        //check story has shown
+        // check story has shown
         if let shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories) as? [String: [String]] {
             if let shownStoriesWithAction = shownStories["\(actId)"], shownStoriesWithAction.contains(self.story?.title ?? "-") {
                 shown = true

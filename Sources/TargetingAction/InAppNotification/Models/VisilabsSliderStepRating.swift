@@ -30,7 +30,7 @@ private func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
 protocol SliderStepDelegate: AnyObject {
     func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float)
 }
-//swiftlint:disable type_body_length valid_ibinspectable file_length
+// swiftlint:disable type_body_length valid_ibinspectable file_length
 class VisilabsSliderStep: UISlider {
 
     @IBInspectable var enableTap: Bool = true
@@ -50,17 +50,17 @@ class VisilabsSliderStep: UISlider {
 
     @objc var customTrack: Bool = true
 
-    ///Requireds
+    /// Requireds
     @objc var stepImages: [UIImage]?
 
-    //Optionals
+    // Optionals
     @objc var tickTitles: [String]?
     @objc var tickImages: [UIImage]?
 
     fileprivate var _stepTickLabels: [UILabel]?
     fileprivate var _stepTickImages: [UIImageView]?
 
-    //Delegate
+    // Delegate
     weak var sliderStepDelegate: SliderStepDelegate!
 
     @objc var stepWidth: Double {
@@ -89,7 +89,7 @@ class VisilabsSliderStep: UISlider {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentMode = .redraw //enable redraw on rotation (calls setNeedsDisplay)
+        self.contentMode = .redraw // enable redraw on rotation (calls setNeedsDisplay)
 
         if enableTap {
             let tap = UITapGestureRecognizer(target: self, action: #selector(VisilabsSliderStep.sliderTapped(_:)))
@@ -138,7 +138,7 @@ class VisilabsSliderStep: UISlider {
     }
 
     @objc internal func setThumbForSliderValue(_ value: Float) {
-        //Image
+        // Image
         if let selectionImage = thumbForSliderValue(value) {
             let image = selectionImage.resizeImage(targetSize: CGSize(width: highlightedImageSize,
                                                                 height: highlightedImageSize))
@@ -147,7 +147,7 @@ class VisilabsSliderStep: UISlider {
             self.setThumbImage(image, for: UIControl.State.highlighted)
         }
 
-        //Label
+        // Label
         thumbForSliderValueLbl(value)
     }
 
@@ -224,7 +224,7 @@ class VisilabsSliderStep: UISlider {
         drawLabels()
         drawTrack()
         drawImages()
-        //Selected Item
+        // Selected Item
         setThumbForSliderValue(self.value)
     }
 
@@ -320,7 +320,7 @@ class VisilabsSliderStep: UISlider {
                 rect.origin.x = xPoint
                 rect.origin.y = bounds.midY - (rect.size.height / 2)
                 imv.frame = rect
-                self.insertSubview(imv, at: 2) //index 2 => draw images below the thumb/above the line
+                self.insertSubview(imv, at: 2) // index 2 => draw images below the thumb/above the line
                 _stepTickImages?.append(imv)
             }
         }
@@ -390,7 +390,7 @@ class VisilabsSliderStep: UISlider {
         ctx?.restoreGState()
     }
 
-    //Avoid exc bad access on viewcontroller view did load
+    // Avoid exc bad access on viewcontroller view did load
     override func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
         drawTrack()

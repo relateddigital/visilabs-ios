@@ -24,12 +24,12 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
     @IBOutlet weak var copyTextButton: UIButton!
     @IBOutlet weak var copyImageButton: UIButton!
-    
+
     @IBOutlet weak var buttonTopCC: NSLayoutConstraint!
     @IBOutlet weak var bodyButtonCC: NSLayoutConstraint!
     @IBOutlet weak var buttonTopNormal: NSLayoutConstraint!
     @IBOutlet weak var bodyButtonNormal: NSLayoutConstraint!
-    
+
     var isCopyEnabled = true
     let pasteboard = UIPasteboard.general
 
@@ -80,13 +80,13 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         } else {
             bodyLabel.textColor = UIColor(hex: "#FFFFFF", alpha: 1)
         }
-        
+
         if let promoTextColor = fullNotification.promotionTextColor {
             copyTextButton.setTitleColor(promoTextColor, for: .normal)
         } else {
             copyTextButton.setTitleColor(UIColor(hex: "#FFFFFF", alpha: 1), for: .normal)
         }
-        
+
         if let promoBackColor = fullNotification.promotionBackgroundColor {
             copyTextButton.backgroundColor = promoBackColor
             copyImageButton.backgroundColor = promoBackColor
@@ -125,7 +125,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             self.copyTextButton.isHidden = false
             self.copyImageButton.isHidden = false
             self.copyTextButton.setTitle(fullNotification.promotionCode, for: .normal)
-            
+
         } else {
             self.buttonTopCC.isActive = false
             self.bodyButtonCC.isActive = false
@@ -134,7 +134,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             self.copyTextButton.isHidden = true
             self.copyImageButton.isHidden = true
         }
-        
+
     }
 
     @IBAction func promotionCodeCopied(_ sender: Any) {
@@ -167,7 +167,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         buttonView.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControl.Event.touchUpInside)
         buttonView.tag = 0
     }
-    
 
     override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
@@ -214,7 +213,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         })
     }
 
-    //TO_DO: burada additionalTrackingProperties kısmında aksiyon id'si gönderilebilir.
+    // TO_DO: burada additionalTrackingProperties kısmında aksiyon id'si gönderilebilir.
     @objc func buttonTapped(_ sender: AnyObject) {
         delegate?.notificationShouldDismiss(controller: self,
                                             callToActionURL: fullNotification.callToActionUrl,

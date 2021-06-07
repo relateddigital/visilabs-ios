@@ -21,11 +21,11 @@ public struct MailSubscriptionModel {
     var emailPermitText: String
     var extendedProps: MailSubscriptionExtendedProps
     var checkConsentMessage: String
-    var report: MailReport
+    var report: TargetingActionReport
 }
 
 public struct MailSubscriptionExtendedProps {
-    var titleTextColor: String 
+    var titleTextColor: String
     var titleFontFamily: String
     var titleTextSize: String
     var textColor: String
@@ -48,7 +48,7 @@ public enum ButtonColor: String {
     case white
 }
 
-public struct MailSubscriptionViewModel : TargetingActionViewModel {
+public struct MailSubscriptionViewModel: TargetingActionViewModel {
     public var targetingActionType: TargetingActionType
     var auth: String
     var actId: Int
@@ -75,10 +75,10 @@ public struct MailSubscriptionViewModel : TargetingActionViewModel {
     var backgroundColor: UIColor
     var permitTextSize: Int
     var consentTextSize: Int
-    var report: MailReport
+    var report: TargetingActionReport
 }
 
-public struct MailReport {
+public struct TargetingActionReport {
     var impression: String
     var click: String
 }
