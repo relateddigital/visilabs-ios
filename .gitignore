@@ -23,3 +23,5 @@ DerivedData
 *.ipa
 .bundle
 Package.resolved
+.swiftpm/
+ObjCStarter/Podfile.lock
