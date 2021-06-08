@@ -28,8 +28,8 @@ branches:
   - master
 env:
   global:
-  - WORKSPACE=VisilabsIOS.xcworkspace
-  - SCHEME=VisilabsIOS-Example
+  - WORKSPACE=VisilabsExample.xcworkspace
+  - SCHEME=VisilabsExample
   matrix:
     - DESTINATION="OS=13.0,name=iPhone 11"   SCHEME="$SCHEME"    RUN_TESTS="NO"     POD_LINT="YES"
 script:
@@ -48,5 +48,5 @@ script:
 
   # Run `pod lib lint` if specified
   - if [ $POD_LINT == "YES" ]; then
-      cd .. && pod lib lint --allow-warnings && cd VisilabsExample;
+      cd .. && pod lib lint --allow-warnings && cd Example;
     fi
