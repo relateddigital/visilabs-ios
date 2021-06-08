@@ -120,7 +120,7 @@ internal class VisilabsHelper {
         #if SWIFT_PACKAGE
         let bundle = Bundle.module
         #else
-        let bundle = Bundle(for: type(of: self))
+        let bundle = Bundle(for: self as AnyClass)
         #endif
         return UIImage(named: named, in: bundle, compatibleWith: nil)!
     }
