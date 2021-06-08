@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'VisilabsIOS'
   s.module_name      = 'VisilabsIOS'
-  s.version          = '2.6.0'
+  s.version          = '3.0.0'
   s.summary          = 'VisilabsIOS TEST KULLANMAYIN'
   s.description      = 'VisilabsIOS TEST KULLANMAYIN'
   s.homepage         = 'https://www.relateddigital.com'
