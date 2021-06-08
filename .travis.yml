@@ -31,7 +31,7 @@ env:
   - WORKSPACE=VisilabsIOS.xcworkspace
   - SCHEME=VisilabsIOS-Example
   matrix:
-    - DESTINATION="OS=13.0,name=iPhone 11"   SCHEME="$SCHEME"    RUN_TESTS="YES"     POD_LINT="YES"
+    - DESTINATION="OS=13.0,name=iPhone 11"   SCHEME="$SCHEME"    RUN_TESTS="NO"     POD_LINT="YES"
 script:
   - set -o pipefail
   - xcodebuild -version
