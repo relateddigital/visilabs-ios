@@ -40,7 +40,7 @@ public class VisilabsStoryHomeViewController: NSObject,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
                       VisilabsStoryHomeViewCell.reuseIdentifier, for: indexPath)
                     as? VisilabsStoryHomeViewCell else {
-                fatalError()
+                return UICollectionViewCell()
             }
             cell.setAsLoadingCell()
             return cell
@@ -48,7 +48,7 @@ public class VisilabsStoryHomeViewController: NSObject,
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
                     VisilabsStoryHomeViewCell.reuseIdentifier, for: indexPath)
                     as? VisilabsStoryHomeViewCell else {
-                fatalError()
+                return UICollectionViewCell()
             }
             if self.storyAction.extendedProperties.moveShownToEnd {
                 self.storyAction.stories = sortStories(stories: self.storyAction.stories)

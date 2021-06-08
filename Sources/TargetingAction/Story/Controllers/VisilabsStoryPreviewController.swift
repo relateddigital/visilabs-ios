@@ -126,7 +126,7 @@ extension VisilabsStoryPreviewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
                     VisilabsStoryPreviewCell.reuseIdentifier, for: indexPath)
                 as? VisilabsStoryPreviewCell else {
-            fatalError()
+            return UICollectionViewCell()
         }
         let story = viewModel?.cellForItemAtIndexPath(indexPath)
         cell.story = story
