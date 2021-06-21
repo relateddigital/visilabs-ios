@@ -87,6 +87,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             VisilabsPersistence.saveVisilabsProfile(self.visilabsProfile)
         }
     }
+    
+    public weak var inappButtonDelegate: VisilabsInappButtonDelegate?
+
     // swiftlint:disable function_body_length
     init(organizationId: String,
          profileId: String,
@@ -388,6 +391,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
                                                                             visilabsUser: self.visilabsUser,
                                                                             completion: { visilabsInAppNotification in
                     if let notification = visilabsInAppNotification {
+                        self.visilabsTargetingActionInstance.notificationsInstance.inappButtonDelegate = self.inappButtonDelegate
                         self.visilabsTargetingActionInstance.notificationsInstance.showNotification(notification)
                     }
                 })
@@ -573,4 +577,8 @@ extension VisilabsInstance {
         props[VisilabsConstants.channelKey] = visilabsProfile.channel
         VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String: String](), timeOutInterval: self.visilabsProfile.requestTimeoutInterval)
     }
+}
+
+public protocol VisilabsInappButtonDelegate: AnyObject {
+    func didTapButton(_ notification: VisilabsInAppNotification)
 }

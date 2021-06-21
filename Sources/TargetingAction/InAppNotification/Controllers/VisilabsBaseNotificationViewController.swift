@@ -25,6 +25,7 @@ class VisilabsBaseNotificationViewController: UIViewController {
     var scratchToWin: ScratchToWinModel?
     var spinToWin: SpinToWinViewModel?
     weak var delegate: VisilabsNotificationViewControllerDelegate?
+    weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     var window: UIWindow?
     var panStartPoint: CGPoint!
 

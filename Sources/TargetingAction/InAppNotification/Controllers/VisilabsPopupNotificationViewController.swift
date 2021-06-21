@@ -100,6 +100,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     func commonButtonAction() {
         guard let notification = self.notification else { return }
+        var returnCallback = true
         var additionalTrackingProperties = [String: String]()
         if notification.type == .smileRating {
             additionalTrackingProperties["OM.s_point"]
@@ -136,11 +137,16 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         var callToActionURL: URL? = notification.callToActionUrl
         if notification.type == .secondNps {
             callToActionURL = nil
+            returnCallback = false
         }
         self.delegate?.notificationShouldDismiss(controller: self,
                                                  callToActionURL: callToActionURL,
                                                  shouldTrack: true,
                                                  additionalTrackingProperties: additionalTrackingProperties)
+        
+        if returnCallback {
+            self.inappButtonDelegate?.didTapButton(notification)
+        }
     }
 
     fileprivate func initForEmailForm(_ viewController: VisilabsDefaultPopupNotificationViewController) {
