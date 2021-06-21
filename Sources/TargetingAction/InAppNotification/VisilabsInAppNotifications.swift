@@ -13,7 +13,7 @@ protocol VisilabsInAppNotificationsDelegate: AnyObject {
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String])
 }
 
-class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
+class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     let lock: VisilabsReadWriteLock
     var checkForNotificationOnActive = true
     var showNotificationOnActive = true
@@ -23,6 +23,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     var currentlyShowingNotification: VisilabsInAppNotification?
     var currentlyShowingTargetingAction: TargetingActionViewModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
+    weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     weak var currentViewController: UIViewController?
 
     init(lock: VisilabsReadWriteLock) {
@@ -116,6 +117,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                 return
             }
             VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            self.inappButtonDelegate?.didTapButton(notification)
         }
 
         let closeText = notification.closeButtonText ?? "Close"
@@ -174,6 +176,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)
         controller.delegate = self
+        controller.inappButtonDelegate = self.inappButtonDelegate
 
         if let rootViewController = getRootViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
@@ -275,4 +278,5 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         currentlyShowingNotification = nil
         currentlyShowingTargetingAction = nil
     }
+    
 }

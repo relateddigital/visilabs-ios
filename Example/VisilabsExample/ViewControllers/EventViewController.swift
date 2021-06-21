@@ -110,6 +110,7 @@ class EventViewController: FormViewController {
         var properties = [String: String]()
         properties["OM.inapptype"] = visilabsInAppNotificationType.rawValue
         Visilabs.callAPI().customEvent("InAppTest", properties: properties)
+        Visilabs.callAPI().inappButtonDelegate = self
     }
 
     private func showModal(title: String, message: String) {
@@ -292,4 +293,11 @@ struct RandomProduct {
     let randomBannerCode: Int
     let genders: [String]
     let randomGender: String
+}
+
+extension EventViewController: VisilabsInappButtonDelegate {
+    func didTapButton(_ notification: VisilabsInAppNotification) {
+        print("notification did tapped...")
+        print(notification)
+    }
 }
