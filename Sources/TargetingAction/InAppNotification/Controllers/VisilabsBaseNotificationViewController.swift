@@ -64,7 +64,8 @@ class VisilabsBaseNotificationViewController: UIViewController {
         if !(touch?.view is VisilabsPopupDialogDefaultView)
             && !(touch?.view is CosmosView) &&
             !(touch?.view is UIImageView) &&
-            !(touch?.view is ScratchUIView) {
+            !(touch?.view is ScratchUIView) &&
+            !(touch?.view?.accessibilityIdentifier == "buttonStack") {
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
         } else {
 //            Dont dismiss on tap

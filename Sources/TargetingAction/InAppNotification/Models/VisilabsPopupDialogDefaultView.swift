@@ -42,7 +42,6 @@ public class VisilabsPopupDialogDefaultView: UIView {
     var numberBorderColor: UIColor = .white
     var selectedNumber: Int?
     var expanded = false
-    weak var delegate: VisilabsPopupDialogDefaultViewDelegate?
     var sctwMail: String = ""
 
     @objc public dynamic var titleFont: UIFont {
@@ -88,6 +87,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
     var scratchToWin: ScratchToWinModel?
     var consentCheckboxAdded = false
     weak var imgButtonDelegate: ImageButtonImageDelegate?
+    weak var delegate: VisilabsPopupDialogDefaultViewDelegate?
+    weak var npsDelegate: NPSDelegate?
     // MARK: - CONSTRUCTOR
     init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification?,
                         emailForm: MailSubscriptionViewModel? = nil,
@@ -516,4 +517,9 @@ protocol VisilabsPopupDialogDefaultViewDelegate: AnyObject {
 
 protocol ImageButtonImageDelegate: AnyObject {
     func imageButtonTapped()
+}
+
+protocol NPSDelegate: AnyObject {
+    func ratingSelected()
+    func ratingUnselected()
 }
