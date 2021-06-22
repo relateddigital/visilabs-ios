@@ -194,6 +194,12 @@ public class ShakeToWinViewController: UIViewController {
                                         width: view.frame.width,
                                         height: view.frame.height))
         page.backgroundColor = .blue
+        let close = getCloseButton(.white)
+        page.addSubview(close)
+        close.top(to: page, offset: 40)
+        close.trailing(to: page, offset: -20)
+        close.width(40)
+        close.height(40)
         return page
     }
 }
