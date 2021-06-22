@@ -91,6 +91,9 @@ extension VisilabsPopupDialogDefaultView {
         let npsView = CosmosView(settings: settings)
         npsView.translatesAutoresizingMaskIntoConstraints = false
         npsView.rating = 0.0
+        npsView.didFinishTouchingCosmos = { _ in
+            self.npsDelegate?.ratingSelected()
+        }
         return npsView
     }
 
@@ -194,7 +197,7 @@ extension VisilabsPopupDialogDefaultView {
         sliderStepRating.stepTickWidth = 20
         sliderStepRating.stepTickHeight = 20
         sliderStepRating.trackHeight = 2
-        sliderStepRating.value = 1
+        sliderStepRating.value = 5
         sliderStepRating.trackColor = .clear
         sliderStepRating.enableTap = true
         sliderStepRating.sliderStepDelegate = self
@@ -500,8 +503,10 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
         }
         if cell.isSelected {
             self.selectedNumber = indexPath.row + 1
+            self.npsDelegate?.ratingSelected()
         } else {
             self.selectedNumber = 10
+            self.npsDelegate?.ratingUnselected()
         }
     }
 

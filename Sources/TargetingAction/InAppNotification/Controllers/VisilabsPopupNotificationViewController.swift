@@ -80,6 +80,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                    buttonTextColor: notification.buttonTextColor,
                                                    buttonColor: notification.buttonColor,
                                                    action: openSecondPopup)
+            button.isEnabled = false
             addButton(button)
         } else if notification.type != .fullImage && notification.type != .imageButtonImage {
 
@@ -87,6 +88,10 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                    font: notification.buttonTextFont,
                                                    buttonTextColor: notification.buttonTextColor,
                                                    buttonColor: notification.buttonColor, action: commonButtonAction)
+            if notification.type == .npsWithNumbers ||
+                notification.type == .nps {
+                button.isEnabled = false
+            }
             addButton(button)
         } else {
             if notification.type != .imageButtonImage {
@@ -189,6 +194,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
         viewController.standardView.imgButtonDelegate = self
+        viewController.standardView.npsDelegate = self
     }
 
     /*!
@@ -229,6 +235,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         self.scratchToWin = scratchToWin
         // Init the presentation manager
         presentationManager = VisilabsPresentationManager(transitionStyle: transitionStyle, interactor: interactor)
+        popupContainerView.buttonStackView.accessibilityIdentifier = "buttonStack"
 
         // Assign the interactor view controller
         interactor.viewController = self
@@ -259,7 +266,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             panRecognizer.cancelsTouchesInView = false
             popupContainerView.stackView.addGestureRecognizer(panRecognizer)
         }
-
+        
         // addCloseButton()
     }
 
@@ -562,4 +569,19 @@ extension VisilabsPopupNotificationViewController: VisilabsPopupDialogDefaultVie
         guard let _ = self.scratchToWin else { return }
         self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
     }
+}
+
+extension VisilabsPopupNotificationViewController: NPSDelegate {
+    
+    func ratingSelected() {
+        guard let button = self.buttons.first else { return }
+        button.isEnabled = true
+    }
+    
+    func ratingUnselected() {
+        guard let button = self.buttons.first else { return }
+        button.isEnabled = false
+    }
+    
+    
 }
