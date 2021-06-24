@@ -329,6 +329,25 @@ There are 9 types of **in-app messages**:
 | ![nps](/Screenshots/InAppNotification/nps.png)                   | ![nps_with_numbers](/Screenshots/InAppNotification/alert.png)   | ![nps_with_numbers](/Screenshots/InAppNotification/nps_with_numbers.png) |
 
 
+If you want to manage the links you add for in-app messages yourself, you can follow the step below.
+
+First you have to call the delegate method
+
+```swift
+Visilabs.callAPI().inappButtonDelegate = self                                 
+```
+
+Then you have to add the extension and you can delete the print codes and write your own codes.
+
+```swift
+extension EventViewController: VisilabsInappButtonDelegate {
+    func didTapButton(_ notification: VisilabsInAppNotification) {
+        print("notification did tapped...")
+        print(notification)
+    }
+}
+```
+
 ### Favorite Attribute Actions
 
 You can access favorite attributes of the **Targeting Actions** of type **Favorite Attribute Action**  that you defined from the  https://intelligence.relateddigital.com/#Target/TargetingAction/TAList/ section on the **RMC** panel via the mobile application as follows.
