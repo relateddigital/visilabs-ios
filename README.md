@@ -23,6 +23,7 @@
         - [Story Actions](#Story-Actions)
         - [Geofencing](#Geofencing)
         - [Mail Subscription Form](#Mail-Subscription-Form)
+        - [Spin To Win](#Spin-To-Win)
     - [Recommendation](#Recommendation)
 
 
@@ -60,7 +61,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Visilabs.createAPI(organizationId: "YOUR_ORGANIZATION_ID", profileId: "YOUR_PROFILE_ID"
         , dataSource: "YOUR_DATASOURCE", inAppNotificationsEnabled: false, channel: "IOS"
-        , requestTimeoutInSeconds: 30, geofenceEnabled: false, maxGeofenceCount: 20)
+        , requestTimeoutInSeconds: 30, geofenceEnabled: false, maxGeofenceCount: 20, isIDFAEnabled: true)
         return true
     }                                        
 ```
@@ -79,6 +80,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
     * **requestTimeoutInSeconds** : Default value is **30**. The request timeout value in seconds to send data to **Visilabs** servers and receive data from.
     * **geofenceEnabled** : Default value is **false**. If you want to use geofencing feature of **Visilabs** you need to set the value to **true**. If you are not using geofencing feature of **Visilabs**, we recommend that you leave this value to **false** in terms of performance and user experience because region monitoring would increase the battery consumption of your application and prompt users a popup dialog to allow location tracking.
     * **maxGeofenceCount** : Default value is **20**. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots. However if you need some of these slots for another use you can set this parameter to a value lower than **20**. Setting a value higher than 20 would not affect the maximum number of regions to be monitored. 
+    * ***isIDFAEnabled***: Default value is ***true***. After iOS 14, if you want to use AdvertisingTrackingID you should request a permission from end user. If this parameter is true, then you should add Privacy - Tracking Usage Description into your *Info.plist* with proper description. As soon as you call `createAPI` There will open popup to request permission from end user. [Click here for detailed information](https://developer.apple.com/documentation/bundleresources/information_property_list/nsusertrackingusagedescription)
 
 
 ![Image of Profiles](/Screenshots/profiles-page.png)
@@ -413,6 +415,23 @@ let storyView = Visilabs.callAPI().getStoryView(actionId: 67)
 view.addSubview(storyHomeView)
 ```
 
+If you add a clickable URL, framework handle to open it on browser (or direct by deeplink). However, if you want to handle by yourself, extend your class that conforms VisilabsStoryURLDelegate, as following;
+
+```swift
+extension StoryViewController: VisilabsStoryURLDelegate {
+    func urlClicked(_ url: URL) {
+        //TO DO
+    }
+}
+```
+After you add this, you can set urlDelegate self.
+
+```swift
+let storyView = Visilabs.callAPI().getStoryView(actionId: 67, urlDelegate: self)
+view.addSubview(storyHomeView)
+```
+If you set delegate, then clickable URL will not be handled by SDK!
+
 ### Geofencing
 
 To enable location services in your application first of all you need to add the following keys to your `Info.plist` file.
@@ -458,6 +477,16 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
 After form is created at **RMC** panel, likewise **in-app message**, existence of mail subscription form is controlled by after each `customEvent` call. It is shown as follows;
 
 ![mail-subscription-form](/Screenshots/InAppNotification/mail-subscription-form.png)
+
+### Spin To Win
+
+After form is created at **RMC** panel, likewise **in-app message**, existence of spin to win is controlled by after each `customEvent` call. It opens a WebViewController. It is shown as follows;
+
+|               Spin to Win Full                                   |                        Spin to Win Half                                    |
+|:----------------------------------------------------------------:|----------------------------------------------------------------------------|
+| ![spin-to-win-full](/Screenshots/spin_to_win_full_en.jpeg)          | ![spin-to-win-half](/Screenshots/spin_to_win_half_en.jpeg)                    |
+
+
 
 ## Recommendation
 
