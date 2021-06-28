@@ -45,6 +45,7 @@ class EventViewController: FormViewController {
                                 "nps_with_numbers": 493,
                                 "scratchToWin": 591,
                                 "nps_with_secondpopup": 584,
+                                "carousel": 999,
                                 "spintowin": 130]
 
     override func viewDidLoad() {
@@ -91,7 +92,7 @@ class EventViewController: FormViewController {
     private func  getInAppSection() -> Section {
         let section = Section("In App Notification Types".uppercased(with: Locale(identifier: "en_US")))
         //change when added new inapp type
-        for counter in 0..<15 {
+        for counter in 0..<16 {
             guard let _ = inAppNotificationIds[VisilabsInAppNotificationType.allCases[counter].rawValue]  else {
                 continue
             }
