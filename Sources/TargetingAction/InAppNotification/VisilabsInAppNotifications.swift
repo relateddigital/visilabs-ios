@@ -47,6 +47,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                         shownNotification = self.showMiniNotification(notification)
                     case .full:
                         shownNotification = self.showFullNotification(notification)
+                    case .carousel:
+                        shownNotification = self.showCarousel(notification)
                     case .alert:
                         shownNotification = true
                         self.showAlert(notification)
@@ -101,6 +103,13 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         let fullNotificationVC = VisilabsFullNotificationViewController(notification: notification)
         fullNotificationVC.delegate = self
         fullNotificationVC.show(animated: true)
+        return true
+    }
+    
+    func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
+        let carousel = VisilabsCarouselNotificationViewController(notification: notification)
+        carousel.delegate = self
+        carousel.show(animated: true)
         return true
     }
 
