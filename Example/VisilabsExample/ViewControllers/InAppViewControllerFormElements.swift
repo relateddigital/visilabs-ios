@@ -360,12 +360,25 @@ extension InAppViewController {
     }
 
     func dummyFunc() {
-        let duration = SocialProofDuration.sec5
-        let location = SocialProofLocation.bottom
-        let model = SocialProofModel(text: "has viewed this product", number: "120",
-                                     location: location, duration: duration, backgroundColor: .blue,
-                                     textColor: .white, numberColor: .red,
-                                     textFont: .systemFont(ofSize: 12), numberFont: .boldSystemFont(ofSize: 14))
+        let model = CountdownModel(title: "Fırsatı kaçırma",
+                                   subtitle: "bla bla bla bla",
+                                   buttonText: "Button'a bas",
+                                   coupon: nil,
+                                   finalDate: 1625097600,
+                                   bgColor: .blue,
+                                   titleColor: .white,
+                                   subtitleColor: .gray,
+                                   buttonColor: .red,
+                                   buttonTextColor: .white,
+                                   couponColor: nil,
+                                   couponBgColor: nil,
+                                   titleFont: .boldSystemFont(ofSize: 18),
+                                   subtitleFont: .italicSystemFont(ofSize: 15),
+                                   buttonFont: .systemFont(ofSize: 14),
+                                   couponFont: nil,
+                                   location: .bottom,
+                                   timerType: .DHMS,
+                                   closeButtonColor: .white)
         let vc = CountdownTimerViewController(model: model)
         vc.showNow(animated: true)
     }
