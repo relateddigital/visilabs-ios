@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -97,7 +96,7 @@
                             <state key="normal" title="Button"/>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="cw6-f9-Qre" secondAttribute="trailing" constant="8" id="26G-on-xeD"/>
                         <constraint firstItem="WFM-mU-UAy" firstAttribute="leading" secondItem="80a-to-ivu" secondAttribute="leading" constant="8" id="2aw-Dt-u2q"/>
@@ -145,8 +144,5 @@
     </objects>
     <resources>
         <image name="VisilabsCloseButtonBlack.png" width="25" height="25"/>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>

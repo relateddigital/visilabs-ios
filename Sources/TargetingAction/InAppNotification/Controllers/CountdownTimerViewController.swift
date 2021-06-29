@@ -28,6 +28,15 @@ public class CountdownTimerViewController: UIViewController {
     var diff: Int = 0
     var position: CGPoint?
     var window: UIWindow?
+    var timeStr: String = "" {
+        didSet {
+            DispatchQueue.main.async {
+                self.countdownLabel.text = self.timeStr
+            }
+        }
+    }
+    
+    var timer: Timer?
 
     public init(model: CountdownModel) {
         let bundle = Bundle(for: CountdownTimerViewController.self)
@@ -48,8 +57,17 @@ public class CountdownTimerViewController: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+        timer?.fire()
     }
     
+    @objc func fireTimer() {
+        guard let m = self.model else {
+            self.timer?.invalidate()
+            return
+        }
+        self.timeStr = CountdownModel.convertDateIntoTimeLabel(date: m.finalDate, type: m.timerType)
+    }
     func configure() {
         guard let m = self.model else { return }
         self.titleLabel.text = m.title
@@ -69,9 +87,9 @@ public class CountdownTimerViewController: UIViewController {
         self.countdownLabel.text = CountdownModel.convertDateIntoTimeLabel(date: m.finalDate, type: m.timerType)
         self.countdownTypeLabel.text = m.timerType.rawValue
         
-        mainButtonCenter.isActive = true
         mainButtonTrailing.isActive = false
-        
+        mainButtonCenter.isActive = true
+        couponCodeButton.isHidden = true
         if let couponCode = m.couponCode,
            let cColor = m.couponColor,
            let cbgColor = m.couponBgColor,
@@ -82,14 +100,19 @@ public class CountdownTimerViewController: UIViewController {
             self.couponCodeButton.titleLabel?.font = cFont
             mainButtonCenter.isActive = false
             mainButtonTrailing.isActive = true
+            couponCodeButton.isHidden = false
+
         }
+
+        self.mainButton.constraints.activate()
+        self.couponCodeButton.constraints.activate()
         
-        if m.closeButtonColor == .white {
-            //set white
-        } else {
-            //set black
+        closeButton.setImage(getUIImage(named: "VisilabsCloseButton"), for: .normal)
+        closeButton.addTarget(self, action: #selector(closeButtonTapped(_:)), for: .touchUpInside)
+        if m.closeButtonColor == .black {
+            closeButton.setImage(getUIImage(named: "VisilabsCloseButtonBlack"), for: .normal)
         }
-        
+
         if m.location == .bottom {
             bottomConstraint.isActive = true
             topConstraint.isActive = false
@@ -201,6 +224,11 @@ public class CountdownTimerViewController: UIViewController {
             return xibName
         }
         return xibName
+    }
+    
+    func getUIImage(named: String) -> UIImage? {
+        let bundle = Bundle(identifier: "com.relateddigital.visilabs")
+        return UIImage(named: named, in: bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
     }
 
 }

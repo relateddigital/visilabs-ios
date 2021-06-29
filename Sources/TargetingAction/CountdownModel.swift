@@ -5,7 +5,7 @@
 //  Created by Said Alır on 28.06.2021.
 //
 
-import Foundation
+import UIKit
 
 public class CountdownModel {
     
@@ -102,17 +102,14 @@ public class CountdownModel {
             (diff, m) = CountdownModel.initMinutes(diff: diff, type: type)
             return "\(d) : \(h ?? 0) : \(m ?? 0)"
         case .DHMS:
-            var s: Int?
             var m: Int?
             var h: Int?
             var d = 0
             (diff, d) = CountdownModel.initDays(diff: diff)
             (diff, h) = CountdownModel.initHours(diff: diff, type: type)
             (diff, m) = CountdownModel.initMinutes(diff: diff, type: type)
-            (diff, s) = CountdownModel.initSeconds(diff: diff, type: type)
-            return "\(d) : \(h ?? 0) : \(m ?? 0) : \(s ?? 0)"
+            return "\(d) : \(h ?? 0) : \(m ?? 0) : \(diff)"
         case .WDHMS:
-            var s: Int?
             var m: Int?
             var h: Int?
             var d = 0
@@ -121,8 +118,7 @@ public class CountdownModel {
             (diff, d) = CountdownModel.initDays(diff: diff)
             (diff, h) = CountdownModel.initHours(diff: diff, type: type)
             (diff, m) = CountdownModel.initMinutes(diff: diff, type: type)
-            (diff, s) = CountdownModel.initSeconds(diff: diff, type: type)
-            return "\(d) : \(h ?? 0) : \(m ?? 0) : \(s ?? 0)"
+            return "\(w) : \(d) : \(h ?? 0) : \(m ?? 0) : \(diff)"
         }
     }
     
@@ -184,17 +180,6 @@ public class CountdownModel {
         }
     }
     
-    private static func initSeconds(diff: Int, type: CountdownTimerType) -> (Int, Int?) {
-        if type != .WDHMS || type != .DHMS {
-            return (diff, nil)
-        }
-        if diff <= 0 || diff > 59 {
-            return (0, 0)
-        } else {
-            return(0, diff)
-        }
-    }
-   
 }
 
 
