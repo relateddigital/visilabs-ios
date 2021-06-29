@@ -45,7 +45,6 @@ class EventViewController: FormViewController {
                                 "nps_with_numbers": 493,
                                 "scratchToWin": 591,
                                 "nps_with_secondpopup": 584,
-                                "carousel": 999,
                                 "spintowin": 130]
 
     override func viewDidLoad() {

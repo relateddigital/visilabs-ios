@@ -332,7 +332,8 @@ extension InAppViewController {
     }
 
     func showNotificationTapped() {
-//        dummyFunc()
+        dummyFunc()
+        return
 
 //        let vc = ShakeToWinViewController()
 //        vc.modalPresentationStyle = .fullScreen
@@ -365,7 +366,7 @@ extension InAppViewController {
                                      location: location, duration: duration, backgroundColor: .blue,
                                      textColor: .white, numberColor: .red,
                                      textFont: .systemFont(ofSize: 12), numberFont: .boldSystemFont(ofSize: 14))
-        let vc = SocialProofViewController(model: model)
+        let vc = CountdownTimerViewController(model: model)
         vc.showNow(animated: true)
     }
 
