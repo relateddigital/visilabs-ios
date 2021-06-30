@@ -42,16 +42,26 @@ extension String {
     func parseClick() -> ParsedClick {
         var click = ParsedClick(omZpc: "", omZn: "")
         let strArr = self.split(separator: "&")
-        var zpcStr: String = String(strArr[0])
-        var znStr: String = strArr.count > 1 ? String(strArr[1]) : ""
-        if zpcStr.split(separator: "=").count > 1 {
-            zpcStr = String(zpcStr.split(separator: "=")[1])
+        
+        if strArr.count > 1 {
+            let firstParameterParts = String(strArr[0]).split(separator: "=")
+            if firstParameterParts.count > 1 {
+                if firstParameterParts[0].compare("OM.zn", options: .caseInsensitive) == .orderedSame {
+                    click.omZn = String(firstParameterParts[1])
+                } else if firstParameterParts[0].compare("OM.zpc", options: .caseInsensitive) == .orderedSame {
+                    click.omZpc = String(firstParameterParts[1])
+                }
+            }
+            let secondParameterParts = String(strArr[1]).split(separator: "=")
+            if secondParameterParts.count > 1 {
+                if secondParameterParts[0].compare("OM.zn", options: .caseInsensitive) == .orderedSame {
+                    click.omZn = String(secondParameterParts[1])
+                } else if secondParameterParts[0].compare("OM.zpc", options: .caseInsensitive) == .orderedSame {
+                    click.omZpc = String(secondParameterParts[1])
+                }
+                
+            }
         }
-        if znStr.split(separator: "=").count > 1 {
-            znStr = String(znStr.split(separator: "=")[1])
-        }
-        click.omZpc = zpcStr
-        click.omZn = znStr
         return click
     }
 
