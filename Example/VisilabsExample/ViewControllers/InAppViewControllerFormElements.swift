@@ -331,6 +331,58 @@ extension InAppViewController {
         }
     }
 
+    func showNotificationTapped() {
+        dummyFunc()
+        return
+
+//        let vc = ShakeToWinViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        self.present(vc, animated: true, completion: nil)
+
+        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
+        print("Form erros count: \(errors.count)")
+        for error in errors {
+            print(error.msg)
+        }
+        if errors.count > 0 {
+            return
+        }
+        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
+        if value == "emailForm" {
+            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
+        } else if value == "scratchToWin" {
+//            let sctw = createScratchToWinModel()
+//            Visilabs.callAPI().showTargetingAction(sctw)
+        } else {
+            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
+            Visilabs.callAPI().showNotification(visilabsInAppNotification)
+        }
+    }
+
+    func dummyFunc() {
+        let model = CountdownModel(title: "Fırsatı kaçırma",
+                                   subtitle: "bla bla bla bla",
+                                   buttonText: "Button'a bas",
+                                   coupon: nil,
+                                   finalDate: 1625097600,
+                                   bgColor: .blue,
+                                   titleColor: .white,
+                                   subtitleColor: .gray,
+                                   buttonColor: .red,
+                                   buttonTextColor: .white,
+                                   couponColor: nil,
+                                   couponBgColor: nil,
+                                   titleFont: .boldSystemFont(ofSize: 18),
+                                   subtitleFont: .italicSystemFont(ofSize: 15),
+                                   buttonFont: .systemFont(ofSize: 14),
+                                   couponFont: nil,
+                                   location: .bottom,
+                                   timerType: .DHMS,
+                                   closeButtonColor: .white)
+        let vc = CountdownTimerViewController(model: model)
+        vc.showNow(animated: true)
+    }
+
     func addSecondPopupBodyTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupBody) {
             $0.title = "Second Popup Body"
@@ -388,26 +440,6 @@ extension InAppViewController {
         }
     }
 
-    func showNotificationTapped() {
-        let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
-        print("Form erros count: \(errors.count)")
-        for error in errors {
-            print(error.msg)
-        }
-        if errors.count > 0 {
-            return
-        }
-        let value = "\(((self.form.rowBy(tag: "msg_type") as? PickerInputRow<String>))?.value ?? "")"
-        if value == "emailForm" {
-            Visilabs.callAPI().customEvent("mail", properties: [String: String]())
-        } else if value == "scratchToWin" {
-//            let sctw = createScratchToWinModel()
-//            Visilabs.callAPI().showTargetingAction(sctw)
-        } else {
-            let visilabsInAppNotification = createVisilabsInAppNotificationModel()
-            Visilabs.callAPI().showNotification(visilabsInAppNotification)
-        }
-    }
 
     func addNumberBGColor(_ colorId: String) -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.numberColors + colorId) {
