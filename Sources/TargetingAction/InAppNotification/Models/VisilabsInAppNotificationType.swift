@@ -20,6 +20,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case npsWithNumbers = "nps_with_numbers"
     case scratchToWin
     case secondNps = "nps_with_secondpopup"
+    case carousel = "carousel"
     case imageButtonImage
     case spintowin
     case feedbackForm

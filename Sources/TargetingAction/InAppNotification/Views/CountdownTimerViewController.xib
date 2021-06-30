@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CountdownTimerViewController" customModule="VisilabsIOS" customModuleProvider="target">
+            <connections>
+                <outlet property="bottomConstraint" destination="TQX-OO-26Q" id="PCf-gX-gjc"/>
+                <outlet property="closeButton" destination="Db8-Xc-rD9" id="Ibu-2I-A3O"/>
+                <outlet property="countdownLabel" destination="p57-fa-5sr" id="4HE-ia-YUd"/>
+                <outlet property="countdownTypeLabel" destination="iCC-fG-fMK" id="8qv-Np-w7J"/>
+                <outlet property="couponCodeButton" destination="WFM-mU-UAy" id="fsI-4q-d6F"/>
+                <outlet property="mainButton" destination="cw6-f9-Qre" id="y1N-3O-WIo"/>
+                <outlet property="mainButtonCenter" destination="Z75-oa-gNz" id="kh3-yE-hpG"/>
+                <outlet property="mainButtonTrailing" destination="26G-on-xeD" id="d37-2H-7ID"/>
+                <outlet property="subtitleLabel" destination="cQ3-va-ss3" id="unL-51-Lr4"/>
+                <outlet property="titleLabel" destination="9bZ-gh-I1g" id="yzG-B4-vn8"/>
+                <outlet property="topConstraint" destination="wCe-36-R9S" id="woP-ee-f9W"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="80a-to-ivu">
+                    <rect key="frame" x="0.0" y="44" width="414" height="190"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Db8-Xc-rD9" userLabel="closeButton">
+                            <rect key="frame" x="386" y="9" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="oKQ-PG-TtB"/>
+                                <constraint firstAttribute="height" constant="20" id="wYY-mi-s6X"/>
+                            </constraints>
+                            <state key="normal" title="Button" image="VisilabsCloseButtonBlack.png"/>
+                            <connections>
+                                <action selector="closeButtonTapped:" destination="-1" eventType="touchUpInside" id="aB7-MP-74N"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bZ-gh-I1g" userLabel="titleLabel">
+                            <rect key="frame" x="8" y="16" width="370" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="LzY-So-tcA"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cQ3-va-ss3" userLabel="subtitleLabel">
+                            <rect key="frame" x="8" y="45" width="370" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="FDG-hK-lbe"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p57-fa-5sr" userLabel="countdownLabel">
+                            <rect key="frame" x="8" y="74" width="370" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="n4V-Fg-A5I"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCC-fG-fMK" userLabel="countdownTypeLabel">
+                            <rect key="frame" x="8" y="103" width="370" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="Y4z-rJ-sKA"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cw6-f9-Qre" userLabel="mainButton">
+                            <rect key="frame" x="278" y="132" width="128" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="128" id="GxN-fQ-MR8"/>
+                                <constraint firstAttribute="height" constant="50" id="oNq-Rn-hsF"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WFM-mU-UAy" userLabel="couponCodeButton">
+                            <rect key="frame" x="8" y="132" width="240" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="240" id="ANH-x9-txC"/>
+                                <constraint firstAttribute="height" constant="50" id="c8w-1e-Ayq"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="cw6-f9-Qre" secondAttribute="trailing" constant="8" id="26G-on-xeD"/>
+                        <constraint firstItem="WFM-mU-UAy" firstAttribute="leading" secondItem="80a-to-ivu" secondAttribute="leading" constant="8" id="2aw-Dt-u2q"/>
+                        <constraint firstAttribute="height" constant="190" id="4JA-4Y-wJr"/>
+                        <constraint firstItem="p57-fa-5sr" firstAttribute="leading" secondItem="80a-to-ivu" secondAttribute="leading" constant="8" id="A1y-2I-iUl"/>
+                        <constraint firstItem="9bZ-gh-I1g" firstAttribute="top" secondItem="80a-to-ivu" secondAttribute="top" constant="16" id="AKg-DJ-cKi"/>
+                        <constraint firstItem="cQ3-va-ss3" firstAttribute="leading" secondItem="80a-to-ivu" secondAttribute="leading" constant="8" id="ESn-DQ-sdR"/>
+                        <constraint firstAttribute="trailing" secondItem="p57-fa-5sr" secondAttribute="trailing" constant="36" id="Mfc-JS-FdW"/>
+                        <constraint firstItem="iCC-fG-fMK" firstAttribute="leading" secondItem="80a-to-ivu" secondAttribute="leading" constant="8" id="Rhc-Vo-wNf"/>
+                        <constraint firstItem="p57-fa-5sr" firstAttribute="top" secondItem="cQ3-va-ss3" secondAttribute="bottom" constant="8" symbolic="YES" id="Uqd-65-L4I"/>
+                        <constraint firstAttribute="trailing" secondItem="cQ3-va-ss3" secondAttribute="trailing" constant="36" id="VgF-yD-n4y"/>
+                        <constraint firstItem="WFM-mU-UAy" firstAttribute="top" secondItem="iCC-fG-fMK" secondAttribute="bottom" constant="8" symbolic="YES" id="Vka-nz-oTN"/>
+                        <constraint firstItem="cw6-f9-Qre" firstAttribute="centerX" secondItem="80a-to-ivu" secondAttribute="centerX" id="Z75-oa-gNz"/>
+                        <constraint firstAttribute="trailing" secondItem="Db8-Xc-rD9" secondAttribute="trailing" constant="8" id="cne-2f-Hke"/>
+                        <constraint firstItem="Db8-Xc-rD9" firstAttribute="leading" secondItem="9bZ-gh-I1g" secondAttribute="trailing" constant="8" symbolic="YES" id="e2l-w2-qMU"/>
+                        <constraint firstItem="cQ3-va-ss3" firstAttribute="top" secondItem="9bZ-gh-I1g" secondAttribute="bottom" constant="8" symbolic="YES" id="j5U-eJ-PQK"/>
+                        <constraint firstItem="cw6-f9-Qre" firstAttribute="top" secondItem="iCC-fG-fMK" secondAttribute="bottom" constant="8" symbolic="YES" id="pc9-ny-tlO"/>
+                        <constraint firstItem="9bZ-gh-I1g" firstAttribute="leading" secondItem="80a-to-ivu" secondAttribute="leading" constant="8" id="qaV-cf-GEC"/>
+                        <constraint firstItem="Db8-Xc-rD9" firstAttribute="top" secondItem="80a-to-ivu" secondAttribute="top" constant="9" id="ri4-wQ-38r"/>
+                        <constraint firstItem="iCC-fG-fMK" firstAttribute="top" secondItem="p57-fa-5sr" secondAttribute="bottom" constant="8" symbolic="YES" id="y1d-gX-Kje"/>
+                        <constraint firstAttribute="trailing" secondItem="iCC-fG-fMK" secondAttribute="trailing" constant="36" id="zyo-7r-sqY"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Z75-oa-gNz"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="80a-to-ivu" secondAttribute="bottom" id="TQX-OO-26Q"/>
+                <constraint firstItem="80a-to-ivu" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="h16-5X-55v"/>
+                <constraint firstItem="80a-to-ivu" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="tAC-nN-Acs"/>
+                <constraint firstItem="80a-to-ivu" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="wCe-36-R9S"/>
+            </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="TQX-OO-26Q"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="44.927536231884062" y="82.366071428571431"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="VisilabsCloseButtonBlack.png" width="25" height="25"/>
+    </resources>
+</document>
