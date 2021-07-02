@@ -7,8 +7,10 @@
 
 import UIKit
 
+import UIKit
+
 extension CGContext {
-    static func imageContext(rect: CGRect, opaque: Bool) -> CGContext? {
+    static func imageContext(in rect: CGRect, isOpaque opaque: Bool) -> CGContext? {
         UIGraphicsBeginImageContextWithOptions(rect.size, opaque, 1)
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
