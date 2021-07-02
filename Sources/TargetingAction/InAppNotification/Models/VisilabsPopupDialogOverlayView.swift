@@ -31,12 +31,6 @@ final public class VisilabsPopupDialogOverlayView: UIView {
         set { overlay.backgroundColor = newValue }
     }
 
-    /// The opacity of the overlay view
-    @objc public dynamic var opacity: CGFloat {
-        get { return overlay.alpha }
-        set { overlay.alpha = newValue }
-    }
-
     // MARK: - Views
 
     internal lazy var blurView: VisilabsDynamicBlurView = {

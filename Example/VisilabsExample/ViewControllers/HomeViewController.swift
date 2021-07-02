@@ -17,10 +17,12 @@ class HomeViewController: FormViewController {
         initializeForm()
     }
     
+    /*
     override func viewDidAppear(_ animated: Bool) {
         Visilabs.createAPI()
         goToTabBarController()
     }
+ */
 
     fileprivate func addClearButtonRow() -> ButtonRow {
         return ButtonRow {
