@@ -16,13 +16,4 @@ extension UIImageView {
         let ratio = image.size.height / image.size.width
         return width * ratio
     }
-    
-    func pv_widthForImageView() -> CGFloat {
-        guard let image = image, image.size.width > 0 else {
-            return 0.0
-        }
-        let height = bounds.size.height
-        let ratio = image.size.height / image.size.width
-        return height * ratio
-    }
 }

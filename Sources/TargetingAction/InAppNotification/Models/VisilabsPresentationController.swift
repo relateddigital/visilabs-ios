@@ -33,11 +33,8 @@ final internal class VisilabsPresentationController: UIPresentationController {
     }
 
     override func containerViewWillLayoutSubviews() {
-
         guard let presentedView = presentedView else { return }
-
         presentedView.frame = frameOfPresentedViewInContainerView
-        overlay.blurView.refresh()
     }
 
 }
