@@ -30,6 +30,7 @@ struct VisilabsProfile: Codable {
     var geofenceEnabled: Bool
     var inAppNotificationsEnabled: Bool
     var maxGeofenceCount: Int
+    var isIDFAEnabled : Bool
     var requestTimeoutInterval: TimeInterval {
         return TimeInterval(requestTimeoutInSeconds)
     }
@@ -128,7 +129,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                                requestTimeoutInSeconds: requestTimeoutInSeconds,
                                                geofenceEnabled: geofenceEnabled,
                                                inAppNotificationsEnabled: inAppNotificationsEnabled,
-                                               maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount)
+                                               maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount,
+                                               isIDFAEnabled: isIDFAEnabled)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
         self.readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
@@ -169,6 +171,22 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             self.visilabsUser.userAgent = userAgentString
         }
 
+    }
+    
+    convenience init?() {
+        if let visilabsProfile = VisilabsPersistence.readVisilabsProfile() {
+            self.init(organizationId: visilabsProfile.organizationId,
+                                    profileId: visilabsProfile.profileId,
+                                    dataSource: visilabsProfile.dataSource,
+                                    inAppNotificationsEnabled: visilabsProfile.inAppNotificationsEnabled,
+                                    channel: visilabsProfile.channel,
+                                    requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
+                                    geofenceEnabled: visilabsProfile.geofenceEnabled,
+                                    maxGeofenceCount: visilabsProfile.maxGeofenceCount,
+                                    isIDFAEnabled: visilabsProfile.isIDFAEnabled)
+        } else {
+            return nil
+        }
     }
 
     static func sharedUIApplication() -> UIApplication? {

@@ -332,8 +332,8 @@ extension InAppViewController {
     }
 
     func showNotificationTapped() {
-        dummyFunc()
-        return
+        //dummyFunc()
+        //return
 
 //        let vc = ShakeToWinViewController()
 //        vc.modalPresentationStyle = .fullScreen

@@ -36,4 +36,8 @@ public class Visilabs {
                                                   maxGeofenceCount: maxGeofenceCount,
                                                   isIDFAEnabled: isIDFAEnabled)
     }
+    
+    public class func createAPI() {
+        VisilabsManager.sharedInstance.initialize()
+    }
 }

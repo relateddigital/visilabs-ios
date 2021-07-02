@@ -16,6 +16,11 @@ class HomeViewController: FormViewController {
         super.viewDidLoad()
         initializeForm()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        Visilabs.createAPI()
+        goToTabBarController()
+    }
 
     fileprivate func addClearButtonRow() -> ButtonRow {
         return ButtonRow {
@@ -246,6 +251,7 @@ class HomeViewController: FormViewController {
             +++ Section("Clear All User Data")
             <<< addLabelRow()
             <<< addClearButtonRow()
+        
     }
 
     func goToTabBarController() {

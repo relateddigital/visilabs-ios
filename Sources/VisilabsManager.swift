@@ -34,6 +34,12 @@ class VisilabsManager {
         self.instance = instance
         return instance
     }
+    
+    func initialize() {
+        if let instance = VisilabsInstance() {
+            self.instance = instance
+        }
+    }
 
     func getInstance() -> VisilabsInstance? {
         return instance
