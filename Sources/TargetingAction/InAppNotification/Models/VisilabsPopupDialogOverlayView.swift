@@ -39,9 +39,12 @@ final public class VisilabsPopupDialogOverlayView: UIView {
         blurView.trackingMode = .none
         blurView.isDeepRendering = true
         blurView.tintColor = .clear
+        blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        /*
         blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth
                                      , .flexibleLeftMargin, .flexibleRightMargin
                                      , .flexibleTopMargin, .flexibleBottomMargin]
+ */
         return blurView
     }()
 
