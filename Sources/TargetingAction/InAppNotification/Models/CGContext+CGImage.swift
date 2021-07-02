@@ -8,14 +8,14 @@
 import UIKit
 
 extension CGContext {
-    static func imageContext(with quality: VisilabsCaptureQuality, rect: CGRect, opaque: Bool) -> CGContext? {
-        UIGraphicsBeginImageContextWithOptions(rect.size, opaque, quality.imageScale)
+    static func imageContext(rect: CGRect, opaque: Bool) -> CGContext? {
+        UIGraphicsBeginImageContextWithOptions(rect.size, opaque, 1)
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
 
         context.translateBy(x: -rect.origin.x, y: -rect.origin.y)
-        context.interpolationQuality = quality.interpolationQuality
+        context.interpolationQuality = .default
 
         return context
     }
