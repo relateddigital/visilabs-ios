@@ -67,8 +67,6 @@ open class VisilabsDynamicBlurView: UIView {
             }
         }
     }
-    /// Quality of captured image.
-    open var quality: VisilabsCaptureQuality = .medium
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -141,7 +139,7 @@ open class VisilabsDynamicBlurView: UIView {
 
     private func snapshotImage(for layer: CALayer, conversion: Bool) -> UIImage? {
         let rect = blurLayerRect(to: layer, conversion: conversion)
-        guard let context = CGContext.imageContext(with: quality, rect: rect, opaque: isOpaque) else {
+        guard let context = CGContext.imageContext(rect: rect, opaque: isOpaque) else {
             return nil
         }
 
