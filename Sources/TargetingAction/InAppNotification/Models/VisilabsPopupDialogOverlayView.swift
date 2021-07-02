@@ -25,19 +25,6 @@ final public class VisilabsPopupDialogOverlayView: UIView {
         set { blurView.blurRadius = newValue }
     }
 
-    /// Whether the blur view should allow for
-    /// live rendering of the background
-    @objc public dynamic var liveBlurEnabled: Bool {
-        get { return blurView.trackingMode == .common }
-        set {
-            if newValue {
-                blurView.trackingMode = .common
-            } else {
-                blurView.trackingMode = .none
-            }
-        }
-    }
-
     /// The background color of the overlay view
     @objc public dynamic var color: UIColor? {
         get { return overlay.backgroundColor }
@@ -58,7 +45,9 @@ final public class VisilabsPopupDialogOverlayView: UIView {
         blurView.trackingMode = .none
         blurView.isDeepRendering = true
         blurView.tintColor = .clear
-        blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth
+                                     , .flexibleLeftMargin, .flexibleRightMargin
+                                     , .flexibleTopMargin, .flexibleBottomMargin]
         return blurView
     }()
 
@@ -92,20 +81,4 @@ final public class VisilabsPopupDialogOverlayView: UIView {
         addSubview(blurView)
         addSubview(overlay)
     }
-
-}
-
-// MARK: - Deprecated
-
-extension VisilabsPopupDialogOverlayView {
-
-    /// Whether the blur view should allow for
-    /// dynamic rendering of the background
-    // swiftlint:disable line_length
-    @available(*, deprecated, message: "liveBlur has been deprecated and will be removed with future versions of PopupDialog. Please use isLiveBlurEnabled instead.")
-    @objc public dynamic var liveBlur: Bool {
-        get { return liveBlurEnabled }
-        set { liveBlurEnabled = newValue }
-    }
-
 }
