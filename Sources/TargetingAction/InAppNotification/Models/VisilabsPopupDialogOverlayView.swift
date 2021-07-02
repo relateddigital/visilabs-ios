@@ -11,42 +11,7 @@ import UIKit
 /// The (blurred) overlay view below the popup dialog
 final public class VisilabsPopupDialogOverlayView: UIView {
 
-    // MARK: - Appearance
-
-    /// Turns the blur of the overlay view on or off
-    @objc public dynamic var blurEnabled: Bool {
-        get { return !blurView.isHidden }
-        set { blurView.isHidden = !newValue }
-    }
-
-    /// The blur radius of the overlay view
-    @objc public dynamic var blurRadius: CGFloat {
-        get { return blurView.blurRadius }
-        set { blurView.blurRadius = newValue }
-    }
-
-    /// The background color of the overlay view
-    @objc public dynamic var color: UIColor? {
-        get { return overlay.backgroundColor }
-        set { overlay.backgroundColor = newValue }
-    }
-
     // MARK: - Views
-
-    internal lazy var blurView: VisilabsDynamicBlurView = {
-        let blurView = VisilabsDynamicBlurView(frame: .zero)
-        blurView.blurRadius = 8
-        blurView.trackingMode = .none
-        blurView.isDeepRendering = true
-        blurView.tintColor = .clear
-        blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        /*
-        blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth
-                                     , .flexibleLeftMargin, .flexibleRightMargin
-                                     , .flexibleTopMargin, .flexibleBottomMargin]
- */
-        return blurView
-    }()
 
     internal lazy var overlay: UIView = {
         let overlay = UIView(frame: .zero)
@@ -70,12 +35,9 @@ final public class VisilabsPopupDialogOverlayView: UIView {
     // MARK: - View setup
 
     fileprivate func setupView() {
-
         autoresizingMask = [.flexibleHeight, .flexibleWidth]
         backgroundColor = .clear
         alpha = 0
-
-        addSubview(blurView)
         addSubview(overlay)
     }
 }
