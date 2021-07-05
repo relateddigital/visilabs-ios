@@ -61,6 +61,7 @@ struct VisilabsConstants {
 
     static let mobileIdKey = "OM.m_adid"
     static let mobileApplicationKey = "OM.mappl"
+    static let mobileSdkVersion = "OM.sdkVersion"
 
     static let isTrue = "true"
 

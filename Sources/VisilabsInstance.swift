@@ -19,6 +19,7 @@ struct VisilabsUser: Codable {
     var visitorData: String?
     var userAgent: String?
     var identifierForAdvertising: String?
+    var sdkVersion: String?
 }
 
 struct VisilabsProfile: Codable {
@@ -154,6 +155,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                     self.visilabsUser.identifierForAdvertising = idfa
                 }
             }
+        }
+        
+        if let infos = Bundle(for: Visilabs.self).infoDictionary{
+            if let shortVersion = infos["CFBundleShortVersionString"] as? String {
+                self.visilabsUser.sdkVersion = shortVersion
+        }
         }
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {
