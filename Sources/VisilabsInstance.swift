@@ -5,6 +5,7 @@
 //  Created by Egemen on 4.05.2020.
 //
 
+import class Foundation.Bundle
 import SystemConfiguration
 import UIKit
 
@@ -155,12 +156,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
-        
-        visilabsUser.sdkVersion = "3.0.5"
+
         #if SWIFT_PACKAGE
-        let bundle = Bundle.module
+            let bundle = Bundle.module
+            visilabsUser.sdkVersion = "3.0.4"
         #else
-        let bundle = Bundle(for: Visilabs.self)
+            let bundle = Bundle(for: Visilabs.self)
         #endif
         if let infos = bundle.infoDictionary {
             if let shortVersion = infos["CFBundleShortVersionString"] as? String {
