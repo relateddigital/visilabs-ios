@@ -5,7 +5,7 @@
 //  Created by Said Alır on 6.04.2021.
 //
 
-import Foundation
+import UIKit
 
 struct ShakeToWinViewModel {
     var firstPage: ShakeToWinFirstPage
