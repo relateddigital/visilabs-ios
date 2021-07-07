@@ -155,15 +155,18 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
+        
+        visilabsUser.sdkVersion = "3.0.5"
         #if SWIFT_PACKAGE
-            visilabsUser.sdkVersion = "3.0.4"
+        let bundle = Bundle.module
         #else
-            if let infos = Bundle(for: Visilabs.self).infoDictionary {
-                if let shortVersion = infos["CFBundleShortVersionString"] as? String {
-                    visilabsUser.sdkVersion = shortVersion
-                }
-            }
+        let bundle = Bundle(for: Visilabs.self)
         #endif
+        if let infos = bundle.infoDictionary {
+            if let shortVersion = infos["CFBundleShortVersionString"] as? String {
+                visilabsUser.sdkVersion = shortVersion
+            }
+        }
 
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
