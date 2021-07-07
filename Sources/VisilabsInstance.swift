@@ -5,9 +5,9 @@
 //  Created by Egemen on 4.05.2020.
 //
 
+import class Foundation.Bundle
 import SystemConfiguration
 import UIKit
-import class Foundation.Bundle
 
 typealias Queue = [[String: String]]
 
@@ -156,13 +156,14 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
-        
+
         #if SWIFT_PACKAGE
-        let bundle = Bundle.module.infoDictionary
+            let bundle = Bundle.module
+            visilabsUser.sdkVersion = "3.0.4"
         #else
-        let bundle = Bundle(for: Visilabs.self).infoDictionary
+            let bundle = Bundle(for: Visilabs.self)
         #endif
-        if let infos = bundle {
+        if let infos = bundle.infoDictionary {
             if let shortVersion = infos["CFBundleShortVersionString"] as? String {
                 visilabsUser.sdkVersion = shortVersion
             }
@@ -366,34 +367,6 @@ extension VisilabsInstance {
             }
         }
     }
-}
-
-private class BundleFinder {}
-
-extension Foundation.Bundle {
-    /// Returns the resource bundle associated with the current Swift module.
-    private static var module: Bundle = {
-        let bundleName = "VisilabsIOS"
-
-        let candidates = [
-            // Bundle should be present here when the package is linked into an App.
-            Bundle.main.resourceURL,
-
-            // Bundle should be present here when the package is linked into a framework.
-            Bundle(for: BundleFinder.self).resourceURL,
-
-            // For command-line tools.
-            Bundle.main.bundleURL,
-        ]
-
-        for candidate in candidates {
-            let bundlePath = candidate?.appendingPathComponent(bundleName + ".bundle")
-            if let bundle = bundlePath.flatMap(Bundle.init(url:)) {
-                return bundle
-            }
-        }
-        fatalError("unable to find bundle named BioSwift_BioSwift")
-    }()
 }
 
 // MARK: - TARGETING ACTIONS
