@@ -38,6 +38,7 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.visitorCappingKey] = visilabsUser.visitorData
             userDic[VisilabsConstants.visitorData] = visilabsUser.visitorData
             userDic[VisilabsConstants.mobileIdKey] = visilabsUser.identifierForAdvertising
+            userDic[VisilabsConstants.mobileSdkVersion] = visilabsUser.sdkVersion
 
             if !NSKeyedArchiver.archiveRootObject(userDic, toFile: path) {
                 VisilabsLogger.error("failed to archive user")
@@ -102,6 +103,10 @@ public class VisilabsPersistence {
             }
             if let madid = props[VisilabsConstants.mobileIdKey], !madid.isNilOrWhiteSpace {
                 visilabsUser.identifierForAdvertising = madid
+            }
+            
+            if let sdkversion = props[VisilabsConstants.mobileSdkVersion], !sdkversion.isNilOrWhiteSpace {
+                visilabsUser.sdkVersion = sdkversion
             }
 
         } else {
