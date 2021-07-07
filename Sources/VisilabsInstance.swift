@@ -372,7 +372,7 @@ private class BundleFinder {}
 
 extension Foundation.Bundle {
     /// Returns the resource bundle associated with the current Swift module.
-    static var module: Bundle = {
+    private static var module: Bundle = {
         let bundleName = "VisilabsIOS"
 
         let candidates = [
