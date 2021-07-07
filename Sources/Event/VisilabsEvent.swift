@@ -84,6 +84,7 @@ class VisilabsEvent {
         props[VisilabsConstants.mobileApplicationKey] = VisilabsConstants.isTrue
         props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
         props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
+        props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
 
         if !vUser.exVisitorId.isNilOrWhiteSpace {
             props[VisilabsConstants.exvisitorIdKey] = vUser.exVisitorId
