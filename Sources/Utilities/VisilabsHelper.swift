@@ -115,6 +115,11 @@ internal class VisilabsHelper {
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: date)
     }
+    
+    static func parseDate(_ dateString: String, format: String = "yyyy-MM-dd HH:mm:ss") -> Date? {
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: dateString)
+    }
 
     static func getUIImage(named: String) -> UIImage? {
         #if SWIFT_PACKAGE
@@ -130,22 +135,6 @@ internal class VisilabsHelper {
         let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
-
-    /* TO_DO: AppDelegate'e ulaşamadığım için bunu değiştiremiyorum. Olmaması sorun mu?
-    static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
-        if let delegate = UIApplication.shared.delegate as? AppDelegate {
-            delegate.orientationLock = orientation
-        }
-    }
-    
-    /// OPTIONAL Added method to adjust lock and rotate to the desired orientation
-    static func lockOrientation(_ orientation: UIInterfaceOrientationMask,
-     andRotateTo rotateOrientation:UIInterfaceOrientation) {
-        self.lockOrientation(orientation)
-        UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
-        UINavigationController.attemptRotationToDeviceOrientation()
-    }
-     */
 
     static let DELAY_SHORT = 1.5
     static let DELAY_LONG = 3.0

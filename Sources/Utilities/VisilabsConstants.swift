@@ -61,7 +61,7 @@ struct VisilabsConstants {
 
     static let mobileIdKey = "OM.m_adid"
     static let mobileApplicationKey = "OM.mappl"
-    static let mobileSdkVersion = "OM.sdkVersion"
+    static let mobileSdkVersion = "sdk_version"
 
     static let isTrue = "true"
 
@@ -97,6 +97,12 @@ struct VisilabsConstants {
 
     static let channelKey = "OM.vchannel"
     static let uriKey = "OM.uri"
+    
+    static let lastEventTimeKey = "lastEventTime"
+    static let nrvKey = "OM.nrv"
+    static let pvivKey = "OM.pviv"
+    static let tvcKey = "OM.tvc"
+    static let lvtKey = "OM.lvt"
 
     static let utmSourceKey = "utm_source"
     static let utmCampaignKey = "utm_campaign"

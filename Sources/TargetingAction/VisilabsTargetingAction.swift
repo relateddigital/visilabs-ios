@@ -44,6 +44,10 @@ class VisilabsTargetingAction {
         var props = properties
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
+        props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
+        props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
+        props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
+        props[VisilabsConstants.lvtKey] = visilabsUser.lvt
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -92,6 +96,12 @@ class VisilabsTargetingAction {
         var props = properties
         props["OM.vcap"] = visilabsUser.visitData
         props["OM.viscap"] = visilabsUser.visitorData
+        props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
+        props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
+        props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
+        props[VisilabsConstants.lvtKey] = visilabsUser.lvt
+        
+        
         props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)"
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
@@ -483,6 +493,12 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.favoriteAttributeAction
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        
+        
+        props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
+        props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
+        props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
+        props[VisilabsConstants.lvtKey] = visilabsUser.lvt
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -548,6 +564,11 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.actionType] = VisilabsConstants.story
         props[VisilabsConstants.channelKey] = self.visilabsProfile.channel
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        
+        props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
+        props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
+        props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
+        props[VisilabsConstants.lvtKey] = visilabsUser.lvt
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {

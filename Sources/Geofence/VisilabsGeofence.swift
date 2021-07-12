@@ -113,6 +113,11 @@ class VisilabsGeofence {
                 props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
                 props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
             }
+            
+            props[VisilabsConstants.nrvKey] = String(user.nrv)
+            props[VisilabsConstants.pvivKey] = String(user.pviv)
+            props[VisilabsConstants.tvcKey] = String(user.tvc)
+            props[VisilabsConstants.lvtKey] = user.lvt
 
             for (key, value) in VisilabsPersistence.readTargetParameters() {
                if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -204,6 +209,11 @@ class VisilabsGeofence {
         props[VisilabsConstants.tokenIdKey] = user.tokenId
         props[VisilabsConstants.appidKey] = user.appId
         props[VisilabsConstants.geoIdKey] = geofenceId
+        
+        props[VisilabsConstants.nrvKey] = String(user.nrv)
+        props[VisilabsConstants.pvivKey] = String(user.pviv)
+        props[VisilabsConstants.tvcKey] = String(user.tvc)
+        props[VisilabsConstants.lvtKey] = user.lvt
 
         if isDwell {
             if isEnter {

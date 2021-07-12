@@ -39,7 +39,13 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.visitorData] = visilabsUser.visitorData
             userDic[VisilabsConstants.mobileIdKey] = visilabsUser.identifierForAdvertising
             userDic[VisilabsConstants.mobileSdkVersion] = visilabsUser.sdkVersion
-
+            
+            userDic[VisilabsConstants.lastEventTimeKey] = visilabsUser.lastEventTime
+            userDic[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
+            userDic[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
+            userDic[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
+            userDic[VisilabsConstants.lvtKey] = visilabsUser.lvt
+            
             if !NSKeyedArchiver.archiveRootObject(userDic, toFile: path) {
                 VisilabsLogger.error("failed to archive user")
             }
@@ -104,11 +110,24 @@ public class VisilabsPersistence {
             if let madid = props[VisilabsConstants.mobileIdKey], !madid.isNilOrWhiteSpace {
                 visilabsUser.identifierForAdvertising = madid
             }
-            
             if let sdkversion = props[VisilabsConstants.mobileSdkVersion], !sdkversion.isNilOrWhiteSpace {
                 visilabsUser.sdkVersion = sdkversion
             }
-
+            if let lastEventTime = props[VisilabsConstants.lastEventTimeKey] as? String {
+                visilabsUser.lastEventTime = lastEventTime
+            }
+            if let nrvString = props[VisilabsConstants.nrvKey] as? String, let nrv = Int(nrvString)  {
+                visilabsUser.nrv = nrv
+            }
+            if let pvivString = props[VisilabsConstants.pvivKey] as? String, let pviv = Int(pvivString)  {
+                visilabsUser.pviv = pviv
+            }
+            if let tvcString = props[VisilabsConstants.tvcKey] as? String, let tvc = Int(tvcString)  {
+                visilabsUser.tvc = tvc
+            }
+            if let lvt = props[VisilabsConstants.lvtKey] as? String {
+                visilabsUser.lvt = lvt
+            }
         } else {
             VisilabsLogger.warn("Visilabs: Error while unarchiving properties.")
         }
