@@ -21,6 +21,11 @@ struct VisilabsUser: Codable {
     var userAgent: String?
     var identifierForAdvertising: String?
     var sdkVersion: String?
+    var lastEventTime: String?
+    var nrv = 0
+    var pviv = 0
+    var tvc = 0
+    var lvt: String?
 }
 
 struct VisilabsProfile: Codable {
@@ -157,9 +162,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
 
+        visilabsUser.sdkVersion = "3.0.4"
         #if SWIFT_PACKAGE
             let bundle = Bundle.module
-            visilabsUser.sdkVersion = "3.0.4"
         #else
             let bundle = Bundle(for: Visilabs.self)
         #endif
@@ -218,6 +223,8 @@ extension VisilabsInstance {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
+        
+        
         trackingQueue.async { [weak self, pageName, properties] in
             guard let self = self else { return }
             var eQueue = Queue()

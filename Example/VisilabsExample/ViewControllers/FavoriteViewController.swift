@@ -12,16 +12,24 @@ import UIKit
 import VisilabsIOS
 
 class FavoriteViewController: FormViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
     }
-
+    
     private func initializeForm() {
         form +++
-        Section("Favorite Attribute Actions".uppercased(with: Locale(identifier: "en_US")))
+            Section("Favorite Attribute Actions".uppercased(with: Locale(identifier: "en_US")))
+            +++
+            ButtonRow {
+                $0.title = "getFavoriteAttributeActions"
+            }.onCellSelection { _, _ in
+                self.getFavoriteAttributeActions()
+            }
     }
+
+
 
     private func getFavoriteAttributeActions() {
         Visilabs.callAPI().getFavoriteAttributeActions { (response) in
