@@ -10,7 +10,7 @@ import WebKit
 
 class SpinToWinViewController: VisilabsBaseNotificationViewController {
 
-    var webView: WKWebView!
+    weak var webView: WKWebView!
 
     init(_ spinToWin: SpinToWinViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -38,6 +38,8 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         let userContentController = WKUserContentController()
         userContentController.add(self, name: "eventHandler")
         configuration.userContentController = userContentController
+        configuration.preferences.javaScriptEnabled = true
+        configuration.mediaTypesRequiringUserActionForPlayback = []
         let webView = WKWebView(frame: .zero, configuration: configuration)
         #if SWIFT_PACKAGE
         let bundle = Bundle.module
