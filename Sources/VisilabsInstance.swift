@@ -162,7 +162,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
 
-        visilabsUser.sdkVersion = "3.0.6"
+        visilabsUser.sdkVersion = "3.0.7"
         #if SWIFT_PACKAGE
             let bundle = Bundle.module
         #else
