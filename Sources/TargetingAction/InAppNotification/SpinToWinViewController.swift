@@ -40,6 +40,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         configuration.userContentController = userContentController
         configuration.preferences.javaScriptEnabled = true
         configuration.mediaTypesRequiringUserActionForPlayback = []
+        configuration.allowsInlineMediaPlayback = true
         let webView = WKWebView(frame: .zero, configuration: configuration)
         #if SWIFT_PACKAGE
         let bundle = Bundle.module
