@@ -175,7 +175,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
         
-        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String {
+        if let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
             visilabsUser.appVersion = appVersion
         }
         
