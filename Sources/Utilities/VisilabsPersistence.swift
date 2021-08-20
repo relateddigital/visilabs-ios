@@ -39,6 +39,7 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.visitorData] = visilabsUser.visitorData
             userDic[VisilabsConstants.mobileIdKey] = visilabsUser.identifierForAdvertising
             userDic[VisilabsConstants.mobileSdkVersion] = visilabsUser.sdkVersion
+            userDic[VisilabsConstants.mobileAppVersion] = visilabsUser.appVersion
             
             userDic[VisilabsConstants.lastEventTimeKey] = visilabsUser.lastEventTime
             userDic[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
@@ -112,6 +113,9 @@ public class VisilabsPersistence {
             }
             if let sdkversion = props[VisilabsConstants.mobileSdkVersion], !sdkversion.isNilOrWhiteSpace {
                 visilabsUser.sdkVersion = sdkversion
+            }
+            if let appversion = props[VisilabsConstants.mobileAppVersion], !appversion.isNilOrWhiteSpace {
+                visilabsUser.appVersion = appversion
             }
             if let lastEventTime = props[VisilabsConstants.lastEventTimeKey] as? String {
                 visilabsUser.lastEventTime = lastEventTime
