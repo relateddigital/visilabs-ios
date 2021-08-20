@@ -26,6 +26,7 @@ struct VisilabsUser: Codable {
     var pviv = 0
     var tvc = 0
     var lvt: String?
+    var appVersion: String?
 }
 
 struct VisilabsProfile: Codable {
@@ -173,7 +174,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 visilabsUser.sdkVersion = shortVersion
             }
         }
-
+        
+        if let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String {
+            visilabsUser.appVersion = appVersion
+        }
+        
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
             VisilabsPersistence.archiveUser(visilabsUser)
