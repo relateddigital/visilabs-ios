@@ -8,6 +8,9 @@
 import Foundation
 import CoreLocation
 
+private var status: String = ""
+private var isSended: Bool = false
+
 class VisilabsLocationManager: NSObject {
 
     public static let sharedManager = VisilabsLocationManager()
@@ -49,6 +52,7 @@ class VisilabsLocationManager: NSObject {
     var locationServicesEnabledForDevice: Bool {
         return CLLocationManager.locationServicesEnabled()
     }
+    
 
     func startMonitorRegion(region: CLRegion) {
         if CLLocationManager.isMonitoringAvailable(for: type(of: region)) {
@@ -99,6 +103,45 @@ class VisilabsLocationManager: NSObject {
             self.locationManager?.requestAlwaysAuthorization()
         }
     }
+    
+    public func sendLocationPermissions() {
+            if CLLocationManager.locationServicesEnabled() {
+                var locationAuthorizationStatus: CLAuthorizationStatus?
+                if #available(iOS 14.0, *) {
+                    locationAuthorizationStatus = locationManager?.authorizationStatus
+                } else {
+                    // Fallback on earlier versions
+                    locationAuthorizationStatus = CLLocationManager.authorizationStatus()
+                }
+                switch locationAuthorizationStatus {
+                case .notDetermined:
+                    break
+                case .restricted:
+                    break
+                case .denied:
+                    status = VisilabsConstants.locationPermissionNone
+                    break
+                case .authorizedAlways:
+                    status = VisilabsConstants.locationPermissionAlways
+                    break
+                case .authorizedWhenInUse:
+                    status = VisilabsConstants.locationPermissionAppOpen
+                    break
+                case .none:
+                    status = VisilabsConstants.locationPermissionNone
+                @unknown default:
+                    break
+                }
+            }
+
+            if status != "" && isSended == false {
+                var properties = [String: String]()
+                properties[VisilabsConstants.locationPermissionReqKey] = status
+                Visilabs.callAPI().customEvent("/OM_evt.gif", properties: properties)
+                isSended = true
+            }
+        }
+    
 }
 
 extension VisilabsLocationManager: CLLocationManagerDelegate {
@@ -109,7 +152,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status)")
         // self.requestLocationAuthorizationCallback?(status)
-        Visilabs.callAPI().sendLocationPermission()
+        sendLocationPermissions()
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -183,3 +226,4 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         VisilabsLogger.info(infoMessage)
     }
 }
+

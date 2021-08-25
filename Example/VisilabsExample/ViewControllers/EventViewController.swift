@@ -50,6 +50,7 @@ class EventViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
+        Visilabs.callAPI().sendLocationPermission()
     }
 
     private func initializeForm() {
