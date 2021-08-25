@@ -109,6 +109,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status)")
         // self.requestLocationAuthorizationCallback?(status)
+        Visilabs.callAPI().sendLocationPermission()
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
