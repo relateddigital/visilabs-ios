@@ -8,8 +8,12 @@
 import class Foundation.Bundle
 import SystemConfiguration
 import UIKit
+import CoreLocation
 
 typealias Queue = [[String: String]]
+private let locationManager = CLLocationManager()
+private var status: String = ""
+private var isSended: Bool = false
 
 struct VisilabsUser: Codable {
     var cookieId: String?
@@ -337,6 +341,42 @@ extension VisilabsInstance {
         visilabsUser.cookieId = VisilabsHelper.generateCookieId()
         VisilabsPersistence.archiveUser(visilabsUser)
     }
+    
+    public func sendLocationPermission() {
+            if CLLocationManager.locationServicesEnabled() {
+                var locationAuthorizationStatus: CLAuthorizationStatus
+                if #available(iOS 14.0, *) {
+                    locationAuthorizationStatus = locationManager.authorizationStatus
+                } else {
+                    // Fallback on earlier versions
+                    locationAuthorizationStatus = CLLocationManager.authorizationStatus()
+                }
+                switch locationAuthorizationStatus {
+                case .notDetermined:
+                    break
+                case .restricted:
+                    break
+                case .denied:
+                    status = VisilabsConstants.locationPermissionNone
+                    break
+                case .authorizedAlways:
+                    status = VisilabsConstants.locationPermissionAlways
+                    break
+                case .authorizedWhenInUse:
+                    status = VisilabsConstants.locationPermissionAppOpen
+                    break
+                @unknown default:
+                    break
+                }
+            }
+
+            if status != "" && isSended == false {
+                var properties = [String: String]()
+                properties[VisilabsConstants.locationPermissionReqKey] = status
+                self.customEvent("/OM_evt.gif", properties: properties)
+                isSended = true
+            }
+        }
 }
 
 // MARK: - PERSISTENCE

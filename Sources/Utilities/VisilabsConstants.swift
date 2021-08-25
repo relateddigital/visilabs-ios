@@ -267,6 +267,12 @@ struct VisilabsConstants {
     private static let targetPrefVQKey = "OM.q"
     private static let targetPrefVRDomainKey = "OM.rDomain"
     private static let targetPrefPPRKey = "OM.ppr"
+    
+    //Location Status
+    static let locationPermissionReqKey = "OM.locpermit"
+    static let locationPermissionAlways = "always"
+    static let locationPermissionAppOpen = "appopen"
+    static let locationPermissionNone = "none"
 
     private static var targetParameters = [VisilabsParameter]()
 
