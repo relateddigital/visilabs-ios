@@ -213,6 +213,13 @@ struct VisilabsConstants {
     static let displayName = "displayName"
     static let color = "color"
     static let code = "code"
+    
+    // SpinToWin information properties
+    static let promoAction = "OM.promoaction"
+    static let promoActionID = "OM.actionid"
+    static let promoEmailKey = "OM.promoemail"
+    static let promoTitleKey = "OM.promotitle"
+    static let promoSlice = "OM.promoslice"
 
     // Scratch To Win constants
     static let scratchColor = "scratch_color"
