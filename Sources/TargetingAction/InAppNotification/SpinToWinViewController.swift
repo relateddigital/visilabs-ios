@@ -11,6 +11,8 @@ import WebKit
 class SpinToWinViewController: VisilabsBaseNotificationViewController {
 
     weak var webView: WKWebView!
+    var subsEmail = ""
+    var sliceText = ""
 
     init(_ spinToWin: SpinToWinViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -60,6 +62,21 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
         }
     }
+    
+    private func sendPromotionCodeInfo(promo: String, actId: String, email: String? = "", promoTitle: String, promoSlice: String) {
+        var properties = [String: String]()
+        properties[VisilabsConstants.promoAction] = promo
+        properties[VisilabsConstants.promoActionID] = actId
+        if !self.subsEmail.isEmptyOrWhitespace {
+            properties[VisilabsConstants.promoEmailKey] = email
+        }
+        properties[VisilabsConstants.promoTitleKey] = promoTitle
+        if !self.sliceText.isEmptyOrWhitespace {
+            properties[VisilabsConstants.promoSlice] = promoSlice
+        }
+        Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
+    
 }
 
 extension SpinToWinViewController: WKScriptMessageHandler {
@@ -89,21 +106,24 @@ extension SpinToWinViewController: WKScriptMessageHandler {
 
                 if method == "subscribeEmail", let email = event["email"] as? String {
                     Visilabs.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
+                    subsEmail = email
                 }
 
                 if method == "getPromotionCode" {
                     var promotionIndexCodes = [Int: String]()
+                    var promotionIndexDisplayNames = [Int: String]()
                     var index = 0
-
+                    
                     for slice in spinToWin!.slices {
                         if slice.type == "promotion" {
                             promotionIndexCodes[index] = slice.code
+                            promotionIndexDisplayNames[index] = slice.displayName
                         }
                         index += 1
                     }
 
                     if !promotionIndexCodes.isEmpty {
-                        if let randomIndex = promotionIndexCodes.keys.randomElement(), let randomCode = promotionIndexCodes[randomIndex] {
+                        if let randomIndex = promotionIndexCodes.keys.randomElement(), let randomCode = promotionIndexCodes[randomIndex], let randomDisplay = promotionIndexDisplayNames[randomIndex] {
                             var props = [String: String]()
                             props[VisilabsConstants.organizationIdKey] = Visilabs.callAPI().visilabsProfile.organizationId
                             props[VisilabsConstants.profileIdKey] = Visilabs.callAPI().visilabsProfile.profileId
@@ -112,6 +132,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                             props["actionid"] = "\(self.spinToWin!.actId)"
                             props["promotionid"] = randomCode
                             props["promoauth"] = "\(self.spinToWin!.promoAuth)"
+                            self.sliceText = randomDisplay
 
                             VisilabsRequest.sendPromotionCodeRequest(properties: props,
                                                                      headers: [String: String](),
@@ -120,9 +141,13 @@ extension SpinToWinViewController: WKScriptMessageHandler {
 
                                                                         var selectedIndex = randomIndex
                                                                         var selectedPromoCode = ""
-
                                                                         if error == nil, let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String, !promocode.isEmptyOrWhitespace {
                                                                             selectedPromoCode = promocode
+                                                                            if !self.subsEmail.isEmptyOrWhitespace {
+                                                                                self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+                                                                            } else {
+                                                                                self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+                                                                            }
                                                                         } else {
                                                                             selectedIndex = -1
                                                                         }
