@@ -610,7 +610,7 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ 
 
 #### Report Recommendation Clicks
 
-To report the clicks of widget recommendations you need to call the `trackRecommendationClick` method with `qs` of `Product` object.
+To report the clicks of widget recommendations you need to call the `trackRecommendationClick` method with the `qs` property of `Product` object.
 
 ```swift
 Visilabs.callAPI().trackRecommendationClick(qs: product.qs)
