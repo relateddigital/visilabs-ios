@@ -21,6 +21,7 @@ enum VisilabsEndpoint {
     case mobile
     case subsjson
     case promotion
+    case remote
 }
 
 struct VisilabsResource<A> {

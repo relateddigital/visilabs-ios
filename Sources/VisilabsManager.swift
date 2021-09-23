@@ -32,6 +32,7 @@ class VisilabsManager {
                                         maxGeofenceCount: maxGeofenceCount,
                                         isIDFAEnabled: isIDFAEnabled)
         self.instance = instance
+        VisilabsRemoteConfig.remoteRequest()
         return instance
     }
     
