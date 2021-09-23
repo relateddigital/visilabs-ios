@@ -50,7 +50,7 @@ pod 'VisilabsIOS'
 
 ## Initializing
 
-Import VisilabsIOS in AppDelegate.swift and call  `createAPI` method within  `application:didFinishLaunchingWithOptions:`  method.
+Import VisilabsIOS in AppDelegate.swift and call `createAPI` method within `application:didFinishLaunchingWithOptions:` method.
 
 The code below is a sample initialization of Visilabs library.
 
@@ -518,9 +518,11 @@ Product recommendations are handled by the `recommend` method of SDK. You have t
 public class VisilabsRecommendationResponse {
     public var products: [VisilabsProduct]
     public var error: VisilabsError?
+    public var widgetTitle: String = ""
     
-    internal init(products: [VisilabsProduct], error: VisilabsError? = nil) {
+    internal init(products: [VisilabsProduct], widgetTitle: String = "", error: VisilabsError? = nil) {
         self.products = products
+        self.widgetTitle = widgetTitle
         self.error = error
     }
 }
@@ -576,6 +578,7 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ 
     if let error = response.error{
         print(error)
     }else{
+        print("Widget Title: \(response.widgetTitle)")
         print("Recommended Products")
         for product in response.products{
             print("product code: \(product.code) title: \(product.title)")
@@ -584,7 +587,7 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ 
 }
 ```
 
-`VisilabsProductFilterAttribute` enum has the following cases  and sample values:
+`VisilabsProductFilterAttribute` enum has the following cases and sample values:
 
 | case      | example |
 | ----------- | ----------- |
@@ -603,6 +606,15 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ 
 | SHIPPINGONSAMEDAY   | "1"        |
 | FREESHIPPING   | "1"         |
 | ISDISCOUNTED   | "1"         |
+
+
+#### Report Recommendation Clicks
+
+To report the clicks of widget recommendations you need to call the `trackRecommendationClick` method with `qs` of `Product` object.
+
+```swift
+Visilabs.callAPI().trackRecommendationClick(qs: product.qs)
+```
 
 
 ## Author
