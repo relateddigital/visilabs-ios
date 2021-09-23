@@ -12,14 +12,14 @@ import UIKit
 import VisilabsIOS
 
 class RecommendationViewController: FormViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
     }
     var filtersSection = Section("FILTERS")
     var filterSections: [Section] = []
-
+    
     private func initializeForm() {
         form +++
         Section("Recommendation".uppercased(with: Locale(identifier: "en_US")))
@@ -30,16 +30,24 @@ class RecommendationViewController: FormViewController {
             properties["prop1"] = "prop1val"
             properties["prop1"] = "prop2val"
             var filters = [VisilabsRecommendationFilter]()
-            filters.append(VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop"))
-
-            Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc",
+            filters.append(VisilabsRecommendationFilter(attribute:.PRODUCTNAME , filterType: .like, value: "a"))
+            //filters.append(VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop"))
+            
+            Visilabs.callAPI().recommend(zoneID: "1", productCode: "",
                                          filters: filters,
                                          properties: properties) { response in
                 if let error = response.error {
                     print(error)
                 } else {
+                    print("Widget Title: \(response.widgetTitle)")
+                    var counter = 0
                     for product in response.products {
-                        print(product)
+                        print("Product Title: \(product.title)")
+                        print("Product qs: \(product.qs)")
+                        if counter == 0 {
+                            Visilabs.callAPI().trackRecommendationClick(qs: product.qs)
+                        }
+                        counter = counter + 1
                     }
                 }
             }
@@ -56,21 +64,21 @@ class RecommendationViewController: FormViewController {
             $0.placeholder = "Product Code"
             $0.value = "asd-123"
         }
-
+        
         +++ filtersSection
         <<< ButtonRow {
             $0.title = "Add Filter"
         }.onCellSelection { _, _ in
             self.addFilterSection()
         }
-
+        
         +++ Section()
         <<< LabelRow {
             $0.title = "not implemented yet"
-//            $0.cell.contentView.backgroundColor = .white
-//            $0.cell.backgroundColor = .white
-//            $0.cell.textLabel?.textColor = .black
-//            $0.cell.textLabel?.textAlignment = .left
+            //            $0.cell.contentView.backgroundColor = .white
+            //            $0.cell.backgroundColor = .white
+            //            $0.cell.textLabel?.textColor = .black
+            //            $0.cell.textLabel?.textAlignment = .left
             $0.disabled = true
         }
         <<< ButtonRow {
@@ -78,11 +86,11 @@ class RecommendationViewController: FormViewController {
             $0.disabled = true
         }
     }
-
+    
     private func addFilterSection() {
         let filterSection = Section("FILTER \(filterSections.count + 1)") { section in
             section.header = {
-                  var header = HeaderFooterView<UIView>(.callback({
+                var header = HeaderFooterView<UIView>(.callback({
                     let view = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
                     view.text = "╳"
                     view.textAlignment = .right
@@ -92,19 +100,19 @@ class RecommendationViewController: FormViewController {
                                                                              action: #selector(self.removeSection))
                     view.addGestureRecognizer(tap)
                     return view
-                  }))
-                  header.height = { 50 }
-                  return header
-                }()
+                }))
+                header.height = { 50 }
+                return header
+            }()
         }
         filterSections.append(filterSection)
         //print(filtersSection.index)
         form.insert(filterSection, at: filtersSection.index! + filterSections.count)
     }
-
+    
     @objc func removeSection() {
-//        filterSections.remove(at: filtersSection.index! + filtersSection.count)
+        //        filterSections.remove(at: filtersSection.index! + filtersSection.count)
         filtersSection.remove(at: filtersSection.index! + filtersSection.count)
     }
-
+    
 }

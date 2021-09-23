@@ -224,10 +224,14 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
 extension VisilabsInstance {
     public func customEvent(_ pageName: String, properties: [String: String]) {
+        
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+        */
+         
         if pageName.isEmptyOrWhitespace {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
@@ -274,10 +278,12 @@ extension VisilabsInstance {
 
     public func sendCampaignParameters(properties: [String: String]) {
         
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+         */
         
         trackingQueue.async { [weak self, properties] in
             guard let strongSelf = self else { return }
@@ -457,7 +463,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         let queryString = notification.queryString
         let qsArr = queryString!.components(separatedBy: "&")
         var properties = properties
-        properties["OM.domain"] = "\(visilabsProfile.dataSource)_IOS"
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = qsArr[0].components(separatedBy: "=")[1]
         properties["OM.zpc"] = qsArr[1].components(separatedBy: "=")[1]
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
@@ -485,7 +491,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 
     func trackSpinToWinClick(spinToWinReport: SpinToWinReport) {
         var properties = [String: String]()
-        properties["OM.domain"] = "\(visilabsProfile.dataSource)_IOS"
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = spinToWinReport.click.parseClick().omZn
         properties["OM.zpc"] = spinToWinReport.click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
@@ -564,6 +570,25 @@ extension VisilabsInstance {
             }
         }
     }
+    
+    public func trackRecommendationClick(qs: String) {
+        let qsArr = qs.components(separatedBy: "&")
+        var properties = [String: String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        if(qsArr.count > 1) {
+            for queryItem in qsArr {
+                let arrComponents = queryItem.components(separatedBy: "=")
+                if arrComponents.count == 2 {
+                    properties[arrComponents[0]] = arrComponents[1]
+                }
+            }
+        } else {
+            VisilabsLogger.info("qs length is less than 2")
+            return
+        }
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
+    
 }
 
 // MARK: - GEOFENCE
@@ -598,7 +623,7 @@ extension VisilabsInstance {
         }
 
         var properties = [String: String]()
-        properties["OM.domain"] = "\(visilabsProfile.dataSource)_IOS"
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = click.parseClick().omZn
         properties["OM.zpc"] = click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)

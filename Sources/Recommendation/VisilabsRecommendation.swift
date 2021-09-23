@@ -62,13 +62,18 @@ class VisilabsRecommendation {
             if error != nil {
                 completion(VisilabsRecommendationResponse(products: [VisilabsProduct](), error: error))
             } else {
+                var widgetTitle = ""
+                var counter = 0
                 for result in results! {
-                    if let product = VisilabsProduct(JSONObject: result as? [String: Any?]) {
+                    if let jsonObject = result as? [String: Any?], let product = VisilabsProduct(JSONObject: jsonObject) {
                         products.append(product)
+                        if counter == 0 {
+                            widgetTitle = jsonObject["wdt"] as? String ?? ""
+                        }
+                        counter = counter + 1
                     }
                 }
-
-                completion(VisilabsRecommendationResponse(products: products, error: nil))
+                completion(VisilabsRecommendationResponse(products: products, widgetTitle: widgetTitle, error: nil))
             }
         })
     }
