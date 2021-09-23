@@ -17,6 +17,11 @@ class VisilabsRequest {
                                 timeoutInterval: TimeInterval,
                                 completion: @escaping ([String: String]?) -> Void) {
 
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
+        
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -35,7 +40,6 @@ class VisilabsRequest {
 
     private class func sendEventRequestHandler(resource: VisilabsResource<Bool>,
                                                completion: @escaping ([String: String]?) -> Void) {
-
         VisilabsNetwork.apiRequest(resource: resource,
             failure: { (error, _, response) in
 
@@ -82,6 +86,10 @@ class VisilabsRequest {
                                          headers: [String: String],
                                          timeoutInterval: TimeInterval,
                                          completion: @escaping ([Any]?, VisilabsError?) -> Void) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -128,6 +136,10 @@ class VisilabsRequest {
                                    headers: [String: String],
                                    timeoutInterval: TimeInterval,
                                    completion: @escaping ([[String: Any]]?, VisilabsError?) -> Void) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -193,6 +205,10 @@ class VisilabsRequest {
                                             headers: [String: String],
                                             timeoutInterval: TimeInterval,
                                             completion: @escaping ([[String: Any]]?) -> Void) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -238,6 +254,10 @@ class VisilabsRequest {
                                  timeoutInterval: TimeInterval,
                                  completion: @escaping ([String: Any]?, VisilabsError?, String?) -> Void,
                                  guid: String? = nil) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -283,6 +303,10 @@ class VisilabsRequest {
                                  headers: [String: String],
                                  timeoutInterval: TimeInterval,
                                  completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -327,6 +351,10 @@ class VisilabsRequest {
                                    headers: [String: String],
                                    timeOutInterval: TimeInterval,
                                    guid: String? = nil) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -352,6 +380,50 @@ class VisilabsRequest {
                 print("Successfully sent!")
             })
 
+    }
+    
+    class func sendRemoteConfigRequest(properties: [String: String],
+                                 headers: [String: String],
+                                 timeoutInterval: TimeInterval,
+                                 completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
+        var queryItems = [URLQueryItem]()
+        for property in properties {
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
+        }
+
+        let responseParser: (Data) -> [String: Any]? = { data in
+            var response: Any?
+            do {
+                response = try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                VisilabsLogger.error("exception decoding api data")
+            }
+            return response as? [String: Any]
+        }
+
+        let resource = VisilabsNetwork.buildResource(endPoint: .remote,
+                                                     method: .get,
+                                                     timeoutInterval: timeoutInterval,
+                                                     requestBody: nil,
+                                                     queryItems: queryItems,
+                                                     headers: headers,
+                                                     parse: responseParser)
+
+        sendRemoteConfigRequestHandler(resource: resource,
+                                 completion: { result, error in completion(result, error)})
+
+    }
+
+    private class func sendRemoteConfigRequestHandler(resource: VisilabsResource<[String: Any]>,
+                                                completion: @escaping ([String: Any]?,
+                                                                       VisilabsError?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+            failure: { (error, _, _) in
+                VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+                completion(nil, error)
+            }, success: { (result, _) in
+                completion(result, nil)
+            })
     }
 
 }

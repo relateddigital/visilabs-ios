@@ -224,11 +224,14 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 
 extension VisilabsInstance {
     public func customEvent(_ pageName: String, properties: [String: String]) {
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
         if pageName.isEmptyOrWhitespace {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
-        
         
         trackingQueue.async { [weak self, pageName, properties] in
             guard let self = self else { return }
@@ -270,6 +273,12 @@ extension VisilabsInstance {
     }
 
     public func sendCampaignParameters(properties: [String: String]) {
+        
+        if VisilabsRemoteConfig.isBlocked == true {
+            VisilabsLogger.info("Too much server load!")
+            return
+        }
+        
         trackingQueue.async { [weak self, properties] in
             guard let strongSelf = self else { return }
             var eQueue = Queue()
