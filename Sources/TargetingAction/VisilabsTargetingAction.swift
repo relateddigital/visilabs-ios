@@ -648,7 +648,7 @@ class VisilabsTargetingAction {
     private func parseStoryReport(_ report: [String: Any?]?) -> ([String: String], [String: String]) {
         var clickItems = [String: String]()
         var impressionItems = [String: String]()
-        // clickItems["OM.domain"] =  "\(self.visilabsProfile.dataSource)_IOS" // TO_DO: OM.domain ne için gerekiyor?
+        // clickItems[VisilabsConstants.domainkey] =  "\(self.visilabsProfile.dataSource)_IOS" // TO_DO: OM.domain ne için gerekiyor?
         if let rep = report {
             if let click = rep[VisilabsConstants.click] as? String {
                 let qsArr = click.components(separatedBy: "&")

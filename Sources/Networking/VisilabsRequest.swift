@@ -17,10 +17,12 @@ class VisilabsRequest {
                                 timeoutInterval: TimeInterval,
                                 completion: @escaping ([String: String]?) -> Void) {
 
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+         */
         
         var queryItems = [URLQueryItem]()
         for property in properties {
@@ -86,10 +88,13 @@ class VisilabsRequest {
                                          headers: [String: String],
                                          timeoutInterval: TimeInterval,
                                          completion: @escaping ([Any]?, VisilabsError?) -> Void) {
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+         */
+         
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -136,10 +141,14 @@ class VisilabsRequest {
                                    headers: [String: String],
                                    timeoutInterval: TimeInterval,
                                    completion: @escaping ([[String: Any]]?, VisilabsError?) -> Void) {
+        
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+        */
+          
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -205,10 +214,14 @@ class VisilabsRequest {
                                             headers: [String: String],
                                             timeoutInterval: TimeInterval,
                                             completion: @escaping ([[String: Any]]?) -> Void) {
+        
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+        */
+         
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -254,10 +267,14 @@ class VisilabsRequest {
                                  timeoutInterval: TimeInterval,
                                  completion: @escaping ([String: Any]?, VisilabsError?, String?) -> Void,
                                  guid: String? = nil) {
+        
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+        */
+         
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -303,10 +320,14 @@ class VisilabsRequest {
                                  headers: [String: String],
                                  timeoutInterval: TimeInterval,
                                  completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
+        
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+        */
+         
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -351,10 +372,14 @@ class VisilabsRequest {
                                    headers: [String: String],
                                    timeOutInterval: TimeInterval,
                                    guid: String? = nil) {
+        
+        /*
         if VisilabsRemoteConfig.isBlocked == true {
             VisilabsLogger.info("Too much server load!")
             return
         }
+        */
+        
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))

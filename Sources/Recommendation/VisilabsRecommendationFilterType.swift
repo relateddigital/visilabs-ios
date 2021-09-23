@@ -38,9 +38,9 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
     case SHIPPINGONSAMEDAY
     case FREESHIPPING
     case ISDISCOUNTED
-
+    
     public typealias RawValue = String
-
+    
     public var rawValue: RawValue {
         switch self {
         case .PRODUCTNAME:
@@ -75,7 +75,7 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
             return "ISDISCOUNTED"
         }
     }
-
+    
     // swiftlint:disable cyclomatic_complexity
     public init?(rawValue: RawValue) {
         switch rawValue {
@@ -120,7 +120,7 @@ public class VisilabsRecommendationFilter: NSObject {
     var attribute: VisilabsProductFilterAttribute
     var filterType: VisilabsRecommendationFilterType
     var value: String
-
+    
     @objc
     public init(attribute: VisilabsProductFilterAttribute,
                 filterType: VisilabsRecommendationFilterType, value: String) {
@@ -131,7 +131,7 @@ public class VisilabsRecommendationFilter: NSObject {
 }
 
 public class VisilabsProduct: Encodable {
-
+    
     public enum PayloadKey {
         public static let code = "code"
         public static let title = "title"
@@ -157,6 +157,7 @@ public class VisilabsProduct: Encodable {
         public static let attr8 = "attr8"
         public static let attr9 = "attr9"
         public static let attr10 = "attr10"
+        public static let qs = "qs"
     }
     public var code: String
     public var title: String
@@ -182,6 +183,7 @@ public class VisilabsProduct: Encodable {
     public var attr8: String
     public var attr9: String
     public var attr10: String
+    public var qs: String = ""
     internal init(code: String,
                   title: String,
                   img: String,
@@ -205,7 +207,8 @@ public class VisilabsProduct: Encodable {
                   attr7: String,
                   attr8: String,
                   attr9: String,
-                  attr10: String) {
+                  attr10: String,
+                  qs:String) {
         self.code = code
         self.title = title
         self.img = img
@@ -230,20 +233,21 @@ public class VisilabsProduct: Encodable {
         self.attr8 = attr8
         self.attr9 = attr9
         self.attr10 = attr10
+        self.qs = qs
     }
-
+    
     internal init?(JSONObject: [String: Any?]?) {
-
+        
         guard let object = JSONObject else {
             VisilabsLogger.error("product json object should not be nil")
             return nil
         }
-
+        
         guard let code = object[PayloadKey.code] as? String else {
             VisilabsLogger.error("invalid \(PayloadKey.code)")
             return nil
         }
-
+        
         self.code = code
         self.title = object[PayloadKey.title] as? String ?? ""
         self.img = object[PayloadKey.img] as? String ?? ""
@@ -268,15 +272,28 @@ public class VisilabsProduct: Encodable {
         self.attr8 = object[PayloadKey.attr8] as? String ?? ""
         self.attr9 = object[PayloadKey.attr9] as? String ?? ""
         self.attr10 = object[PayloadKey.attr10] as? String ?? ""
+        self.qs = self.getQueryString()
+    }
+    
+    private func getQueryString() -> String {
+        var qs = ""
+        if self.destUrl.count > 0, let url = URL(string: self.destUrl), let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false), let queryItems = urlComponents.queryItems {
+            qs = queryItems.map { queryItem in "\(queryItem.name)=\(queryItem.value ?? "")" }.joined(separator: "&")
+        } else {
+            VisilabsLogger.warn("destUrl query items are incorrect.")
+        }
+        return qs
     }
 }
 
 public class VisilabsRecommendationResponse {
     public var products: [VisilabsProduct]
     public var error: VisilabsError?
-
-    internal init(products: [VisilabsProduct], error: VisilabsError? = nil) {
+    public var widgetTitle: String = ""
+    
+    internal init(products: [VisilabsProduct], widgetTitle: String = "", error: VisilabsError? = nil) {
         self.products = products
+        self.widgetTitle = widgetTitle
         self.error = error
     }
 }
