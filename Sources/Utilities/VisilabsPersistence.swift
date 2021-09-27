@@ -235,6 +235,14 @@ public class VisilabsPersistence {
         ud.removeObject(forKey: VisilabsConstants.exvisitorIdKey)
         ud.synchronize()
     }
+    
+    static func saveBlock(_ block: Bool) {
+        saveUserDefaults(VisilabsConstants.userDefaultsBlockKey, withObject: block)
+    }
+    
+    static func readBlock(_ block: Bool) -> Bool {
+        return readUserDefaults(VisilabsConstants.userDefaultsBlockKey) as? Bool ?? false
+    }
 
     static func saveVisilabsProfile(_ visilabsProfile: VisilabsProfile) {
         let encoder = JSONEncoder()

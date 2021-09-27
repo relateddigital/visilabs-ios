@@ -34,6 +34,7 @@ struct VisilabsConstants {
     static let userDefaultsUserKey = "Visilabs.user"
     static let userDefaultsGeofenceHistoryKey = "Visilabs.geofenceHistory"
     static let userDefaultsTargetKey = "Visilabs.target"
+    static let userDefaultsBlockKey = "Visilabs.block"
 
     // MARK: - Archive Keys
 
