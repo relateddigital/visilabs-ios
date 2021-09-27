@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import VisilabsIOS
 import Euromsg
 import UserNotifications
 
@@ -21,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Euromsg.configure(appAlias: visilabsProfile.appAlias, enableLog: false)
         InAppHelper.downloadMiniIconImagesAndSave()
-
+        
         if let vlp = DataManager.readVisilabsProfile() {
             visilabsProfile = vlp
         }
