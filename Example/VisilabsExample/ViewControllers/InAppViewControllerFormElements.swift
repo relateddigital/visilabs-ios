@@ -298,6 +298,60 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
+    
+    
+    
+    func addShowCountDownTimerButtonRow() -> ButtonRow {
+        return ButtonRow {
+            $0.title = "showCountDownTimer"
+        }.onCellSelection { _, _ in
+            let model = CountdownModel(title: "Fırsatı kaçırma",
+                                       subtitle: "bla bla bla bla",
+                                       buttonText: "Button'a bas",
+                                       coupon: nil,
+                                       finalDate: 1625097600,
+                                       bgColor: .blue,
+                                       titleColor: .white,
+                                       subtitleColor: .gray,
+                                       buttonColor: .red,
+                                       buttonTextColor: .white,
+                                       couponColor: nil,
+                                       couponBgColor: nil,
+                                       titleFont: .boldSystemFont(ofSize: 18),
+                                       subtitleFont: .italicSystemFont(ofSize: 15),
+                                       buttonFont: .systemFont(ofSize: 14),
+                                       couponFont: nil,
+                                       location: .bottom,
+                                       timerType: .DHMS,
+                                       closeButtonColor: .white)
+            let vc = CountdownTimerViewController(model: model)
+            vc.showNow(animated: true)
+        }
+    }
+    
+    
+    func addShowSocialPoofButtonRow() -> ButtonRow {
+        return ButtonRow {
+            $0.title = "showSocialPoof"
+        }.onCellSelection { _, _ in
+            let model = SocialProofModel(text: "soctext", number: "5", location: .bottom, duration: .sec10, backgroundColor: .yellow
+                                         , textColor: .brown, numberColor: .green, textFont: .boldSystemFont(ofSize: 18)
+                                         , numberFont: .italicSystemFont(ofSize: 15), closeButtonColor: .white)
+            let vc = SocialProofViewController(model: model)
+            vc.showNow(animated: true)
+        }
+    }
+    
+    func addShowHalfScreenButtonRow() -> ButtonRow {
+        return ButtonRow {
+            $0.title = "showHalfScreen"
+        }.onCellSelection { _, _ in
+            let model = HalfScreenModel(text: "tttt", location: .bottom, duration: 10, backgroundColor: .green, textColor: .brown, textFont: .boldSystemFont(ofSize: 18),  closeButtonColor: .white)
+            let vc = HalfScreenViewController(model: model)
+            vc.showNow(animated: true)
+        }
+    }
+    
 
     func addShowNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
@@ -357,30 +411,6 @@ extension InAppViewController {
             let visilabsInAppNotification = createVisilabsInAppNotificationModel()
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
         }
-    }
-
-    func dummyFunc() {
-        let model = CountdownModel(title: "Fırsatı kaçırma",
-                                   subtitle: "bla bla bla bla",
-                                   buttonText: "Button'a bas",
-                                   coupon: nil,
-                                   finalDate: 1625097600,
-                                   bgColor: .blue,
-                                   titleColor: .white,
-                                   subtitleColor: .gray,
-                                   buttonColor: .red,
-                                   buttonTextColor: .white,
-                                   couponColor: nil,
-                                   couponBgColor: nil,
-                                   titleFont: .boldSystemFont(ofSize: 18),
-                                   subtitleFont: .italicSystemFont(ofSize: 15),
-                                   buttonFont: .systemFont(ofSize: 14),
-                                   couponFont: nil,
-                                   location: .bottom,
-                                   timerType: .DHMS,
-                                   closeButtonColor: .white)
-        let vc = CountdownTimerViewController(model: model)
-        vc.showNow(animated: true)
     }
 
     func addSecondPopupBodyTextRow() -> TextRow {
