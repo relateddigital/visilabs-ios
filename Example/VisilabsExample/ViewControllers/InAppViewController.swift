@@ -101,6 +101,9 @@ class InAppViewController: FormViewController {
         +++ Section()
 
             <<< addShowNotificationButtonRow()
+            <<< addShowCountDownTimerButtonRow()
+            <<< addShowSocialPoofButtonRow()
+            <<< addShowHalfScreenButtonRow()
 
         showHiddenRows()
     }

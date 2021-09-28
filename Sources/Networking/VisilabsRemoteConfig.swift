@@ -38,7 +38,7 @@ public class VisilabsRemoteConfig: VisilabsAppLifecycle {
     init(remoteConfigFetchTimeInterval: Double) {
         self.remoteConfigFetchTimeInterval = remoteConfigFetchTimeInterval
         remoteConfigIntervalReadWriteLock = DispatchQueue(label: "com.relateddigital.remote_configinterval.lock", qos: .utility, attributes: .concurrent)
-        startRemoteConfigTimer()
+        //startRemoteConfigTimer()//TODO
     }
     
     
@@ -76,11 +76,11 @@ public class VisilabsRemoteConfig: VisilabsAppLifecycle {
     
     
     func applicationDidBecomeActive() {
-        startRemoteConfigTimer()
+        //startRemoteConfigTimer() //TODO
     }
 
     func applicationWillResignActive() {
-        stopRemoteConfigTimer()
+        //stopRemoteConfigTimer() //TODO
     }
     
 }
