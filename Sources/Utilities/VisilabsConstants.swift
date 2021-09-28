@@ -13,11 +13,11 @@ struct VisilabsConstants {
     static let HTTPS = "https"
 
     static let queueSize = 5000
-    static let geofenceHistoryMaxCount = 500 // TO_DO: bunu sonra değiştir
-    static let geofenceHistoryErrorMaxCount = 500 // TO_DO: bunu sonra değiştir
-    static let geofenceFetchTimeInterval = TimeInterval(60) // TO_DO: bunu sonra değiştir 15 dakika yap
+    static let geofenceHistoryMaxCount = 100
+    static let geofenceHistoryErrorMaxCount = 100
+    static let geofenceFetchTimeInterval = TimeInterval(15 * 60)
+    static let remoteConfigFetchTimeInterval = TimeInterval(15 * 60)
 
-    // TO_DO: bunlar https e çevirilecek
     static var loggerEndPoint = "lgr.visilabs.net"
     static var realtimeEndPoint = "rt.visilabs.net"
     static var recommendationEndPoint = "s.visilabs.net/json"

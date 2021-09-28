@@ -201,6 +201,10 @@ internal class VisilabsHelper {
         }
         return colorArr
     }
+    
+    static func isiOSAppExtension() -> Bool {
+        return Bundle.main.bundlePath.hasSuffix(".appex")
+    }
 }
 
 class ToastLabel: UILabel {

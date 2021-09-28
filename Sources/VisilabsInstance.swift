@@ -9,6 +9,11 @@ import class Foundation.Bundle
 import SystemConfiguration
 import UIKit
 
+protocol VisilabsAppLifecycle {
+    func applicationDidBecomeActive()
+    func applicationWillResignActive()
+}
+
 typealias Queue = [[String: String]]
 
 struct VisilabsUser: Codable {
@@ -56,6 +61,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var recommendationQueue: DispatchQueue!
     var networkQueue: DispatchQueue!
     let readWriteLock: VisilabsReadWriteLock
+    private var observers: [NSObjectProtocol]?
 
     // TO_DO: www.relateddigital.com ı değiştirmeli miyim?
     static let reachability = SCNetworkReachabilityCreateWithName(nil, "www.relateddigital.com")
@@ -64,6 +70,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsSendInstance: VisilabsSend
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendation
+    let visilabsRemoteConfigInstance: VisilabsRemoteConfig
 
     public var debugDescription: String {
         return "Visilabs(siteId : \(visilabsProfile.profileId)" +
@@ -151,7 +158,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsTargetingActionInstance = VisilabsTargetingAction(lock: readWriteLock,
                                                                   visilabsProfile: visilabsProfile)
         visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
-
+        visilabsRemoteConfigInstance = VisilabsRemoteConfig(remoteConfigFetchTimeInterval: VisilabsConstants.remoteConfigFetchTimeInterval)
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
 
@@ -193,6 +200,22 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         VisilabsHelper.computeWebViewUserAgent { userAgentString in
             self.visilabsUser.userAgent = userAgentString
         }
+        
+        let ncd = NotificationCenter.default
+        observers = []
+        
+        if !VisilabsHelper.isiOSAppExtension() {
+            observers?.append(ncd.addObserver(
+                                forName: UIApplication.didBecomeActiveNotification,
+                                object: nil,
+                                queue: nil,
+                                using: self.applicationDidBecomeActive(_:)))
+            observers?.append(ncd.addObserver(
+                                forName: UIApplication.willResignActiveNotification,
+                                object: nil,
+                                queue: nil,
+                                using: self.applicationWillResignActive(_:)))
+        }
     }
 
     convenience init?() {
@@ -209,6 +232,15 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         } else {
             return nil
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UIApplication.didBecomeActiveNotification,
+                                                  object: nil)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UIApplication.willResignActiveNotification,
+                                                  object: nil)
     }
 
     static func sharedUIApplication() -> UIApplication? {
@@ -644,6 +676,22 @@ extension VisilabsInstance {
         VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String: String](), timeOutInterval: visilabsProfile.requestTimeoutInterval)
     }
 }
+
+// MARK: -REMOTE CONFIG
+
+
+extension VisilabsInstance {
+
+    @objc private func applicationDidBecomeActive(_ notification: Notification) {
+        visilabsRemoteConfigInstance.applicationDidBecomeActive()
+    }
+    
+    @objc private func applicationWillResignActive(_ notification: Notification) {
+        visilabsRemoteConfigInstance.applicationWillResignActive()
+    }
+}
+
+
 
 public protocol VisilabsInappButtonDelegate: AnyObject {
     func didTapButton(_ notification: VisilabsInAppNotification)
