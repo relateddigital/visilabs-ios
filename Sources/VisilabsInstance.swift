@@ -80,17 +80,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     public var loggingEnabled: Bool = false {
         didSet {
             if loggingEnabled {
-                VisilabsLogger.enableLevel(.debug)
-                VisilabsLogger.enableLevel(.info)
-                VisilabsLogger.enableLevel(.warning)
-                VisilabsLogger.enableLevel(.error)
+                VisilabsLogger.enableLevels([.debug, .info, .warning, .error])
                 VisilabsLogger.info("Logging Enabled")
             } else {
                 VisilabsLogger.info("Logging Disabled")
-                VisilabsLogger.disableLevel(.debug)
-                VisilabsLogger.disableLevel(.info)
-                VisilabsLogger.disableLevel(.warning)
-                VisilabsLogger.disableLevel(.error)
+                VisilabsLogger.disableLevels([.debug, .info, .warning, .error])
             }
         }
     }
@@ -115,7 +109,14 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          requestTimeoutInSeconds: Int,
          geofenceEnabled: Bool,
          maxGeofenceCount: Int,
-         isIDFAEnabled: Bool = true) {
+         isIDFAEnabled: Bool = true,
+         loggingEnabled: Bool = false) {
+        
+        if loggingEnabled {
+            VisilabsLogger.enableLevels([.debug, .info, .warning, .error])
+            VisilabsLogger.info("Logging Enabled")
+        }
+        
         // TO_DO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil,
@@ -162,28 +163,18 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
 
+        visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
+        
+        if let appVersion = VisilabsHelper.getAppVersion() {
+            visilabsUser.appVersion = appVersion
+        }
+        
         if isIDFAEnabled {
             VisilabsHelper.getIDFA { uuid in
                 if let idfa = uuid {
                     self.visilabsUser.identifierForAdvertising = idfa
                 }
             }
-        }
-
-        visilabsUser.sdkVersion = "3.1.0"
-        #if SWIFT_PACKAGE
-            let bundle = Bundle.module
-        #else
-            let bundle = Bundle(for: Visilabs.self)
-        #endif
-        if let infos = bundle.infoDictionary {
-            if let shortVersion = infos["CFBundleShortVersionString"] as? String {
-                visilabsUser.sdkVersion = shortVersion
-            }
-        }
-        
-        if let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-            visilabsUser.appVersion = appVersion
         }
         
         if visilabsUser.cookieId.isNilOrWhiteSpace {
@@ -639,7 +630,11 @@ extension VisilabsInstance {
     }
     
     public func sendLocationPermission() {
-        VisilabsLocationManager.sharedManager.sendLocationPermissions()
+        if VisilabsLocationManager.locationServicesEnabledForDevice {
+            
+        }
+        
+        //VisilabsLocationManager.sharedManager.sendLocationPermissions()
     }
 
     // swiftlint:disable file_length

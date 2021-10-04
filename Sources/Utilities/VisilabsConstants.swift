@@ -8,6 +8,8 @@
 import UIKit
 
 struct VisilabsConstants {
+    
+    static let sdkVersion = "3.1.0"
 
     static let HTTP = "http"
     static let HTTPS = "https"

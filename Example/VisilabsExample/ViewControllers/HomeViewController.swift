@@ -84,8 +84,8 @@ class HomeViewController: FormViewController {
                                requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
                                geofenceEnabled: visilabsProfile.geofenceEnabled,
                                maxGeofenceCount: visilabsProfile.maxGeofenceCount,
-                               isIDFAEnabled: visilabsProfile.isIDFAEnabled)
-            Visilabs.callAPI().loggingEnabled = true
+                               isIDFAEnabled: visilabsProfile.isIDFAEnabled,
+                               loggingEnabled: true)
             Visilabs.callAPI().useInsecureProtocol = true
             self.configureEuromessage()
             self.goToTabBarController()

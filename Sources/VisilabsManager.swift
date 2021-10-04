@@ -8,7 +8,7 @@
 class VisilabsManager {
     static let sharedInstance = VisilabsManager()
     private var instance: VisilabsInstance?
-
+    
     init() {
         VisilabsLogger.addLogging(VisilabsPrintLogging())
     }
@@ -21,7 +21,8 @@ class VisilabsManager {
                     requestTimeoutInSeconds: Int,
                     geofenceEnabled: Bool,
                     maxGeofenceCount: Int,
-                    isIDFAEnabled: Bool) -> VisilabsInstance {
+                    isIDFAEnabled: Bool,
+                    loggingEnabled: Bool) -> VisilabsInstance {
         let instance = VisilabsInstance(organizationId: organizationId,
                                         profileId: profileId,
                                         dataSource: dataSource,
@@ -30,7 +31,8 @@ class VisilabsManager {
                                         requestTimeoutInSeconds: requestTimeoutInSeconds,
                                         geofenceEnabled: geofenceEnabled,
                                         maxGeofenceCount: maxGeofenceCount,
-                                        isIDFAEnabled: isIDFAEnabled)
+                                        isIDFAEnabled: isIDFAEnabled,
+                                        loggingEnabled: loggingEnabled)
         self.instance = instance
         return instance
     }
@@ -40,7 +42,7 @@ class VisilabsManager {
             self.instance = instance
         }
     }
-
+    
     func getInstance() -> VisilabsInstance? {
         return instance
     }
