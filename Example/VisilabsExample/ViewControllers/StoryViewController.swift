@@ -36,7 +36,6 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        automaticallyAdjustsScrollViewInsets = false
         actionIdTextField.delegate = self
         actionIdTextField.addTarget(self, action: #selector(self.textFieldFilter), for: .editingChanged)
         self.view.addSubview(actionIdTextField)
