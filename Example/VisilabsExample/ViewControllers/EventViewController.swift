@@ -81,7 +81,7 @@ class EventViewController: FormViewController {
                     Visilabs.callAPI().logout()
                     print("log out!!")
                 } else if row.title == VisilabsEventType.getExVisitorId.rawValue {
-                    print(Visilabs.callAPI().getExVisitorId())
+                    print(Visilabs.callAPI().getExVisitorId() ?? "")
                 }
                 self.customEvent(eventType)
             })
