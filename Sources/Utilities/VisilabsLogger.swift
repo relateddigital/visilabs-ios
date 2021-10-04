@@ -6,19 +6,13 @@
 //
 
 import Foundation
+import os.log
 
 enum VisilabsLogLevel: String {
-    /// Logging displays *all* logs and additional debug information that may be useful to a developer
-    case debug
-
-    /// Logging displays *all* logs (**except** debug)
-    case info
-
-    /// Logging displays *only* warnings and above
-    case warning
-
-    /// Logging displays *only* errors and above
-    case error
+    case debug = "▪️"
+    case info = "🔷"
+    case warning = "🔶"
+    case error = "❌"
 }
 
 struct VisilabsLogMessage {
@@ -52,17 +46,8 @@ protocol VisilabsLogging {
 
 class VisilabsPrintLogging: VisilabsLogging {
     func addMessage(message: VisilabsLogMessage) {
-        let msg = "[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date()))" +
-            " - \(message.file) - func \(message.function)] : \(message.text)"
-        print(msg)
-    }
-}
-
-class VisilabsPrintDebugLogging: VisilabsLogging {
-    func addMessage(message: VisilabsLogMessage) {
-        let msg = "[Visilabs(\(message.level.rawValue)) - \(VisilabsHelper.formatDate(Date()))" +
-            " - \(message.file) - func \(message.function)] : \(message.text)"
-        debugPrint(msg)
+        let msg = "[Visilabs(\(message.level.rawValue))  - \(message.file) - func \(message.function)] : \(message.text)"
+        os_log("%@", type: .debug, msg)
     }
 }
 
@@ -77,15 +62,19 @@ class VisilabsLogger {
         }
     }
 
-    class func enableLevel(_ level: VisilabsLogLevel) {
+    class func enableLevels(_ levels: [VisilabsLogLevel]) {
         readWriteLock.write {
-            enabledLevels.insert(level)
+            for level in levels {
+                enabledLevels.insert(level)
+            }
         }
     }
 
-    class func disableLevel(_ level: VisilabsLogLevel) {
+    class func disableLevels(_ levels: [VisilabsLogLevel]) {
         readWriteLock.write {
-            enabledLevels.remove(level)
+            for level in levels {
+                enabledLevels.remove(level)
+            }
         }
     }
 
