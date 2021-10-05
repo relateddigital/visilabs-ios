@@ -235,6 +235,13 @@ internal class VisilabsHelper {
         }
         return true
     }
+    
+    static func hasBackgroundLocationCabability() -> Bool {
+        guard let capabilities = Bundle.main.infoDictionary?["UIBackgroundModes"] as? [String] else {
+            return false
+        }
+        return capabilities.contains("location")
+    }
 }
 
 class ToastLabel: UILabel {
