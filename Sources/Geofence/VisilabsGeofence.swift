@@ -32,13 +32,13 @@ class VisilabsGeofence {
     }
 
     var locationServicesEnabledForDevice: Bool {
-        return VisilabsLocationManager.sharedManager.locationServicesEnabledForDevice
+        return VisilabsLocationManager.locationServicesEnabledForDevice
     }
 
     // notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
     var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
         return VisilabsCLAuthorizationStatus(rawValue:
-                            VisilabsLocationManager.sharedManager.locationServiceStateStatus.rawValue) ?? .none
+                            VisilabsLocationManager.locationServiceStateStatus.rawValue) ?? .none
     }
 
     private var locationServiceEnabledForApplication: Bool {
@@ -48,6 +48,7 @@ class VisilabsGeofence {
 
     func startGeofencing() {
         VisilabsLocationManager.sharedManager.createLocationManager()
+        VisilabsLocationManager.sharedManager.startGeofencing()
     }
 
     private func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
@@ -236,63 +237,6 @@ class VisilabsGeofence {
                 VisilabsLogger.error("Geofence Push Send Error: \(error)")
             }
         }
-    }
-
-}
-
-class VisilabsGeofence2: NSObject, CLLocationManagerDelegate {
-
-    internal var lastLocationManagerCreated: Date?
-    internal var maximumDesiredLocationAccuracy: CLLocationAccuracy = 30
-    // TO_DO: yukarıda 30 yerine başka değer vermek doğru mu? önceden kCLLocationAccuracyHundredMeters kullanıyorduk.
-    let organizationId: String
-    let siteId: String
-
-    lazy var locationManager: CLLocationManager = {
-        lastLocationManagerCreated = Date()
-
-        let manager = CLLocationManager()
-        manager.distanceFilter = kCLDistanceFilterNone
-        manager.desiredAccuracy = self.maximumDesiredLocationAccuracy
-        manager.pausesLocationUpdatesAutomatically = false
-
-        manager.delegate = self
-
-        return manager
-    }()
-
-    init(organizationId: String, siteId: String) {
-        self.organizationId = organizationId
-        self.siteId = siteId
-    }
-
-    // MARK: - iOS bug workaround
-
-    // to work around an iOS 13.3 bug that results in the location manager "dying", no longer receiving location updates
-    public func recreateTheLocationManager() {
-
-        // don't recreate location managers too often
-        // if let last = lastLocationManagerCreated, last.age! < .oneMinute { return }
-
-        if let llmc = lastLocationManagerCreated, llmc > Date().addingTimeInterval(-TimeInterval(60)) {
-            return
-        }
-
-        lastLocationManagerCreated = Date()
-
-        let freshManager = CLLocationManager()
-        freshManager.distanceFilter = locationManager.distanceFilter
-        freshManager.desiredAccuracy = locationManager.desiredAccuracy
-        freshManager.pausesLocationUpdatesAutomatically = false
-        freshManager.allowsBackgroundLocationUpdates = true
-        freshManager.delegate = self
-
-        // hand over to new manager
-        freshManager.startUpdatingLocation()
-        locationManager.stopUpdatingLocation()
-        locationManager = freshManager
-
-        VisilabsLogger.warn("Recreated the LocationManager")
     }
 
 }
