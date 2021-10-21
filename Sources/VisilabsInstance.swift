@@ -524,6 +524,50 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 // MARK: - Story
 
 extension VisilabsInstance {
+    
+    public func getStoryViewAsync(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil
+                                  , completion: @escaping ((_ storyHomeView: VisilabsStoryHomeView?) -> Void)) {
+        let guid = UUID().uuidString
+        let storyHomeView = VisilabsStoryHomeView()
+        let storyHomeViewController = VisilabsStoryHomeViewController()
+        storyHomeViewController.urlDelegate = urlDelegate
+        storyHomeView.controller = storyHomeViewController
+        visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid] = storyHomeViewController
+        visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] = storyHomeView
+        storyHomeView.setDelegates()
+        storyHomeViewController.collectionView = storyHomeView.collectionView
+        
+        trackingQueue.async { [weak self, actionId, guid] in
+            guard let self = self else { return }
+            self.networkQueue.async { [weak self, actionId, guid] in
+                guard let self = self else { return }
+                self.visilabsTargetingActionInstance.getStories(visilabsUser: self.visilabsUser,
+                                                                guid: guid,
+                                                                actionId: actionId,
+                                                                completion: { response in
+                    if let error = response.error {
+                        VisilabsLogger.error(error)
+                        completion(nil)
+                    } else {
+                        if let guid = response.guid, response.storyActions.count > 0,
+                           let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid],
+                           let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] {
+                            DispatchQueue.main.async {
+                                storyHomeViewController.loadStoryAction(response.storyActions.first!)
+                                storyHomeView.collectionView.reloadData()
+                                storyHomeView.setDelegates()
+                                storyHomeViewController.collectionView = storyHomeView.collectionView
+                                completion(storyHomeView)
+                            }
+                        } else {
+                            completion(nil)
+                        }
+                    }
+                })
+            }
+        }
+    }
+    
     public func getStoryView(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil) -> VisilabsStoryHomeView {
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
@@ -630,11 +674,7 @@ extension VisilabsInstance {
     }
     
     public func sendLocationPermission() {
-        if VisilabsLocationManager.locationServicesEnabledForDevice {
-            
-        }
-        
-        //VisilabsLocationManager.sharedManager.sendLocationPermissions()
+        VisilabsLocationManager.sharedManager.sendLocationPermission()
     }
 
     // swiftlint:disable file_length
