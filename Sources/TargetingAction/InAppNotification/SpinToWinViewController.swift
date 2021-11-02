@@ -9,32 +9,32 @@ import UIKit
 import WebKit
 
 class SpinToWinViewController: VisilabsBaseNotificationViewController {
-
+    
     weak var webView: WKWebView!
     var subsEmail = ""
     var sliceText = ""
-
+    
     init(_ spinToWin: SpinToWinViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.spinToWin = spinToWin
     }
-
+    
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         webView = configureWebView()
         self.view.addSubview(webView)
         webView.allEdges(to: self.view)
     }
-
+    
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         dismiss(animated: true)
         completion()
     }
-
+    
     func configureWebView() -> WKWebView {
         let configuration = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
@@ -44,11 +44,11 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         configuration.mediaTypesRequiringUserActionForPlayback = []
         configuration.allowsInlineMediaPlayback = true
         let webView = WKWebView(frame: .zero, configuration: configuration)
-        #if SWIFT_PACKAGE
+#if SWIFT_PACKAGE
         let bundle = Bundle.module
-        #else
+#else
         let bundle = Bundle(for: type(of: self))
-        #endif
+#endif
         let htmlPath = bundle.path(forResource: "spintowin", ofType: "html") ?? ""
         let url = URL(fileURLWithPath: htmlPath)
         webView.load(URLRequest(url: url))
@@ -56,7 +56,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }
-
+    
     private func close() {
         dismiss(animated: true) {
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
@@ -80,9 +80,9 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
 }
 
 extension SpinToWinViewController: WKScriptMessageHandler {
-
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-
+        
         if message.name == "eventHandler" {
             if let event = message.body as? [String: Any], let method = event["method"] as? String {
                 if method == "console.log", let message = event["message"] as? String {
@@ -91,108 +91,122 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 if method == "initSpinToWin" {
                     VisilabsLogger.info("initSpinToWin")
                     if let json = try? JSONEncoder().encode(self.spinToWin!), let jsonString = String(data: json, encoding: .utf8) {
-
+                        
                         print(jsonString) // TODO: KALDIR
-
+                        
                         self.webView.evaluateJavaScript("window.initSpinToWin(\(jsonString));") { (_, err) in
                             if let error = err {
                                 VisilabsLogger.error(error)
                                 VisilabsLogger.error(error.localizedDescription)
-
+                                
                             }
                         }
                     }
                 }
-
+                
                 if method == "subscribeEmail", let email = event["email"] as? String {
                     Visilabs.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
                     subsEmail = email
                 }
-
+                
                 if method == "getPromotionCode" {
-                    var promotionIndexCodes = [Int: String]()
-                    var promotionIndexDisplayNames = [Int: String]()
+                    var pIndexCodes = [Int: String]()
+                    var pIndexDisplayNames = [Int: String]()
+                    var sIndexCodes = [Int: String]()
+                    var sIndexDisplayNames = [Int: String]()
                     var index = 0
                     
                     for slice in spinToWin!.slices {
-                        if slice.type == "promotion" {
-                            promotionIndexCodes[index] = slice.code
-                            promotionIndexDisplayNames[index] = slice.displayName
+                        if slice.type == "promotion", slice.is_available {
+                            pIndexCodes[index] = slice.code
+                            pIndexDisplayNames[index] = slice.displayName
+                        } else if slice.type == "staticcode" {
+                            sIndexCodes[index] = slice.code
+                            sIndexDisplayNames[index] = slice.displayName
                         }
                         index += 1
                     }
-
-                    if !promotionIndexCodes.isEmpty {
-                        if let randomIndex = promotionIndexCodes.keys.randomElement(), let randomCode = promotionIndexCodes[randomIndex], let randomDisplay = promotionIndexDisplayNames[randomIndex] {
-                            var props = [String: String]()
-                            props[VisilabsConstants.organizationIdKey] = Visilabs.callAPI().visilabsProfile.organizationId
-                            props[VisilabsConstants.profileIdKey] = Visilabs.callAPI().visilabsProfile.profileId
-                            props[VisilabsConstants.cookieIdKey] = Visilabs.callAPI().visilabsUser.cookieId
-                            props[VisilabsConstants.exvisitorIdKey] = Visilabs.callAPI().visilabsUser.exVisitorId
-                            props["actionid"] = "\(self.spinToWin!.actId)"
-                            props["promotionid"] = randomCode
-                            props["promoauth"] = "\(self.spinToWin!.promoAuth)"
-                            self.sliceText = randomDisplay
-
-                            VisilabsRequest.sendPromotionCodeRequest(properties: props,
-                                                                     headers: [String: String](),
-                                                                     timeoutInterval: Visilabs.callAPI().visilabsProfile.requestTimeoutInterval,
-                                                                     completion: { (result: [String: Any]?, error: VisilabsError?) in
-
-                                                                        var selectedIndex = randomIndex
-                                                                        var selectedPromoCode = ""
-                                                                        if error == nil, let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String, !promocode.isEmptyOrWhitespace {
-                                                                            selectedPromoCode = promocode
-                                                                            if !self.subsEmail.isEmptyOrWhitespace {
-                                                                                self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
-                                                                            } else {
-                                                                                self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
-                                                                            }
-                                                                        } else {
-                                                                            selectedIndex = -1
-                                                                        }
-                                                                        DispatchQueue.main.async {
-                                                                            self.webView.evaluateJavaScript("window.chooseSlice(\(selectedIndex), '\(selectedPromoCode)');") { (_, err) in
-                                                                                if let error = err {
-                                                                                    VisilabsLogger.error(error)
-                                                                                    VisilabsLogger.error(error.localizedDescription)
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                     })
-
+                    
+                    if !pIndexCodes.isEmpty, let randomIndex = pIndexCodes.keys.randomElement(), let randomCode = pIndexCodes[randomIndex], let randomDisplay = pIndexDisplayNames[randomIndex] {
+                        var props = [String: String]()
+                        props[VisilabsConstants.organizationIdKey] = Visilabs.callAPI().visilabsProfile.organizationId
+                        props[VisilabsConstants.profileIdKey] = Visilabs.callAPI().visilabsProfile.profileId
+                        props[VisilabsConstants.cookieIdKey] = Visilabs.callAPI().visilabsUser.cookieId
+                        props[VisilabsConstants.exvisitorIdKey] = Visilabs.callAPI().visilabsUser.exVisitorId
+                        props["actionid"] = "\(self.spinToWin!.actId)"
+                        props["promotionid"] = randomCode
+                        props["promoauth"] = "\(self.spinToWin!.promoAuth)"
+                        self.sliceText = randomDisplay
+                        
+                        VisilabsRequest.sendPromotionCodeRequest(properties: props,
+                                                                 headers: [String: String](),
+                                                                 timeoutInterval: Visilabs.callAPI().visilabsProfile.requestTimeoutInterval,
+                                                                 completion: { (result: [String: Any]?, error: VisilabsError?) in
+                            
+                            var selectedIndex = randomIndex
+                            var selectedPromoCode = ""
+                            if error == nil, let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String, !promocode.isEmptyOrWhitespace {
+                                selectedPromoCode = promocode
+                                if !self.subsEmail.isEmptyOrWhitespace {
+                                    self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+                                } else {
+                                    self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+                                }
+                            } else {
+                                selectedIndex = -1
+                            }
+                            DispatchQueue.main.async {
+                                self.webView.evaluateJavaScript("window.chooseSlice(\(selectedIndex), '\(selectedPromoCode)');") { (_, err) in
+                                    if let error = err {
+                                        VisilabsLogger.error(error)
+                                        VisilabsLogger.error(error.localizedDescription)
+                                    }
+                                }
+                            }
+                        })
+                    } else if !sIndexCodes.isEmpty, let randomIndex = sIndexCodes.keys.randomElement(), let randomCode = sIndexCodes[randomIndex], let randomDisplay = sIndexDisplayNames[randomIndex] {
+                        self.sliceText = randomDisplay
+                        if !self.subsEmail.isEmptyOrWhitespace {
+                            self.sendPromotionCodeInfo(promo: randomCode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+                        } else {
+                            self.sendPromotionCodeInfo(promo: randomCode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
                         }
-
+                        self.webView.evaluateJavaScript("window.chooseSlice(\(randomIndex), '\(randomCode)');") { (_, err) in
+                            if let error = err {
+                                VisilabsLogger.error(error)
+                                VisilabsLogger.error(error.localizedDescription)
+                            }
+                        }
                     } else {
                         self.webView.evaluateJavaScript("window.chooseSlice(-1, undefined);") { (_, err) in
                             if let error = err {
                                 VisilabsLogger.error(error)
                                 VisilabsLogger.error(error.localizedDescription)
-
+                                
                             }
                         }
                     }
                 }
-
+                
                 if method == "sendReport" {
                     Visilabs.callAPI().trackSpinToWinClick(spinToWinReport: self.spinToWin!.report)
                 }
-
+                
                 if method == "copyToClipboard", let couponCode = event["couponCode"] as? String {
                     UIPasteboard.general.string = couponCode
                     VisilabsHelper.showCopiedClipboardMessage()
                     self.close()
                 }
-
+                
                 if method == "close" {
                     self.close()
                 }
-
+                
                 if method == "openUrl", let urlString = event["url"] as? String, let url = URL(string: urlString) {
                     let app = VisilabsInstance.sharedUIApplication()
                     app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: url, waitUntilDone: true)
                 }
-
+                
             }
         }
     }

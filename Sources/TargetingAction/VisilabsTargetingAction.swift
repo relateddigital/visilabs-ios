@@ -216,7 +216,8 @@ class VisilabsTargetingAction {
             let color = slice[VisilabsConstants.color] as? String ?? ""
             let code = slice[VisilabsConstants.code] as? String ?? ""
             let type = slice[VisilabsConstants.type] as? String ?? ""
-            let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type)
+            let is_available = slice[VisilabsConstants.is_available] as? Bool ?? true
+            let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type, is_available: is_available)
             sliceArray.append(spinToWinSliceViewModel)
         }
 
