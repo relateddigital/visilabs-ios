@@ -98,7 +98,7 @@ class VisilabsLocationManager: NSObject {
         if !authorizationStatus.queryStringValue.isEmpty, authorizationStatus != lastKnownCLAuthorizationStatus {
             var properties = [String: String]()
             properties[VisilabsConstants.locationPermissionReqKey] = authorizationStatus.queryStringValue
-            Visilabs.callAPI().customEvent("/OM_evt.gif", properties: properties)
+            Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: properties)
             lastKnownCLAuthorizationStatus = authorizationStatus
         }
     }

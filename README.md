@@ -1,10 +1,11 @@
 ![IVisilabs Logo](/Screenshots/visilabs.png)
 
-
-[![Build Status](https://travis-ci.org/relateddigital/visilabs-ios.svg)](https://travis-ci.org/relateddigital/visilabs-ios)
+[![Actions Status](https://github.com/relateddigital/visilabs-ios/workflows/CI/badge.svg)](https://github.com/relateddigital/visilabs-ios/actions)
 [![Version](https://img.shields.io/cocoapods/v/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![License](https://img.shields.io/cocoapods/l/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
 [![Platform](https://img.shields.io/cocoapods/p/VisilabsIOS.svg?style=flat)](https://cocoapods.org/pods/VisilabsIOS)
+[![SPM compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+
 
 
 # Table of Contents
