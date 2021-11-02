@@ -129,19 +129,12 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     
                     if !pIndexCodes.isEmpty, let randomIndex = pIndexCodes.keys.randomElement(), let randomCode = pIndexCodes[randomIndex], let randomDisplay = pIndexDisplayNames[randomIndex] {
                         var props = [String: String]()
-                        props[VisilabsConstants.organizationIdKey] = Visilabs.callAPI().visilabsProfile.organizationId
-                        props[VisilabsConstants.profileIdKey] = Visilabs.callAPI().visilabsProfile.profileId
-                        props[VisilabsConstants.cookieIdKey] = Visilabs.callAPI().visilabsUser.cookieId
-                        props[VisilabsConstants.exvisitorIdKey] = Visilabs.callAPI().visilabsUser.exVisitorId
                         props["actionid"] = "\(self.spinToWin!.actId)"
                         props["promotionid"] = randomCode
                         props["promoauth"] = "\(self.spinToWin!.promoAuth)"
                         self.sliceText = randomDisplay
                         
-                        VisilabsRequest.sendPromotionCodeRequest(properties: props,
-                                                                 headers: [String: String](),
-                                                                 timeoutInterval: Visilabs.callAPI().visilabsProfile.requestTimeoutInterval,
-                                                                 completion: { (result: [String: Any]?, error: VisilabsError?) in
+                        VisilabsRequest.sendPromotionCodeRequest(properties: props, completion: { (result: [String: Any]?, error: VisilabsError?) in
                             
                             var selectedIndex = randomIndex
                             var selectedPromoCode = ""
@@ -152,7 +145,12 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                                 } else {
                                     self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
                                 }
+                            } else if let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String  {
+                                let id = res["id"] as? Int ?? 0
+                                VisilabsLogger.error("Promocode request error: {\"id\":\(id),\"success\":\(success),\"promocode\":\"\(promocode)\"}")
+                                selectedIndex = -1
                             } else {
+                                VisilabsLogger.error("Promocode request error")
                                 selectedIndex = -1
                             }
                             DispatchQueue.main.async {

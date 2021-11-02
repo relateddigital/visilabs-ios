@@ -699,16 +699,11 @@ extension VisilabsInstance {
 
     private func createSubsJsonRequest(actid: String, auth: String, mail: String, type: String = "subscription_email") {
         var props = [String: String]()
-        props[VisilabsConstants.organizationIdKey] = visilabsProfile.organizationId // Om.oid
-        props[VisilabsConstants.profileIdKey] = visilabsProfile.profileId // Om.siteId
-        props[VisilabsConstants.cookieIdKey] = visilabsUser.cookieId
-        props[VisilabsConstants.exvisitorIdKey] = visilabsUser.exVisitorId
         props[VisilabsConstants.type] = type
         props["actionid"] = actid
         props[VisilabsConstants.authentication] = auth
         props[VisilabsConstants.subscribedEmail] = mail
-        props[VisilabsConstants.channelKey] = visilabsProfile.channel
-        VisilabsRequest.sendSubsJsonRequest(properties: props, headers: [String: String](), timeOutInterval: visilabsProfile.requestTimeoutInterval)
+        VisilabsRequest.sendSubsJsonRequest(properties: props)
     }
 }
 
