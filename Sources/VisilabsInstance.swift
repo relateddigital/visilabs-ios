@@ -243,18 +243,27 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     }
 }
 
+// MARK: - IDFA
+
+extension VisilabsInstance {
+    
+    public func requestIDFA() {
+        VisilabsHelper.getIDFA { uuid in
+            if let idfa = uuid {
+                self.visilabsUser.identifierForAdvertising = idfa
+                self.customEvent(VisilabsConstants.omEvtGif, properties: [String: String]())
+            }
+        }
+    }
+    
+}
+
+
 // MARK: - EVENT
 
 extension VisilabsInstance {
     public func customEvent(_ pageName: String, properties: [String: String]) {
-        
-        /*
-        if VisilabsRemoteConfig.isBlocked == true {
-            VisilabsLogger.info("Too much server load!")
-            return
-        }
-        */
-         
+
         if pageName.isEmptyOrWhitespace {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
@@ -300,14 +309,7 @@ extension VisilabsInstance {
     }
 
     public func sendCampaignParameters(properties: [String: String]) {
-        
-        /*
-        if VisilabsRemoteConfig.isBlocked == true {
-            VisilabsLogger.info("Too much server load!")
-            return
-        }
-         */
-        
+
         trackingQueue.async { [weak self, properties] in
             guard let strongSelf = self else { return }
             var eQueue = Queue()

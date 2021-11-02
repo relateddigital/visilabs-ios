@@ -29,6 +29,7 @@ enum VisilabsEventType: String, CaseIterable {
     case pushMessage = "Push Message"
     case getExVisitorId = "Get exVisitor ID"
     case logout = "Logout"
+    case requestIDFA = "Request IDFA"
 }
 
 class EventViewController: FormViewController {
@@ -82,6 +83,8 @@ class EventViewController: FormViewController {
                     print("log out!!")
                 } else if row.title == VisilabsEventType.getExVisitorId.rawValue {
                     print(Visilabs.callAPI().getExVisitorId() ?? "")
+                } else if row.title == VisilabsEventType.requestIDFA.rawValue {
+                    Visilabs.callAPI().requestIDFA()
                 }
                 self.customEvent(eventType)
             })

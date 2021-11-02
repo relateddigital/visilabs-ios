@@ -26,6 +26,7 @@
 		88EC49EE2647045E009C6DDB /* InAppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49E02647045E009C6DDB /* InAppHelper.swift */; };
 		88EC49EF2647045E009C6DDB /* FormHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49E12647045E009C6DDB /* FormHelper.swift */; };
 		88EC49F02647045E009C6DDB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49E22647045E009C6DDB /* Extensions.swift */; };
+		D2274E4F2731EB1E00824B31 /* LocationTester.gpx in Resources */ = {isa = PBXBuildFile; fileRef = D2274E4E2731EB1E00824B31 /* LocationTester.gpx */; };
 		D7BA7B2E7EC9913E34B55D73 /* Pods_VisilabsExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8D4D4C39C17F534180035BA /* Pods_VisilabsExample.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		B8D4D4C39C17F534180035BA /* Pods_VisilabsExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisilabsExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA471184E187F3C37E6331BB /* Pods-VisilabsExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsExample.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample.debug.xcconfig"; sourceTree = "<group>"; };
 		C5C5B88503D47C871E50B1B4 /* Pods-VisilabsExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsExample.release.xcconfig"; path = "Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample.release.xcconfig"; sourceTree = "<group>"; };
+		D2274E4E2731EB1E00824B31 /* LocationTester.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LocationTester.gpx; sourceTree = "<group>"; };
 		D48B6AA369E1D873BD381DDD /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,14 +128,15 @@
 			isa = PBXGroup;
 			children = (
 				88EC49BE2646FACD009C6DDB /* AppDelegate.swift */,
-				88EC49C02646FACD009C6DDB /* SceneDelegate.swift */,
-				88EC49C42646FACD009C6DDB /* Main.storyboard */,
 				88EC49C72646FACF009C6DDB /* Assets.xcassets */,
+				88EC49CC2646FACF009C6DDB /* Info.plist */,
 				88EC49C92646FACF009C6DDB /* LaunchScreen.storyboard */,
+				D2274E4E2731EB1E00824B31 /* LocationTester.gpx */,
+				88EC49C42646FACD009C6DDB /* Main.storyboard */,
+				88EC49C02646FACD009C6DDB /* SceneDelegate.swift */,
 				88EC49DE2647045E009C6DDB /* Helpers */,
 				88EC49D22647045E009C6DDB /* Models */,
 				88EC49D42647045E009C6DDB /* ViewControllers */,
-				88EC49CC2646FACF009C6DDB /* Info.plist */,
 			);
 			path = VisilabsExample;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				88EC49CB2646FACF009C6DDB /* LaunchScreen.storyboard in Resources */,
 				88EC49C82646FACF009C6DDB /* Assets.xcassets in Resources */,
 				88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */,
+				D2274E4F2731EB1E00824B31 /* LocationTester.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

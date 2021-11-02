@@ -80,7 +80,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions
     * **requestTimeoutInSeconds** : Default value is **30**. The request timeout value in seconds to send data to **Visilabs** servers and receive data from.
     * **geofenceEnabled** : Default value is **false**. If you want to use geofencing feature of **Visilabs** you need to set the value to **true**. If you are not using geofencing feature of **Visilabs**, we recommend that you leave this value to **false** in terms of performance and user experience because region monitoring would increase the battery consumption of your application and prompt users a popup dialog to allow location tracking.
     * **maxGeofenceCount** : Default value is **20**. **Apple** prevents any single application from monitoring more than 20 regions simultaneously. Visilabs can use all these slots. However if you need some of these slots for another use you can set this parameter to a value lower than **20**. Setting a value higher than 20 would not affect the maximum number of regions to be monitored. 
-    * ***isIDFAEnabled***: Default value is ***true***. After iOS 14, if you want to use AdvertisingTrackingID you should request a permission from end user. If this parameter is true, then you should add Privacy - Tracking Usage Description into your *Info.plist* with proper description. As soon as you call `createAPI` There will open popup to request permission from end user. [Click here for detailed information](https://developer.apple.com/documentation/bundleresources/information_property_list/nsusertrackingusagedescription)
+    * **isIDFAEnabled**: Default value is ***true***. After iOS 14, if you want to use _AdvertisingTrackingID_ you should request a permission from end user. If this parameter is true, then you should add _NSUserTrackingUsageDescription_ key into your *Info.plist* with proper description. As soon as you call `createAPI`, a dialog to request permission from end user will open and according to choice of the user, the value of _AdvertisingTrackingID_ will be sent to **Visilabs** servers. If you want to show your prompt at another time instead of when the app is opened you need to set the value **isIDFAEnabled** to ***false*** and call the public `requestIDFA` function whenever you want to show prompt. [Click here for detailed information](https://developer.apple.com/documentation/bundleresources/information_property_list/nsusertrackingusagedescription)
 
 
 ![Image of Profiles](/Screenshots/profiles-page.png)
@@ -296,6 +296,15 @@ Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
 ```
 
 ![IOS Application Page](/Screenshots/ios-application-page.png)
+
+### Request and Send IDFA
+
+You can call the `requestIDFA` function whenever you want to show `App Tracking Transparency` prompt to request **IDFA** and send the value to **Visilabs** servers.
+
+```swift
+Visilabs.callAPI().requestIDFA()
+```
+
 
 ## Targeting Actions
 
