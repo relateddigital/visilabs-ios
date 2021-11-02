@@ -8,16 +8,13 @@
 import Foundation
 import CoreLocation
 
-//private var status: String = ""
-//private var isSended: Bool = false
-
 class VisilabsLocationManager: NSObject {
-
-    public static let sharedManager = VisilabsLocationManager()
-
-    private var locationManager: CLLocationManager?
+    
+    static let sharedManager = VisilabsLocationManager()
+    
+    private var locationManager: CLLocationManager
     private var lastKnownCLAuthorizationStatus : CLAuthorizationStatus?
-
+    
     var currentGeoLocationValue: CLLocationCoordinate2D?
     var sentGeoLocationValue: CLLocationCoordinate2D? // TO_DO: ne işe yarayacak bu?
     var sentGeoLocationTime: TimeInterval?
@@ -25,93 +22,65 @@ class VisilabsLocationManager: NSObject {
     var locationServiceEnabled = true //TODO var locationServiceEnabled = false
     
     var locationManagerCreated = false
-
+    
     override init() {
+        locationManager = CLLocationManager()
+        locationManagerCreated = true
         super.init()
+        locationManager.delegate = self
     }
-
+    
     deinit {
-        locationManager?.delegate = nil
+        locationManager.delegate = nil
         NotificationCenter.default.removeObserver(self)// TO_DO: buna gerek var mı tekrar kontrol et.
     }
     
-    func createLocationManager() {
-        if !locationManagerCreated {
-            self.locationManager = CLLocationManager()
-            self.locationManager?.delegate = self
-            self.locationManagerCreated = true
-        }
-    }
     
     func startGeofencing() {
-        self.locationManager?.allowsBackgroundLocationUpdates = VisilabsHelper.hasBackgroundLocationCabability()
 #if !TARGET_IPHONE_SIMULATOR
-        if self.locationManager?.responds(to:
-                                            #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) ?? false {
-            self.locationManager?.pausesLocationUpdatesAutomatically = false
+        if locationManager.responds(to: #selector(setter: CLLocationManager.pausesLocationUpdatesAutomatically)) {
+            locationManager.pausesLocationUpdatesAutomatically = false
         }
 #endif
         
-        self.requestLocationAuthorization()
+        requestLocationAuthorization()
         
         // TO_DO:bunu yayınlarken tekrar 100e çek
-        self.locationManager?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters // kCLLocationAccuracyHundredMeters
-        self.locationManager?.distanceFilter = CLLocationDistance(10)
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters // kCLLocationAccuracyHundredMeters
+        self.locationManager.distanceFilter = CLLocationDistance(10)
         self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         self.sentGeoLocationTime = 0
         
-        self.locationManager?.allowsBackgroundLocationUpdates = VisilabsHelper.hasBackgroundLocationCabability()
+        self.locationManager.allowsBackgroundLocationUpdates = VisilabsHelper.hasBackgroundLocationCabability()
         //self.locationManager?.startUpdatingLocation()
-
+        
         
         //self.locationManager?.startMonitoringSignificantLocationChanges()
         
         self.requestLocationAuthorization()
         
-        if let loc = self.locationManager?.location {
+        if let loc = self.locationManager.location {
             VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: loc.coordinate.latitude, lastKnownLongitude: loc.coordinate.longitude)
         }
         
-        
-        
-        
-        // Significant Location Change Monitoring is only available when using cell tower.
-        //https://stackoverflow.com/questions/5885293/hows-does-significant-location-change-work
-        
-        /*
-        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
-            VisilabsLogger.info("Start significant location update.")
-            locationManager?.startMonitoringSignificantLocationChanges()
-            locationServiceEnabled = true
-        }
-         */
-         
-        
     }
-
+    
     func stopMonitorRegions() {
-        if let regions = self.locationManager?.monitoredRegions {
-            for region in regions {
-                if region.identifier.contains("visilabs", options: String.CompareOptions.caseInsensitive) {
-                    self.locationManager?.stopMonitoring(for: region)
-                    VisilabsLogger.info("stopped monitoring region: \(region.identifier)")
-                }
+        for region in self.locationManager.monitoredRegions {
+            if region.identifier.contains("visilabs", options: String.CompareOptions.caseInsensitive) {
+                self.locationManager.stopMonitoring(for: region)
+                VisilabsLogger.info("stopped monitoring region: \(region.identifier)")
             }
         }
     }
-
+    
     // notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
     static var locationServiceStateStatus: CLAuthorizationStatus {
         if locationServicesEnabledForDevice {
             var authorizationStatus: CLAuthorizationStatus = .denied
             if #available(iOS 14.0, *) {
-                if let lm = VisilabsLocationManager.sharedManager.locationManager {
-                    authorizationStatus = lm.authorizationStatus
-                } else {
-                    VisilabsLocationManager.sharedManager.createLocationManager()
-                    authorizationStatus = VisilabsLocationManager.sharedManager.locationManager?.authorizationStatus ?? .denied
-                }
+                authorizationStatus = VisilabsLocationManager.sharedManager.locationManager.authorizationStatus
             } else {
                 authorizationStatus = CLLocationManager.authorizationStatus()
             }
@@ -119,7 +88,7 @@ class VisilabsLocationManager: NSObject {
         }
         return .notDetermined
     }
-
+    
     static var locationServicesEnabledForDevice: Bool {
         return CLLocationManager.locationServicesEnabled()
     }
@@ -134,50 +103,46 @@ class VisilabsLocationManager: NSObject {
         }
     }
     
-
+    
     func startMonitorRegion(region: CLRegion) {
         if CLLocationManager.isMonitoringAvailable(for: type(of: region)) {
-            locationManager?.startMonitoring(for: region)
+            locationManager.startMonitoring(for: region)
         }
     }
-
+    
     public func requestLocationAuthorization() {
+        var status = CLAuthorizationStatus.notDetermined
         if #available(iOS 14.0, *) {
-            guard self.locationManager?.authorizationStatus == .notDetermined else {
-                return
-            }
+            status = self.locationManager.authorizationStatus
         } else {
-            guard CLLocationManager.authorizationStatus() == .notDetermined else {
-                return
-            }
+            status = CLLocationManager.authorizationStatus()
         }
         let alwaysIsEnabled = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription") != nil
         let onlyInUseEnabled = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") != nil
         
         if alwaysIsEnabled, VisilabsHelper.hasBackgroundLocationCabability() {
-            self.locationManager?.requestAlwaysAuthorization()
+            self.locationManager.requestAlwaysAuthorization()
         } else if onlyInUseEnabled {
             VisilabsLogger.warn("Your app does not have background location capability.")
-            self.locationManager?.requestWhenInUseAuthorization()
+            self.locationManager.requestWhenInUseAuthorization()
         }
     }
+    
     
     private let acceptedAuthorization:[CLAuthorizationStatus] = [.authorizedAlways, .authorizedWhenInUse]
     
 }
 
 extension VisilabsLocationManager: CLLocationManagerDelegate {
-
+    
     // MARK: - CLLocationManagerDelegate implementation
     
-    
-
     // TO_DO: buna bak tekrardan
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status.string)")
         sendLocationPermission(status)
-        if acceptedAuthorization.contains(status), let loc = self.locationManager?.location {
-            VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: loc.coordinate.latitude, lastKnownLongitude: loc.coordinate.longitude)
+        if acceptedAuthorization.contains(status) {
+            VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: locationManager.location?.coordinate.latitude, lastKnownLongitude: locationManager.location?.coordinate.longitude)
         }
     }
     
@@ -185,29 +150,29 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
         if #available(iOS 14.0, *) {
             VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(manager.authorizationStatus.string)")
             sendLocationPermission(manager.authorizationStatus)
-            if acceptedAuthorization.contains(manager.authorizationStatus), let loc = self.locationManager?.location {
+            if acceptedAuthorization.contains(manager.authorizationStatus), let loc = self.locationManager.location {
                 VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: loc.coordinate.latitude, lastKnownLongitude: loc.coordinate.longitude)
             }
         }
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if !locationServiceEnabled {
             return
         } else if locations.count > 0 {
             self.currentGeoLocationValue = locations[0].coordinate
             let infoMessage = "CLLocationManager didUpdateLocations: lat:\(locations[0].coordinate.latitude)" +
-                " lon:\(locations[0].coordinate.longitude)"
+            " lon:\(locations[0].coordinate.longitude)"
             VisilabsLogger.info(infoMessage)
             VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: self.currentGeoLocationValue?.latitude,
-                                                        lastKnownLongitude: self.currentGeoLocationValue?.longitude)
+                                                            lastKnownLongitude: self.currentGeoLocationValue?.longitude)
         }
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         VisilabsLogger.error("CLLocationManager didFailWithError : \(error.localizedDescription)")
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         let elements = region.identifier.components(separatedBy: "_")
         if elements.count == 4, elements[0] == "visilabs" {
@@ -226,7 +191,7 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             }
         }
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         let elements = region.identifier.components(separatedBy: "_")
         if elements.count == 4, elements[0] == "visilabs" {
@@ -244,18 +209,18 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
             }
         }
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         VisilabsLogger.info("CLLocationManager didStartMonitoringFor: region identifier: \(region.identifier)")
-        self.locationManager?.requestState(for: region)
+        self.locationManager.requestState(for: region)
     }
-
+    
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
         let errorMessage = "CLLocationManager monitoringDidFailFor: region identifier:" +
-            " \(region?.identifier ?? "nil") error: \(error.localizedDescription)"
+        " \(region?.identifier ?? "nil") error: \(error.localizedDescription)"
         VisilabsLogger.error(errorMessage)
     }
-
+    
     // TO_DO: buna gerek yok sanırım
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         let infoMessage = "CLLocationManager didDetermineState: region identifier: \(region.identifier) state: \(state)"
@@ -283,7 +248,7 @@ extension CLAuthorizationStatus {
         case .authorizedWhenInUse: return VisilabsConstants.locationPermissionAppOpen
         case .notDetermined, .restricted: return ""
         @unknown default: return ""
-
+            
         }
     }
 }

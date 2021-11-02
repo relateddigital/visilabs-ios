@@ -47,7 +47,6 @@ class VisilabsGeofence {
     }
 
     func startGeofencing() {
-        VisilabsLocationManager.sharedManager.createLocationManager()
         VisilabsLocationManager.sharedManager.startGeofencing()
     }
 
