@@ -217,6 +217,7 @@ struct VisilabsConstants {
     static let displayName = "displayName"
     static let color = "color"
     static let code = "code"
+    static let is_available = "is_available"
     
     // SpinToWin information properties
     static let promoAction = "OM.promoaction"

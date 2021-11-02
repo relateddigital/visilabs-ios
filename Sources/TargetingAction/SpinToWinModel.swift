@@ -12,6 +12,7 @@ public struct SpinToWinSliceViewModel: Codable {
     var color: String
     var code: String
     var type: String
+    var is_available: Bool
 }
 
 public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
