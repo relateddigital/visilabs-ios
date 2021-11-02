@@ -29,12 +29,22 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+    
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We will use your location always!</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We will use your location when app is open!</string>
+	<string>Related Digital will use your location always and when in use!</string>
+    
+    
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Related Digital will use your location always!</string>
+    
+    
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Related Digital will use your location when in use!</string>
+
+    
 	<key>NSUserTrackingUsageDescription</key>
-	<string>We use advertising identifier!</string>
+	<string>Related Digital uses your advertising identifier!</string>
+    
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -49,6 +59,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
