@@ -84,10 +84,7 @@ class VisilabsGeofence {
     }
     // swiftlint:disable function_body_length cyclomatic_complexity
     func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
-        if self.profile.geofenceEnabled
-            && self.locationServicesEnabledForDevice
-            && self.locationServiceEnabledForApplication {
-
+        if profile.geofenceEnabled, locationServicesEnabledForDevice, locationServiceEnabledForApplication {
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
             if timeInterval < VisilabsConstants.geofenceFetchTimeInterval {
