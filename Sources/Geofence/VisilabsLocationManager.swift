@@ -14,8 +14,7 @@ class VisilabsLocationManager: NSObject {
     
     var locationManager: CLLocationManager
     var lowPowerLocationManager: CLLocationManager
-    private var lastKnownCLAuthorizationStatus : CLAuthorizationStatus?
-    
+    var lastKnownCLAuthorizationStatus : CLAuthorizationStatus?
     var currentGeoLocationValue: CLLocationCoordinate2D?
     
     override init() {
@@ -34,6 +33,7 @@ class VisilabsLocationManager: NSObject {
     
     deinit {
         locationManager.delegate = nil
+        lowPowerLocationManager.delegate = nil
         NotificationCenter.default.removeObserver(self)// TO_DO: buna gerek var mı tekrar kontrol et.
     }
     
@@ -53,7 +53,7 @@ class VisilabsLocationManager: NSObject {
         lowPowerLocationManager.startUpdatingLocation()
         locationManager.startMonitoringSignificantLocationChanges()
 
-        self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)        
+        self.currentGeoLocationValue = CLLocationCoordinate2DMake(0, 0)
         
         if let loc = self.locationManager.location {
             VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: loc.coordinate.latitude, lastKnownLongitude: loc.coordinate.longitude)
