@@ -306,6 +306,20 @@ You can call the `requestIDFA` function whenever you want to show `App Tracking 
 Visilabs.callAPI().requestIDFA()
 ```
 
+### Sending Location Status Information
+
+You can call the `sendLocationPermission` method to to send the location permission status of your users to **Visilabs** servers and use this information on the panel later.
+
+```swift
+Visilabs.callAPI().sendLocationPermission()
+```
+
+This information is sent with the `OM.locpermit` parameter and can take one of the following 3 values:
+
+* "always" : Location permission is obtained while the application is open and closed.
+* "appopen" : Location permission is only obtained when the app is open.
+* "none" : Location permission is not obtained.
+
 
 ## Targeting Actions
 
