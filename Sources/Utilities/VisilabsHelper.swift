@@ -112,7 +112,7 @@ internal class VisilabsHelper {
         VisilabsBasePath.endpoints[.mobile] = "\(httpProtocol)://\(VisilabsConstants.mobileEndPoint)"
         VisilabsBasePath.endpoints[.subsjson] = "\(httpProtocol)://\(VisilabsConstants.subsjsonEndpoint)"
         VisilabsBasePath.endpoints[.promotion] = "\(httpProtocol)://\(VisilabsConstants.promotionEndpoint)"
-        VisilabsBasePath.endpoints[.remote] = "\(httpProtocol)://\(VisilabsConstants.remoteConfigEndpoint)"
+        VisilabsBasePath.endpoints[.remote] = "https://\(VisilabsConstants.remoteConfigEndpoint)"
     }
     
     static private let dateFormatter = DateFormatter()
