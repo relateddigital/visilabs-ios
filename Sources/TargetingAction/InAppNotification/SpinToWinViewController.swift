@@ -14,6 +14,11 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     var subsEmail = ""
     var sliceText = ""
     
+    var pIndexCodes = [Int: String]()
+    var pIndexDisplayNames = [Int: String]()
+    var sIndexCodes = [Int: String]()
+    var sIndexDisplayNames = [Int: String]()
+    
     init(_ spinToWin: SpinToWinViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.spinToWin = spinToWin
@@ -81,6 +86,40 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
 
 extension SpinToWinViewController: WKScriptMessageHandler {
     
+    
+    
+    private func chooseSlice(selectedIndex: Int, selectedPromoCode: String) {
+        
+        var promoCode = selectedPromoCode
+        var index = selectedIndex
+        
+        if selectedIndex < 0 {
+            if !sIndexCodes.isEmpty, let randomIndex = sIndexCodes.keys.randomElement(), let randomCode = sIndexCodes[randomIndex], let randomDisplay = sIndexDisplayNames[randomIndex] {
+                self.sliceText = randomDisplay
+                promoCode = randomCode
+                index = randomIndex
+            }
+        }
+        
+        if index > -1 {
+            if !self.subsEmail.isEmptyOrWhitespace {
+                self.sendPromotionCodeInfo(promo: promoCode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+            } else {
+                self.sendPromotionCodeInfo(promo: promoCode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
+            }
+        }
+        let promoCodeString = index > -1 ? "'\(promoCode)'" : "undefined"
+        
+        DispatchQueue.main.async {
+            self.webView.evaluateJavaScript("window.chooseSlice(\(index), \(promoCodeString));") { (_, err) in
+                if let error = err {
+                    VisilabsLogger.error(error)
+                    VisilabsLogger.error(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         if message.name == "eventHandler" {
@@ -91,9 +130,6 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 if method == "initSpinToWin" {
                     VisilabsLogger.info("initSpinToWin")
                     if let json = try? JSONEncoder().encode(self.spinToWin!), let jsonString = String(data: json, encoding: .utf8) {
-                        
-                        print(jsonString) // TODO: KALDIR
-                        
                         self.webView.evaluateJavaScript("window.initSpinToWin(\(jsonString));") { (_, err) in
                             if let error = err {
                                 VisilabsLogger.error(error)
@@ -110,10 +146,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 }
                 
                 if method == "getPromotionCode" {
-                    var pIndexCodes = [Int: String]()
-                    var pIndexDisplayNames = [Int: String]()
-                    var sIndexCodes = [Int: String]()
-                    var sIndexDisplayNames = [Int: String]()
+                    
                     var index = 0
                     
                     for slice in spinToWin!.slices {
@@ -135,16 +168,10 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                         self.sliceText = randomDisplay
                         
                         VisilabsRequest.sendPromotionCodeRequest(properties: props, completion: { (result: [String: Any]?, error: VisilabsError?) in
-                            
-                            var selectedIndex = randomIndex
+                            var selectedIndex = randomIndex as Int
                             var selectedPromoCode = ""
                             if error == nil, let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String, !promocode.isEmptyOrWhitespace {
                                 selectedPromoCode = promocode
-                                if !self.subsEmail.isEmptyOrWhitespace {
-                                    self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
-                                } else {
-                                    self.sendPromotionCodeInfo(promo: promocode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
-                                }
                             } else if let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String  {
                                 let id = res["id"] as? Int ?? 0
                                 VisilabsLogger.error("Promocode request error: {\"id\":\(id),\"success\":\(success),\"promocode\":\"\(promocode)\"}")
@@ -153,28 +180,12 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                                 VisilabsLogger.error("Promocode request error")
                                 selectedIndex = -1
                             }
-                            DispatchQueue.main.async {
-                                self.webView.evaluateJavaScript("window.chooseSlice(\(selectedIndex), '\(selectedPromoCode)');") { (_, err) in
-                                    if let error = err {
-                                        VisilabsLogger.error(error)
-                                        VisilabsLogger.error(error.localizedDescription)
-                                    }
-                                }
-                            }
+                            self.chooseSlice(selectedIndex: selectedIndex, selectedPromoCode: selectedPromoCode)
+                            
                         })
                     } else if !sIndexCodes.isEmpty, let randomIndex = sIndexCodes.keys.randomElement(), let randomCode = sIndexCodes[randomIndex], let randomDisplay = sIndexDisplayNames[randomIndex] {
                         self.sliceText = randomDisplay
-                        if !self.subsEmail.isEmptyOrWhitespace {
-                            self.sendPromotionCodeInfo(promo: randomCode, actId: "act-\(self.spinToWin!.actId)", email: self.subsEmail, promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
-                        } else {
-                            self.sendPromotionCodeInfo(promo: randomCode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
-                        }
-                        self.webView.evaluateJavaScript("window.chooseSlice(\(randomIndex), '\(randomCode)');") { (_, err) in
-                            if let error = err {
-                                VisilabsLogger.error(error)
-                                VisilabsLogger.error(error.localizedDescription)
-                            }
-                        }
+                        self.chooseSlice(selectedIndex: randomIndex, selectedPromoCode: randomCode)
                     } else {
                         self.webView.evaluateJavaScript("window.chooseSlice(-1, undefined);") { (_, err) in
                             if let error = err {
