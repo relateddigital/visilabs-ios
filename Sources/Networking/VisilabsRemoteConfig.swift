@@ -47,7 +47,6 @@ public class VisilabsRemoteConfig {
         }
     }
     
-    
     func startRemoteConfigTimer() {
         stopRemoteConfigTimer()
         DispatchQueue.main.async { [weak self] in
