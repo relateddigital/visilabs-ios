@@ -86,8 +86,6 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
 
 extension SpinToWinViewController: WKScriptMessageHandler {
     
-    
-    
     private func chooseSlice(selectedIndex: Int, selectedPromoCode: String) {
         
         var promoCode = selectedPromoCode
@@ -183,18 +181,10 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                             self.chooseSlice(selectedIndex: selectedIndex, selectedPromoCode: selectedPromoCode)
                             
                         })
-                    } else if !sIndexCodes.isEmpty, let randomIndex = sIndexCodes.keys.randomElement(), let randomCode = sIndexCodes[randomIndex], let randomDisplay = sIndexDisplayNames[randomIndex] {
-                        self.sliceText = randomDisplay
-                        self.chooseSlice(selectedIndex: randomIndex, selectedPromoCode: randomCode)
                     } else {
-                        self.webView.evaluateJavaScript("window.chooseSlice(-1, undefined);") { (_, err) in
-                            if let error = err {
-                                VisilabsLogger.error(error)
-                                VisilabsLogger.error(error.localizedDescription)
-                                
-                            }
-                        }
+                        self.chooseSlice(selectedIndex: -1, selectedPromoCode: "")
                     }
+                    
                 }
                 
                 if method == "sendReport" {
