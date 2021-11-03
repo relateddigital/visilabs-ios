@@ -30,6 +30,7 @@ enum VisilabsEventType: String, CaseIterable {
     case getExVisitorId = "Get exVisitor ID"
     case logout = "Logout"
     case requestIDFA = "Request IDFA"
+    case sendLocationPermission = "Send Location Permission"
 }
 
 class EventViewController: FormViewController {
@@ -51,7 +52,6 @@ class EventViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
-        Visilabs.callAPI().sendLocationPermission()
     }
 
     private func initializeForm() {
@@ -85,8 +85,11 @@ class EventViewController: FormViewController {
                     print(Visilabs.callAPI().getExVisitorId() ?? "")
                 } else if row.title == VisilabsEventType.requestIDFA.rawValue {
                     Visilabs.callAPI().requestIDFA()
+                } else if row.title == VisilabsEventType.sendLocationPermission.rawValue {
+                    Visilabs.callAPI().sendLocationPermission()
+                } else {
+                    self.customEvent(eventType)
                 }
-                self.customEvent(eventType)
             })
         }
         return section
