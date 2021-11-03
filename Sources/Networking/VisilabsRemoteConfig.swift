@@ -24,12 +24,11 @@ public class VisilabsRemoteConfig {
     }
     
     @objc func checkRemoteConfig() {
-        
-        if !firstTime, Date().addingTimeInterval(-self.remoteConfigFetchTimeInterval) > lastCheckTime {
+        if !firstTime, Date().addingTimeInterval(-self.remoteConfigFetchTimeInterval) < lastCheckTime {
             return
         }
-        
         firstTime = false
+        VisilabsLogger.info("Sending RemoteConfigRequest")
         VisilabsRequest.sendRemoteConfigRequest { sIdArr, err in
             if let err = err {
                 VisilabsLogger.error("checkRemoteConfig: Error \(err)")
