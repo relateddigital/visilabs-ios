@@ -93,7 +93,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func showStory(sender: UIButton!) {
         storyHomeView?.removeFromSuperview()
-        storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""))
+        storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""), urlDelegate: self)
         self.view.addSubview(storyHomeView!)
         storyHomeView!.translatesAutoresizingMaskIntoConstraints = false
         storyHomeView!.topAnchor.constraint(equalTo: storyAsyncButton.bottomAnchor, constant: 20).isActive = true
@@ -113,7 +113,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
                     storyHomeView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
                     storyHomeView.heightAnchor.constraint(equalToConstant: 100).isActive = true
                 } else {
-                    print("There is no story matching your criteria.")
+                    print("There is no story action matching your criteria.")
                 }
             }
 
