@@ -71,6 +71,8 @@
 		BA471184E187F3C37E6331BB /* Pods-VisilabsExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsExample.debug.xcconfig"; path = "Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample.debug.xcconfig"; sourceTree = "<group>"; };
 		C5C5B88503D47C871E50B1B4 /* Pods-VisilabsExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisilabsExample.release.xcconfig"; path = "Target Support Files/Pods-VisilabsExample/Pods-VisilabsExample.release.xcconfig"; sourceTree = "<group>"; };
 		D2274E4E2731EB1E00824B31 /* LocationTester.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LocationTester.gpx; sourceTree = "<group>"; };
+		D2EE696527330D8200A44D88 /* VisilabsExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VisilabsExample.entitlements; sourceTree = "<group>"; };
+		D2EE696627330D9000A44D88 /* VisilabsExampleRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VisilabsExampleRelease.entitlements; sourceTree = "<group>"; };
 		D48B6AA369E1D873BD381DDD /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +129,8 @@
 		88EC49BD2646FACD009C6DDB /* VisilabsExample */ = {
 			isa = PBXGroup;
 			children = (
+				D2EE696627330D9000A44D88 /* VisilabsExampleRelease.entitlements */,
+				D2EE696527330D8200A44D88 /* VisilabsExample.entitlements */,
 				88EC49BE2646FACD009C6DDB /* AppDelegate.swift */,
 				88EC49C72646FACF009C6DDB /* Assets.xcassets */,
 				88EC49CC2646FACF009C6DDB /* Info.plist */,
@@ -455,6 +459,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VisilabsExample/VisilabsExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsExample/Info.plist;
@@ -476,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VisilabsExample/VisilabsExampleRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsExample/Info.plist;
