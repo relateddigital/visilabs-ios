@@ -14,17 +14,12 @@ public class VisilabsRemoteConfig {
     var firstTime = true
     var lastCheckTime = Date()
     var timer: Timer?
-    private let remoteConfigIntervalReadWriteLock: DispatchQueue
     private var remoteConfigFetchTimeInterval: TimeInterval
     
     init(profileId: String) {
         self.profileId = profileId
         self.remoteConfigFetchTimeInterval = VisilabsConstants.remoteConfigFetchTimeInterval
-        remoteConfigIntervalReadWriteLock = DispatchQueue(label: "com.relateddigital.remote_configinterval.lock", qos: .utility, attributes: .concurrent)
         VisilabsPersistence.saveBlock(false)
-        if firstTime {
-            checkRemoteConfig()
-        }
         startRemoteConfigTimer()
     }
     
@@ -37,10 +32,11 @@ public class VisilabsRemoteConfig {
         firstTime = false
         VisilabsRequest.sendRemoteConfigRequest { sIdArr, err in
             if let err = err {
-                VisilabsLogger.error("remoteConfigSelector: Error \(err)")
+                VisilabsLogger.error("checkRemoteConfig: Error \(err)")
                 VisilabsPersistence.saveBlock(false)
             }
             if let sIdArr = sIdArr {
+                VisilabsLogger.info("Blocked profiles: \(sIdArr)")
                 if sIdArr.contains(self.profileId) {
                     VisilabsPersistence.saveBlock(true)
                 } else {
@@ -48,6 +44,7 @@ public class VisilabsRemoteConfig {
                 }
             }
             self.lastCheckTime = Date()
+            self.startRemoteConfigTimer()
         }
     }
     
@@ -58,11 +55,12 @@ public class VisilabsRemoteConfig {
             guard let self = self else {
                 return
             }
-            self.timer = Timer.scheduledTimer(timeInterval: self.remoteConfigFetchTimeInterval,
+            let ti = self.firstTime ? TimeInterval(1) : self.remoteConfigFetchTimeInterval
+            self.timer = Timer.scheduledTimer(timeInterval: ti,
                                               target: self,
                                               selector: #selector(self.checkRemoteConfig),
                                               userInfo: nil,
-                                              repeats: true)
+                                              repeats: false)
         }
     }
     
