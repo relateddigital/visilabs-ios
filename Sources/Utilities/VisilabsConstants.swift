@@ -28,7 +28,7 @@ struct VisilabsConstants {
     static var mobileEndPoint = "s.visilabs.net/mobile"
     static var subsjsonEndpoint = "s.visilabs.net/subsjson"
     static var promotionEndpoint = "s.visilabs.net/promotion"
-    static var remoteConfigEndpoint = "mbls.visilabs.net/rc.json" //TODO: Burası değişebilir
+    static var remoteConfigEndpoint = "mbls.visilabs.net/rc.json"
 
     // MARK: - UserDefaults Keys
 
