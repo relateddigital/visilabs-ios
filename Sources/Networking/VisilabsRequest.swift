@@ -129,13 +129,6 @@ class VisilabsRequest {
                                    timeoutInterval: TimeInterval,
                                    completion: @escaping ([[String: Any]]?, VisilabsError?) -> Void) {
         
-        /*
-         if VisilabsRemoteConfig.isBlocked == true {
-         VisilabsLogger.info("Too much server load!")
-         return
-         }
-         */
-        
         var queryItems = [URLQueryItem]()
         for property in properties {
             queryItems.append(URLQueryItem(name: property.key, value: property.value))
@@ -365,40 +358,36 @@ class VisilabsRequest {
         
     }
     
-    class func sendRemoteConfigRequest(properties: [String: String],
-                                       headers: [String: String],
-                                       timeoutInterval: TimeInterval,
-                                       completion: @escaping ([String: Any]?, VisilabsError?) -> Void) {
-        var queryItems = [URLQueryItem]()
-        for property in properties {
-            queryItems.append(URLQueryItem(name: property.key, value: property.value))
-        }
+    class func sendRemoteConfigRequest(completion: @escaping ([String]?, VisilabsError?) -> Void) {
+
         
-        let responseParser: (Data) -> [String: Any]? = { data in
+        let responseParser: (Data) -> [String]? = { data in
             var response: Any?
             do {
                 response = try JSONSerialization.jsonObject(with: data, options: [])
             } catch {
-                VisilabsLogger.error("exception decoding api data")
+                VisilabsLogger.error("exception decoding remote config data")
             }
-            return response as? [String: Any]
+            return response as? [String]
         }
         
-        let resource = VisilabsNetwork.buildResource(endPoint: .remote,
+        var headers = [String: String]()
+        if let userAgent = Visilabs.callAPI().visilabsUser.userAgent {
+            headers =  ["User-Agent": userAgent]
+        }
+        
+        let resource = VisilabsNetwork.buildResource(endPoint: .remote ,
                                                      method: .get,
-                                                     timeoutInterval: timeoutInterval,
-                                                     requestBody: nil,
-                                                     queryItems: queryItems,
+                                                     timeoutInterval: Visilabs.callAPI().visilabsProfile.requestTimeoutInterval,
                                                      headers: headers,
                                                      parse: responseParser)
         
-        sendRemoteConfigRequestHandler(resource: resource,
-                                       completion: { result, error in completion(result, error)})
+        sendRemoteConfigRequestHandler(resource: resource, completion: { result, error in completion(result, error)})
         
     }
     
-    private class func sendRemoteConfigRequestHandler(resource: VisilabsResource<[String: Any]>,
-                                                      completion: @escaping ([String: Any]?,
+    private class func sendRemoteConfigRequestHandler(resource: VisilabsResource<[String]>,
+                                                      completion: @escaping ([String]?,
                                                                              VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,
                                    failure: { (error, _, _) in
