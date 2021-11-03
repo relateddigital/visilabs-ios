@@ -8,60 +8,61 @@
 import Foundation
 import UIKit
 
-
-protocol VisilabsRemoteConfigDelegate {
-    func flush(completion: (() -> Void)?)
-}
-
-public class VisilabsRemoteConfig: VisilabsAppLifecycle {
-    //tatic let isBlocked = false
+public class VisilabsRemoteConfig {
     
+    var profileId: String
+    var firstTime = true
+    var lastCheckTime = Date()
+    var timer: Timer?
+    private let remoteConfigIntervalReadWriteLock: DispatchQueue
+    private var remoteConfigFetchTimeInterval: TimeInterval
     
-    /*
-    static func remoteRequest() {
-        let remoteTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            VisilabsRequest.sendRemoteConfigRequest(properties: [String: String](), headers: [String: String](), timeoutInterval: Visilabs.callAPI().visilabsProfile.requestTimeoutInterval) { (result: [String: Any]?, error: VisilabsError?) in
-                if error == nil, let res = result {
-                    print("Response: \(res)") //TODO: Dönecek sonuca göre isBlocked true veya false olacak
+    init(profileId: String) {
+        self.profileId = profileId
+        self.remoteConfigFetchTimeInterval = VisilabsConstants.remoteConfigFetchTimeInterval
+        remoteConfigIntervalReadWriteLock = DispatchQueue(label: "com.relateddigital.remote_configinterval.lock", qos: .utility, attributes: .concurrent)
+        VisilabsPersistence.saveBlock(false)
+        if firstTime {
+            checkRemoteConfig()
+        }
+        startRemoteConfigTimer()
+    }
+    
+    @objc func checkRemoteConfig() {
+        
+        if !firstTime, Date().addingTimeInterval(-self.remoteConfigFetchTimeInterval) > lastCheckTime {
+            return
+        }
+        
+        firstTime = false
+        VisilabsRequest.sendRemoteConfigRequest { sIdArr, err in
+            if let err = err {
+                VisilabsLogger.error("remoteConfigSelector: Error \(err)")
+                VisilabsPersistence.saveBlock(false)
+            }
+            if let sIdArr = sIdArr {
+                if sIdArr.contains(self.profileId) {
+                    VisilabsPersistence.saveBlock(true)
+                } else {
+                    VisilabsPersistence.saveBlock(false)
                 }
             }
+            self.lastCheckTime = Date()
         }
-    }
-     */
-    
-    
-    var timer: Timer?
-    var delegate: VisilabsRemoteConfigDelegate?
-    private let remoteConfigIntervalReadWriteLock: DispatchQueue
-    private var remoteConfigFetchTimeInterval: Double
-    
-    init(remoteConfigFetchTimeInterval: Double) {
-        self.remoteConfigFetchTimeInterval = remoteConfigFetchTimeInterval
-        remoteConfigIntervalReadWriteLock = DispatchQueue(label: "com.relateddigital.remote_configinterval.lock", qos: .utility, attributes: .concurrent)
-        //startRemoteConfigTimer()//TODO
-    }
-    
-    
-
-    
-    @objc func flushSelector() {
-        delegate?.flush(completion: nil)
     }
     
     
     func startRemoteConfigTimer() {
         stopRemoteConfigTimer()
-        if remoteConfigFetchTimeInterval > 0 {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else {
-                    return
-                }
-                self.timer = Timer.scheduledTimer(timeInterval: self.remoteConfigFetchTimeInterval,
-                                                     target: self,
-                                                     selector: #selector(self.flushSelector),
-                                                     userInfo: nil,
-                                                     repeats: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                return
             }
+            self.timer = Timer.scheduledTimer(timeInterval: self.remoteConfigFetchTimeInterval,
+                                              target: self,
+                                              selector: #selector(self.checkRemoteConfig),
+                                              userInfo: nil,
+                                              repeats: true)
         }
     }
     
@@ -74,13 +75,12 @@ public class VisilabsRemoteConfig: VisilabsAppLifecycle {
         }
     }
     
-    
     func applicationDidBecomeActive() {
-        //startRemoteConfigTimer() //TODO
+        startRemoteConfigTimer()
     }
-
+    
     func applicationWillResignActive() {
-        //stopRemoteConfigTimer() //TODO
+        stopRemoteConfigTimer()
     }
     
 }

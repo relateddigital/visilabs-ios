@@ -240,7 +240,7 @@ public class VisilabsPersistence {
         saveUserDefaults(VisilabsConstants.userDefaultsBlockKey, withObject: block)
     }
     
-    static func readBlock(_ block: Bool) -> Bool {
+    static func isBlocked() -> Bool {
         return readUserDefaults(VisilabsConstants.userDefaultsBlockKey) as? Bool ?? false
     }
 

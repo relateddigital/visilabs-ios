@@ -9,10 +9,6 @@ import class Foundation.Bundle
 import SystemConfiguration
 import UIKit
 
-protocol VisilabsAppLifecycle {
-    func applicationDidBecomeActive()
-    func applicationWillResignActive()
-}
 
 typealias Queue = [[String: String]]
 
@@ -159,7 +155,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsTargetingActionInstance = VisilabsTargetingAction(lock: readWriteLock,
                                                                   visilabsProfile: visilabsProfile)
         visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
-        visilabsRemoteConfigInstance = VisilabsRemoteConfig(remoteConfigFetchTimeInterval: VisilabsConstants.remoteConfigFetchTimeInterval)
+        visilabsRemoteConfigInstance = VisilabsRemoteConfig(profileId: visilabsProfile.profileId)
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
 
@@ -248,6 +244,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 extension VisilabsInstance {
     
     public func requestIDFA() {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            return
+        }
+        
         VisilabsHelper.getIDFA { uuid in
             if let idfa = uuid {
                 self.visilabsUser.identifierForAdvertising = idfa
@@ -262,6 +264,11 @@ extension VisilabsInstance {
 
 extension VisilabsInstance {
     public func customEvent(_ pageName: String, properties: [String: String]) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            return
+        }
 
         if pageName.isEmptyOrWhitespace {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
@@ -308,6 +315,11 @@ extension VisilabsInstance {
     }
 
     public func sendCampaignParameters(properties: [String: String]) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            return
+        }
 
         trackingQueue.async { [weak self, properties] in
             guard let strongSelf = self else { return }
@@ -342,6 +354,12 @@ extension VisilabsInstance {
     }
 
     public func login(exVisitorId: String, properties: [String: String] = [String: String]()) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            return
+        }
+        
         if exVisitorId.isEmptyOrWhitespace {
             VisilabsLogger.error("login can not be called with empty exVisitorId.")
             return
@@ -354,6 +372,12 @@ extension VisilabsInstance {
     }
 
     public func signUp(exVisitorId: String, properties: [String: String] = [String: String]()) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            return
+        }
+        
         if exVisitorId.isEmptyOrWhitespace {
             VisilabsLogger.error("signUp can not be called with empty exVisitorId.")
             return
@@ -429,6 +453,13 @@ extension VisilabsInstance {
     public func getFavoriteAttributeActions(actionId: Int? = nil,
                                             completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse)
                                                 -> Void)) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            completion(VisilabsFavoriteAttributeActionResponse(favorites: [VisilabsFavoriteAttribute: [String]](), error: .noData))
+            return
+        }
+        
         targetingActionQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
                 guard let self = self else { return }
@@ -528,6 +559,13 @@ extension VisilabsInstance {
     
     public func getStoryViewAsync(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil
                                   , completion: @escaping ((_ storyHomeView: VisilabsStoryHomeView?) -> Void)) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            completion(nil)
+            return
+        }
+        
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
         let storyHomeViewController = VisilabsStoryHomeViewController()
@@ -570,6 +608,12 @@ extension VisilabsInstance {
     }
     
     public func getStoryView(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil) -> VisilabsStoryHomeView {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+            return VisilabsStoryHomeView()
+        }
+        
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
         let storyHomeViewController = VisilabsStoryHomeViewController()
@@ -618,6 +662,12 @@ extension VisilabsInstance {
                           filters: [VisilabsRecommendationFilter] = [],
                           properties: [String: String] = [:],
                           completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+        }
+        
+        
         recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else { return }
@@ -640,6 +690,11 @@ extension VisilabsInstance {
     }
     
     public func trackRecommendationClick(qs: String) {
+        
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+        }
+        
         let qsArr = qs.components(separatedBy: "&")
         var properties = [String: String]()
         properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
