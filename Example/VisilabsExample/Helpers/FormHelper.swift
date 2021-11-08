@@ -8,6 +8,16 @@
 
 import Eureka
 
+
+public final class InAppButtonRowOf<T: Equatable> : _ButtonRowOf<T>, RowType {
+    public required init(tag: String?) {
+        super.init(tag: tag)
+        cellStyle = .subtitle
+    }
+}
+public typealias InAppButtonRow = InAppButtonRowOf<String>
+
+/*
 enum RowType {
     case textRow
     case urlRow
@@ -102,3 +112,4 @@ class FormHelper {
         return form
     }
 }
+*/
