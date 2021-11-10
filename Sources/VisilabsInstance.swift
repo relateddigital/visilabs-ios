@@ -730,7 +730,7 @@ extension VisilabsInstance {
     }
     
     public func sendLocationPermission() {
-        VisilabsLocationManager.sharedManager.sendLocationPermission()
+        VisilabsLocationManager.sharedManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
     }
 
     // swiftlint:disable file_length
