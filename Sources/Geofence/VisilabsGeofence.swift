@@ -225,7 +225,7 @@ class VisilabsGeofence {
                props[key] = value
            }
         }
-        VisilabsLogger.error("Geofence Triggerred: actionId: \(actionId) geofenceid: \(geofenceId)")
+        VisilabsLogger.info("Geofence Triggerred: actionId: \(actionId) geofenceid: \(geofenceId)")
         VisilabsRequest.sendGeofenceRequest(properties: props,
                                             headers: [String: String](),
                                             timeoutInterval: profile.requestTimeoutInterval) { (_, error) in

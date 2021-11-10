@@ -17,6 +17,8 @@ class VisilabsLocationManager: NSObject {
     var lastKnownCLAuthorizationStatus : CLAuthorizationStatus?
     var currentGeoLocationValue: CLLocationCoordinate2D?
     
+    var geofenceEnabled = false
+    
     override init() {
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
@@ -39,6 +41,7 @@ class VisilabsLocationManager: NSObject {
     
     
     func startGeofencing() {
+        geofenceEnabled = true
         requestLocationAuthorization()
         if !acceptedAuthorizationStatuses.contains(VisilabsLocationManager.locationServiceStateStatus) {
             return
@@ -70,6 +73,15 @@ class VisilabsLocationManager: NSObject {
         }
     }
     
+    func stopUpdates() {
+        stopMonitorRegions()
+        locationManager.stopMonitoringSignificantLocationChanges()
+        lowPowerLocationManager.stopMonitoringSignificantLocationChanges()
+        locationManager.stopUpdatingLocation()
+        lowPowerLocationManager.stopUpdatingLocation()
+        
+    }
+    
     // notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
     static var locationServiceStateStatus: CLAuthorizationStatus {
         if locationServicesEnabledForDevice {
@@ -88,13 +100,17 @@ class VisilabsLocationManager: NSObject {
         return CLLocationManager.locationServicesEnabled()
     }
     
-    func sendLocationPermission(_ status: CLAuthorizationStatus? = nil) {
+    func sendLocationPermission(status: CLAuthorizationStatus? = nil, geofenceEnabled: Bool = true) {
         let authorizationStatus = status ?? VisilabsLocationManager.locationServiceStateStatus
         if authorizationStatus != lastKnownCLAuthorizationStatus {
             var properties = [String: String]()
             properties[VisilabsConstants.locationPermissionReqKey] = authorizationStatus.queryStringValue
             Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: properties)
             lastKnownCLAuthorizationStatus = authorizationStatus
+        }
+        if !geofenceEnabled {
+            self.geofenceEnabled = false
+            stopUpdates()
         }
     }
     
@@ -148,7 +164,11 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     // TO_DO: buna bak tekrardan
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(status.string)")
-        sendLocationPermission(status)
+        sendLocationPermission(status: status)
+        if !self.geofenceEnabled {
+            stopUpdates()
+            return
+        }
         requestLocationAuthorization()
         if acceptedAuthorizationStatuses.contains(status) {
             startGeofencing()
@@ -159,7 +179,11 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization (_ manager: CLLocationManager) {
         if #available(iOS 14.0, *) {
             VisilabsLogger.info("CLLocationManager didChangeAuthorization: status: \(manager.authorizationStatus.string)")
-            sendLocationPermission(manager.authorizationStatus)
+            sendLocationPermission(status: manager.authorizationStatus)
+            if !self.geofenceEnabled {
+                stopUpdates()
+                return
+            }
             requestLocationAuthorization()
             if acceptedAuthorizationStatuses.contains(manager.authorizationStatus) {
                 startGeofencing()
@@ -169,6 +193,9 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !self.geofenceEnabled {
+            stopUpdates()
+        }
         if locations.count > 0 {
             self.currentGeoLocationValue = locations[0].coordinate
             VisilabsLogger.info("CLLocationManager didUpdateLocations: lat:\(locations[0].coordinate.latitude) lon:\(locations[0].coordinate.longitude)")
