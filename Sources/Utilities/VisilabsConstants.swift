@@ -127,6 +127,8 @@ struct VisilabsConstants {
     static let mailSubscriptionForm = "MailSubscriptionForm"
     static let spinToWin = "SpinToWin"
     static let scratchToWin = "ScratchToWin"
+    static let productStatNotifier = "ProductStatNotifier"
+    
     static let actid = "actid"
     static let actionId = "action_id"
     static let actionData = "actiondata"
