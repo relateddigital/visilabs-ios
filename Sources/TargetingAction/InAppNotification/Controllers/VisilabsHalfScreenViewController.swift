@@ -76,14 +76,14 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
             bounds = UIScreen.main.bounds
         }
         
-        let bottomInset = VisilabsHelper.getsafeAreaInsets().bottom
-        let topInset = VisilabsHelper.getsafeAreaInsets().top
-        halfScreenHeight = visilabsHalfScreenView.imageView.frame.height + visilabsHalfScreenView.titleLabel.frame.height
+        let bottomInset = Double(VisilabsHelper.getsafeAreaInsets().bottom)
+        let topInset = Double(VisilabsHelper.getsafeAreaInsets().top)
+        halfScreenHeight = Double(visilabsHalfScreenView.imageView.frame.height) + Double(visilabsHalfScreenView.titleLabel.frame.height)
         
-        let frameY = halfScreenNotification.position == .bottom ? bounds.size.height - (halfScreenHeight + bottomInset) : topInset
+        let frameY = halfScreenNotification.position == .bottom ? Double(bounds.size.height) - (halfScreenHeight + bottomInset) : topInset
         
         
-        let frame = CGRect(origin: CGPoint(x: 0, y: frameY), size: CGSize(width: bounds.size.width, height: halfScreenHeight))
+        let frame = CGRect(origin: CGPoint(x: 0, y: CGFloat(frameY)), size: CGSize(width: bounds.size.width, height: CGFloat(halfScreenHeight)))
         
         if #available(iOS 13.0, *) {
             let windowScene = sharedUIApplication
@@ -118,12 +118,12 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
                 
                 var originY = 0.0
                 if self.halfScreenNotification.position == .bottom {
-                    originY = self.halfScreenHeight + VisilabsHelper.getsafeAreaInsets().bottom
+                    originY = self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().bottom)
                 } else {
-                    originY = -(self.halfScreenHeight + VisilabsHelper.getsafeAreaInsets().top)
+                    originY = -(self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().top))
                 }
                 
-                self.window?.frame.origin.y += originY
+                self.window?.frame.origin.y += CGFloat(originY)
                 }, completion: { _ in
                     self.window?.isHidden = true
                     self.window?.removeFromSuperview()
