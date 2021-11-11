@@ -89,12 +89,15 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         }
     }
     
+    func showProductStatNotifier() {
+        
+    }
+    
     func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let halfScreenNotificationVC = VisilabsHalfScreenViewController(notification: notification)
         halfScreenNotificationVC.delegate = self
         halfScreenNotificationVC.show(animated: true)
         return true
-         
     }
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
