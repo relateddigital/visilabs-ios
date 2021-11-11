@@ -33,7 +33,7 @@ class VisilabsHalfScreenView: UIView {
     
     private func setupTitle() {
         titleLabel = UILabel()
-        titleLabel.text = notification.messageTitle //TODO: AÇ SONRA
+        titleLabel.text = notification.messageTitle
         titleLabel.font = notification.messageTitleFont
         titleLabel.textColor = notification.messageTitleColor
         titleLabel.textAlignment = .center
@@ -91,43 +91,4 @@ class VisilabsHalfScreenView: UIView {
         super.layoutSubviews()
     }
     
-    
-    
-    
-    
 }
-
-
-//entry
-//
-//auxLabel: nil, auxiliaryContent: nil
-//message:
-
-
-
-//name:nil
-//windowLevel:normal
-//position:top
-//precedence:override(prority:500, dropEnqueuedEntries:false)
-//displayDuration:infinite
-//popBehavior: animated
-//positionConstraints: rotation:(isEnabled: true, supportedInterfaceOrientations: standard), keyboardRelation: unbind
-//        maxSize(width:intrinsic, height: intrinsic), verticalOffset = 0, safeArea = overridden
-//screenInteraction: defaultAction: forward, customTapActions = 0 values {}
-//entryInteraction = {defaultAction = dismissEntry customTapActions = 0 values {} }
-//scroll = disabled
-//hapticFeedbackType = none
-//lifecycleEvents: hepsi nil
-//displayMode = inferred
-// entryBackground : color
-// screenBackground = clear
-//shadow = none
-//roundCorners = none
-//statusBar = inferred
-//entranceAnimation: {translate = some {duration = 0.29999999999999999 delay = 0 anchorPosition = automatic spring = nil} scale = nil fade = nil}
-//exitAnimation = {translate = some { duration = 0.29999999999999999 delay = 0 anchorPosition = automatic spring = nil} scale = nil fade = nil }
-//popBehavior:animated { animated = { animation = { translate = some { duration = 0.29999999999999999 delay = 0 anchorPosition = automaticspring = nil}
-//    scale = nil fade = nil } } }
-
-
-

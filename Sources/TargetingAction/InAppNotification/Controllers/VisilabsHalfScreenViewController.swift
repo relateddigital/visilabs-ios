@@ -7,9 +7,6 @@
 
 import UIKit
 
-
-//messageTitle,img
-
 class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
 
     var halfScreenNotification: VisilabsInAppNotification! {
