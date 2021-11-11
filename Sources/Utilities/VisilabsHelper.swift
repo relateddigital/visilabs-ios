@@ -242,6 +242,41 @@ internal class VisilabsHelper {
         }
         return capabilities.contains("location")
     }
+    
+    static private func getVisibleViewController(_ vc: UIViewController?) -> UIViewController? {
+        if vc is UINavigationController {
+            return getVisibleViewController((vc as? UINavigationController)?.visibleViewController)
+        } else if vc is UITabBarController {
+            return getVisibleViewController((vc as? UITabBarController)?.selectedViewController)
+        } else {
+            if let pvc = vc?.presentedViewController {
+                return getVisibleViewController(pvc.presentedViewController)
+            } else {
+                return vc
+            }
+        }
+    }
+    
+    static func getRootViewController() -> UIViewController? {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
+            return nil
+        }
+        if let rootViewController = sharedUIApplication.keyWindow?.rootViewController {
+            return getVisibleViewController(rootViewController)
+        }
+        return nil
+    }
+    
+    static func getsafeAreaInsets() -> UIEdgeInsets {
+        if #available(iOS 11.0, *) {
+            //return getRootViewController()?.view?.safeAreaInsets ?? UIApplication.shared.keyWindow?.rootViewController?.view.safeAreaInsets ?? .zero
+            return UIApplication.shared.keyWindow?.rootViewController?.view.safeAreaInsets ?? .zero
+        } else {
+            let statusBarMaxY = UIApplication.shared.statusBarFrame.maxY
+            return UIEdgeInsets(top: statusBarMaxY, left: 0, bottom: 10, right: 0)
+        }
+    }
+    
 }
 
 class ToastLabel: UILabel {

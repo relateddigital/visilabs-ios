@@ -34,19 +34,21 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         let notification = notification
         let delayTime = notification.waitingTime ?? 0
         DispatchQueue.main.async {
-            self.currentViewController = self.getRootViewController()
+            self.currentViewController = VisilabsHelper.getRootViewController()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an in-app notification")
             } else {
-                if notification.waitingTime ?? 0 == 0 || self.currentViewController == self.getRootViewController() {
+                if notification.waitingTime ?? 0 == 0 || self.currentViewController == VisilabsHelper.getRootViewController() {
                     var shownNotification = false
                     switch notification.type {
                     case .mini:
                         shownNotification = self.showMiniNotification(notification)
                     case .full:
                         shownNotification = self.showFullNotification(notification)
+                    case .halfScreenImage:
+                        shownNotification = self.showHalfScreenNotification(notification)
                     case .carousel:
                         shownNotification = self.showCarousel(notification)
                     case .alert:
@@ -85,6 +87,24 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                 }
             }
         }
+    }
+    
+    func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
+        
+        /*
+        if let root = getRootViewController() {
+            root.addChild(VisilabsHalfScreenViewController(notification: notification))
+        }
+        return true
+        */
+        
+        
+        let halfScreenNotificationVC = VisilabsHalfScreenViewController(notification: notification)
+        halfScreenNotificationVC.delegate = self
+        halfScreenNotificationVC.loadView()
+        halfScreenNotificationVC.show(animated: true)
+        return true
+         
     }
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
@@ -137,57 +157,19 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         alert.addAction(action)
         alert.addAction(close)
 
-        if let root = getRootViewController() {
+        if let root = VisilabsHelper.getRootViewController() {
             root.present(alert, animated: true, completion: alertDismiss)
         }
     }
 
-    // TO_DO: bu gerekmeyecek sanırım
-    func getTopView() -> UIView? {
-        var topView: UIView?
-        let window = UIApplication.shared.keyWindow
-        if window != nil {
-            for subview in window?.subviews ?? [] {
-                if !subview.isHidden && subview.alpha > 0
-                    && subview.frame.size.width > 0
-                    && subview.frame.size.height > 0 {
-                    topView = subview
-                }
-            }
-        }
-        return topView
-    }
-
-    func getRootViewController() -> UIViewController? {
-        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
-            return nil
-        }
-        if let rootViewController = sharedUIApplication.keyWindow?.rootViewController {
-            return getVisibleViewController(rootViewController)
-        }
-        return nil
-    }
-
-    private func getVisibleViewController(_ vc: UIViewController?) -> UIViewController? {
-        if vc is UINavigationController {
-            return getVisibleViewController((vc as? UINavigationController)?.visibleViewController)
-        } else if vc is UITabBarController {
-            return getVisibleViewController((vc as? UITabBarController)?.selectedViewController)
-        } else {
-            if let pvc = vc?.presentedViewController {
-                return getVisibleViewController(pvc.presentedViewController)
-            } else {
-                return vc
-            }
-        }
-    }
+    
 
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)
         controller.delegate = self
         controller.inappButtonDelegate = self.inappButtonDelegate
 
-        if let rootViewController = getRootViewController() {
+        if let rootViewController = VisilabsHelper.getRootViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
             return true
         } else {
@@ -199,7 +181,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         let controller = VisilabsPopupNotificationViewController(mailForm: model)
         controller.delegate = self
 
-        if let rootViewController = getRootViewController() {
+        if let rootViewController = VisilabsHelper.getRootViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
             return true
         } else {
@@ -210,7 +192,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
         let controller = VisilabsPopupNotificationViewController(scratchToWin: model)
         controller.delegate = self
-        if let rootViewController = getRootViewController() {
+        if let rootViewController = VisilabsHelper.getRootViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
             return true
         } else {
@@ -222,7 +204,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         let controller = SpinToWinViewController(model)
         controller.modalPresentationStyle = .fullScreen
         controller.delegate = self
-        if let rootViewController = getRootViewController() {
+        if let rootViewController = VisilabsHelper.getRootViewController() {
             rootViewController.present(controller, animated: true, completion: nil)
             return true
         }
@@ -281,6 +263,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
 
     func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String) {
+        
     }
 
     func alertDismiss() {
