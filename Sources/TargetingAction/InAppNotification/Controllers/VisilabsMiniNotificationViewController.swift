@@ -28,6 +28,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 
         titleLabel.text = notification!.messageTitle
         titleLabel.font = notification!.messageTitleFont
