@@ -330,17 +330,19 @@ extension InAppViewController {
     }
     
     
+    /*
     func addShowSocialPoofButtonRow() -> ButtonRow {
         return ButtonRow {
             $0.title = "showSocialPoof"
         }.onCellSelection { _, _ in
-            let model = SocialProofModel(text: "soctext", number: "5", location: .bottom, duration: .sec10, backgroundColor: .yellow
+            let model = VisilabsProductStatNotifierViewModel(text: "soctext", number: "5", location: .bottom, duration: .sec10, backgroundColor: .yellow
                                          , textColor: .brown, numberColor: .green, textFont: .boldSystemFont(ofSize: 18)
                                          , numberFont: .italicSystemFont(ofSize: 15), closeButtonColor: .white)
             let vc = SocialProofViewController(model: model)
             vc.showNow(animated: true)
         }
     }
+     */
     
     func addShowHalfScreenButtonRow() -> ButtonRow {
         return ButtonRow {

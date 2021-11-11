@@ -164,7 +164,8 @@ class EventViewController: FormViewController {
             .halfScreenImage: [VisilabsInAppNotificationType.halfScreenImage.rawValue: 704],
             .scratchToWin: [VisilabsInAppNotificationType.scratchToWin.rawValue: 592],
             .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
-            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130]
+            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130],
+            .productStatNotifier: [VisilabsInAppNotificationType.productStatNotifier.rawValue: 703]
         ]
     }
     

@@ -80,7 +80,7 @@ class InAppViewController: FormViewController {
 
             <<< addShowNotificationButtonRow()
             <<< addShowCountDownTimerButtonRow()
-            <<< addShowSocialPoofButtonRow()
+            //<<< addShowSocialPoofButtonRow()
             <<< addShowHalfScreenButtonRow()
 
         showHiddenRows()
@@ -115,6 +115,8 @@ class InAppViewController: FormViewController {
             setFormRowsForEmail()
         case .halfScreenImage:
             setFormRowsForEmail()
+        case .productStatNotifier:
+            break
         }
         
         
