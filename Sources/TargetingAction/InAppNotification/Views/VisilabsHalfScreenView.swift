@@ -13,7 +13,7 @@ class VisilabsHalfScreenView: UIView {
     var notification: VisilabsInAppNotification
     var titleLabel: UILabel!
     var imageView: UIImageView!
-    
+    var closeButton: UIButton!
     
     init(frame: CGRect, notification: VisilabsInAppNotification) {
         self.notification = notification
@@ -22,6 +22,7 @@ class VisilabsHalfScreenView: UIView {
         if let imageData = notification.image, let image = UIImage(data: imageData, scale: 1) {
             setupImageView(image: image)
         }
+        setCloseButton()
         layoutContent()
     }
     
@@ -32,7 +33,7 @@ class VisilabsHalfScreenView: UIView {
     
     private func setupTitle() {
         titleLabel = UILabel()
-        titleLabel.text = notification.messageTitle
+        titleLabel.text = notification.messageTitle //TODO: AÇ SONRA
         titleLabel.font = notification.messageTitleFont
         titleLabel.textColor = notification.messageTitleColor
         titleLabel.textAlignment = .center
@@ -48,33 +49,42 @@ class VisilabsHalfScreenView: UIView {
         addSubview(imageView)
     }
     
+    private func setCloseButton() {
+        closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.contentHorizontalAlignment = .right
+        closeButton.clipsToBounds = false
+        closeButton.setTitleColor(UIColor.white, for: .normal)
+        closeButton.setTitle("×", for: .normal)
+        closeButton.titleLabel?.font = .systemFont(ofSize: 35.0, weight: .regular)
+        closeButton.contentEdgeInsets = UIEdgeInsets(top: 2.5, left: 2.5, bottom: 2.5, right: 2.5)
+        if let closeButtonColor = notification.closeButtonColor {
+            closeButton.setTitleColor(closeButtonColor, for: .normal)
+        }
+        addSubview(closeButton)
+    }
+    
     private func layoutContent() {
         self.backgroundColor = notification.backGroundColor
         titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
         titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
         titleLabel.centerX(to: self,priority: .required)
-        //titleLabel.layoutMargins = UIEdgeInsets(top: 40, left: 40, bottom: 40, right: 40)
-        
-        titleLabel.height(titleLabel.intrinsicContentSize.height + 10)
-        
+        if titleLabel.text.isNilOrWhiteSpace {
+            titleLabel.height(0)
+            titleLabel.isHidden = true
+        } else {
+            titleLabel.height(titleLabel.intrinsicContentSize.height + 10)
+        }
         imageView?.topToBottom(of: self.titleLabel, offset: 0)
         imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
         imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
-        //self.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 0.0).isActive = true
-        //self.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0.0).isActive = true
+        
+        closeButton.top(to: self, offset: -5.0)
+        closeButton.trailing(to: self, offset: -10.0)
+        
         self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
         self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true
-        
-        //self.window?.bottomAnchor.constraint(equalTo: self.imageView.bottomAnchor, constant: 0.0).isActive = true
-        //self.window?.topAnchor.constraint(equalTo: self.titleLabel.topAnchor, constant: 0.0).isActive = true
-        
-        
         self.layoutIfNeeded()
-
-        //self.leading(to: window!, offset: 0, relation: .equal, priority: .required)
-        //let height = titleLabel.height + (imageView == nil ? CGFloat(0) : imageView!.height)
-        //self.height(height)
-        
     }
     
     override func layoutSubviews() {

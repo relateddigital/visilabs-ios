@@ -90,18 +90,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
     
     func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
-        
-        /*
-        if let root = getRootViewController() {
-            root.addChild(VisilabsHalfScreenViewController(notification: notification))
-        }
-        return true
-        */
-        
-        
         let halfScreenNotificationVC = VisilabsHalfScreenViewController(notification: notification)
         halfScreenNotificationVC.delegate = self
-        halfScreenNotificationVC.loadView()
         halfScreenNotificationVC.show(animated: true)
         return true
          
@@ -111,7 +101,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
         miniNotificationVC.delegate = self
         miniNotificationVC.show(animated: true)
-
         DispatchQueue.main.asyncAfter(deadline: .now() + miniNotificationPresentationTime) {
             self.notificationShouldDismiss(controller: miniNotificationVC, callToActionURL: nil,
                                            shouldTrack: false, additionalTrackingProperties: nil)
