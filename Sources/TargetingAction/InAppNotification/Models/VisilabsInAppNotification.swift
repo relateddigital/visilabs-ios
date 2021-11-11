@@ -22,6 +22,7 @@ public class VisilabsInAppNotification {
         public static let visitData = "visit_data"
         public static let queryString = "qs"
         public static let messageTitleColor = "msg_title_color"
+        public static let messageTitleTextSize = "msg_title_textsize"
         public static let messageBodyColor = "msg_body_color"
         public static let messageBodyTextSize = "msg_body_textsize"
         public static let fontFamily = "font_family"
@@ -44,6 +45,7 @@ public class VisilabsInAppNotification {
         public static let secondPopupButtonText = "secondPopup_btn_text"
         public static let secondImageUrlString1 = "secondPopup_image1"
         public static let secondImageUrlString2 = "secondPopup_image2"
+        public static let position = "pos"
     }
 
     let actId: Int
@@ -58,6 +60,7 @@ public class VisilabsInAppNotification {
     let visitData: String?
     let queryString: String?
     let messageTitleColor: UIColor?
+    let messageTitleTextSize: String?
     let messageBodyColor: UIColor?
     let messageBodyTextSize: String?
     let fontFamily: String?
@@ -81,6 +84,7 @@ public class VisilabsInAppNotification {
     let secondImageUrlString2: String?
     let secondPopupMinPoint: String?
     let previousPopupPoint: Double?
+    let position: VisilabsHalfScreenPosition?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -140,6 +144,7 @@ public class VisilabsInAppNotification {
                 visitData: String?,
                 queryString: String?,
                 messageTitleColor: String?,
+                messageTitleTextSize: String?,
                 messageBodyColor: String?,
                 messageBodyTextSize: String?,
                 fontFamily: String?,
@@ -162,7 +167,8 @@ public class VisilabsInAppNotification {
                 secondImageUrlString1: String?,
                 secondImageUrlString2: String?,
                 secondPopupMinPoint: String?,
-                previousPopupPoint: Double? = nil) {
+                previousPopupPoint: Double? = nil,
+                position: VisilabsHalfScreenPosition?) {
 
         self.actId = actId
         self.messageType = type.rawValue
@@ -176,6 +182,7 @@ public class VisilabsInAppNotification {
         self.visitData = visitData
         self.queryString = queryString
         self.messageTitleColor =  UIColor(hex: messageTitleColor)
+        self.messageTitleTextSize = messageTitleTextSize
         self.messageBodyColor = UIColor(hex: messageBodyColor)
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
@@ -224,6 +231,7 @@ public class VisilabsInAppNotification {
             self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(secondImageUrlString2!, type: self.type)
         }
         self.previousPopupPoint = previousPopupPoint
+        self.position = position
         setFonts()
     }
     
@@ -264,6 +272,7 @@ public class VisilabsInAppNotification {
         self.messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
         self.messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
         self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
+        self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? self.messageBodyTextSize
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
         self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
         self.promotionCode = actionData[PayloadKey.promotionCode] as? String
@@ -322,12 +331,20 @@ public class VisilabsInAppNotification {
         }
         self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
         self.previousPopupPoint = nil
+        
+        if let positionString = actionData[PayloadKey.position] as? String
+            , let position = VisilabsHalfScreenPosition.init(rawValue: positionString) {
+            self.position = position
+        } else {
+            self.position = .bottom
+        }
+        
         setFonts()
     }
 
     private func setFonts() {
         self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
-                                                                  fontSize: self.messageBodyTextSize,
+                                                                  fontSize: self.messageTitleTextSize,
                                                                   style: .title2)
         self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
                                                                  fontSize: self.messageBodyTextSize,

@@ -32,3 +32,8 @@ public enum VisilabsSecondPopupType: String, CaseIterable {
     case imageButtonImage = "image_text_button_image"
     case feedback = "feedback_form"
 }
+
+public enum VisilabsHalfScreenPosition: String, CaseIterable {
+    case top = "top"
+    case bottom = "bottom"
+}

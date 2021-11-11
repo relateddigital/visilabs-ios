@@ -600,6 +600,7 @@ extension InAppViewController {
                                          visitData: nil,
                                          queryString: nil,
                                          messageTitleColor: messageTitleColor,
+                                         messageTitleTextSize: nil,
                                          messageBodyColor: messageBodyColor,
                                          messageBodyTextSize: messageBodyTextSize,
                                          fontFamily: fontFamily,
@@ -621,7 +622,8 @@ extension InAppViewController {
                                          secondPopupButtonText: secondPopupButtonText,
                                          secondImageUrlString1: secondImg1,
                                          secondImageUrlString2: secondImg2,
-                                         secondPopupMinPoint: minPoint)
+                                         secondPopupMinPoint: minPoint,
+                                         position: .bottom)
     }
 
     //swiftlint:disable function_body_length
