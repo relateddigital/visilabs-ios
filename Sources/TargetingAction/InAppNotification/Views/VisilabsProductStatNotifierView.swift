@@ -27,7 +27,7 @@ class VisilabsProductStatNotifierView: UIView {
     
     private func setupTitle() {
         titleLabel = UILabel()
-        titleLabel.attributedText = productStatNotifier.getAttributedString()
+        titleLabel.attributedText = productStatNotifier.attributedString
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 0
