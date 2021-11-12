@@ -135,12 +135,17 @@ class VisilabsTargetingAction {
         } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
             return parseScratchToWin(sctw)
         } else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
-            let productStatNotifier = parseProductStatNotifier(psn)
-            if productStatNotifier?.getAttributedString() == nil {
-                VisilabsLogger.error("There cannot be more than one number in the product stat notifier content!")
-                return nil
+            if let productStatNotifier = parseProductStatNotifier(psn) {
+                if productStatNotifier.attributedString == nil {
+                    VisilabsLogger.error("There cannot be more than one number in the product stat notifier content!")
+                    return nil
+                }
+                if productStatNotifier.contentCount < productStatNotifier.threshold {
+                    VisilabsLogger.warn("Product stat notifier content count below threshold.")
+                    return nil
+                }
+                return productStatNotifier
             }
-            return productStatNotifier
         }
         return nil
     }
@@ -258,7 +263,9 @@ class VisilabsTargetingAction {
         let contentcount_text_size = extendedProps[VisilabsConstants.contentcount_text_size] as? String ?? ""
         let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? "black"
         
-        return VisilabsProductStatNotifierViewModel(targetingActionType: .productStatNotifier, content: content, timeout: timeout, position: position, bgcolor: bgcolor, threshold: threshold, showclosebtn: showclosebtn, content_text_color: content_text_color, content_font_family: content_font_family, content_text_size: content_text_size, contentcount_text_color: contentcount_text_color, contentcount_text_size: contentcount_text_size, closeButtonColor: closeButtonColor)
+        var productStatNotifier = VisilabsProductStatNotifierViewModel(targetingActionType: .productStatNotifier, content: content, timeout: timeout, position: position, bgcolor: bgcolor, threshold: threshold, showclosebtn: showclosebtn, content_text_color: content_text_color, content_font_family: content_font_family, content_text_size: content_text_size, contentcount_text_color: contentcount_text_color, contentcount_text_size: contentcount_text_size, closeButtonColor: closeButtonColor)
+        productStatNotifier.setAttributedString()
+        return productStatNotifier
     }
 
     // MARK: MailSubscriptionForm
