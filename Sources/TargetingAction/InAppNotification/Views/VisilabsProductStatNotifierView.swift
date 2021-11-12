@@ -27,9 +27,7 @@ class VisilabsProductStatNotifierView: UIView {
     
     private func setupTitle() {
         titleLabel = UILabel()
-        titleLabel.text = productStatNotifier.content
-        titleLabel.font = productStatNotifier.getContentFont()
-        titleLabel.textColor = UIColor(hex: productStatNotifier.content_text_color)
+        titleLabel.attributedText = productStatNotifier.getAttributedString()
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 0
@@ -51,27 +49,27 @@ class VisilabsProductStatNotifierView: UIView {
     
     private func layoutContent() {
         self.backgroundColor = UIColor(hex: productStatNotifier.bgcolor)
-        titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
-        titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+        titleLabel.leading(to: self, offset: 40, relation: .equal, priority: .required)
+        titleLabel.trailing(to: self, offset: -40, relation: .equal, priority: .required)
         titleLabel.centerX(to: self,priority: .required)
-        titleLabel.height(titleLabel.intrinsicContentSize.height + 40)
-        
         if productStatNotifier.showclosebtn {
             closeButton.top(to: self, offset: -5.0)
             closeButton.trailing(to: self, offset: -10.0)
         } else {
             closeButton.isHidden = true
         }
-        
-        
-        
         self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
         self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true
         self.layoutIfNeeded()
     }
     
     override func layoutSubviews() {
+        if titleLabel.text.isNilOrWhiteSpace {
+            titleLabel.height(0)
+            titleLabel.isHidden = true
+        } else {
+            titleLabel.height(titleLabel.intrinsicContentSize.height + 20 )
+        }
         super.layoutSubviews()
     }
-    
 }

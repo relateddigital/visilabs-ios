@@ -71,12 +71,6 @@ class VisilabsHalfScreenView: UIView {
         titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
         titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
         titleLabel.centerX(to: self,priority: .required)
-        if titleLabel.text.isNilOrWhiteSpace {
-            titleLabel.height(0)
-            titleLabel.isHidden = true
-        } else {
-            titleLabel.height(titleLabel.intrinsicContentSize.height + 10)
-        }
         imageView?.topToBottom(of: self.titleLabel, offset: 0)
         imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
         imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
@@ -90,6 +84,12 @@ class VisilabsHalfScreenView: UIView {
     }
     
     override func layoutSubviews() {
+        if titleLabel.text.isNilOrWhiteSpace {
+            titleLabel.height(0)
+            titleLabel.isHidden = true
+        } else {
+            titleLabel.height(titleLabel.intrinsicContentSize.height + 20 )
+        }
         super.layoutSubviews()
     }
     
