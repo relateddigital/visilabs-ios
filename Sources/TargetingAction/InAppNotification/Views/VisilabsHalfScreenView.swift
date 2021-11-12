@@ -37,6 +37,8 @@ class VisilabsHalfScreenView: UIView {
         titleLabel.font = notification.messageTitleFont
         titleLabel.textColor = notification.messageTitleColor
         titleLabel.textAlignment = .center
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.numberOfLines = 0
         addSubview(titleLabel)
     }
     

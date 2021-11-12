@@ -21,4 +21,12 @@ public struct VisilabsProductStatNotifierViewModel: TargetingActionViewModel {
     var contentcount_text_color: String
     var contentcount_text_size: String
     var closeButtonColor: String
+    
+    func getContentFont() -> UIFont {
+        return VisilabsInAppNotification.getFont(fontFamily: content_font_family, fontSize: content_text_size, style: .title2)
+    }
+    
+    func getContentCountFont() -> UIFont {
+        return VisilabsInAppNotification.getFont(fontFamily: content_font_family, fontSize: contentcount_text_size, style: .title2)
+    }
 }

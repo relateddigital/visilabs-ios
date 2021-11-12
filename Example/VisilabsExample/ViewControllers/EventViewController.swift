@@ -101,6 +101,9 @@ class EventViewController: FormViewController {
     private func inAppEvent(_ queryStringFilter: String) {
         var properties = [String: String]()
         properties["OM.inapptype"] = queryStringFilter
+        if queryStringFilter.lowercased() == VisilabsInAppNotificationType.productStatNotifier.rawValue {
+            properties["OM.pv"] = "CV7933-837-837"
+        }
         Visilabs.callAPI().customEvent("InAppTest", properties: properties)
         Visilabs.callAPI().inappButtonDelegate = self
     }

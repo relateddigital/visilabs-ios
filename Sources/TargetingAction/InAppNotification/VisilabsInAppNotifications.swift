@@ -84,13 +84,20 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                     if self.showScratchToWin(sctw) {
                         self.markTargetingActionShown(model: sctw)
                     }
+                } else if model.targetingActionType == .productStatNotifier, let psn = model as? VisilabsProductStatNotifierViewModel {
+                    if self.showProductStatNotifier(psn) {
+                        self.markTargetingActionShown(model: psn)
+                    }
                 }
             }
         }
     }
     
-    func showProductStatNotifier() {
-        
+    func showProductStatNotifier(_ model: VisilabsProductStatNotifierViewModel) -> Bool {
+        let productStatNotifierVC = VisilabsProductStatNotifierViewController(productStatNotifier: model)
+        productStatNotifierVC.delegate = self
+        productStatNotifierVC.show(animated: true)
+        return true
     }
     
     func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
