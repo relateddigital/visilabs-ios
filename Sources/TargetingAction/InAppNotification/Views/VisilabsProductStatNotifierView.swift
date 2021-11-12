@@ -1,31 +1,25 @@
 //
-//  VisilabsHalfScreenView.swift
+//  VisilabsProductStatNotifierView.swift
 //  VisilabsIOS
 //
-//  Created by Egemen Gülkılık on 10.11.2021.
+//  Created by Egemen Gülkılık on 11.11.2021.
 //
 
-import Foundation
 import UIKit
 
-class VisilabsHalfScreenView: UIView {
+class VisilabsProductStatNotifierView: UIView {
     
-    var notification: VisilabsInAppNotification
+    var productStatNotifier: VisilabsProductStatNotifierViewModel
     var titleLabel: UILabel!
-    var imageView: UIImageView!
     var closeButton: UIButton!
     
-    init(frame: CGRect, notification: VisilabsInAppNotification) {
-        self.notification = notification
+    init(frame: CGRect, productStatNotifier: VisilabsProductStatNotifierViewModel) {
+        self.productStatNotifier = productStatNotifier
         super.init(frame: frame)
         setupTitle()
-        if let imageData = notification.image, let image = UIImage(data: imageData, scale: 1) {
-            setupImageView(image: image)
-        }
         setCloseButton()
         layoutContent()
     }
-    
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -33,22 +27,13 @@ class VisilabsHalfScreenView: UIView {
     
     private func setupTitle() {
         titleLabel = UILabel()
-        titleLabel.text = notification.messageTitle
-        titleLabel.font = notification.messageTitleFont
-        titleLabel.textColor = notification.messageTitleColor
+        titleLabel.text = productStatNotifier.content
+        titleLabel.font = productStatNotifier.getContentFont()
+        titleLabel.textColor = UIColor(hex: productStatNotifier.content_text_color)
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 0
         addSubview(titleLabel)
-    }
-    
-    private func setupImageView(image: UIImage) {
-        imageView = UIImageView(frame: .zero)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .center
-        imageView.clipsToBounds = true
-        imageView.image = image
-        addSubview(imageView)
     }
     
     private func setCloseButton() {
@@ -60,29 +45,25 @@ class VisilabsHalfScreenView: UIView {
         closeButton.setTitle("×", for: .normal)
         closeButton.titleLabel?.font = .systemFont(ofSize: 35.0, weight: .regular)
         closeButton.contentEdgeInsets = UIEdgeInsets(top: 2.5, left: 2.5, bottom: 2.5, right: 2.5)
-        if let closeButtonColor = notification.closeButtonColor {
-            closeButton.setTitleColor(closeButtonColor, for: .normal)
-        }
+        closeButton.setTitleColor(productStatNotifier.closeButtonColor.lowercased() == "white" ? UIColor.white : UIColor.black , for: .normal)
         addSubview(closeButton)
     }
     
     private func layoutContent() {
-        self.backgroundColor = notification.backGroundColor
+        self.backgroundColor = UIColor(hex: productStatNotifier.bgcolor)
         titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
         titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
         titleLabel.centerX(to: self,priority: .required)
-        if titleLabel.text.isNilOrWhiteSpace {
-            titleLabel.height(0)
-            titleLabel.isHidden = true
-        } else {
-            titleLabel.height(titleLabel.intrinsicContentSize.height + 10)
-        }
-        imageView?.topToBottom(of: self.titleLabel, offset: 0)
-        imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
-        imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+        titleLabel.height(titleLabel.intrinsicContentSize.height + 40)
         
-        closeButton.top(to: self, offset: -5.0)
-        closeButton.trailing(to: self, offset: -10.0)
+        if productStatNotifier.showclosebtn {
+            closeButton.top(to: self, offset: -5.0)
+            closeButton.trailing(to: self, offset: -10.0)
+        } else {
+            closeButton.isHidden = true
+        }
+        
+        
         
         self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
         self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true

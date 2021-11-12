@@ -8,12 +8,13 @@
 import UIKit
 
 class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewController {
-
-    var halfScreenNotification: VisilabsInAppNotification! {
-        return super.notification
+    
+    
+    var notifier: VisilabsProductStatNotifierViewModel! {
+        return super.productStatNotifier
     }
     
-    var visilabsHalfScreenView: VisilabsHalfScreenView!
+    var visilabsProductStatNotifierView: VisilabsProductStatNotifierView!
     var halfScreenHeight = 0.0
     
     var isDismissing = false
@@ -23,23 +24,18 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
     init(productStatNotifier: VisilabsProductStatNotifierViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.productStatNotifier = productStatNotifier
-    }
-    
-    init(notification: VisilabsInAppNotification) {
-        super.init(nibName: nil, bundle: nil)
-        self.notification = notification
-        visilabsHalfScreenView = VisilabsHalfScreenView(frame: UIScreen.main.bounds, notification: halfScreenNotification)
-        view = visilabsHalfScreenView
-        
+        visilabsProductStatNotifierView = VisilabsProductStatNotifierView(frame: UIScreen.main.bounds, productStatNotifier: productStatNotifier)
+        view = visilabsProductStatNotifierView
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap(gesture:)))
         tapGesture.numberOfTapsRequired = 1
-        visilabsHalfScreenView.addGestureRecognizer(tapGesture)
+        visilabsProductStatNotifierView.addGestureRecognizer(tapGesture)
         
         let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeButtonTapped(tapGestureRecognizer:)))
-        visilabsHalfScreenView.closeButton.isUserInteractionEnabled = true
-        visilabsHalfScreenView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
+        visilabsProductStatNotifierView.closeButton.isUserInteractionEnabled = true
+        visilabsProductStatNotifierView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
     }
     
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -51,8 +47,8 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
     @objc func didTap(gesture: UITapGestureRecognizer) {
         if !isDismissing && gesture.state == UIGestureRecognizer.State.ended {
             delegate?.notificationShouldDismiss(controller: self,
-                                                callToActionURL: halfScreenNotification.callToActionUrl,
-                                                shouldTrack: true,
+                                                callToActionURL: nil,
+                                                shouldTrack: false,
                                                 additionalTrackingProperties: nil)
         }
     }
@@ -82,14 +78,16 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
             bounds = UIScreen.main.bounds
         }
         
-        let bottomInset = VisilabsHelper.getsafeAreaInsets().bottom
-        let topInset = VisilabsHelper.getsafeAreaInsets().top
-        halfScreenHeight = visilabsHalfScreenView.imageView.frame.height + visilabsHalfScreenView.titleLabel.frame.height
+        let bottomInset = Double(VisilabsHelper.getsafeAreaInsets().bottom)
+        let topInset = Double(VisilabsHelper.getsafeAreaInsets().top)
+        halfScreenHeight = Double(visilabsProductStatNotifierView.titleLabel.frame.height)
         
-        let frameY = halfScreenNotification.position == .bottom ? bounds.size.height - (halfScreenHeight + bottomInset) : topInset
+        let frameY = notifier.position == .bottom ? Double(bounds.size.height) - (halfScreenHeight + bottomInset) : topInset
         
         
-        let frame = CGRect(origin: CGPoint(x: 0, y: frameY), size: CGSize(width: bounds.size.width, height: halfScreenHeight))
+        let frame = CGRect(origin: CGPoint(x: 0, y: CGFloat(frameY)), size: CGSize(width: bounds.size.width, height: CGFloat(halfScreenHeight)))
+        
+        
         
         if #available(iOS 13.0, *) {
             let windowScene = sharedUIApplication
@@ -123,13 +121,13 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
             UIView.animate(withDuration: duration, animations: {
                 
                 var originY = 0.0
-                if self.halfScreenNotification.position == .bottom {
-                    originY = self.halfScreenHeight + VisilabsHelper.getsafeAreaInsets().bottom
+                if self.notifier.position == .bottom {
+                    originY = self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().bottom)
                 } else {
-                    originY = -(self.halfScreenHeight + VisilabsHelper.getsafeAreaInsets().top)
+                    originY = -(self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().top))
                 }
                 
-                self.window?.frame.origin.y += originY
+                self.window?.frame.origin.y += CGFloat(originY)
                 }, completion: { _ in
                     self.window?.isHidden = true
                     self.window?.removeFromSuperview()

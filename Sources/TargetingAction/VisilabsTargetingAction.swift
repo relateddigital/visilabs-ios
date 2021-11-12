@@ -242,8 +242,8 @@ class VisilabsTargetingAction {
             position = pos
         }
         let bgcolor = actionData[VisilabsConstants.bgcolor] as? String ?? ""
-        let threshold = actionData[VisilabsConstants.bgcolor] as? Int ?? 0
-        let showclosebtn = actionData[VisilabsConstants.bgcolor] as? Bool ?? false
+        let threshold = actionData[VisilabsConstants.threshold] as? Int ?? 0
+        let showclosebtn = actionData[VisilabsConstants.showclosebtn] as? Bool ?? false
         
         // extended properties
         let content_text_color = extendedProps[VisilabsConstants.content_text_color] as? String ?? ""
