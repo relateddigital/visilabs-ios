@@ -135,7 +135,12 @@ class VisilabsTargetingAction {
         } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
             return parseScratchToWin(sctw)
         } else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
-            return parseProductStatNotifier(psn)
+            let productStatNotifier = parseProductStatNotifier(psn)
+            if productStatNotifier?.getAttributedString() == nil {
+                VisilabsLogger.error("There cannot be more than one number in the product stat notifier content!")
+                return nil
+            }
+            return productStatNotifier
         }
         return nil
     }
