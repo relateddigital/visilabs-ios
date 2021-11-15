@@ -271,8 +271,9 @@ public class VisilabsInAppNotification {
         self.queryString = actionData[PayloadKey.queryString] as? String
         self.messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
         self.messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
-        self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
-        self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? self.messageBodyTextSize
+        let messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
+        self.messageBodyTextSize = messageBodyTextSize
+        self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? messageBodyTextSize
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
         self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
         self.promotionCode = actionData[PayloadKey.promotionCode] as? String
