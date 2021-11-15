@@ -137,11 +137,10 @@ class VisilabsTargetingAction {
         } else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
             if let productStatNotifier = parseProductStatNotifier(psn) {
                 if productStatNotifier.attributedString == nil {
-                    VisilabsLogger.error("There cannot be more than one number in the product stat notifier content!")
                     return nil
                 }
                 if productStatNotifier.contentCount < productStatNotifier.threshold {
-                    VisilabsLogger.warn("Product stat notifier content count below threshold.")
+                    VisilabsLogger.warn("Product stat notifier: content count below threshold.")
                     return nil
                 }
                 return productStatNotifier
