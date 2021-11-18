@@ -269,7 +269,6 @@ internal class VisilabsHelper {
     
     static func getsafeAreaInsets() -> UIEdgeInsets {
         if #available(iOS 11.0, *) {
-            //return getRootViewController()?.view?.safeAreaInsets ?? UIApplication.shared.keyWindow?.rootViewController?.view.safeAreaInsets ?? .zero
             return UIApplication.shared.keyWindow?.rootViewController?.view.safeAreaInsets ?? .zero
         } else {
             let statusBarMaxY = UIApplication.shared.statusBarFrame.maxY

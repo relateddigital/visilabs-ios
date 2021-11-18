@@ -24,6 +24,8 @@ class VisilabsBaseNotificationViewController: UIViewController {
     var mailForm: MailSubscriptionViewModel?
     var scratchToWin: ScratchToWinModel?
     var spinToWin: SpinToWinViewModel?
+    var productStatNotifier: VisilabsProductStatNotifierViewModel?
+    
     weak var delegate: VisilabsNotificationViewControllerDelegate?
     weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     var window: UIWindow?
@@ -52,12 +54,15 @@ class VisilabsBaseNotificationViewController: UIViewController {
     func hide(animated: Bool, completion: @escaping () -> Void) {}
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
         if self.mailForm != nil || self.spinToWin != nil {
             return
         }
         if let not = self.notification,
             not.type == .full ||
-            not.type == .feedbackForm {
+            not.type == .feedbackForm ||
+            not.type == .mini ||
+            not.type == .halfScreenImage {
             return
         }
         let touch = touches.first

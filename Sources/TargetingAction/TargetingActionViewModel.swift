@@ -11,6 +11,7 @@ public enum TargetingActionType: String, Codable {
     case mailSubscriptionForm = "MailSubscriptionForm"
     case spinToWin = "SpinToWin"
     case scratchToWin = "ScratchToWin"
+    case productStatNotifier = "ProductStatNotifier"
 }
 
 public protocol TargetingActionViewModel {
