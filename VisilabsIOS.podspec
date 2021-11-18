@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name             = 'VisilabsIOS'
   s.module_name      = 'VisilabsIOS'
-  s.version          = '3.2.0'
+  s.version          = '3.3.0'
   s.summary          = 'VisilabsIOS IOS SDK'
-  s.description      = 'VisilabsIOS IOS SDK'
+  s.description      = 'VisilabsIOS IOS SDK for analytics and recommendation'
   s.homepage         = 'https://www.relateddigital.com'
   s.license          = 'Apache License, Version 2.0'
   s.swift_version    = '5.0'

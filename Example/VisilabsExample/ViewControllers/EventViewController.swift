@@ -101,6 +101,9 @@ class EventViewController: FormViewController {
     private func inAppEvent(_ queryStringFilter: String) {
         var properties = [String: String]()
         properties["OM.inapptype"] = queryStringFilter
+        if queryStringFilter.lowercased() == VisilabsInAppNotificationType.productStatNotifier.rawValue {
+            properties["OM.pv"] = "CV7933-837-837"
+        }
         Visilabs.callAPI().customEvent("InAppTest", properties: properties)
         Visilabs.callAPI().inappButtonDelegate = self
     }
@@ -164,7 +167,8 @@ class EventViewController: FormViewController {
             .halfScreenImage: [VisilabsInAppNotificationType.halfScreenImage.rawValue: 704],
             .scratchToWin: [VisilabsInAppNotificationType.scratchToWin.rawValue: 592],
             .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
-            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130]
+            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130],
+            .productStatNotifier: [VisilabsInAppNotificationType.productStatNotifier.rawValue: 703]
         ]
     }
     

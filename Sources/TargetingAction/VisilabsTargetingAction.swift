@@ -134,10 +134,21 @@ class VisilabsTargetingAction {
             return parseSpinToWin(spinToWin)
         } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
             return parseScratchToWin(sctw)
+        } else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
+            if let productStatNotifier = parseProductStatNotifier(psn) {
+                if productStatNotifier.attributedString == nil {
+                    return nil
+                }
+                if productStatNotifier.contentCount < productStatNotifier.threshold {
+                    VisilabsLogger.warn("Product stat notifier: content count below threshold.")
+                    return nil
+                }
+                return productStatNotifier
+            }
         }
         return nil
     }
-
+    
     // MARK: SpinToWin
 
     private func parseSpinToWin(_ spinToWin: [String: Any?]) -> SpinToWinViewModel? {
@@ -224,6 +235,36 @@ class VisilabsTargetingAction {
         let model = SpinToWinViewModel(targetingActionType: .spinToWin, actId: actid, auth: auth, promoAuth: promoAuth, type: type, title: title, message: message, placeholder: placeholder, buttonLabel: buttonLabel, consentText: consentText, emailPermitText: emailPermitText, successMessage: successMessage, invalidEmailMessage: invalidEmailMessage, checkConsentMessage: checkConsentMessage, promocodeTitle: promocodeTitle, copyButtonLabel: copybuttonLabel, mailSubscription: mailSubscription, sliceCount: sliceCount, slices: sliceArray, report: spinToWinReport, taTemplate: taTemplate, img: img, wheelSpinAction: wheelSpinAction, displaynameTextColor: displaynameTextColor, displaynameFontFamily: displaynameFontFamily, displaynameTextSize: displaynameTextSize, titleTextColor: titleTextColor, titleFontFamily: titleFontFamily, titleTextSize: titleTextSize, textColor: textColor, textFontFamily: textFontFamily, textSize: textSize, buttonColor: button_color, buttonTextColor: button_text_color, buttonFontFamily: buttonFontFamily, buttonTextSize: buttonTextSize, promocodeTitleTextColor: promocodeTitleTextColor, promocodeTitleFontFamily: promocodeTitleFontFamily, promocodeTitleTextSize: promocodeTitleTextSize, promocodeBackgroundColor: promocodeBackgroundColor, promocodeTextColor: promocodeTextColor, copybuttonColor: copybuttonColor, copybuttonTextColor: copybuttonTextColor, copybuttonFontFamily: copybuttonFontFamily, copybuttonTextSize: copybuttonTextSize, emailpermitTextSize: emailpermitTextSize, emailpermitTextUrl: emailpermitTextUrl, consentTextSize: consentTextSize, consentTextUrl: consentTextUrl, closeButtonColor: closeButtonColor, backgroundColor: backgroundColor)
 
         return model
+    }
+
+
+    // MARK: ProductStatNotifier
+
+    private func parseProductStatNotifier(_ productStatNotifier: [String: Any?]) -> VisilabsProductStatNotifierViewModel? {
+        guard let actionData = productStatNotifier[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+        let content = actionData[VisilabsConstants.content] as? String ?? ""
+        let timeout = actionData[VisilabsConstants.timeout] as? String ?? ""
+        var position = VisilabsProductStatNotifierPosition.bottom
+        if let positionString = actionData[VisilabsConstants.pos] as? String, let pos = VisilabsProductStatNotifierPosition.init(rawValue: positionString) {
+            position = pos
+        }
+        let bgcolor = actionData[VisilabsConstants.bgcolor] as? String ?? ""
+        let threshold = actionData[VisilabsConstants.threshold] as? Int ?? 0
+        let showclosebtn = actionData[VisilabsConstants.showclosebtn] as? Bool ?? false
+        
+        // extended properties
+        let content_text_color = extendedProps[VisilabsConstants.content_text_color] as? String ?? ""
+        let content_font_family = extendedProps[VisilabsConstants.content_font_family] as? String ?? ""
+        let content_text_size = extendedProps[VisilabsConstants.content_text_size] as? String ?? ""
+        let contentcount_text_color = extendedProps[VisilabsConstants.contentcount_text_color] as? String ?? ""
+        let contentcount_text_size = extendedProps[VisilabsConstants.contentcount_text_size] as? String ?? ""
+        let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? "black"
+        
+        var productStatNotifier = VisilabsProductStatNotifierViewModel(targetingActionType: .productStatNotifier, content: content, timeout: timeout, position: position, bgcolor: bgcolor, threshold: threshold, showclosebtn: showclosebtn, content_text_color: content_text_color, content_font_family: content_font_family, content_text_size: content_text_size, contentcount_text_color: contentcount_text_color, contentcount_text_size: contentcount_text_size, closeButtonColor: closeButtonColor)
+        productStatNotifier.setAttributedString()
+        return productStatNotifier
     }
 
     // MARK: MailSubscriptionForm

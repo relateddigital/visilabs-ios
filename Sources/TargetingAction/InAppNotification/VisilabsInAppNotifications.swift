@@ -84,34 +84,33 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                     if self.showScratchToWin(sctw) {
                         self.markTargetingActionShown(model: sctw)
                     }
+                } else if model.targetingActionType == .productStatNotifier, let psn = model as? VisilabsProductStatNotifierViewModel {
+                    if self.showProductStatNotifier(psn) {
+                        self.markTargetingActionShown(model: psn)
+                    }
                 }
             }
         }
     }
     
-    func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
-        
-        /*
-        if let root = getRootViewController() {
-            root.addChild(VisilabsHalfScreenViewController(notification: notification))
-        }
+    func showProductStatNotifier(_ model: VisilabsProductStatNotifierViewModel) -> Bool {
+        let productStatNotifierVC = VisilabsProductStatNotifierViewController(productStatNotifier: model)
+        productStatNotifierVC.delegate = self
+        productStatNotifierVC.show(animated: true)
         return true
-        */
-        
-        
+    }
+    
+    func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let halfScreenNotificationVC = VisilabsHalfScreenViewController(notification: notification)
         halfScreenNotificationVC.delegate = self
-        halfScreenNotificationVC.loadView()
         halfScreenNotificationVC.show(animated: true)
         return true
-         
     }
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
         miniNotificationVC.delegate = self
         miniNotificationVC.show(animated: true)
-
         DispatchQueue.main.asyncAfter(deadline: .now() + miniNotificationPresentationTime) {
             self.notificationShouldDismiss(controller: miniNotificationVC, callToActionURL: nil,
                                            shouldTrack: false, additionalTrackingProperties: nil)

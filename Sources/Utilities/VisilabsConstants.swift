@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "3.2.0"
+    static let sdkVersion = "3.3.0"
 
     static let HTTP = "http"
     static let HTTPS = "https"
@@ -244,6 +244,21 @@ struct VisilabsConstants {
     static let promocodeFontFamily = "promocode_font_family"
     static let promocodeTextSize = "promocode_text_size"
     static let sctwMailSubscriptionForm = "mail_subscription_form"
+    
+    // ProductStatNotifier constants
+    static let content = "content"
+    static let pos = "pos"
+    static let timeout = "timeout"
+    static let bgcolor = "bgcolor"
+    static let threshold = "threshold"
+    static let showclosebtn = "showclosebtn"
+    static let content_text_color = "content_text_color"
+    static let content_font_family = "content_font_family"
+    static let content_text_size = "content_text_size"
+    static let contentcount_text_color = "contentcount_text_color"
+    static let contentcount_text_size = "contentcount_text_size"
+    
+    
 
     private static let targetPrefVossStoreKey = "OM.voss"
     private static let targetPrefVcnameStoreKey = "OM.vcname"

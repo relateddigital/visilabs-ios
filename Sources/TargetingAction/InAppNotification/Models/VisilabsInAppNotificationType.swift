@@ -25,6 +25,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case imageButtonImage
     case spintowin
     case feedbackForm
+    case productStatNotifier = "product_stat_notifier"
 }
 
 public enum VisilabsSecondPopupType: String, CaseIterable {
@@ -34,6 +35,11 @@ public enum VisilabsSecondPopupType: String, CaseIterable {
 }
 
 public enum VisilabsHalfScreenPosition: String, CaseIterable {
+    case top = "top"
+    case bottom = "bottom"
+}
+
+public enum VisilabsProductStatNotifierPosition: String, CaseIterable {
     case top = "top"
     case bottom = "bottom"
 }
