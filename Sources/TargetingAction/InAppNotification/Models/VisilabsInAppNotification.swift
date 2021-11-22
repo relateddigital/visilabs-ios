@@ -46,6 +46,7 @@ public class VisilabsInAppNotification {
         public static let secondImageUrlString1 = "secondPopup_image1"
         public static let secondImageUrlString2 = "secondPopup_image2"
         public static let position = "pos"
+        public static let customFont = "custom_font_family_ios"
     }
 
     let actId: Int
@@ -64,6 +65,7 @@ public class VisilabsInAppNotification {
     let messageBodyColor: UIColor?
     let messageBodyTextSize: String?
     let fontFamily: String?
+    let customFont: String?
     let backGroundColor: UIColor?
     let closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
@@ -148,6 +150,7 @@ public class VisilabsInAppNotification {
                 messageBodyColor: String?,
                 messageBodyTextSize: String?,
                 fontFamily: String?,
+                customFont: String?,
                 backGround: String?,
                 closeButtonColor: String?,
                 buttonTextColor: String?,
@@ -186,6 +189,7 @@ public class VisilabsInAppNotification {
         self.messageBodyColor = UIColor(hex: messageBodyColor)
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
+        self.customFont = customFont
         self.backGroundColor = UIColor(hex: backGround)
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
@@ -274,6 +278,7 @@ public class VisilabsInAppNotification {
         self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
         self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? self.messageBodyTextSize
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
+        self.customFont = actionData[PayloadKey.customFont] as? String
         self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
         self.promotionCode = actionData[PayloadKey.promotionCode] as? String
         self.promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
@@ -345,16 +350,16 @@ public class VisilabsInAppNotification {
     private func setFonts() {
         self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
                                                                   fontSize: self.messageTitleTextSize,
-                                                                  style: .title2)
+                                                                  style: .title2, customFont: self.customFont)
         self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
                                                                  fontSize: self.messageBodyTextSize,
-                                                                 style: .body)
+                                                                 style: .body, customFont: self.customFont)
         self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
                                                                 fontSize: self.messageBodyTextSize,
-                                                                style: .title2)
+                                                                style: .title2, customFont: self.customFont)
     }
 
-    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle) -> UIFont {
+    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String?) -> UIFont {
         var size = style == .title2 ? 12 : 8
         if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
             size += siz
@@ -382,9 +387,12 @@ public class VisilabsInAppNotification {
                     finalFont = UIFont(name: fontName, size: CGFloat(size))!
                 }
             }
-            if let customFont = UIFont(name: font, size: CGFloat(size)) {
-                return customFont
+            if let customFont = customFont {
+                if let uiCustomFont = UIFont(name: customFont, size: CGFloat(size)) {
+                    return uiCustomFont
+                }
             }
+
         }
         return finalFont
     }
