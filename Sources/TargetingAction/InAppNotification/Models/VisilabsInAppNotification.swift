@@ -359,7 +359,7 @@ public class VisilabsInAppNotification {
                                                                 style: .title2, customFont: self.customFont)
     }
 
-    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String?) -> UIFont {
+    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String? = "") -> UIFont {
         var size = style == .title2 ? 12 : 8
         if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
             size += siz
@@ -387,12 +387,10 @@ public class VisilabsInAppNotification {
                     finalFont = UIFont(name: fontName, size: CGFloat(size))!
                 }
             }
-            if let customFont = customFont {
-                if let uiCustomFont = UIFont(name: customFont, size: CGFloat(size)) {
-                    return uiCustomFont
-                }
+                
+            if let uiCustomFont = UIFont(name: customFont ?? "", size: CGFloat(size)) {
+                return uiCustomFont
             }
-
         }
         return finalFont
     }
