@@ -518,6 +518,12 @@ extension InAppViewController {
 
         tag = VisilabsInAppNotification.PayloadKey.fontFamily
         let fontFamily: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.customFont
+        let customFont: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.closePopupActionType
+        let closePopupActionType: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
 
         tag = VisilabsInAppNotification.PayloadKey.backGround
         let backGround = ((self.form.rowBy(tag: tag) as? TextRow)?.value ?? "") as String
@@ -606,6 +612,8 @@ extension InAppViewController {
                                          messageBodyColor: messageBodyColor,
                                          messageBodyTextSize: messageBodyTextSize,
                                          fontFamily: fontFamily,
+                                         customFont: customFont,
+                                         closePopupActionType: closePopupActionType ,
                                          backGround: backGround,
                                          closeButtonColor: closeButtonColor,
                                          buttonTextColor: buttonTextColor,
