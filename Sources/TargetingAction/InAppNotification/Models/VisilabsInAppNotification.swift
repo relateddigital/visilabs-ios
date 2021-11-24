@@ -47,6 +47,7 @@ public class VisilabsInAppNotification {
         public static let secondImageUrlString2 = "secondPopup_image2"
         public static let position = "pos"
         public static let customFont = "custom_font_family_ios"
+        public static let closePopupActionType = "close_event_trigger"
     }
 
     let actId: Int
@@ -87,6 +88,7 @@ public class VisilabsInAppNotification {
     let secondPopupMinPoint: String?
     let previousPopupPoint: Double?
     let position: VisilabsHalfScreenPosition?
+    let closePopupActionType : String?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -151,6 +153,7 @@ public class VisilabsInAppNotification {
                 messageBodyTextSize: String?,
                 fontFamily: String?,
                 customFont: String?,
+                closePopupActionType:String?,
                 backGround: String?,
                 closeButtonColor: String?,
                 buttonTextColor: String?,
@@ -190,6 +193,7 @@ public class VisilabsInAppNotification {
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
         self.customFont = customFont
+        self.closePopupActionType = closePopupActionType
         self.backGroundColor = UIColor(hex: backGround)
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
@@ -279,6 +283,7 @@ public class VisilabsInAppNotification {
         self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? self.messageBodyTextSize
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
         self.customFont = actionData[PayloadKey.customFont] as? String
+        self.closePopupActionType = actionData[PayloadKey.closePopupActionType] as? String
         self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
         self.promotionCode = actionData[PayloadKey.promotionCode] as? String
         self.promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)

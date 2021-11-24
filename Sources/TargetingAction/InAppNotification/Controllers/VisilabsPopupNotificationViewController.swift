@@ -11,6 +11,7 @@ import UIKit
 class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewController {
     /// First init flag
     fileprivate var initialized = false
+    weak var visilabsInAppNotification: VisilabsInAppNotification?
 
     /// StatusBar display related
     fileprivate let hideStatusBar: Bool
@@ -46,8 +47,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     // MARK: - Initializers
 
     override func hide(animated: Bool, completion: @escaping () -> Void) {
-        dismiss(animated: true)
-        completion()
+        if let closeButtonActionType = visilabsInAppNotification?.closePopupActionType {
+            if closeButtonActionType == "backgroundclick" || closeButtonActionType == "all"  {
+                dismiss(animated: true)
+                completion()
+            }
+        }
     }
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
@@ -58,13 +63,17 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                      additionalTrackingProperties: nil)
         }
     }
-
     @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self,
-                                                     callToActionURL: nil,
-                                                     shouldTrack: false,
-                                                     additionalTrackingProperties: nil)
+    
+        if let closeButtonActionType = visilabsInAppNotification?.closePopupActionType {
+            if closeButtonActionType == "closebutton" || closeButtonActionType == "all"  {
+                dismiss(animated: true) {
+                    self.delegate?.notificationShouldDismiss(controller: self,
+                                                             callToActionURL: nil,
+                                                             shouldTrack: false,
+                                                             additionalTrackingProperties: nil)
+                }
+            }
         }
     }
 
@@ -189,6 +198,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         initForInAppNotification(viewController)
         initForEmailForm(viewController)
         initForScratchToWin(viewController)
+        self.visilabsInAppNotification = notification
         let closeTapGestureRecognizer = UITapGestureRecognizer(target: self,
                                         action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
@@ -522,7 +532,7 @@ internal extension VisilabsPopupNotificationViewController {
             default:
                 type = .imageTextButton
             }
-            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageTitleTextSize: not.secondPopupBodyTextSize, messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, customFont: not.customFont, backGround: not.backGroundColor?.toHexString(), closeButtonColor: closeButtonColor, buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil, previousPopupPoint: point, position: .bottom)
+            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageTitleTextSize: not.secondPopupBodyTextSize, messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, customFont: not.customFont, closePopupActionType: not.closePopupActionType, backGround: not.backGroundColor?.toHexString(), closeButtonColor: closeButtonColor, buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil, previousPopupPoint: point, position: .bottom)
         }
         return nil
     }
