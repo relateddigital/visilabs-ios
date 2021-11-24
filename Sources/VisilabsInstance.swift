@@ -8,6 +8,7 @@
 import class Foundation.Bundle
 import SystemConfiguration
 import UIKit
+import UserNotifications
 
 
 typealias Queue = [[String: String]]
@@ -28,6 +29,7 @@ struct VisilabsUser: Codable {
     var tvc = 0
     var lvt: String?
     var appVersion: String?
+    var pushPermit: String?
 }
 
 struct VisilabsProfile: Codable {
@@ -164,6 +166,24 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         if let appVersion = VisilabsHelper.getAppVersion() {
             visilabsUser.appVersion = appVersion
         }
+        
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { permission in
+            switch permission.authorizationStatus {
+            case .authorized:
+                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitActive
+            case .denied:
+                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitPassive
+            case .notDetermined:
+                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitPassive
+            case .provisional:
+                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitActive
+            case .ephemeral:
+                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitActive
+            @unknown default:
+                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitPassive
+            }
+        })
         
         if isIDFAEnabled {
             VisilabsHelper.getIDFA { uuid in
