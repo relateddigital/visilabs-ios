@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		61AC0D092743DA34003C3C22 /* sydney-signature.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61AC0D082743DA0D003C3C22 /* sydney-signature.ttf */; };
 		88EC49BF2646FACD009C6DDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49BE2646FACD009C6DDB /* AppDelegate.swift */; };
 		88EC49C12646FACD009C6DDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49C02646FACD009C6DDB /* SceneDelegate.swift */; };
 		88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88EC49C42646FACD009C6DDB /* Main.storyboard */; };
@@ -45,7 +44,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		61AC0D082743DA0D003C3C22 /* sydney-signature.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sydney-signature.ttf"; sourceTree = "<group>"; };
 		88EC49BB2646FACD009C6DDB /* VisilabsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88EC49BE2646FACD009C6DDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88EC49C02646FACD009C6DDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,14 +88,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		61AC0D032743D491003C3C22 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				61AC0D082743DA0D003C3C22 /* sydney-signature.ttf */,
-			);
-			path = Fonts;
-			sourceTree = "<group>";
-		};
 		77C4A723C4FC04B816E56650 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,7 +129,6 @@
 		88EC49BD2646FACD009C6DDB /* VisilabsExample */ = {
 			isa = PBXGroup;
 			children = (
-				61AC0D032743D491003C3C22 /* Fonts */,
 				D2EE696627330D9000A44D88 /* VisilabsExampleRelease.entitlements */,
 				D2EE696527330D8200A44D88 /* VisilabsExample.entitlements */,
 				88EC49BE2646FACD009C6DDB /* AppDelegate.swift */,
@@ -252,7 +241,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				88EC49CB2646FACF009C6DDB /* LaunchScreen.storyboard in Resources */,
-				61AC0D092743DA34003C3C22 /* sydney-signature.ttf in Resources */,
 				88EC49C82646FACF009C6DDB /* Assets.xcassets in Resources */,
 				88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */,
 				D2274E4F2731EB1E00824B31 /* LocationTester.gpx in Resources */,

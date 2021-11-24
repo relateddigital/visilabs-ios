@@ -149,25 +149,6 @@ class EventViewController: FormViewController {
     }
     
     
-//    private func getInApps() -> [VisilabsInAppNotificationType: [String: Int]]{
-//        return [
-//            .mini: [VisilabsInAppNotificationType.mini.rawValue: 491],
-//            .full: [VisilabsInAppNotificationType.full.rawValue: 485],
-//            .imageTextButton: [VisilabsInAppNotificationType.imageTextButton.rawValue: 490],
-//            .fullImage: [VisilabsInAppNotificationType.fullImage.rawValue: 495],
-//            .nps: [VisilabsInAppNotificationType.nps.rawValue: 492],
-//            .imageButton: [VisilabsInAppNotificationType.imageButton.rawValue: 489],
-//            .smileRating: [VisilabsInAppNotificationType.smileRating.rawValue: 494],
-//            .emailForm: [VisilabsInAppNotificationType.emailForm.rawValue: 417],
-//            .alert: ["alert_actionsheet": 487, "alert_native": 540],
-//            .npsWithNumbers: [VisilabsInAppNotificationType.npsWithNumbers.rawValue: 493],
-//            .halfScreenImage: [VisilabsInAppNotificationType.halfScreenImage.rawValue: 704],
-//            .scratchToWin: [VisilabsInAppNotificationType.scratchToWin.rawValue: 592],
-//            .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
-//            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130]
-//        ]
-//    }
-    
     private func getInApps() -> [VisilabsInAppNotificationType: [String: Int]]{
         return [
             .mini: [VisilabsInAppNotificationType.mini.rawValue: 491],
@@ -177,10 +158,13 @@ class EventViewController: FormViewController {
             .nps: [VisilabsInAppNotificationType.nps.rawValue: 492],
             .imageButton: [VisilabsInAppNotificationType.imageButton.rawValue: 489],
             .smileRating: [VisilabsInAppNotificationType.smileRating.rawValue: 494],
+            .emailForm: [VisilabsInAppNotificationType.emailForm.rawValue: 417],
             .alert: ["alert_actionsheet": 487, "alert_native": 540],
             .npsWithNumbers: [VisilabsInAppNotificationType.npsWithNumbers.rawValue: 493],
             .halfScreenImage: [VisilabsInAppNotificationType.halfScreenImage.rawValue: 704],
+            .scratchToWin: [VisilabsInAppNotificationType.scratchToWin.rawValue: 592],
             .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
+            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130]
         ]
     }
     

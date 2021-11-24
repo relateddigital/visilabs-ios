@@ -392,10 +392,10 @@ public class VisilabsInAppNotification {
                     finalFont = UIFont(name: fontName, size: CGFloat(size))!
                 }
             }
-                
             if let uiCustomFont = UIFont(name: customFont ?? "", size: CGFloat(size)) {
                 return uiCustomFont
             }
+
         }
         return finalFont
     }
