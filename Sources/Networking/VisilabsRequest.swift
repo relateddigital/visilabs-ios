@@ -415,6 +415,7 @@ class VisilabsRequest {
             props[VisilabsConstants.exvisitorIdKey] = vUser.exVisitorId
             props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
             props[VisilabsConstants.mobileAppVersion] = vUser.appVersion
+            props[VisilabsConstants.pushPermitPermissionReqKey] = vUser.pushPermit
             props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
             props[VisilabsConstants.nrvKey] = String(vUser.nrv)
             props[VisilabsConstants.pvivKey] = String(vUser.pviv)
