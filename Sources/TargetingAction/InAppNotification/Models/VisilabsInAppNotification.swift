@@ -56,7 +56,7 @@ public class VisilabsInAppNotification {
     let messageTitle: String?
     let messageBody: String?
     let buttonText: String?
-    let iosLink: String?
+    public let iosLink: String?
     let imageUrlString: String?
     let visitorData: String?
     let visitData: String?
