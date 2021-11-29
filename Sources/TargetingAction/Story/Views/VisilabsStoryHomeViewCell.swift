@@ -36,6 +36,49 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
             self.layer.shadowRadius = 10
         }
     }
+    
+    func setStoryTitleLabelProperties(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String? = "",labelColor:String?,labelStory:UILabel?) {
+        
+        var size = style == .title2 ? 12 : 8
+        if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
+            size += siz
+        }
+        if let color = labelColor {
+            labelStory?.textColor = UIColor(hex: color)
+        } else {
+            labelStory?.textColor = .black
+        }
+        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
+                               size: CGFloat(size))
+        if let font = fontFamily {
+            if #available(iOS 13.0, *) {
+                var systemDesign: UIFontDescriptor.SystemDesign  = .default
+                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
+                    systemDesign = .serif
+                } else if font.lowercased() == "monospace" {
+                    systemDesign = .monospaced
+                }
+                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
+                    .withDesign(systemDesign) {
+                    finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
+                }
+            } else {
+                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
+                    let fontName = style == .title2 ? "GillSans-Bold": "GillSans"
+                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
+                } else if font.lowercased() == "monospace" {
+                    let fontName = style == .title2 ? "CourierNewPS-BoldMT": "CourierNewPSMT"
+                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
+                }
+            }
+
+            if let uiCustomFont = UIFont(name: customFont ?? "", size: CGFloat(size)) {
+                labelStory?.font = uiCustomFont
+                return
+            }
+       }
+        labelStory?.font = finalFont
+    }
 
     // MARK: - Public iVars
     var story: VisilabsStory? {
