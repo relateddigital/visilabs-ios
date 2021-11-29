@@ -54,6 +54,8 @@ class VisilabsTargetingAction {
                props[key] = value
            }
         }
+        
+        props[VisilabsConstants.pushPermitPermissionReqKey] = VisilabsConstants.pushPermitStatus
 
         VisilabsRequest.sendInAppNotificationRequest(properties: props,
                                                      headers: headers,
@@ -109,6 +111,8 @@ class VisilabsTargetingAction {
                props[key] = value
            }
         }
+        
+        props[VisilabsConstants.pushPermitPermissionReqKey] = VisilabsConstants.pushPermitStatus
 
         VisilabsRequest.sendMobileRequest(properties: props,
                                           headers: prepareHeaders(visilabsUser),
