@@ -196,6 +196,8 @@ struct VisilabsConstants {
     static let copybuttonLabel = "copybutton_label"
     static let img = "img"
     static let wheelSpinAction = "wheel_spin_action"
+    static let is_available = "wheel_spin_action"
+
 
     // SpinToWin extended properties
     static let displaynameTextColor = "displayname_text_color"
@@ -219,7 +221,7 @@ struct VisilabsConstants {
     static let displayName = "displayName"
     static let color = "color"
     static let code = "code"
-    static let is_available = "is_available"
+    static let isAvailable = "is_available"
     
     // SpinToWin information properties
     static let promoAction = "OM.promoaction"
