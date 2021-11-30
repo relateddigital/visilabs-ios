@@ -39,6 +39,7 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var taTemplate: String
     var img: String
     var wheelSpinAction:String
+    var isAvailable:Bool
 
     // ExtendedProps
     var displaynameTextColor: String
