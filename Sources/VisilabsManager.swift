@@ -22,7 +22,9 @@ class VisilabsManager {
                     geofenceEnabled: Bool,
                     maxGeofenceCount: Int,
                     isIDFAEnabled: Bool,
-                    loggingEnabled: Bool) -> VisilabsInstance {
+                    loggingEnabled: Bool,
+                    isTest: Bool) -> VisilabsInstance {
+        setTest(test: isTest)
         let instance = VisilabsInstance(organizationId: organizationId,
                                         profileId: profileId,
                                         dataSource: dataSource,
@@ -35,6 +37,12 @@ class VisilabsManager {
                                         loggingEnabled: loggingEnabled)
         self.instance = instance
         return instance
+    }
+    
+    func setTest(test:Bool) {
+        if test {
+            urlConstant.shared.setTest()
+        }
     }
     
     func initialize() {

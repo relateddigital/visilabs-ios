@@ -22,4 +22,8 @@ struct VisilabsProfile: Codable {
     var userKey = "userKey"
     var userEmail = "user@mail.com"
     var isIDFAEnabled = true
+    var organizationTestId = "394A48556A2F76466136733D"
+    var profileTestId = "75763259366A3345686E303D"
+    var IsTest: Bool = false
+
 }
