@@ -29,7 +29,6 @@ struct VisilabsUser: Codable {
     var tvc = 0
     var lvt: String?
     var appVersion: String?
-    var pushPermit: String?
 }
 
 struct VisilabsProfile: Codable {
@@ -167,24 +166,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             visilabsUser.appVersion = appVersion
         }
         
-        let current = UNUserNotificationCenter.current()
-        current.getNotificationSettings(completionHandler: { permission in
-            switch permission.authorizationStatus {
-            case .authorized:
-                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitActive
-            case .denied:
-                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitPassive
-            case .notDetermined:
-                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitPassive
-            case .provisional:
-                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitActive
-            case .ephemeral:
-                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitActive
-            @unknown default:
-                self.visilabsUser.pushPermit = VisilabsConstants.pushPermitPassive
-            }
-        })
-        
         if isIDFAEnabled {
             VisilabsHelper.getIDFA { uuid in
                 if let idfa = uuid {
@@ -283,6 +264,27 @@ extension VisilabsInstance {
 // MARK: - EVENT
 
 extension VisilabsInstance {
+    
+    private func checkPushPermission() {
+            let current = UNUserNotificationCenter.current()
+            current.getNotificationSettings(completionHandler: { permission in
+                switch permission.authorizationStatus {
+                case .authorized:
+                    VisilabsConstants.pushPermitStatus = "granted"
+                case .denied:
+                    VisilabsConstants.pushPermitStatus = "denied"
+                case .notDetermined:
+                    VisilabsConstants.pushPermitStatus = "denied"
+                case .provisional:
+                    VisilabsConstants.pushPermitStatus = "default"
+                case .ephemeral:
+                    VisilabsConstants.pushPermitStatus = "denied"
+                @unknown default:
+                    VisilabsConstants.pushPermitStatus = "denied"
+                }
+            })
+        }
+    
     public func customEvent(_ pageName: String, properties: [String: String]) {
         
         if VisilabsPersistence.isBlocked() {
@@ -294,6 +296,8 @@ extension VisilabsInstance {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
+        
+        checkPushPermission()
         
         trackingQueue.async { [weak self, pageName, properties] in
             guard let self = self else { return }

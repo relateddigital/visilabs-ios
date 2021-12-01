@@ -86,7 +86,6 @@ class VisilabsEvent {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
         props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
         props[VisilabsConstants.mobileAppVersion] = vUser.appVersion
-        props[VisilabsConstants.pushPermitPermissionReqKey] = vUser.pushPermit
         
         props[VisilabsConstants.nrvKey] = String(vUser.nrv)
         props[VisilabsConstants.pvivKey] = String(vUser.pviv)

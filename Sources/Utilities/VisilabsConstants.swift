@@ -304,9 +304,8 @@ struct VisilabsConstants {
     static let locationPermissionNone = "none"
     
     //Push Permission Status
-    static let pushPermitPermissionReqKey = "OM.pushpermit"
-    static let pushPermitActive = "active"
-    static let pushPermitPassive = "passive"
+        static let pushPermitPermissionReqKey = "OM.pushnotifystatus"
+        static var pushPermitStatus = "default"
 
     private static var targetParameters = [VisilabsParameter]()
 
