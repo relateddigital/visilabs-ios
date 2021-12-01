@@ -25,7 +25,9 @@ public class Visilabs {
                                 geofenceEnabled: Bool = false,
                                 maxGeofenceCount: Int = 20,
                                 isIDFAEnabled: Bool = true,
-                                loggingEnabled: Bool = false) -> VisilabsInstance {
+                                loggingEnabled: Bool = false,
+                                isTest:Bool = false) -> VisilabsInstance {
+
 
         VisilabsManager.sharedInstance.initialize(organizationId: organizationId,
                                                   profileId: profileId,
@@ -36,7 +38,8 @@ public class Visilabs {
                                                   geofenceEnabled: geofenceEnabled,
                                                   maxGeofenceCount: maxGeofenceCount,
                                                   isIDFAEnabled: isIDFAEnabled,
-                                                  loggingEnabled: loggingEnabled)
+                                                  loggingEnabled: loggingEnabled,
+                                                  isTest: isTest)
     }
     
     public class func createAPI() {

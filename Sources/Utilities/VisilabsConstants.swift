@@ -12,7 +12,7 @@ struct VisilabsConstants {
     static let sdkVersion = "3.3.2"
 
     static let HTTP = "http"
-    static let HTTPS = "https"
+    static let HTTPS = urlConstant.shared.securityTag
 
     static let queueSize = 5000
     static let geofenceHistoryMaxCount = 100
@@ -22,12 +22,12 @@ struct VisilabsConstants {
 
     static var loggerEndPoint = "lgr.visilabs.net"
     static var realtimeEndPoint = "rt.visilabs.net"
-    static var recommendationEndPoint = "s.visilabs.net/json"
-    static var actionEndPoint = "s.visilabs.net/actjson"
-    static var geofenceEndPoint = "s.visilabs.net/geojson"
-    static var mobileEndPoint = "s.visilabs.net/mobile"
-    static var subsjsonEndpoint = "s.visilabs.net/subsjson"
-    static var promotionEndpoint = "s.visilabs.net/promotion"
+    static var recommendationEndPoint = "\(urlConstant.shared.urlPrefix)/json"
+    static var actionEndPoint = "\(urlConstant.shared.urlPrefix)/actjson"
+    static var geofenceEndPoint = "\(urlConstant.shared.urlPrefix)/geojson"
+    static var mobileEndPoint = "\(urlConstant.shared.urlPrefix)/mobile"
+    static var subsjsonEndpoint = "\(urlConstant.shared.urlPrefix)/subsjson"
+    static var promotionEndpoint = "\(urlConstant.shared.urlPrefix)/promotion"
     static var remoteConfigEndpoint = "mbls.visilabs.net/rc.json"
 
     // MARK: - UserDefaults Keys

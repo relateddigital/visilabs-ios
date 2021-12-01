@@ -60,6 +60,7 @@ class HomeViewController: FormViewController {
             let profileIdRow: TextRow? = self.form.rowBy(tag: "profileId")
             let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
             let inAppNotificationsEnabledRow: SwitchRow? = self.form.rowBy(tag: "inAppNotificationsEnabled")
+            let isTestRow: SwitchRow? = self.form.rowBy(tag: "IsTest")
             let channelRow: TextRow? = self.form.rowBy(tag: "channel")
             let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
             let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
@@ -74,6 +75,7 @@ class HomeViewController: FormViewController {
             visilabsProfile.channel = channelRow!.value!
             visilabsProfile.requestTimeoutInSeconds = requestTimeoutInSecondsRow!.value!
             visilabsProfile.inAppNotificationsEnabled = inAppNotificationsEnabledRow?.value ?? false
+            visilabsProfile.IsTest = isTestRow?.value ?? false
             visilabsProfile.maxGeofenceCount = maxGeofenceCountRow?.value ?? 20
             visilabsProfile.appAlias = appAliasRow?.value ?? "VisilabsIOSExample"
             DataManager.saveVisilabsProfile(visilabsProfile)
@@ -85,7 +87,7 @@ class HomeViewController: FormViewController {
                                geofenceEnabled: visilabsProfile.geofenceEnabled,
                                maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                                isIDFAEnabled: visilabsProfile.isIDFAEnabled,
-                               loggingEnabled: true)
+                               loggingEnabled: true,isTest: visilabsProfile.IsTest)
             Visilabs.callAPI().useInsecureProtocol = false
             self.configureEuromessage()
             self.goToTabBarController()
@@ -148,6 +150,23 @@ class HomeViewController: FormViewController {
         return SwitchRow("inAppNotificationsEnabled") {
             $0.title = "inAppNotificationsEnabled"
             $0.value = visilabsProfile.inAppNotificationsEnabled
+        }
+    }
+    
+    fileprivate func addIsTest() -> SwitchRow {
+        return SwitchRow("IsTest") {
+            $0.title = "IsTest"
+            $0.value = visilabsProfile.IsTest
+        }.onChange { SwitchRow in
+            let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
+            let profileIdRow: TextRow? = self.form.rowBy(tag: "profileId")
+            if SwitchRow.value == true {
+                orgIdRow?.value = "394A48556A2F76466136733D"
+                profileIdRow?.value = "75763259366A3345686E303D"
+            } else {
+                orgIdRow?.value = "676D325830564761676D453D"
+                profileIdRow?.value = "356467332F6533766975593D"
+            }
         }
     }
 
@@ -236,6 +255,7 @@ class HomeViewController: FormViewController {
         form +++
 
             Section("createAPI")
+            <<< addIsTest()
             <<< addOrganizationIdTextRow()
             <<< addProfileIdTextRow()
             <<< addDataSourceTextRow()
@@ -246,7 +266,6 @@ class HomeViewController: FormViewController {
             <<< addGeofencePickerInputRow()
             <<< addAppAliasTextRow()
             <<< addIDFASwitchRow()
-
             +++ Section()
             <<< addCreateApiButtonRow()
 
