@@ -13,6 +13,7 @@ public struct SpinToWinSliceViewModel: Codable {
     var code: String
     var type: String
     var is_available: Bool
+    var isAvailable: Bool
 }
 
 public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
@@ -39,7 +40,6 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var taTemplate: String
     var img: String
     var wheelSpinAction:String
-    var isAvailable:Bool
 
     // ExtendedProps
     var displaynameTextColor: String
