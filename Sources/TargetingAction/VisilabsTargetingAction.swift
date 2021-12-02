@@ -192,8 +192,6 @@ class VisilabsTargetingAction {
         let promocodeTitle = actionData[VisilabsConstants.promocodeTitle] as? String ?? ""
         let copybuttonLabel = actionData[VisilabsConstants.copybuttonLabel] as? String ?? ""
         let wheelSpinAction = actionData[VisilabsConstants.wheelSpinAction] as? String ?? ""
-        let isAvailable = actionData[VisilabsConstants.isAvailable] as? Bool ?? false
-
 
         // extended properties
         let displaynameTextColor = extendedProps[VisilabsConstants.displaynameTextColor] as? String ?? ""
@@ -233,12 +231,13 @@ class VisilabsTargetingAction {
             let color = slice[VisilabsConstants.color] as? String ?? ""
             let code = slice[VisilabsConstants.code] as? String ?? ""
             let type = slice[VisilabsConstants.type] as? String ?? ""
+            let isAvailable = slice[VisilabsConstants.isAvailable] as? Bool ?? true
             let is_available = slice[VisilabsConstants.is_available] as? Bool ?? true
-            let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type, is_available: is_available)
+            let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type, is_available: is_available, isAvailable: isAvailable)
             sliceArray.append(spinToWinSliceViewModel)
         }
 
-        let model = SpinToWinViewModel(targetingActionType: .spinToWin, actId: actid, auth: auth, promoAuth: promoAuth, type: type, title: title, message: message, placeholder: placeholder, buttonLabel: buttonLabel, consentText: consentText, emailPermitText: emailPermitText, successMessage: successMessage, invalidEmailMessage: invalidEmailMessage, checkConsentMessage: checkConsentMessage, promocodeTitle: promocodeTitle, copyButtonLabel: copybuttonLabel, mailSubscription: mailSubscription, sliceCount: sliceCount, slices: sliceArray, report: spinToWinReport, taTemplate: taTemplate, img: img, wheelSpinAction: wheelSpinAction, isAvailable: isAvailable, displaynameTextColor: displaynameTextColor, displaynameFontFamily: displaynameFontFamily, displaynameTextSize: displaynameTextSize, titleTextColor: titleTextColor, titleFontFamily: titleFontFamily, titleTextSize: titleTextSize, textColor: textColor, textFontFamily: textFontFamily, textSize: textSize, buttonColor: button_color, buttonTextColor: button_text_color, buttonFontFamily: buttonFontFamily, buttonTextSize: buttonTextSize, promocodeTitleTextColor: promocodeTitleTextColor, promocodeTitleFontFamily: promocodeTitleFontFamily, promocodeTitleTextSize: promocodeTitleTextSize, promocodeBackgroundColor: promocodeBackgroundColor, promocodeTextColor: promocodeTextColor, copybuttonColor: copybuttonColor, copybuttonTextColor: copybuttonTextColor, copybuttonFontFamily: copybuttonFontFamily, copybuttonTextSize: copybuttonTextSize, emailpermitTextSize: emailpermitTextSize, emailpermitTextUrl: emailpermitTextUrl, consentTextSize: consentTextSize, consentTextUrl: consentTextUrl, closeButtonColor: closeButtonColor, backgroundColor: backgroundColor)
+        let model = SpinToWinViewModel(targetingActionType: .spinToWin, actId: actid, auth: auth, promoAuth: promoAuth, type: type, title: title, message: message, placeholder: placeholder, buttonLabel: buttonLabel, consentText: consentText, emailPermitText: emailPermitText, successMessage: successMessage, invalidEmailMessage: invalidEmailMessage, checkConsentMessage: checkConsentMessage, promocodeTitle: promocodeTitle, copyButtonLabel: copybuttonLabel, mailSubscription: mailSubscription, sliceCount: sliceCount, slices: sliceArray, report: spinToWinReport, taTemplate: taTemplate, img: img, wheelSpinAction: wheelSpinAction, displaynameTextColor: displaynameTextColor, displaynameFontFamily: displaynameFontFamily, displaynameTextSize: displaynameTextSize, titleTextColor: titleTextColor, titleFontFamily: titleFontFamily, titleTextSize: titleTextSize, textColor: textColor, textFontFamily: textFontFamily, textSize: textSize, buttonColor: button_color, buttonTextColor: button_text_color, buttonFontFamily: buttonFontFamily, buttonTextSize: buttonTextSize, promocodeTitleTextColor: promocodeTitleTextColor, promocodeTitleFontFamily: promocodeTitleFontFamily, promocodeTitleTextSize: promocodeTitleTextSize, promocodeBackgroundColor: promocodeBackgroundColor, promocodeTextColor: promocodeTextColor, copybuttonColor: copybuttonColor, copybuttonTextColor: copybuttonTextColor, copybuttonFontFamily: copybuttonFontFamily, copybuttonTextSize: copybuttonTextSize, emailpermitTextSize: emailpermitTextSize, emailpermitTextUrl: emailpermitTextUrl, consentTextSize: consentTextSize, consentTextUrl: consentTextUrl, closeButtonColor: closeButtonColor, backgroundColor: backgroundColor)
 
         return model
     }
