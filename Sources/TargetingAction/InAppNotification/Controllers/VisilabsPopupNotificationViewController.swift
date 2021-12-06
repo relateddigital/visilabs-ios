@@ -52,6 +52,9 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                 dismiss(animated: true)
                 completion()
             }
+        } else {
+            dismiss(animated: true)
+            completion()
         }
     }
 
@@ -73,6 +76,13 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                              shouldTrack: false,
                                                              additionalTrackingProperties: nil)
                 }
+            }
+        } else {
+            dismiss(animated: true) {
+                self.delegate?.notificationShouldDismiss(controller: self,
+                                                         callToActionURL: nil,
+                                                         shouldTrack: false,
+                                                         additionalTrackingProperties: nil)
             }
         }
     }
