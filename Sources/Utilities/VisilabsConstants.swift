@@ -160,6 +160,11 @@ struct VisilabsConstants {
     static let storyzImgBorderRadius = "storyz_img_borderRadius"
     static let shownStories = "shownStories"
     static let moveShownToEnd = "moveShownToEnd"
+    static let storyzLabelColor = "storyz_label_color"
+    static let fontFamily = "font_family"
+    static let customFontFamilyIos = "custom_font_family_ios"
+
+    
     // Email form constants
     static let message = "message"
     static let placeholder = "placeholder"

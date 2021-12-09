@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		61BC8E852762477000198A18 /* sydney_signature.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61BC8E842762452700198A18 /* sydney_signature.ttf */; };
 		88EC49BF2646FACD009C6DDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49BE2646FACD009C6DDB /* AppDelegate.swift */; };
 		88EC49C12646FACD009C6DDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49C02646FACD009C6DDB /* SceneDelegate.swift */; };
 		88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88EC49C42646FACD009C6DDB /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		61BC8E842762452700198A18 /* sydney_signature.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sydney_signature.ttf; sourceTree = "<group>"; };
 		88EC49BB2646FACD009C6DDB /* VisilabsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88EC49BE2646FACD009C6DDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88EC49C02646FACD009C6DDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		88EC49BD2646FACD009C6DDB /* VisilabsExample */ = {
 			isa = PBXGroup;
 			children = (
+				61BC8E842762452700198A18 /* sydney_signature.ttf */,
 				D2EE696627330D9000A44D88 /* VisilabsExampleRelease.entitlements */,
 				D2EE696527330D8200A44D88 /* VisilabsExample.entitlements */,
 				88EC49BE2646FACD009C6DDB /* AppDelegate.swift */,
@@ -243,6 +246,7 @@
 				88EC49CB2646FACF009C6DDB /* LaunchScreen.storyboard in Resources */,
 				88EC49C82646FACF009C6DDB /* Assets.xcassets in Resources */,
 				88EC49C62646FACD009C6DDB /* Main.storyboard in Resources */,
+				61BC8E852762477000198A18 /* sydney_signature.ttf in Resources */,
 				D2274E4F2731EB1E00824B31 /* LocationTester.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
