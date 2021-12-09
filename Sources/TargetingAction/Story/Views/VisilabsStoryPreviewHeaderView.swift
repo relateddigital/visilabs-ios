@@ -79,14 +79,61 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         super.init(coder: aDecoder)
     }
 
+    
+    
     // MARK: - Private functions
     private func loadUIElements() {
         backgroundColor = .clear
         addSubview(getProgressView)
         addSubview(snaperImageView)
         addSubview(detailView)
+        setStoryTitleLabelProperties(fontFamily: storyCustomVariables.shared.fontFamily, customFont: storyCustomVariables.shared.customFontFamilyIos, labelColor: storyCustomVariables.shared.storyzLabelColor, labelStory: snaperNameLabel)
         detailView.addSubview(snaperNameLabel)
         addSubview(closeButton)
+    }
+    
+    func setStoryTitleLabelProperties(fontFamily: String?,customFont:String? = "",labelColor:String?,labelStory:UILabel?) {
+
+        if let color = UIColor(hex: labelColor) {
+            labelStory?.textColor = color
+        } else {
+            labelStory?.textColor = .black
+        }
+        var finalFont = labelStory?.font
+        if let font = fontFamily {
+            if #available(iOS 13.0, *) {
+                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
+                    finalFont = UIFont(descriptor: (labelStory?.font.fontDescriptor.withDesign(.serif))!, size: labelStory?.font.pointSize ?? 8)
+                } else if font.lowercased() == "monospace" {
+                    finalFont = UIFont(descriptor: (labelStory?.font.fontDescriptor.withDesign(.monospaced))!, size: labelStory?.font.pointSize ?? 8)
+                }
+            } else {
+                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
+                    if let fontTemp = UIFont(name: "GillSans-Bold", size: labelStory?.font.pointSize ?? 8) {
+                        finalFont = fontTemp
+                    }
+                    if font.lowercased() == "sansserif" {
+                        if let fontTemp = UIFont(name: "GillSans", size: labelStory?.font.pointSize ?? 8) {
+                            finalFont = fontTemp
+                        }
+                    }
+                } else if font.lowercased() == "monospace" {
+                    if let fontTemp = UIFont(name: "CourierNewPS-BoldMT", size: labelStory?.font.pointSize ?? 8) {
+                        finalFont = fontTemp
+                    } else {
+                        if let fontTemp = UIFont(name: "CourierNewPSMT", size: labelStory?.font.pointSize ?? 8) {
+                            finalFont = fontTemp
+                        }
+                    }
+                }
+            }
+
+            if let uiCustomFont = UIFont(name: customFont ?? "", size:labelStory?.font.pointSize ?? 8) {
+                labelStory?.font = uiCustomFont
+                return
+            }
+       }
+        labelStory?.font = finalFont
     }
     private func installLayoutConstraints() {
         // Setting constraints for progressView

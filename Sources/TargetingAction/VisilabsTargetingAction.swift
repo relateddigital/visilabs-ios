@@ -782,6 +782,20 @@ class VisilabsTargetingAction {
                                                                         CharacterSet(charactersIn: "%"))) {
                 props.imageBorderRadius = imageBorderRadius / 100.0
             }
+            let storyzLabelColor = extendedProps[VisilabsConstants.storyzLabelColor] as? String ?? ""
+            props.storyzLabelColor = storyzLabelColor
+            storyCustomVariables.shared.storyzLabelColor = storyzLabelColor
+
+            let fontFamily = extendedProps[VisilabsConstants.fontFamily] as? String ?? ""
+            props.fontFamily = fontFamily
+            storyCustomVariables.shared.fontFamily = fontFamily
+
+
+            let customFontFamilyIos = extendedProps[VisilabsConstants.customFontFamilyIos] as? String ?? ""
+            props.customFontFamilyIos = customFontFamilyIos
+            storyCustomVariables.shared.customFontFamilyIos = customFontFamilyIos
+
+            
             if let imageBorderColorString = extendedProps[VisilabsConstants.storylbImgBorderColor] as? String
                 ?? extendedProps[VisilabsConstants.storyzimgBorderColor] as? String {
                 if imageBorderColorString.starts(with: "rgba") {

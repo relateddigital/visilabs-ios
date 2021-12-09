@@ -17,6 +17,8 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
     func setProperties(_ properties: VisilabsStoryActionExtendedProperties, _ actId: Int) {
         self.profileNameLabel.textColor = properties.labelColor
         var shown = false
+        
+        setStoryTitleLabelProperties(fontFamily: properties.fontFamily,customFont: properties.customFontFamilyIos, labelColor: properties.storyzLabelColor, labelStory: self.profileNameLabel)
         // check story has shown
         if let shownStories = UserDefaults.standard.dictionary(forKey: VisilabsConstants.shownStories) as? [String: [String]] {
             if let shownStoriesWithAction = shownStories["\(actId)"], shownStoriesWithAction.contains(self.story?.title ?? "-") {
@@ -37,42 +39,43 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
         }
     }
     
-    func setStoryTitleLabelProperties(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String? = "",labelColor:String?,labelStory:UILabel?) {
-        
-        var size = style == .title2 ? 12 : 8
-        if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
-            size += siz
-        }
-        if let color = labelColor {
-            labelStory?.textColor = UIColor(hex: color)
+    func setStoryTitleLabelProperties(fontFamily: String?,customFont:String? = "",labelColor:String?,labelStory:UILabel?) {
+
+        if let color = UIColor(hex: labelColor) {
+            labelStory?.textColor = color
         } else {
             labelStory?.textColor = .black
         }
-        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
-                               size: CGFloat(size))
+        var finalFont = labelStory?.font
         if let font = fontFamily {
             if #available(iOS 13.0, *) {
-                var systemDesign: UIFontDescriptor.SystemDesign  = .default
                 if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    systemDesign = .serif
+                    finalFont = UIFont(descriptor: (labelStory?.font.fontDescriptor.withDesign(.serif))!, size: labelStory?.font.pointSize ?? 8)
                 } else if font.lowercased() == "monospace" {
-                    systemDesign = .monospaced
-                }
-                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
-                    .withDesign(systemDesign) {
-                    finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
+                    finalFont = UIFont(descriptor: (labelStory?.font.fontDescriptor.withDesign(.monospaced))!, size: labelStory?.font.pointSize ?? 8)
                 }
             } else {
                 if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    let fontName = style == .title2 ? "GillSans-Bold": "GillSans"
-                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
+                    if let fontTemp = UIFont(name: "GillSans-Bold", size: labelStory?.font.pointSize ?? 8) {
+                        finalFont = fontTemp
+                    }
+                    if font.lowercased() == "sansserif" {
+                        if let fontTemp = UIFont(name: "GillSans", size: labelStory?.font.pointSize ?? 8) {
+                            finalFont = fontTemp
+                        }
+                    }
                 } else if font.lowercased() == "monospace" {
-                    let fontName = style == .title2 ? "CourierNewPS-BoldMT": "CourierNewPSMT"
-                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
+                    if let fontTemp = UIFont(name: "CourierNewPS-BoldMT", size: labelStory?.font.pointSize ?? 8) {
+                        finalFont = fontTemp
+                    } else {
+                        if let fontTemp = UIFont(name: "CourierNewPSMT", size: labelStory?.font.pointSize ?? 8) {
+                            finalFont = fontTemp
+                        }
+                    }
                 }
             }
 
-            if let uiCustomFont = UIFont(name: customFont ?? "", size: CGFloat(size)) {
+            if let uiCustomFont = UIFont(name: customFont ?? "", size:labelStory?.font.pointSize ?? 8) {
                 labelStory?.font = uiCustomFont
                 return
             }
