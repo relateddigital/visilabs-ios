@@ -185,6 +185,10 @@ struct VisilabsConstants {
     static let consentTextUrl = "consent_text_url"
     static let closeButtonColor = "close_button_color"
     static let backgroundColor = "background_color"
+    static let wheelBorderWidth = "wheel_borderWidth"
+    static let wheelBorderColor = "wheel_borderColor"
+    static let sliceDisplaynameFontFamily = "slice_displayname_font_family"
+
 
     // SpinToWin constants
     static let slices = "slices"
@@ -197,6 +201,8 @@ struct VisilabsConstants {
     static let img = "img"
     static let wheelSpinAction = "wheel_spin_action"
     static let is_available = "wheel_spin_action"
+    static let promocodesSoldoutMessage = "promocodes_soldout_message"
+
 
 
     // SpinToWin extended properties
