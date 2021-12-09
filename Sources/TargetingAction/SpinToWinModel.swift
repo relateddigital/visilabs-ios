@@ -40,6 +40,7 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var taTemplate: String
     var img: String
     var wheelSpinAction:String
+    var promocodesSoldoutMessage: String
 
     // ExtendedProps
     var displaynameTextColor: String
@@ -70,6 +71,9 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var consentTextUrl: String
     var closeButtonColor: String
     var backgroundColor: String
+    var wheelBorderWidth: String
+    var wheelBorderColor: String
+    var sliceDisplaynameFontFamily: String
 }
 
 public struct SpinToWinReport: Codable {
