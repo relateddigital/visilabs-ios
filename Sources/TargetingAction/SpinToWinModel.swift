@@ -12,7 +12,6 @@ public struct SpinToWinSliceViewModel: Codable {
     var color: String
     var code: String
     var type: String
-    var is_available: Bool
     var isAvailable: Bool
 }
 
@@ -74,6 +73,12 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var wheelBorderWidth: String
     var wheelBorderColor: String
     var sliceDisplaynameFontFamily: String
+    
+    var promocodes_soldout_message_text_color: String
+    var promocodes_soldout_message_font_family: String
+    var promocodes_soldout_message_text_size: String
+    var promocodes_soldout_message_background_color: String
+    
 }
 
 public struct SpinToWinReport: Codable {

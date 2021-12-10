@@ -160,13 +160,19 @@ class HomeViewController: FormViewController {
         }.onChange { SwitchRow in
             let orgIdRow: TextRow? = self.form.rowBy(tag: "orgId")
             let profileIdRow: TextRow? = self.form.rowBy(tag: "profileId")
+            let dataSourceRow: TextRow? = self.form.rowBy(tag: "dataSource")
             if SwitchRow.value == true {
                 orgIdRow?.value = "394A48556A2F76466136733D"
                 profileIdRow?.value = "75763259366A3345686E303D"
+                dataSourceRow?.value = "mrhp"
             } else {
                 orgIdRow?.value = "676D325830564761676D453D"
                 profileIdRow?.value = "356467332F6533766975593D"
+                dataSourceRow?.value = "visistore"
             }
+            orgIdRow?.updateCell()
+            profileIdRow?.updateCell()
+            dataSourceRow?.updateCell()
         }
     }
 

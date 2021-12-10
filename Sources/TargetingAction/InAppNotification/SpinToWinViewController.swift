@@ -148,7 +148,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     var index = 0
                     
                     for slice in spinToWin!.slices {
-                        if slice.type == "promotion", slice.is_available {
+                        if slice.type == "promotion", slice.isAvailable {
                             pIndexCodes[index] = slice.code
                             pIndexDisplayNames[index] = slice.displayName
                         } else if slice.type == "staticcode" {

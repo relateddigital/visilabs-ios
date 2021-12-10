@@ -205,9 +205,7 @@ struct VisilabsConstants {
     static let copybuttonLabel = "copybutton_label"
     static let img = "img"
     static let wheelSpinAction = "wheel_spin_action"
-    static let is_available = "wheel_spin_action"
     static let promocodesSoldoutMessage = "promocodes_soldout_message"
-
 
 
     // SpinToWin extended properties
@@ -227,6 +225,11 @@ struct VisilabsConstants {
     static let copybuttonTextSize = "copybutton_text_size"
     static let emailpermitTextSize = "emailpermit_text_size"
     static let emailpermitTextUrl = "emailpermit_text_url"
+    
+    static let promocodes_soldout_message_text_color = "promocodes_soldout_message_text_color"
+    static let promocodes_soldout_message_font_family = "promocodes_soldout_message_font_family"
+    static let promocodes_soldout_message_text_size = "promocodes_soldout_message_text_size"
+    static let promocodes_soldout_message_background_color = "promocodes_soldout_message_background_color"
 
     // SpinToWin slices
     static let displayName = "displayName"
