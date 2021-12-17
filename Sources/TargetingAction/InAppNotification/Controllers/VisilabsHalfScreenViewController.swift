@@ -76,8 +76,8 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
             bounds = UIScreen.main.bounds
         }
         
-        let bottomInset = Double(VisilabsHelper.getsafeAreaInsets().bottom)
-        let topInset = Double(VisilabsHelper.getsafeAreaInsets().top)
+        let bottomInset = Double(VisilabsHelper.getSafeAreaInsets().bottom)
+        let topInset = Double(VisilabsHelper.getSafeAreaInsets().top)
         halfScreenHeight = Double(visilabsHalfScreenView.imageView.frame.height) + Double(visilabsHalfScreenView.titleLabel.frame.height)
         
         let frameY = halfScreenNotification.position == .bottom ? Double(bounds.size.height) - (halfScreenHeight + bottomInset) : topInset
@@ -118,9 +118,9 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
                 
                 var originY = 0.0
                 if self.halfScreenNotification.position == .bottom {
-                    originY = self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().bottom)
+                    originY = self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().bottom)
                 } else {
-                    originY = -(self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().top))
+                    originY = -(self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().top))
                 }
                 
                 self.window?.frame.origin.y += CGFloat(originY)

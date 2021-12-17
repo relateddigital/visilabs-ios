@@ -47,15 +47,8 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     // MARK: - Initializers
 
     override func hide(animated: Bool, completion: @escaping () -> Void) {
-        if let closeButtonActionType = visilabsInAppNotification?.closePopupActionType {
-            if closeButtonActionType == "backgroundclick" || closeButtonActionType == "all"  {
-                dismiss(animated: true)
-                completion()
-            }
-        } else {
-            dismiss(animated: true)
-            completion()
-        }
+        dismiss(animated: true)
+        completion()
     }
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {

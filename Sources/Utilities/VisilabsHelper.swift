@@ -267,7 +267,7 @@ internal class VisilabsHelper {
         return nil
     }
     
-    static func getsafeAreaInsets() -> UIEdgeInsets {
+    static func getSafeAreaInsets() -> UIEdgeInsets {
         if #available(iOS 11.0, *) {
             return UIApplication.shared.keyWindow?.rootViewController?.view.safeAreaInsets ?? .zero
         } else {

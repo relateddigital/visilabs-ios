@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>sydney_signature.ttf</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -33,14 +29,18 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Related Digital uses your advertising identifier!</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Related Digital will use your location always and when in use!</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Related Digital will use your location always!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Related Digital will use your location when in use!</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Related Digital uses your advertising identifier!</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>sydney_signature.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -60,6 +60,7 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>
