@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "3.3.4"
+    static let sdkVersion = "3.4.0"
 
     static let HTTP = "http"
     static let HTTPS = urlConstant.shared.securityTag
@@ -274,6 +274,9 @@ struct VisilabsConstants {
     static let contentcount_text_color = "contentcount_text_color"
     static let contentcount_text_size = "contentcount_text_size"
     
+    
+    
+    static let backgroundClickCloseDisabledInAppNotificationTypes: [VisilabsInAppNotificationType] = [.full, .feedbackForm, .mini, .halfScreenImage]
     
 
     private static let targetPrefVossStoreKey = "OM.voss"

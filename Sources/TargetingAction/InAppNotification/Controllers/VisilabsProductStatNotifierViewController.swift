@@ -78,8 +78,8 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
             bounds = UIScreen.main.bounds
         }
         
-        let bottomInset = Double(VisilabsHelper.getsafeAreaInsets().bottom)
-        let topInset = Double(VisilabsHelper.getsafeAreaInsets().top)
+        let bottomInset = Double(VisilabsHelper.getSafeAreaInsets().bottom)
+        let topInset = Double(VisilabsHelper.getSafeAreaInsets().top)
         halfScreenHeight = Double(visilabsProductStatNotifierView.titleLabel.frame.height)
         
         let frameY = notifier.position == .bottom ? Double(bounds.size.height) - (halfScreenHeight + bottomInset) : topInset
@@ -122,9 +122,9 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
                 
                 var originY = 0.0
                 if self.notifier.position == .bottom {
-                    originY = self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().bottom)
+                    originY = self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().bottom)
                 } else {
-                    originY = -(self.halfScreenHeight + Double(VisilabsHelper.getsafeAreaInsets().top))
+                    originY = -(self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().top))
                 }
                 
                 self.window?.frame.origin.y += CGFloat(originY)
