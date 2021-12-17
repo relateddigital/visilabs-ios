@@ -275,6 +275,8 @@ struct VisilabsConstants {
     static let contentcount_text_size = "contentcount_text_size"
     
     
+    static let backgroundClickCloseDisabledInAppNotificationTypes: [VisilabsInAppNotificationType] = [.full, .feedbackForm, .mini, .halfScreenImage]
+    
 
     private static let targetPrefVossStoreKey = "OM.voss"
     private static let targetPrefVcnameStoreKey = "OM.vcname"
