@@ -136,7 +136,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         let title = notification.messageTitle?.removeEscapingCharacters()
         let message = notification.messageBody?.removeEscapingCharacters()
         let style: UIAlertController.Style = notification.alertType?.lowercased() ?? "" == "actionsheet" ? .actionSheet : .alert
-        let alert = UIAlertController(title: title, message: message, preferredStyle: style)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
         
         let buttonTxt = notification.buttonText
         let urlStr = notification.iosLink ?? ""
@@ -153,11 +153,18 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             print("dismiss tapped")
         }
         
-        alert.addAction(action)
-        alert.addAction(close)
+        alertController.addAction(action)
+        alertController.addAction(close)
         
         if let root = VisilabsHelper.getRootViewController() {
-            root.present(alert, animated: true, completion: alertDismiss)
+            
+            if UIDevice.current.userInterfaceIdiom == .pad, style == .actionSheet {
+                alertController.popoverPresentationController?.sourceView = root.view
+                alertController.popoverPresentationController?.sourceRect = CGRect(x: root.view.bounds.midX, y: root.view.bounds.maxY, width: 0, height: 0)
+            }
+            
+            
+            root.present(alertController, animated: true, completion: alertDismiss)
         }
     }
     
