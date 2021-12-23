@@ -41,6 +41,10 @@ public struct MailSubscriptionExtendedProps {
     var consentTextUrl: String
     var closeButtonColor: ButtonColor
     var backgroundColor: String
+    
+    var titleCustomFontFamilyIos: String
+    var textCustomFontFamilyIos: String
+    var buttonCustomFontFamilyIos: String
 }
 
 public enum ButtonColor: String {
