@@ -79,6 +79,14 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var promocodes_soldout_message_text_size: String
     var promocodes_soldout_message_background_color: String
     
+    var displaynameCustomFontFamilyIos: String
+    var titleCustomFontFamilyIos : String
+    var textCustomFontFamilyIos : String
+    var buttonCustomFontFamilyIos : String
+    var promocodeTitleCustomFontFamilyIos : String
+    var copybuttonCustomFontFamilyIos : String
+    var promocodesSoldoutMessageCustomFontFamilyIos : String
+    
 }
 
 public struct SpinToWinReport: Codable {
