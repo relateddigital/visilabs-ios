@@ -226,6 +226,15 @@ struct VisilabsConstants {
     static let emailpermitTextSize = "emailpermit_text_size"
     static let emailpermitTextUrl = "emailpermit_text_url"
     
+    static let displaynameCustomFontFamilyIos = "displayname_custom_font_family_ios"
+    static let titleCustomFontFamilyIos = "title_custom_font_family_ios"
+    static let textCustomFontFamilyIos = "text_custom_font_family_ios"
+    static let buttonCustomFontFamilyIos = "button_custom_font_family_ios"
+    static let promocodeTitleCustomFontFamilyIos = "promocode_title_custom_font_family_ios"
+    static let copybuttonCustomFontFamilyIos = "copybutton_custom_font_family_ios"
+    static let promocodesSoldoutMessageCustomFontFamilyIos = "promocodes_soldout_message_custom_font_family_ios"
+
+    
     static let promocodes_soldout_message_text_color = "promocodes_soldout_message_text_color"
     static let promocodes_soldout_message_font_family = "promocodes_soldout_message_font_family"
     static let promocodes_soldout_message_text_size = "promocodes_soldout_message_text_size"
