@@ -326,6 +326,11 @@ class VisilabsTargetingAction {
         let consentTextUrl = extendedProps[VisilabsConstants.consentTextUrl] as? String ?? ""
         let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? "black"
         let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String ?? ""
+        
+        let titleCustomFontFamilyIos = extendedProps[VisilabsConstants.titleCustomFontFamilyIos] as? String ?? ""
+        let textCustomFontFamilyIos = extendedProps[VisilabsConstants.textCustomFontFamilyIos] as? String ?? ""
+        let buttonCustomFontFamilyIos = extendedProps[VisilabsConstants.buttonCustomFontFamilyIos] as? String ?? ""
+        
         let impression = report[VisilabsConstants.impression] as? String ?? ""
         let click = report[VisilabsConstants.click] as? String ?? ""
         let mailReport = TargetingActionReport(impression: impression, click: click)
@@ -344,7 +349,7 @@ class VisilabsTargetingAction {
                                                                consentTextSize: consentTextSize,
                                                                consentTextUrl: consentTextUrl,
                                                                closeButtonColor: ButtonColor(rawValue: closeButtonColor) ?? ButtonColor.black,
-                                                               backgroundColor: backgroundColor)
+                                                               backgroundColor: backgroundColor,titleCustomFontFamilyIos:titleCustomFontFamilyIos,textCustomFontFamilyIos:textCustomFontFamilyIos,buttonCustomFontFamilyIos:buttonCustomFontFamilyIos)
 
         let mailModel = MailSubscriptionModel(auth: auth,
                                               title: title,
@@ -484,13 +489,13 @@ class VisilabsTargetingAction {
         let parsedPermit = emailForm.emailPermitText.parsePermissionText()
         let titleFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.titleFontFamily,
                                                           fontSize: emailForm.extendedProps.titleTextSize,
-                                                          style: .title2)
+                                                          style: .title2,customFont: emailForm.extendedProps.titleCustomFontFamilyIos)
         let messageFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.textFontFamily,
                                                             fontSize: emailForm.extendedProps.textSize,
-                                                            style: .body)
+                                                            style: .body,customFont: emailForm.extendedProps.textCustomFontFamilyIos)
         let buttonFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.buttonFontFamily,
                                                            fontSize: emailForm.extendedProps.buttonTextSize,
-                                                           style: .title2)
+                                                           style: .title2,customFont: emailForm.extendedProps.buttonCustomFontFamilyIos)
         let closeButtonColor = getCloseButtonColor(from: emailForm.extendedProps.closeButtonColor)
         let titleColor = UIColor(hex: emailForm.extendedProps.titleTextColor) ?? .white
         let textColor = UIColor(hex: emailForm.extendedProps.textColor) ?? .white
