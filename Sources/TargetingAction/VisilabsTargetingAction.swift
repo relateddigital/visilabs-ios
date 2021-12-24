@@ -428,6 +428,13 @@ class VisilabsTargetingAction {
         let closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String
         let backgroundColor = extendedProps[VisilabsConstants.backgroundColor] as? String
 
+        let contentTitleCustomFontFamilyIos = extendedProps[VisilabsConstants.contentTitleCustomFontFamilyIos] as? String ?? ""
+        let contentBodyCustomFontFamilyIos = extendedProps[VisilabsConstants.contentBodyCustomFontFamilyIos] as? String ?? ""
+        let buttonCustomFontFamilyIos = extendedProps[VisilabsConstants.buttonCustomFontFamilyIos] as? String ?? ""
+        let promocodeCustomFontFamilyIos = extendedProps[VisilabsConstants.promocodeCustomFontFamilyIos] as? String ?? ""
+        let copybuttonCustomFontFamilyIos = extendedProps[VisilabsConstants.copybuttonCustomFontFamilyIos] as? String
+
+        
         var click = ""
         var impression = ""
         if let report = actionData[VisilabsConstants.report] as? [String: Any] {
@@ -478,7 +485,12 @@ class VisilabsTargetingAction {
                                  consentUrl: consentTextUrl,
                                  closeButtonColor: closeButtonColor,
                                  backgroundColor: backgroundColor,
-                                 report: rep)
+                                 report: rep,
+                                 contentTitleCustomFontFamilyIos:contentTitleCustomFontFamilyIos,
+                                 contentBodyCustomFontFamilyIos:contentBodyCustomFontFamilyIos,
+                                 buttonCustomFontFamilyIos:buttonCustomFontFamilyIos,
+                                 promocodeCustomFontFamilyIos:promocodeCustomFontFamilyIos,
+                                 copybuttonCustomFontFamilyIos:copybuttonCustomFontFamilyIos)
     }
 
     private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {
