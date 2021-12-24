@@ -47,6 +47,11 @@ public class ScratchToWinModel: TargetingActionViewModel {
     let consentUrl: URL?
     let permitUrl: URL?
     let report: TargetingActionReport?
+    let contentTitleCustomFontFamilyIos : String?
+    let contentBodyCustomFontFamilyIos : String?
+    let buttonCustomFontFamilyIos : String?
+    let promocodeCustomFontFamilyIos : String?
+    let copybuttonCustomFontFamilyIos : String?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -110,7 +115,12 @@ public class ScratchToWinModel: TargetingActionViewModel {
                 consentUrl: String?,
                 closeButtonColor: String?,
                 backgroundColor: String?,
-                report: TargetingActionReport?) {
+                report: TargetingActionReport?,
+                contentTitleCustomFontFamilyIos:String?,
+                contentBodyCustomFontFamilyIos:String?,
+                buttonCustomFontFamilyIos : String?,
+                promocodeCustomFontFamilyIos : String?,
+                copybuttonCustomFontFamilyIos : String?) {
 
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
@@ -153,22 +163,27 @@ public class ScratchToWinModel: TargetingActionViewModel {
             self.imageUrl = ScratchToWinModel.getImageUrl(self.imageUrlString!, type: .full)
         }
         self.report = report
+        self.contentTitleCustomFontFamilyIos = contentTitleCustomFontFamilyIos
+        self.contentBodyCustomFontFamilyIos = contentBodyCustomFontFamilyIos
+        self.buttonCustomFontFamilyIos = buttonCustomFontFamilyIos
+        self.promocodeCustomFontFamilyIos = promocodeCustomFontFamilyIos
+        self.copybuttonCustomFontFamilyIos = copybuttonCustomFontFamilyIos
 
         titleFont = VisilabsInAppNotification.getFont(fontFamily: titleFontFamily,
                                                                   fontSize: titleTextSize,
-                                                                  style: .title2)
+                                                                  style: .title2,customFont: contentTitleCustomFontFamilyIos)
         messageFont = VisilabsInAppNotification.getFont(fontFamily: messageFontFamily,
                                                         fontSize: messageTextSize,
-                                                        style: .body)
+                                                        style: .body,customFont: contentBodyCustomFontFamilyIos)
         mailButtonFont = VisilabsInAppNotification.getFont(fontFamily: mailButtonFontFamily,
                                                            fontSize: mailButtonTextSize,
-                                                           style: .title2)
+                                                           style: .title2,customFont: buttonCustomFontFamilyIos)
         promoFont = VisilabsInAppNotification.getFont(fontFamily: promocodeTextFamily,
                                                       fontSize: promocodeTextSize,
-                                                      style: .title2)
+                                                      style: .title2,customFont: promocodeCustomFontFamilyIos)
         copyButtonTextFont = VisilabsInAppNotification.getFont(fontFamily: copyButtonFontFamily,
                                                               fontSize: copyButtonTextSize,
-                                                              style: .title2)
+                                                              style: .title2,customFont: copybuttonCustomFontFamilyIos)
         emailPermitTextFont = UIFont.systemFont(ofSize: CGFloat(8 + (Int(emailPermitTextSize ?? "0") ?? 0)))
         consentTextFont = UIFont.systemFont(ofSize: CGFloat(8 + (Int(consentTextSize ?? "0") ?? 0)))
 

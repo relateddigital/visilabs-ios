@@ -264,11 +264,17 @@ struct VisilabsConstants {
     static let contentTitleFontFamily = "content_title_font_family"
     static let contentTitleTextSize = "content_title_text_size"
     static let contentBodyTextColor = "content_body_text_color"
-    static let contentBodyTextFontFamily = "content_body_text_font_family"
+    static let contentBodyTextFontFamily = "content_body_font_family"
     static let contentBodyTextSize = "content_body_text_size"
     static let promocodeFontFamily = "promocode_font_family"
     static let promocodeTextSize = "promocode_text_size"
     static let sctwMailSubscriptionForm = "mail_subscription_form"
+    
+    static let contentTitleCustomFontFamilyIos = "content_title_custom_font_family_ios"
+    static let contentBodyCustomFontFamilyIos = "content_body_custom_font_family_ios"
+    static let promocodeCustomFontFamilyIos = "promocode_custom_font_family_ios"
+
+    
     
     // ProductStatNotifier constants
     static let content = "content"
