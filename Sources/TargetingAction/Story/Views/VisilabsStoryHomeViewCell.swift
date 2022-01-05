@@ -43,8 +43,6 @@ class VisilabsStoryHomeViewCell: UICollectionViewCell {
 
         if let color = UIColor(hex: labelColor) {
             labelStory?.textColor = color
-        } else {
-            labelStory?.textColor = .black
         }
         var finalFont = labelStory?.font
         if let font = fontFamily {
