@@ -19,7 +19,10 @@ class VisilabsHalfScreenView: UIView {
         self.notification = notification
         super.init(frame: frame)
         setupTitle()
-        if let imageData = notification.image, let image = UIImage(data: imageData, scale: 1) {
+        if let imageData = notification.image, var image = UIImage(data: imageData, scale: 1) {
+            if let imageGif = UIImage.gif(data: imageData) {
+                image = imageGif
+            }
             setupImageView(image: image)
         }
         setCloseButton()

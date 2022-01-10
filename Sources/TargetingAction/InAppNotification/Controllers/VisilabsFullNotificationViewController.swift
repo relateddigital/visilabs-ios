@@ -50,7 +50,12 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         super.viewDidLoad()
 
         if let notificationImage = notification!.image, let image = UIImage(data: notificationImage, scale: 1) {
-            imageView.image = image
+            if let imageGif = UIImage.gif(data: notificationImage) {
+                imageView.image = imageGif
+            } else {
+                imageView.image = image
+            }
+            
             if let width = imageView.image?.size.width,
                width / UIScreen.main.bounds.width <= 0.6, let height = imageView.image?.size.height,
                 height / UIScreen.main.bounds.height <= 0.3 {

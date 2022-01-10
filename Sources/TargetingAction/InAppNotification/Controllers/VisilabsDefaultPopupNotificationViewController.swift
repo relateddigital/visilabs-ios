@@ -21,8 +21,13 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
         self.mailForm = emailForm
         self.scratchToWin = scratchToWin
 
+        
         if let image = visilabsInAppNotification?.image {
-            self.image = UIImage(data: image)
+            if let imageGif = UIImage.gif(data: image) {
+                self.image = imageGif
+            } else {
+                self.image = UIImage(data: image)
+            }
         }
 
         if let img = scratchToWin?.image {
@@ -30,7 +35,7 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
         }
 
         if let secondImage = visilabsInAppNotification?.secondImage2 {
-            self.secondImage = UIImage(data: secondImage)
+            self.secondImage = UIImage.gif(data: secondImage)
         }
     }
 
