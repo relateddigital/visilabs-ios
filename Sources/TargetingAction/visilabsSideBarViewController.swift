@@ -46,14 +46,17 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     func configureView(sideBar:sideBarView) {
+        sideBar.titleLabelWidth.constant = (view.height - sideBar.arrowLabel.height) * 0.9
         sideBar.titleLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
         sideBar.labelSuperView.backgroundColor = .clear
-        sideBar.titleLabel.text = "aslımmmm"
+        sideBar.titleLabel.text = "deneme"
         sideBar.titleLabel.font = sideBar.titleLabel.font.withSize(30)
         sideBar.titleLabel.textColor = .black
         sideBar.backgroundColor = .red
         sideBar.arrowLabel.textColor = .white
+
     }
+
 
     @objc func viewClicked(_ sender: UITapGestureRecognizer? = nil) {
         print("view a basıldı")
@@ -85,18 +88,17 @@ class visilabsSideBarViewController : UIViewController {
         } else {
             bounds = UIScreen.main.bounds
         }
-        let SideBarframeWidth = 60.0
-
-        
+        let SideBarframeWidth = 30.0
         sideBarHeight = bounds.size.height / 3
         
         //ortada istiyorsak
         let frameY = bounds.size.height / 2 - sideBarHeight / 2
+        //aşşağıda istersek
         
+
         
     
         let frame = CGRect(origin: CGPoint(x: bounds.maxX-SideBarframeWidth, y: CGFloat(frameY)), size: CGSize(width: SideBarframeWidth, height: CGFloat(sideBarHeight)))
-        
         if #available(iOS 13.0, *) {
             let windowScene = sharedUIApplication
                 .connectedScenes
@@ -109,7 +111,6 @@ class visilabsSideBarViewController : UIViewController {
         } else {
             window = UIWindow(frame: frame)
         }
-
         if let window = window {
             window.windowLevel = UIWindow.Level.alert
             window.clipsToBounds = false // true
@@ -117,7 +118,6 @@ class visilabsSideBarViewController : UIViewController {
             window.isHidden = false
         }
         self.position = self.window?.layer.position
-        
         configureView(sideBar: view as! sideBarView)
     }
     
