@@ -16,19 +16,22 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hty-Ev-fqZ">
-                    <rect key="frame" x="10" y="10" width="70" height="20"/>
+                    <rect key="frame" x="0.0" y="10" width="90" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="mci-aA-eQ9"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tUB-ke-NWh">
-                    <rect key="frame" x="0.0" y="44" width="90" height="356"/>
+                    <rect key="frame" x="0.0" y="35" width="90" height="365"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kHQ-o2-POh">
-                            <rect key="frame" x="24.5" y="178" width="41.5" height="20.5"/>
+                            <rect key="frame" x="24.5" y="162.5" width="41.5" height="20.5"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="41.5" id="2ig-fR-LwQ"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -36,7 +39,7 @@
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstItem="kHQ-o2-POh" firstAttribute="centerY" secondItem="tUB-ke-NWh" secondAttribute="centerY" constant="10" id="0i5-fe-czC"/>
+                        <constraint firstItem="kHQ-o2-POh" firstAttribute="centerY" secondItem="tUB-ke-NWh" secondAttribute="centerY" constant="-10" id="0i5-fe-czC"/>
                         <constraint firstItem="kHQ-o2-POh" firstAttribute="centerX" secondItem="tUB-ke-NWh" secondAttribute="centerX" id="OpL-pt-3wJ"/>
                     </constraints>
                 </view>
@@ -47,10 +50,10 @@
             <constraints>
                 <constraint firstItem="hty-Ev-fqZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="7ts-U2-Pfb"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="tUB-ke-NWh" secondAttribute="bottom" id="Ak6-B6-fpI"/>
-                <constraint firstAttribute="trailing" secondItem="hty-Ev-fqZ" secondAttribute="trailing" constant="10" id="Fey-QL-UnP"/>
-                <constraint firstItem="hty-Ev-fqZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="Toc-fA-jqI"/>
-                <constraint firstItem="tUB-ke-NWh" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="cwb-sQ-7iC"/>
+                <constraint firstAttribute="trailing" secondItem="hty-Ev-fqZ" secondAttribute="trailing" id="Fey-QL-UnP"/>
+                <constraint firstItem="hty-Ev-fqZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Toc-fA-jqI"/>
                 <constraint firstItem="tUB-ke-NWh" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="kFQ-w6-fTg"/>
+                <constraint firstItem="tUB-ke-NWh" firstAttribute="top" secondItem="hty-Ev-fqZ" secondAttribute="bottom" constant="5" id="rFg-yI-Kqa"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="tUB-ke-NWh" secondAttribute="trailing" id="sgw-Lb-9tc"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -58,6 +61,7 @@
                 <outlet property="arrowLabel" destination="hty-Ev-fqZ" id="7SA-8S-Evf"/>
                 <outlet property="labelSuperView" destination="tUB-ke-NWh" id="pbf-oY-tes"/>
                 <outlet property="titleLabel" destination="kHQ-o2-POh" id="UTC-4O-XMn"/>
+                <outlet property="titleLabelWidth" destination="2ig-fR-LwQ" id="qoO-Vf-6Wr"/>
             </connections>
             <point key="canvasLocation" x="98.550724637681171" y="127.90178571428571"/>
         </view>

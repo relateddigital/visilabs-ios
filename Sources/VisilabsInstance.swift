@@ -298,10 +298,12 @@ extension VisilabsInstance {
             })
         }
     
-    private func sideBarTest(controller:UIViewController) {
-        let sideBar = visilabsSideBar()
-        sideBar.addedView = controller.view
-        sideBar.addSideBar()
+    private func sideBarTest() {
+
+        let model = SideBarModel()
+        let sideBar = visilabsSideBarViewController(model:model)
+        sideBar.show(animated: true)
+
     }
     
     public func customEvent(_ pageName: String, properties: [String: String]) {
