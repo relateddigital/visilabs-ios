@@ -9,10 +9,18 @@ import UIKit
 
 class sideBarView: UIView {
 
+    
+    @IBOutlet weak var sideBarMiniWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var sideBarMiniImageView: UIImageView!
+    @IBOutlet weak var sideBarMiniView: UIView!
+    @IBOutlet weak var sideBarMiniContentImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var labelSuperView: UIView!
-    @IBOutlet weak var arrowLabel: UILabel!
-    @IBOutlet weak var titleLabelWidth: NSLayoutConstraint!
+    @IBOutlet weak var sideBarGrandView: UIView!
+    @IBOutlet weak var sideBarGrandImageView: UIImageView!
+    @IBOutlet weak var sideBarGrandContentImageView: UIImageView!
+    @IBOutlet weak var sideBarMiniVerticalConstraint: NSLayoutConstraint!
+    
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,16 +29,17 @@ class sideBarView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
 
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // we need to adjust the frame of the subview to no longer match the size used
-        // in the XIB file BUT the actual frame we got assinged from the superview
-        self.bounds = self.frame
-        roundCorners(corners: [.topLeft, .bottomLeft], radius: 45)
+       
+        self.bounds = self.frame        
+        
+//        roundCorners(corners: [.topLeft, .bottomLeft], radius: 90)
 
     }
 }
