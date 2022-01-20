@@ -24,6 +24,124 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         self.spinToWin = spinToWin
     }
     
+    private func getCustomFontNames() -> Set<String> {
+        var customFontNames = Set<String>()
+        if let spinToWin = self.spinToWin {
+            if !spinToWin.displaynameCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.displaynameCustomFontFamilyIos)
+            }
+            if !spinToWin.titleCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.titleCustomFontFamilyIos)
+            }
+            if !spinToWin.textCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.textCustomFontFamilyIos)
+            }
+            if !spinToWin.buttonCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.buttonCustomFontFamilyIos)
+            }
+            if !spinToWin.promocodeTitleCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.promocodeTitleCustomFontFamilyIos)
+            }
+            if !spinToWin.copybuttonCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.copybuttonCustomFontFamilyIos)
+            }
+            if !spinToWin.promocodesSoldoutMessageCustomFontFamilyIos.isEmptyOrWhitespace {
+                customFontNames.insert(spinToWin.promocodesSoldoutMessageCustomFontFamilyIos)
+            }
+        }
+        return customFontNames
+    }
+    
+    private func createSpinToWinFiles() -> URL? {
+        let manager = FileManager.default
+        guard let docUrl = try? manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
+            VisilabsLogger.error("Can not create documentDirectory")
+            return nil
+        }
+        let htmlUrl = docUrl.appendingPathComponent("spintowin.html")
+        let jsUrl = docUrl.appendingPathComponent("spintowin.js")
+#if SWIFT_PACKAGE
+        let bundle = Bundle.module
+#else
+        let bundle = Bundle(for: type(of: self))
+#endif
+        let bundleHtmlPath = bundle.path(forResource: "spintowin", ofType: "html") ?? ""
+        let bundleJsPath = bundle.path(forResource: "spintowin", ofType: "js") ?? ""
+
+        let bundleHtmlUrl = URL(fileURLWithPath: bundleHtmlPath)
+        let bundleJsUrl = URL(fileURLWithPath: bundleJsPath)
+        
+        VisilabsHelper.registerFonts(fontNames: getCustomFontNames())
+        let fontUrls = getSpinToWinFonts(fontNames: getCustomFontNames())
+
+        do {
+            if manager.fileExists(atPath: htmlUrl.path) {
+                try manager.removeItem(atPath: htmlUrl.path)
+            }
+            if manager.fileExists(atPath: jsUrl.path) {
+                try manager.removeItem(atPath: jsUrl.path)
+            }
+            
+            try manager.copyItem(at: bundleHtmlUrl, to: htmlUrl)
+            try manager.copyItem(at: bundleJsUrl, to: jsUrl)
+        } catch let error {
+            VisilabsLogger.error(error)
+            VisilabsLogger.error(error.localizedDescription)
+            return nil
+        }
+        
+        for fontUrlKeyValue in fontUrls {
+            do {
+                let fontUrl = docUrl.appendingPathComponent(fontUrlKeyValue.key)
+                if manager.fileExists(atPath: fontUrl.path) {
+                    try manager.removeItem(atPath: fontUrl.path)
+                }
+                try manager.copyItem(at: fontUrlKeyValue.value, to: fontUrl)
+                self.spinToWin?.fontFiles.append(fontUrlKeyValue.key)
+            } catch let error {
+                VisilabsLogger.error(error)
+                VisilabsLogger.error(error.localizedDescription)
+                continue
+            }
+        }
+        
+        return htmlUrl
+    }
+    
+    private func getSpinToWinFonts(fontNames: Set<String>) -> [String: URL] {
+        var fontUrls = [String: URL]()
+        if let infos = Bundle.main.infoDictionary {
+            if let uiAppFonts = infos["UIAppFonts"] as? [String] {
+                for uiAppFont in uiAppFonts {
+                    let uiAppFontParts = uiAppFont.split(separator: ".")
+                    guard uiAppFontParts.count == 2 else{
+                        continue
+                    }
+                    let fontName = String(uiAppFontParts[0])
+                    let fontExtension = String(uiAppFontParts[1])
+                    
+                    var register = false
+                    for name in fontNames {
+                        if name.contains(fontName, options: .caseInsensitive) {
+                            register = true
+                        }
+                    }
+                    
+                    if !register {
+                        continue
+                    }
+                    
+                    guard let url = Bundle.main.url(forResource: fontName, withExtension: fontExtension) else {
+                        VisilabsLogger.error("UIFont+:  Failed to register font - path for resource not found.")
+                        continue
+                    }
+                    fontUrls[uiAppFont] = url
+                }
+            }
+        }
+        return fontUrls
+    }
+    
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -49,16 +167,12 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         configuration.mediaTypesRequiringUserActionForPlayback = []
         configuration.allowsInlineMediaPlayback = true
         let webView = WKWebView(frame: .zero, configuration: configuration)
-#if SWIFT_PACKAGE
-        let bundle = Bundle.module
-#else
-        let bundle = Bundle(for: type(of: self))
-#endif
-        let htmlPath = bundle.path(forResource: "spintowin", ofType: "html") ?? ""
-        let url = URL(fileURLWithPath: htmlPath)
-        webView.load(URLRequest(url: url))
-        webView.backgroundColor = .clear
-        webView.translatesAutoresizingMaskIntoConstraints = false
+        if let htmlUrl = createSpinToWinFiles() {
+            webView.loadFileURL(htmlUrl, allowingReadAccessTo: htmlUrl.deletingLastPathComponent())
+            webView.backgroundColor = .clear
+            webView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         return webView
     }
     
