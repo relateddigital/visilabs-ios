@@ -298,7 +298,7 @@ extension VisilabsInstance {
             })
         }
     
-    private func sideBarTest() {
+    public func sideBarTest() {
 
         let model = SideBarModel()
         let sideBar = visilabsSideBarViewController(model:model)

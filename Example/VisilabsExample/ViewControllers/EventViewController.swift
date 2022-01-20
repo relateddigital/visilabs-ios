@@ -38,6 +38,7 @@ class EventViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
+        Visilabs.callAPI().sideBarTest()
     }
     
     private func initializeForm() {
