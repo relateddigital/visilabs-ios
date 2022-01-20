@@ -276,6 +276,53 @@ internal class VisilabsHelper {
         }
     }
     
+    static func registerFonts(fontNames: Set<String>) {
+        if let infos = Bundle.main.infoDictionary {
+            if let uiAppFonts = infos["UIAppFonts"] as? [String] {
+                for uiAppFont in uiAppFonts {
+                    
+                    let uiAppFontParts = uiAppFont.split(separator: ".")
+                    guard uiAppFontParts.count == 2 else {
+                        return
+                    }
+                    let fontName = String(uiAppFontParts[0])
+                    let fontExtension = String(uiAppFontParts[1])
+                    
+                    
+                    var register = false
+                    for name in fontNames {
+                        if name.contains(fontName, options: .caseInsensitive) {
+                            register = true
+                        }
+                    }
+                    
+                    if !register {
+                        continue
+                    }
+                    
+                    guard let url = Bundle.main.url(forResource: fontName, withExtension: fontExtension) else {
+                        VisilabsLogger.error("UIFont+:  Failed to register font - path for resource not found.")
+                        continue
+                    }
+
+                    guard let fontDataProvider = CGDataProvider(url: url as CFURL) else {
+                        VisilabsLogger.error("CGDataProvider: ERROR")
+                        continue
+                    }
+                    
+                    if let font = CGFont(fontDataProvider) {
+                        var error: Unmanaged<CFError>?
+                        guard CTFontManagerRegisterGraphicsFont(font, &error) else {
+                            VisilabsLogger.error("CTFontManagerRegisterGraphicsFont: ERROR")
+                            continue
+                        }
+                        VisilabsLogger.error("\(String(describing: font.fullName)): registered")
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 class ToastLabel: UILabel {
