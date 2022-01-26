@@ -9,16 +9,25 @@ import UIKit
 
 class sideBarView: UIView {
 
-    
-    @IBOutlet weak var sideBarMiniWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var sideBarMiniImageView: UIImageView!
-    @IBOutlet weak var sideBarMiniView: UIView!
-    @IBOutlet weak var sideBarMiniContentImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+    //grandView
     @IBOutlet weak var sideBarGrandView: UIView!
     @IBOutlet weak var sideBarGrandImageView: UIImageView!
     @IBOutlet weak var sideBarGrandContentImageView: UIImageView!
-    @IBOutlet weak var sideBarMiniVerticalConstraint: NSLayoutConstraint!
+    
+    //leftMini
+    @IBOutlet weak var LeftSideBarMiniView: UIView!
+    @IBOutlet weak var LeftSideBarMiniWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var LeftSideBarMiniVerticalConstraint: NSLayoutConstraint!
+    @IBOutlet weak var LeftSideBarMiniImageView: UIImageView!
+    @IBOutlet weak var LeftSideBarMiniContentImageView: UIImageView!
+    @IBOutlet weak var LeftTitleLabel: UILabel!
+    
+    //rightMini
+    @IBOutlet weak var rightSideBarMiniView: UIView!
+    @IBOutlet weak var rightSideBarMiniWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarMiniImageView: UIImageView!
+    @IBOutlet weak var rightSideBarMiniContentImageView: UIImageView!
+    @IBOutlet weak var rightTitleLabel: UILabel!
     
 
     
