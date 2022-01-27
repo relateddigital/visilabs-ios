@@ -119,7 +119,7 @@ public struct DrawerReport: Codable {
 struct DrawerViewModel {
 
     // constants and varams
-    var drawerHeight = 200.0
+    var drawerHeight = 250.0
     var miniDrawerWidth = 40.0
     var miniDrawerWidthForCircle = 140.0
     var xCoordPaddingConstant = -25.0

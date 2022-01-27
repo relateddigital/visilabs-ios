@@ -8,7 +8,7 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     var globDrawerView: drawerView?
     var drawerOpen: Bool = false
     var drawerFirstPosition: CGPoint?
-    var titleLenght = 12
+
     var shouldDismissed = false
     var report: DrawerReport?
     
@@ -111,14 +111,17 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             self.globDrawerView?.leftDrawerTitleLabelCenterXConstraint.constant =  self.model.xCoordPaddingConstant
             self.globDrawerView?.leftDrawerContentImageCenterXConstraint.constant =  2
             
-            if self.model.titleString.count > 0 {
-                self.globDrawerView?.leftDrawerMiniContentImageView.isHidden = true
-                self.globDrawerView?.leftDrawerMiniContentImageTopConstraint.constant *= 1.6
-                self.globDrawerView?.leftDrawerMiniContentImageBottomConstraint.constant *= 3
-                self.globDrawerView?.leftDrawerMiniContentImageLeadingConstraint.constant = 20
+            if let imgUrl = self.model.miniDrawerContentImage, !imgUrl.isEmpty {
+                self.globDrawerView?.leftDrawerMiniContentImageView.isHidden = false
+                self.globDrawerView?.leftTitleLabel.isHidden = true
+                self.globDrawerView?.leftDrawerMiniContentImageTopConstraint.constant = 0
+                self.globDrawerView?.leftDrawerMiniContentImageBottomConstraint.constant = 0
+                self.globDrawerView?.leftDrawerMiniContentImageLeadingConstraint.constant = 0
                 self.globDrawerView?.leftDrawerMiniContentImageTrailingConstraint.constant += (self.globDrawerView?.drawerModel!.miniDrawerWidth)!
             } else {
-                self.globDrawerView?.leftDrawerMiniContentImageTopConstraint.constant *=  3
+                self.globDrawerView?.leftDrawerMiniContentImageView.isHidden = true
+                self.globDrawerView?.leftTitleLabel.isHidden = false
+                self.globDrawerView?.leftDrawerMiniContentImageTopConstraint.constant *= 1.6
                 self.globDrawerView?.leftDrawerMiniContentImageBottomConstraint.constant *= 3
                 self.globDrawerView?.leftDrawerMiniContentImageLeadingConstraint.constant = 20
                 self.globDrawerView?.leftDrawerMiniContentImageTrailingConstraint.constant += (self.globDrawerView?.drawerModel!.miniDrawerWidth)!
@@ -135,14 +138,17 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             self.globDrawerView?.rightDrawerTitleLabelCenterXConstraint.constant =  -(self.model.xCoordPaddingConstant)
             self.globDrawerView?.rightDrawerContentImageCenterXConstraint.constant = -2
             
-            if self.model.titleString.count > 0 {
-                self.globDrawerView?.rightDrawerMiniContentImageView.isHidden = true
-                self.globDrawerView?.rightDrawerMiniContentImageTopConstraint.constant *= 1.6
-                self.globDrawerView?.rightDrawerMiniContentImageBottomConstraint.constant *= 3
-                self.globDrawerView?.rightDrawerMiniContentImageTrailingConstraint.constant = 20
+            if let imgUrl = self.model.miniDrawerContentImage, !imgUrl.isEmpty {
+                self.globDrawerView?.rightDrawerMiniContentImageView.isHidden = false
+                self.globDrawerView?.rightTitleLabel.isHidden = true
+                self.globDrawerView?.rightDrawerMiniContentImageTopConstraint.constant = 0
+                self.globDrawerView?.rightDrawerMiniContentImageBottomConstraint.constant = 0
+                self.globDrawerView?.rightDrawerMiniContentImageTrailingConstraint.constant = 0
                 self.globDrawerView?.rightDrawerMiniContentImageLeadingConstraint.constant += (self.globDrawerView?.drawerModel!.miniDrawerWidth)!
             } else {
-                self.globDrawerView?.rightDrawerMiniContentImageTopConstraint.constant *=  3
+                self.globDrawerView?.rightDrawerMiniContentImageView.isHidden = true
+                self.globDrawerView?.rightTitleLabel.isHidden = false
+                self.globDrawerView?.rightDrawerMiniContentImageTopConstraint.constant *= 1.6
                 self.globDrawerView?.rightDrawerMiniContentImageBottomConstraint.constant *= 3
                 self.globDrawerView?.rightDrawerMiniContentImageTrailingConstraint.constant = 20
                 self.globDrawerView?.rightDrawerMiniContentImageLeadingConstraint.constant += (self.globDrawerView?.drawerModel!.miniDrawerWidth)!
@@ -176,19 +182,11 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
         }
         
         if self.model.screenXcoordinate == .right {
-            if model.titleString.count > titleLenght {
-                while model.titleString.count != titleLenght {
-                    model.titleString.removeLast()
-                }
-            }
+
             globDrawerView!.leftTitleLabel.text = model.titleString
             // modele göre diğer elementlerin assign edilmesi gerek left mini viewa
         } else if self.model.screenXcoordinate == .left {
-            if model.titleString.count > titleLenght {
-                while model.titleString.count != titleLenght {
-                    model.titleString.removeLast()
-                }
-            }
+
             globDrawerView!.rightTitleLabel.text = model.titleString
             // modele göre diğer elementlerin assign edilmesi gerek right mini viewa
         }
