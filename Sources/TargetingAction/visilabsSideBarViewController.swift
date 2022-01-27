@@ -53,7 +53,7 @@ class visilabsSideBarViewController : UIViewController {
         let model = SideBarModel()
         
         model.titleString = "deneme"
-        model.isCircle = true
+        model.isCircle = false
         model.screenYcoordinate = .middle
         model.screenXcoordinate = .left
         model.labelType = .upToDown
@@ -85,7 +85,6 @@ class visilabsSideBarViewController : UIViewController {
             self.globSidebarView!.rightSideBarMiniView.layer.addSublayer(semiCirleLayer)
             self.globSidebarView!.rightSideBarMiniView.backgroundColor = .clear
             self.globSidebarView!.isHidden = false
-            
         }
 
         
@@ -97,9 +96,15 @@ class visilabsSideBarViewController : UIViewController {
         if self.model.screenXcoordinate == .right {
             globSidebarView?.rightSideBarMiniWidthConstraint.constant = 0
             globSidebarView?.rightSideBarMiniView.isHidden = true
+            if !model.isCircle {
+                globSidebarView?.LeftSideBarMiniView.roundCorners(corners: [.topLeft, .bottomLeft], radius: 30)
+            }
         } else if self.model.screenXcoordinate == .left {
             globSidebarView?.LeftSideBarMiniWidthConstraint.constant = 0
             globSidebarView?.LeftSideBarMiniView.isHidden = true
+            if !model.isCircle {
+                globSidebarView?.rightSideBarMiniView.roundCorners(corners: [.topRight, .bottomRight], radius: 30)
+            }
         }
         
         //label tipi
@@ -136,7 +141,7 @@ class visilabsSideBarViewController : UIViewController {
             } else if model.labelType == .upToDown {
                 globSidebarView!.rightTitleLabel.text = "^ " + model.titleString
             }
-            //modele göre diğer elementlerin assign edilmesi gerek left mini viewa
+            //modele göre diğer elementlerin assign edilmesi gerek right mini viewa
         }
 
     }
@@ -208,7 +213,7 @@ class visilabsSideBarViewController : UIViewController {
         }
         let SideBarframeWidth = bounds.size.width / 2
         
-        var frameY = bounds.size.height / 2 - self.model.sideBarHeight / 2
+        var frameY = Double()
 
         if self.model.screenYcoordinate == .top {
             frameY = bounds.size.height/2 - self.model.sideBarHeight * 1.5
@@ -218,7 +223,7 @@ class visilabsSideBarViewController : UIViewController {
             frameY = bounds.size.height / 2 - self.model.sideBarHeight / 2
         }
 
-        var frame = CGRect(origin: CGPoint(x: bounds.maxX-self.model.miniSideBarWidth, y: CGFloat(frameY)), size: CGSize(width: SideBarframeWidth, height: CGFloat(self.model.sideBarHeight)))
+        var frame = CGRect()
         
         if self.model.screenXcoordinate == .right {
             frame = CGRect(origin: CGPoint(x: bounds.maxX-self.model.miniSideBarWidth, y: CGFloat(frameY)), size: CGSize(width: SideBarframeWidth, height: CGFloat(self.model.sideBarHeight)))
@@ -267,11 +272,10 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     func addTapGestureToSideBarMiniView() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.viewClicked(_:)))
         if self.model.screenXcoordinate == .right {
-            let tap = UITapGestureRecognizer(target: self, action: #selector(self.viewClicked(_:)))
             globSidebarView?.LeftSideBarMiniView.addGestureRecognizer(tap)
         } else if self.model.screenXcoordinate == .left {
-            let tap = UITapGestureRecognizer(target: self, action: #selector(self.viewClicked(_:)))
             globSidebarView?.rightSideBarMiniView.addGestureRecognizer(tap)
         }
     }
