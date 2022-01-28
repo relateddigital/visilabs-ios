@@ -180,8 +180,7 @@ class EventViewController: FormViewController {
     //TO_DO: utm parametreleri geliyorsa bunları da targetpreferences içine kaydetmeli miyiz?
     //TO_DO: birthday ve gender formatı doğru mu?
     private func customEvent(_ eventType: VisilabsEventType) {
-        let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)!.value
-                                   ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let exVisitorId: String = ""
         let email: String = ((self.form.rowBy(tag: "email") as TextRow?)!.value
                              ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         var properties = [String: String]()
@@ -218,6 +217,7 @@ class EventViewController: FormViewController {
                 return
             }
         case .pageView:
+            properties["OM.exVisitorID"] = "umut"
             Visilabs.callAPI().customEvent("Page Name", properties: [String: String]())
             return
         case .productView:
