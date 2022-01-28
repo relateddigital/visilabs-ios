@@ -48,6 +48,29 @@ public class VisilabsInAppNotification {
         public static let position = "pos"
         public static let customFont = "custom_font_family_ios"
         public static let closePopupActionType = "close_event_trigger"
+        public static let carouselItems = "carousel_items"
+        public static let carouselImage = "image"
+        public static let carouselTitle = "title"
+        public static let carouselTitleColor = "title_color"
+        public static let carouselTitleFontFamilyIOS = "title_custom_font_family_ios"
+        public static let carouselTitleTextSize = "title_textsize"
+        public static let carouselBody = "body"
+        public static let carouselBodyColor = "body_color"
+        public static let carouselBodyFontFamilyIOS = "body_custom_font_family_ios"
+        public static let carouselBodyTextSize = "body_textsize"
+        public static let carouselPromocodeType = "promocode_type"
+        public static let carouselPromotionCode = "promotion_code"
+        public static let carouselPromocodeBackgroundColor = "promocode_background_color"
+        public static let carouselPromocodeTextColor = "promocode_text_color"
+        public static let carouselButtonText = "button_text"
+        public static let carouselButtonTextColor = "button_text_color"
+        public static let carouselButtonColor = "button_color"
+        public static let carouselButtonFontFamilyIOS = "button_custom_font_family_ios"
+        public static let carouselButtonTextSize = "button_textsize"
+        public static let carouselBackgroundImage = "background_image"
+        public static let carouselBackgrounColor = "background_color"
+        public static let carouselIOSLink = "ios_lnk"
+        
     }
 
     let actId: Int
@@ -88,7 +111,29 @@ public class VisilabsInAppNotification {
     let secondPopupMinPoint: String?
     let previousPopupPoint: Double?
     let position: VisilabsHalfScreenPosition?
-    let closePopupActionType : String?
+    let closePopupActionType: String?
+    let carouselItems: String?
+    let carouselImage: [String]?
+    let carouselTitle: [String]?
+    let carouselTitleColor: [UIColor]?
+    let carouselTitleFontFamilyIOS: [String]?
+    let carouselTitleTextSize: [String]?
+    let carouselBody: [String]?
+    let carouselBodyColor: [UIColor]?
+    let carouselBodyFontFamilyIOS: [String]?
+    let carouselBodyTextSize: [String]?
+    let carouselPromocodeType: [String]?
+    let carouselPromotionCode: [String]?
+    let carouselPromocodeBackgroundColor: [UIColor]?
+    let carouselPromocodeTextColor: [UIColor]?
+    let carouselButtonText: [String]?
+    let carouselButtonTextColor: [UIColor]?
+    let carouselButtonColor: [UIColor]?
+    let carouselButtonFontFamilyIOS: [String]?
+    let carouselButtonTextSize: [String]?
+    let carouselBackgroundImage: [String]?
+    let carouselBackgrounColor: [UIColor]?
+    let carouselIOSLink: [String]?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -136,6 +181,12 @@ public class VisilabsInAppNotification {
                                          size: CGFloat(8))
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
+    var carouselTitleFont: [UIFont] = [UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
+                                           size: CGFloat(12))]
+    var carouselBodyFont: [UIFont] = [UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                          size: CGFloat(8))]
+    var carouselButtonFont: [UIFont] = [UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                            size: CGFloat(8))]
 
     public init(actId: Int,
                 type: VisilabsInAppNotificationType,
@@ -174,7 +225,31 @@ public class VisilabsInAppNotification {
                 secondImageUrlString2: String?,
                 secondPopupMinPoint: String?,
                 previousPopupPoint: Double? = nil,
-                position: VisilabsHalfScreenPosition?) {
+                position: VisilabsHalfScreenPosition?,
+                carouselItems: String?,
+                carouselImage: [String]?,
+                carouselTitle: [String]?,
+                carouselTitleColor: [String]?,
+                carouselTitleFontFamilyIOS: [String]?,
+                carouselTitleTextSize: [String]?,
+                carouselBody: [String]?,
+                carouselBodyColor: [String]?,
+                carouselBodyFontFamilyIOS: [String]?,
+                carouselBodyTextSize: [String]?,
+                carouselPromocodeType: [String]?,
+                carouselPromotionCode: [String]?,
+                carouselPromocodeBackgroundColor: [String]?,
+                carouselPromocodeTextColor: [String]?,
+                carouselButtonText: [String]?,
+                carouselButtonTextColor: [String]?,
+                carouselButtonColor: [String]?,
+                carouselButtonFontFamilyIOS: [String]?,
+                carouselButtonTextSize: [String]?,
+                carouselBackgroundImage: [String]?,
+                carouselBackgrounColor: [String]?,
+                carouselIOSLink: [String]?
+    )
+    {
 
         self.actId = actId
         self.messageType = type.rawValue
@@ -240,6 +315,28 @@ public class VisilabsInAppNotification {
         }
         self.previousPopupPoint = previousPopupPoint
         self.position = position
+        self.carouselImage = carouselImage
+        self.carouselTitle = carouselTitle
+        self.carouselTitleColor = VisilabsHelper.convertColorArray(carouselTitleColor)
+        self.carouselTitleFontFamilyIOS = carouselTitleFontFamilyIOS
+        self.carouselTitleTextSize = carouselTitleTextSize
+        self.carouselBody = carouselBody
+        self.carouselBodyColor = VisilabsHelper.convertColorArray(carouselBodyColor)
+        self.carouselBodyFontFamilyIOS = carouselBodyFontFamilyIOS
+        self.carouselBodyTextSize = carouselBodyTextSize
+        self.carouselPromocodeType = carouselPromocodeType
+        self.carouselPromotionCode = carouselPromotionCode
+        self.carouselPromocodeBackgroundColor = VisilabsHelper.convertColorArray(carouselPromocodeBackgroundColor)
+        self.carouselPromocodeTextColor = VisilabsHelper.convertColorArray(carouselPromocodeTextColor)
+        self.carouselButtonText = carouselButtonText
+        self.carouselButtonTextColor = VisilabsHelper.convertColorArray(carouselButtonTextColor)
+        self.carouselButtonColor = VisilabsHelper.convertColorArray(carouselButtonColor)
+        self.carouselButtonFontFamilyIOS = carouselButtonFontFamilyIOS
+        self.carouselButtonTextSize = carouselButtonTextSize
+        self.carouselBackgroundImage = carouselBackgroundImage
+        self.carouselBackgrounColor = VisilabsHelper.convertColorArray(carouselBackgrounColor)
+        self.carouselIOSLink = carouselIOSLink
+        
         setFonts()
     }
     
@@ -257,6 +354,11 @@ public class VisilabsInAppNotification {
 
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
             VisilabsLogger.error("invalid \(PayloadKey.actionData)")
+            return nil
+        }
+        
+        guard let carouselItems = actionData[PayloadKey.carouselItems] as? [String: Any?] else {
+            VisilabsLogger.error("invalid \(PayloadKey.carouselItems)")
             return nil
         }
 
@@ -349,6 +451,28 @@ public class VisilabsInAppNotification {
         } else {
             self.position = .bottom
         }
+        self.carouselImage = carouselItems[PayloadKey.carouselImage] as? [String]
+        self.carouselTitle = carouselItems[PayloadKey.carouselTitle] as? [String]
+        self.carouselTitleColor = carouselItems[PayloadKey.carouselTitleColor] as? [UIColor]
+        self.carouselTitleFontFamilyIOS = carouselItems[PayloadKey.carouselTitleFontFamilyIOS] as? [String]
+        self.carouselTitleTextSize = carouselItems[PayloadKey.carouselTitleTextSize] as? [String]
+        self.carouselBody = carouselItems[PayloadKey.carouselBody] as? [String]
+        self.carouselBodyColor = carouselItems[PayloadKey.carouselBodyColor] as? [UIColor]
+        self.carouselBodyFontFamilyIOS = carouselItems[PayloadKey.carouselBodyFontFamilyIOS] as? [String]
+        self.carouselBodyTextSize = carouselItems[PayloadKey.carouselBodyTextSize] as? [String]
+        self.carouselPromocodeType = carouselItems[PayloadKey.carouselPromocodeType] as? [String]
+        self.carouselPromotionCode = carouselItems[PayloadKey.carouselPromotionCode] as? [String]
+        self.carouselPromocodeBackgroundColor = carouselItems[PayloadKey.carouselPromocodeBackgroundColor] as? [UIColor]
+        self.carouselPromocodeTextColor = carouselItems[PayloadKey.carouselPromocodeTextColor] as? [UIColor]
+        self.carouselButtonText = carouselItems[PayloadKey.carouselButtonText] as? [String]
+        self.carouselButtonTextColor = carouselItems[PayloadKey.carouselButtonTextColor] as? [UIColor]
+        self.carouselButtonColor = carouselItems[PayloadKey.carouselButtonColor] as? [UIColor]
+        self.carouselButtonFontFamilyIOS = carouselItems[PayloadKey.carouselButtonFontFamilyIOS] as? [String]
+        self.carouselButtonTextSize = carouselItems[PayloadKey.carouselButtonTextSize] as? [String]
+        self.carouselBackgroundImage = carouselItems[PayloadKey.carouselBackgroundImage] as? [String]
+        self.carouselBackgrounColor = carouselItems[PayloadKey.carouselBackgrounColor] as? [UIColor]
+        self.carouselIOSLink = carouselItems[PayloadKey.carouselIOSLink] as? [String]
+        
         
         setFonts()
     }
