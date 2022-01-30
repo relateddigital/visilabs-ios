@@ -18,12 +18,14 @@ class visilabsSideBarViewController : UIViewController {
     var globSidebarView : sideBarView?
     var sideBarOpen:Bool = false
     var sideBarFirstPosition:CGPoint?
+    var titleLenght = 12
     
     
     public init(model:SideBarModel?) {
         super.init(nibName: nil, bundle: nil)
         self.model = createDummyModel()
         let sidebarView : sideBarView = UIView.fromNib()
+        sidebarView.sideBarModel = self.model
         globSidebarView = sidebarView
         addTapGestureToSideBarMiniView()
         addTapGestureToImageOfGranSideBar()
@@ -52,7 +54,7 @@ class visilabsSideBarViewController : UIViewController {
     func createDummyModel()  -> SideBarModel {
         let model = SideBarModel()
         
-        model.titleString = "deneme"
+        model.titleString = "denemeorhunn"
         model.isCircle = false
         model.screenYcoordinate = .middle
         model.screenXcoordinate = .left
@@ -90,21 +92,15 @@ class visilabsSideBarViewController : UIViewController {
         
     }
     
-    func configureView(sideBar:sideBarView) {
+    func configureStandartView(sideBar:sideBarView) {
         
         //ekranın sağında mı solunda mı
         if self.model.screenXcoordinate == .right {
             globSidebarView?.rightSideBarMiniWidthConstraint.constant = 0
             globSidebarView?.rightSideBarMiniView.isHidden = true
-            if !model.isCircle {
-                globSidebarView?.LeftSideBarMiniView.roundCorners(corners: [.topLeft, .bottomLeft], radius: 30)
-            }
         } else if self.model.screenXcoordinate == .left {
             globSidebarView?.LeftSideBarMiniWidthConstraint.constant = 0
             globSidebarView?.LeftSideBarMiniView.isHidden = true
-            if !model.isCircle {
-                globSidebarView?.rightSideBarMiniView.roundCorners(corners: [.topRight, .bottomRight], radius: 30)
-            }
         }
         
         //label tipi
@@ -119,8 +115,8 @@ class visilabsSideBarViewController : UIViewController {
         }
         
         if self.model.screenXcoordinate == .right {
-            if model.titleString.count > 10 {
-                while model.titleString.count != 10 {
+            if model.titleString.count > titleLenght {
+                while model.titleString.count != titleLenght {
                     model.titleString.removeLast()
                 }
             }
@@ -131,8 +127,8 @@ class visilabsSideBarViewController : UIViewController {
             }
             //modele göre diğer elementlerin assign edilmesi gerek left mini viewa
         } else if self.model.screenXcoordinate == .left {
-            if model.titleString.count > 10 {
-                while model.titleString.count != 10 {
+            if model.titleString.count > titleLenght {
+                while model.titleString.count != titleLenght {
                     model.titleString.removeLast()
                 }
             }
@@ -250,7 +246,7 @@ class visilabsSideBarViewController : UIViewController {
             window.isHidden = false
         }
         self.position = self.window?.layer.position
-        configureView(sideBar: view as! sideBarView)
+        configureStandartView(sideBar: view as! sideBarView)
     }
     
     
@@ -294,27 +290,27 @@ class visilabsSideBarViewController : UIViewController {
 class SideBarModel {
     
     var isCircle : Bool = false
-    var sideBarHeight = 175.0
+    var sideBarHeight = 200.0
     var miniSideBarWidth = 40.0
     var titleString : String = "Deneme"
     var screenYcoordinate : screenYcoordinate?
     var screenXcoordinate : screenXcoordinate?
     var labelType : labelType?
     
-    enum screenYcoordinate {
-        case top
-        case middle
-        case bottom
-    }
-    
-    enum screenXcoordinate {
-        case right
-        case left
-    }
-    
-    enum labelType {
-        case downToUp
-        case upToDown
-    }
-    
+}
+
+public enum screenYcoordinate {
+    case top
+    case middle
+    case bottom
+}
+
+public enum screenXcoordinate {
+    case right
+    case left
+}
+
+public enum labelType {
+    case downToUp
+    case upToDown
 }
