@@ -29,27 +29,25 @@ class sideBarView: UIView {
     @IBOutlet weak var rightSideBarMiniContentImageView: UIImageView!
     @IBOutlet weak var rightTitleLabel: UILabel!
     
-
+    var sideBarModel : SideBarModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-       
-        self.bounds = self.frame        
         
-//        roundCorners(corners: [.topLeft, .bottomLeft], radius: 90)
-
+        self.bounds = self.frame
+        if sideBarModel?.screenXcoordinate == .right && !(sideBarModel?.isCircle ?? false) {
+            self.LeftSideBarMiniView.roundCorners(corners: [.topLeft, .bottomLeft], radius: 25)
+        } else if sideBarModel?.screenXcoordinate == .left && !(sideBarModel?.isCircle ?? false) {
+            self.rightSideBarMiniView.roundCorners(corners: [.topRight, .bottomRight], radius: 25)
+        }
     }
 }
 
