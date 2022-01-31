@@ -55,8 +55,8 @@ class visilabsSideBarViewController : UIViewController {
         let model = SideBarModel()
         
         model.titleString = "denemeorhunn"
-        model.isCircle = false
-        model.screenYcoordinate = .middle
+        model.isCircle = true
+        model.screenYcoordinate = .bottom
         model.screenXcoordinate = .left
         model.labelType = .upToDown
 
@@ -66,6 +66,7 @@ class visilabsSideBarViewController : UIViewController {
     func configureCircleSideBar() {
 
         if model.screenXcoordinate == .right {
+            globSidebarView?.leftSideBarMiniImageArrow.isHidden = false
             let semiCirleLayer: CAShapeLayer = CAShapeLayer()
             let arcCenter = CGPoint(x: globSidebarView!.LeftSideBarMiniView.bounds.maxX, y: self.globSidebarView!.LeftSideBarMiniView.bounds.maxY/2)
             let circleRadius = self.globSidebarView!.LeftSideBarMiniView.height / 2
@@ -77,6 +78,7 @@ class visilabsSideBarViewController : UIViewController {
             self.globSidebarView!.LeftSideBarMiniView.backgroundColor = .clear
             self.globSidebarView!.isHidden = false
         } else if model.screenXcoordinate == .left {
+            globSidebarView?.rightSideBarMiniImageArrow.isHidden = false
             let semiCirleLayer: CAShapeLayer = CAShapeLayer()
             let arcCenter = CGPoint(x: globSidebarView!.rightSideBarMiniView.bounds.minX, y: self.globSidebarView!.rightSideBarMiniView.bounds.maxY/2)
             let circleRadius = self.globSidebarView!.rightSideBarMiniView.height / 2
@@ -144,6 +146,9 @@ class visilabsSideBarViewController : UIViewController {
     
     @objc func imageClicked(_ sender: UITapGestureRecognizer? = nil) {
         print("image a basıldı")
+        hide() {
+            print("hided")
+        }
     }
 
     @objc func viewClicked(_ sender: UITapGestureRecognizer? = nil) {
@@ -260,11 +265,18 @@ class visilabsSideBarViewController : UIViewController {
 
         let duration = animated ? 0.1 : 0
         UIView.animate(withDuration: duration, animations: {
-            //self.window?.frame.origin.y -= 75
             self.window?.frame.origin.y -= 0
         }, completion: { _ in
             self.position = self.window?.layer.position
         })
+    }
+    
+    
+    func hide(completion: @escaping () -> Void) {
+        self.window?.isHidden = true
+        self.window?.removeFromSuperview()
+        self.window = nil
+        completion()
     }
     
     func addTapGestureToSideBarMiniView() {
