@@ -24,6 +24,7 @@ class visilabsSideBarViewController : UIViewController {
     public init(model:SideBarModel?) {
         super.init(nibName: nil, bundle: nil)
         self.model = createDummyModel()
+        self.model.dataImage = model?.dataImage
         let sidebarView : sideBarView = UIView.fromNib()
         sidebarView.sideBarModel = self.model
         globSidebarView = sidebarView
@@ -31,6 +32,7 @@ class visilabsSideBarViewController : UIViewController {
         addTapGestureToImageOfGranSideBar()
         if self.model.isCircle {
             self.globSidebarView!.isHidden = true
+            self.model.miniSideBarWidth = self.model.miniSideBarWidthForCircle / 2
         }
         self.view = sidebarView
     }
@@ -54,9 +56,9 @@ class visilabsSideBarViewController : UIViewController {
     func createDummyModel()  -> SideBarModel {
         let model = SideBarModel()
         
-        model.titleString = "DenemeDeneme"
+        model.titleString = ""
         model.isCircle = true
-        model.screenYcoordinate = .bottom
+        model.screenYcoordinate = .middle
         model.screenXcoordinate = .right
         model.labelType = .upToDown
 
@@ -66,26 +68,52 @@ class visilabsSideBarViewController : UIViewController {
     func configureCircleSideBar() {
 
         if model.screenXcoordinate == .right {
-            let semiCirleLayer: CAShapeLayer = CAShapeLayer()
-            let arcCenter = CGPoint(x: globSidebarView!.leftSideBarMiniView.bounds.maxX, y: self.globSidebarView!.leftSideBarMiniView.bounds.maxY/2)
-            let circleRadius = self.globSidebarView!.leftSideBarMiniView.height / 2
-            let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleRadius, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi*3/2 , clockwise: true)
-            semiCirleLayer.path = circlePath.cgPath
-            semiCirleLayer.fillColor = UIColor.red.cgColor
-            semiCirleLayer.zPosition = -1
-            self.globSidebarView!.leftSideBarMiniView.layer.addSublayer(semiCirleLayer)
-            self.globSidebarView!.leftSideBarMiniView.backgroundColor = .clear
+            
+            self.globSidebarView?.leftSideBarMiniView.layer.zPosition = -1
+            self.globSidebarView?.leftSideBarWidthConstraint.constant = self.model.miniSideBarWidthForCircle
+            self.globSidebarView?.leftSideBarMiniView.layer.cornerRadius = self.model.miniSideBarWidthForCircle / 2
+            self.globSidebarView?.leftSideBarTrailingConstraint.constant = -((self.globSidebarView?.leftSideBarWidthConstraint.constant)! / 2)
+            self.globSidebarView?.leftSideBarTitleLabelCenterXConstraint.constant =  self.model.xCoordPaddingConstant
+            self.globSidebarView?.leftSideBarContentImageCenterXConstraint.constant =  2
+    
+            if self.model.titleString.count > 0 {
+                self.globSidebarView?.leftSideBarMiniContentImageView.isHidden = true
+                self.globSidebarView?.leftSideBarMiniContentImageTopConstraint.constant *= 1.6
+                self.globSidebarView?.leftSideBarMiniContentImageBottomConstraint.constant *= 3
+                self.globSidebarView?.leftSideBarMiniContentImageLeadingConstraint.constant = 20
+                self.globSidebarView?.leftSideBarMiniContentImageTrailingConstraint.constant += (self.globSidebarView?.sideBarModel!.miniSideBarWidth)!
+            } else {
+                self.globSidebarView?.leftSideBarMiniContentImageTopConstraint.constant *=  3
+                self.globSidebarView?.leftSideBarMiniContentImageBottomConstraint.constant *= 3
+                self.globSidebarView?.leftSideBarMiniContentImageLeadingConstraint.constant = 20
+                self.globSidebarView?.leftSideBarMiniContentImageTrailingConstraint.constant += (self.globSidebarView?.sideBarModel!.miniSideBarWidth)!
+            }
+            self.globSidebarView!.leftSideBarMiniView.clipsToBounds = true
+            self.globSidebarView?.leftSideBarMiniImageView.image = self.model.dataImage
             self.globSidebarView!.isHidden = false
         } else if model.screenXcoordinate == .left {
-            let semiCirleLayer: CAShapeLayer = CAShapeLayer()
-            let arcCenter = CGPoint(x: globSidebarView!.rightSideBarMiniView.bounds.minX, y: self.globSidebarView!.rightSideBarMiniView.bounds.maxY/2)
-            let circleRadius = self.globSidebarView!.rightSideBarMiniView.height / 2
-            let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleRadius, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi*3/2 , clockwise: false)
-            semiCirleLayer.path = circlePath.cgPath
-            semiCirleLayer.fillColor = UIColor.red.cgColor
-            semiCirleLayer.zPosition = -1
-            self.globSidebarView!.rightSideBarMiniView.layer.addSublayer(semiCirleLayer)
-            self.globSidebarView!.rightSideBarMiniView.backgroundColor = .clear
+
+            self.globSidebarView?.rightSideBarMiniView.layer.zPosition = -1
+            self.globSidebarView?.rightSideBarWidthConstraint.constant = self.model.miniSideBarWidthForCircle
+            self.globSidebarView?.rightSideBarMiniView.layer.cornerRadius = self.model.miniSideBarWidthForCircle / 2
+            self.globSidebarView?.rightSideBarTrailingConstraint.constant = -((self.globSidebarView?.rightSideBarWidthConstraint.constant)! / 2)
+            self.globSidebarView?.rightSideBarTitleLabelCenterXConstraint.constant =  -(self.model.xCoordPaddingConstant)
+            self.globSidebarView?.rightSideBarContentImageCenterXConstraint.constant = -2
+    
+            if self.model.titleString.count > 0 {
+                self.globSidebarView?.rightSideBarMiniContentImageView.isHidden = true
+                self.globSidebarView?.rightSideBarMiniContentImageTopConstraint.constant *= 1.6
+                self.globSidebarView?.rightSideBarMiniContentImageBottomConstraint.constant *= 3
+                self.globSidebarView?.rightSideBarMiniContentImageTrailingConstraint.constant = 20
+                self.globSidebarView?.rightSideBarMiniContentImageLeadingConstraint.constant += (self.globSidebarView?.sideBarModel!.miniSideBarWidth)!
+            } else {
+                self.globSidebarView?.rightSideBarMiniContentImageTopConstraint.constant *=  3
+                self.globSidebarView?.rightSideBarMiniContentImageBottomConstraint.constant *= 3
+                self.globSidebarView?.rightSideBarMiniContentImageTrailingConstraint.constant = 20
+                self.globSidebarView?.rightSideBarMiniContentImageLeadingConstraint.constant += (self.globSidebarView?.sideBarModel!.miniSideBarWidth)!
+            }
+            self.globSidebarView!.rightSideBarMiniView.clipsToBounds = true
+            //self.globSidebarView?.rightSideBarMiniImageView.image = self.model.dataImage
             self.globSidebarView!.isHidden = false
         }
     }
@@ -133,6 +161,12 @@ class visilabsSideBarViewController : UIViewController {
         if !self.model.isCircle {
             globSidebarView?.rightSideBarMiniContentImageView.isHidden = true
             globSidebarView?.leftSideBarMiniContentImageView.isHidden = true
+        }
+        
+        if self.model.screenXcoordinate == .right && !(self.model.isCircle ) {
+            self.globSidebarView?.leftSideBarMiniContentImageTopConstraint.constant *= 1.2
+        } else if self.model.screenXcoordinate == .left && !(self.model.isCircle ) {
+            self.globSidebarView?.rightSideBarMiniContentImageTopConstraint.constant *= 1.2
         }
 
     }
@@ -280,10 +314,13 @@ class SideBarModel {
     var isCircle : Bool = false
     var sideBarHeight = 200.0
     var miniSideBarWidth = 40.0
+    var miniSideBarWidthForCircle = 140.0
+    var xCoordPaddingConstant = -25.0
     var titleString : String = "Label"
     var screenYcoordinate : screenYcoordinate?
     var screenXcoordinate : screenXcoordinate?
     var labelType : labelType?
+    var dataImage:UIImage?
     
 }
 

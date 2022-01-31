@@ -24,8 +24,12 @@ class sideBarView: UIView {
     @IBOutlet weak var leftSideBarMiniContentImageTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var leftSideBarMiniContentImageBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var leftSideBarMiniContentImageLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarMiniContentImageTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var leftSideBarMiniArrow: UILabel!
-    
+    @IBOutlet weak var leftSideBarWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarTitleLabelCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarContentImageCenterXConstraint: NSLayoutConstraint!
     //rightMini
     @IBOutlet weak var rightSideBarMiniView: UIView!
     @IBOutlet weak var rightSideBarMiniWidthConstraint: NSLayoutConstraint!
@@ -35,7 +39,12 @@ class sideBarView: UIView {
     @IBOutlet weak var rightSideBarMiniContentImageTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var rightSideBarMiniContentImageBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var rightSideBarMiniContentImageTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarMiniContentImageLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var rightSideBarMiniArrow: UILabel!
+    @IBOutlet weak var rightSideBarWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarTitleLabelCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarContentImageCenterXConstraint: NSLayoutConstraint!
 
     
     var sideBarModel : SideBarModel?
@@ -54,32 +63,9 @@ class sideBarView: UIView {
         self.bounds = self.frame
         if sideBarModel?.screenXcoordinate == .right && !(sideBarModel?.isCircle ?? false) {
             self.leftSideBarMiniView.roundCorners(corners: [.topLeft, .bottomLeft], radius: 10)
-            self.leftSideBarMiniContentImageTopConstraint.constant = self.leftSideBarMiniContentImageTopConstraint.constant * 1.2
         } else if sideBarModel?.screenXcoordinate == .left && !(sideBarModel?.isCircle ?? false) {
             self.rightSideBarMiniView.roundCorners(corners: [.topRight, .bottomRight], radius: 10)
-            self.rightSideBarMiniContentImageTopConstraint.constant = self.rightSideBarMiniContentImageTopConstraint.constant * 1.2
-        } else if sideBarModel?.screenXcoordinate == .right && (sideBarModel?.isCircle ?? false) {
-            if sideBarModel?.titleString.count ?? 0 > 0 {
-                self.leftSideBarMiniContentImageView.isHidden = true
-                self.leftSideBarMiniContentImageTopConstraint.constant = self.leftSideBarMiniContentImageTopConstraint.constant * 1.8
-            } else {
-                self.leftSideBarMiniContentImageTopConstraint.constant = self.leftSideBarMiniContentImageTopConstraint.constant * 2.66
-                self.leftSideBarMiniContentImageBottomConstraint.constant = self.leftSideBarMiniContentImageBottomConstraint.constant * 2.66
-                self.leftSideBarMiniContentImageLeadingConstraint.constant = 0
-            }
-
-        } else if sideBarModel?.screenXcoordinate == .left && (sideBarModel?.isCircle ?? false) {
-            
-            if sideBarModel?.titleString.count ?? 0 > 0 {
-                self.rightSideBarMiniContentImageView.isHidden = true
-                self.rightSideBarMiniContentImageTopConstraint.constant = self.rightSideBarMiniContentImageTopConstraint.constant * 1.8
-
-            } else {
-                self.rightSideBarMiniContentImageTopConstraint.constant = self.rightSideBarMiniContentImageTopConstraint.constant * 2.66
-                self.rightSideBarMiniContentImageBottomConstraint.constant = self.rightSideBarMiniContentImageBottomConstraint.constant * 2.66
-                self.rightSideBarMiniContentImageTrailingConstraint.constant = 0
-            }
-        }
+        } 
     }
 }
 
