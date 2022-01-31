@@ -54,10 +54,10 @@ class visilabsSideBarViewController : UIViewController {
     func createDummyModel()  -> SideBarModel {
         let model = SideBarModel()
         
-        model.titleString = "denemeorhunn"
-        model.isCircle = true
+        model.titleString = "denemeDeneme"
+        model.isCircle = false
         model.screenYcoordinate = .bottom
-        model.screenXcoordinate = .left
+        model.screenXcoordinate = .right
         model.labelType = .upToDown
 
         return model
@@ -66,19 +66,17 @@ class visilabsSideBarViewController : UIViewController {
     func configureCircleSideBar() {
 
         if model.screenXcoordinate == .right {
-            globSidebarView?.leftSideBarMiniImageArrow.isHidden = false
             let semiCirleLayer: CAShapeLayer = CAShapeLayer()
-            let arcCenter = CGPoint(x: globSidebarView!.LeftSideBarMiniView.bounds.maxX, y: self.globSidebarView!.LeftSideBarMiniView.bounds.maxY/2)
-            let circleRadius = self.globSidebarView!.LeftSideBarMiniView.height / 2
+            let arcCenter = CGPoint(x: globSidebarView!.leftSideBarMiniView.bounds.maxX, y: self.globSidebarView!.leftSideBarMiniView.bounds.maxY/2)
+            let circleRadius = self.globSidebarView!.leftSideBarMiniView.height / 2
             let circlePath = UIBezierPath(arcCenter: arcCenter, radius: circleRadius, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi*3/2 , clockwise: true)
             semiCirleLayer.path = circlePath.cgPath
             semiCirleLayer.fillColor = UIColor.red.cgColor
             semiCirleLayer.zPosition = -1
-            self.globSidebarView!.LeftSideBarMiniView.layer.addSublayer(semiCirleLayer)
-            self.globSidebarView!.LeftSideBarMiniView.backgroundColor = .clear
+            self.globSidebarView!.leftSideBarMiniView.layer.addSublayer(semiCirleLayer)
+            self.globSidebarView!.leftSideBarMiniView.backgroundColor = .clear
             self.globSidebarView!.isHidden = false
         } else if model.screenXcoordinate == .left {
-            globSidebarView?.rightSideBarMiniImageArrow.isHidden = false
             let semiCirleLayer: CAShapeLayer = CAShapeLayer()
             let arcCenter = CGPoint(x: globSidebarView!.rightSideBarMiniView.bounds.minX, y: self.globSidebarView!.rightSideBarMiniView.bounds.maxY/2)
             let circleRadius = self.globSidebarView!.rightSideBarMiniView.height / 2
@@ -90,8 +88,6 @@ class visilabsSideBarViewController : UIViewController {
             self.globSidebarView!.rightSideBarMiniView.backgroundColor = .clear
             self.globSidebarView!.isHidden = false
         }
-
-        
     }
     
     func configureStandartView(sideBar:sideBarView) {
@@ -101,15 +97,15 @@ class visilabsSideBarViewController : UIViewController {
             globSidebarView?.rightSideBarMiniWidthConstraint.constant = 0
             globSidebarView?.rightSideBarMiniView.isHidden = true
         } else if self.model.screenXcoordinate == .left {
-            globSidebarView?.LeftSideBarMiniWidthConstraint.constant = 0
-            globSidebarView?.LeftSideBarMiniView.isHidden = true
+            globSidebarView?.leftSideBarMiniWidthConstraint.constant = 0
+            globSidebarView?.leftSideBarMiniView.isHidden = true
         }
         
         //label tipi
         if self.model.labelType == .downToUp  && self.model.screenXcoordinate == .right {
-            globSidebarView!.LeftTitleLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+            globSidebarView!.leftTitleLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
         } else if self.model.labelType == .upToDown  && self.model.screenXcoordinate == .right {
-            globSidebarView!.LeftTitleLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            globSidebarView!.leftTitleLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
         } else if self.model.labelType == .downToUp  && self.model.screenXcoordinate == .left {
             globSidebarView!.rightTitleLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
         } else if self.model.labelType == .upToDown  && self.model.screenXcoordinate == .left {
@@ -122,11 +118,7 @@ class visilabsSideBarViewController : UIViewController {
                     model.titleString.removeLast()
                 }
             }
-            if model.labelType == .downToUp {
-                globSidebarView!.LeftTitleLabel.text = model.titleString + " ^"
-            } else if model.labelType == .upToDown {
-                globSidebarView!.LeftTitleLabel.text = "⌄ " + model.titleString
-            }
+            globSidebarView!.leftTitleLabel.text = model.titleString
             //modele göre diğer elementlerin assign edilmesi gerek left mini viewa
         } else if self.model.screenXcoordinate == .left {
             if model.titleString.count > titleLenght {
@@ -134,12 +126,13 @@ class visilabsSideBarViewController : UIViewController {
                     model.titleString.removeLast()
                 }
             }
-            if model.labelType == .downToUp {
-                globSidebarView!.rightTitleLabel.text = model.titleString + " ⌄"
-            } else if model.labelType == .upToDown {
-                globSidebarView!.rightTitleLabel.text = "^ " + model.titleString
-            }
+            globSidebarView!.rightTitleLabel.text = model.titleString
             //modele göre diğer elementlerin assign edilmesi gerek right mini viewa
+        }
+        
+        if !self.model.isCircle {
+            globSidebarView?.rightSideBarMiniContentImageView.isHidden = true
+            globSidebarView?.leftSideBarMiniContentImageView.isHidden = true
         }
 
     }
@@ -158,38 +151,21 @@ class visilabsSideBarViewController : UIViewController {
             if sideBarOpen {
                 self.window?.layer.position = sideBarFirstPosition!
                 if model.screenXcoordinate == .right {
-                    if model.labelType == .downToUp {
-                        globSidebarView?.LeftTitleLabel.text = model.titleString + " ^"
-                    } else if model.labelType == .upToDown {
-                        globSidebarView?.LeftTitleLabel.text = "⌄ " + model.titleString
-                    }
+                    globSidebarView?.leftSideBarMiniArrow.text = "<"
                 } else if model.screenXcoordinate == .left {
-                    if model.labelType == .downToUp {
-                        globSidebarView?.rightTitleLabel.text = model.titleString + " ⌄"
-                    } else if model.labelType == .upToDown {
-                        globSidebarView?.rightTitleLabel.text = "^ " + model.titleString
-                    }
-                    
+                    globSidebarView?.rightSideBarMiniArrow.text = ">"
                 }
             } else {
                 if model.screenXcoordinate == .right {
                     if let winPos = self.window?.layer.position {
                         self.window?.layer.position = CGPoint(x: winPos.x - globSidebarView!.width + self.model.miniSideBarWidth  , y: winPos.y)
-                        if model.labelType == .downToUp {
-                            globSidebarView?.LeftTitleLabel.text = model.titleString + " ⌄"
-                        } else if model.labelType == .upToDown {
-                            globSidebarView?.LeftTitleLabel.text = "^ " + model.titleString
-                        }
                     }
+                    globSidebarView?.leftSideBarMiniArrow.text = ">"
                 } else if model.screenXcoordinate == .left {
                     if let winPos = self.window?.layer.position {
                         self.window?.layer.position = CGPoint(x: winPos.x + globSidebarView!.width - self.model.miniSideBarWidth  , y: winPos.y)
-                        if model.labelType == .downToUp {
-                            globSidebarView?.rightTitleLabel.text = model.titleString + " ^"
-                        } else if model.labelType == .upToDown {
-                            globSidebarView?.rightTitleLabel.text = "⌄ " + model.titleString
-                        }
                     }
+                    globSidebarView?.rightSideBarMiniArrow.text = "<"
                 }
             }
         })
@@ -282,7 +258,7 @@ class visilabsSideBarViewController : UIViewController {
     func addTapGestureToSideBarMiniView() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.viewClicked(_:)))
         if self.model.screenXcoordinate == .right {
-            globSidebarView?.LeftSideBarMiniView.addGestureRecognizer(tap)
+            globSidebarView?.leftSideBarMiniView.addGestureRecognizer(tap)
         } else if self.model.screenXcoordinate == .left {
             globSidebarView?.rightSideBarMiniView.addGestureRecognizer(tap)
         }
