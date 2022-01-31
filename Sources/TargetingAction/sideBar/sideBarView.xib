@@ -139,24 +139,34 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="leftSideBarContentImageCenterXConstraint" destination="DZl-mD-sBH" id="uSq-VD-SIF"/>
                 <outlet property="leftSideBarMiniArrow" destination="169-03-SeD" id="xeq-We-MNQ"/>
                 <outlet property="leftSideBarMiniContentImageBottomConstraint" destination="QCc-yF-Bzh" id="igV-Ul-0MI"/>
                 <outlet property="leftSideBarMiniContentImageLeadingConstraint" destination="kcw-sF-K3f" id="Q06-4r-xmu"/>
                 <outlet property="leftSideBarMiniContentImageTopConstraint" destination="C8a-ce-coo" id="ZLo-2j-d16"/>
+                <outlet property="leftSideBarMiniContentImageTrailingConstraint" destination="vb2-fF-K2s" id="Cc0-OO-x28"/>
                 <outlet property="leftSideBarMiniContentImageView" destination="K3J-W6-HYf" id="EtJ-Wy-Crk"/>
                 <outlet property="leftSideBarMiniImageView" destination="80h-eZ-Jfq" id="oiK-8Y-oFx"/>
                 <outlet property="leftSideBarMiniVerticalConstraint" destination="XPo-4k-BX6" id="xwE-ga-rmf"/>
                 <outlet property="leftSideBarMiniView" destination="hso-HS-9H6" id="Xz4-n9-6oD"/>
                 <outlet property="leftSideBarMiniWidthConstraint" destination="Mqo-5z-c8e" id="Ukq-gj-hDG"/>
+                <outlet property="leftSideBarTitleLabelCenterXConstraint" destination="zyv-J6-vRB" id="0JB-KW-QMj"/>
+                <outlet property="leftSideBarTrailingConstraint" destination="c8v-QR-8z9" id="yI9-RZ-vNr"/>
+                <outlet property="leftSideBarWidthConstraint" destination="Mqo-5z-c8e" id="qBj-OX-1uU"/>
                 <outlet property="leftTitleLabel" destination="Enw-6f-U5k" id="mhd-GD-CzM"/>
+                <outlet property="rightSideBarContentImageCenterXConstraint" destination="Znt-Xt-hDN" id="fa1-2l-LZa"/>
                 <outlet property="rightSideBarMiniArrow" destination="1KZ-Om-7wx" id="Qda-XB-CxI"/>
                 <outlet property="rightSideBarMiniContentImageBottomConstraint" destination="anW-AU-hwY" id="Ynp-TS-Qrd"/>
+                <outlet property="rightSideBarMiniContentImageLeadingConstraint" destination="dDJ-Lf-w9l" id="Hv9-Y2-fru"/>
                 <outlet property="rightSideBarMiniContentImageTopConstraint" destination="LjJ-7S-h9P" id="agJ-Sz-v8p"/>
                 <outlet property="rightSideBarMiniContentImageTrailingConstraint" destination="g2R-Qv-JYb" id="s5E-BA-wHN"/>
                 <outlet property="rightSideBarMiniContentImageView" destination="eh4-Yb-hyz" id="yag-8E-Bnd"/>
                 <outlet property="rightSideBarMiniImageView" destination="Szh-wH-ZNq" id="FTv-0x-ndv"/>
                 <outlet property="rightSideBarMiniView" destination="ciF-NZ-IeA" id="tAA-IF-3rd"/>
                 <outlet property="rightSideBarMiniWidthConstraint" destination="KrX-uL-cQP" id="Ejb-cq-rIJ"/>
+                <outlet property="rightSideBarTitleLabelCenterXConstraint" destination="ghw-Nt-hDc" id="eg5-Rp-cOg"/>
+                <outlet property="rightSideBarTrailingConstraint" destination="DKs-eJ-yI2" id="bHp-97-fqL"/>
+                <outlet property="rightSideBarWidthConstraint" destination="KrX-uL-cQP" id="qCQ-aF-xlr"/>
                 <outlet property="rightTitleLabel" destination="cM9-um-2x3" id="L7s-ag-y8g"/>
                 <outlet property="sideBarGrandContentImageView" destination="fwP-4H-Nil" id="gqD-Mm-reY"/>
                 <outlet property="sideBarGrandImageView" destination="6Nc-GW-iml" id="GPN-Zr-gtK"/>
