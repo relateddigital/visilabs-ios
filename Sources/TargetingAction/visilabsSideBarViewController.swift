@@ -54,8 +54,8 @@ class visilabsSideBarViewController : UIViewController {
     func createDummyModel()  -> SideBarModel {
         let model = SideBarModel()
         
-        model.titleString = "denemeDeneme"
-        model.isCircle = false
+        model.titleString = "DenemeDeneme"
+        model.isCircle = true
         model.screenYcoordinate = .bottom
         model.screenXcoordinate = .right
         model.labelType = .upToDown
@@ -280,7 +280,7 @@ class SideBarModel {
     var isCircle : Bool = false
     var sideBarHeight = 200.0
     var miniSideBarWidth = 40.0
-    var titleString : String = "Deneme"
+    var titleString : String = "Label"
     var screenYcoordinate : screenYcoordinate?
     var screenXcoordinate : screenXcoordinate?
     var labelType : labelType?

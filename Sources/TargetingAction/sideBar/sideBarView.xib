@@ -67,7 +67,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="546" height="400"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemGreenColor"/>
+                    <color key="backgroundColor" systemColor="systemPurpleColor"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="6Nc-GW-iml" secondAttribute="trailing" id="7Z2-Wz-o1q"/>
                         <constraint firstItem="6Nc-GW-iml" firstAttribute="leading" secondItem="Xfn-En-lFJ" secondAttribute="leading" id="AKp-LZ-EdH"/>
@@ -166,9 +166,6 @@
         </view>
     </objects>
     <resources>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
