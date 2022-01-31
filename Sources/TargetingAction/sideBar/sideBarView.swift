@@ -21,6 +21,10 @@ class sideBarView: UIView {
     @IBOutlet weak var LeftSideBarMiniImageView: UIImageView!
     @IBOutlet weak var LeftSideBarMiniContentImageView: UIImageView!
     @IBOutlet weak var LeftTitleLabel: UILabel!
+    @IBOutlet weak var leftSideBarMiniTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarMiniBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarMiniLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftSideBarMiniImageArrow: UILabel!
     
     //rightMini
     @IBOutlet weak var rightSideBarMiniView: UIView!
@@ -28,6 +32,11 @@ class sideBarView: UIView {
     @IBOutlet weak var rightSideBarMiniImageView: UIImageView!
     @IBOutlet weak var rightSideBarMiniContentImageView: UIImageView!
     @IBOutlet weak var rightTitleLabel: UILabel!
+    @IBOutlet weak var rightSideBarMiniTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarMiniBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarMiniTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightSideBarMiniImageArrow: UILabel!
+
     
     var sideBarModel : SideBarModel?
     
@@ -44,9 +53,17 @@ class sideBarView: UIView {
         
         self.bounds = self.frame
         if sideBarModel?.screenXcoordinate == .right && !(sideBarModel?.isCircle ?? false) {
-            self.LeftSideBarMiniView.roundCorners(corners: [.topLeft, .bottomLeft], radius: 25)
+            self.LeftSideBarMiniView.roundCorners(corners: [.topLeft, .bottomLeft], radius: 10)
         } else if sideBarModel?.screenXcoordinate == .left && !(sideBarModel?.isCircle ?? false) {
-            self.rightSideBarMiniView.roundCorners(corners: [.topRight, .bottomRight], radius: 25)
+            self.rightSideBarMiniView.roundCorners(corners: [.topRight, .bottomRight], radius: 10)
+        } else if sideBarModel?.screenXcoordinate == .right && (sideBarModel?.isCircle ?? false) {
+            self.leftSideBarMiniTopConstraint.constant = self.leftSideBarMiniTopConstraint.constant * 2.66
+            self.leftSideBarMiniBottomConstraint.constant = self.leftSideBarMiniBottomConstraint.constant * 2.66
+            self.leftSideBarMiniLeadingConstraint.constant = 0
+        } else if sideBarModel?.screenXcoordinate == .left && (sideBarModel?.isCircle ?? false) {
+            self.rightSideBarMiniTopConstraint.constant = self.rightSideBarMiniTopConstraint.constant * 2.66
+            self.rightSideBarMiniBottomConstraint.constant = self.rightSideBarMiniBottomConstraint.constant * 2.66
+            self.rightSideBarMiniTrailingConstraint.constant = 0
         }
     }
 }
