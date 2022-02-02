@@ -56,11 +56,11 @@ class visilabsSideBarViewController : UIViewController {
     func createDummyModel()  -> SideBarModel {
         let model = SideBarModel()
         
-        model.titleString = ""
+        model.titleString = "DenemeDeneme"
         model.isCircle = true
         model.screenYcoordinate = .middle
         model.screenXcoordinate = .right
-        model.labelType = .upToDown
+        model.labelType = .downToUp
 
         return model
     }
@@ -89,7 +89,7 @@ class visilabsSideBarViewController : UIViewController {
                 self.globSidebarView?.leftSideBarMiniContentImageTrailingConstraint.constant += (self.globSidebarView?.sideBarModel!.miniSideBarWidth)!
             }
             self.globSidebarView!.leftSideBarMiniView.clipsToBounds = true
-            self.globSidebarView?.leftSideBarMiniImageView.image = self.model.dataImage
+            //self.globSidebarView?.leftSideBarMiniImageView.image = self.model.dataImage
             self.globSidebarView!.isHidden = false
         } else if model.screenXcoordinate == .left {
 
