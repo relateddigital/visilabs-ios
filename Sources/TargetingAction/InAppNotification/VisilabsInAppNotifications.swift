@@ -49,7 +49,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                         shownNotification = self.showFullNotification(notification)
                     case .halfScreenImage:
                         shownNotification = self.showHalfScreenNotification(notification)
-                    case .carousel:
+                    case .inappcarousel:
                         shownNotification = self.showCarousel(notification)
                     case .alert:
                         shownNotification = true

@@ -8,7 +8,7 @@
 import UIKit
 // swiftlint:disable type_body_length
 public class VisilabsInAppNotification {
-
+    
     public enum PayloadKey {
         public static let actId = "actid"
         public static let actionData = "actiondata"
@@ -49,30 +49,8 @@ public class VisilabsInAppNotification {
         public static let customFont = "custom_font_family_ios"
         public static let closePopupActionType = "close_event_trigger"
         public static let carouselItems = "carousel_items"
-        public static let carouselImage = "image"
-        public static let carouselTitle = "title"
-        public static let carouselTitleColor = "title_color"
-        public static let carouselTitleFontFamilyIOS = "title_custom_font_family_ios"
-        public static let carouselTitleTextSize = "title_textsize"
-        public static let carouselBody = "body"
-        public static let carouselBodyColor = "body_color"
-        public static let carouselBodyFontFamilyIOS = "body_custom_font_family_ios"
-        public static let carouselBodyTextSize = "body_textsize"
-        public static let carouselPromocodeType = "promocode_type"
-        public static let carouselPromotionCode = "promotion_code"
-        public static let carouselPromocodeBackgroundColor = "promocode_background_color"
-        public static let carouselPromocodeTextColor = "promocode_text_color"
-        public static let carouselButtonText = "button_text"
-        public static let carouselButtonTextColor = "button_text_color"
-        public static let carouselButtonColor = "button_color"
-        public static let carouselButtonFontFamilyIOS = "button_custom_font_family_ios"
-        public static let carouselButtonTextSize = "button_textsize"
-        public static let carouselBackgroundImage = "background_image"
-        public static let carouselBackgrounColor = "background_color"
-        public static let carouselIOSLink = "ios_lnk"
-        
     }
-
+    
     let actId: Int
     let messageType: String
     let type: VisilabsInAppNotificationType
@@ -112,29 +90,8 @@ public class VisilabsInAppNotification {
     let previousPopupPoint: Double?
     let position: VisilabsHalfScreenPosition?
     let closePopupActionType: String?
-    let carouselItems: String?
-    let carouselImage: [String]?
-    let carouselTitle: [String]?
-    let carouselTitleColor: [UIColor]?
-    let carouselTitleFontFamilyIOS: [String]?
-    let carouselTitleTextSize: [String]?
-    let carouselBody: [String]?
-    let carouselBodyColor: [UIColor]?
-    let carouselBodyFontFamilyIOS: [String]?
-    let carouselBodyTextSize: [String]?
-    let carouselPromocodeType: [String]?
-    let carouselPromotionCode: [String]?
-    let carouselPromocodeBackgroundColor: [UIColor]?
-    let carouselPromocodeTextColor: [UIColor]?
-    let carouselButtonText: [String]?
-    let carouselButtonTextColor: [UIColor]?
-    let carouselButtonColor: [UIColor]?
-    let carouselButtonFontFamilyIOS: [String]?
-    let carouselButtonTextSize: [String]?
-    let carouselBackgroundImage: [String]?
-    let carouselBackgrounColor: [UIColor]?
-    let carouselIOSLink: [String]?
-
+    let carouselItems: [VisilabsCarouselItem]?
+    
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
@@ -173,7 +130,7 @@ public class VisilabsInAppNotification {
         }
         return data
     }()
-
+    
     let callToActionUrl: URL?
     var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
                                           size: CGFloat(12))
@@ -182,12 +139,12 @@ public class VisilabsInAppNotification {
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
     var carouselTitleFont: [UIFont] = [UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
-                                           size: CGFloat(12))]
+                                              size: CGFloat(12))]
     var carouselBodyFont: [UIFont] = [UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
-                                          size: CGFloat(8))]
+                                             size: CGFloat(8))]
     var carouselButtonFont: [UIFont] = [UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
-                                            size: CGFloat(8))]
-
+                                               size: CGFloat(8))]
+    
     public init(actId: Int,
                 type: VisilabsInAppNotificationType,
                 messageTitle: String?,
@@ -226,31 +183,9 @@ public class VisilabsInAppNotification {
                 secondPopupMinPoint: String?,
                 previousPopupPoint: Double? = nil,
                 position: VisilabsHalfScreenPosition?,
-                carouselItems: String?,
-                carouselImage: [String]?,
-                carouselTitle: [String]?,
-                carouselTitleColor: [String]?,
-                carouselTitleFontFamilyIOS: [String]?,
-                carouselTitleTextSize: [String]?,
-                carouselBody: [String]?,
-                carouselBodyColor: [String]?,
-                carouselBodyFontFamilyIOS: [String]?,
-                carouselBodyTextSize: [String]?,
-                carouselPromocodeType: [String]?,
-                carouselPromotionCode: [String]?,
-                carouselPromocodeBackgroundColor: [String]?,
-                carouselPromocodeTextColor: [String]?,
-                carouselButtonText: [String]?,
-                carouselButtonTextColor: [String]?,
-                carouselButtonColor: [String]?,
-                carouselButtonFontFamilyIOS: [String]?,
-                carouselButtonTextSize: [String]?,
-                carouselBackgroundImage: [String]?,
-                carouselBackgrounColor: [String]?,
-                carouselIOSLink: [String]?
-    )
+                carouselItems: [VisilabsCarouselItem]?)
     {
-
+        
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -286,7 +221,7 @@ public class VisilabsInAppNotification {
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
-
+        
         var callToActionUrl: URL?
         if let urlString = self.iosLink {
             callToActionUrl = URL(string: urlString)
@@ -315,28 +250,8 @@ public class VisilabsInAppNotification {
         }
         self.previousPopupPoint = previousPopupPoint
         self.position = position
-        self.carouselImage = carouselImage
-        self.carouselTitle = carouselTitle
-        self.carouselTitleColor = VisilabsHelper.convertColorArray(carouselTitleColor)
-        self.carouselTitleFontFamilyIOS = carouselTitleFontFamilyIOS
-        self.carouselTitleTextSize = carouselTitleTextSize
-        self.carouselBody = carouselBody
-        self.carouselBodyColor = VisilabsHelper.convertColorArray(carouselBodyColor)
-        self.carouselBodyFontFamilyIOS = carouselBodyFontFamilyIOS
-        self.carouselBodyTextSize = carouselBodyTextSize
-        self.carouselPromocodeType = carouselPromocodeType
-        self.carouselPromotionCode = carouselPromotionCode
-        self.carouselPromocodeBackgroundColor = VisilabsHelper.convertColorArray(carouselPromocodeBackgroundColor)
-        self.carouselPromocodeTextColor = VisilabsHelper.convertColorArray(carouselPromocodeTextColor)
-        self.carouselButtonText = carouselButtonText
-        self.carouselButtonTextColor = VisilabsHelper.convertColorArray(carouselButtonTextColor)
-        self.carouselButtonColor = VisilabsHelper.convertColorArray(carouselButtonColor)
-        self.carouselButtonFontFamilyIOS = carouselButtonFontFamilyIOS
-        self.carouselButtonTextSize = carouselButtonTextSize
-        self.carouselBackgroundImage = carouselBackgroundImage
-        self.carouselBackgrounColor = VisilabsHelper.convertColorArray(carouselBackgrounColor)
-        self.carouselIOSLink = carouselIOSLink
-        
+        self.carouselItems = carouselItems
+
         setFonts()
     }
     
@@ -346,28 +261,24 @@ public class VisilabsInAppNotification {
             VisilabsLogger.error("notification json object should not be nil")
             return nil
         }
-
+        
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
             VisilabsLogger.error("invalid \(PayloadKey.actId)")
             return nil
         }
-
+        
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
             VisilabsLogger.error("invalid \(PayloadKey.actionData)")
             return nil
         }
         
-        guard let carouselItems = actionData[PayloadKey.carouselItems] as? [String: Any?] else {
-            VisilabsLogger.error("invalid \(PayloadKey.carouselItems)")
-            return nil
-        }
-
+        
         guard let messageType = actionData[PayloadKey.messageType] as? String,
               let type = VisilabsInAppNotificationType(rawValue: messageType) else {
-            VisilabsLogger.error("invalid \(PayloadKey.messageType)")
-            return nil
-        }
-
+                  VisilabsLogger.error("invalid \(PayloadKey.messageType)")
+                  return nil
+              }
+        
         self.actId = actId
         self.messageType = messageType
         self.type = type
@@ -402,14 +313,14 @@ public class VisilabsInAppNotification {
         } else {
             self.closeButtonColor = nil
         }
-
+        
         self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
         self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
-
+        
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
         }
-
+        
         var callToActionUrl: URL?
         if let urlString = self.iosLink {
             callToActionUrl = URL(string: urlString)
@@ -423,7 +334,7 @@ public class VisilabsInAppNotification {
             self.numberColors = nil
         }
         self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
-
+        
         // Second Popup Variables
         if let secondType = actionData[PayloadKey.secondPopupType] as? String {
             self.secondPopupType = VisilabsSecondPopupType.init(rawValue: secondType)
@@ -451,32 +362,21 @@ public class VisilabsInAppNotification {
         } else {
             self.position = .bottom
         }
-        self.carouselImage = carouselItems[PayloadKey.carouselImage] as? [String]
-        self.carouselTitle = carouselItems[PayloadKey.carouselTitle] as? [String]
-        self.carouselTitleColor = carouselItems[PayloadKey.carouselTitleColor] as? [UIColor]
-        self.carouselTitleFontFamilyIOS = carouselItems[PayloadKey.carouselTitleFontFamilyIOS] as? [String]
-        self.carouselTitleTextSize = carouselItems[PayloadKey.carouselTitleTextSize] as? [String]
-        self.carouselBody = carouselItems[PayloadKey.carouselBody] as? [String]
-        self.carouselBodyColor = carouselItems[PayloadKey.carouselBodyColor] as? [UIColor]
-        self.carouselBodyFontFamilyIOS = carouselItems[PayloadKey.carouselBodyFontFamilyIOS] as? [String]
-        self.carouselBodyTextSize = carouselItems[PayloadKey.carouselBodyTextSize] as? [String]
-        self.carouselPromocodeType = carouselItems[PayloadKey.carouselPromocodeType] as? [String]
-        self.carouselPromotionCode = carouselItems[PayloadKey.carouselPromotionCode] as? [String]
-        self.carouselPromocodeBackgroundColor = carouselItems[PayloadKey.carouselPromocodeBackgroundColor] as? [UIColor]
-        self.carouselPromocodeTextColor = carouselItems[PayloadKey.carouselPromocodeTextColor] as? [UIColor]
-        self.carouselButtonText = carouselItems[PayloadKey.carouselButtonText] as? [String]
-        self.carouselButtonTextColor = carouselItems[PayloadKey.carouselButtonTextColor] as? [UIColor]
-        self.carouselButtonColor = carouselItems[PayloadKey.carouselButtonColor] as? [UIColor]
-        self.carouselButtonFontFamilyIOS = carouselItems[PayloadKey.carouselButtonFontFamilyIOS] as? [String]
-        self.carouselButtonTextSize = carouselItems[PayloadKey.carouselButtonTextSize] as? [String]
-        self.carouselBackgroundImage = carouselItems[PayloadKey.carouselBackgroundImage] as? [String]
-        self.carouselBackgrounColor = carouselItems[PayloadKey.carouselBackgrounColor] as? [UIColor]
-        self.carouselIOSLink = carouselItems[PayloadKey.carouselIOSLink] as? [String]
         
+        var carouselItems = [VisilabsCarouselItem]()
+        
+        if let carouselItemObjects = object[PayloadKey.carouselItems] as? [[String: Any]] {
+            for carouselItemObject in carouselItemObjects {
+                if let carouselItem = VisilabsCarouselItem.init(JSONObject: carouselItemObject) {
+                    carouselItems.append(carouselItem)
+                }
+            }
+        }
+        self.carouselItems = carouselItems
         
         setFonts()
     }
-
+    
     private func setFonts() {
         self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
                                                                   fontSize: self.messageTitleTextSize,
@@ -488,7 +388,7 @@ public class VisilabsInAppNotification {
                                                                 fontSize: self.messageBodyTextSize,
                                                                 style: .title2, customFont: self.customFont)
     }
-
+    
     static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String? = "") -> UIFont {
         var size = style == .title2 ? 12 : 8
         if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
@@ -517,14 +417,14 @@ public class VisilabsInAppNotification {
                     finalFont = UIFont(name: fontName, size: CGFloat(size))!
                 }
             }
-
+            
             if let uiCustomFont = UIFont(name: customFont ?? "", size: CGFloat(size)) {
                 return uiCustomFont
             }
-       }
+        }
         return finalFont
     }
-
+    
     private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
         var imageUrl: URL?
         var urlString = imageUrlString
@@ -532,7 +432,7 @@ public class VisilabsInAppNotification {
             urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
         }
         if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
-                                                                     NSCharacterSet.urlQueryAllowed),
+                                                                        NSCharacterSet.urlQueryAllowed),
            let imageUrlComponents = URLComponents(string: escapedImageUrlString),
            let imageUrlParsed = imageUrlComponents.url {
             imageUrl = imageUrlParsed
