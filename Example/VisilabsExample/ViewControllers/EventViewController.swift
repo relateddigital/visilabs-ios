@@ -38,8 +38,6 @@ class EventViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
-        let testData = UIImage(named: "ben.jpg")!
-        Visilabs.callAPI().sideBarTest(imageData: testData)
     }
     
     private func initializeForm() {
