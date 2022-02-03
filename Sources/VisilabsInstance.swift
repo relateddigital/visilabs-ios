@@ -298,7 +298,7 @@ extension VisilabsInstance {
             })
         }
     
-    public func sideBarTest(imageData:UIImage) {
+    private func sideBarTest(imageData:UIImage) {
 
         let model = SideBarModel()
         model.dataImage = imageData
