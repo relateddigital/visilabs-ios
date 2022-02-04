@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class SpinToWinViewController: VisilabsBaseNotificationViewController {
+class SpinToWinViewController: RelatedDigitalBaseNotificationViewController {
     
     weak var webView: WKWebView!
     var subsEmail = ""
@@ -55,7 +55,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     private func createSpinToWinFiles() -> URL? {
         let manager = FileManager.default
         guard let docUrl = try? manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            VisilabsLogger.error("Can not create documentDirectory")
+            RelatedDigitalLogger.error("Can not create documentDirectory")
             return nil
         }
         let htmlUrl = docUrl.appendingPathComponent("spintowin.html")
@@ -71,7 +71,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         let bundleHtmlUrl = URL(fileURLWithPath: bundleHtmlPath)
         let bundleJsUrl = URL(fileURLWithPath: bundleJsPath)
         
-        VisilabsHelper.registerFonts(fontNames: getCustomFontNames())
+        RelatedDigitalHelper.registerFonts(fontNames: getCustomFontNames())
         let fontUrls = getSpinToWinFonts(fontNames: getCustomFontNames())
 
         do {
@@ -85,8 +85,8 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
             try manager.copyItem(at: bundleHtmlUrl, to: htmlUrl)
             try manager.copyItem(at: bundleJsUrl, to: jsUrl)
         } catch let error {
-            VisilabsLogger.error(error)
-            VisilabsLogger.error(error.localizedDescription)
+            RelatedDigitalLogger.error(error)
+            RelatedDigitalLogger.error(error.localizedDescription)
             return nil
         }
         
@@ -99,8 +99,8 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
                 try manager.copyItem(at: fontUrlKeyValue.value, to: fontUrl)
                 self.spinToWin?.fontFiles.append(fontUrlKeyValue.key)
             } catch let error {
-                VisilabsLogger.error(error)
-                VisilabsLogger.error(error.localizedDescription)
+                RelatedDigitalLogger.error(error)
+                RelatedDigitalLogger.error(error.localizedDescription)
                 continue
             }
         }
@@ -132,7 +132,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
                     }
                     
                     guard let url = Bundle.main.url(forResource: fontName, withExtension: fontExtension) else {
-                        VisilabsLogger.error("UIFont+:  Failed to register font - path for resource not found.")
+                        RelatedDigitalLogger.error("UIFont+:  Failed to register font - path for resource not found.")
                         continue
                     }
                     fontUrls[uiAppFont] = url
@@ -184,16 +184,16 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     
     private func sendPromotionCodeInfo(promo: String, actId: String, email: String? = "", promoTitle: String, promoSlice: String) {
         var properties = [String: String]()
-        properties[VisilabsConstants.promoAction] = promo
-        properties[VisilabsConstants.promoActionID] = actId
+        properties[RelatedDigitalConstants.promoAction] = promo
+        properties[RelatedDigitalConstants.promoActionID] = actId
         if !self.subsEmail.isEmptyOrWhitespace {
-            properties[VisilabsConstants.promoEmailKey] = email
+            properties[RelatedDigitalConstants.promoEmailKey] = email
         }
-        properties[VisilabsConstants.promoTitleKey] = promoTitle
+        properties[RelatedDigitalConstants.promoTitleKey] = promoTitle
         if !self.sliceText.isEmptyOrWhitespace {
-            properties[VisilabsConstants.promoSlice] = promoSlice
+            properties[RelatedDigitalConstants.promoSlice] = promoSlice
         }
-        Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: properties)
+        RelatedDigital.callAPI().customEvent(RelatedDigitalConstants.omEvtGif, properties: properties)
     }
     
 }
@@ -225,8 +225,8 @@ extension SpinToWinViewController: WKScriptMessageHandler {
         DispatchQueue.main.async {
             self.webView.evaluateJavaScript("window.chooseSlice(\(index), \(promoCodeString));") { (_, err) in
                 if let error = err {
-                    VisilabsLogger.error(error)
-                    VisilabsLogger.error(error.localizedDescription)
+                    RelatedDigitalLogger.error(error)
+                    RelatedDigitalLogger.error(error.localizedDescription)
                 }
             }
         }
@@ -237,15 +237,15 @@ extension SpinToWinViewController: WKScriptMessageHandler {
         if message.name == "eventHandler" {
             if let event = message.body as? [String: Any], let method = event["method"] as? String {
                 if method == "console.log", let message = event["message"] as? String {
-                    VisilabsLogger.info("console.log: \(message)")
+                    RelatedDigitalLogger.info("console.log: \(message)")
                 }
                 if method == "initSpinToWin" {
-                    VisilabsLogger.info("initSpinToWin")
+                    RelatedDigitalLogger.info("initSpinToWin")
                     if let json = try? JSONEncoder().encode(self.spinToWin!), let jsonString = String(data: json, encoding: .utf8) {
                         self.webView.evaluateJavaScript("window.initSpinToWin(\(jsonString));") { (_, err) in
                             if let error = err {
-                                VisilabsLogger.error(error)
-                                VisilabsLogger.error(error.localizedDescription)
+                                RelatedDigitalLogger.error(error)
+                                RelatedDigitalLogger.error(error.localizedDescription)
                                 
                             }
                         }
@@ -253,7 +253,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 }
                 
                 if method == "subscribeEmail", let email = event["email"] as? String {
-                    Visilabs.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
+                    RelatedDigital.callAPI().subscribeSpinToWinMail(actid: "\(self.spinToWin!.actId)", auth: self.spinToWin!.auth, mail: email)
                     subsEmail = email
                 }
                 
@@ -279,17 +279,17 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                         props["promoauth"] = "\(self.spinToWin!.promoAuth)"
                         self.sliceText = randomDisplay
                         
-                        VisilabsRequest.sendPromotionCodeRequest(properties: props, completion: { (result: [String: Any]?, error: VisilabsError?) in
+                        RelatedDigitalRequest.sendPromotionCodeRequest(properties: props, completion: { (result: [String: Any]?, error: VisilabsError?) in
                             var selectedIndex = randomIndex as Int
                             var selectedPromoCode = ""
                             if error == nil, let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String, !promocode.isEmptyOrWhitespace {
                                 selectedPromoCode = promocode
                             } else if let res = result, let success = res["success"] as? Bool, success, let promocode = res["promocode"] as? String  {
                                 let id = res["id"] as? Int ?? 0
-                                VisilabsLogger.error("Promocode request error: {\"id\":\(id),\"success\":\(success),\"promocode\":\"\(promocode)\"}")
+                                RelatedDigitalLogger.error("Promocode request error: {\"id\":\(id),\"success\":\(success),\"promocode\":\"\(promocode)\"}")
                                 selectedIndex = -1
                             } else {
-                                VisilabsLogger.error("Promocode request error")
+                                RelatedDigitalLogger.error("Promocode request error")
                                 selectedIndex = -1
                             }
                             self.chooseSlice(selectedIndex: selectedIndex, selectedPromoCode: selectedPromoCode)
@@ -302,12 +302,12 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 }
                 
                 if method == "sendReport" {
-                    Visilabs.callAPI().trackSpinToWinClick(spinToWinReport: self.spinToWin!.report)
+                    RelatedDigital.callAPI().trackSpinToWinClick(spinToWinReport: self.spinToWin!.report)
                 }
                 
                 if method == "copyToClipboard", let couponCode = event["couponCode"] as? String {
                     UIPasteboard.general.string = couponCode
-                    VisilabsHelper.showCopiedClipboardMessage()
+                    RelatedDigitalHelper.showCopiedClipboardMessage()
                     self.close()
                 }
                 
@@ -316,7 +316,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 }
                 
                 if method == "openUrl", let urlString = event["url"] as? String, let url = URL(string: urlString) {
-                    let app = VisilabsInstance.sharedUIApplication()
+                    let app = RelatedDigitalInstance.sharedUIApplication()
                     app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: url, waitUntilDone: true)
                 }
                 

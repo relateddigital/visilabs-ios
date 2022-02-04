@@ -41,7 +41,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         return button
     }()
     
-    var storyHomeView: VisilabsStoryHomeView?
+    var storyHomeView: RelatedDigitalStoryHomeView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +93,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func showStory(sender: UIButton!) {
         storyHomeView?.removeFromSuperview()
-        storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""), urlDelegate: self)
+        storyHomeView = RelatedDigital.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""), urlDelegate: self)
         self.view.addSubview(storyHomeView!)
         storyHomeView!.translatesAutoresizingMaskIntoConstraints = false
         storyHomeView!.topAnchor.constraint(equalTo: storyAsyncButton.bottomAnchor, constant: 20).isActive = true
@@ -102,7 +102,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func showStoryAsync(sender: UIButton!) {
-        Visilabs.callAPI().getStoryViewAsync(actionId: Int(self.actionIdTextField.text ?? "")){ storyHomeView in
+        RelatedDigital.callAPI().getStoryViewAsync(actionId: Int(self.actionIdTextField.text ?? "")){ storyHomeView in
             DispatchQueue.main.async {
                 self.storyHomeView?.removeFromSuperview()
                 if let storyHomeView = storyHomeView {

@@ -45,9 +45,9 @@ class CarouselViewModel {
         }
         
         self.title = title
-        self.titleFont = VisilabsInAppNotification.getFont(fontFamily: titleFontFamily, fontSize: titleTextSize, style: .title2)
-        self.messageFont = VisilabsInAppNotification.getFont(fontFamily: messageFontFamily, fontSize: messageTextSize, style: .body)
-        self.buttonFont = VisilabsInAppNotification.getFont(fontFamily: buttonFontFamily, fontSize: buttonTextSize, style: .title2)
+        self.titleFont = RelatedDigitalInAppNotification.getFont(fontFamily: titleFontFamily, fontSize: titleTextSize, style: .title2)
+        self.messageFont = RelatedDigitalInAppNotification.getFont(fontFamily: messageFontFamily, fontSize: messageTextSize, style: .body)
+        self.buttonFont = RelatedDigitalInAppNotification.getFont(fontFamily: buttonFontFamily, fontSize: buttonTextSize, style: .title2)
         self.titleColor = UIColor(hex: titleTextColor)
         self.messageColor = UIColor(hex: messageTextColor)
         self.buttonTextColor = UIColor(hex: buttonTextColor)

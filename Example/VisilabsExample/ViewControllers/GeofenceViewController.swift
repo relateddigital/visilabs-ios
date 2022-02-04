@@ -20,7 +20,7 @@ class GeofenceViewController: FormViewController {
     let lastKnownLongitude = "Last Known Longitude"
 
     let dateFormatter = DateFormatter()
-    var visilabsGeofenceHistory: VisilabsGeofenceHistory!
+    var visilabsGeofenceHistory: RelatedDigitalGeofenceHistory!
     var historySection = Section("Geofence Server Checks".uppercased(with: Locale(identifier: "en_US")))
     var errorSection = Section("Geofence Server Checks With Error".uppercased(with: Locale(identifier: "en_US")))
     var refreshSection = Section()
@@ -112,9 +112,9 @@ class GeofenceViewController: FormViewController {
     }
 
     private func refreshData(firstTime: Bool = false) {
-        visilabsGeofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
-        locationServicesEnabledForDeviceRow.value = Visilabs.callAPI().locationServicesEnabledForDevice ? "YES" : "NO"
-        let state = Visilabs.callAPI().locationServiceStateStatusForApplication
+        visilabsGeofenceHistory = RelatedDigitalPersistence.readVisilabsGeofenceHistory()
+        locationServicesEnabledForDeviceRow.value = RelatedDigital.callAPI().locationServicesEnabledForDevice ? "YES" : "NO"
+        let state = RelatedDigital.callAPI().locationServiceStateStatusForApplication
         locationServiceStatusForAppRow.value = String(describing: state)
         let time = visilabsGeofenceHistory.lastFetchTime
         lastFetchTimeRow.value = dateFormatter.string(from: time ?? Date(timeIntervalSince1970: 0))
@@ -150,7 +150,7 @@ class GeofenceViewController: FormViewController {
     }
 
     private func clearHistory() {
-        VisilabsPersistence.clearVisilabsGeofenceHistory()
+        RelatedDigitalPersistence.clearVisilabsGeofenceHistory()
         historySection.removeAll()
         historySection.reload()
         errorSection.removeAll()
@@ -172,7 +172,7 @@ class GeofenceAlertViewController: CleanyAlertViewController {
                    styleSettings: styleSettings)
     }
 
-    init(date: Date, visilabsGeofenceEntities: [VisilabsGeofenceEntity]?) {
+    init(date: Date, visilabsGeofenceEntities: [RelatedDigitalGeofenceEntity]?) {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let styleSettings = CleanyAlertConfig.getDefaultStyleSettings()
         styleSettings[.cornerRadius] = 18
@@ -187,7 +187,7 @@ class GeofenceAlertViewController: CleanyAlertViewController {
                    styleSettings: styleSettings)
     }
 
-    private static func getMessageFromGeofenceEntities(_ geofences: [VisilabsGeofenceEntity]) -> String {
+    private static func getMessageFromGeofenceEntities(_ geofences: [RelatedDigitalGeofenceEntity]) -> String {
         var message = ""
         for geofence in geofences {
             message += "actid:\(geofence.actId) geoid\(geofence.geofenceId)" +  "\n"
