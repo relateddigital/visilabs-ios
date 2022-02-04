@@ -60,7 +60,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
+                RelatedDigitalLogger.error("image failed to load from url \(iUrl)")
             }
         }
         return data
@@ -73,7 +73,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
 
-    public init(type: VisilabsInAppNotificationType,
+    public init(type: RelatedDigitalInAppNotificationType,
                 actid: Int,
                 auth: String,
                 hasMailForm: Bool,
@@ -169,19 +169,19 @@ public class ScratchToWinModel: TargetingActionViewModel {
         self.promocodeCustomFontFamilyIos = promocodeCustomFontFamilyIos
         self.copybuttonCustomFontFamilyIos = copybuttonCustomFontFamilyIos
 
-        titleFont = VisilabsInAppNotification.getFont(fontFamily: titleFontFamily,
+        titleFont = RelatedDigitalInAppNotification.getFont(fontFamily: titleFontFamily,
                                                                   fontSize: titleTextSize,
                                                                   style: .title2,customFont: contentTitleCustomFontFamilyIos)
-        messageFont = VisilabsInAppNotification.getFont(fontFamily: messageFontFamily,
+        messageFont = RelatedDigitalInAppNotification.getFont(fontFamily: messageFontFamily,
                                                         fontSize: messageTextSize,
                                                         style: .body,customFont: contentBodyCustomFontFamilyIos)
-        mailButtonFont = VisilabsInAppNotification.getFont(fontFamily: mailButtonFontFamily,
+        mailButtonFont = RelatedDigitalInAppNotification.getFont(fontFamily: mailButtonFontFamily,
                                                            fontSize: mailButtonTextSize,
                                                            style: .title2,customFont: buttonCustomFontFamilyIos)
-        promoFont = VisilabsInAppNotification.getFont(fontFamily: promocodeTextFamily,
+        promoFont = RelatedDigitalInAppNotification.getFont(fontFamily: promocodeTextFamily,
                                                       fontSize: promocodeTextSize,
                                                       style: .title2,customFont: promocodeCustomFontFamilyIos)
-        copyButtonTextFont = VisilabsInAppNotification.getFont(fontFamily: copyButtonFontFamily,
+        copyButtonTextFont = RelatedDigitalInAppNotification.getFont(fontFamily: copyButtonFontFamily,
                                                               fontSize: copyButtonTextSize,
                                                               style: .title2,customFont: copybuttonCustomFontFamilyIos)
         emailPermitTextFont = UIFont.systemFont(ofSize: CGFloat(8 + (Int(emailPermitTextSize ?? "0") ?? 0)))
@@ -189,7 +189,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
 
     }
 
-    private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
+    private static func getImageUrl(_ imageUrlString: String, type: RelatedDigitalInAppNotificationType) -> URL? {
         var imageUrl: URL?
         if let escapedImageUrlString = imageUrlString.addingPercentEncoding(withAllowedCharacters:
                                                                      NSCharacterSet.urlQueryAllowed),

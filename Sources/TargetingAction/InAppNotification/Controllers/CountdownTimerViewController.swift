@@ -123,7 +123,7 @@ public class CountdownTimerViewController: UIViewController {
     }
     
     public func showNow(animated: Bool) {
-        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
+        guard let sharedUIApplication = RelatedDigitalInstance.sharedUIApplication() else {
             return
         }
         var bounds: CGRect
@@ -220,7 +220,7 @@ public class CountdownTimerViewController: UIViewController {
 
     static func xibName() -> String {
         let xibName = String(describing: CountdownTimerViewController.self)
-        guard VisilabsInstance.sharedUIApplication() != nil else {
+        guard RelatedDigitalInstance.sharedUIApplication() != nil else {
             return xibName
         }
         return xibName

@@ -96,7 +96,7 @@ public class HalfScreenViewController: UIViewController {
         if let bColor = m.closeButtonColor {
             self.closeButton.isHidden = false
             if bColor == .white {
-                let img = VisilabsHelper.getUIImage(named: "VisilabsCloseButton")
+                let img = RelatedDigitalHelper.getUIImage(named: "VisilabsCloseButton")
                 self.closeButton.setImage(img, for: .normal)
             }
         }
@@ -106,7 +106,7 @@ public class HalfScreenViewController: UIViewController {
     }
     
     public func showNow(animated: Bool) {
-        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
+        guard let sharedUIApplication = RelatedDigitalInstance.sharedUIApplication() else {
             return
         }
         var bounds: CGRect
@@ -200,7 +200,7 @@ public class HalfScreenViewController: UIViewController {
 
     static func xibName() -> String {
         let xibName = String(describing: HalfScreenViewController.self)
-        guard VisilabsInstance.sharedUIApplication() != nil else {
+        guard RelatedDigitalInstance.sharedUIApplication() != nil else {
             return xibName
         }
         return xibName

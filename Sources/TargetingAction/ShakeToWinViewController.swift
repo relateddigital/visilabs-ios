@@ -240,7 +240,7 @@ extension ShakeToWinViewController {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
+                RelatedDigitalLogger.error("image failed to load from url \(iUrl)")
             }
         }
         return data

@@ -33,7 +33,7 @@ class RecommendationViewController: FormViewController {
             filters.append(VisilabsRecommendationFilter(attribute:.PRODUCTNAME , filterType: .like, value: "a"))
             //filters.append(VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop"))
             
-            Visilabs.callAPI().recommend(zoneID: "1", productCode: "",
+            RelatedDigital.callAPI().recommend(zoneID: "1", productCode: "",
                                          filters: filters,
                                          properties: properties) { response in
                 if let error = response.error {
@@ -45,7 +45,7 @@ class RecommendationViewController: FormViewController {
                         print("Product Title: \(product.title)")
                         print("Product qs: \(product.qs)")
                         if counter == 0 {
-                            Visilabs.callAPI().trackRecommendationClick(qs: product.qs)
+                            RelatedDigital.callAPI().trackRecommendationClick(qs: product.qs)
                         }
                         counter = counter + 1
                     }

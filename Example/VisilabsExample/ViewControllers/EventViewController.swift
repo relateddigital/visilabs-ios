@@ -65,14 +65,14 @@ class EventViewController: FormViewController {
             }
                             .onCellSelection { _, row in
                 if row.title == VisilabsEventType.logout.rawValue {
-                    Visilabs.callAPI().logout()
+                    RelatedDigital.callAPI().logout()
                     print("log out!!")
                 } else if row.title == VisilabsEventType.getExVisitorId.rawValue {
-                    print(Visilabs.callAPI().getExVisitorId() ?? "")
+                    print(RelatedDigital.callAPI().getExVisitorId() ?? "")
                 } else if row.title == VisilabsEventType.requestIDFA.rawValue {
-                    Visilabs.callAPI().requestIDFA()
+                    RelatedDigital.callAPI().requestIDFA()
                 } else if row.title == VisilabsEventType.sendLocationPermission.rawValue {
-                    Visilabs.callAPI().sendLocationPermission()
+                    RelatedDigital.callAPI().sendLocationPermission()
                 } else {
                     self.customEvent(eventType)
                 }
@@ -101,11 +101,11 @@ class EventViewController: FormViewController {
     private func inAppEvent(_ queryStringFilter: String) {
         var properties = [String: String]()
         properties["OM.inapptype"] = queryStringFilter
-        if queryStringFilter.lowercased() == VisilabsInAppNotificationType.productStatNotifier.rawValue {
+        if queryStringFilter.lowercased() == RelatedDigitalInAppNotificationType.productStatNotifier.rawValue {
             properties["OM.pv"] = "CV7933-837-837"
         }
-        Visilabs.callAPI().customEvent("InAppTest", properties: properties)
-        Visilabs.callAPI().inappButtonDelegate = self
+        RelatedDigital.callAPI().customEvent("InAppTest", properties: properties)
+        RelatedDigital.callAPI().inappButtonDelegate = self
     }
     
     private func showModal(title: String, message: String) {
@@ -152,23 +152,23 @@ class EventViewController: FormViewController {
     }
     
     
-    private func getInApps() -> [VisilabsInAppNotificationType: [String: Int]]{
+    private func getInApps() -> [RelatedDigitalInAppNotificationType: [String: Int]]{
         return [
-            .mini: [VisilabsInAppNotificationType.mini.rawValue: 491],
-            .full: [VisilabsInAppNotificationType.full.rawValue: 485],
-            .imageTextButton: [VisilabsInAppNotificationType.imageTextButton.rawValue: 490],
-            .fullImage: [VisilabsInAppNotificationType.fullImage.rawValue: 495],
-            .nps: [VisilabsInAppNotificationType.nps.rawValue: 492],
-            .imageButton: [VisilabsInAppNotificationType.imageButton.rawValue: 489],
-            .smileRating: [VisilabsInAppNotificationType.smileRating.rawValue: 494],
-            .emailForm: [VisilabsInAppNotificationType.emailForm.rawValue: 417],
+            .mini: [RelatedDigitalInAppNotificationType.mini.rawValue: 491],
+            .full: [RelatedDigitalInAppNotificationType.full.rawValue: 485],
+            .imageTextButton: [RelatedDigitalInAppNotificationType.imageTextButton.rawValue: 490],
+            .fullImage: [RelatedDigitalInAppNotificationType.fullImage.rawValue: 495],
+            .nps: [RelatedDigitalInAppNotificationType.nps.rawValue: 492],
+            .imageButton: [RelatedDigitalInAppNotificationType.imageButton.rawValue: 489],
+            .smileRating: [RelatedDigitalInAppNotificationType.smileRating.rawValue: 494],
+            .emailForm: [RelatedDigitalInAppNotificationType.emailForm.rawValue: 417],
             .alert: ["alert_actionsheet": 487, "alert_native": 540],
-            .npsWithNumbers: [VisilabsInAppNotificationType.npsWithNumbers.rawValue: 493],
-            .halfScreenImage: [VisilabsInAppNotificationType.halfScreenImage.rawValue: 704],
-            .scratchToWin: [VisilabsInAppNotificationType.scratchToWin.rawValue: 592],
+            .npsWithNumbers: [RelatedDigitalInAppNotificationType.npsWithNumbers.rawValue: 493],
+            .halfScreenImage: [RelatedDigitalInAppNotificationType.halfScreenImage.rawValue: 704],
+            .scratchToWin: [RelatedDigitalInAppNotificationType.scratchToWin.rawValue: 592],
             .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
-            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130],
-            .productStatNotifier: [VisilabsInAppNotificationType.productStatNotifier.rawValue: 703]
+            .spintowin: [RelatedDigitalInAppNotificationType.spintowin.rawValue: 130],
+            .productStatNotifier: [RelatedDigitalInAppNotificationType.productStatNotifier.rawValue: 703]
         ]
     }
     
@@ -199,9 +199,9 @@ class EventViewController: FormViewController {
                 visilabsProfile.userEmail = email
                 DataManager.saveVisilabsProfile(visilabsProfile)
                 if eventType == .login {
-                    Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
+                    RelatedDigital.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
                 } else if eventType == .signUp {
-                    Visilabs.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
+                    RelatedDigital.callAPI().signUp(exVisitorId: visilabsProfile.userKey, properties: properties)
                 } else {
                     properties["OM.vseg1"] = "seg1val" // Visitor Segment 1
                     properties["OM.vseg2"] = "seg2val" // Visitor Segment 2
@@ -211,14 +211,14 @@ class EventViewController: FormViewController {
                     properties["OM.bd"] = "1977-03-15" // Birthday
                     properties["OM.gn"] = randomValues.randomGender // Gender
                     properties["OM.loc"] = "Bursa" // Location
-                    Visilabs.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
+                    RelatedDigital.callAPI().login(exVisitorId: visilabsProfile.userKey, properties: properties)
                 }
                 Euromsg.setEuroUserId(userKey: visilabsProfile.userKey)
                 Euromsg.setEmail(email: visilabsProfile.userEmail, permission: true)
                 return
             }
         case .pageView:
-            Visilabs.callAPI().customEvent("Page Name", properties: [String: String]())
+            RelatedDigital.callAPI().customEvent("Page Name", properties: [String: String]())
             return
         case .productView:
             properties["OM.pv"] = "\(randomValues.randomProductCode1)" // Product Code
@@ -226,7 +226,7 @@ class EventViewController: FormViewController {
             properties["OM.ppr"] = randomValues.randomProductPrice1.formatPrice() // Product Price
             properties["OM.pv.1"] = "Brand" //Product Brand
             properties["OM.inv"] = "\(randomValues.randomInventory)" //Number of items in stock
-            Visilabs.callAPI().customEvent("Product View", properties: properties)
+            RelatedDigital.callAPI().customEvent("Product View", properties: properties)
             return
         case .productAddToCart:
             properties["OM.pbid"] = "\(randomValues.randomBasketID)" // Basket ID
@@ -237,7 +237,7 @@ class EventViewController: FormViewController {
             let price1 = (randomValues.randomProductPrice1 * Double(randomValues.randomProductQuantity1)).formatPrice()
             let price2 = (randomValues.randomProductPrice2 * Double(randomValues.randomProductQuantity2)).formatPrice()
             properties["OM.ppr"] = "\(price1);\(price2)"
-            Visilabs.callAPI().customEvent("Cart", properties: properties)
+            RelatedDigital.callAPI().customEvent("Cart", properties: properties)
             return
         case .productPurchase:
             properties["OM.tid"] = "\(randomValues.randomOrderID)" // Order ID
@@ -248,32 +248,32 @@ class EventViewController: FormViewController {
             let price1 = (randomValues.randomProductPrice1 * Double(randomValues.randomProductQuantity1)).formatPrice()
             let price2 = (randomValues.randomProductPrice2 * Double(randomValues.randomProductQuantity2)).formatPrice()
             properties["OM.ppr"] = "\(price1);\(price2)"
-            Visilabs.callAPI().customEvent("Purchase", properties: properties)
+            RelatedDigital.callAPI().customEvent("Purchase", properties: properties)
             return
         case .productCategoryPageView:
             properties["OM.clist"] = "\(randomValues.randomCategoryID)" // Category Code/Category ID
-            Visilabs.callAPI().customEvent("Category View", properties: properties)
+            RelatedDigital.callAPI().customEvent("Category View", properties: properties)
             return
         case .inAppSearch:
             properties["OM.OSS"] = "laptop" // Search Keyword
             properties["OM.OSSR"] = "\(randomValues.randomNumberOfSearchResults)" // Number of Search Results
-            Visilabs.callAPI().customEvent("In App Search", properties: properties)
+            RelatedDigital.callAPI().customEvent("In App Search", properties: properties)
             return
         case .bannerClick:
             properties["OM.OSB"] = "\(randomValues.randomBannerCode)" // Banner Name/Banner Code
-            Visilabs.callAPI().customEvent("Banner Click", properties: properties)
+            RelatedDigital.callAPI().customEvent("Banner Click", properties: properties)
             return
         case .addToFavorites:
             properties["OM.pf"] = "\(randomValues.randomProductCode1)" // Product Code
             properties["OM.pfu"] = "1"
             properties["OM.ppr"] = randomValues.randomProductPrice1.formatPrice() // Product Price
-            Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
+            RelatedDigital.callAPI().customEvent("Add To Favorites", properties: properties)
             return
         case .removeFromFavorites:
             properties["OM.pf"] = "\(randomValues.randomProductCode1)" // Product Code
             properties["OM.pfu"] = "-1"
             properties["OM.ppr"] = randomValues.randomProductPrice1.formatPrice() // Product Price
-            Visilabs.callAPI().customEvent("Add To Favorites", properties: properties)
+            RelatedDigital.callAPI().customEvent("Add To Favorites", properties: properties)
             return
         case .sendingCampaignParameters:
             properties["utm_source"] = "euromsg"
@@ -282,12 +282,12 @@ class EventViewController: FormViewController {
             properties["OM.csource"] = "euromsg"
             properties["OM.cmedium"] = "push"
             properties["OM.cname"] = "euromsg campaign"
-            Visilabs.callAPI().customEvent("Login Page", properties: properties)
+            RelatedDigital.callAPI().customEvent("Login Page", properties: properties)
             return
         case .pushMessage:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
             properties["OM.sys.AppID"] = visilabsProfile.appAlias // "App ID to use for push messages"
-            Visilabs.callAPI().customEvent("RegisterToken", properties: properties)
+            RelatedDigital.callAPI().customEvent("RegisterToken", properties: properties)
             return
         default:
             return
@@ -313,7 +313,7 @@ struct RandomProduct {
 }
 
 extension EventViewController: VisilabsInappButtonDelegate {
-    func didTapButton(_ notification: VisilabsInAppNotification) {
+    func didTapButton(_ notification: RelatedDigitalInAppNotification) {
         print("notification did tapped...")
         print(notification)
     }
