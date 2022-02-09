@@ -8,12 +8,13 @@
 
 import VisilabsIOS
 import Eureka
+import simd
 
 /**
  This extension is written to handle form elements functions
  */
 extension InAppViewController {
-
+    
     func addNotificationTypePickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.messageType) {
             $0.title = "Type"
@@ -23,7 +24,7 @@ extension InAppViewController {
             self.showHiddenRows()
         }
     }
-
+    
     func addSecondNotificationPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.secondPopupType) {
             $0.title = "Second Popup Type"
@@ -31,7 +32,7 @@ extension InAppViewController {
             $0.value = secondPopupTypes.first
         }
     }
-
+    
     func addMessageTitleTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageTitle) {
             $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
@@ -56,7 +57,7 @@ extension InAppViewController {
             }
         }
     }
-
+    
     func addMessageBodyTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageBody) {
             $0.title = "Body"
@@ -64,7 +65,7 @@ extension InAppViewController {
             $0.value = "Test Body"
         }
     }
-
+    
     func addButtonTextTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.buttonText) {
             $0.title = "Button Text"
@@ -72,7 +73,7 @@ extension InAppViewController {
             $0.value = "Test Button Text"
         }
     }
-
+    
     func addCopyCodeTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.promotionCode) {
             $0.title = "Promotion Code"
@@ -80,7 +81,7 @@ extension InAppViewController {
             $0.value = "Promotion Code"
         }
     }
-
+    
     func addCopyCodeBackgroundColor() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.promotionBackgroundColor) {
             $0.title = "Promotion Code Background Color"
@@ -101,7 +102,7 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-
+    
     func addCopyCodeTextColor() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.promotionTextColor) {
             $0.title = "Promotion Code Text Color"
@@ -122,7 +123,7 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-
+    
     func addIosLinkUrlRow() -> URLRow {
         return URLRow(VisilabsInAppNotification.PayloadKey.iosLink) {
             $0.title = "IOS Link"
@@ -132,7 +133,7 @@ extension InAppViewController {
             $0.value = URL(string: "https://www.relateddigital.com")
         }
     }
-
+    
     func addImageUrlUrlRow() -> URLRow {
         return URLRow(VisilabsInAppNotification.PayloadKey.imageUrlString) {
             $0.title = "Image URL"
@@ -143,7 +144,7 @@ extension InAppViewController {
             $0.value = URL(string: str)
         }
     }
-
+    
     func addDelayPickerInputRow() -> PickerInputRow<Int> {
         return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.waitingTime) {
             $0.title = "Waiting Time"
@@ -154,7 +155,7 @@ extension InAppViewController {
             $0.value = 0
         }
     }
-
+    
     func addMiniIconPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>("miniIcon") {
             $0.title = "Mini Icon"
@@ -166,7 +167,7 @@ extension InAppViewController {
             cell.imageView?.image = InAppHelper.miniIconImages[row.value!]
         }
     }
-
+    
     func addMessageTitleColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageTitleColor) {
             $0.title = "Message Title Color"
@@ -187,7 +188,7 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-
+    
     func addMessageBodyColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageBodyColor) {
             $0.title = "Message Body Color"
@@ -208,7 +209,7 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-
+    
     func addMessageBodyTextSizePickerInputRow() -> PickerInputRow<Int> {
         return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.messageBodyTextSize) {
             $0.title = "Text Size"
@@ -219,7 +220,7 @@ extension InAppViewController {
             $0.value = 2
         }
     }
-
+    
     func addFontFamilyPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.fontFamily) {
             $0.title = "Font Family"
@@ -227,7 +228,7 @@ extension InAppViewController {
             $0.value = "DefaultFont"
         }
     }
-
+    
     func addBackgroundColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.backGround) {
             $0.title = "Background Color"
@@ -248,7 +249,7 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-
+    
     func addCloseButtonColorPickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.closeButtonColor) {
             $0.title = "Close Button Color"
@@ -256,7 +257,7 @@ extension InAppViewController {
             $0.value = "white"
         }
     }
-
+    
     func addButtonTextColorTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.buttonTextColor) {
             $0.title = "Button Text Color"
@@ -277,7 +278,7 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-
+    
     func addButtonColorTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.buttonColor) {
             $0.title = "Button Color"
@@ -301,60 +302,187 @@ extension InAppViewController {
     
     
     
-    func addShowCountDownTimerButtonRow() -> ButtonRow {
-        return ButtonRow {
-            $0.title = "showCountDownTimer"
-        }.onCellSelection { _, _ in
-            let model = CountdownModel(title: "Fırsatı kaçırma",
-                                       subtitle: "bla bla bla bla",
-                                       buttonText: "Button'a bas",
-                                       coupon: nil,
-                                       finalDate: 1625097600,
-                                       bgColor: .blue,
-                                       titleColor: .white,
-                                       subtitleColor: .gray,
-                                       buttonColor: .red,
-                                       buttonTextColor: .white,
-                                       couponColor: nil,
-                                       couponBgColor: nil,
-                                       titleFont: .boldSystemFont(ofSize: 18),
-                                       subtitleFont: .italicSystemFont(ofSize: 15),
-                                       buttonFont: .systemFont(ofSize: 14),
-                                       couponFont: nil,
-                                       location: .bottom,
-                                       timerType: .DHMS,
-                                       closeButtonColor: .white)
-            let vc = CountdownTimerViewController(model: model)
-            vc.showNow(animated: true)
-        }
-    }
     
     
     /*
-    func addShowSocialPoofButtonRow() -> ButtonRow {
-        return ButtonRow {
-            $0.title = "showSocialPoof"
-        }.onCellSelection { _, _ in
-            let model = VisilabsProductStatNotifierViewModel(text: "soctext", number: "5", location: .bottom, duration: .sec10, backgroundColor: .yellow
-                                         , textColor: .brown, numberColor: .green, textFont: .boldSystemFont(ofSize: 18)
-                                         , numberFont: .italicSystemFont(ofSize: 15), closeButtonColor: .white)
-            let vc = SocialProofViewController(model: model)
-            vc.showNow(animated: true)
-        }
-    }
+     func addShowCountDownTimerButtonRow() -> ButtonRow {
+     return ButtonRow {
+     $0.title = "showCountDownTimer"
+     }.onCellSelection { _, _ in
+     let model = CountdownModel(title: "Fırsatı kaçırma",
+     subtitle: "bla bla bla bla",
+     buttonText: "Button'a bas",
+     coupon: nil,
+     finalDate: 1625097600,
+     bgColor: .blue,
+     titleColor: .white,
+     subtitleColor: .gray,
+     buttonColor: .red,
+     buttonTextColor: .white,
+     couponColor: nil,
+     couponBgColor: nil,
+     titleFont: .boldSystemFont(ofSize: 18),
+     subtitleFont: .italicSystemFont(ofSize: 15),
+     buttonFont: .systemFont(ofSize: 14),
+     couponFont: nil,
+     location: .bottom,
+     timerType: .DHMS,
+     closeButtonColor: .white)
+     let vc = CountdownTimerViewController(model: model)
+     vc.showNow(animated: true)
+     }
+     }
+     
+     
+     
+     func addShowSocialPoofButtonRow() -> ButtonRow {
+     return ButtonRow {
+     $0.title = "showSocialPoof"
+     }.onCellSelection { _, _ in
+     let model = VisilabsProductStatNotifierViewModel(text: "soctext", number: "5", location: .bottom, duration: .sec10, backgroundColor: .yellow
+     , textColor: .brown, numberColor: .green, textFont: .boldSystemFont(ofSize: 18)
+     , numberFont: .italicSystemFont(ofSize: 15), closeButtonColor: .white)
+     let vc = SocialProofViewController(model: model)
+     vc.showNow(animated: true)
+     }
+     }
+     
+     
+     func addShowHalfScreenButtonRow() -> ButtonRow {
+     return ButtonRow {
+     $0.title = "showHalfScreen"
+     }.onCellSelection { _, _ in
+     let model = HalfScreenModel(text: "tttt", location: .bottom, duration: 10, backgroundColor: .green, textColor: .brown, textFont: .boldSystemFont(ofSize: 18),  closeButtonColor: .white)
+     let vc = HalfScreenViewController(model: model)
+     vc.showNow(animated: true)
+     }
+     }
      */
     
-    func addShowHalfScreenButtonRow() -> ButtonRow {
+    
+    
+    
+    func addShowCarouselNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
-            $0.title = "showHalfScreen"
+            $0.title = "showCarouselNotification"
         }.onCellSelection { _, _ in
-            let model = HalfScreenModel(text: "tttt", location: .bottom, duration: 10, backgroundColor: .green, textColor: .brown, textFont: .boldSystemFont(ofSize: 18),  closeButtonColor: .white)
-            let vc = HalfScreenViewController(model: model)
-            vc.showNow(animated: true)
+            
+            let carouselModel = self.createCarouselVisilabsInAppNotificationModel()
+            
+            self.carouselItems = [DataItem]()
+            
+            for carousel in carouselModel!.carouselItems! {
+                
+                let imageView = UIImageView()
+                
+                let myFetchImageBlock: FetchImageBlock = { imageCompletion in
+                    if let imageUrlString = carousel.imageUrlString,  let url = URL(string: imageUrlString)
+                        , let imageData: Data = try? Data(contentsOf: url) {
+                        let image = UIImage(data: imageData as Data)
+                        imageCompletion(image)
+                    } else {
+                        imageCompletion(nil)
+                    }
+                }
+
+                let itemViewControllerBlock: ItemViewControllerBlock = { index, itemCount, fetchImageBlock, configuration, isInitialController in
+
+                    return AnimatedViewController(index: index, itemCount: itemCount, fetchImageBlock: myFetchImageBlock, configuration: configuration, isInitialController: isInitialController)
+                }
+
+                let galleryItem = GalleryItem.custom(fetchImageBlock: myFetchImageBlock, itemViewControllerBlock: itemViewControllerBlock)
+                let dataItem = DataItem(imageView: imageView, galleryItem: galleryItem)
+                self.carouselItems.append(dataItem)
+            }
+            
+            
+            
+            
+            let displacedViewIndex = 0
+
+            let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
+            let headerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
+            let footerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
+
+            let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration())
+            galleryViewController.headerView = headerView
+            galleryViewController.footerView = footerView
+
+            galleryViewController.launchedCompletion = { print("LAUNCHED") }
+            galleryViewController.closedCompletion = { print("CLOSED") }
+            galleryViewController.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
+
+            galleryViewController.landedPageAtIndexCompletion = { index in
+
+                print("LANDED AT INDEX: \(index)")
+
+                headerView.count = self.carouselItems.count
+                headerView.currentIndex = index
+                footerView.count = self.carouselItems.count
+                footerView.currentIndex = index
+            }
+
+            self.presentImageGallery(galleryViewController)
+            
+            
+            //self.showNotificationTapped()
         }
     }
     
+    func galleryConfiguration() -> GalleryConfiguration {
 
+        return [
+
+            GalleryConfigurationItem.closeButtonMode(.builtIn),
+
+            GalleryConfigurationItem.pagingMode(.carousel),
+            GalleryConfigurationItem.presentationStyle(.displacement),
+            GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
+
+            GalleryConfigurationItem.swipeToDismissMode(.vertical),
+            GalleryConfigurationItem.toggleDecorationViewsBySingleTap(false),
+            GalleryConfigurationItem.activityViewByLongPress(false),
+
+            GalleryConfigurationItem.overlayColor(UIColor(white: 0.035, alpha: 1)),
+            GalleryConfigurationItem.overlayColorOpacity(0.5),
+            GalleryConfigurationItem.overlayBlurOpacity(0.5),
+            GalleryConfigurationItem.overlayBlurStyle(UIBlurEffect.Style.light),
+            
+            GalleryConfigurationItem.videoControlsColor(.white),
+
+            GalleryConfigurationItem.maximumZoomScale(8),
+            GalleryConfigurationItem.swipeToDismissThresholdVelocity(500),
+
+            GalleryConfigurationItem.doubleTapToZoomDuration(0.15),
+
+            GalleryConfigurationItem.blurPresentDuration(0.5),
+            GalleryConfigurationItem.blurPresentDelay(0),
+            GalleryConfigurationItem.colorPresentDuration(0.25),
+            GalleryConfigurationItem.colorPresentDelay(0),
+
+            GalleryConfigurationItem.blurDismissDuration(0.1),
+            GalleryConfigurationItem.blurDismissDelay(0.4),
+            GalleryConfigurationItem.colorDismissDuration(0.45),
+            GalleryConfigurationItem.colorDismissDelay(0),
+
+            GalleryConfigurationItem.itemFadeDuration(0.3),
+            GalleryConfigurationItem.decorationViewsFadeDuration(0.15),
+            GalleryConfigurationItem.rotationDuration(0.15),
+
+            GalleryConfigurationItem.displacementDuration(0.55),
+            GalleryConfigurationItem.reverseDisplacementDuration(0.25),
+            GalleryConfigurationItem.displacementTransitionStyle(.springBounce(0.7)),
+            GalleryConfigurationItem.displacementTimingCurve(.linear),
+
+            GalleryConfigurationItem.statusBarHidden(true),
+            GalleryConfigurationItem.displacementKeepOriginalInPlace(false),
+            GalleryConfigurationItem.displacementInsetMargin(50),
+            
+            GalleryConfigurationItem.imageDividerWidth(CGFloat(30.0)) //TODO:egemen
+        ]
+    }
+    
+    
     func addShowNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
             $0.title = "showNotification"
@@ -362,7 +490,7 @@ extension InAppViewController {
             self.showNotificationTapped()
         }
     }
-
+    
     func addCloseButtonTextTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.closeButtonText) {
             $0.title = "Close Button Text"
@@ -370,7 +498,7 @@ extension InAppViewController {
             $0.value = "Close"
         }
     }
-
+    
     func addAlertTypePickerInputRow() -> PickerInputRow<String> {
         return PickerInputRow<String>(VisilabsInAppNotification.PayloadKey.alertType) {
             $0.title = "Alert Type"
@@ -386,15 +514,15 @@ extension InAppViewController {
             $0.value = "Second Title"
         }
     }
-
+    
     func showNotificationTapped() {
         //dummyFunc()
         //return
-
-//        let vc = ShakeToWinViewController()
-//        vc.modalPresentationStyle = .fullScreen
-//        self.present(vc, animated: true, completion: nil)
-
+        
+        //        let vc = ShakeToWinViewController()
+        //        vc.modalPresentationStyle = .fullScreen
+        //        self.present(vc, animated: true, completion: nil)
+        
         let errors = self.form.validate(includeHidden: false, includeDisabled: false, quietly: false)
         print("Form erros count: \(errors.count)")
         for error in errors {
@@ -407,14 +535,14 @@ extension InAppViewController {
         if value == "emailForm" {
             Visilabs.callAPI().customEvent("mail", properties: [String: String]())
         } else if value == "scratchToWin" {
-//            let sctw = createScratchToWinModel()
-//            Visilabs.callAPI().showTargetingAction(sctw)
+            //            let sctw = createScratchToWinModel()
+            //            Visilabs.callAPI().showTargetingAction(sctw)
         } else {
             let visilabsInAppNotification = createVisilabsInAppNotificationModel()
             Visilabs.callAPI().showNotification(visilabsInAppNotification)
         }
     }
-
+    
     func addSecondPopupBodyTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupBody) {
             $0.title = "Second Popup Body"
@@ -422,7 +550,7 @@ extension InAppViewController {
             $0.value = "Second Body"
         }
     }
-
+    
     func addSecondMessageBodyTextSizePickerInputRow() -> PickerInputRow<Int> {
         return PickerInputRow<Int>(VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize) {
             $0.title = "Second Body Text Size"
@@ -433,7 +561,7 @@ extension InAppViewController {
             $0.value = 2
         }
     }
-
+    
     func addSecondButtonTextTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupButtonText) {
             $0.title = "Second Button Text"
@@ -452,7 +580,7 @@ extension InAppViewController {
             $0.value = URL(string: str)
         }
     }
-
+    
     func addSecondImageUrl2UrlRow() -> URLRow {
         return URLRow(VisilabsInAppNotification.PayloadKey.secondImageUrlString2) {
             $0.title = "Second Popup Image URL 2"
@@ -463,7 +591,7 @@ extension InAppViewController {
             $0.value = URL(string: str)
         }
     }
-
+    
     func addSecondPopupMinTextRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.secondPopupMinPoint) {
             $0.title = "Second Popup Survey Min Point"
@@ -471,8 +599,8 @@ extension InAppViewController {
             $0.value = "2.5"
         }
     }
-
-
+    
+    
     func addNumberBGColor(_ colorId: String) -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.numberColors + colorId) {
             $0.title = "Number Background Color" + colorId
@@ -498,24 +626,24 @@ extension InAppViewController {
     func createVisilabsInAppNotificationModel() -> VisilabsInAppNotification {
         var tag = ""
         var rawValue = (((self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageType)
-                            as PickerInputRow<String>?)?.value)! as String)
+                          as PickerInputRow<String>?)?.value)! as String)
         let messageType = VisilabsInAppNotificationType.init(rawValue: rawValue)!
         let messageTitle: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitle)
-                                        as TextRow?)!.value ?? ""
-        let messageBody: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)
                                     as TextRow?)!.value ?? ""
+        let messageBody: String = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBody)
+                                   as TextRow?)!.value ?? ""
         let buttonText = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.buttonText)
-                            as TextRow?)!.value ?? ""
+                          as TextRow?)!.value ?? ""
         let iosLink = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.iosLink)
-                        as URLRow?)?.value?.absoluteString
+                       as URLRow?)?.value?.absoluteString
         let messageTitleColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)
-                                    as TextRow?)!.value!  as String
+                                 as TextRow?)!.value!  as String
         let messageBodyColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)
-                                    as TextRow?)!.value!  as String
-
+                                as TextRow?)!.value!  as String
+        
         tag = VisilabsInAppNotification.PayloadKey.messageBodyTextSize
         let messageBodyTextSize = "\((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)"
-
+        
         tag = VisilabsInAppNotification.PayloadKey.fontFamily
         let fontFamily: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
         
@@ -524,21 +652,21 @@ extension InAppViewController {
         
         tag = VisilabsInAppNotification.PayloadKey.closePopupActionType
         let closePopupActionType: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.backGround
         let backGround = ((self.form.rowBy(tag: tag) as? TextRow)?.value ?? "") as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.closeButtonColor
         let closeButtonColor: String = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.buttonTextColor
         let buttonTextColor = (self.form.rowBy(tag: tag) as TextRow?)!.value!  as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.buttonColor
         let buttonColor = (self.form.rowBy(tag: tag) as TextRow?)!.value!  as String
-
+        
         let miniIcon = (self.form.rowBy(tag: "miniIcon") as PickerInputRow<String>?)!.value!  as String
-
+        
         var imageUrlString: String? = ""
         if messageType == .mini {
             imageUrlString = InAppHelper.miniIconUrlFormat.replacingOccurrences(of: "#", with: miniIcon)
@@ -546,57 +674,57 @@ extension InAppViewController {
             tag = VisilabsInAppNotification.PayloadKey.imageUrlString
             imageUrlString = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
         }
-
+        
         tag = VisilabsInAppNotification.PayloadKey.closeButtonText
         let closeButtonText = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.alertType
         let alertType = ((self.form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
-
+        
         let promotionCode = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionCode)
-                                as TextRow?)!.value ?? ""
-
+                             as TextRow?)!.value ?? ""
+        
         let promotionTextColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promotionTextColor)
-                                    as TextRow?)!.value!  as String
-
+                                  as TextRow?)!.value!  as String
+        
         tag = VisilabsInAppNotification.PayloadKey.promotionBackgroundColor
         let promotionBackgroundColor = (self.form.rowBy(tag: tag)
-                                            as TextRow?)!.value!  as String
-
+                                        as TextRow?)!.value!  as String
+        
         tag = VisilabsInAppNotification.PayloadKey.numberColors
         let numberBgColor1 = (self.form.rowBy(tag: tag+"1") as TextRow?)!.value! as String
         let numberBgColor2 = (self.form.rowBy(tag: tag+"2") as TextRow?)!.value! as String
         let numberBgColor3 = (self.form.rowBy(tag: tag+"3") as TextRow?)!.value! as String
         let numberColors = [numberBgColor1, numberBgColor2, numberBgColor3]
-
+        
         tag = VisilabsInAppNotification.PayloadKey.waitingTime
         let waitingTime = ((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondPopupType
         rawValue = ((self.form.rowBy(tag: tag) as PickerInputRow<String>?)!.value!)
         let secondPopupType = VisilabsSecondPopupType.init(rawValue: rawValue)
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondPopupTitle
         let secondPopupTitle = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondPopupBody
         let secondBody = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondPopupBodyTextSize
         let secondBodyTextSize = "\((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)"
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondPopupButtonText
         let secondPopupButtonText = (self.form.rowBy(tag: tag) as TextRow?)!.value ?? ""
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondImageUrlString1
         let secondImg1 = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondImageUrlString2
         let secondImg2 = (self.form.rowBy(tag: tag) as URLRow?)?.value?.absoluteString
-
+        
         tag = VisilabsInAppNotification.PayloadKey.secondPopupMinPoint
         let minPoint = (self.form.rowBy(tag: tag) as TextRow?)!.value! as String
-
+        
         return VisilabsInAppNotification(actId: 0,
                                          type: messageType,
                                          messageTitle: messageTitle,
@@ -635,11 +763,175 @@ extension InAppViewController {
                                          secondPopupMinPoint: minPoint,
                                          position: .bottom)
     }
-
+    
     //swiftlint:disable function_body_length
-    func createScratchToWinModel() -> ScratchToWinModel? {
+    func createCarouselVisilabsInAppNotificationModel() -> VisilabsInAppNotification? {
         
-        return nil
+        var carouselItems = [VisilabsCarouselItem]()
+        
+        let carouselItemsJson = """
+[{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163449231.png","title":"Title","title_color":"#1b1e1f","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"4","body":"Text","body_color":"#081c2c","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#e7b3b3","promocode_text_color":"#ffffff","button_text":"BUTTON","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163546000.jpg","title":"Title","title_color":"#19181a","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#1e072b","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#dc1c1c","promocode_text_color":"#581180","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163750752.png","title":"Title","title_color":"#242727","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"","body_color":"","body_font_family":"","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"","promocode_type":"","cid":"","promotion_code":"","promocode_background_color":"","promocode_text_color":"","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"2","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"","title":"Title","title_color":"#000000","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#000000","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#db1b3e","promocode_text_color":"#0e832a","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"}]
+"""
+        
+        if let data = carouselItemsJson.data(using: .utf8) {
+            if let carouselItemsArray = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
+                for carouselItemDic in carouselItemsArray {
+                    if let carouselItem = VisilabsCarouselItem(JSONObject: carouselItemDic) {
+                        carouselItems.append(carouselItem)
+                    }
+                }
+            }
+        }
+        
+        print("carouselItems count = \(carouselItems.count)")
+
+        
+        return VisilabsInAppNotification(actId: 0,
+                                         type: .inappcarousel,
+                                         messageTitle: "messageTitle",
+                                         messageBody: "messageBody",
+                                         buttonText: "buttonText",
+                                         iosLink: "iosLink",
+                                         imageUrlString: "imageUrlString",
+                                         visitorData: nil,
+                                         visitData: nil,
+                                         queryString: nil,
+                                         messageTitleColor: "messageTitleColor",
+                                         messageTitleTextSize: nil,
+                                         messageBodyColor: "messageBodyColor",
+                                         messageBodyTextSize: "messageBodyTextSize",
+                                         fontFamily: "fontFamily",
+                                         customFont: "customFont",
+                                         closePopupActionType: "closePopupActionType" ,
+                                         backGround: "backGround",
+                                         closeButtonColor: "closeButtonColor",
+                                         buttonTextColor: "buttonTextColor",
+                                         buttonColor: "buttonColor",
+                                         alertType: "alertType",
+                                         closeButtonText: "closeButtonText",
+                                         promotionCode: "promotionCode",
+                                         promotionTextColor: "promotionTextColor",
+                                         promotionBackgroundColor: "promotionBackgroundColor",
+                                         numberColors: nil,
+                                         waitingTime: 0,
+                                         secondPopupType: nil,
+                                         secondPopupTitle: nil,
+                                         secondPopupBody: nil,
+                                         secondPopupBodyTextSize: nil,
+                                         secondPopupButtonText: nil,
+                                         secondImageUrlString1: nil,
+                                         secondImageUrlString2: nil,
+                                         secondPopupMinPoint: nil,
+                                         position: .bottom,
+                                         carouselItems: carouselItems)
+        
+    }
+    
+}
+
+
+extension InAppViewController: GalleryDisplacedViewsDataSource {
+
+    func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
+
+        return index < carouselItems.count ? carouselItems[index].imageView : nil
+    }
+}
+
+extension InAppViewController: GalleryItemsDataSource {
+
+    func itemCount() -> Int {
+
+        return carouselItems.count
     }
 
+    func provideGalleryItem(_ index: Int) -> GalleryItem {
+
+        return carouselItems[index].galleryItem
+    }
+}
+
+extension InAppViewController: GalleryItemsDelegate {
+
+    func removeGalleryItem(at index: Int) {
+
+        print("remove item at \(index)")
+
+        let imageView = carouselItems[index].imageView
+        imageView.removeFromSuperview()
+        carouselItems.remove(at: index)
+    }
+}
+
+
+// Some external custom UIImageView we want to show in the gallery
+class FLSomeAnimatedImage: UIImageView {
+}
+
+// Extend ImageBaseController so we get all the functionality for free
+class AnimatedViewController: ItemBaseController<FLSomeAnimatedImage> {
+}
+
+
+
+
+
+extension UIImageView: DisplaceableView {
+    
+}
+
+struct DataItem {
+
+    let imageView: UIImageView
+    let galleryItem: GalleryItem
+}
+
+
+
+
+
+class CounterView: UIView {
+
+    var count: Int
+    let countLabel = UILabel()
+    var currentIndex: Int {
+        didSet {
+            updateLabel()
+        }
+    }
+
+    init(frame: CGRect, currentIndex: Int, count: Int) {
+
+        self.currentIndex = currentIndex
+        self.count = count
+
+        super.init(frame: frame)
+
+        configureLabel()
+        updateLabel()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configureLabel() {
+
+        countLabel.textAlignment = .center
+        self.addSubview(countLabel)
+    }
+
+    func updateLabel() {
+
+        let stringTemplate = "%d of %d"
+        let countString = String(format: stringTemplate, arguments: [currentIndex + 1, count])
+
+        countLabel.attributedText = NSAttributedString(string: countString, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17), NSAttributedString.Key.foregroundColor: UIColor.white])
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        countLabel.frame = self.bounds
+    }
 }

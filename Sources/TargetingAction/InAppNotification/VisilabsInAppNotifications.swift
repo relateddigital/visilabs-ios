@@ -49,7 +49,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                         shownNotification = self.showFullNotification(notification)
                     case .halfScreenImage:
                         shownNotification = self.showHalfScreenNotification(notification)
-                    case .carousel:
+                    case .inappcarousel:
                         shownNotification = self.showCarousel(notification)
                     case .alert:
                         shownNotification = true
@@ -125,13 +125,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         return true
     }
     
-    func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
-        let carousel = VisilabsCarouselNotificationViewController(notification: notification)
-        carousel.delegate = self
-        carousel.show(animated: true)
-        return true
-    }
-    
     func showAlert(_ notification: VisilabsInAppNotification) {
         let title = notification.messageTitle?.removeEscapingCharacters()
         let message = notification.messageBody?.removeEscapingCharacters()
@@ -168,7 +161,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         }
     }
     
-    
+    func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
+        //let carousel = VisilabsCarouselNotificationViewController(notification: notification)
+        //carousel.delegate = self
+        //carousel.show(animated: true)
+        return true
+    }
     
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)

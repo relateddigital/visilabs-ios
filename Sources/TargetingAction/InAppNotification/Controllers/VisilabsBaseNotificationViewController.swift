@@ -18,6 +18,11 @@ protocol VisilabsNotificationViewControllerDelegate: AnyObject {
     // func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String)
 }
 
+public class VisilabsBasePageViewController: UIPageViewController {
+    
+    var notification: VisilabsInAppNotification?
+}
+
 class VisilabsBaseNotificationViewController: UIViewController {
     
     var notification: VisilabsInAppNotification?

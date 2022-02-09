@@ -25,11 +25,11 @@ public struct VisilabsProductStatNotifierViewModel: TargetingActionViewModel {
     var attributedString: NSAttributedString? = nil
     
     func getContentFont() -> UIFont {
-        return VisilabsInAppNotification.getFont(fontFamily: content_font_family, fontSize: content_text_size, style: .title2)
+        return VisilabsHelper.getFont(fontFamily: content_font_family, fontSize: content_text_size, style: .title2)
     }
     
     func getContentCountFont() -> UIFont {
-        return VisilabsInAppNotification.getFont(fontFamily: content_font_family, fontSize: contentcount_text_size, style: .title2)
+        return VisilabsHelper.getFont(fontFamily: content_font_family, fontSize: contentcount_text_size, style: .title2)
     }
     
     mutating func setAttributedString() {
