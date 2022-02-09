@@ -8,7 +8,7 @@
 import UIKit
 // swiftlint:disable type_body_length
 public class VisilabsInAppNotification {
-
+    
     public enum PayloadKey {
         public static let actId = "actid"
         public static let actionData = "actiondata"
@@ -48,8 +48,9 @@ public class VisilabsInAppNotification {
         public static let position = "pos"
         public static let customFont = "custom_font_family_ios"
         public static let closePopupActionType = "close_event_trigger"
+        public static let carouselItems = "carousel_items"
     }
-
+    
     let actId: Int
     let messageType: String
     let type: VisilabsInAppNotificationType
@@ -89,7 +90,8 @@ public class VisilabsInAppNotification {
     let previousPopupPoint: Double?
     let position: VisilabsHalfScreenPosition?
     let closePopupActionType : String?
-
+    public let carouselItems: [VisilabsCarouselItem]?
+    
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
@@ -128,7 +130,7 @@ public class VisilabsInAppNotification {
         }
         return data
     }()
-
+    
     let callToActionUrl: URL?
     var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
                                           size: CGFloat(12))
@@ -136,7 +138,7 @@ public class VisilabsInAppNotification {
                                          size: CGFloat(8))
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
-
+    
     public init(actId: Int,
                 type: VisilabsInAppNotificationType,
                 messageTitle: String?,
@@ -174,8 +176,9 @@ public class VisilabsInAppNotification {
                 secondImageUrlString2: String?,
                 secondPopupMinPoint: String?,
                 previousPopupPoint: Double? = nil,
-                position: VisilabsHalfScreenPosition?) {
-
+                position: VisilabsHalfScreenPosition?,
+                carouselItems: [VisilabsCarouselItem]? = nil) {
+        
         self.actId = actId
         self.messageType = type.rawValue
         self.type = type
@@ -209,9 +212,9 @@ public class VisilabsInAppNotification {
         self.buttonTextColor = UIColor(hex: buttonTextColor)
         self.buttonColor = UIColor(hex: buttonColor)
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
-
+        
         var callToActionUrl: URL?
         if let urlString = self.iosLink {
             callToActionUrl = URL(string: urlString)
@@ -233,13 +236,14 @@ public class VisilabsInAppNotification {
         self.secondImageUrlString2 = secondImageUrlString2
         self.secondPopupMinPoint = secondPopupMinPoint
         if !secondImageUrlString1.isNilOrWhiteSpace {
-            self.secondImageUrl1 = VisilabsInAppNotification.getImageUrl(secondImageUrlString1!, type: self.type)
+            self.secondImageUrl1 = VisilabsHelper.getImageUrl(secondImageUrlString1!, type: self.type)
         }
         if !secondImageUrlString2.isNilOrWhiteSpace {
-            self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(secondImageUrlString2!, type: self.type)
+            self.secondImageUrl2 = VisilabsHelper.getImageUrl(secondImageUrlString2!, type: self.type)
         }
         self.previousPopupPoint = previousPopupPoint
         self.position = position
+        self.carouselItems = carouselItems
         setFonts()
     }
     
@@ -249,23 +253,23 @@ public class VisilabsInAppNotification {
             VisilabsLogger.error("notification json object should not be nil")
             return nil
         }
-
+        
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
             VisilabsLogger.error("invalid \(PayloadKey.actId)")
             return nil
         }
-
+        
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
             VisilabsLogger.error("invalid \(PayloadKey.actionData)")
             return nil
         }
-
+        
         guard let messageType = actionData[PayloadKey.messageType] as? String,
               let type = VisilabsInAppNotificationType(rawValue: messageType) else {
-            VisilabsLogger.error("invalid \(PayloadKey.messageType)")
-            return nil
-        }
-
+                  VisilabsLogger.error("invalid \(PayloadKey.messageType)")
+                  return nil
+              }
+        
         self.actId = actId
         self.messageType = messageType
         self.type = type
@@ -300,14 +304,14 @@ public class VisilabsInAppNotification {
         } else {
             self.closeButtonColor = nil
         }
-
+        
         self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
         self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
-
+        
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
-
+        
         var callToActionUrl: URL?
         if let urlString = self.iosLink {
             callToActionUrl = URL(string: urlString)
@@ -321,7 +325,7 @@ public class VisilabsInAppNotification {
             self.numberColors = nil
         }
         self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
-
+        
         // Second Popup Variables
         if let secondType = actionData[PayloadKey.secondPopupType] as? String {
             self.secondPopupType = VisilabsSecondPopupType.init(rawValue: secondType)
@@ -335,10 +339,10 @@ public class VisilabsInAppNotification {
         self.secondImageUrlString1 = actionData[PayloadKey.secondImageUrlString1] as? String
         self.secondImageUrlString2 = actionData[PayloadKey.secondImageUrlString2] as? String
         if !secondImageUrlString1.isNilOrWhiteSpace {
-            self.secondImageUrl1 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+            self.secondImageUrl1 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
         if !secondImageUrlString2.isNilOrWhiteSpace {
-            self.secondImageUrl2 = VisilabsInAppNotification.getImageUrl(imageUrlString!, type: self.type)
+            self.secondImageUrl2 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
         self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
         self.previousPopupPoint = nil
@@ -350,69 +354,30 @@ public class VisilabsInAppNotification {
             self.position = .bottom
         }
         
+        var carouselItems = [VisilabsCarouselItem]()
+        
+        if let carouselItemObjects = object[PayloadKey.carouselItems] as? [[String: Any]] {
+            for carouselItemObject in carouselItemObjects {
+                if let carouselItem = VisilabsCarouselItem.init(JSONObject: carouselItemObject) {
+                    carouselItems.append(carouselItem)
+                }
+            }
+        }
+        self.carouselItems = carouselItems
+        
         setFonts()
     }
-
+    
     private func setFonts() {
-        self.messageTitleFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+        self.messageTitleFont = VisilabsHelper.getFont(fontFamily: self.fontFamily,
                                                                   fontSize: self.messageTitleTextSize,
                                                                   style: .title2, customFont: self.customFont)
-        self.messageBodyFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+        self.messageBodyFont = VisilabsHelper.getFont(fontFamily: self.fontFamily,
                                                                  fontSize: self.messageBodyTextSize,
                                                                  style: .body, customFont: self.customFont)
-        self.buttonTextFont = VisilabsInAppNotification.getFont(fontFamily: self.fontFamily,
+        self.buttonTextFont = VisilabsHelper.getFont(fontFamily: self.fontFamily,
                                                                 fontSize: self.messageBodyTextSize,
                                                                 style: .title2, customFont: self.customFont)
     }
 
-    static func getFont(fontFamily: String?, fontSize: String?, style: UIFont.TextStyle,customFont:String? = "") -> UIFont {
-        var size = style == .title2 ? 12 : 8
-        if let fSize = fontSize, let siz = Int(fSize), siz > 0 {
-            size += siz
-        }
-        var finalFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: style),
-                               size: CGFloat(size))
-        if let font = fontFamily {
-            if #available(iOS 13.0, *) {
-                var systemDesign: UIFontDescriptor.SystemDesign  = .default
-                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    systemDesign = .serif
-                } else if font.lowercased() == "monospace" {
-                    systemDesign = .monospaced
-                }
-                if let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
-                    .withDesign(systemDesign) {
-                    finalFont = UIFont(descriptor: fontDescriptor, size: CGFloat(size))
-                }
-            } else {
-                if font.lowercased() == "serif" || font.lowercased() == "sansserif" {
-                    let fontName = style == .title2 ? "GillSans-Bold": "GillSans"
-                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
-                } else if font.lowercased() == "monospace" {
-                    let fontName = style == .title2 ? "CourierNewPS-BoldMT": "CourierNewPSMT"
-                    finalFont = UIFont(name: fontName, size: CGFloat(size))!
-                }
-            }
-
-            if let uiCustomFont = UIFont(name: customFont ?? "", size: CGFloat(size)) {
-                return uiCustomFont
-            }
-       }
-        return finalFont
-    }
-
-    private static func getImageUrl(_ imageUrlString: String, type: VisilabsInAppNotificationType) -> URL? {
-        var imageUrl: URL?
-        var urlString = imageUrlString
-        if type == .mini {
-            urlString = imageUrlString.getUrlWithoutExtension() + "@2x." + imageUrlString.getUrlExtension()
-        }
-        if let escapedImageUrlString = urlString.addingPercentEncoding(withAllowedCharacters:
-                                                                     NSCharacterSet.urlQueryAllowed),
-           let imageUrlComponents = URLComponents(string: escapedImageUrlString),
-           let imageUrlParsed = imageUrlComponents.url {
-            imageUrl = imageUrlParsed
-        }
-        return imageUrl
-    }
 }

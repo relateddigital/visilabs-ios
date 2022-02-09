@@ -499,13 +499,13 @@ class VisilabsTargetingAction {
             parsedConsent = consent.parsePermissionText()
         }
         let parsedPermit = emailForm.emailPermitText.parsePermissionText()
-        let titleFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.titleFontFamily,
+        let titleFont = VisilabsHelper.getFont(fontFamily: emailForm.extendedProps.titleFontFamily,
                                                           fontSize: emailForm.extendedProps.titleTextSize,
                                                           style: .title2,customFont: emailForm.extendedProps.titleCustomFontFamilyIos)
-        let messageFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.textFontFamily,
+        let messageFont = VisilabsHelper.getFont(fontFamily: emailForm.extendedProps.textFontFamily,
                                                             fontSize: emailForm.extendedProps.textSize,
                                                             style: .body,customFont: emailForm.extendedProps.textCustomFontFamilyIos)
-        let buttonFont = VisilabsInAppNotification.getFont(fontFamily: emailForm.extendedProps.buttonFontFamily,
+        let buttonFont = VisilabsHelper.getFont(fontFamily: emailForm.extendedProps.buttonFontFamily,
                                                            fontSize: emailForm.extendedProps.buttonTextSize,
                                                            style: .title2,customFont: emailForm.extendedProps.buttonCustomFontFamilyIos)
         let closeButtonColor = getCloseButtonColor(from: emailForm.extendedProps.closeButtonColor)
