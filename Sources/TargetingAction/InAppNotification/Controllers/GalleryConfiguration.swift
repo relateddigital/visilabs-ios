@@ -59,26 +59,11 @@ public enum GalleryConfigurationItem {
     ///Option to set the Close button type.
     case closeButtonMode(ButtonMode)
     
-    ///Option to set the Close button type  within the Thumbnails screen.
-    case seeAllCloseButtonMode(ButtonMode)
-
-    ///Option to set the Thumbnails button type.
-    case thumbnailsButtonMode(ButtonMode)
-
-    ///Option to set the Delete button type.
-    case deleteButtonMode(ButtonMode)
 
     /// Layout behaviour for the Close button.
     case closeLayout(ButtonLayout)
 
-    /// Layout behaviour for the Close button within the Thumbnails screen.
-    case seeAllCloseLayout(ButtonLayout)
-    
-    /// Layout behaviour for the Thumbnails button.
-    case thumbnailsLayout(ButtonLayout)
 
-    /// Layout behaviour for the Delete button.
-    case deleteLayout(ButtonLayout)
 
     /// This spinner is shown when we page to an image page, but the image itself is still loading.
     case spinnerStyle(UIActivityIndicatorView.Style)
@@ -101,17 +86,8 @@ public enum GalleryConfigurationItem {
     ///Allows to turn on/off decoration views hiding via single tap.
     case toggleDecorationViewsBySingleTap(Bool)
 
-    ///Allows to uiactivityviewcontroller with itemview via long press.
-    case activityViewByLongPress(Bool)
-
     /// Allows you to select between different types of initial gallery presentation style
     case presentationStyle(GalleryPresentationStyle)
-
-    ///Allows to set maximum magnification factor for the image
-    case maximumZoomScale(CGFloat)
-
-    ///Sets the duration of the animation when item is double tapped and transitions between ScaleToAspectFit & ScaleToAspectFill sizes.
-    case doubleTapToZoomDuration(TimeInterval)
 
     ///Transition duration for the blur layer component of the overlay when Gallery is being presented.
     case blurPresentDuration(TimeInterval)
@@ -188,14 +164,6 @@ public enum GalleryConfigurationItem {
     ///Allows to set rotation support support with relation to rotation support in the hosting app.
     case rotationMode(GalleryRotationMode)
     
-    ///Allows the video player to automatically continue playing the next video
-    case continuePlayVideoOnEnd(Bool)
-
-    ///Allows auto play video after gallery presented
-    case videoAutoPlay(Bool)
-
-    ///Tint color of video controls
-    case videoControlsColor(UIColor)
 }
 
 public enum GalleryRotationMode {

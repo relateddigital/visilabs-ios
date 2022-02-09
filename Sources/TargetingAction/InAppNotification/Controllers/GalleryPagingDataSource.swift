@@ -16,13 +16,11 @@ final class GalleryPagingDataSource: NSObject, UIPageViewControllerDataSource {
     fileprivate let configuration: GalleryConfiguration
     fileprivate var pagingMode = GalleryPagingMode.standard
     fileprivate var itemCount: Int { return itemsDataSource?.itemCount() ?? 0 }
-    fileprivate unowned var scrubber: VideoScrubber
 
-    init(itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?, scrubber: VideoScrubber, configuration: GalleryConfiguration) {
+    init(itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?, configuration: GalleryConfiguration) {
 
         self.itemsDataSource = itemsDataSource
         self.displacedViewsDataSource = displacedViewsDataSource
-        self.scrubber = scrubber
         self.configuration = configuration
 
         if itemsDataSource.itemCount() > 1 { // Potential carousel mode present in configuration only makes sense for more than 1 item
@@ -84,14 +82,6 @@ final class GalleryPagingDataSource: NSObject, UIPageViewControllerDataSource {
 
             return imageController
 
-        case .video(let fetchImageBlock, let videoURL):
-
-            let videoController = VideoViewController(index: itemIndex, itemCount: itemsDataSource.itemCount(), fetchImageBlock: fetchImageBlock, videoURL: videoURL, scrubber: scrubber, configuration: configuration, isInitialController: isInitial)
-
-            videoController.delegate = itemControllerDelegate
-            videoController.displacedViewsDataSource = displacedViewsDataSource
-
-            return videoController
 
         case .custom(let fetchImageBlock, let itemViewControllerBlock):
 

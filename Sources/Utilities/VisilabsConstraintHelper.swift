@@ -136,9 +136,8 @@ public extension Constrainable {
         }
 
     // MARK: - LEADING/TRAILING FUNCTIONS
-    //TODO: public'i kaldır
     @discardableResult
-       public func leading(to view: Constrainable,
+    func leading(to view: Constrainable,
                     _ anchor: NSLayoutXAxisAnchor? = nil,
                     offset: CGFloat = 0,
                     relation: ConstraintRelation = .equal,
