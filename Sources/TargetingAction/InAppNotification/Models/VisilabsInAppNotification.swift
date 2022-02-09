@@ -68,7 +68,7 @@ public class VisilabsInAppNotification {
     let messageBodyTextSize: String?
     let fontFamily: String?
     let customFont: String?
-    let backGroundColor: UIColor?
+    public let backGroundColor: UIColor?
     let closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?

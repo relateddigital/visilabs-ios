@@ -10,6 +10,7 @@ import UIKit
 
 public protocol ItemView {
 
+    var label: UILabel? {get set}
     var image: UIImage? { get set }
 }
 
@@ -209,6 +210,19 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
 
                     var itemView = self?.itemView
                     itemView?.image = image
+                    
+                    //TODO: egemen ekledi
+                    if let scrollView = self?.scrollView {
+                        itemView?.contentMode = .scaleAspectFit
+                        itemView?.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 30.0).isActive = true
+                        itemView?.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -30.0).isActive = true
+                        itemView?.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+                        itemView?.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
+                        itemView?.translatesAutoresizingMaskIntoConstraints = false
+                        
+                    }
+                    
+                    
                     itemView?.isAccessibilityElement = image.isAccessibilityElement
                     itemView?.accessibilityLabel = image.accessibilityLabel
                     itemView?.accessibilityTraits = image.accessibilityTraits
@@ -888,9 +902,18 @@ class VideoView: UIView {
     }
 }
 
+extension VideoView: ItemView {
+    public var label: UILabel? {
+        get {
+            return nil
+        }
+        set {
+            
+        }
+    }
+    
+}
 
-
-extension VideoView: ItemView {}
 
 class VideoViewController: ItemBaseController<VideoView> {
 
@@ -1117,7 +1140,18 @@ class VideoViewController: ItemBaseController<VideoView> {
 }
 
 
-extension UIImageView: ItemView {}
+
+extension UIImageView: ItemView {
+    public var label: UILabel? {
+        get {
+            return nil
+        }
+        set {
+            
+        }
+    }
+    
+}
 
 class ImageViewController: ItemBaseController<UIImageView> {
 }
