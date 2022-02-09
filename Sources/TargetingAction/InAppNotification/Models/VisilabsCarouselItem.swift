@@ -44,17 +44,17 @@ public class VisilabsCarouselItem {
     public let titleCustomFontFamily: String?
     public let titleTextsize: String?
     public let body: String?
-    public let bodyColor: String?
+    public let bodyColor: UIColor?
     public let bodyFontFamily: String?
     public let bodyCustomFontFamily: String?
     public let bodyTextsize: String?
     public let promocodeType: String?
     public let promotionCode: String?
-    public let promocodeBackgroundColor: String?
-    public let promocodeTextColor: String?
+    public let promocodeBackgroundColor: UIColor?
+    public let promocodeTextColor: UIColor?
     public let buttonText: String?
-    public let buttonTextColor: String?
-    public let buttonColor: String?
+    public let buttonTextColor: UIColor?
+    public let buttonColor: UIColor?
     public let buttonFontFamily: String?
     public let buttonCustomFontFamily: String?
     public let buttonTextsize: String?
@@ -62,10 +62,14 @@ public class VisilabsCarouselItem {
     public let backgroundColor: UIColor?
     public let link: String?
     
+    var titleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
+    var bodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
+    var buttonFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
+    
     public init(imageUrlString: String?, title: String?, titleColor: String?, titleFontFamily: String?, titleCustomFontFamily: String?
-                ,titleTextsize: String?, body: String?, bodyColor: String?, bodyFontFamily: String?, bodyCustomFontFamily: String?
-                ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: String?
-                ,promocodeTextColor: String?, buttonText: String?, buttonTextColor: String?, buttonColor: String?
+                ,titleTextsize: String?, body: String?, bodyColor: UIColor?, bodyFontFamily: String?, bodyCustomFontFamily: String?
+                ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
+                ,promocodeTextColor: UIColor?, buttonText: String?, buttonTextColor: UIColor?, buttonColor: UIColor?
                 ,buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImage: String?
                 ,backgroundColor: UIColor?, link: String?) {
         self.imageUrlString = imageUrlString
@@ -96,8 +100,7 @@ public class VisilabsCarouselItem {
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
-        
-        
+        self.setFonts()
     }
     
     // swiftlint:disable function_body_length disable cyclomatic_complexity
@@ -114,17 +117,17 @@ public class VisilabsCarouselItem {
         self.titleCustomFontFamily = object[PayloadKey.title_custom_font_family_ios] as? String
         self.titleTextsize = object[PayloadKey.title_textsize] as? String
         self.body = object[PayloadKey.body] as? String
-        self.bodyColor = object[PayloadKey.body_color] as? String
+        self.bodyColor = UIColor(hex: object[PayloadKey.body_color] as? String)
         self.bodyFontFamily = object[PayloadKey.body_font_family] as? String
         self.bodyCustomFontFamily = object[PayloadKey.body_custom_font_family_ios] as? String
         self.bodyTextsize = object[PayloadKey.body_textsize] as? String
         self.promocodeType = object[PayloadKey.promocode_type] as? String
         self.promotionCode = object[PayloadKey.promotion_code] as? String
-        self.promocodeBackgroundColor = object[PayloadKey.promocode_background_color] as? String
-        self.promocodeTextColor = object[PayloadKey.promocode_text_color] as? String
+        self.promocodeBackgroundColor = UIColor(hex: object[PayloadKey.promocode_background_color] as? String)
+        self.promocodeTextColor = UIColor(hex: object[PayloadKey.promocode_text_color] as? String)
         self.buttonText = object[PayloadKey.button_text] as? String
-        self.buttonTextColor = object[PayloadKey.button_text_color] as? String
-        self.buttonColor = object[PayloadKey.button_color] as? String
+        self.buttonTextColor = UIColor(hex: object[PayloadKey.button_text_color] as? String)
+        self.buttonColor = UIColor(hex: object[PayloadKey.button_color] as? String)
         self.buttonFontFamily = object[PayloadKey.button_font_family] as? String
         self.buttonCustomFontFamily = object[PayloadKey.button_custom_font_family_ios] as? String
         self.buttonTextsize = object[PayloadKey.button_textsize] as? String
@@ -135,6 +138,7 @@ public class VisilabsCarouselItem {
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
+        self.setFonts()
     }
     
     var imageUrl: URL?
@@ -149,5 +153,14 @@ public class VisilabsCarouselItem {
         }
         return data
     }()
+    
+    private func setFonts() {
+        self.titleFont = VisilabsHelper.getFont(fontFamily: self.titleFontFamily, fontSize: self.titleTextsize
+                                                , style: .title2, customFont: self.titleCustomFontFamily)
+        self.bodyFont = VisilabsHelper.getFont(fontFamily: self.bodyFontFamily, fontSize: self.bodyTextsize
+                                               , style: .body, customFont: self.bodyCustomFontFamily)
+        self.buttonFont = VisilabsHelper.getFont(fontFamily: self.buttonFontFamily, fontSize: self.buttonTextsize
+                                                 , style: .title2, customFont: self.buttonCustomFontFamily)
+    }
 }
 

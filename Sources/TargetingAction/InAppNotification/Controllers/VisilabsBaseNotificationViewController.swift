@@ -20,7 +20,7 @@ protocol VisilabsNotificationViewControllerDelegate: AnyObject {
 
 public class VisilabsBasePageViewController: UIPageViewController {
     
-    var notification: VisilabsInAppNotification?
+    var notification: VisilabsInAppNotification? = nil
 }
 
 class VisilabsBaseNotificationViewController: UIViewController {

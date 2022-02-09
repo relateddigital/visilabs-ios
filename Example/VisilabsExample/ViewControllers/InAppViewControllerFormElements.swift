@@ -314,15 +314,17 @@ extension InAppViewController {
             
             for carousel in carouselModel!.carouselItems! {
                 
+                print("carousel: \(String(describing: carousel.body))")
+                
                 let imageView = UIImageView()
                 
                 let myFetchImageBlock: FetchImageBlock = { imageCompletion in
                     if let imageUrlString = carousel.imageUrlString,  let url = URL(string: imageUrlString)
                         , let imageData: Data = try? Data(contentsOf: url) {
                         let image = UIImage(data: imageData as Data)
-                        imageCompletion(image)
+                        imageCompletion(image, carousel)
                     } else {
-                        imageCompletion(nil)
+                        imageCompletion(nil, carousel)
                     }
                 }
                 
@@ -335,11 +337,8 @@ extension InAppViewController {
                 let label = UILabel()
                 label.text = UUID.init().uuidString
                 label.backgroundColor = .purple
-                
-                let customView = CustomView(frame: UIScreen.main.bounds, visilabsCarouselItem: carousel)
-                customView.image = imageView.image
-                
-                let dataItem = DataItem(imageView: imageView, customView: customView, galleryItem: galleryItem)
+        
+                let dataItem = DataItem(imageView: imageView, galleryItem: galleryItem)
                 self.carouselItems.append(dataItem)
             }
             
@@ -352,7 +351,7 @@ extension InAppViewController {
             let headerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
             let footerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
             
-            let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration())
+            let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration())
             galleryViewController.headerView = headerView
             galleryViewController.footerView = footerView
             
@@ -361,9 +360,7 @@ extension InAppViewController {
             galleryViewController.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
             
             galleryViewController.landedPageAtIndexCompletion = { index in
-                
                 print("LANDED AT INDEX: \(index)")
-                
                 headerView.count = self.carouselItems.count
                 headerView.currentIndex = index
                 footerView.count = self.carouselItems.count
@@ -373,7 +370,6 @@ extension InAppViewController {
             self.presentImageGallery(galleryViewController)
             
             
-            //self.showNotificationTapped()
         }
     }
     
@@ -383,25 +379,21 @@ extension InAppViewController {
             
             GalleryConfigurationItem.closeButtonMode(.builtIn),
             
-            GalleryConfigurationItem.pagingMode(.carousel),
+            GalleryConfigurationItem.pagingMode(.standard),
             GalleryConfigurationItem.presentationStyle(.displacement),
             GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
             
             GalleryConfigurationItem.swipeToDismissMode(.vertical),
             GalleryConfigurationItem.toggleDecorationViewsBySingleTap(false),
-            GalleryConfigurationItem.activityViewByLongPress(false),
             
             GalleryConfigurationItem.overlayColor(UIColor(white: 0.035, alpha: 1)),
-            GalleryConfigurationItem.overlayColorOpacity(0.5),
-            GalleryConfigurationItem.overlayBlurOpacity(0.5),
+            GalleryConfigurationItem.overlayColorOpacity(0.7),
+            GalleryConfigurationItem.overlayBlurOpacity(0.7),
             GalleryConfigurationItem.overlayBlurStyle(UIBlurEffect.Style.light),
             
-            GalleryConfigurationItem.videoControlsColor(.white),
             
-            GalleryConfigurationItem.maximumZoomScale(8),
             GalleryConfigurationItem.swipeToDismissThresholdVelocity(500),
             
-            GalleryConfigurationItem.doubleTapToZoomDuration(0.15),
             
             GalleryConfigurationItem.blurPresentDuration(0.5),
             GalleryConfigurationItem.blurPresentDelay(0),
@@ -787,9 +779,6 @@ extension InAppViewController: GalleryDisplacedViewsDataSource {
     
     func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
         return index < carouselItems.count ? carouselItems[index].imageView : nil
-        //TODO:egemen
-        //return index < carouselItems.count ? carouselItems[index].customView : nil
-        
     }
 }
 
@@ -806,19 +795,6 @@ extension InAppViewController: GalleryItemsDataSource {
     }
 }
 
-extension InAppViewController: GalleryItemsDelegate {
-    
-    func removeGalleryItem(at index: Int) {
-        
-        print("remove item at \(index)")
-        
-        let imageView = carouselItems[index].imageView
-        imageView.removeFromSuperview()
-        carouselItems.remove(at: index)
-    }
-}
-
-
 // Some external custom UIImageView we want to show in the gallery
 class FLSomeAnimatedImage: UIImageView {
 }
@@ -827,88 +803,6 @@ class FLSomeAnimatedImage: UIImageView {
 class AnimatedViewController: ItemBaseController<FLSomeAnimatedImage> {
 }
 
-
-
-
-/*
- extension UIImageView: DisplaceableView {
- 
- }
- */
-
-class CustomView: UIView, DisplaceableView, ItemView {
-    
-    public var label: UILabel? {
-        get {
-            return nil
-        }
-        set {
-            
-        }
-    }
-    
-    var image: UIImage? = nil
-    var imageView: UIImageView!
-    var visilabsCarouselItem: VisilabsCarouselItem?
-    
-    
-    init(){
-        super.init(frame: CGRect())
-    }
-    
-    init(frame: CGRect, visilabsCarouselItem: VisilabsCarouselItem) {
-        self.visilabsCarouselItem = visilabsCarouselItem
-        super.init(frame: frame)
-        //setupTitle()
-        if let imageData = visilabsCarouselItem.image, var image = UIImage(data: imageData, scale: 1) {
-            if let imageGif = UIImage.gif(data: imageData) {
-                image = imageGif
-            }
-            setupImageView(image: image)
-        }
-        //setCloseButton()
-        layoutContent()
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupImageView(image: UIImage) {
-        imageView = UIImageView(frame: .zero)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        //imageView.clipsToBounds = true
-        imageView.image = image
-        
-        
-        addSubview(imageView)
-    }
-    
-    private func layoutContent() {
-        self.backgroundColor = .orange
-        //self.backgroundColor = visilabsCarouselItem?.backgroundColor
-        //titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
-        //titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
-        //titleLabel.centerX(to: self,priority: .required)
-        //imageView?.topToBottom(of: self, offset: 0)
-        //imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
-        //imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
-        
-        //closeButton.top(to: self, offset: -5.0)
-        //closeButton.trailing(to: self, offset: -10.0)
-        
-        //self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
-        //self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true
-        self.layoutIfNeeded()
-    }
-    
-    
-    
-    
-    
-    
-}
 
 /*
  extension UIView: DisplaceableView {
@@ -919,7 +813,6 @@ class CustomView: UIView, DisplaceableView, ItemView {
 struct DataItem {
     
     let imageView: UIImageView
-    let customView: CustomView
     let galleryItem: GalleryItem
 }
 
@@ -972,3 +865,4 @@ class CounterView: UIView {
         countLabel.frame = self.bounds
     }
 }
+
