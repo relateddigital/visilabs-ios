@@ -59,7 +59,7 @@ public class VisilabsCarouselItem {
     public let buttonCustomFontFamily: String?
     public let buttonTextsize: String?
     public let backgroundImage: String?
-    public let backgroundColor: String?
+    public let backgroundColor: UIColor?
     public let link: String?
     
     public init(imageUrlString: String?, title: String?, titleColor: String?, titleFontFamily: String?, titleCustomFontFamily: String?
@@ -67,7 +67,7 @@ public class VisilabsCarouselItem {
                 ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: String?
                 ,promocodeTextColor: String?, buttonText: String?, buttonTextColor: String?, buttonColor: String?
                 ,buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImage: String?
-                ,backgroundColor:String?, link: String?) {
+                ,backgroundColor: UIColor?, link: String?) {
         self.imageUrlString = imageUrlString
         self.title = title
         self.titleColor = UIColor(hex: titleColor)
@@ -92,6 +92,12 @@ public class VisilabsCarouselItem {
         self.backgroundImage = backgroundImage
         self.backgroundColor = backgroundColor
         self.link = link
+        
+        if !imageUrlString.isNilOrWhiteSpace {
+            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
+        }
+        
+        
     }
     
     // swiftlint:disable function_body_length disable cyclomatic_complexity
@@ -123,8 +129,25 @@ public class VisilabsCarouselItem {
         self.buttonCustomFontFamily = object[PayloadKey.button_custom_font_family_ios] as? String
         self.buttonTextsize = object[PayloadKey.button_textsize] as? String
         self.backgroundImage = object[PayloadKey.background_image] as? String
-        self.backgroundColor = object[PayloadKey.background_color] as? String
+        self.backgroundColor = UIColor(hex: object[PayloadKey.background_color] as? String)
         self.link = object[PayloadKey.ios_lnk] as? String
+        
+        if !imageUrlString.isNilOrWhiteSpace {
+            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
+        }
     }
+    
+    var imageUrl: URL?
+    public lazy var image: Data? = {
+        var data: Data?
+        if let iUrl = self.imageUrl {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            }
+        }
+        return data
+    }()
 }
 

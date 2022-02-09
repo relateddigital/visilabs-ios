@@ -10,28 +10,36 @@ import UIKit
 
 internal typealias LayoutGuide = UILayoutGuide
 internal typealias ConstraintAxis = NSLayoutConstraint.Axis
-internal typealias LayoutPriority = UILayoutPriority
+
+//TODO: public'i kaldır
+public typealias LayoutPriority = UILayoutPriority
 
 internal typealias EdgeInsets = UIEdgeInsets
 
-internal typealias Constraint = NSLayoutConstraint
-internal typealias Constraints = [Constraint]
+//TODO: public'i kaldır
+public typealias Constraint = NSLayoutConstraint
+
+//TODO: public'i kaldır
+public typealias Constraints = [Constraint]
 
 extension UIView: Constrainable {
 
+    //TODO: public'i kaldır
     @discardableResult
-    internal func prepareForLayout() -> Self {
+    public func prepareForLayout() -> Self {
         translatesAutoresizingMaskIntoConstraints = false
         return self
     }
 }
 
 extension LayoutGuide: Constrainable {
+    //TODO: public'i kaldır
     @discardableResult
-    internal func prepareForLayout() -> Self { return self }
+    public func prepareForLayout() -> Self { return self }
 }
 
-internal protocol Constrainable {
+//TODO: public'i kaldır
+public protocol Constrainable {
     var topAnchor: NSLayoutYAxisAnchor { get }
     var bottomAnchor: NSLayoutYAxisAnchor { get }
     var leftAnchor: NSLayoutXAxisAnchor { get }
@@ -49,7 +57,8 @@ internal protocol Constrainable {
     func prepareForLayout() -> Self
 }
 
-internal enum Edge {
+//TODO: public'i kaldır
+public enum Edge {
     case top
     case leading
     case trailing

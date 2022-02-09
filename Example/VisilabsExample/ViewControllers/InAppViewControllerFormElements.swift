@@ -303,65 +303,6 @@ extension InAppViewController {
     
     
     
-    
-    /*
-     func addShowCountDownTimerButtonRow() -> ButtonRow {
-     return ButtonRow {
-     $0.title = "showCountDownTimer"
-     }.onCellSelection { _, _ in
-     let model = CountdownModel(title: "Fırsatı kaçırma",
-     subtitle: "bla bla bla bla",
-     buttonText: "Button'a bas",
-     coupon: nil,
-     finalDate: 1625097600,
-     bgColor: .blue,
-     titleColor: .white,
-     subtitleColor: .gray,
-     buttonColor: .red,
-     buttonTextColor: .white,
-     couponColor: nil,
-     couponBgColor: nil,
-     titleFont: .boldSystemFont(ofSize: 18),
-     subtitleFont: .italicSystemFont(ofSize: 15),
-     buttonFont: .systemFont(ofSize: 14),
-     couponFont: nil,
-     location: .bottom,
-     timerType: .DHMS,
-     closeButtonColor: .white)
-     let vc = CountdownTimerViewController(model: model)
-     vc.showNow(animated: true)
-     }
-     }
-     
-     
-     
-     func addShowSocialPoofButtonRow() -> ButtonRow {
-     return ButtonRow {
-     $0.title = "showSocialPoof"
-     }.onCellSelection { _, _ in
-     let model = VisilabsProductStatNotifierViewModel(text: "soctext", number: "5", location: .bottom, duration: .sec10, backgroundColor: .yellow
-     , textColor: .brown, numberColor: .green, textFont: .boldSystemFont(ofSize: 18)
-     , numberFont: .italicSystemFont(ofSize: 15), closeButtonColor: .white)
-     let vc = SocialProofViewController(model: model)
-     vc.showNow(animated: true)
-     }
-     }
-     
-     
-     func addShowHalfScreenButtonRow() -> ButtonRow {
-     return ButtonRow {
-     $0.title = "showHalfScreen"
-     }.onCellSelection { _, _ in
-     let model = HalfScreenModel(text: "tttt", location: .bottom, duration: 10, backgroundColor: .green, textColor: .brown, textFont: .boldSystemFont(ofSize: 18),  closeButtonColor: .white)
-     let vc = HalfScreenViewController(model: model)
-     vc.showNow(animated: true)
-     }
-     }
-     */
-    
-    
-    
-    
     func addShowCarouselNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
             $0.title = "showCarouselNotification"
@@ -384,14 +325,21 @@ extension InAppViewController {
                         imageCompletion(nil)
                     }
                 }
-
+                
                 let itemViewControllerBlock: ItemViewControllerBlock = { index, itemCount, fetchImageBlock, configuration, isInitialController in
-
+                    
                     return AnimatedViewController(index: index, itemCount: itemCount, fetchImageBlock: myFetchImageBlock, configuration: configuration, isInitialController: isInitialController)
                 }
-
+                
                 let galleryItem = GalleryItem.custom(fetchImageBlock: myFetchImageBlock, itemViewControllerBlock: itemViewControllerBlock)
-                let dataItem = DataItem(imageView: imageView, galleryItem: galleryItem)
+                let label = UILabel()
+                label.text = UUID.init().uuidString
+                label.backgroundColor = .purple
+                
+                let customView = CustomView(frame: UIScreen.main.bounds, visilabsCarouselItem: carousel)
+                customView.image = imageView.image
+                
+                let dataItem = DataItem(imageView: imageView, customView: customView, galleryItem: galleryItem)
                 self.carouselItems.append(dataItem)
             }
             
@@ -399,29 +347,29 @@ extension InAppViewController {
             
             
             let displacedViewIndex = 0
-
+            
             let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
             let headerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
             let footerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
-
+            
             let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, itemsDelegate: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration())
             galleryViewController.headerView = headerView
             galleryViewController.footerView = footerView
-
+            
             galleryViewController.launchedCompletion = { print("LAUNCHED") }
             galleryViewController.closedCompletion = { print("CLOSED") }
             galleryViewController.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
-
+            
             galleryViewController.landedPageAtIndexCompletion = { index in
-
+                
                 print("LANDED AT INDEX: \(index)")
-
+                
                 headerView.count = self.carouselItems.count
                 headerView.currentIndex = index
                 footerView.count = self.carouselItems.count
                 footerView.currentIndex = index
             }
-
+            
             self.presentImageGallery(galleryViewController)
             
             
@@ -430,50 +378,50 @@ extension InAppViewController {
     }
     
     func galleryConfiguration() -> GalleryConfiguration {
-
+        
         return [
-
+            
             GalleryConfigurationItem.closeButtonMode(.builtIn),
-
+            
             GalleryConfigurationItem.pagingMode(.carousel),
             GalleryConfigurationItem.presentationStyle(.displacement),
             GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
-
+            
             GalleryConfigurationItem.swipeToDismissMode(.vertical),
             GalleryConfigurationItem.toggleDecorationViewsBySingleTap(false),
             GalleryConfigurationItem.activityViewByLongPress(false),
-
+            
             GalleryConfigurationItem.overlayColor(UIColor(white: 0.035, alpha: 1)),
             GalleryConfigurationItem.overlayColorOpacity(0.5),
             GalleryConfigurationItem.overlayBlurOpacity(0.5),
             GalleryConfigurationItem.overlayBlurStyle(UIBlurEffect.Style.light),
             
             GalleryConfigurationItem.videoControlsColor(.white),
-
+            
             GalleryConfigurationItem.maximumZoomScale(8),
             GalleryConfigurationItem.swipeToDismissThresholdVelocity(500),
-
+            
             GalleryConfigurationItem.doubleTapToZoomDuration(0.15),
-
+            
             GalleryConfigurationItem.blurPresentDuration(0.5),
             GalleryConfigurationItem.blurPresentDelay(0),
             GalleryConfigurationItem.colorPresentDuration(0.25),
             GalleryConfigurationItem.colorPresentDelay(0),
-
+            
             GalleryConfigurationItem.blurDismissDuration(0.1),
             GalleryConfigurationItem.blurDismissDelay(0.4),
             GalleryConfigurationItem.colorDismissDuration(0.45),
             GalleryConfigurationItem.colorDismissDelay(0),
-
+            
             GalleryConfigurationItem.itemFadeDuration(0.3),
             GalleryConfigurationItem.decorationViewsFadeDuration(0.15),
             GalleryConfigurationItem.rotationDuration(0.15),
-
+            
             GalleryConfigurationItem.displacementDuration(0.55),
             GalleryConfigurationItem.reverseDisplacementDuration(0.25),
             GalleryConfigurationItem.displacementTransitionStyle(.springBounce(0.7)),
             GalleryConfigurationItem.displacementTimingCurve(.linear),
-
+            
             GalleryConfigurationItem.statusBarHidden(true),
             GalleryConfigurationItem.displacementKeepOriginalInPlace(false),
             GalleryConfigurationItem.displacementInsetMargin(50),
@@ -770,7 +718,7 @@ extension InAppViewController {
         var carouselItems = [VisilabsCarouselItem]()
         
         let carouselItemsJson = """
-[{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163449231.png","title":"Title","title_color":"#1b1e1f","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"4","body":"Text","body_color":"#081c2c","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#e7b3b3","promocode_text_color":"#ffffff","button_text":"BUTTON","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163546000.jpg","title":"Title","title_color":"#19181a","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#1e072b","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#dc1c1c","promocode_text_color":"#581180","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163750752.png","title":"Title","title_color":"#242727","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"","body_color":"","body_font_family":"","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"","promocode_type":"","cid":"","promotion_code":"","promocode_background_color":"","promocode_text_color":"","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"2","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"","title":"Title","title_color":"#000000","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#000000","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#db1b3e","promocode_text_color":"#0e832a","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"}]
+[{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163449231.png","title":"Title","title_color":"#1b1e1f","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"4","body":"Text","body_color":"#081c2c","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#e7b3b3","promocode_text_color":"#ffffff","button_text":"BUTTON","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163546000.jpg","title":"Title","title_color":"#19181a","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#1e072b","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#dc1c1c","promocode_text_color":"#581180","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220209142156924.png","title":"Title","title_color":"#242727","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"","body_color":"","body_font_family":"","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"","promocode_type":"","cid":"","promotion_code":"","promocode_background_color":"","promocode_text_color":"","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"2","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"","title":"Title","title_color":"#000000","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#000000","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#db1b3e","promocode_text_color":"#0e832a","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"}]
 """
         
         if let data = carouselItemsJson.data(using: .utf8) {
@@ -784,7 +732,7 @@ extension InAppViewController {
         }
         
         print("carouselItems count = \(carouselItems.count)")
-
+        
         
         return VisilabsInAppNotification(actId: 0,
                                          type: .inappcarousel,
@@ -830,33 +778,40 @@ extension InAppViewController {
 }
 
 
+
+extension UIImageView: DisplaceableView {
+    
+}
+
 extension InAppViewController: GalleryDisplacedViewsDataSource {
-
+    
     func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
-
         return index < carouselItems.count ? carouselItems[index].imageView : nil
+        //TODO:egemen
+        //return index < carouselItems.count ? carouselItems[index].customView : nil
+        
     }
 }
 
 extension InAppViewController: GalleryItemsDataSource {
-
+    
     func itemCount() -> Int {
-
+        
         return carouselItems.count
     }
-
+    
     func provideGalleryItem(_ index: Int) -> GalleryItem {
-
+        
         return carouselItems[index].galleryItem
     }
 }
 
 extension InAppViewController: GalleryItemsDelegate {
-
+    
     func removeGalleryItem(at index: Int) {
-
+        
         print("remove item at \(index)")
-
+        
         let imageView = carouselItems[index].imageView
         imageView.removeFromSuperview()
         carouselItems.remove(at: index)
@@ -875,14 +830,96 @@ class AnimatedViewController: ItemBaseController<FLSomeAnimatedImage> {
 
 
 
+/*
+ extension UIImageView: DisplaceableView {
+ 
+ }
+ */
 
-extension UIImageView: DisplaceableView {
+class CustomView: UIView, DisplaceableView, ItemView {
+    
+    public var label: UILabel? {
+        get {
+            return nil
+        }
+        set {
+            
+        }
+    }
+    
+    var image: UIImage? = nil
+    var imageView: UIImageView!
+    var visilabsCarouselItem: VisilabsCarouselItem?
+    
+    
+    init(){
+        super.init(frame: CGRect())
+    }
+    
+    init(frame: CGRect, visilabsCarouselItem: VisilabsCarouselItem) {
+        self.visilabsCarouselItem = visilabsCarouselItem
+        super.init(frame: frame)
+        //setupTitle()
+        if let imageData = visilabsCarouselItem.image, var image = UIImage(data: imageData, scale: 1) {
+            if let imageGif = UIImage.gif(data: imageData) {
+                image = imageGif
+            }
+            setupImageView(image: image)
+        }
+        //setCloseButton()
+        layoutContent()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupImageView(image: UIImage) {
+        imageView = UIImageView(frame: .zero)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        //imageView.clipsToBounds = true
+        imageView.image = image
+        
+        
+        addSubview(imageView)
+    }
+    
+    private func layoutContent() {
+        self.backgroundColor = .orange
+        //self.backgroundColor = visilabsCarouselItem?.backgroundColor
+        //titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
+        //titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+        //titleLabel.centerX(to: self,priority: .required)
+        //imageView?.topToBottom(of: self, offset: 0)
+        //imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
+        //imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+        
+        //closeButton.top(to: self, offset: -5.0)
+        //closeButton.trailing(to: self, offset: -10.0)
+        
+        //self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
+        //self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true
+        self.layoutIfNeeded()
+    }
+    
+    
+    
+    
+    
     
 }
 
-struct DataItem {
+/*
+ extension UIView: DisplaceableView {
+ 
+ }
+ */
 
+struct DataItem {
+    
     let imageView: UIImageView
+    let customView: CustomView
     let galleryItem: GalleryItem
 }
 
@@ -891,7 +928,7 @@ struct DataItem {
 
 
 class CounterView: UIView {
-
+    
     var count: Int
     let countLabel = UILabel()
     var currentIndex: Int {
@@ -899,39 +936,39 @@ class CounterView: UIView {
             updateLabel()
         }
     }
-
+    
     init(frame: CGRect, currentIndex: Int, count: Int) {
-
+        
         self.currentIndex = currentIndex
         self.count = count
-
+        
         super.init(frame: frame)
-
+        
         configureLabel()
         updateLabel()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     func configureLabel() {
-
+        
         countLabel.textAlignment = .center
         self.addSubview(countLabel)
     }
-
+    
     func updateLabel() {
-
+        
         let stringTemplate = "%d of %d"
         let countString = String(format: stringTemplate, arguments: [currentIndex + 1, count])
-
+        
         countLabel.attributedText = NSAttributedString(string: countString, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17), NSAttributedString.Key.foregroundColor: UIColor.white])
     }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         countLabel.frame = self.bounds
     }
 }

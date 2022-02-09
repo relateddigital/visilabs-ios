@@ -8,11 +8,12 @@
 import Foundation
 import UIKit
 
-internal extension Constrainable {
+//TODO: public'i kaldır
+public extension Constrainable {
 
     // MARK: - SIZE FUNCTIONS
     @discardableResult
-    func size(_ size: CGSize,
+    internal func size(_ size: CGSize,
               relation: ConstraintRelation = .equal,
               priority: LayoutPriority = .required,
               isActive: Bool = true) -> Constraints {
@@ -135,8 +136,9 @@ internal extension Constrainable {
         }
 
     // MARK: - LEADING/TRAILING FUNCTIONS
+    //TODO: public'i kaldır
     @discardableResult
-       func leading(to view: Constrainable,
+       public func leading(to view: Constrainable,
                     _ anchor: NSLayoutXAxisAnchor? = nil,
                     offset: CGFloat = 0,
                     relation: ConstraintRelation = .equal,
@@ -157,8 +159,9 @@ internal extension Constrainable {
            }
        }
 
+    //TODO: public'i kaldır
     @discardableResult
-        func trailing(to view: Constrainable,
+        public func trailing(to view: Constrainable,
                       _ anchor: NSLayoutXAxisAnchor? = nil,
                       offset: CGFloat = 0,
                       relation: ConstraintRelation = .equal,
