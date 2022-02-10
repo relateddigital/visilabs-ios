@@ -64,21 +64,12 @@ final class GalleryPagingDataSource: NSObject, UIPageViewControllerDataSource {
     }
 
     func createItemController(_ itemIndex: Int, isInitial: Bool = false) -> UIViewController {
-
         guard let itemsDataSource = itemsDataSource else { return UIViewController() }
-
         let item = itemsDataSource.provideGalleryItem(itemIndex)
-
-        switch item {
-
-        case .image(let fetchImageBlock):
-
-            let imageController = ImageViewController(index: itemIndex, itemCount: itemsDataSource.itemCount(), fetchImageBlock: fetchImageBlock, configuration: configuration, isInitialController: isInitial)
-            imageController.delegate = itemControllerDelegate
-            imageController.displacedViewsDataSource = displacedViewsDataSource
-
-            return imageController
-        }
+        let imageController = ItemBaseController(index: itemIndex, itemCount: itemsDataSource.itemCount(), fetchImageBlock: item.fetchImageBlock, visilabsCarouselItemView: item.visilabsCarouselItemView, configuration: configuration, isInitialController: isInitial)
+        imageController.delegate = itemControllerDelegate
+        imageController.displacedViewsDataSource = displacedViewsDataSource
+        return imageController
     }
 }
 

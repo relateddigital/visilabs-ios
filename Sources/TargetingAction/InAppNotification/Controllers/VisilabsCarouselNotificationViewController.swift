@@ -6,16 +6,19 @@
 //
 
 import UIKit
-import AVFoundation
 
 public typealias ImageCompletion = (UIImage?, VisilabsCarouselItem) -> Void
 public typealias FetchImageBlock = (@escaping ImageCompletion) -> Void
 
-public enum GalleryItem {
+public struct VisilabsCarouselItemBlock {
+    public var fetchImageBlock: FetchImageBlock
+    public var visilabsCarouselItemView: VisilabsCarouselItemView
     
-    case image(fetchImageBlock: FetchImageBlock)
+    public init(fetchImageBlock: @escaping FetchImageBlock, visilabsCarouselItemView: VisilabsCarouselItemView) {
+        self.fetchImageBlock = fetchImageBlock
+        self.visilabsCarouselItemView = visilabsCarouselItemView
+    }
 }
-
 
 typealias Duration = TimeInterval
 
@@ -68,7 +71,7 @@ public protocol ItemControllerDelegate: AnyObject {
 
 public protocol GalleryItemsDataSource: AnyObject {
     func itemCount() -> Int
-    func provideGalleryItem(_ index: Int) -> GalleryItem
+    func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock
 }
 
 public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewController, ItemControllerDelegate {
@@ -124,7 +127,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     @available(*, unavailable)
     required public init?(coder: NSCoder) { fatalError() }
     
-    public init(startIndex: Int, itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource? = nil, configuration: GalleryConfiguration = []) {
+    public init(startIndex: Int, itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource? = nil, configuration: GalleryConfiguration = [], notification: VisilabsInAppNotification) {
         
         self.currentIndex = startIndex
         self.itemsDataSource = itemsDataSource
@@ -177,6 +180,9 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         super.init(transitionStyle: UIPageViewController.TransitionStyle.scroll,
                    navigationOrientation: UIPageViewController.NavigationOrientation.horizontal,
                    options: [UIPageViewController.OptionsKey.interPageSpacing : NSNumber(value: spineDividerWidth as Float)])
+        
+        
+        self.notification = notification
         
         pagingDataSource.itemControllerDelegate = self
         

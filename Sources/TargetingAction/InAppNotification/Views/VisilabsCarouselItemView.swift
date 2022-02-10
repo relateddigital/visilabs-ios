@@ -31,10 +31,12 @@ public class VisilabsCarouselItemView: UIView {
     var expanded = false
     var sctwMail: String = ""
 
+    
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
         set { titleLabel.font = newValue }
     }
+    
 
     @objc public dynamic var titleColor: UIColor? {
         get { return titleLabel.textColor }
@@ -74,7 +76,7 @@ public class VisilabsCarouselItemView: UIView {
     weak var delegate: VisilabsPopupDialogDefaultViewDelegate?
     
     // MARK: - CONSTRUCTOR
-    init(frame: CGRect, visilabsCarouselItem: VisilabsCarouselItem?) {
+    public init(frame: CGRect, visilabsCarouselItem: VisilabsCarouselItem?) {
         self.visilabsCarouselItem = visilabsCarouselItem
         super.init(frame: frame)
         if self.visilabsCarouselItem != nil {
@@ -96,20 +98,7 @@ public class VisilabsCarouselItemView: UIView {
 
         var constraints = [NSLayoutConstraint]()
 
-        /*
-        switch notification.type {
-        case .imageButton, .fullImage:
-            imageView.allEdges(to: self)
-        case .imageTextButton:
-            setupForImageTextButton()
-        case .imageButtonImage:
-            setupForImageButtonImage()
-        default:
-            setupForDefault()
-        }
-         */
-        
-        setupForDefault()
+        setupForImageTextButton()
 
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
             attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
@@ -211,16 +200,6 @@ extension VisilabsCarouselItemView {
         return label
     }
 
-    internal func setNumberRating() -> UICollectionView {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 60.0
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(RatingCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        return cv
-    }
-
     internal func setImageButton() -> UIButton {
         let button = UIButton(frame: .zero)
         button.backgroundColor = self.visilabsCarouselItem?.buttonColor ?? .black
@@ -320,7 +299,6 @@ extension VisilabsCarouselItemView {
            let _ = self.visilabsCarouselItem?.promocodeBackgroundColor,
            let _ = self.visilabsCarouselItem?.promocodeTextColor,
            !promo.isEmpty {
-
             addSubview(copyCodeTextButton)
             addSubview(copyCodeImageButton)
             copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
@@ -360,6 +338,7 @@ extension VisilabsCarouselItemView {
     internal func setupForDefault() {
         addSubview(titleLabel)
         addSubview(messageLabel)
+        addSubview(imageButton)
 
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 8.0)

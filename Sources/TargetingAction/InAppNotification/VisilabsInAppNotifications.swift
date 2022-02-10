@@ -162,7 +162,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
     
     func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
-        //let carousel = VisilabsCarouselNotificationViewController(notification: notification)
+        
+        //let carousel = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration(), notification: notification)
         //carousel.delegate = self
         //carousel.show(animated: true)
         return true
