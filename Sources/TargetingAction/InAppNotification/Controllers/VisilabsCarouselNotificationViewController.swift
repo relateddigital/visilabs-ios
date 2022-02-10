@@ -10,12 +10,10 @@ import AVFoundation
 
 public typealias ImageCompletion = (UIImage?, VisilabsCarouselItem) -> Void
 public typealias FetchImageBlock = (@escaping ImageCompletion) -> Void
-public typealias ItemViewControllerBlock = (_ index: Int, _ itemCount: Int, _ fetchImageBlock: FetchImageBlock, _ configuration: GalleryConfiguration, _ isInitialController: Bool) -> UIViewController
 
 public enum GalleryItem {
     
     case image(fetchImageBlock: FetchImageBlock)
-    case custom(fetchImageBlock: FetchImageBlock, itemViewControllerBlock: ItemViewControllerBlock)
 }
 
 
@@ -98,7 +96,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     fileprivate let pagingDataSource: GalleryPagingDataSource
     
     // CONFIGURATION
-    fileprivate var spineDividerWidth:         Float = 10
+    fileprivate var spineDividerWidth:         Float = 30
     fileprivate var galleryPagingMode = GalleryPagingMode.standard
     fileprivate var headerLayout = HeaderLayout.center(25)
     fileprivate var footerLayout = FooterLayout.center(25)
@@ -208,11 +206,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc func didEndPlaying() {
-        page(toIndex: currentIndex+1)
-    }
-    
-    
     fileprivate func configureOverlayView() {
         
         overlayView.bounds.size = UIScreen.main.bounds.insetBy(dx: -UIScreen.main.bounds.width / 2, dy: -UIScreen.main.bounds.height / 2).size
@@ -231,7 +224,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     fileprivate func configureFooterView() {
-        
         if let footer = footerView {
             footer.alpha = 0
             self.view.addSubview(footer)
@@ -239,7 +231,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     fileprivate func configureCloseButton() {
-        
         if let closeButton = closeButton {
             closeButton.addTarget(self, action: #selector(VisilabsCarouselNotificationViewController.closeInteractively), for: .touchUpInside)
             closeButton.alpha = 0
@@ -483,6 +474,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
             self?.view.transform = windowRotationTransform()
             self?.view.bounds = rotationAdjustedBounds()
             self?.view.setNeedsLayout()
+            
             self?.view.layoutIfNeeded()
             
         })
