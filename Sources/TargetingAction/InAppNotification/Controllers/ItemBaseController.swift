@@ -164,7 +164,13 @@ open class ItemBaseController<T: UIImageView>: UIViewController, ItemController,
                         itemView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
                         itemView.translatesAutoresizingMaskIntoConstraints = false
                         
+                        //let labelView = UILabel()
+                        //labelView.text = carouselItem.title
                         
+                        //scrollView.addSubview(labelView)
+                        
+                        //labelView.widthAnchor.constraint(equalTo: itemView.widthAnchor).isActive = true
+                        //labelView.topAnchor.constraint(equalTo: itemView.bottomAnchor).isActive = true
                     }
                     
                     

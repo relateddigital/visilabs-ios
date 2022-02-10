@@ -18,15 +18,12 @@ final class GalleryPagingDataSource: NSObject, UIPageViewControllerDataSource {
     fileprivate var itemCount: Int { return itemsDataSource?.itemCount() ?? 0 }
 
     init(itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?, configuration: GalleryConfiguration) {
-
         self.itemsDataSource = itemsDataSource
         self.displacedViewsDataSource = displacedViewsDataSource
         self.configuration = configuration
-
+        //TODO: egemen buna bak sonra. tek elemanlı carousel olabilir mi?
         if itemsDataSource.itemCount() > 1 { // Potential carousel mode present in configuration only makes sense for more than 1 item
-
             for item in configuration {
-
                 switch item {
 
                 case .pagingMode(let mode): pagingMode = mode

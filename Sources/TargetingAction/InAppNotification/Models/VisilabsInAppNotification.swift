@@ -69,7 +69,7 @@ public class VisilabsInAppNotification {
     let fontFamily: String?
     let customFont: String?
     public let backGroundColor: UIColor?
-    let closeButtonColor: UIColor?
+    var closeButtonColor: UIColor? = nil
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?
     let alertType: String?
@@ -293,17 +293,19 @@ public class VisilabsInAppNotification {
         self.promotionCode = actionData[PayloadKey.promotionCode] as? String
         self.promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
         self.promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
+        var closeButtonColor: UIColor? = nil
         if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
             if cBColor.lowercased() == "white" {
-                self.closeButtonColor = UIColor.white
+                closeButtonColor = UIColor.white
             } else if cBColor.lowercased() == "black" {
-                self.closeButtonColor = UIColor.black
+                closeButtonColor = UIColor.black
             } else {
-                self.closeButtonColor = UIColor(hex: cBColor)
+                closeButtonColor = UIColor(hex: cBColor)
             }
         } else {
-            self.closeButtonColor = nil
+            closeButtonColor = nil
         }
+        self.closeButtonColor = closeButtonColor
         
         self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
         self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
@@ -358,12 +360,17 @@ public class VisilabsInAppNotification {
         
         if let carouselItemObjects = object[PayloadKey.carouselItems] as? [[String: Any]] {
             for carouselItemObject in carouselItemObjects {
+                //carouselItemObject[VisilabsCarouselItem.PayloadKey.close_button_color] = actionData[PayloadKey.closeButtonColor] as? String
                 if let carouselItem = VisilabsCarouselItem.init(JSONObject: carouselItemObject) {
                     carouselItems.append(carouselItem)
                 }
             }
         }
-        self.carouselItems = carouselItems
+        
+        self.carouselItems = carouselItems.map { (item) -> VisilabsCarouselItem in
+            item.closeButtonColor = closeButtonColor
+            return item
+        }
         
         setFonts()
     }
