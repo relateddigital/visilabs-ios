@@ -35,6 +35,7 @@ public class VisilabsCarouselItem {
         public static let background_image = "background_image"
         public static let background_color = "background_color"
         public static let ios_lnk = "ios_lnk"
+        public static let close_button_color = "close_button_color"
     }
     
     public let imageUrlString: String?
@@ -61,6 +62,7 @@ public class VisilabsCarouselItem {
     public let backgroundImage: String?
     public let backgroundColor: UIColor?
     public let link: String?
+    public var closeButtonColor: UIColor?
     
     var titleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
     var bodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
@@ -71,7 +73,7 @@ public class VisilabsCarouselItem {
                 ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
                 ,promocodeTextColor: UIColor?, buttonText: String?, buttonTextColor: UIColor?, buttonColor: UIColor?
                 ,buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImage: String?
-                ,backgroundColor: UIColor?, link: String?) {
+                ,backgroundColor: UIColor?, link: String?, closeButtonColor: UIColor?) {
         self.imageUrlString = imageUrlString
         self.title = title
         self.titleColor = UIColor(hex: titleColor)
@@ -100,6 +102,7 @@ public class VisilabsCarouselItem {
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
+        self.closeButtonColor = closeButtonColor
         self.setFonts()
     }
     
@@ -138,6 +141,7 @@ public class VisilabsCarouselItem {
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
+        self.closeButtonColor = UIColor(hex: object[PayloadKey.close_button_color] as? String)
         self.setFonts()
     }
     
