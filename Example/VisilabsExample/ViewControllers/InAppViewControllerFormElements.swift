@@ -308,11 +308,14 @@ extension InAppViewController {
             $0.title = "showCarouselNotification"
         }.onCellSelection { _, _ in
             
-            let carouselModel = self.createCarouselVisilabsInAppNotificationModel()
+            guard let notification = self.createCarouselVisilabsInAppNotificationModel() else {
+                print("showCarouselNotification carouselModel is nil")
+                return
+            }
             
             self.carouselItems = [DataItem]()
             
-            for carousel in carouselModel!.carouselItems! {
+            for carousel in notification.carouselItems! {
                 
                 print("carousel: \(String(describing: carousel.body))")
                 
@@ -326,7 +329,7 @@ extension InAppViewController {
                     }
                 }
                 
-                let galleryItem = GalleryItem.image(fetchImageBlock: myFetchImageBlock)
+                let galleryItem = VisilabsCarouselItemBlock(fetchImageBlock: myFetchImageBlock, visilabsCarouselItemView: VisilabsCarouselItemView(frame: .zero, visilabsCarouselItem: carousel))
                 let dataItem = DataItem(imageView: UIImageView(), galleryItem: galleryItem)
                 self.carouselItems.append(dataItem)
             }
@@ -340,7 +343,7 @@ extension InAppViewController {
             let headerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
             let footerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
             
-            let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration())
+            let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration(), notification: notification)
             galleryViewController.headerView = headerView
             galleryViewController.footerView = footerView
             
@@ -405,7 +408,7 @@ extension InAppViewController {
             
             GalleryConfigurationItem.statusBarHidden(true),
             GalleryConfigurationItem.displacementKeepOriginalInPlace(false),
-            GalleryConfigurationItem.displacementInsetMargin(50),
+            GalleryConfigurationItem.displacementInsetMargin(0),
             
             GalleryConfigurationItem.imageDividerWidth(CGFloat(30.0)) //TODO:egemen
         ]
@@ -699,7 +702,7 @@ extension InAppViewController {
         var carouselItems = [VisilabsCarouselItem]()
         
         let carouselItemsJson = """
-[{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163449231.png","title":"Title","title_color":"#1b1e1f","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"4","body":"Text","body_color":"#081c2c","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#e7b3b3","promocode_text_color":"#ffffff","button_text":"BUTTON","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163546000.jpg","title":"Title","title_color":"#19181a","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#1e072b","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#dc1c1c","promocode_text_color":"#581180","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220209142156924.png","title":"Title","title_color":"#242727","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"","body_color":"","body_font_family":"","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"","promocode_type":"","cid":"","promotion_code":"","promocode_background_color":"","promocode_text_color":"","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"2","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"","title":"Title","title_color":"#000000","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#000000","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#db1b3e","promocode_text_color":"#0e832a","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"}]
+[{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163449231.png","title":"Title","title_color":"#1b1e1f","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"4","body":"Text","body_color":"#081c2c","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#e7b3b3","promocode_text_color":"#ffffff","button_text":"BUTTON","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220204163546000.jpg","title":"Title","title_color":"#19181a","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#1e072b","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#dc1c1c","promocode_text_color":"#581180","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"https://imgvisilabsnet.azureedge.net/in-app-message/uploaded_images/test/112_885_161_20220209142156924.png","title":"Title","title_color":"#242727","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"","body_color":"","body_font_family":"","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"","promocode_type":"","cid":"","promotion_code":"","promocode_background_color":"","promocode_text_color":"","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"2","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"},{"image":"","title":"Title 4","title_color":"#000000","title_font_family":"sansserif","title_custom_font_family_ios":"","title_custom_font_family_android":"","title_textsize":"3","body":"Text","body_color":"#000000","body_font_family":"sansserif","body_custom_font_family_ios":"","body_custom_font_family_android":"","body_textsize":"3","promocode_type":"staticcode","cid":"","promotion_code":"Copy Code","promocode_background_color":"#db1b3e","promocode_text_color":"#0e832a","button_text":"Button","button_text_color":"#ffffff","button_color":"#000000","button_font_family":"sansserif","button_custom_font_family_ios":"","button_custom_font_family_android":"","button_textsize":"3","background_image":"","background_color":"#ffffff","ios_lnk":"https://www.relateddigital.com/","android_lnk":"https://www.relateddigital.com/"}]
 """
         
         if let data = carouselItemsJson.data(using: .utf8) {
@@ -775,12 +778,10 @@ extension InAppViewController: GalleryDisplacedViewsDataSource {
 extension InAppViewController: GalleryItemsDataSource {
     
     func itemCount() -> Int {
-        
         return carouselItems.count
     }
     
-    func provideGalleryItem(_ index: Int) -> GalleryItem {
-        
+    func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock {
         return carouselItems[index].galleryItem
     }
 }
@@ -789,7 +790,7 @@ extension InAppViewController: GalleryItemsDataSource {
 struct DataItem {
     
     let imageView: UIImageView
-    let galleryItem: GalleryItem
+    let galleryItem: VisilabsCarouselItemBlock
 }
 
 

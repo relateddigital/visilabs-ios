@@ -8,42 +8,7 @@
 
 import UIKit
 
-func contentCenter(forBoundingSize boundingSize: CGSize, contentSize: CGSize) -> CGPoint {
 
-    /// When the zoom scale changes i.e. the image is zoomed in or out, the hypothetical center
-    /// of content view changes too. But the default Apple implementation is keeping the last center
-    /// value which doesn't make much sense. If the image ratio is not matching the screen
-    /// ratio, there will be some empty space horizontally or vertically. This needs to be calculated
-    /// so that we can get the correct new center value. When these are added, edges of contentView
-    /// are aligned in realtime and always aligned with corners of scrollView.
-
-    let horizontalOffset = (boundingSize.width > contentSize.width) ? ((boundingSize.width - contentSize.width) * 0.5): 0.0
-    let verticalOffset   = (boundingSize.height > contentSize.height) ? ((boundingSize.height - contentSize.height) * 0.5): 0.0
-
-    return CGPoint(x: contentSize.width * 0.5 + horizontalOffset, y: contentSize.height * 0.5 + verticalOffset)
-}
-
-func zoomRect(ForScrollView scrollView: UIScrollView, scale: CGFloat, center: CGPoint) -> CGRect {
-
-    let width = scrollView.frame.size.width  / scale
-    let height = scrollView.frame.size.height / scale
-    let originX = center.x - (width / 2.0)
-    let originY = center.y - (height / 2.0)
-
-    return CGRect(x: originX, y: originY, width: width, height: height)
-}
-
-func screenshotFromView(_ view: UIView) -> UIImage {
-
-    let image: UIImage
-
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
-    view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
-    image = UIGraphicsGetImageFromCurrentImageContext()!
-    UIGraphicsEndImageContext()
-
-    return image
-}
 
 // the transform needed to rotate a view that matches device screen orientation to match window orientation.
 func windowRotationTransform() -> CGAffineTransform {
@@ -94,11 +59,6 @@ func rotationAdjustedBounds() -> CGRect {
     return window.bounds
 }
 
-func maximumZoomScale(forBoundingSize boundingSize: CGSize, contentSize: CGSize) -> CGFloat {
-
-    /// we want to allow the image to always cover 4x the area of screen
-    return min(boundingSize.width, boundingSize.height) / min(contentSize.width, contentSize.height) * 4
-}
 
 func rotationAdjustedCenter(_ view: UIView) -> CGPoint {
 
