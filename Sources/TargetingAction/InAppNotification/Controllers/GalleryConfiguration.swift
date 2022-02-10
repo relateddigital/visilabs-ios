@@ -59,17 +59,8 @@ public enum GalleryConfigurationItem {
     ///Option to set the Close button type.
     case closeButtonMode(ButtonMode)
     
-
     /// Layout behaviour for the Close button.
     case closeLayout(ButtonLayout)
-
-
-
-    /// This spinner is shown when we page to an image page, but the image itself is still loading.
-    case spinnerStyle(UIActivityIndicatorView.Style)
-
-    /// Tint color for the spinner.
-    case spinnerColor(UIColor)
 
     /// Layout behaviour for optional header view.
     case headerViewLayout(HeaderLayout)

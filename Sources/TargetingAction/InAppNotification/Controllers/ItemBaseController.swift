@@ -9,16 +9,14 @@
 import UIKit
 
 public protocol ItemView {
-
     var image: UIImage? { get set }
 }
 
-open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGestureRecognizerDelegate, UIScrollViewDelegate where T: ItemView {
+open class ItemBaseController<T: UIImageView>: UIViewController, ItemController, UIGestureRecognizerDelegate, UIScrollViewDelegate {
 
     //UI
     public var itemView = T()
     let scrollView = UIScrollView()
-    let activityIndicatorView = UIActivityIndicatorView(style: .white)
 
     //DELEGATE / DATASOURCE
     weak public var delegate:                 ItemControllerDelegate?
@@ -78,13 +76,9 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
             case .displacementKeepOriginalInPlace(let keep):        displacementKeepOriginalInPlace = keep
             case .displacementInsetMargin(let margin):              displacementInsetMargin = margin
             case .swipeToDismissMode(let mode):                     swipeToDismissMode = mode
-            case .spinnerColor(let color):                          activityIndicatorView.color = color
-            case .spinnerStyle(let style):                          activityIndicatorView.style = style
 
             case .displacementTransitionStyle(let style):
-
                 switch style {
-
                 case .springBounce(let bounce):                     displacementSpringBounce = bounce
                 case .normal:                                       displacementSpringBounce = 1
                 }
@@ -102,14 +96,12 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
         configureScrollView()
         configureGestureRecognizers()
 
-        activityIndicatorView.hidesWhenStopped = true
     }
 
     @available (*, unavailable)
     required public init?(coder aDecoder: NSCoder) { fatalError() }
 
     deinit {
-
         self.scrollView.removeObserver(self, forKeyPath: "contentOffset")
     }
 
@@ -119,19 +111,16 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
 
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
-        scrollView.decelerationRate = UIScrollView.DecelerationRate.fast
+        scrollView.decelerationRate = UIScrollView.DecelerationRate.normal
         scrollView.contentInset = UIEdgeInsets.zero
         scrollView.contentOffset = CGPoint.zero
         scrollView.delegate = self
-
         scrollView.addObserver(self, forKeyPath: "contentOffset", options: NSKeyValueObservingOptions.new, context: nil)
     }
 
     func configureGestureRecognizers() {
 
-
         if swipeToDismissMode != .never {
-
             swipeToDismissRecognizer.addTarget(self, action: #selector(scrollViewDidSwipeToDismiss))
             swipeToDismissRecognizer.delegate = self
             view.addGestureRecognizer(swipeToDismissRecognizer)
@@ -139,15 +128,9 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
     }
 
     fileprivate func createViewHierarchy() {
-
+        scrollView.addSubview(itemView)
         self.view.addSubview(scrollView)
         
-
-        
-        scrollView.addSubview(itemView)
-
-        activityIndicatorView.startAnimating()
-        view.addSubview(activityIndicatorView)
     }
 
     // MARK: - View Controller Lifecycle
@@ -167,19 +150,19 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
             if let image = image {
 
                 DispatchQueue.main.async {
-                    self?.activityIndicatorView.stopAnimating()
 
                     var itemView = self?.itemView
                     itemView?.image = image
                     
                     //TODO: egemen ekledi
-                    if let scrollView = self?.scrollView {
-                        itemView?.contentMode = .scaleAspectFit
-                        itemView?.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 30.0).isActive = true
-                        itemView?.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -30.0).isActive = true
-                        itemView?.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-                        itemView?.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
-                        itemView?.translatesAutoresizingMaskIntoConstraints = false
+                    if let scrollView = self?.scrollView, let itemView = itemView {
+                        itemView.contentMode = .scaleAspectFit
+                        //itemView?.widthAnchor.constraint(equalToConstant: 300.0).isActive = true
+                        itemView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 30.0).isActive = true
+                        itemView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -30.0).isActive = true
+                        itemView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+                        itemView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
+                        itemView.translatesAutoresizingMaskIntoConstraints = false
                         
                         
                     }
@@ -218,7 +201,6 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
         super.viewDidLayoutSubviews()
 
         scrollView.frame = self.view.bounds
-        activityIndicatorView.center = view.boundsCenter
 
         if let size = itemView.image?.size , size != CGSize.zero {
 
@@ -238,11 +220,6 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
     }
 
     // MARK: - Scroll View delegate methods
-
-    public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-
-        itemView.center = contentCenter(forBoundingSize: scrollView.bounds.size, contentSize: scrollView.contentSize)
-    }
 
     @objc func scrollViewDidSwipeToDismiss(_ recognizer: UIPanGestureRecognizer) {
 
@@ -490,7 +467,7 @@ open class ItemBaseController<T: UIView>: UIViewController, ItemController, UIGe
 
                 UIView.animate(withDuration: reverseDisplacementDuration, animations: { [weak self] in
 
-                    self?.scrollView.zoomScale = 1
+                    //self?.scrollView.zoomScale = 1
 
                     //rotate the image view
                     if UIApplication.isPortraitOnly == true {

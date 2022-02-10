@@ -316,8 +316,6 @@ extension InAppViewController {
                 
                 print("carousel: \(String(describing: carousel.body))")
                 
-                let imageView = UIImageView()
-                
                 let myFetchImageBlock: FetchImageBlock = { imageCompletion in
                     if let imageUrlString = carousel.imageUrlString,  let url = URL(string: imageUrlString)
                         , let imageData: Data = try? Data(contentsOf: url) {
@@ -328,17 +326,8 @@ extension InAppViewController {
                     }
                 }
                 
-                let itemViewControllerBlock: ItemViewControllerBlock = { index, itemCount, fetchImageBlock, configuration, isInitialController in
-                    
-                    return AnimatedViewController(index: index, itemCount: itemCount, fetchImageBlock: myFetchImageBlock, configuration: configuration, isInitialController: isInitialController)
-                }
-                
-                let galleryItem = GalleryItem.custom(fetchImageBlock: myFetchImageBlock, itemViewControllerBlock: itemViewControllerBlock)
-                let label = UILabel()
-                label.text = UUID.init().uuidString
-                label.backgroundColor = .purple
-        
-                let dataItem = DataItem(imageView: imageView, galleryItem: galleryItem)
+                let galleryItem = GalleryItem.image(fetchImageBlock: myFetchImageBlock)
+                let dataItem = DataItem(imageView: UIImageView(), galleryItem: galleryItem)
                 self.carouselItems.append(dataItem)
             }
             
@@ -383,7 +372,7 @@ extension InAppViewController {
             GalleryConfigurationItem.presentationStyle(.displacement),
             GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
             
-            GalleryConfigurationItem.swipeToDismissMode(.vertical),
+            GalleryConfigurationItem.swipeToDismissMode(.never),
             GalleryConfigurationItem.toggleDecorationViewsBySingleTap(false),
             
             GalleryConfigurationItem.overlayColor(UIColor(white: 0.035, alpha: 1)),
@@ -778,7 +767,8 @@ extension UIImageView: DisplaceableView {
 extension InAppViewController: GalleryDisplacedViewsDataSource {
     
     func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
-        return index < carouselItems.count ? carouselItems[index].imageView : nil
+        let a = index < carouselItems.count ? carouselItems[index].imageView : nil
+        return a
     }
 }
 
@@ -795,20 +785,6 @@ extension InAppViewController: GalleryItemsDataSource {
     }
 }
 
-// Some external custom UIImageView we want to show in the gallery
-class FLSomeAnimatedImage: UIImageView {
-}
-
-// Extend ImageBaseController so we get all the functionality for free
-class AnimatedViewController: ItemBaseController<FLSomeAnimatedImage> {
-}
-
-
-/*
- extension UIView: DisplaceableView {
- 
- }
- */
 
 struct DataItem {
     
