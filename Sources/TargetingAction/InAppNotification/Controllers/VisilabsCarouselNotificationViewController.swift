@@ -11,10 +11,10 @@ public typealias ImageCompletion = (UIImage?, VisilabsCarouselItem) -> Void
 public typealias FetchImageBlock = (@escaping ImageCompletion) -> Void
 
 public struct VisilabsCarouselItemBlock {
-    public var fetchImageBlock: FetchImageBlock
+    public var fetchImageBlock: FetchImageBlock?
     public var visilabsCarouselItemView: VisilabsCarouselItemView
     
-    public init(fetchImageBlock: @escaping FetchImageBlock, visilabsCarouselItemView: VisilabsCarouselItemView) {
+    public init(fetchImageBlock: FetchImageBlock?, visilabsCarouselItemView: VisilabsCarouselItemView) {
         self.fetchImageBlock = fetchImageBlock
         self.visilabsCarouselItemView = visilabsCarouselItemView
     }
@@ -61,7 +61,6 @@ public protocol ItemControllerDelegate: AnyObject {
     ///Represents a generic transitioning progress from 0 to 1 (or reversed) where 0 is no progress and 1 is fully finished transitioning. It's up to the implementing controller to make decisions about how this value is being calculated, based on the nature of transition.
     func itemController(_ controller: ItemController, didSwipeToDismissWithDistanceToEdge distance: CGFloat)
     
-    func itemControllerDidFinishSwipeToDismissSuccessfully()
     
     
     func itemControllerWillAppear(_ controller: ItemController)
@@ -74,7 +73,16 @@ public protocol GalleryItemsDataSource: AnyObject {
     func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock
 }
 
+public extension VisilabsInAppNotification {
+    
+}
+
 public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewController, ItemControllerDelegate {
+    
+    
+    var carouselNotification: VisilabsInAppNotification! {
+        return super.notification
+    }
     
     // UI
     fileprivate let overlayView = VisilabsBlurView()
@@ -95,8 +103,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     fileprivate var initialPresentationDone = false
     
     // DATASOURCE/DELEGATE
-    fileprivate let itemsDataSource: GalleryItemsDataSource
-    fileprivate let pagingDataSource: GalleryPagingDataSource
+    fileprivate var pagingDataSource: GalleryPagingDataSource!
     
     // CONFIGURATION
     fileprivate var spineDividerWidth:         Float = 30
@@ -127,62 +134,32 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     @available(*, unavailable)
     required public init?(coder: NSCoder) { fatalError() }
     
-    public init(startIndex: Int, itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource? = nil, configuration: GalleryConfiguration = [], notification: VisilabsInAppNotification) {
+    public init(startIndex: Int, notification: VisilabsInAppNotification) {
+        
+        
+        overlayView.overlayColor = UIColor(white: 0.035, alpha: 1)
+        overlayView.colorTargetOpacity = 0.7
+        overlayView.blurTargetOpacity = 0.7
+        overlayView.blurringView.effect = UIBlurEffect(style: UIBlurEffect.Style.light)
         
         self.currentIndex = startIndex
-        self.itemsDataSource = itemsDataSource
         
-        ///Only those options relevant to the paging GalleryViewController are explicitly handled here, the rest is handled by ItemViewControllers
-        for item in configuration {
-            
-            switch item {
-                
-            case .imageDividerWidth(let width):                 spineDividerWidth = Float(width)
-            case .pagingMode(let mode):                         galleryPagingMode = mode
-            case .headerViewLayout(let layout):                 headerLayout = layout
-            case .footerViewLayout(let layout):                 footerLayout = layout
-            case .closeLayout(let layout):                      closeLayout = layout
-            case .statusBarHidden(let hidden):                  statusBarHidden = hidden
-            case .hideDecorationViewsOnLaunch(let hidden):      decorationViewsHidden = hidden
-            case .decorationViewsFadeDuration(let duration):    decorationViewsFadeDuration = duration
-            case .rotationDuration(let duration):               rotationDuration = duration
-            case .rotationMode(let mode):                       rotationMode = mode
-            case .overlayColor(let color):                      overlayView.overlayColor = color
-            case .overlayBlurStyle(let style):                  overlayView.blurringView.effect = UIBlurEffect(style: style)
-            case .overlayBlurOpacity(let opacity):              overlayView.blurTargetOpacity = opacity
-            case .overlayColorOpacity(let opacity):             overlayView.colorTargetOpacity = opacity
-            case .blurPresentDuration(let duration):            overlayView.blurPresentDuration = duration
-            case .blurPresentDelay(let delay):                  overlayView.blurPresentDelay = delay
-            case .colorPresentDuration(let duration):           overlayView.colorPresentDuration = duration
-            case .colorPresentDelay(let delay):                 overlayView.colorPresentDelay = delay
-            case .blurDismissDuration(let duration):            overlayView.blurDismissDuration = duration
-            case .blurDismissDelay(let delay):                  overlayView.blurDismissDelay = delay
-            case .colorDismissDuration(let duration):           overlayView.colorDismissDuration = duration
-            case .colorDismissDelay(let delay):                 overlayView.colorDismissDelay = delay
-            case .closeButtonMode(let buttonMode):
-                
-                switch buttonMode {
-                case .builtIn:              break
-                case .none: break
-                    
-                case .custom(_):
-                    break
-                }
-                
-            default: break
-                
-                
-            }
-        }
+        galleryPagingMode = .standard
         
-        pagingDataSource = GalleryPagingDataSource(itemsDataSource: itemsDataSource, displacedViewsDataSource: displacedViewsDataSource, configuration: configuration)
+        
+        spineDividerWidth = 0.0// TODO: egemen bak sonra
+        
+        
         
         super.init(transitionStyle: UIPageViewController.TransitionStyle.scroll,
                    navigationOrientation: UIPageViewController.NavigationOrientation.horizontal,
                    options: [UIPageViewController.OptionsKey.interPageSpacing : NSNumber(value: spineDividerWidth as Float)])
         
-        
         self.notification = notification
+        pagingDataSource = GalleryPagingDataSource(itemsDataSource: self, displacedViewsDataSource: self)
+        
+        
+        
         
         pagingDataSource.itemControllerDelegate = self
         
@@ -314,7 +291,9 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
             self.view.bounds = bounds
         }
         
-        overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width * 2, dy: -UIScreen.main.bounds.height * 2)
+        //TODO: egemen
+        //overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width * 2, dy: -UIScreen.main.bounds.height * 2)
+        overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width , dy: -UIScreen.main.bounds.height)
         
         layoutButton(closeButton, layout: closeLayout)
         layoutHeaderView()
@@ -412,9 +391,9 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     
-    open func page(toIndex index: Int) {
+    public func page(toIndex index: Int) {
         
-        guard currentIndex != index && index >= 0 && index < self.itemsDataSource.itemCount() else { return }
+        guard currentIndex != index && index >= 0 && index < self.itemCount() else { return }
         
         let imageViewController = self.pagingDataSource.createItemController(index)
         let direction: UIPageViewController.NavigationDirection = index > currentIndex ? .forward : .reverse
@@ -441,7 +420,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         
         // If removing last item, go back, otherwise, go forward
         
-        let direction: UIPageViewController.NavigationDirection = index < self.itemsDataSource.itemCount() ? .forward : .reverse
+        let direction: UIPageViewController.NavigationDirection = index < self.itemCount() ? .forward : .reverse
         
         let newIndex = direction == .forward ? index : index - 1
         
@@ -453,7 +432,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     
     open func reload(atIndex index: Int) {
         
-        guard index >= 0 && index < self.itemsDataSource.itemCount() else { return }
+        guard index >= 0 && index < self.itemCount() else { return }
         
         guard let firstVC = viewControllers?.first, let itemController = firstVC as? ItemController else { return }
         
@@ -491,7 +470,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     /// Invoked when closed programmatically
-    open func close() {
+    public func close() {
         
         closeDecorationViews(programmaticallyClosedCompletion)
     }
@@ -598,11 +577,29 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         self.overlayView.colorView.alpha = 1 - distance
     }
     
-    public func itemControllerDidFinishSwipeToDismissSuccessfully() {
+}
+
+
+extension VisilabsCarouselNotificationViewController: GalleryItemsDataSource {
+    
+    public func itemCount() -> Int {
+        return carouselNotification.carouselItems.count
+    }
+    
+    public func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock {
         
-        self.swipedToDismissCompletion?()
-        self.overlayView.removeFromSuperview()
-        self.dismiss(animated: false, completion: nil)
+        let carouselItem = carouselNotification.carouselItems[index]
+        
+        return VisilabsCarouselItemBlock(fetchImageBlock: carouselItem.fetchImageBlock, visilabsCarouselItemView: VisilabsCarouselItemView(frame: .zero, visilabsCarouselItem: carouselItem))
     }
 }
 
+extension VisilabsCarouselNotificationViewController: GalleryDisplacedViewsDataSource {
+    public func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
+        if index < carouselNotification.carouselItems.count {
+            return VisilabsCarouselItemView(frame: .zero, visilabsCarouselItem: carouselNotification.carouselItems[index])
+        } else {
+            return nil
+        }
+    }
+}

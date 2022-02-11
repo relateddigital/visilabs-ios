@@ -68,6 +68,24 @@ public class VisilabsCarouselItem {
     var bodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     var buttonFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     
+    
+    var imageUrl: URL? = nil
+    public lazy var image: Data? = {
+        var data: Data?
+        if let iUrl = self.imageUrl {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            }
+        }
+        return data
+    }()
+    
+    
+    public var fetchImageBlock: FetchImageBlock? = nil
+    
+    
     public init(imageUrlString: String?, title: String?, titleColor: String?, titleFontFamily: String?, titleCustomFontFamily: String?
                 ,titleTextsize: String?, body: String?, bodyColor: UIColor?, bodyFontFamily: String?, bodyCustomFontFamily: String?
                 ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
@@ -103,7 +121,19 @@ public class VisilabsCarouselItem {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
         self.closeButtonColor = closeButtonColor
+        
         self.setFonts()
+        
+        self.fetchImageBlock = { imageCompletion in
+            if let imageUrlString = self.imageUrlString,  let url = URL(string: imageUrlString)
+                , let imageData: Data = try? Data(contentsOf: url) {
+                let image = UIImage(data: imageData as Data)
+                imageCompletion(image, self)
+            } else {
+                imageCompletion(nil, self)
+            }
+        }
+        
     }
     
     // swiftlint:disable function_body_length disable cyclomatic_complexity
@@ -142,21 +172,28 @@ public class VisilabsCarouselItem {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
         self.closeButtonColor = UIColor(hex: object[PayloadKey.close_button_color] as? String)
+        
+        self.titleFont = VisilabsHelper.getFont(fontFamily: self.titleFontFamily, fontSize: self.titleTextsize
+                                                , style: .title2, customFont: self.titleCustomFontFamily)
+        self.bodyFont = VisilabsHelper.getFont(fontFamily: self.bodyFontFamily, fontSize: self.bodyTextsize
+                                               , style: .body, customFont: self.bodyCustomFontFamily)
+        self.buttonFont = VisilabsHelper.getFont(fontFamily: self.buttonFontFamily, fontSize: self.buttonTextsize
+                                                 , style: .title2, customFont: self.buttonCustomFontFamily)
+        
         self.setFonts()
-    }
-    
-    var imageUrl: URL?
-    public lazy var image: Data? = {
-        var data: Data?
-        if let iUrl = self.imageUrl {
-            do {
-                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
-            } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
+        
+        self.fetchImageBlock = { imageCompletion in
+            if let imageUrlString = self.imageUrlString,  let url = URL(string: imageUrlString)
+                , let imageData: Data = try? Data(contentsOf: url) {
+                let image = UIImage(data: imageData as Data)
+                imageCompletion(image, self)
+            } else {
+                imageCompletion(nil, self)
             }
         }
-        return data
-    }()
+        
+    }
+
     
     private func setFonts() {
         self.titleFont = VisilabsHelper.getFont(fontFamily: self.titleFontFamily, fontSize: self.titleTextsize
@@ -166,5 +203,7 @@ public class VisilabsCarouselItem {
         self.buttonFont = VisilabsHelper.getFont(fontFamily: self.buttonFontFamily, fontSize: self.buttonTextsize
                                                  , style: .title2, customFont: self.buttonCustomFontFamily)
     }
+    
+    
 }
 

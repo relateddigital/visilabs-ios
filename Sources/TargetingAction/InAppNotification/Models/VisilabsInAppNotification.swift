@@ -90,7 +90,7 @@ public class VisilabsInAppNotification {
     let previousPopupPoint: Double?
     let position: VisilabsHalfScreenPosition?
     let closePopupActionType : String?
-    public let carouselItems: [VisilabsCarouselItem]?
+    public var carouselItems: [VisilabsCarouselItem] = [VisilabsCarouselItem]()
     
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -243,7 +243,9 @@ public class VisilabsInAppNotification {
         }
         self.previousPopupPoint = previousPopupPoint
         self.position = position
-        self.carouselItems = carouselItems
+        if let carouselItems = carouselItems {
+            self.carouselItems = carouselItems
+        }
         setFonts()
     }
     
@@ -358,7 +360,7 @@ public class VisilabsInAppNotification {
         
         var carouselItems = [VisilabsCarouselItem]()
         
-        if let carouselItemObjects = object[PayloadKey.carouselItems] as? [[String: Any]] {
+        if let carouselItemObjects = actionData[PayloadKey.carouselItems] as? [[String: Any]] {
             for carouselItemObject in carouselItemObjects {
                 //carouselItemObject[VisilabsCarouselItem.PayloadKey.close_button_color] = actionData[PayloadKey.closeButtonColor] as? String
                 if let carouselItem = VisilabsCarouselItem.init(JSONObject: carouselItemObject) {
