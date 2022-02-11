@@ -20,23 +20,17 @@ public struct VisilabsCarouselItemBlock {
     }
 }
 
-typealias Duration = TimeInterval
-
-
 public protocol DisplaceableView {
-    
     var image: UIImage? { get }
     var bounds: CGRect { get }
     var center: CGPoint { get }
     var boundsCenter: CGPoint { get }
     var contentMode: UIView.ContentMode { get }
     var isHidden: Bool { get set }
-    
     func convert(_ point: CGPoint, to view: UIView?) -> CGPoint
 }
 
 public protocol GalleryDisplacedViewsDataSource: AnyObject {
-    
     func provideDisplacementItem(atIndex index: Int) -> DisplaceableView?
 }
 
@@ -60,15 +54,12 @@ public protocol ItemControllerDelegate: AnyObject {
     
     ///Represents a generic transitioning progress from 0 to 1 (or reversed) where 0 is no progress and 1 is fully finished transitioning. It's up to the implementing controller to make decisions about how this value is being calculated, based on the nature of transition.
     func itemController(_ controller: ItemController, didSwipeToDismissWithDistanceToEdge distance: CGFloat)
-    
-    
-    
     func itemControllerWillAppear(_ controller: ItemController)
     func itemControllerWillDisappear(_ controller: ItemController)
     func itemControllerDidAppear(_ controller: ItemController)
 }
 
-public protocol GalleryItemsDataSource: AnyObject {
+public protocol VisilabsCarouselItemsDataSource: AnyObject {
     func itemCount() -> Int
     func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock
 }
@@ -79,15 +70,13 @@ public extension VisilabsInAppNotification {
 
 public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewController, ItemControllerDelegate {
     
-    
     var carouselNotification: VisilabsInAppNotification! {
         return super.notification
     }
     
     // UI
     fileprivate let overlayView = VisilabsBlurView()
-    /// A custom view on the top of the gallery with layout using default (or custom) pinning settings for header.
-    open var headerView: UIView?
+
     /// A custom view at the bottom of the gallery with layout using default (or custom) pinning settings for footer.
     open var footerView: UIView?
     fileprivate var closeButton: UIButton? = UIButton.closeButton()
@@ -103,12 +92,11 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     fileprivate var initialPresentationDone = false
     
     // DATASOURCE/DELEGATE
-    fileprivate var pagingDataSource: GalleryPagingDataSource!
+    fileprivate var pagingDataSource: VisilabsCarouselPagingDataSource!
     
     // CONFIGURATION
     fileprivate var spineDividerWidth:         Float = 30
     fileprivate var galleryPagingMode = GalleryPagingMode.standard
-    fileprivate var headerLayout = HeaderLayout.center(25)
     fileprivate var footerLayout = FooterLayout.center(25)
     fileprivate var closeLayout = ButtonLayout.pinRight(8, 16)
     fileprivate var seeAllCloseLayout = ButtonLayout.pinRight(8, 16)
@@ -146,9 +134,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         
         galleryPagingMode = .standard
         
-        
         spineDividerWidth = 0.0// TODO: egemen bak sonra
-        
         
         
         super.init(transitionStyle: UIPageViewController.TransitionStyle.scroll,
@@ -156,7 +142,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
                    options: [UIPageViewController.OptionsKey.interPageSpacing : NSNumber(value: spineDividerWidth as Float)])
         
         self.notification = notification
-        pagingDataSource = GalleryPagingDataSource(itemsDataSource: self, displacedViewsDataSource: self)
+        pagingDataSource = VisilabsCarouselPagingDataSource(itemsDataSource: self, displacedViewsDataSource: self)
         
         
         
@@ -190,21 +176,12 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     fileprivate func configureOverlayView() {
-        
         overlayView.bounds.size = UIScreen.main.bounds.insetBy(dx: -UIScreen.main.bounds.width / 2, dy: -UIScreen.main.bounds.height / 2).size
         overlayView.center = CGPoint(x: (UIScreen.main.bounds.width / 2), y: (UIScreen.main.bounds.height / 2))
-        
         self.view.addSubview(overlayView)
         self.view.sendSubviewToBack(overlayView)
     }
     
-    fileprivate func configureHeaderView() {
-        
-        if let header = headerView {
-            header.alpha = 0
-            self.view.addSubview(header)
-        }
-    }
     
     fileprivate func configureFooterView() {
         if let footer = footerView {
@@ -231,12 +208,9 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
             if (statusBarHidden || UIScreen.hasNotch) {
                 additionalSafeAreaInsets = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
             }
-        }
-        
-        configureHeaderView()
+        }        
         configureFooterView()
         configureCloseButton()
-        
         self.view.clipsToBounds = false
     }
     
@@ -296,7 +270,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width , dy: -UIScreen.main.bounds.height)
         
         layoutButton(closeButton, layout: closeLayout)
-        layoutHeaderView()
         layoutFooterView()
     }
     
@@ -309,53 +282,16 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     fileprivate func layoutButton(_ button: UIButton?, layout: ButtonLayout) {
-        
         guard let button = button else { return }
-        
         switch layout {
-            
         case .pinRight(let marginTop, let marginRight):
-            
             button.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin]
             button.frame.origin.x = self.view.bounds.size.width - marginRight - button.bounds.size.width
             button.frame.origin.y = defaultInsets.top + marginTop
-            
         case .pinLeft(let marginTop, let marginLeft):
-            
             button.autoresizingMask = [.flexibleBottomMargin, .flexibleRightMargin]
             button.frame.origin.x = marginLeft
             button.frame.origin.y = defaultInsets.top + marginTop
-        }
-    }
-    
-    fileprivate func layoutHeaderView() {
-        
-        guard let header = headerView else { return }
-        
-        switch headerLayout {
-            
-        case .center(let marginTop):
-            
-            header.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
-            header.center = self.view.boundsCenter
-            header.frame.origin.y = defaultInsets.top + marginTop
-            
-        case .pinBoth(let marginTop, let marginLeft,let marginRight):
-            
-            header.autoresizingMask = [.flexibleBottomMargin, .flexibleWidth]
-            header.bounds.size.width = self.view.bounds.width - marginLeft - marginRight
-            header.sizeToFit()
-            header.frame.origin = CGPoint(x: marginLeft, y: defaultInsets.top + marginTop)
-            
-        case .pinLeft(let marginTop, let marginLeft):
-            
-            header.autoresizingMask = [.flexibleBottomMargin, .flexibleRightMargin]
-            header.frame.origin = CGPoint(x: marginLeft, y: defaultInsets.top + marginTop)
-            
-        case .pinRight(let marginTop, let marginRight):
-            
-            header.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin]
-            header.frame.origin = CGPoint(x: self.view.bounds.width - marginRight - header.bounds.width, y: defaultInsets.top + marginTop)
         }
     }
     
@@ -471,7 +407,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     
     /// Invoked when closed programmatically
     public func close() {
-        
         closeDecorationViews(programmaticallyClosedCompletion)
     }
     
@@ -492,8 +427,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         }
         
         UIView.animate(withDuration: decorationViewsFadeDuration, animations: { [weak self] in
-            
-            self?.headerView?.alpha = 0.0
             self?.footerView?.alpha = 0.0
             self?.closeButton?.alpha = 0.0
             
@@ -533,8 +466,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         let targetAlpha: CGFloat = (visible) ? 1 : 0
         
         UIView.animate(withDuration: decorationViewsFadeDuration, animations: { [weak self] in
-            
-            self?.headerView?.alpha = targetAlpha
             self?.footerView?.alpha = targetAlpha
             self?.closeButton?.alpha = targetAlpha
             
@@ -552,24 +483,16 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     public func itemControllerDidAppear(_ controller: ItemController) {
-        
         self.currentIndex = controller.index
         self.landedPageAtIndexCompletion?(self.currentIndex)
-        self.headerView?.sizeToFit()
         self.footerView?.sizeToFit()
-        
-        
     }
     
     
     public func itemController(_ controller: ItemController, didSwipeToDismissWithDistanceToEdge distance: CGFloat) {
-        
         if decorationViewsHidden == false {
-            
             let alpha = 1 - distance * swipeToDismissFadeOutAccelerationFactor
-            
             closeButton?.alpha = alpha
-            headerView?.alpha = alpha
             footerView?.alpha = alpha
         }
         
@@ -580,7 +503,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
 }
 
 
-extension VisilabsCarouselNotificationViewController: GalleryItemsDataSource {
+extension VisilabsCarouselNotificationViewController: VisilabsCarouselItemsDataSource {
     
     public func itemCount() -> Int {
         return carouselNotification.carouselItems.count

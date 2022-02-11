@@ -161,24 +161,24 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
         
         let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-        let headerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
         let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
         
         let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
-        vc.headerView = headerView
+        vc.visilabsDelegate = self
         vc.footerView = footerView
-        
-        vc.launchedCompletion = { print("LAUNCHED") }
-        vc.closedCompletion = { print("CLOSED") }
+        vc.launchedCompletion = { VisilabsLogger.info("Carousel Launched") }
+        vc.closedCompletion = {
+            VisilabsLogger.info("Carousel Closed")
+            vc.visilabsDelegate?.notificationShouldDismiss(controller: vc, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+        }
         vc.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
         
         vc.landedPageAtIndexCompletion = { index in
             print("LANDED AT INDEX: \(index)")
-            headerView.count = notification.carouselItems.count
-            headerView.currentIndex = index
             footerView.count = notification.carouselItems.count
             footerView.currentIndex = index
         }
+        
         
         if let rootViewController = VisilabsHelper.getRootViewController() {
             rootViewController.presentCarouselNotification(vc)
@@ -250,7 +250,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
     
     @discardableResult
-    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
+    func notificationShouldDismiss(controller: VisilabsBaseViewProtocol,
                                    callToActionURL: URL?, shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool {
         

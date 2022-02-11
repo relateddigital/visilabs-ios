@@ -44,9 +44,3 @@ func rotationAdjustedBounds() -> CGRect {
     }
     return window.bounds
 }
-
-func rotationAdjustedCenter(_ view: UIView) -> CGPoint {
-    guard UIApplication.isPortraitOnly else { return view.center }
-    return (UIDevice.current.orientation.isLandscape) ? view.center.inverted() : view.center
-}
-

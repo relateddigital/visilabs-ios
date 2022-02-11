@@ -212,21 +212,6 @@ extension Slider {
     }
 }
 
-
-
-//TODO: GEREKSİZ SİL
-
-import AVFoundation
-
-extension AVPlayer {
-
-    func isPlaying() -> Bool {
-
-        return (self.rate != 0.0 && self.status == .readyToPlay)
-    }
-}
-
-
 import CoreGraphics
 
 extension CGPoint {
@@ -238,12 +223,10 @@ extension CGPoint {
 }
 
 enum Direction {
-
     case left, right, up, down, none
 }
 
 enum Orientation {
-
     case vertical, horizontal, none
 }
 

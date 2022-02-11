@@ -20,6 +20,7 @@ public class VisilabsCarouselItemView: UIView, DisplaceableView {
     internal lazy var copyCodeTextButton = setCopyCodeText()
     internal lazy var copyCodeImageButton = setCopyCodeImage()
     internal lazy var messageLabel = setMessageLabel()
+    internal lazy var button = setButton()
 
 
 
@@ -92,16 +93,13 @@ public class VisilabsCarouselItemView: UIView, DisplaceableView {
     }
 
     internal func setupViews() {
-
-        guard let crouselItem = visilabsCarouselItem else {
+        guard let carouselItem = visilabsCarouselItem else {
             return
         }
 
-        baseSetup(crouselItem)
-
+        setup(carouselItem)
+        
         var constraints = [NSLayoutConstraint]()
-
-        setupForImageTextButton()
 
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
             attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
@@ -133,6 +131,16 @@ extension VisilabsCarouselItemView {
 }
 
 extension VisilabsCarouselItemView {
+    
+    internal func setButton() -> UIButton {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentHorizontalAlignment = .center
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 35.0, weight: .regular)
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return button
+    }
 
     internal func setCloseButton() -> UIButton {
         let closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -171,7 +179,7 @@ extension VisilabsCarouselItemView {
         copyCodeText.backgroundColor = self.visilabsCarouselItem?.promocodeBackgroundColor
         copyCodeText.setTitleColor(self.visilabsCarouselItem?.promocodeTextColor, for: .normal)
         copyCodeText.addTarget(self, action: #selector(copyCodeTextButtonTapped(_:)), for: .touchUpInside)
-
+        copyCodeText.titleLabel?.font = .systemFont(ofSize: 15.0, weight: .regular)
         return copyCodeText
     }
 
@@ -217,45 +225,6 @@ extension VisilabsCarouselItemView {
         self.imgButtonDelegate?.imageButtonTapped()
     }
 
-    internal func setSliderStepRating() -> VisilabsSliderStep {
-
-        let sliderStepRating = VisilabsSliderStep()
-
-        sliderStepRating.stepImages =   [getUIImage(named: "terrible")!, getUIImage(named: "bad")!,
-                                         getUIImage(named: "okay")!, getUIImage(named: "good")!,
-                                         getUIImage(named: "great")! ]
-        sliderStepRating.tickImages = [getUIImage(named: "unTerrible")!, getUIImage(named: "unBad")!,
-                                       getUIImage(named: "unOkay")!, getUIImage(named: "unGood")!,
-                                       getUIImage(named: "unGreat")! ]
-
-        sliderStepRating.tickTitles = ["Berbat", "Kötü", "Normal", "İyi", "Harika"]
-
-        sliderStepRating.minimumValue = 1
-        sliderStepRating.maximumValue = Float(sliderStepRating.stepImages!.count) + sliderStepRating.minimumValue - 1.0
-        sliderStepRating.stepTickColor = UIColor.clear
-        sliderStepRating.stepTickWidth = 20
-        sliderStepRating.stepTickHeight = 20
-        sliderStepRating.trackHeight = 2
-        sliderStepRating.value = 5
-        sliderStepRating.trackColor = .clear
-        sliderStepRating.enableTap = true
-        sliderStepRating.sliderStepDelegate = self
-        sliderStepRating.translatesAutoresizingMaskIntoConstraints = false
-
-        sliderStepRating.contentMode = .redraw // enable redraw on rotation (calls setNeedsDisplay)
-
-        if sliderStepRating.enableTap {
-            let tap = UITapGestureRecognizer(target: sliderStepRating,
-                                action: #selector(VisilabsSliderStep.sliderTapped(_:)))
-            self.addGestureRecognizer(tap)
-        }
-
-        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.movingSliderStepValue),
-                                   for: .valueChanged)
-        sliderStepRating.addTarget(sliderStepRating, action: #selector(VisilabsSliderStep.didMoveSliderStepValue),
-                                   for: [.touchUpInside, .touchUpOutside, .touchCancel])
-        return sliderStepRating
-    }
 
     private func getUIImage(named: String) -> UIImage? {
         #if SWIFT_PACKAGE
@@ -266,7 +235,7 @@ extension VisilabsCarouselItemView {
         return UIImage(named: named, in: bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
     }
 
-    internal func baseSetup(_ carouselItem: VisilabsCarouselItem) {
+    internal func setup(_ carouselItem: VisilabsCarouselItem) {
         if let bgColor = carouselItem.backgroundColor {
             self.backgroundColor = bgColor
         }
@@ -281,6 +250,18 @@ extension VisilabsCarouselItemView {
         if let bodyColor = carouselItem.bodyColor {
             messageLabel.textColor = bodyColor
         }
+        
+        button.setTitle(carouselItem.buttonText?.removeEscapingCharacters(), for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.titleLabel?.font = carouselItem.buttonFont
+        if let buttonTextColor = carouselItem.buttonTextColor {
+            button.setTitleColor(buttonTextColor, for: .normal)
+        }
+        if let buttonColor = carouselItem.buttonColor {
+            button.backgroundColor = buttonColor
+        }
+        
+        
 
         if let closeButtonColor = carouselItem.closeButtonColor {
             closeButton.setTitleColor(closeButtonColor, for: .normal)
@@ -289,21 +270,22 @@ extension VisilabsCarouselItemView {
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(imageView)
         addSubview(closeButton)
-    }
-
-    internal func setupForImageTextButton(_ withFeedback: Bool = false) {
         addSubview(titleLabel)
         addSubview(messageLabel)
+        addSubview(button)
+        
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)
         messageLabel.topToBottom(of: titleLabel, offset: 8.0)
+        
+        addSubview(copyCodeTextButton)
+        addSubview(copyCodeImageButton)
+        
 
         if let promo = self.visilabsCarouselItem?.promotionCode,
            let _ = self.visilabsCarouselItem?.promocodeBackgroundColor,
            let _ = self.visilabsCarouselItem?.promocodeTextColor,
            !promo.isEmpty {
-            addSubview(copyCodeTextButton)
-            addSubview(copyCodeImageButton)
             copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
             copyCodeTextButton.bottom(to: self, offset: 0.0)
             copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
@@ -312,55 +294,30 @@ extension VisilabsCarouselItemView {
             copyCodeImageButton.width(50.0)
             copyCodeImageButton.trailing(to: self)
             copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
-        } else if withFeedback == false {
+            
+        } else {
+            copyCodeTextButton.topToBottom(of: messageLabel, offset: 10.0)
+            copyCodeTextButton.bottom(to: self, offset: 0.0)
+            copyCodeImageButton.topToBottom(of: messageLabel, offset: 10.0)
+            copyCodeImageButton.bottom(to: copyCodeTextButton)
+            copyCodeTextButton.leading(to: self)
+            copyCodeImageButton.width(50.0)
+            copyCodeImageButton.trailing(to: self)
+            copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
+            copyCodeTextButton.isHidden = true
+            copyCodeImageButton.isHidden = true
             messageLabel.bottom(to: self, offset: -10)
         }
+        
+        button.topToBottom(of: copyCodeTextButton, offset: 5.0)
 
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
+        button.centerX(to: self)
     }
 
-    internal func setupForImageButtonImage() {
-        addSubview(titleLabel)
-        addSubview(messageLabel)
-        addSubview(imageButton)
 
-        imageView.allEdges(to: self, excluding: .bottom)
-        titleLabel.topToBottom(of: imageView, offset: 10.0)
-        messageLabel.topToBottom(of: titleLabel, offset: 8.0)
 
-        imageButton.topToBottom(of: messageLabel, offset: 10.0)
-        imageButton.leading(to: self)
-        imageButton.trailing(to: self)
-        imageButton.height(50.0)
-
-        titleLabel.centerX(to: self)
-        messageLabel.centerX(to: self)
-    }
-
-    internal func setupForDefault() {
-        addSubview(titleLabel)
-        addSubview(messageLabel)
-        addSubview(imageButton)
-
-        imageView.allEdges(to: self, excluding: .bottom)
-        titleLabel.topToBottom(of: imageView, offset: 8.0)
-        messageLabel.topToBottom(of: titleLabel, offset: 8.0)
-        messageLabel.bottom(to: self, offset: -10.0)
-    }
-
-    private func setBorderColorOfCell() -> UIColor {
-        guard let bgColor = self.backgroundColor else { return .white }
-        let red = bgColor.rgba.red
-        let green = bgColor.rgba.green
-        let blue = bgColor.rgba.blue
-        let tot = red + green + blue
-        if tot < 2.7 {
-            return .white
-        } else {
-            return .black
-        }
-    }
 }
 
 
