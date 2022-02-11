@@ -169,19 +169,19 @@ public class ScratchToWinModel: TargetingActionViewModel {
         self.promocodeCustomFontFamilyIos = promocodeCustomFontFamilyIos
         self.copybuttonCustomFontFamilyIos = copybuttonCustomFontFamilyIos
 
-        titleFont = VisilabsInAppNotification.getFont(fontFamily: titleFontFamily,
+        titleFont = VisilabsHelper.getFont(fontFamily: titleFontFamily,
                                                                   fontSize: titleTextSize,
                                                                   style: .title2,customFont: contentTitleCustomFontFamilyIos)
-        messageFont = VisilabsInAppNotification.getFont(fontFamily: messageFontFamily,
+        messageFont = VisilabsHelper.getFont(fontFamily: messageFontFamily,
                                                         fontSize: messageTextSize,
                                                         style: .body,customFont: contentBodyCustomFontFamilyIos)
-        mailButtonFont = VisilabsInAppNotification.getFont(fontFamily: mailButtonFontFamily,
+        mailButtonFont = VisilabsHelper.getFont(fontFamily: mailButtonFontFamily,
                                                            fontSize: mailButtonTextSize,
                                                            style: .title2,customFont: buttonCustomFontFamilyIos)
-        promoFont = VisilabsInAppNotification.getFont(fontFamily: promocodeTextFamily,
+        promoFont = VisilabsHelper.getFont(fontFamily: promocodeTextFamily,
                                                       fontSize: promocodeTextSize,
                                                       style: .title2,customFont: promocodeCustomFontFamilyIos)
-        copyButtonTextFont = VisilabsInAppNotification.getFont(fontFamily: copyButtonFontFamily,
+        copyButtonTextFont = VisilabsHelper.getFont(fontFamily: copyButtonFontFamily,
                                                               fontSize: copyButtonTextSize,
                                                               style: .title2,customFont: copybuttonCustomFontFamilyIos)
         emailPermitTextFont = UIFont.systemFont(ofSize: CGFloat(8 + (Int(emailPermitTextSize ?? "0") ?? 0)))
