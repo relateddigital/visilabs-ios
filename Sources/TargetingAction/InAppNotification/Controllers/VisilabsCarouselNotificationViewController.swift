@@ -7,13 +7,12 @@
 
 import UIKit
 
-public typealias ImageCompletion = (UIImage?, VisilabsCarouselItem) -> Void
+public typealias ImageCompletion = (UIImage?, UIImage?, VisilabsCarouselItem) -> Void
 public typealias FetchImageBlock = (@escaping ImageCompletion) -> Void
 
 public struct VisilabsCarouselItemBlock {
     public var fetchImageBlock: FetchImageBlock?
     public var visilabsCarouselItemView: VisilabsCarouselItemView
-    
     public init(fetchImageBlock: FetchImageBlock?, visilabsCarouselItemView: VisilabsCarouselItemView) {
         self.fetchImageBlock = fetchImageBlock
         self.visilabsCarouselItemView = visilabsCarouselItemView
@@ -21,7 +20,7 @@ public struct VisilabsCarouselItemBlock {
 }
 
 public protocol DisplaceableView {
-    var image: UIImage? { get }
+    var visilabsCarouselItem: VisilabsCarouselItem? { get }
     var bounds: CGRect { get }
     var center: CGPoint { get }
     var boundsCenter: CGPoint { get }
@@ -36,6 +35,8 @@ public protocol GalleryDisplacedViewsDataSource: AnyObject {
 
 public protocol ItemController: AnyObject {
     
+    var itemView: VisilabsCarouselItemView { get set}
+    
     var index: Int { get }
     var isInitialController: Bool { get set }
     var delegate:                 ItemControllerDelegate? { get set }
@@ -46,7 +47,7 @@ public protocol ItemController: AnyObject {
     func presentItem(alongsideAnimation: () -> Void, completion: @escaping () -> Void)
     func dismissItem(alongsideAnimation: () -> Void, completion: @escaping () -> Void)
     
-    func closeDecorationViews(_ duration: TimeInterval)
+    func closeCarousel(shouldTrack: Bool, callToActionURL: URL?)
 }
 
 
@@ -57,6 +58,10 @@ public protocol ItemControllerDelegate: AnyObject {
     func itemControllerWillAppear(_ controller: ItemController)
     func itemControllerWillDisappear(_ controller: ItemController)
     func itemControllerDidAppear(_ controller: ItemController)
+    
+    func fetchedImage(_ controller: ItemController)
+    
+    func closeCarousel(shouldTrack: Bool, callToActionURL: URL?)
 }
 
 public protocol VisilabsCarouselItemsDataSource: AnyObject {
@@ -64,9 +69,6 @@ public protocol VisilabsCarouselItemsDataSource: AnyObject {
     func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock
 }
 
-public extension VisilabsInAppNotification {
-    
-}
 
 public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewController, ItemControllerDelegate {
     
@@ -76,10 +78,9 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     
     // UI
     fileprivate let overlayView = VisilabsBlurView()
-
+    
     /// A custom view at the bottom of the gallery with layout using default (or custom) pinning settings for footer.
-    open var footerView: UIView?
-    fileprivate var closeButton: UIButton? = UIButton.closeButton()
+    public var footerView: UIPageControl?
     
     fileprivate weak var initialItemController: ItemController?
     
@@ -96,10 +97,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     
     // CONFIGURATION
     fileprivate var spineDividerWidth:         Float = 30
-    fileprivate var galleryPagingMode = GalleryPagingMode.standard
     fileprivate var footerLayout = FooterLayout.center(25)
-    fileprivate var closeLayout = ButtonLayout.pinRight(8, 16)
-    fileprivate var seeAllCloseLayout = ButtonLayout.pinRight(8, 16)
     fileprivate var statusBarHidden = true
     fileprivate var overlayAccelerationFactor: CGFloat = 1
     fileprivate var rotationDuration = 0.15
@@ -116,24 +114,17 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     open var closedCompletion:                 (() -> Void)?
     /// If set, launched after all animations finish when the close() method is invoked via public API.
     open var programmaticallyClosedCompletion: (() -> Void)?
-    /// If set, launched after all animations finish when the swipe-to-dismiss (applies to all directions and cases) gesture is used.
-    open var swipedToDismissCompletion:        (() -> Void)?
-    
+ 
     @available(*, unavailable)
     required public init?(coder: NSCoder) { fatalError() }
     
     public init(startIndex: Int, notification: VisilabsInAppNotification) {
         
-        
         overlayView.overlayColor = UIColor(white: 0.035, alpha: 1)
         overlayView.colorTargetOpacity = 0.7
         overlayView.blurTargetOpacity = 0.7
         overlayView.blurringView.effect = UIBlurEffect(style: UIBlurEffect.Style.light)
-        
         self.currentIndex = startIndex
-        
-        galleryPagingMode = .standard
-        
         spineDividerWidth = 0.0// TODO: egemen bak sonra
         
         
@@ -142,11 +133,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
                    options: [UIPageViewController.OptionsKey.interPageSpacing : NSNumber(value: spineDividerWidth as Float)])
         
         self.notification = notification
-        pagingDataSource = VisilabsCarouselPagingDataSource(itemsDataSource: self, displacedViewsDataSource: self)
-        
-        
-        
-        
+        pagingDataSource = VisilabsCarouselPagingDataSource(itemsDataSource: self, displacedViewsDataSource: self, notification: notification)
         pagingDataSource.itemControllerDelegate = self
         
         ///This feels out of place, one would expect even the first presented(paged) item controller to be provided by the paging dataSource but there is nothing we can do as Apple requires the first controller to be set via this "setViewControllers" method.
@@ -166,6 +153,22 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         
         NotificationCenter.default.addObserver(self, selector: #selector(VisilabsCarouselNotificationViewController.rotate), name: UIDevice.orientationDidChangeNotification, object: nil)
         
+        
+        if notification.closePopupActionType?.lowercased() != "closebutton" {
+            let overlayViewTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(overlayViewTapped(tapGestureRecognizer:)))
+            view.gestureRecognizers = []
+            view.isUserInteractionEnabled = true
+            view.addGestureRecognizer(overlayViewTapGestureRecognizer)
+        }
+        
+        //footerView = UIPageControl()
+        //footerView?.numberOfPages = notification.carouselItems.count
+        //footerView?.currentPage = startIndex
+        
+    }
+    
+    @objc func overlayViewTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        self.closeCarousel(shouldTrack: false, callToActionURL: nil)
     }
     
     
@@ -183,22 +186,14 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     }
     
     
+    /*
     fileprivate func configureFooterView() {
         if let footer = footerView {
             footer.alpha = 0
             self.view.addSubview(footer)
         }
     }
-    
-    fileprivate func configureCloseButton() {
-        if let closeButton = closeButton {
-            closeButton.addTarget(self, action: #selector(VisilabsCarouselNotificationViewController.closeInteractively), for: .touchUpInside)
-            closeButton.alpha = 0
-            self.view.addSubview(closeButton)
-        }
-    }
-    
-    
+     */
     
     
     open override func viewDidLoad() {
@@ -208,9 +203,8 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
             if (statusBarHidden || UIScreen.hasNotch) {
                 additionalSafeAreaInsets = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
             }
-        }        
-        configureFooterView()
-        configureCloseButton()
+        }
+        //configureFooterView()
         self.view.clipsToBounds = false
     }
     
@@ -234,7 +228,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         
         ///Animates decoration views to the initial state if they are set to be visible on launch. We do not need to do anything if they are set to be hidden because they are already set up as hidden by default. Unhiding them for the launch is part of chosen UX.
         initialItemController?.presentItem(alongsideAnimation: { [weak self] in
-            
             self?.overlayView.present()
             
         }, completion: { [weak self] in
@@ -265,12 +258,8 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
             self.view.bounds = bounds
         }
         
-        //TODO: egemen
-        //overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width * 2, dy: -UIScreen.main.bounds.height * 2)
-        overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width , dy: -UIScreen.main.bounds.height)
-        
-        layoutButton(closeButton, layout: closeLayout)
-        layoutFooterView()
+        overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width * 2, dy: -UIScreen.main.bounds.height * 2)
+        //layoutFooterView()
     }
     
     private var defaultInsets: UIEdgeInsets {
@@ -405,71 +394,26 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         }
     }
     
+    //TODO: gereksizse kaldır
     /// Invoked when closed programmatically
     public func close() {
-        closeDecorationViews(programmaticallyClosedCompletion)
     }
     
+    //TODO: gereksizse kaldır
     /// Invoked when closed via close button
     @objc fileprivate func closeInteractively() {
-        
-        closeDecorationViews(closedCompletion)
     }
     
-    fileprivate func closeDecorationViews(_ completion: (() -> Void)?) {
-        
-        guard isAnimating == false else { return }
-        isAnimating = true
-        
-        if let itemController = self.viewControllers?.first as? ItemController {
-            
-            itemController.closeDecorationViews(decorationViewsFadeDuration)
-        }
-        
-        UIView.animate(withDuration: decorationViewsFadeDuration, animations: { [weak self] in
-            self?.footerView?.alpha = 0.0
-            self?.closeButton?.alpha = 0.0
-            
-        }, completion: { [weak self] done in
-            
-            if let strongSelf = self,
-               let itemController = strongSelf.viewControllers?.first as? ItemController {
-                
-                itemController.dismissItem(alongsideAnimation: {
-                    
-                    strongSelf.overlayView.dismiss()
-                    
-                }, completion: { [weak self] in
-                    
-                    self?.isAnimating = true
-                    self?.closeGallery(false, completion: completion)
-                })
-            }
-        })
-    }
-    
-    func closeGallery(_ animated: Bool, completion: (() -> Void)?) {
-        
-        self.overlayView.removeFromSuperview()
-        
-        self.modalTransitionStyle = .crossDissolve
-        
-        self.dismiss(animated: animated) {
-            
-            UIApplication.applicationWindow.windowLevel = UIWindow.Level.normal
-            completion?()
-        }
-    }
+
     
     fileprivate func animateDecorationViews(visible: Bool) {
         
-        let targetAlpha: CGFloat = (visible) ? 1 : 0
+        //let targetAlpha: CGFloat = (visible) ? 1 : 0
         
-        UIView.animate(withDuration: decorationViewsFadeDuration, animations: { [weak self] in
-            self?.footerView?.alpha = targetAlpha
-            self?.closeButton?.alpha = targetAlpha
+        //UIView.animate(withDuration: decorationViewsFadeDuration, animations: { [weak self] in
+        //    self?.footerView?.alpha = targetAlpha
             
-        })
+        //})
     }
     
     public func itemControllerWillAppear(_ controller: ItemController) {
@@ -482,22 +426,56 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         
     }
     
+    public func fetchedImage(_ controller: ItemController) {
+        if let notification = notification {
+            controller.itemView.footerView?.removeFromSuperview()
+            controller.itemView.footerView = UIPageControl()
+            controller.itemView.footerView?.numberOfPages = notification.carouselItems.count
+            controller.itemView.footerView?.currentPage = controller.index
+            controller.itemView.addSubview(controller.itemView.footerView!)
+            controller.itemView.footerView?.topToBottom(of: controller.itemView, offset: -30, relation: .equal, priority: .required, isActive: true)
+            controller.itemView.footerView?.centerX(to: controller.itemView, isActive: true)
+        }
+    }
+    
+    
     public func itemControllerDidAppear(_ controller: ItemController) {
         self.currentIndex = controller.index
         self.landedPageAtIndexCompletion?(self.currentIndex)
-        self.footerView?.sizeToFit()
+        
+        if let notification = notification {
+            controller.itemView.footerView?.removeFromSuperview()
+            controller.itemView.footerView = UIPageControl()
+            controller.itemView.footerView?.numberOfPages = notification.carouselItems.count
+            controller.itemView.footerView?.currentPage = controller.index
+            controller.itemView.addSubview(controller.itemView.footerView!)
+            controller.itemView.footerView?.topToBottom(of: controller.itemView, offset: -30, relation: .equal, priority: .required, isActive: true)
+            controller.itemView.footerView?.centerX(to: controller.itemView, isActive: true)
+        }
     }
     
     
     public func itemController(_ controller: ItemController, didSwipeToDismissWithDistanceToEdge distance: CGFloat) {
         if decorationViewsHidden == false {
             let alpha = 1 - distance * swipeToDismissFadeOutAccelerationFactor
-            closeButton?.alpha = alpha
             footerView?.alpha = alpha
         }
-        
         self.overlayView.blurringView.alpha = 1 - distance
         self.overlayView.colorView.alpha = 1 - distance
+    }
+    
+    public func closeCarousel(shouldTrack: Bool, callToActionURL: URL?) {
+        
+        self.visilabsDelegate?.notificationShouldDismiss(controller: self,
+                                            callToActionURL: callToActionURL,
+                                            shouldTrack: shouldTrack,
+                                            additionalTrackingProperties: nil)
+    }
+    
+    public override func hide(animated: Bool, completion: @escaping () -> Void) {
+        self.overlayView.removeFromSuperview()
+        dismiss(animated: true)
+        completion()
     }
     
 }
@@ -510,9 +488,7 @@ extension VisilabsCarouselNotificationViewController: VisilabsCarouselItemsDataS
     }
     
     public func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock {
-        
         let carouselItem = carouselNotification.carouselItems[index]
-        
         return VisilabsCarouselItemBlock(fetchImageBlock: carouselItem.fetchImageBlock, visilabsCarouselItemView: VisilabsCarouselItemView(frame: .zero, visilabsCarouselItem: carouselItem))
     }
 }

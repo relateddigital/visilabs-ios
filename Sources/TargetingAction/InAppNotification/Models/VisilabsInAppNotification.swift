@@ -362,7 +362,6 @@ public class VisilabsInAppNotification {
         
         if let carouselItemObjects = actionData[PayloadKey.carouselItems] as? [[String: Any]] {
             for carouselItemObject in carouselItemObjects {
-                //carouselItemObject[VisilabsCarouselItem.PayloadKey.close_button_color] = actionData[PayloadKey.closeButtonColor] as? String
                 if let carouselItem = VisilabsCarouselItem.init(JSONObject: carouselItemObject) {
                     carouselItems.append(carouselItem)
                 }

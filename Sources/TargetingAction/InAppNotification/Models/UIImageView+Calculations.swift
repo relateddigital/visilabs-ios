@@ -16,4 +16,5 @@ extension UIImageView {
         let ratio = image.size.height / image.size.width
         return width * ratio
     }
+    
 }
