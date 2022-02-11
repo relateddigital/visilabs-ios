@@ -12,9 +12,6 @@ import Eureka
 //swiftlint:disable type_body_length
 class InAppViewController: FormViewController {
 
-    
-    var carouselItems: [DataItem] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()

@@ -312,109 +312,32 @@ extension InAppViewController {
                 print("showCarouselNotification carouselModel is nil")
                 return
             }
-            
-            self.carouselItems = [DataItem]()
-            
-            for carousel in notification.carouselItems! {
-                
-                print("carousel: \(String(describing: carousel.body))")
-                
-                let myFetchImageBlock: FetchImageBlock = { imageCompletion in
-                    if let imageUrlString = carousel.imageUrlString,  let url = URL(string: imageUrlString)
-                        , let imageData: Data = try? Data(contentsOf: url) {
-                        let image = UIImage(data: imageData as Data)
-                        imageCompletion(image, carousel)
-                    } else {
-                        imageCompletion(nil, carousel)
-                    }
-                }
-                
-                let galleryItem = VisilabsCarouselItemBlock(fetchImageBlock: myFetchImageBlock, visilabsCarouselItemView: VisilabsCarouselItemView(frame: .zero, visilabsCarouselItem: carousel))
-                let dataItem = DataItem(imageView: UIImageView(), galleryItem: galleryItem)
-                self.carouselItems.append(dataItem)
-            }
-            
-            
-            
-            
-            let displacedViewIndex = 0
-            
+
             let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-            let headerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
-            let footerView = CounterView(frame: frame, currentIndex: displacedViewIndex, count: self.carouselItems.count)
+            let headerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
+            let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
             
-            let galleryViewController = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration(), notification: notification)
-            galleryViewController.headerView = headerView
-            galleryViewController.footerView = footerView
+            let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
+            vc.headerView = headerView
+            vc.footerView = footerView
             
-            galleryViewController.launchedCompletion = { print("LAUNCHED") }
-            galleryViewController.closedCompletion = { print("CLOSED") }
-            galleryViewController.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
+            vc.launchedCompletion = { print("LAUNCHED") }
+            vc.closedCompletion = { print("CLOSED") }
+            vc.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
             
-            galleryViewController.landedPageAtIndexCompletion = { index in
+            vc.landedPageAtIndexCompletion = { index in
                 print("LANDED AT INDEX: \(index)")
-                headerView.count = self.carouselItems.count
+                headerView.count = notification.carouselItems.count
                 headerView.currentIndex = index
-                footerView.count = self.carouselItems.count
+                footerView.count = notification.carouselItems.count
                 footerView.currentIndex = index
             }
             
-            self.presentImageGallery(galleryViewController)
-            
-            
+            self.presentCarouselNotification(vc)
         }
     }
     
-    func galleryConfiguration() -> GalleryConfiguration {
-        
-        return [
-            
-            GalleryConfigurationItem.closeButtonMode(.builtIn),
-            
-            GalleryConfigurationItem.pagingMode(.standard),
-            GalleryConfigurationItem.presentationStyle(.displacement),
-            GalleryConfigurationItem.hideDecorationViewsOnLaunch(false),
-            
-            GalleryConfigurationItem.swipeToDismissMode(.never),
-            GalleryConfigurationItem.toggleDecorationViewsBySingleTap(false),
-            
-            GalleryConfigurationItem.overlayColor(UIColor(white: 0.035, alpha: 1)),
-            GalleryConfigurationItem.overlayColorOpacity(0.7),
-            GalleryConfigurationItem.overlayBlurOpacity(0.7),
-            GalleryConfigurationItem.overlayBlurStyle(UIBlurEffect.Style.light),
-            
-            
-            GalleryConfigurationItem.swipeToDismissThresholdVelocity(500),
-            
-            
-            GalleryConfigurationItem.blurPresentDuration(0.5),
-            GalleryConfigurationItem.blurPresentDelay(0),
-            GalleryConfigurationItem.colorPresentDuration(0.25),
-            GalleryConfigurationItem.colorPresentDelay(0),
-            
-            GalleryConfigurationItem.blurDismissDuration(0.1),
-            GalleryConfigurationItem.blurDismissDelay(0.4),
-            GalleryConfigurationItem.colorDismissDuration(0.45),
-            GalleryConfigurationItem.colorDismissDelay(0),
-            
-            GalleryConfigurationItem.itemFadeDuration(0.3),
-            GalleryConfigurationItem.decorationViewsFadeDuration(0.15),
-            GalleryConfigurationItem.rotationDuration(0.15),
-            
-            GalleryConfigurationItem.displacementDuration(0.55),
-            GalleryConfigurationItem.reverseDisplacementDuration(0.25),
-            GalleryConfigurationItem.displacementTransitionStyle(.springBounce(0.7)),
-            GalleryConfigurationItem.displacementTimingCurve(.linear),
-            
-            GalleryConfigurationItem.statusBarHidden(true),
-            GalleryConfigurationItem.displacementKeepOriginalInPlace(false),
-            GalleryConfigurationItem.displacementInsetMargin(0),
-            
-            GalleryConfigurationItem.imageDividerWidth(CGFloat(30.0)) //TODO:egemen
-        ]
-    }
-    
-    
+
     func addShowNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
             $0.title = "showNotification"
@@ -760,86 +683,3 @@ extension InAppViewController {
     }
     
 }
-
-
-
-extension UIImageView: DisplaceableView {
-    
-}
-
-extension InAppViewController: GalleryDisplacedViewsDataSource {
-    
-    func provideDisplacementItem(atIndex index: Int) -> DisplaceableView? {
-        let a = index < carouselItems.count ? carouselItems[index].imageView : nil
-        return a
-    }
-}
-
-extension InAppViewController: GalleryItemsDataSource {
-    
-    func itemCount() -> Int {
-        return carouselItems.count
-    }
-    
-    func provideGalleryItem(_ index: Int) -> VisilabsCarouselItemBlock {
-        return carouselItems[index].galleryItem
-    }
-}
-
-
-struct DataItem {
-    
-    let imageView: UIImageView
-    let galleryItem: VisilabsCarouselItemBlock
-}
-
-
-
-
-
-class CounterView: UIView {
-    
-    var count: Int
-    let countLabel = UILabel()
-    var currentIndex: Int {
-        didSet {
-            updateLabel()
-        }
-    }
-    
-    init(frame: CGRect, currentIndex: Int, count: Int) {
-        
-        self.currentIndex = currentIndex
-        self.count = count
-        
-        super.init(frame: frame)
-        
-        configureLabel()
-        updateLabel()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configureLabel() {
-        
-        countLabel.textAlignment = .center
-        self.addSubview(countLabel)
-    }
-    
-    func updateLabel() {
-        
-        let stringTemplate = "%d of %d"
-        let countString = String(format: stringTemplate, arguments: [currentIndex + 1, count])
-        
-        countLabel.attributedText = NSAttributedString(string: countString, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17), NSAttributedString.Key.foregroundColor: UIColor.white])
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        countLabel.frame = self.bounds
-    }
-}
-

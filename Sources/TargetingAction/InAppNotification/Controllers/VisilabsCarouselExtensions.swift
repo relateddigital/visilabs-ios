@@ -340,9 +340,7 @@ extension Bool {
 }
 
 public extension UIViewController {
-
-    func presentImageGallery(_ gallery: VisilabsCarouselNotificationViewController, completion: (() -> Void)? = {}) {
-
+    func presentCarouselNotification(_ gallery: VisilabsCarouselNotificationViewController, completion: (() -> Void)? = {}) {
         present(gallery, animated: false, completion: completion)
     }
 }

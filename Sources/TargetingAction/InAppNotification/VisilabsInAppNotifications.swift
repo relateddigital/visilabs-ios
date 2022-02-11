@@ -150,23 +150,42 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         alertController.addAction(close)
         
         if let root = VisilabsHelper.getRootViewController() {
-            
             if UIDevice.current.userInterfaceIdiom == .pad, style == .actionSheet {
                 alertController.popoverPresentationController?.sourceView = root.view
                 alertController.popoverPresentationController?.sourceRect = CGRect(x: root.view.bounds.midX, y: root.view.bounds.maxY, width: 0, height: 0)
             }
-            
-            
             root.present(alertController, animated: true, completion: alertDismiss)
         }
     }
     
     func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
         
-        //let carousel = VisilabsCarouselNotificationViewController(startIndex: 0, itemsDataSource: self, displacedViewsDataSource: self, configuration: self.galleryConfiguration(), notification: notification)
-        //carousel.delegate = self
-        //carousel.show(animated: true)
-        return true
+        let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
+        let headerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
+        let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
+        
+        let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
+        vc.headerView = headerView
+        vc.footerView = footerView
+        
+        vc.launchedCompletion = { print("LAUNCHED") }
+        vc.closedCompletion = { print("CLOSED") }
+        vc.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
+        
+        vc.landedPageAtIndexCompletion = { index in
+            print("LANDED AT INDEX: \(index)")
+            headerView.count = notification.carouselItems.count
+            headerView.currentIndex = index
+            footerView.count = notification.carouselItems.count
+            footerView.currentIndex = index
+        }
+        
+        if let rootViewController = VisilabsHelper.getRootViewController() {
+            rootViewController.presentCarouselNotification(vc)
+            return true
+        } else {
+            return false
+        }
     }
     
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
