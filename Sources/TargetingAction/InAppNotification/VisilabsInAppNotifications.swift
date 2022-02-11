@@ -160,23 +160,25 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     
     func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
         
+        if notification.carouselItems.count < 2 {
+            VisilabsLogger.error("Carousel Item Count is less than 2.")
+            return false
+        }
+        
         let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-        let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
+        //let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
         
         let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
         vc.visilabsDelegate = self
-        vc.footerView = footerView
         vc.launchedCompletion = { VisilabsLogger.info("Carousel Launched") }
         vc.closedCompletion = {
             VisilabsLogger.info("Carousel Closed")
             vc.visilabsDelegate?.notificationShouldDismiss(controller: vc, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
-        }
-        vc.swipedToDismissCompletion = { print("SWIPE-DISMISSED") }
-        
+        }        
         vc.landedPageAtIndexCompletion = { index in
             print("LANDED AT INDEX: \(index)")
-            footerView.count = notification.carouselItems.count
-            footerView.currentIndex = index
+            //footerView.count = notification.carouselItems.count
+            //footerView.currentIndex = index
         }
         
         

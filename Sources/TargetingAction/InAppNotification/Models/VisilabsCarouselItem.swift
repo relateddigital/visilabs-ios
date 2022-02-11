@@ -59,20 +59,35 @@ public class VisilabsCarouselItem {
     public let buttonFontFamily: String?
     public let buttonCustomFontFamily: String?
     public let buttonTextsize: String?
-    public let backgroundImage: String?
+    public let backgroundImageString: String?
     public let backgroundColor: UIColor?
-    public let link: String?
+    public let linkString: String?
     public var closeButtonColor: UIColor?
     
     var titleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
     var bodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     var buttonFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     
+    var linkUrl: URL? = nil
     
     var imageUrl: URL? = nil
     public lazy var image: Data? = {
         var data: Data?
         if let iUrl = self.imageUrl {
+            do {
+                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
+            } catch {
+                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            }
+        }
+        return data
+    }()
+    
+    
+    var backgroundImageUrl: URL? = nil
+    public lazy var backgroundImage: Data? = {
+        var data: Data?
+        if let iUrl = self.backgroundImageUrl {
             do {
                 data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
             } catch {
@@ -90,8 +105,8 @@ public class VisilabsCarouselItem {
                 ,titleTextsize: String?, body: String?, bodyColor: UIColor?, bodyFontFamily: String?, bodyCustomFontFamily: String?
                 ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
                 ,promocodeTextColor: UIColor?, buttonText: String?, buttonTextColor: UIColor?, buttonColor: UIColor?
-                ,buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImage: String?
-                ,backgroundColor: UIColor?, link: String?, closeButtonColor: UIColor?) {
+                ,buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImageString: String?
+                ,backgroundColor: UIColor?, linkString: String?, closeButtonColor: UIColor?) {
         self.imageUrlString = imageUrlString
         self.title = title
         self.titleColor = UIColor(hex: titleColor)
@@ -113,25 +128,38 @@ public class VisilabsCarouselItem {
         self.buttonFontFamily = buttonFontFamily
         self.buttonCustomFontFamily = buttonCustomFontFamily
         self.buttonTextsize = buttonTextsize
-        self.backgroundImage = backgroundImage
+        self.backgroundImageString = backgroundImageString
         self.backgroundColor = backgroundColor
-        self.link = link
+        self.linkString = linkString
+        
+        if let linkString = linkString, !linkString.isEmptyOrWhitespace {
+            self.linkUrl = URL(string: linkString)
+        }
         
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
+        
+        if !backgroundImageString.isNilOrWhiteSpace {
+            self.backgroundImageUrl = VisilabsHelper.getImageUrl(backgroundImageString!, type: .inappcarousel)
+        }
+        
         self.closeButtonColor = closeButtonColor
         
         self.setFonts()
         
         self.fetchImageBlock = { imageCompletion in
-            if let imageUrlString = self.imageUrlString,  let url = URL(string: imageUrlString)
-                , let imageData: Data = try? Data(contentsOf: url) {
-                let image = UIImage(data: imageData as Data)
-                imageCompletion(image, self)
-            } else {
-                imageCompletion(nil, self)
+            var image: UIImage? = nil
+            var backgroundImage: UIImage? = nil
+            
+            if let imageUrl = self.imageUrl, let imageData: Data = try? Data(contentsOf: imageUrl) {
+                image = UIImage(data: imageData as Data)
             }
+            if let backgroundImageUrl = self.backgroundImageUrl, let imageData: Data = try? Data(contentsOf: backgroundImageUrl) {
+                backgroundImage = UIImage(data: imageData as Data)
+            }
+            
+            imageCompletion(image, backgroundImage, self)
         }
         
     }
@@ -164,13 +192,22 @@ public class VisilabsCarouselItem {
         self.buttonFontFamily = object[PayloadKey.button_font_family] as? String
         self.buttonCustomFontFamily = object[PayloadKey.button_custom_font_family_ios] as? String
         self.buttonTextsize = object[PayloadKey.button_textsize] as? String
-        self.backgroundImage = object[PayloadKey.background_image] as? String
+        self.backgroundImageString = object[PayloadKey.background_image] as? String
         self.backgroundColor = UIColor(hex: object[PayloadKey.background_color] as? String)
-        self.link = object[PayloadKey.ios_lnk] as? String
+        self.linkString = object[PayloadKey.ios_lnk] as? String
+        
+        if let linkString = linkString, !linkString.isEmptyOrWhitespace {
+            self.linkUrl = URL(string: linkString)
+        }
         
         if !imageUrlString.isNilOrWhiteSpace {
             self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
+        
+        if !backgroundImageString.isNilOrWhiteSpace {
+            self.backgroundImageUrl = VisilabsHelper.getImageUrl(backgroundImageString!, type: .inappcarousel)
+        }
+        
         self.closeButtonColor = UIColor(hex: object[PayloadKey.close_button_color] as? String)
         
         self.titleFont = VisilabsHelper.getFont(fontFamily: self.titleFontFamily, fontSize: self.titleTextsize
@@ -183,13 +220,17 @@ public class VisilabsCarouselItem {
         self.setFonts()
         
         self.fetchImageBlock = { imageCompletion in
-            if let imageUrlString = self.imageUrlString,  let url = URL(string: imageUrlString)
-                , let imageData: Data = try? Data(contentsOf: url) {
-                let image = UIImage(data: imageData as Data)
-                imageCompletion(image, self)
-            } else {
-                imageCompletion(nil, self)
+            var image: UIImage? = nil
+            var backgroundImage: UIImage? = nil
+            
+            if let imageUrl = self.imageUrl, let imageData: Data = try? Data(contentsOf: imageUrl) {
+                image = UIImage(data: imageData as Data)
             }
+            if let backgroundImageUrl = self.backgroundImageUrl, let imageData: Data = try? Data(contentsOf: backgroundImageUrl) {
+                backgroundImage = UIImage(data: imageData as Data)
+            }
+            
+            imageCompletion(image, backgroundImage, self)
         }
         
     }

@@ -125,93 +125,6 @@ extension CAShapeLayer {
     }
 }
 
-
-extension UIButton {
-
-    static func closeButton() -> UIButton {
-
-        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 50, height: 50)))
-        button.setImage(CAShapeLayer.closeShape(edgeLength: 15).toImage(), for: .normal)
-
-        return button
-    }
-
-    static func thumbnailsButton() -> UIButton {
-
-        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 80, height: 50)))
-        button.setTitle("See All", for: .normal)
-        //button.titleLabel?.textColor = UIColor.redColor()
-
-        return button
-    }
-
-    static func deleteButton() -> UIButton {
-
-        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 80, height: 50)))
-        button.setTitle("Delete", for: .normal)
-
-        return button
-    }
-}
-
-//TODO: BAK TEKRAR
-class Slider: UISlider {
-
-    @objc dynamic var isSliding: Bool = false
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-
-        isSliding = true
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-
-        isSliding = false
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-
-        isSliding = false
-    }
-}
-
-extension Slider {
-
-    static func createSlider(_ width: CGFloat, height: CGFloat, pointerDiameter: CGFloat, barHeight: CGFloat) -> Slider {
-
-        let slider = Slider(frame: CGRect(x: 0, y: 0, width: width, height: height))
-
-        slider.setThumbImage(CAShapeLayer.circle(UIColor.white, diameter: pointerDiameter).toImage(), for: UIControl.State())
-
-        let tileImageFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: barHeight))
-
-        let minTrackImage = CALayer()
-        minTrackImage.backgroundColor = UIColor.white.cgColor
-        minTrackImage.frame = tileImageFrame
-
-        let maxTrackImage = CALayer()
-        maxTrackImage.backgroundColor = UIColor.darkGray.cgColor
-        maxTrackImage.frame = tileImageFrame
-
-        slider.setMinimumTrackImage(minTrackImage.toImage(), for: UIControl.State())
-        slider.setMaximumTrackImage(maxTrackImage.toImage(), for: UIControl.State())
-
-        return slider
-    }
-    
-    override func tintColorDidChange() {
-        self.minimumTrackTintColor = self.tintColor
-        self.maximumTrackTintColor = self.tintColor.shadeDarker()
-        
-        // Correct way would be setting self.thumbTintColor however this has a bug which changes the thumbImage frame
-        let image = self.currentThumbImage?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-        self.setThumbImage(image, for: UIControl.State.normal)
-    }
-}
-
 import CoreGraphics
 
 extension CGPoint {
@@ -277,9 +190,7 @@ extension CGPoint {
 
 
 extension CGSize {
-
     func inverted() -> CGSize {
-
         return CGSize(width: self.height, height: self.width)
     }
 }
@@ -294,16 +205,11 @@ public extension UIScreen {
 }
 
 extension DisplaceableView {
-
-    func imageView() -> UIImageView {
-
-        let imageView = UIImageView(image: self.image)
-        imageView.bounds = self.bounds
-        imageView.center = self.center
-        //TODO: egemen
-        //imageView.contentMode = self.contentMode
-
-        return imageView
+    func getView() -> UIView {
+        let view = VisilabsCarouselItemView(frame: .zero, visilabsCarouselItem: self.visilabsCarouselItem)
+        view.bounds = self.bounds
+        view.center = self.center
+        return view
     }
 }
 
@@ -317,7 +223,6 @@ extension DisplaceableView {
 extension Bool {
 
     mutating func flip() {
-
         self = !self
     }
 }

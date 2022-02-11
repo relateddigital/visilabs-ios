@@ -9,20 +9,21 @@ import UIKit
 
 final class VisilabsCarouselPagingDataSource: NSObject, UIPageViewControllerDataSource {
     
+    
+    weak var notification: VisilabsInAppNotification?
     weak var itemControllerDelegate: ItemControllerDelegate?
     fileprivate weak var itemsDataSource:          VisilabsCarouselItemsDataSource?
     fileprivate weak var displacedViewsDataSource: GalleryDisplacedViewsDataSource?
     
-    fileprivate var pagingMode = GalleryPagingMode.standard
     fileprivate var itemCount: Int { return itemsDataSource?.itemCount() ?? 0 }
     
-    init(itemsDataSource: VisilabsCarouselItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?) {
+    init(itemsDataSource: VisilabsCarouselItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?, notification: VisilabsInAppNotification?) {
+        self.notification = notification
         self.itemsDataSource = itemsDataSource
         self.displacedViewsDataSource = displacedViewsDataSource
         //TODO: egemen buna bak sonra. tek elemanlı carousel olabilir mi?
-        if itemsDataSource.itemCount() > 1 { // Potential carousel mode present in configuration only makes sense for more than 1 item
-            pagingMode = .standard
-        }
+        // Potential carousel mode present in configuration only makes sense for more than 1 item
+    
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -30,14 +31,7 @@ final class VisilabsCarouselPagingDataSource: NSObject, UIPageViewControllerData
         guard let currentController = viewController as? ItemController else { return nil }
         let previousIndex = (currentController.index == 0) ? itemCount - 1 : currentController.index - 1
         
-        switch pagingMode {
-            
-        case .standard:
-            return (currentController.index > 0) ? self.createItemController(previousIndex) : nil
-            
-        case .carousel:
-            return self.createItemController(previousIndex)
-        }
+        return (currentController.index > 0) ? self.createItemController(previousIndex) : nil
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
@@ -45,20 +39,13 @@ final class VisilabsCarouselPagingDataSource: NSObject, UIPageViewControllerData
         guard let currentController = viewController as? ItemController  else { return nil }
         let nextIndex = (currentController.index == itemCount - 1) ? 0 : currentController.index + 1
         
-        switch pagingMode {
-            
-        case .standard:
-            return (currentController.index < itemCount - 1) ? self.createItemController(nextIndex) : nil
-            
-        case .carousel:
-            return self.createItemController(nextIndex)
-        }
+        return (currentController.index < itemCount - 1) ? self.createItemController(nextIndex) : nil
     }
     
     func createItemController(_ itemIndex: Int, isInitial: Bool = false) -> UIViewController {
         guard let itemsDataSource = itemsDataSource else { return UIViewController() }
         let item = itemsDataSource.provideGalleryItem(itemIndex)
-        let imageController = ItemBaseController(index: itemIndex, itemCount: itemsDataSource.itemCount(), fetchImageBlock: item.fetchImageBlock, visilabsCarouselItemView: item.visilabsCarouselItemView, isInitialController: isInitial)
+        let imageController = ItemBaseController(index: itemIndex, itemCount: itemsDataSource.itemCount(), fetchImageBlock: item.fetchImageBlock, visilabsCarouselItemView: item.visilabsCarouselItemView, isInitialController: isInitial, visilabsInAppNotification: notification)
         imageController.delegate = itemControllerDelegate
         imageController.displacedViewsDataSource = displacedViewsDataSource
         return imageController
