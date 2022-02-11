@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-internal enum ConstraintRelation: Int {
+//TODO: public'i kaldır
+public enum ConstraintRelation: Int {
     case equal = 0
     case equalOrLess = -1
     case equalOrGreater = 1

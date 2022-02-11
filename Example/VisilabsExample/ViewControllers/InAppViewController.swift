@@ -79,9 +79,7 @@ class InAppViewController: FormViewController {
         +++ Section()
 
             <<< addShowNotificationButtonRow()
-            <<< addShowCountDownTimerButtonRow()
-            //<<< addShowSocialPoofButtonRow()
-            <<< addShowHalfScreenButtonRow()
+            <<< addShowCarouselNotificationButtonRow()
 
         showHiddenRows()
     }
@@ -93,7 +91,7 @@ class InAppViewController: FormViewController {
         switch messageType {
         case .mini:
             setFormRowsForMini()
-        case .full, .imageTextButton, .carousel:
+        case .full, .imageTextButton, .inappcarousel:
             setFormRowsForDefault()
         case .nps, .smileRating:
             setFormRowsForPromoCode()

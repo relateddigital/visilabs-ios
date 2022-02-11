@@ -49,7 +49,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                         shownNotification = self.showFullNotification(notification)
                     case .halfScreenImage:
                         shownNotification = self.showHalfScreenNotification(notification)
-                    case .carousel:
+                    case .inappcarousel:
                         shownNotification = self.showCarousel(notification)
                     case .alert:
                         shownNotification = true
@@ -125,13 +125,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         return true
     }
     
-    func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
-        let carousel = VisilabsCarouselNotificationViewController(notification: notification)
-        carousel.delegate = self
-        carousel.show(animated: true)
-        return true
-    }
-    
     func showAlert(_ notification: VisilabsInAppNotification) {
         let title = notification.messageTitle?.removeEscapingCharacters()
         let message = notification.messageBody?.removeEscapingCharacters()
@@ -157,18 +150,45 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         alertController.addAction(close)
         
         if let root = VisilabsHelper.getRootViewController() {
-            
             if UIDevice.current.userInterfaceIdiom == .pad, style == .actionSheet {
                 alertController.popoverPresentationController?.sourceView = root.view
                 alertController.popoverPresentationController?.sourceRect = CGRect(x: root.view.bounds.midX, y: root.view.bounds.maxY, width: 0, height: 0)
             }
-            
-            
             root.present(alertController, animated: true, completion: alertDismiss)
         }
     }
     
-    
+    func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
+        
+        if notification.carouselItems.count < 2 {
+            VisilabsLogger.error("Carousel Item Count is less than 2.")
+            return false
+        }
+        
+        let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
+        //let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
+        
+        let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
+        vc.visilabsDelegate = self
+        vc.launchedCompletion = { VisilabsLogger.info("Carousel Launched") }
+        vc.closedCompletion = {
+            VisilabsLogger.info("Carousel Closed")
+            vc.visilabsDelegate?.notificationShouldDismiss(controller: vc, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+        }        
+        vc.landedPageAtIndexCompletion = { index in
+            print("LANDED AT INDEX: \(index)")
+            //footerView.count = notification.carouselItems.count
+            //footerView.currentIndex = index
+        }
+        
+        
+        if let rootViewController = VisilabsHelper.getRootViewController() {
+            rootViewController.presentCarouselNotification(vc)
+            return true
+        } else {
+            return false
+        }
+    }
     
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)
@@ -232,7 +252,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
     
     @discardableResult
-    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
+    func notificationShouldDismiss(controller: VisilabsBaseViewProtocol,
                                    callToActionURL: URL?, shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool {
         
