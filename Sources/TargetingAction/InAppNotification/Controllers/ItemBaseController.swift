@@ -32,11 +32,10 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
     fileprivate var itemFadeDuration: TimeInterval = 0.3
     fileprivate var displacementTimingCurve: UIView.AnimationCurve = .linear
     fileprivate var displacementSpringBounce: CGFloat = 0.7
-    fileprivate var pagingMode: GalleryPagingMode = .carousel
+    fileprivate var pagingMode: GalleryPagingMode = .standard
     fileprivate var thresholdVelocity: CGFloat = 500 // The speed of swipe needs to be at least this amount of pixels per second for the swipe to finish dismissal.
     fileprivate var displacementKeepOriginalInPlace = false
     fileprivate var displacementInsetMargin: CGFloat = 0
-    fileprivate var activityViewByLongPress = true
 
     // MARK: - Initializers
     
@@ -105,6 +104,11 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
         fetchImage()
     }
     
+    @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+
+        self.closeDecorationViews(0)
+    }
+    
     public func fetchImage() {
         
         fetchImageBlock? { [weak self] image, carouselItem in
@@ -127,6 +131,13 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
                     s.scrollView.minimumZoomScale = 1.0
                     s.scrollView.maximumZoomScale = 1.0
                     s.itemView.translatesAutoresizingMaskIntoConstraints = false
+                    
+                    
+                    let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(s.closeButtonTapped(tapGestureRecognizer:)))
+                    s.itemView.closeButton.isUserInteractionEnabled = true
+                    s.itemView.closeButton.gestureRecognizers = []
+                    s.itemView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
+                    
                     self?.view.setNeedsLayout()
                     self?.view.layoutIfNeeded()
                 }
@@ -348,6 +359,6 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
     }
     
     public func closeDecorationViews(_ duration: TimeInterval) {
-        // stub
+ 
     }
 }

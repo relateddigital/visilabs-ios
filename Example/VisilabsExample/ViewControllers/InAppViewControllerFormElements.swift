@@ -314,11 +314,9 @@ extension InAppViewController {
             }
 
             let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-            let headerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
             let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
             
             let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
-            vc.headerView = headerView
             vc.footerView = footerView
             
             vc.launchedCompletion = { print("LAUNCHED") }
@@ -327,8 +325,6 @@ extension InAppViewController {
             
             vc.landedPageAtIndexCompletion = { index in
                 print("LANDED AT INDEX: \(index)")
-                headerView.count = notification.carouselItems.count
-                headerView.currentIndex = index
                 footerView.count = notification.carouselItems.count
                 footerView.currentIndex = index
             }

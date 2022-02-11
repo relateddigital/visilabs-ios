@@ -1,5 +1,5 @@
 //
-//  GalleryPagingDataSource.swift
+//  VisilabsCarouselPagingDataSource.swift
 //  VisilabsIOS
 //
 //  Created by Egemen Gülkılık on 8.02.2022.
@@ -7,16 +7,16 @@
 
 import UIKit
 
-final class GalleryPagingDataSource: NSObject, UIPageViewControllerDataSource {
+final class VisilabsCarouselPagingDataSource: NSObject, UIPageViewControllerDataSource {
     
     weak var itemControllerDelegate: ItemControllerDelegate?
-    fileprivate weak var itemsDataSource:          GalleryItemsDataSource?
+    fileprivate weak var itemsDataSource:          VisilabsCarouselItemsDataSource?
     fileprivate weak var displacedViewsDataSource: GalleryDisplacedViewsDataSource?
     
     fileprivate var pagingMode = GalleryPagingMode.standard
     fileprivate var itemCount: Int { return itemsDataSource?.itemCount() ?? 0 }
     
-    init(itemsDataSource: GalleryItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?) {
+    init(itemsDataSource: VisilabsCarouselItemsDataSource, displacedViewsDataSource: GalleryDisplacedViewsDataSource?) {
         self.itemsDataSource = itemsDataSource
         self.displacedViewsDataSource = displacedViewsDataSource
         //TODO: egemen buna bak sonra. tek elemanlı carousel olabilir mi?

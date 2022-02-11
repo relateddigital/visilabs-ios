@@ -7,25 +7,33 @@
 
 import UIKit
 
-protocol VisilabsNotificationViewControllerDelegate: AnyObject {
+public protocol VisilabsNotificationViewControllerDelegate: AnyObject {
     @discardableResult
-    func notificationShouldDismiss(controller: VisilabsBaseNotificationViewController,
+    func notificationShouldDismiss(controller: VisilabsBaseViewProtocol,
                                    callToActionURL: URL?,
                                    shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool
     
-    // kullanılmıyor
-    // func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String)
 }
 
-public class VisilabsBasePageViewController: UIPageViewController {
-    
-    var notification: VisilabsInAppNotification? = nil
+
+public protocol VisilabsBaseViewProtocol {
+    var notification: VisilabsInAppNotification? { get set }
+    func hide(animated: Bool, completion: @escaping () -> Void)
 }
 
-class VisilabsBaseNotificationViewController: UIViewController {
+public class VisilabsBasePageViewController: UIPageViewController, VisilabsBaseViewProtocol {
+    public func hide(animated: Bool, completion: @escaping () -> Void) {
+        
+    }
     
-    var notification: VisilabsInAppNotification?
+    weak var visilabsDelegate: VisilabsNotificationViewControllerDelegate?
+    public var notification: VisilabsInAppNotification? = nil
+}
+
+public class VisilabsBaseNotificationViewController: UIViewController, VisilabsBaseViewProtocol {
+    
+    public var notification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
     var scratchToWin: ScratchToWinModel?
     var spinToWin: SpinToWinViewModel?
@@ -47,20 +55,20 @@ class VisilabsBaseNotificationViewController: UIViewController {
         self.notification = notification
     }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .all
     }
     
-    override var shouldAutorotate: Bool {
+    public override var shouldAutorotate: Bool {
         return true
     }
     
     func show(animated: Bool) {}
-    func hide(animated: Bool, completion: @escaping () -> Void) {}
+    public func hide(animated: Bool, completion: @escaping () -> Void) {}
     
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if self.mailForm != nil || self.spinToWin != nil {
             return
