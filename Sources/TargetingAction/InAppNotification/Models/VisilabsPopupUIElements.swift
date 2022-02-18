@@ -156,7 +156,6 @@ extension VisilabsPopupDialogDefaultView {
 
     internal func setFeedbackTF() -> UITextField {
         let tf = UITextField(frame: .zero)
-        tf.placeholder = "Please let us know what did make you unhappy."
         tf.font = .systemFont(ofSize: 11)
         tf.backgroundColor = .white
         tf.textColor = .black
