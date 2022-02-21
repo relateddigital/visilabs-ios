@@ -189,6 +189,27 @@ extension InAppViewController {
         }
     }
     
+    func addMessageTitleBackgroundColorRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.messageTitleBackgroundColor) {
+            $0.title = "Message Title Background Color"
+            $0.value = "#000000"
+            $0.disabled = true
+        }.onCellSelection { _, row in
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
+            guard let modalVC = viewController as? ModalViewController else {
+                return
+            }
+            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value) {
+                modalVC.selectedColor = selectedColor
+            }
+            modalVC.headerText = row.title!
+            modalVC.textRow = row
+            self.present(modalVC, animated: true, completion: nil)
+        }
+    }
+    
     func addMessageBodyColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageBodyColor) {
             $0.title = "Message Body Color"
@@ -205,6 +226,27 @@ extension InAppViewController {
                 modalVC.selectedColor = selectedColor
             }
             modalVC.headerText = row.title ?? ""
+            modalVC.textRow = row
+            self.present(modalVC, animated: true, completion: nil)
+        }
+    }
+    
+    func addMessageBodyBackgroundColorRow() -> TextRow {
+        return TextRow(VisilabsInAppNotification.PayloadKey.messageBodyBackgroundColor) {
+            $0.title = "Message Body Background Color"
+            $0.value = "#000000"
+            $0.disabled = true
+        }.onCellSelection { _, row in
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
+            guard let modalVC = viewController as? ModalViewController else {
+                return
+            }
+            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            if let selectedColor = UIColor(hex: row.value) {
+                modalVC.selectedColor = selectedColor
+            }
+            modalVC.headerText = row.title!
             modalVC.textRow = row
             self.present(modalVC, animated: true, completion: nil)
         }
@@ -299,9 +341,6 @@ extension InAppViewController {
             self.present(modalVC, animated: true, completion: nil)
         }
     }
-    
-    
-    
     
     func addShowCarouselNotificationButtonRow() -> ButtonRow {
         return ButtonRow {
@@ -488,8 +527,12 @@ extension InAppViewController {
                        as URLRow?)?.value?.absoluteString
         let messageTitleColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleColor)
                                  as TextRow?)!.value!  as String
+        let messageTitleBackgroundColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageTitleBackgroundColor)
+                                 as TextRow?)!.value!  as String
         let messageBodyColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyColor)
                                 as TextRow?)!.value!  as String
+        let messageBodyBackgroundColor = (self.form.rowBy(tag: VisilabsInAppNotification.PayloadKey.messageBodyBackgroundColor)
+                                 as TextRow?)!.value!  as String
         
         tag = VisilabsInAppNotification.PayloadKey.messageBodyTextSize
         let messageBodyTextSize = "\((self.form.rowBy(tag: tag) as PickerInputRow<Int>?)!.value!)"
@@ -586,8 +629,10 @@ extension InAppViewController {
                                          visitData: nil,
                                          queryString: nil,
                                          messageTitleColor: messageTitleColor,
+                                         messageTitleBackgroundColor: messageTitleBackgroundColor,
                                          messageTitleTextSize: nil,
                                          messageBodyColor: messageBodyColor,
+                                         messageBodyBackgroundColor: messageBodyBackgroundColor,
                                          messageBodyTextSize: messageBodyTextSize,
                                          fontFamily: fontFamily,
                                          customFont: customFont,
@@ -647,8 +692,10 @@ extension InAppViewController {
                                          visitData: nil,
                                          queryString: nil,
                                          messageTitleColor: "messageTitleColor",
+                                         messageTitleBackgroundColor: "messageTitleBackgroundColor",
                                          messageTitleTextSize: nil,
                                          messageBodyColor: "messageBodyColor",
+                                         messageBodyBackgroundColor: "messageBodyBackgroundColor",
                                          messageBodyTextSize: "messageBodyTextSize",
                                          fontFamily: "fontFamily",
                                          customFont: "customFont",

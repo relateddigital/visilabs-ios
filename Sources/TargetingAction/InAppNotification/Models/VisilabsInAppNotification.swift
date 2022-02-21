@@ -22,8 +22,10 @@ public class VisilabsInAppNotification {
         public static let visitData = "visit_data"
         public static let queryString = "qs"
         public static let messageTitleColor = "msg_title_color"
+        public static let messageTitleBackgroundColor = "msg_title_backgroundcolor"
         public static let messageTitleTextSize = "msg_title_textsize"
         public static let messageBodyColor = "msg_body_color"
+        public static let messageBodyBackgroundColor = "msg_body_backgroundcolor"
         public static let messageBodyTextSize = "msg_body_textsize"
         public static let fontFamily = "font_family"
         public static let backGround = "background"
@@ -63,8 +65,10 @@ public class VisilabsInAppNotification {
     let visitData: String?
     let queryString: String?
     let messageTitleColor: UIColor?
+    let messageTitleBackgroundColor: UIColor?
     let messageTitleTextSize: String?
     let messageBodyColor: UIColor?
+    let messageBodyBackgroundColor: UIColor?
     let messageBodyTextSize: String?
     let fontFamily: String?
     let customFont: String?
@@ -150,8 +154,10 @@ public class VisilabsInAppNotification {
                 visitData: String?,
                 queryString: String?,
                 messageTitleColor: String?,
+                messageTitleBackgroundColor: String?,
                 messageTitleTextSize: String?,
                 messageBodyColor: String?,
+                messageBodyBackgroundColor: String?,
                 messageBodyTextSize: String?,
                 fontFamily: String?,
                 customFont: String?,
@@ -191,8 +197,10 @@ public class VisilabsInAppNotification {
         self.visitData = visitData
         self.queryString = queryString
         self.messageTitleColor =  UIColor(hex: messageTitleColor)
+        self.messageTitleBackgroundColor = UIColor(hex: messageTitleBackgroundColor)
         self.messageTitleTextSize = messageTitleTextSize
         self.messageBodyColor = UIColor(hex: messageBodyColor)
+        self.messageBodyBackgroundColor = UIColor(hex: messageBodyBackgroundColor)
         self.messageBodyTextSize = messageBodyTextSize
         self.fontFamily = fontFamily
         self.customFont = customFont
@@ -284,9 +292,10 @@ public class VisilabsInAppNotification {
         self.visitData = actionData[PayloadKey.visitData] as? String
         self.queryString = actionData[PayloadKey.queryString] as? String
         self.messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
+        self.messageTitleBackgroundColor = UIColor(hex: actionData[PayloadKey.messageTitleBackgroundColor] as? String)
         self.messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
-        let messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
-        self.messageBodyTextSize = messageBodyTextSize
+        self.messageBodyBackgroundColor = UIColor(hex: actionData[PayloadKey.messageBodyBackgroundColor] as? String)
+        self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
         self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? messageBodyTextSize
         self.fontFamily = actionData[PayloadKey.fontFamily] as? String
         self.customFont = actionData[PayloadKey.customFont] as? String
