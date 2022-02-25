@@ -50,6 +50,7 @@ class InAppViewController: FormViewController {
             <<< addCopyCodeTextRow()
             <<< addCopyCodeTextColor()
             <<< addCopyCodeBackgroundColor()
+            <<< addButtonFunction()
             <<< addIosLinkUrlRow()
             <<< addImageUrlUrlRow()
             <<< addDelayPickerInputRow()
