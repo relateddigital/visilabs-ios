@@ -8,7 +8,6 @@
 import UIKit
 // swiftlint:disable type_body_length
 public class VisilabsInAppNotification {
-    
     public enum PayloadKey {
         public static let actId = "actid"
         public static let actionData = "actiondata"
@@ -17,6 +16,7 @@ public class VisilabsInAppNotification {
         public static let messageBody = "msg_body"
         public static let buttonText = "btn_text"
         public static let iosLink = "ios_lnk"
+        public static let buttonFunction = "button_function"
         public static let imageUrlString = "img"
         public static let visitorData = "visitor_data"
         public static let visitData = "visit_data"
@@ -52,7 +52,7 @@ public class VisilabsInAppNotification {
         public static let closePopupActionType = "close_event_trigger"
         public static let carouselItems = "carousel_items"
     }
-    
+
     let actId: Int
     let messageType: String
     let type: VisilabsInAppNotificationType
@@ -60,6 +60,7 @@ public class VisilabsInAppNotification {
     let messageBody: String?
     let buttonText: String?
     public let iosLink: String?
+    let buttonFunction: String?
     let imageUrlString: String?
     let visitorData: String?
     let visitData: String?
@@ -73,7 +74,7 @@ public class VisilabsInAppNotification {
     let fontFamily: String?
     let customFont: String?
     public let backGroundColor: UIColor?
-    var closeButtonColor: UIColor? = nil
+    var closeButtonColor: UIColor?
     let buttonTextColor: UIColor?
     let buttonColor: UIColor?
     let alertType: String?
@@ -93,9 +94,9 @@ public class VisilabsInAppNotification {
     let secondPopupMinPoint: String?
     let previousPopupPoint: Double?
     let position: VisilabsHalfScreenPosition?
-    let closePopupActionType : String?
+    let closePopupActionType: String?
     public var carouselItems: [VisilabsCarouselItem] = [VisilabsCarouselItem]()
-    
+
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
@@ -108,6 +109,7 @@ public class VisilabsInAppNotification {
         }
         return data
     }()
+
     /// Second Popup First Image
     var secondImageUrl1: URL?
     lazy var secondImage1: Data? = {
@@ -121,6 +123,7 @@ public class VisilabsInAppNotification {
         }
         return data
     }()
+
     /// Second Popup Second Image
     var secondImageUrl2: URL?
     lazy var secondImage2: Data? = {
@@ -134,7 +137,7 @@ public class VisilabsInAppNotification {
         }
         return data
     }()
-    
+
     let callToActionUrl: URL?
     var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
                                           size: CGFloat(12))
@@ -142,13 +145,14 @@ public class VisilabsInAppNotification {
                                          size: CGFloat(8))
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
-    
+
     public init(actId: Int,
                 type: VisilabsInAppNotificationType,
                 messageTitle: String?,
                 messageBody: String?,
                 buttonText: String?,
                 iosLink: String?,
+                buttonFunction: String?,
                 imageUrlString: String?,
                 visitorData: String?,
                 visitData: String?,
@@ -161,7 +165,7 @@ public class VisilabsInAppNotification {
                 messageBodyTextSize: String?,
                 fontFamily: String?,
                 customFont: String?,
-                closePopupActionType:String?,
+                closePopupActionType: String?,
                 backGround: String?,
                 closeButtonColor: String?,
                 buttonTextColor: String?,
@@ -184,19 +188,19 @@ public class VisilabsInAppNotification {
                 previousPopupPoint: Double? = nil,
                 position: VisilabsHalfScreenPosition?,
                 carouselItems: [VisilabsCarouselItem]? = nil) {
-        
         self.actId = actId
-        self.messageType = type.rawValue
+        messageType = type.rawValue
         self.type = type
         self.messageTitle = messageTitle
         self.messageBody = messageBody
         self.buttonText = buttonText
         self.iosLink = iosLink
+        self.buttonFunction = buttonFunction
         self.imageUrlString = imageUrlString
         self.visitorData = visitorData
         self.visitData = visitData
         self.queryString = queryString
-        self.messageTitleColor =  UIColor(hex: messageTitleColor)
+        self.messageTitleColor = UIColor(hex: messageTitleColor)
         self.messageTitleBackgroundColor = UIColor(hex: messageTitleBackgroundColor)
         self.messageTitleTextSize = messageTitleTextSize
         self.messageBodyColor = UIColor(hex: messageBodyColor)
@@ -205,7 +209,7 @@ public class VisilabsInAppNotification {
         self.fontFamily = fontFamily
         self.customFont = customFont
         self.closePopupActionType = closePopupActionType
-        self.backGroundColor = UIColor(hex: backGround)
+        backGroundColor = UIColor(hex: backGround)
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white
@@ -220,13 +224,24 @@ public class VisilabsInAppNotification {
         self.buttonTextColor = UIColor(hex: buttonTextColor)
         self.buttonColor = UIColor(hex: buttonColor)
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
+            imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
-        
+
         var callToActionUrl: URL?
-        if let urlString = self.iosLink {
-            callToActionUrl = URL(string: urlString)
+        if let buttonFunction = buttonFunction {
+            if buttonFunction == "link" || buttonFunction == "" {
+                if let urlString = iosLink {
+                    callToActionUrl = URL(string: urlString)
+                }
+            } else if buttonFunction == "redirect" {
+                callToActionUrl = URL(string: "redirect")
+            }
+        } else {
+            if let urlString = iosLink {
+                callToActionUrl = URL(string: urlString)
+            }
         }
+
         self.callToActionUrl = callToActionUrl
         self.alertType = alertType
         self.closeButtonText = closeButtonText
@@ -244,10 +259,10 @@ public class VisilabsInAppNotification {
         self.secondImageUrlString2 = secondImageUrlString2
         self.secondPopupMinPoint = secondPopupMinPoint
         if !secondImageUrlString1.isNilOrWhiteSpace {
-            self.secondImageUrl1 = VisilabsHelper.getImageUrl(secondImageUrlString1!, type: self.type)
+            secondImageUrl1 = VisilabsHelper.getImageUrl(secondImageUrlString1!, type: self.type)
         }
         if !secondImageUrlString2.isNilOrWhiteSpace {
-            self.secondImageUrl2 = VisilabsHelper.getImageUrl(secondImageUrlString2!, type: self.type)
+            secondImageUrl2 = VisilabsHelper.getImageUrl(secondImageUrlString2!, type: self.type)
         }
         self.previousPopupPoint = previousPopupPoint
         self.position = position
@@ -256,55 +271,56 @@ public class VisilabsInAppNotification {
         }
         setFonts()
     }
-    
+
     // swiftlint:disable function_body_length disable cyclomatic_complexity
     init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
             VisilabsLogger.error("notification json object should not be nil")
             return nil
         }
-        
+
         guard let actId = object[PayloadKey.actId] as? Int, actId > 0 else {
             VisilabsLogger.error("invalid \(PayloadKey.actId)")
             return nil
         }
-        
+
         guard let actionData = object[PayloadKey.actionData] as? [String: Any?] else {
             VisilabsLogger.error("invalid \(PayloadKey.actionData)")
             return nil
         }
-        
+
         guard let messageType = actionData[PayloadKey.messageType] as? String,
               let type = VisilabsInAppNotificationType(rawValue: messageType) else {
-                  VisilabsLogger.error("invalid \(PayloadKey.messageType)")
-                  return nil
-              }
-        
+            VisilabsLogger.error("invalid \(PayloadKey.messageType)")
+            return nil
+        }
+
         self.actId = actId
         self.messageType = messageType
         self.type = type
-        self.messageTitle = actionData[PayloadKey.messageTitle] as? String
-        self.messageBody = actionData[PayloadKey.messageBody] as? String
-        self.buttonText = actionData[PayloadKey.buttonText] as? String
-        self.iosLink = actionData[PayloadKey.iosLink] as? String
-        self.imageUrlString = actionData[PayloadKey.imageUrlString] as? String
-        self.visitorData = actionData[PayloadKey.visitorData] as? String
-        self.visitData = actionData[PayloadKey.visitData] as? String
-        self.queryString = actionData[PayloadKey.queryString] as? String
-        self.messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
-        self.messageTitleBackgroundColor = UIColor(hex: actionData[PayloadKey.messageTitleBackgroundColor] as? String)
-        self.messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
-        self.messageBodyBackgroundColor = UIColor(hex: actionData[PayloadKey.messageBodyBackgroundColor] as? String)
-        self.messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
-        self.messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? messageBodyTextSize
-        self.fontFamily = actionData[PayloadKey.fontFamily] as? String
-        self.customFont = actionData[PayloadKey.customFont] as? String
-        self.closePopupActionType = actionData[PayloadKey.closePopupActionType] as? String
-        self.backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
-        self.promotionCode = actionData[PayloadKey.promotionCode] as? String
-        self.promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
-        self.promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
-        var closeButtonColor: UIColor? = nil
+        messageTitle = actionData[PayloadKey.messageTitle] as? String
+        messageBody = actionData[PayloadKey.messageBody] as? String
+        buttonText = actionData[PayloadKey.buttonText] as? String
+        iosLink = actionData[PayloadKey.iosLink] as? String
+        buttonFunction = actionData[PayloadKey.buttonFunction] as? String
+        imageUrlString = actionData[PayloadKey.imageUrlString] as? String
+        visitorData = actionData[PayloadKey.visitorData] as? String
+        visitData = actionData[PayloadKey.visitData] as? String
+        queryString = actionData[PayloadKey.queryString] as? String
+        messageTitleColor = UIColor(hex: actionData[PayloadKey.messageTitleColor] as? String)
+        messageTitleBackgroundColor = UIColor(hex: actionData[PayloadKey.messageTitleBackgroundColor] as? String)
+        messageBodyColor = UIColor(hex: actionData[PayloadKey.messageBodyColor] as? String)
+        messageBodyBackgroundColor = UIColor(hex: actionData[PayloadKey.messageBodyBackgroundColor] as? String)
+        messageBodyTextSize = actionData[PayloadKey.messageBodyTextSize] as? String
+        messageTitleTextSize = actionData[PayloadKey.messageTitleTextSize] as? String ?? messageBodyTextSize
+        fontFamily = actionData[PayloadKey.fontFamily] as? String
+        customFont = actionData[PayloadKey.customFont] as? String
+        closePopupActionType = actionData[PayloadKey.closePopupActionType] as? String
+        backGroundColor = UIColor(hex: actionData[PayloadKey.backGround] as? String)
+        promotionCode = actionData[PayloadKey.promotionCode] as? String
+        promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
+        promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
+        var closeButtonColor: UIColor?
         if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
             if cBColor.lowercased() == "white" {
                 closeButtonColor = UIColor.white
@@ -317,84 +333,94 @@ public class VisilabsInAppNotification {
             closeButtonColor = nil
         }
         self.closeButtonColor = closeButtonColor
-        
-        self.buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
-        self.buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
-        
+
+        buttonTextColor = UIColor(hex: actionData[PayloadKey.buttonTextColor] as? String)
+        buttonColor = UIColor(hex: actionData[PayloadKey.buttonColor] as? String)
+
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
+            imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
-        
+
         var callToActionUrl: URL?
-        if let urlString = self.iosLink {
-            callToActionUrl = URL(string: urlString)
-        }
-        self.callToActionUrl = callToActionUrl
-        self.alertType = actionData[PayloadKey.alertType] as? String
-        self.closeButtonText = actionData[PayloadKey.closeButtonText] as? String
-        if let numColors = actionData[PayloadKey.numberColors] as? [String]? {
-            self.numberColors = VisilabsHelper.convertColorArray(numColors)
+        if let buttonFunction = buttonFunction {
+            if buttonFunction == "link" || buttonFunction == "" {
+                if let urlString = iosLink {
+                    callToActionUrl = URL(string: urlString)
+                }
+            } else if buttonFunction == "redirect" {
+                callToActionUrl = URL(string: "redirect")
+            }
         } else {
-            self.numberColors = nil
+            if let urlString = iosLink {
+                callToActionUrl = URL(string: urlString)
+            }
         }
-        self.waitingTime = actionData[PayloadKey.waitingTime] as? Int
-        
+
+        self.callToActionUrl = callToActionUrl
+        alertType = actionData[PayloadKey.alertType] as? String
+        closeButtonText = actionData[PayloadKey.closeButtonText] as? String
+        if let numColors = actionData[PayloadKey.numberColors] as? [String]? {
+            numberColors = VisilabsHelper.convertColorArray(numColors)
+        } else {
+            numberColors = nil
+        }
+        waitingTime = actionData[PayloadKey.waitingTime] as? Int
+
         // Second Popup Variables
         if let secondType = actionData[PayloadKey.secondPopupType] as? String {
-            self.secondPopupType = VisilabsSecondPopupType.init(rawValue: secondType)
+            secondPopupType = VisilabsSecondPopupType(rawValue: secondType)
         } else {
-            self.secondPopupType = nil
+            secondPopupType = nil
         }
-        self.secondPopupTitle = actionData[PayloadKey.secondPopupTitle] as? String
-        self.secondPopupBody = actionData[PayloadKey.secondPopupBody] as? String
-        self.secondPopupBodyTextSize = actionData[PayloadKey.secondPopupBodyTextSize] as? String
-        self.secondPopupButtonText = actionData[PayloadKey.secondPopupButtonText] as? String
-        self.secondImageUrlString1 = actionData[PayloadKey.secondImageUrlString1] as? String
-        self.secondImageUrlString2 = actionData[PayloadKey.secondImageUrlString2] as? String
+        secondPopupTitle = actionData[PayloadKey.secondPopupTitle] as? String
+        secondPopupBody = actionData[PayloadKey.secondPopupBody] as? String
+        secondPopupBodyTextSize = actionData[PayloadKey.secondPopupBodyTextSize] as? String
+        secondPopupButtonText = actionData[PayloadKey.secondPopupButtonText] as? String
+        secondImageUrlString1 = actionData[PayloadKey.secondImageUrlString1] as? String
+        secondImageUrlString2 = actionData[PayloadKey.secondImageUrlString2] as? String
         if !secondImageUrlString1.isNilOrWhiteSpace {
-            self.secondImageUrl1 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
+            secondImageUrl1 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
         if !secondImageUrlString2.isNilOrWhiteSpace {
-            self.secondImageUrl2 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
+            secondImageUrl2 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
-        self.secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
-        self.previousPopupPoint = nil
-        
+        secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
+        previousPopupPoint = nil
+
         if let positionString = actionData[PayloadKey.position] as? String
-            , let position = VisilabsHalfScreenPosition.init(rawValue: positionString) {
+            , let position = VisilabsHalfScreenPosition(rawValue: positionString) {
             self.position = position
         } else {
-            self.position = .bottom
+            position = .bottom
         }
-        
+
         var carouselItems = [VisilabsCarouselItem]()
-        
+
         if let carouselItemObjects = actionData[PayloadKey.carouselItems] as? [[String: Any]] {
             for carouselItemObject in carouselItemObjects {
-                if let carouselItem = VisilabsCarouselItem.init(JSONObject: carouselItemObject) {
+                if let carouselItem = VisilabsCarouselItem(JSONObject: carouselItemObject) {
                     carouselItems.append(carouselItem)
                 }
             }
         }
-        
+
         self.carouselItems = carouselItems.map { (item) -> VisilabsCarouselItem in
             item.closeButtonColor = closeButtonColor
             return item
         }
-        
+
         setFonts()
     }
-    
-    private func setFonts() {
-        self.messageTitleFont = VisilabsHelper.getFont(fontFamily: self.fontFamily,
-                                                                  fontSize: self.messageTitleTextSize,
-                                                                  style: .title2, customFont: self.customFont)
-        self.messageBodyFont = VisilabsHelper.getFont(fontFamily: self.fontFamily,
-                                                                 fontSize: self.messageBodyTextSize,
-                                                                 style: .body, customFont: self.customFont)
-        self.buttonTextFont = VisilabsHelper.getFont(fontFamily: self.fontFamily,
-                                                                fontSize: self.messageBodyTextSize,
-                                                                style: .title2, customFont: self.customFont)
-    }
 
+    private func setFonts() {
+        messageTitleFont = VisilabsHelper.getFont(fontFamily: fontFamily,
+                                                  fontSize: messageTitleTextSize,
+                                                  style: .title2, customFont: customFont)
+        messageBodyFont = VisilabsHelper.getFont(fontFamily: fontFamily,
+                                                 fontSize: messageBodyTextSize,
+                                                 style: .body, customFont: customFont)
+        buttonTextFont = VisilabsHelper.getFont(fontFamily: fontFamily,
+                                                fontSize: messageBodyTextSize,
+                                                style: .title2, customFont: customFont)
+    }
 }
