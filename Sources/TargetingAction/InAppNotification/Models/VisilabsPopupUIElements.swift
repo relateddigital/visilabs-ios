@@ -254,10 +254,10 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(titleLabel)
         addSubview(messageLabel)
         imageView.allEdges(to: self, excluding: .bottom)
-        titleLabel.topToBottom(of: imageView, offset: 10.0)
+        titleLabel.topToBottom(of: imageView, offset: 0)
         titleLabel.leading(to: self)
         titleLabel.trailing(to: self)
-        messageLabel.topToBottom(of: titleLabel, offset: 8.0)
+        messageLabel.topToBottom(of: titleLabel, offset: 0)
         messageLabel.leading(to: self)
         messageLabel.trailing(to: self)
         if let titleBackgroundColor = visilabsInAppNotification?.messageTitleBackgroundColor {
