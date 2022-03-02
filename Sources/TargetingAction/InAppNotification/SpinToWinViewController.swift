@@ -171,13 +171,15 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
             webView.loadFileURL(htmlUrl, allowingReadAccessTo: htmlUrl.deletingLastPathComponent())
             webView.backgroundColor = .clear
             webView.translatesAutoresizingMaskIntoConstraints = false
+            //webView.allowsBackForwardNavigationGestures = true // TODO:egemen??
+            
         }
         
         return webView
     }
     
     private func close() {
-        dismiss(animated: true) {
+        self.dismiss(animated: true) {
             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
         }
     }
@@ -306,18 +308,27 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 }
                 
                 if method == "copyToClipboard", let couponCode = event["couponCode"] as? String {
-                    UIPasteboard.general.string = couponCode
-                    VisilabsHelper.showCopiedClipboardMessage()
-                    self.close()
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true) {
+                            UIPasteboard.general.string = couponCode
+                            VisilabsHelper.showCopiedClipboardMessage()
+                        }
+                        self.close()
+                    }
+                    
                 }
                 
                 if method == "close" {
-                    self.close()
+                    DispatchQueue.main.async {
+                        self.close()
+                    }
                 }
                 
                 if method == "openUrl", let urlString = event["url"] as? String, let url = URL(string: urlString) {
-                    let app = VisilabsInstance.sharedUIApplication()
-                    app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: url, waitUntilDone: true)
+                    DispatchQueue.main.async {
+                        let app = VisilabsInstance.sharedUIApplication()
+                        app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: url, waitUntilDone: true)
+                    }
                 }
                 
             }
