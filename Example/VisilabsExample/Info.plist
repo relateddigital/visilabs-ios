@@ -39,8 +39,8 @@
 	<string>Related Digital uses your advertising identifier!</string>
 	<key>UIAppFonts</key>
 	<array>
-        <string>sydneysignature.ttf</string>
-        <string>android101.otf</string>
+		<string>sydneysignature.ttf</string>
+		<string>android101.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
