@@ -253,23 +253,33 @@ extension VisilabsPopupDialogDefaultView {
     internal func setupForImageTextButton(_ withFeedback: Bool = false) {
         addSubview(titleLabel)
         addSubview(messageLabel)
-        imageView.allEdges(to: self, excluding: .bottom)
-        titleLabel.topToBottom(of: imageView, offset: 0)
-        titleLabel.leading(to: self)
-        titleLabel.trailing(to: self)
+        
+        
         if visilabsInAppNotification?.messageTitle != "" {
+            titleLabel.topToBottom(of: imageView, offset: 0)
+            titleLabel.leading(to: self)
+            titleLabel.trailing(to: self)
             titleLabel.height(32)
         } else {
+            titleLabel.isHidden = true
             titleLabel.height(0)
         }
         
-        messageLabel.topToBottom(of: titleLabel, offset: 0)
-        messageLabel.leading(to: self)
-        messageLabel.trailing(to: self)
+        
         if visilabsInAppNotification?.messageBody != "" {
+            messageLabel.topToBottom(of: titleLabel, offset: 0)
+            messageLabel.leading(to: self)
+            messageLabel.trailing(to: self)
             messageLabel.height(32)
         } else {
+            messageLabel.isHidden = true
             messageLabel.height(0)
+        }
+        
+        if messageLabel.isHidden && messageLabel.isHidden {
+            imageView.allEdges(to: self)
+        } else {
+            imageView.allEdges(to: self, excluding: .bottom)
         }
         
         
