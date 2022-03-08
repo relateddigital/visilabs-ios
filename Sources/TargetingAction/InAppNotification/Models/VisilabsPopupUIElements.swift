@@ -257,11 +257,21 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.topToBottom(of: imageView, offset: 0)
         titleLabel.leading(to: self)
         titleLabel.trailing(to: self)
-        titleLabel.height(32)
+        if visilabsInAppNotification?.messageTitle != "" {
+            titleLabel.height(32)
+        } else {
+            titleLabel.height(0)
+        }
+        
         messageLabel.topToBottom(of: titleLabel, offset: 0)
         messageLabel.leading(to: self)
         messageLabel.trailing(to: self)
-        messageLabel.height(32)
+        if visilabsInAppNotification?.messageBody != "" {
+            messageLabel.height(32)
+        } else {
+            messageLabel.height(0)
+        }
+        
         
         if visilabsInAppNotification?.imageUrlString?.isEmpty == true {
             closeButton.layer.zPosition = 1
