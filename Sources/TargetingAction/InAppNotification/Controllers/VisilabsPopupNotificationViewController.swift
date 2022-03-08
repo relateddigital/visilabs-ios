@@ -80,10 +80,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         }
     }
 
-    func changeCloseButtonConstraints() {
-
-    }
-
     fileprivate func initForInAppNotification(_ viewController: VisilabsDefaultPopupNotificationViewController) {
         guard let notification = self.notification else { return }
         if notification.type == .secondNps {
@@ -94,7 +90,31 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                    action: openSecondPopup)
             button.isEnabled = false
             addButton(button)
-        } else if notification.type != .fullImage && notification.type != .imageButtonImage {
+        } else if notification.type == .imageTextButton {
+            
+            if !notification.buttonText.isNilOrWhiteSpace {
+                let button = VisilabsPopupDialogButton(title: notification.buttonText!,
+                                                       font: notification.buttonTextFont,
+                                                       buttonTextColor: notification.buttonTextColor,
+                                                       buttonColor: notification.buttonColor, action: commonButtonAction)
+                if notification.type == .npsWithNumbers ||
+                    notification.type == .nps {
+                    button.isEnabled = false
+                }
+                addButton(button)
+            }
+            
+            if notification.messageTitle.isNilOrWhiteSpace {
+                viewController.hideTitle()
+            }
+            
+            if notification.messageBody.isNilOrWhiteSpace {
+                viewController.hideMessage()
+            }
+            
+            
+        }
+        else if notification.type != .fullImage && notification.type != .imageButtonImage {
 
             let button = VisilabsPopupDialogButton(title: notification.buttonText!,
                                                    font: notification.buttonTextFont,
@@ -319,7 +339,10 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         addObservers()
 
         guard !initialized else { return }
-        appendButtons()
+        if let not = notification, !not.buttonText.isNilOrWhiteSpace {
+            appendButtons()
+        }
+        
         initialized = true
     }
 
@@ -456,12 +479,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         return .slide
     }
 
-    /*
-     convenience init(notification: VisilabsInAppNotification) {
-         self.init(notification: notification,
-     nameOfClass: String(describing: VisilabsPopupNotificationViewController.self))
-     }
-     */
 }
 
 // MARK: - View proxy values
