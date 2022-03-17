@@ -40,7 +40,7 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var img: String
     var wheelSpinAction:String
     var promocodesSoldoutMessage: String
-
+    
     // ExtendedProps
     var displaynameTextColor: String
     var displaynameFontFamily: String
@@ -86,6 +86,24 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var promocodeTitleCustomFontFamilyIos : String
     var copybuttonCustomFontFamilyIos : String
     var promocodesSoldoutMessageCustomFontFamilyIos : String
+    
+    
+    var titlePosition: String
+    var textPosition: String
+    var buttonPosition: String
+    var copybuttonPosition: String
+    
+    var promocodeBannerText: String
+    var promocodeBannerTextColor: String
+    var promocodeBannerBackgroundColor: String
+    var promocodeBannerButtonLabel: String
+    
+    
+    
+    
+    
+    
+    
     
     var fontFiles: [String] = []
     
