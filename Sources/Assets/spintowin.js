@@ -2810,7 +2810,16 @@ function SpinToWin(config) {
 		this.convertConfigJson()
 	}
 	this.container = document.getElementById("container");
-	this.wheelContainer = document.getElementById("wheel-container");
+	if(this.config.taTemplate == "full_spin") {
+		this.wheelContainerId = "wheel-container-full";
+		document.getElementById("wheel-container-half").remove();
+	} else {
+		this.wheelContainerId = "wheel-container-half";
+		document.getElementById("wheel-container-full").remove();
+	}
+
+
+	this.wheelContainer = document.getElementById(this.wheelContainerId);
 	this.closeButton = document.getElementById("spin-to-win-box-close");
 	this.titleElement = document.getElementById("form-title");
 	this.messageElement = document.getElementById("form-message");
@@ -2931,7 +2940,7 @@ SpinToWin.prototype.createItems = function () {
 	}
 };
 SpinToWin.prototype.createEasyWheel = function () {
-	$("#wheel-container").easyWheel({
+	$("#" + this.wheelContainerId).easyWheel({
 		items: window.spinToWin.config.items,
 		duration: 1,
 		rotates: 4,
@@ -3378,13 +3387,13 @@ SpinToWin.prototype.styleHandler = function () {
 		}
 	}
 	var styleEl = document.createElement("style"),
-		styleString = "#wheel-container{float:left;width:" + config.r + "px;height:" + 2 * this.config.r + "px}" + "#form-title, #form-message, #success-message, #promocode-title{text-align:center;}" + "#warning{display:none; position: absolute; z-index: 3; background: #fcf6c1; font-size: 12px; border: 1px solid #ccc; top: 105%;width: 100%; box-sizing: border-box;}" + "#warning>ul{margin: 2px;padding-inline-start: 20px;}" + ".form-submit-btn{transition:.2s filter ease-in-out;}" + ".form-submit-btn:hover{filter: brightness(110%);transition:.2s filter ease-in-out;}" + ".form-submit-btn.disabled{filter: grayscale(100%);transition:.2s filter ease-in-out;}" + "@media only screen and (max-width:2500px){" + "#wheel-container{float:unset;width:100%;text-align:center;position:relative}" + "}";
-	styleEl.id = "vl-styles";
-	if (!document.getElementById("vl-styles")) {
+		styleString = "#" + this.wheelContainerId + "{float:left;width:" + config.r + "px;height:" + (2 * this.config.r) + "px}@media only screen and (max-width:2500px){" + "#" + this.wheelContainerId +"{float:unset;width:100%;text-align:center;position:relative}" + "}";
+	styleEl.id = "rd-styles";
+	if (!document.getElementById("rd-styles")) {
 		styleEl.innerHTML = styleString;
 		document.head.appendChild(styleEl);
 	} else {
-		document.getElementById("vl-styles").innerHTML = styleString;
+		document.getElementById("rd-styles").innerHTML = styleString;
 	}
 };
 SpinToWin.prototype.submit = function () {
