@@ -53,10 +53,20 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
+            guard let notification = self.notification else { return }
+            var callToActionURL: URL? = notification.callToActionUrl
+            var returnCallback = true
+            if notification.type == .secondNps {
+                callToActionURL = nil
+                returnCallback = false
+            }
             self.delegate?.notificationShouldDismiss(controller: self,
-                                                     callToActionURL: self.notification?.callToActionUrl,
+                                                     callToActionURL: callToActionURL,
                                                      shouldTrack: true,
                                                      additionalTrackingProperties: nil)
+            if returnCallback {
+                self.inappButtonDelegate?.didTapButton(notification)
+            }
         }
     }
     @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
