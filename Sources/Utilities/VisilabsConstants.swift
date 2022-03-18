@@ -195,6 +195,9 @@ struct VisilabsConstants {
     static let sliceDisplaynameFontFamily = "slice_displayname_font_family"
 
 
+    
+    
+    
     // SpinToWin constants
     static let slices = "slices"
     static let promoAuth = "promoAuth"
@@ -239,6 +242,17 @@ struct VisilabsConstants {
     static let promocodes_soldout_message_font_family = "promocodes_soldout_message_font_family"
     static let promocodes_soldout_message_text_size = "promocodes_soldout_message_text_size"
     static let promocodes_soldout_message_background_color = "promocodes_soldout_message_background_color"
+    
+    static let title_position = "title_position"
+    static let text_position = "text_position"
+    static let button_position = "button_position"
+    static let copybutton_position = "copybutton_position"
+    
+    static let promocode_banner_text = "promocode_banner_text"
+    static let promocode_banner_text_color = "promocode_banner_text_color"
+    static let promocode_banner_background_color = "promocode_banner_background_color"
+    static let promocode_banner_button_label = "promocode_banner_button_label"
+    
 
     // SpinToWin slices
     static let displayName = "displayName"
