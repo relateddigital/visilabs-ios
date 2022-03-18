@@ -3052,7 +3052,18 @@ SpinToWin.prototype.convertConfigJson = function () {
 	this.config.promocodeTitleCustomFontFamilyAndroid = extendedProps.promocode_title_custom_font_family_android;
 	this.config.copybuttonCustomFontFamilyAndroid = extendedProps.copybutton_custom_font_family_android;
 	this.config.promocodesSoldoutMessageCustomFontFamilyAndroid = extendedProps.promocodes_soldout_message_custom_font_family_android;
-
+	
+	//position
+	this.config.titlePosition = extendedProps.title_position;
+	this.config.textPosition = extendedProps.text_position;
+	this.config.buttonPosition = extendedProps.button_position;
+	this.config.copybuttonPosition = extendedProps.copybutton_position;
+	
+	//promocodeBanner
+	this.config.promocodeBannerText = extendedProps.promocode_banner_text;
+	this.config.promocodeBannerTextColor = extendedProps.promocode_banner_text_color;
+	this.config.promocodeBannerBackgroundColor = extendedProps.promocode_banner_background_color;
+	this.config.promocodeBannerButtonLabel = extendedProps.promocode_banner_button_label;
 };
 SpinToWin.prototype.addFonts = function () {
 	if (this.config.fontFiles === undefined) {
