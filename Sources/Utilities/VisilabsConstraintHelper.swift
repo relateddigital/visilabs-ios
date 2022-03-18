@@ -160,7 +160,7 @@ public extension Constrainable {
 
     //TODO: public'i kaldır
     @discardableResult
-        public func trailing(to view: Constrainable,
+    func trailing(to view: Constrainable,
                       _ anchor: NSLayoutXAxisAnchor? = nil,
                       offset: CGFloat = 0,
                       relation: ConstraintRelation = .equal,

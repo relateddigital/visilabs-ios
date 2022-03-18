@@ -28,7 +28,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
         button.setTitle("Show Story", for: .normal)
-        button.addTarget(self, action: #selector(showStory), for: .touchUpInside)
+        button.addTarget(StoryViewController.self, action: #selector(showStory), for: .touchUpInside)
         return button
     }()
     
@@ -37,7 +37,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
         button.setTitle("Show Story Async", for: .normal)
-        button.addTarget(self, action: #selector(showStoryAsync), for: .touchUpInside)
+        button.addTarget(StoryViewController.self, action: #selector(showStoryAsync), for: .touchUpInside)
         return button
     }()
     
