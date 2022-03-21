@@ -114,7 +114,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
             if let uiAppFonts = infos["UIAppFonts"] as? [String] {
                 for uiAppFont in uiAppFonts {
                     let uiAppFontParts = uiAppFont.split(separator: ".")
-                    guard uiAppFontParts.count == 2 else{
+                    guard uiAppFontParts.count == 2 else {
                         continue
                     }
                     let fontName = String(uiAppFontParts[0])
@@ -170,9 +170,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         if let htmlUrl = createSpinToWinFiles() {
             webView.loadFileURL(htmlUrl, allowingReadAccessTo: htmlUrl.deletingLastPathComponent())
             webView.backgroundColor = .clear
-            webView.translatesAutoresizingMaskIntoConstraints = false
-            //webView.allowsBackForwardNavigationGestures = true // TODO:egemen??
-            
+            webView.translatesAutoresizingMaskIntoConstraints = false            
         }
         
         return webView
@@ -180,7 +178,13 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     
     private func close() {
         self.dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+            if let spinToWin = self.spinToWin, spinToWin.showPromoCodeBanner {
+                let bannerVC = VisilabsSpinToWinCodeBannerController(spinToWin)
+                bannerVC.delegate = self.delegate
+                bannerVC.show(animated: true)
+            } else {
+                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+            }
         }
     }
     
@@ -229,6 +233,8 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 if let error = err {
                     VisilabsLogger.error(error)
                     VisilabsLogger.error(error.localizedDescription)
+                } else {
+                    self.spinToWin?.bannerCode = promoCodeString
                 }
             }
         }
