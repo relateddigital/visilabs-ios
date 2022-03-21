@@ -69,10 +69,10 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             }
         }
     }
+
     @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-    
         if let closeButtonActionType = visilabsInAppNotification?.closePopupActionType {
-            if closeButtonActionType == "closebutton" || closeButtonActionType == "all"  {
+            if closeButtonActionType == "closebutton" || closeButtonActionType == "all" {
                 dismiss(animated: true) {
                     self.delegate?.notificationShouldDismiss(controller: self,
                                                              callToActionURL: nil,
@@ -101,7 +101,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             button.isEnabled = false
             addButton(button)
         } else if notification.type == .imageTextButton {
-            
             if !notification.buttonText.isNilOrWhiteSpace {
                 let button = VisilabsPopupDialogButton(title: notification.buttonText!,
                                                        font: notification.buttonTextFont,
@@ -113,19 +112,15 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                 }
                 addButton(button)
             }
-            
+
             if notification.messageTitle.isNilOrWhiteSpace {
                 viewController.hideTitle()
             }
-            
+
             if notification.messageBody.isNilOrWhiteSpace {
                 viewController.hideMessage()
             }
-            
-            
-        }
-        else if notification.type != .fullImage && notification.type != .imageButtonImage {
-
+        } else if notification.type != .fullImage && notification.type != .imageButtonImage {
             let button = VisilabsPopupDialogButton(title: notification.buttonText!,
                                                    font: notification.buttonTextFont,
                                                    buttonTextColor: notification.buttonTextColor,
@@ -169,7 +164,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         } else if notification.previousPopupPoint != nil {
             additionalTrackingProperties["OM.s_point"] = String(notification.previousPopupPoint ?? 0.0)
             additionalTrackingProperties["OM.s_cat"] = "nps_with_secondpopup"
-            additionalTrackingProperties["OM.s_feed"]  = viewController.standardView.feedbackTF.text ?? ""
+            additionalTrackingProperties["OM.s_feed"] = viewController.standardView.feedbackTF.text ?? ""
             additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
         } else if notification.type == .secondNps { // works iff second popup wont show
             let threshold = Double(self.notification?.secondPopupMinPoint ?? "3.0") ?? 3.0
@@ -186,13 +181,13 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             callToActionURL = nil
             returnCallback = false
         }
-        self.delegate?.notificationShouldDismiss(controller: self,
-                                                 callToActionURL: callToActionURL,
-                                                 shouldTrack: true,
-                                                 additionalTrackingProperties: additionalTrackingProperties)
-        
+        delegate?.notificationShouldDismiss(controller: self,
+                                            callToActionURL: callToActionURL,
+                                            shouldTrack: true,
+                                            additionalTrackingProperties: additionalTrackingProperties)
+
         if returnCallback {
-            self.inappButtonDelegate?.didTapButton(notification)
+            inappButtonDelegate?.didTapButton(notification)
         }
     }
 
@@ -200,11 +195,10 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         guard let mailForm = self.mailForm else { return }
 
         let button = VisilabsPopupDialogButton(title: mailForm.buttonTitle,
-                                                font: mailForm.buttonFont,
-                                                   buttonTextColor: mailForm.buttonTextColor,
-                                                   buttonColor: mailForm.buttonColor, action: nil)
+                                               font: mailForm.buttonFont,
+                                               buttonTextColor: mailForm.buttonTextColor,
+                                               buttonColor: mailForm.buttonColor, action: nil)
         addButton(button)
-
     }
 
     fileprivate func initForScratchToWin(_ viewController: VisilabsDefaultPopupNotificationViewController) {
@@ -214,7 +208,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public convenience init(notification: VisilabsInAppNotification? = nil,
                             mailForm: MailSubscriptionViewModel? = nil,
                             scratchToWin: ScratchToWinModel? = nil) {
-
         let viewController = VisilabsDefaultPopupNotificationViewController(visilabsInAppNotification: notification,
                                                                             emailForm: mailForm,
                                                                             scratchToWin: scratchToWin)
@@ -231,9 +224,9 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         initForInAppNotification(viewController)
         initForEmailForm(viewController)
         initForScratchToWin(viewController)
-        self.visilabsInAppNotification = notification
+        visilabsInAppNotification = notification
         let closeTapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                        action: #selector(closeButtonTapped(tapGestureRecognizer:)))
+                                                               action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
         viewController.standardView.imgButtonDelegate = self
@@ -266,7 +259,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         panGestureDismissal: Bool = true,
         hideStatusBar: Bool = false,
         completion: (() -> Void)? = nil) {
-
         self.viewController = viewController as? VisilabsDefaultPopupNotificationViewController
             ?? VisilabsDefaultPopupNotificationViewController()
         self.preferredWidth = preferredWidth
@@ -309,17 +301,17 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             panRecognizer.cancelsTouchesInView = false
             popupContainerView.stackView.addGestureRecognizer(panRecognizer)
         }
-        
+
         // addCloseButton()
     }
 
     func openSecondPopup() {
         commonButtonAction()
-        guard let type = self.notification?.secondPopupType else { return }
+        guard let type = notification?.secondPopupType else { return }
         var not: VisilabsInAppNotification?
         switch type {
         case .feedback:
-            let threshold = Double(self.notification?.secondPopupMinPoint ?? "3.0") ?? 3.0
+            let threshold = Double(notification?.secondPopupMinPoint ?? "3.0") ?? 3.0
             let userRating = viewController.standardView.npsView.rating
             if userRating < threshold {
                 not = createSecondPopup()
@@ -340,11 +332,11 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     // MARK: - View life cycle
 
     /// Replaces controller view with popup view
-    public override func loadView() {
+    override public func loadView() {
         view = VisilabsPopupDialogContainerView(frame: UIScreen.main.bounds, preferredWidth: preferredWidth)
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addObservers()
 
@@ -352,11 +344,11 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         if let not = notification, !not.buttonText.isNilOrWhiteSpace {
             appendButtons()
         }
-        
+
         initialized = true
     }
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         statusBarShouldBeHidden = hideStatusBar
@@ -365,7 +357,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         }
     }
 
-    public override func viewWillDisappear(_ animated: Bool) {
+    override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeObservers()
     }
@@ -432,7 +424,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     /// Calls the action closure of the button instance tapped
     @objc fileprivate func buttonTapped(_ button: VisilabsPopupDialogButton) {
-        if self.mailForm != nil {
+        if mailForm != nil {
             let defaultView = viewController.standardView
             let first = defaultView.firstCheckBox.isChecked
             var second = true
@@ -442,10 +434,10 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             let mail = defaultView.emailTF.text ?? ""
 
             DispatchQueue.main.async {
-                if !VisilabsHelper.checkEmail(email: mail) {// If mail is not valid
+                if !VisilabsHelper.checkEmail(email: mail) { // If mail is not valid
                     defaultView.resultLabel.text = self.mailForm?.invalidEmailMessage
                     defaultView.resultLabel.isHidden = false
-                } else if first && second {// Mail valid and checkbox are checked
+                } else if first && second { // Mail valid and checkbox are checked
                     defaultView.resultLabel.text = self.mailForm?.successMessage ?? "Succesful!"
                     defaultView.resultLabel.textColor = .systemGreen
                     defaultView.resultLabel.isHidden = false
@@ -457,7 +449,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         self.dismiss()
                     }
-                } else {// Mail is valid checkboxes are not checked
+                } else { // Mail is valid checkboxes are not checked
                     defaultView.resultLabel.text = self.mailForm?.checkConsentMessage ?? ""
                     defaultView.resultLabel.isHidden = false
                 }
@@ -481,14 +473,13 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
 
     // MARK: - StatusBar display related
 
-    public override var prefersStatusBarHidden: Bool {
+    override public var prefersStatusBarHidden: Bool {
         return statusBarShouldBeHidden
     }
 
-    public override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+    override public var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return .slide
     }
-
 }
 
 // MARK: - View proxy values
@@ -538,11 +529,11 @@ internal extension VisilabsPopupNotificationViewController {
      - parameter notification: NSNotification
      */
     @objc fileprivate func orientationChanged(_ notification: Notification) {
-
     }
+
     // Creates a second popup with first popup properties
     func createSecondPopup() -> VisilabsInAppNotification? {
-        if let not = self.notification {
+        if let not = notification {
             let point = viewController.standardView.npsView.rating
             var promo: String?
             if not.secondPopupType == .imageTextButton {
@@ -566,17 +557,17 @@ internal extension VisilabsPopupNotificationViewController {
         }
         return nil
     }
-
 }
+
 extension VisilabsPopupNotificationViewController: ImageButtonImageDelegate {
     func imageButtonTapped() {
-        self.commonButtonAction()
+        commonButtonAction()
     }
 }
 
 extension UIColor {
     func toHexString() -> String {
-        let components = self.cgColor.components
+        let components = cgColor.components
         guard let c = components, c.count > 3 else {
             return "FFFFFF"
         }
@@ -584,44 +575,40 @@ extension UIColor {
         let green: CGFloat = components?[1] ?? 0.0
         let blue: CGFloat = components?[2] ?? 0.0
 
-        let hexString = String.init(format: "#%02lX%02lX%02lX",
-                                    lroundf(Float(red * 255)),
-                                    lroundf(Float(green * 255)),
-                                    lroundf(Float(blue * 255)))
+        let hexString = String(format: "#%02lX%02lX%02lX",
+                               lroundf(Float(red * 255)),
+                               lroundf(Float(green * 255)),
+                               lroundf(Float(blue * 255)))
         return hexString
     }
 }
 
 extension VisilabsPopupNotificationViewController: VisilabsPopupDialogDefaultViewDelegate {
     func viewExpanded() {
-        guard let scratchTW = self.scratchToWin else { return }
+        guard let scratchTW = scratchToWin else { return }
         let button = VisilabsPopupDialogButton(title: scratchTW.copyButtonText ?? "",
-                                               font: scratchTW.copyButtonTextFont ?? .systemFont(ofSize: 20 ),
-                                                   buttonTextColor: scratchTW.copyButtonTextColor,
-                                                   buttonColor: scratchTW.copyButtonColor,
-                                                   action: nil)
+                                               font: scratchTW.copyButtonTextFont ?? .systemFont(ofSize: 20),
+                                               buttonTextColor: scratchTW.copyButtonTextColor,
+                                               buttonColor: scratchTW.copyButtonColor,
+                                               action: nil)
         addButton(button)
         appendButtons()
-
     }
 
     func dismissSctw() {
-        guard let _ = self.scratchToWin else { return }
-        self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
+        guard let _ = scratchToWin else { return }
+        delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
     }
 }
 
 extension VisilabsPopupNotificationViewController: NPSDelegate {
-    
     func ratingSelected() {
-        guard let button = self.buttons.first else { return }
+        guard let button = buttons.first else { return }
         button.isEnabled = true
     }
-    
+
     func ratingUnselected() {
-        guard let button = self.buttons.first else { return }
+        guard let button = buttons.first else { return }
         button.isEnabled = false
     }
-    
-    
 }
