@@ -98,11 +98,11 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var promocodeBannerBackgroundColor: String
     var promocodeBannerButtonLabel: String
     
+    var bannerCode: String?
     
-    
-    
-    
-    
+    var showPromoCodeBanner: Bool {
+        return !promocodeBannerButtonLabel.isEmpty && !bannerCode.isNilOrWhiteSpace
+    }
     
     
     var fontFiles: [String] = []
