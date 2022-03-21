@@ -97,7 +97,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         }
         let frame: CGRect
         if sharedUIApplication.statusBarOrientation.isPortrait
-            && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone {
+            && UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
             frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
                            y: bounds.size.height,
                            width: bounds.size.width - (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
@@ -185,7 +185,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         coordinator.animate(alongsideTransition: { (_) in
             let frame: CGRect
             if  UIDevice.current.orientation.isPortrait
-                && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone {
+                    && UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
                 frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
                                y: UIScreen.main.bounds.size.height -
                                 (VisilabsInAppNotificationsConstants.miniInAppHeight
