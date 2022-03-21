@@ -8,14 +8,13 @@
 import UIKit
 
 class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewController {
-
     var miniNotification: VisilabsInAppNotification! {
         return super.notification
     }
 
-    @IBOutlet weak var circleLabel: UIView!
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet var circleLabel: UIView!
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
 
     var isDismissing = false
     var canPan = true
@@ -28,7 +27,6 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
 
         titleLabel.text = notification!.messageTitle
         titleLabel.font = notification!.messageTitleFont
@@ -41,7 +39,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         imageView.tintColor = UIColor.white
 
         circleLabel.backgroundColor = UIColor(hex: "#000000", alpha: 0)
-        circleLabel.layer.cornerRadius = self.circleLabel.frame.size.width / 2
+        circleLabel.layer.cornerRadius = circleLabel.frame.size.width / 2
         circleLabel.clipsToBounds = false // TO_DO: burası true olsa ne olur
         circleLabel.layer.borderWidth = 2.0
         circleLabel.layer.borderColor = UIColor.white.cgColor
@@ -72,7 +70,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         let duration = animated ? 0.1 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
-                                                + VisilabsInAppNotificationsConstants.miniBottomPadding)
+                + VisilabsInAppNotificationsConstants.miniBottomPadding)
             self.canPan = true
         }, completion: { _ in
             self.position = self.window?.layer.position
@@ -87,9 +85,9 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         var bounds: CGRect
         if #available(iOS 13.0, *) {
             let windowScene = sharedUIApplication
-                           .connectedScenes
-                           .filter { $0.activationState == .foregroundActive }
-                           .first
+                .connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first
             guard let scene = windowScene as? UIWindowScene else { return }
             bounds = scene.coordinateSpace.bounds
         } else {
@@ -131,12 +129,12 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             let duration = animated ? 0.5 : 0
             UIView.animate(withDuration: duration, animations: {
                 self.window?.frame.origin.y += (VisilabsInAppNotificationsConstants.miniInAppHeight
-                                            + VisilabsInAppNotificationsConstants.miniBottomPadding)
-                }, completion: { _ in
-                    self.window?.isHidden = true
-                    self.window?.removeFromSuperview()
-                    self.window = nil
-                    completion()
+                    + VisilabsInAppNotificationsConstants.miniBottomPadding)
+            }, completion: { _ in
+                self.window?.isHidden = true
+                self.window?.removeFromSuperview()
+                self.window = nil
+                completion()
             })
         }
     }
@@ -182,27 +180,27 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             return
         }
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { (_) in
+        coordinator.animate(alongsideTransition: { _ in
             let frame: CGRect
-            if  UIDevice.current.orientation.isPortrait
-                    && UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
+            if UIDevice.current.orientation.isPortrait
+                && UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
                 frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
                                y: UIScreen.main.bounds.size.height -
-                                (VisilabsInAppNotificationsConstants.miniInAppHeight
-                                + VisilabsInAppNotificationsConstants.miniBottomPadding),
+                                   (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                       + VisilabsInAppNotificationsConstants.miniBottomPadding),
                                width: UIScreen.main.bounds.size.width -
-                                (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
+                                   (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
                                height: VisilabsInAppNotificationsConstants.miniInAppHeight)
             } else { // Is iPad or Landscape mode
                 frame = CGRect(x: UIScreen.main.bounds.size.width / 4,
                                y: UIScreen.main.bounds.size.height -
-                                (VisilabsInAppNotificationsConstants.miniInAppHeight
-                                + VisilabsInAppNotificationsConstants.miniBottomPadding),
+                                   (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                       + VisilabsInAppNotificationsConstants.miniBottomPadding),
                                width: UIScreen.main.bounds.size.width / 2,
                                height: VisilabsInAppNotificationsConstants.miniInAppHeight)
             }
             self.window?.frame = frame
 
-            }, completion: nil)
+        }, completion: nil)
     }
 }
