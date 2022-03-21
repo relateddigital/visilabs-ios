@@ -3269,9 +3269,17 @@ SpinToWin.prototype.setContent = function () {
 				this.submitButton.remove();
 				this.messageElement.parentNode.insertBefore(this.submitButton, this.messageElement.nextSibling);
 			}
+			if(this.config.copybuttonPosition == "bottom"){
+				this.copyButton.remove();
+				this.messageElement.parentNode.insertBefore(this.copyButton, this.messageElement.nextSibling);
+			}
 		} else {
 			this.submitButton.remove();
 			this.titleElement.parentNode.insertBefore(this.submitButton, this.titleElement.nextSibling);
+			if(this.config.copybuttonPosition == "bottom"){
+				this.copyButton.remove();
+				this.titleElement.parentNode.insertBefore(this.copyButton, this.titleElement.nextSibling);
+			}
 		}
 	} else if(this.config.textPosition == "bottom") {
 		this.messageElement.remove();
@@ -3281,10 +3289,19 @@ SpinToWin.prototype.setContent = function () {
 			this.submitButton.remove();
 			this.messageElement.parentNode.insertBefore(this.submitButton, this.messageElement.nextSibling);
 		}
+		if(this.config.copybuttonPosition == "bottom"){
+			this.copyButton.remove();
+			this.messageElement.parentNode.insertBefore(this.copyButton, this.messageElement.nextSibling);
+		}
 	} else if(this.config.buttonPosition == "bottom"){
 		this.submitButton.remove();
 		this.wheelContainer.parentNode.insertBefore(this.submitButton, this.wheelContainer.nextSibling);
 		this.submitButton.style.marginTop = window.innerWidth * 0.88  + "px";
+		if(this.config.copybuttonPosition == "bottom"){
+			this.copyButton.remove();
+			this.submitButton.parentNode.insertBefore(this.copyButton, this.submitButton.nextSibling);
+			this.copyButton.style.marginTop = window.innerWidth * 0.88  + "px";
+		}
 	} else if(this.config.copybuttonPosition == "bottom"){
 		this.copyButton.remove();
 		this.wheelContainer.parentNode.insertBefore(this.copyButton, this.wheelContainer.nextSibling);
