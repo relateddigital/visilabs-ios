@@ -634,6 +634,10 @@
             transition: .2s filter ease-in-out !important;
         }
 
+        .copy-btn.disabled {
+            filter: grayscale(0%) !important;
+        }
+
         #warning {
             display: none;
             position: absolute;
@@ -690,7 +694,7 @@
                             style="background-color: #eeeeee; color: #000000;">Coupon Code</div>
                         <div class="wlo_btn wlo_try_luck_btn form-submit-btn" id="form-submit-btn"
                             style="background-color: #000000; color: #FFFFFF;">Submit</div>
-                        <div class="wlo_btn wlo_try_luck_btn form-submit-btn" id="form-copy-btn"
+                        <div class="wlo_btn wlo_try_luck_btn form-submit-btn copy-btn" id="form-copy-btn"
                             style="background-color: #000000; color: #FFFFFF;">Copy</div>
                         <div id="vl-warning" class="vl-validationMessage" style="display: block; color:red;">
                             <ul style="padding-inline-start: 0px; list-style-type: none;">
@@ -756,19 +760,19 @@
                 "displayname_custom_font_family_ios": "",
                 "displayname_custom_font_family_android": "",
                 "displayname_text_size": "6",
-                "title_position": "top",
+                "title_position": "bottom",
                 "title_text_color": "#422de8",
                 "title_font_family": "Monospace",
                 "title_custom_font_family_ios": "sydneysignature",
                 "title_custom_font_family_android": "sydneysignature",
                 "title_text_size": "5",
-                "text_position": "top",
+                "text_position": "bottom",
                 "text_color": "#422de8",
                 "text_font_family": "default",
                 "text_custom_font_family_ios": "",
                 "text_custom_font_family_android": "",
                 "text_size": "5",
-                "button_position": "top",
+                "button_position": "bottom",
                 "button_color": "#ffa3bf",
                 "button_text_color": "#ffffff",
                 "button_font_family": "custom",
@@ -782,7 +786,7 @@
                 "promocode_title_text_size": "3",
                 "promocode_background_color": "#3047bf",
                 "promocode_text_color": "#ffffff",
-                "copybutton_position": "top",
+                "copybutton_position": "bottom",
                 "copybutton_color": "#3047bf",
                 "copybutton_text_color": "#ffffff",
                 "copybutton_font_family": "custom",
