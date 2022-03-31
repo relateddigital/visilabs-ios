@@ -45,4 +45,8 @@ public class Visilabs {
     public class func createAPI() {
         VisilabsManager.sharedInstance.initialize()
     }
+    
+    public class func testMode() {
+        VisilabsManager.sharedInstance.sideBarTest(imageData: UIImage())
+    }
 }

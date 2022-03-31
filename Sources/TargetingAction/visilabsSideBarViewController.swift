@@ -21,10 +21,9 @@ class visilabsSideBarViewController : UIViewController {
     var titleLenght = 12
     
     
-    public init(model:SideBarModel?) {
+    public init(model:SideBarViewModel?) {
         super.init(nibName: nil, bundle: nil)
-        self.model = createDummyModel()
-        self.model.dataImage = model?.dataImage
+        self.model = visilabsSideBarViewControllerModel().mapServiceModelToNeededModel(serviceModel: model)
         let sidebarView : sideBarView = UIView.fromNib()
         sidebarView.sideBarModel = self.model
         globSidebarView = sidebarView
@@ -54,7 +53,7 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     func createDummyModel()  -> SideBarModel {
-        let model = SideBarModel()
+        var model = SideBarModel()
         
         model.titleString = "DenemeDeneme"
         model.isCircle = true
@@ -309,33 +308,3 @@ class visilabsSideBarViewController : UIViewController {
 
 
 
-class SideBarModel {
-    
-    var isCircle : Bool = false
-    var sideBarHeight = 200.0
-    var miniSideBarWidth = 40.0
-    var miniSideBarWidthForCircle = 140.0
-    var xCoordPaddingConstant = -25.0
-    var titleString : String = "Label"
-    var screenYcoordinate : screenYcoordinate?
-    var screenXcoordinate : screenXcoordinate?
-    var labelType : labelType?
-    var dataImage:UIImage?
-    
-}
-
-public enum screenYcoordinate {
-    case top
-    case middle
-    case bottom
-}
-
-public enum screenXcoordinate {
-    case right
-    case left
-}
-
-public enum labelType {
-    case downToUp
-    case upToDown
-}

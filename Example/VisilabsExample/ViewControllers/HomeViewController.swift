@@ -17,6 +17,9 @@ class HomeViewController: FormViewController {
         initializeForm()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        Visilabs.testMode()
+    }
     /*
     override func viewDidAppear(_ animated: Bool) {
         Visilabs.createAPI()
