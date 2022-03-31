@@ -298,14 +298,6 @@ extension VisilabsInstance {
             })
         }
     
-    private func sideBarTest(imageData:UIImage) {
-
-        let model = SideBarModel()
-        model.dataImage = imageData
-        let sideBar = visilabsSideBarViewController(model:model)
-        sideBar.show(animated: true)
-
-    }
     
     public func customEvent(_ pageName: String, properties: [String: String]) {
         
