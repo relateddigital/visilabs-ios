@@ -26,6 +26,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case spintowin
     case feedbackForm
     case productStatNotifier = "product_stat_notifier"
+    case drawer = "drawer"
 }
 
 public enum VisilabsSecondPopupType: String, CaseIterable {

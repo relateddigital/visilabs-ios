@@ -46,7 +46,4 @@ public class Visilabs {
         VisilabsManager.sharedInstance.initialize()
     }
     
-    public class func testMode() {
-        VisilabsManager.sharedInstance.sideBarTest(imageData: UIImage())
-    }
 }

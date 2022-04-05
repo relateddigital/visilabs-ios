@@ -128,6 +128,8 @@ struct VisilabsConstants {
     static let spinToWin = "SpinToWin"
     static let scratchToWin = "ScratchToWin"
     static let productStatNotifier = "ProductStatNotifier"
+    static let drawer = "Drawer"
+
     
     static let actid = "actid"
     static let actionId = "action_id"
@@ -195,6 +197,26 @@ struct VisilabsConstants {
     static let sliceDisplaynameFontFamily = "slice_displayname_font_family"
 
 
+    //Drawer
+    static let shape = "shape"
+    static let position = "pos"
+    static let contentMinimizedImage = "content_minimized_image"
+    static let contentMinimizedText = "content_minimized_text"
+    static let contentMaximizedImage = "content_maximized_image"
+    static let iosLnk = "ios_lnk"
+    // extended properties
+    static let contentMinimizedTextSize = "content_minimized_text_size"
+    static let contentMinimizedTextColor = "content_minimized_text_color"
+    static let contentMinimizedFontFamily = "content_minimized_font_family"
+    static let contentMinimizedCustomFontFamilyIos = "content_minimized_custom_font_family_ios"
+    static let contentMinimizedTextOrientation = "content_minimized_text_orientation"
+    static let contentMinimizedBackgroundImage = "content_minimized_background_image"
+    static let contentMinimizedBackgroundColor = "content_minimized_background_color"
+    static let contentMinimizedArrowColor = "content_minimized_arrow_color"
+    static let contentMaximizedBackgroundImage = "content_maximized_background_image"
+    static let contentMaximizedBackgroundColor = "content_maximized_background_color"
+
+    
     
     
     

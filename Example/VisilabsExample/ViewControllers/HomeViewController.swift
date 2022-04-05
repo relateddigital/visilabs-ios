@@ -18,7 +18,6 @@ class HomeViewController: FormViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        Visilabs.testMode()
     }
     /*
     override func viewDidAppear(_ animated: Bool) {
