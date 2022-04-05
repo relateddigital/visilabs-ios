@@ -169,7 +169,8 @@ class EventViewController: FormViewController {
             .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
             .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130],
             .productStatNotifier: [VisilabsInAppNotificationType.productStatNotifier.rawValue: 703],
-            .inappcarousel: [VisilabsInAppNotificationType.inappcarousel.rawValue: 804]
+            .inappcarousel: [VisilabsInAppNotificationType.inappcarousel.rawValue: 804],
+            .drawer : [VisilabsInAppNotificationType.drawer.rawValue: 203]
         ]
     }
     

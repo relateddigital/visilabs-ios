@@ -116,6 +116,8 @@ class InAppViewController: FormViewController {
             setFormRowsForEmail()
         case .productStatNotifier:
             break
+        case .drawer:
+            setFormRowsForEmail()
         }
         
         

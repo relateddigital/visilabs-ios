@@ -54,12 +54,4 @@ class VisilabsManager {
     func getInstance() -> VisilabsInstance? {
         return instance
     }
-    
-    public func sideBarTest(imageData:UIImage) {
-
-        let model = SideBarViewModel()
-        let sideBar = visilabsSideBarViewController(model:model)
-        sideBar.show(animated: true)
-
-    }
 }
