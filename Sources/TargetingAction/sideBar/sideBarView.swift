@@ -47,7 +47,7 @@ class sideBarView: UIView {
     @IBOutlet weak var rightSideBarContentImageCenterXConstraint: NSLayoutConstraint!
 
     
-    var sideBarModel : SideBarModel?
+    var sideBarModel : SideBarViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
