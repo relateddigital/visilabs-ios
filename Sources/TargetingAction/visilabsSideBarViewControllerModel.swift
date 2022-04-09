@@ -11,27 +11,31 @@ import Foundation
 class visilabsSideBarViewControllerModel {
     
     
-    func mapServiceModelToNeededModel(serviceModel : SideBarViewModel?)  -> SideBarModel {
+    func mapServiceModelToNeededModel(serviceModel : SideBarServiceModel?)  -> SideBarViewModel {
         
-        var sideBarModel = SideBarModel()
+        var sideBarModel = SideBarViewModel()
         
         sideBarModel.actId = serviceModel?.actId
         sideBarModel.title = serviceModel?.title
-        sideBarModel.actiontype = serviceModel?.actiontype
         
-        if serviceModel?.shape == "circle" {
+        if serviceModel?.shape?.lowercased() == "circle" {
             sideBarModel.isCircle = true
+        } else if serviceModel?.shape?.lowercased() == "roundedcorners" {
+            sideBarModel.isCircle = false
+        } else {
+            sideBarModel.isCircle = false
+            sideBarModel.cornerRadius = 0.0
         }
         
-        if ((serviceModel?.pos?.contains("top")) != nil) {
+        if (serviceModel?.pos?.lowercased().contains("top") == true) {
             sideBarModel.screenYcoordinate = .top
-        } else if ((serviceModel?.pos?.contains("middle")) != nil) {
-            sideBarModel.screenYcoordinate = .middle
-        }  else if ((serviceModel?.pos?.contains("bottom")) != nil) {
+        } else if (serviceModel?.pos?.lowercased().contains("bottom") == true) {
             sideBarModel.screenYcoordinate = .bottom
+        } else {
+            sideBarModel.screenYcoordinate = .middle
         }
         
-        if ((serviceModel?.pos?.contains("Right")) != nil) {
+        if (serviceModel?.pos?.lowercased().contains("right") == true) {
             sideBarModel.screenXcoordinate = .right
         } else {
             sideBarModel.screenXcoordinate = .left
@@ -44,14 +48,21 @@ class visilabsSideBarViewControllerModel {
         sideBarModel.linkToGo = serviceModel?.iosLnk
         
         sideBarModel.miniSideBarTextFont = VisilabsHelper.getFont(fontFamily: serviceModel?.contentMinimizedFontFamily, fontSize: serviceModel?.contentMinimizedTextSize, style: .title2, customFont: serviceModel?.contentMinimizedCustomFontFamilyIos)
+        sideBarModel.miniSideBarTextColor = UIColor(hex: serviceModel?.contentMinimizedTextColor)
         
-        if serviceModel?.contentMinimizedTextOrientation == "" {
-            sideBarModel.labelType = .downToUp
-        } else {
+        if serviceModel?.contentMinimizedTextOrientation?.lowercased() == "toptobottom" {
             sideBarModel.labelType = .upToDown
+        } else {
+            sideBarModel.labelType = .downToUp
         }
         
+        sideBarModel.miniSideBarBackgroundImage = UIImage(data: getDataOfImage(urlString: serviceModel?.contentMinimizedBackgroundImage ?? ""))
+        sideBarModel.miniSideBarBackgroundColor = UIColor(hex: serviceModel?.contentMinimizedBackgroundColor)
+        sideBarModel.arrowColor = UIColor(hex: serviceModel?.contentMinimizedArrowColor)
         
+        sideBarModel.sideBarBackgroundImage = UIImage(data: getDataOfImage(urlString: serviceModel?.contentMaximizedBackgroundImage ?? ""))
+        sideBarModel.sideBarBackgroundColor = UIColor(hex: serviceModel?.contentMaximizedBackgroundColor)
+
         return sideBarModel
     }
     
@@ -74,11 +85,11 @@ class visilabsSideBarViewControllerModel {
 }
 
 
-struct SideBarViewModel {
+struct SideBarServiceModel: TargetingActionViewModel {
     
+    var targetingActionType: TargetingActionType
     var actId:Int?
     var title:String?
-    var actiontype:String?
     
     //actionData
     var shape:String?
@@ -102,13 +113,14 @@ struct SideBarViewModel {
     var contentMaximizedBackgroundColor:String? 
 }
 
-struct SideBarModel {
+struct SideBarViewModel {
     
     //constants and varams
     var sideBarHeight = 200.0
     var miniSideBarWidth = 40.0
     var miniSideBarWidthForCircle = 140.0
     var xCoordPaddingConstant = -25.0
+    var cornerRadius = 10.0
     
     var actId:Int?
     var title:String?
@@ -129,12 +141,13 @@ struct SideBarModel {
     //extended Props
 
     var miniSideBarTextFont : UIFont?
+    var miniSideBarTextColor : UIColor?
     var labelType : labelType?
     var miniSideBarBackgroundImage:UIImage?
-    var miniSideBarBackgroundColor:String?
-    var arrowColor:String?
-    var sideBarBackgroundImage:String?
-    var sideBarBackgroundColor:String?
+    var miniSideBarBackgroundColor:UIColor?
+    var arrowColor:UIColor?
+    var sideBarBackgroundImage:UIImage?
+    var sideBarBackgroundColor:UIColor?
     
 }
 
