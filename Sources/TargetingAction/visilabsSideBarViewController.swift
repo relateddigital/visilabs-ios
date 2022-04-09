@@ -13,7 +13,7 @@ class visilabsSideBarViewController : UIViewController {
     
     
     var position: CGPoint?
-    var model = SideBarModel()
+    var model = SideBarViewModel()
     var window: UIWindow?
     var globSidebarView : sideBarView?
     var sideBarOpen:Bool = false
@@ -21,7 +21,7 @@ class visilabsSideBarViewController : UIViewController {
     var titleLenght = 12
     
     
-    public init(model:SideBarViewModel?) {
+    public init(model:SideBarServiceModel?) {
         super.init(nibName: nil, bundle: nil)
         self.model = visilabsSideBarViewControllerModel().mapServiceModelToNeededModel(serviceModel: model)
         let sidebarView : sideBarView = UIView.fromNib()
@@ -50,10 +50,37 @@ class visilabsSideBarViewController : UIViewController {
         if model.isCircle {
             configureCircleSideBar()
         }
+        initializeData()
+        
     }
     
-    func createDummyModel()  -> SideBarModel {
-        var model = SideBarModel()
+    func initializeData() {
+        
+        if model.screenXcoordinate == .right {
+            globSidebarView?.leftSideBarMiniContentImageView.image = model.miniSidebarContentImage
+            globSidebarView?.leftTitleLabel.text = model.titleString
+            globSidebarView?.leftTitleLabel.font = model.miniSideBarTextFont
+            globSidebarView?.leftTitleLabel.textColor = model.miniSideBarTextColor
+            globSidebarView?.leftSideBarMiniImageView.image = model.miniSideBarBackgroundImage
+            globSidebarView?.leftSideBarMiniImageView.backgroundColor = model.miniSideBarBackgroundColor
+            globSidebarView?.leftSideBarMiniArrow.textColor = model.arrowColor
+        } else {
+            globSidebarView?.rightSideBarMiniContentImageView.image = model.miniSidebarContentImage
+            globSidebarView?.rightTitleLabel.text = model.titleString
+            globSidebarView?.rightTitleLabel.font = model.miniSideBarTextFont
+            globSidebarView?.rightTitleLabel.textColor = model.miniSideBarTextColor
+            globSidebarView?.rightSideBarMiniImageView.image = model.miniSideBarBackgroundImage
+            globSidebarView?.rightSideBarMiniImageView.backgroundColor = model.miniSideBarBackgroundColor
+            globSidebarView?.rightSideBarMiniArrow.textColor = model.arrowColor
+        }
+        globSidebarView?.sideBarGrandImageView.image = model.sideBarBackgroundImage
+        globSidebarView?.sideBarGrandImageView.backgroundColor = model.sideBarBackgroundColor
+        globSidebarView?.sideBarGrandContentImageView.image = model.sideBarContentImage
+
+    }
+    
+    func createDummyModel()  -> SideBarViewModel {
+        var model = SideBarViewModel()
         
         model.titleString = "DenemeDeneme"
         model.isCircle = true
@@ -171,15 +198,15 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     @objc func imageClicked(_ sender: UITapGestureRecognizer? = nil) {
-        print("image a basıldı")
         hide() {
-            print("hided")
+            if let url = URL(string: self.model.linkToGo ?? "") {
+                UIApplication.shared.open(url)
+            }
         }
     }
 
     @objc func viewClicked(_ sender: UITapGestureRecognizer? = nil) {
-        print("view a basıldı")
-       
+        
         UIView.animate(withDuration: 0.5, animations: { [self] in
             if sideBarOpen {
                 self.window?.layer.position = sideBarFirstPosition!

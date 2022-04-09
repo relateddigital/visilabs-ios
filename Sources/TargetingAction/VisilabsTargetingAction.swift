@@ -104,7 +104,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         
         
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)"
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -138,6 +138,8 @@ class VisilabsTargetingAction {
             return parseSpinToWin(spinToWin)
         } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
             return parseScratchToWin(sctw)
+        }  else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
+            return parseDrawer(drw)
         } else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
             if let productStatNotifier = parseProductStatNotifier(psn) {
                 if productStatNotifier.attributedString == nil {
@@ -378,6 +380,40 @@ class VisilabsTargetingAction {
         return convertJsonToEmailViewModel(emailForm: mailModel)
     }
 
+    private func parseDrawer(_ drawer: [String: Any?]) -> SideBarServiceModel? {
+        
+        guard let actionData = drawer[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        var sideBarServiceModel = SideBarServiceModel(targetingActionType: .drawer)
+        sideBarServiceModel.actId = drawer[VisilabsConstants.actid] as? Int ?? 0
+        sideBarServiceModel.title = drawer[VisilabsConstants.title] as? String ?? ""
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+
+        
+        //actionData
+        sideBarServiceModel.shape = actionData[VisilabsConstants.shape] as? String ?? ""
+        sideBarServiceModel.pos = actionData[VisilabsConstants.position] as? String ?? ""
+        sideBarServiceModel.contentMinimizedImage  = actionData[VisilabsConstants.contentMinimizedImage] as? String ?? ""
+        sideBarServiceModel.contentMinimizedText = actionData[VisilabsConstants.contentMinimizedText] as? String ?? ""
+        sideBarServiceModel.contentMaximizedImage = actionData[VisilabsConstants.contentMaximizedImage] as? String ?? ""
+        sideBarServiceModel.waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
+        sideBarServiceModel.iosLnk = actionData[VisilabsConstants.iosLnk] as? String ?? ""
+        
+        //extended Props
+        sideBarServiceModel.contentMinimizedTextSize = extendedProps[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""
+        sideBarServiceModel.contentMinimizedTextColor = extendedProps[VisilabsConstants.contentMinimizedTextColor] as? String ?? ""
+        sideBarServiceModel.contentMinimizedFontFamily = extendedProps[VisilabsConstants.contentMinimizedFontFamily] as? String ?? ""
+        sideBarServiceModel.contentMinimizedCustomFontFamilyIos = extendedProps[VisilabsConstants.contentMinimizedCustomFontFamilyIos] as? String ?? ""
+        sideBarServiceModel.contentMinimizedTextOrientation = extendedProps[VisilabsConstants.contentMinimizedTextOrientation] as? String ?? ""
+        sideBarServiceModel.contentMinimizedBackgroundImage = extendedProps[VisilabsConstants.contentMinimizedBackgroundImage] as? String ?? ""
+        sideBarServiceModel.contentMinimizedBackgroundColor = extendedProps[VisilabsConstants.contentMinimizedBackgroundColor] as? String ?? ""
+        sideBarServiceModel.contentMinimizedArrowColor = extendedProps[VisilabsConstants.contentMinimizedArrowColor] as? String ?? ""
+        sideBarServiceModel.contentMaximizedBackgroundImage = extendedProps[VisilabsConstants.contentMaximizedBackgroundImage] as? String ?? ""
+        sideBarServiceModel.contentMaximizedBackgroundColor = extendedProps[VisilabsConstants.contentMaximizedBackgroundColor] as? String ?? ""
+    
+
+        return sideBarServiceModel
+    }
     private func parseScratchToWin(_ scratchToWin: [String: Any?]) -> ScratchToWinModel? {
         guard let actionData = scratchToWin[VisilabsConstants.actionData] as? [String: Any] else { return nil }
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
