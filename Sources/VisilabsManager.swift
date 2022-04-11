@@ -20,6 +20,7 @@ class VisilabsManager {
                     channel: String,
                     requestTimeoutInSeconds: Int,
                     geofenceEnabled: Bool,
+                    askLocationPermmissionAtStart: Bool,
                     maxGeofenceCount: Int,
                     isIDFAEnabled: Bool,
                     loggingEnabled: Bool,
@@ -32,6 +33,7 @@ class VisilabsManager {
                                         channel: channel,
                                         requestTimeoutInSeconds: requestTimeoutInSeconds,
                                         geofenceEnabled: geofenceEnabled,
+                                        askLocationPermmissionAtStart: askLocationPermmissionAtStart,
                                         maxGeofenceCount: maxGeofenceCount,
                                         isIDFAEnabled: isIDFAEnabled,
                                         loggingEnabled: loggingEnabled)

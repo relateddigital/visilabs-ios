@@ -9,6 +9,8 @@ import Foundation
 import CoreLocation
 
 class VisilabsGeofence {
+    
+    typealias VLogger = VisilabsLogger
 
     static let sharedManager = VisilabsGeofence()
 
@@ -30,6 +32,10 @@ class VisilabsGeofence {
             return nil
         }
     }
+    
+    func requestLocationPermissions() {
+        VisilabsLocationManager.sharedManager.requestLocationPermissions()
+    }
 
     var locationServicesEnabledForDevice: Bool {
         return VisilabsLocationManager.locationServicesEnabledForDevice
@@ -47,23 +53,7 @@ class VisilabsGeofence {
     }
 
     func startGeofencing() {
-        VisilabsLocationManager.sharedManager.startGeofencing()
-    }
-
-    private func startMonitorGeofences(geofences: [VisilabsGeofenceEntity]) {
-        VisilabsLocationManager.sharedManager.stopMonitorRegions()
-        self.activeGeofenceList = sortAndTakeVisilabsGeofenceEntitiesToMonitor(geofences)
-        if self.profile.geofenceEnabled
-            && self.locationServicesEnabledForDevice
-            && self.locationServiceEnabledForApplication {
-            for geofence in self.activeGeofenceList {
-                let geoRegion = CLCircularRegion(center:
-                    CLLocationCoordinate2DMake(geofence.latitude, geofence.longitude),
-                    radius: geofence.radius,
-                    identifier: geofence.identifier)
-                VisilabsLocationManager.sharedManager.startMonitorRegion(region: geoRegion)
-            }
-        }
+        VisilabsLocationManager.sharedManager.startGeofencing(fromInit: true)
     }
 
     private func sortAndTakeVisilabsGeofenceEntitiesToMonitor(_ geofences: [VisilabsGeofenceEntity])
@@ -83,11 +73,14 @@ class VisilabsGeofence {
         return [VisilabsGeofenceEntity](geofencesToMonitor)
     }
     // swiftlint:disable function_body_length cyclomatic_complexity
-    func getGeofenceList(lastKnownLatitude: Double?, lastKnownLongitude: Double?) {
+    func getGeofenceList(lastKnownLatitude: Double?,
+                         lastKnownLongitude: Double?,
+                         completion: @escaping ((_ response: Bool, _ fetchedGeofences: [VisilabsGeofenceEntity]) -> Void)) {
         if profile.geofenceEnabled, locationServicesEnabledForDevice, locationServiceEnabledForApplication {
             let now = Date()
             let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
             if timeInterval < VisilabsConstants.geofenceFetchTimeInterval {
+                completion(false, [VisilabsGeofenceEntity]())
                 return
             }
 
@@ -121,7 +114,7 @@ class VisilabsGeofence {
                    props[key] = value
                }
             }
-            // swiftlint:disable closure_parameter_position
+
             VisilabsRequest.sendGeofenceRequest(properties: props,
                                                 headers: [String: String](),
                                             timeoutInterval: profile.requestTimeoutInterval) {
@@ -139,6 +132,7 @@ class VisilabsGeofence {
                         }
                     }
                     VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
+                    completion(false, [VisilabsGeofenceEntity]())
                     return
                 }
                 (self.lastSuccessfulGeofenceFetchTime, self.geofenceHistory.lastFetchTime) = (now, now)
@@ -187,14 +181,17 @@ class VisilabsGeofence {
                         self.geofenceHistory.fetchHistory[key] = nil
                     }
                 }
-                // self.geofenceHistory = geofenceHistory
                 VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
-                self.startMonitorGeofences(geofences: fetchedGeofences)
+                completion(true, fetchedGeofences)
             }
         }
     }
 
-    func sendPushNotification(actionId: String, geofenceId: String, isDwell: Bool, isEnter: Bool) {
+    func sendPushNotification(actId: Int,
+                              geoId: Int,
+                              isDwell: Bool,
+                              isEnter: Bool,
+                              completion: @escaping ((_ response: Bool) -> Void)) {
         let user = VisilabsPersistence.unarchiveUser()
         var props = [String: String]()
         props[VisilabsConstants.organizationIdKey] = profile.organizationId
@@ -202,10 +199,10 @@ class VisilabsGeofence {
         props[VisilabsConstants.cookieIdKey] = user.cookieId
         props[VisilabsConstants.exvisitorIdKey] = user.exVisitorId
         props[VisilabsConstants.actKey] = VisilabsConstants.processV2
-        props[VisilabsConstants.actidKey] = actionId
+        props[VisilabsConstants.actidKey] = "\(actId)"
         props[VisilabsConstants.tokenIdKey] = user.tokenId
         props[VisilabsConstants.appidKey] = user.appId
-        props[VisilabsConstants.geoIdKey] = geofenceId
+        props[VisilabsConstants.geoIdKey] = "\(geoId)"
         
         props[VisilabsConstants.nrvKey] = String(user.nrv)
         props[VisilabsConstants.pvivKey] = String(user.pviv)
@@ -213,11 +210,7 @@ class VisilabsGeofence {
         props[VisilabsConstants.lvtKey] = user.lvt
 
         if isDwell {
-            if isEnter {
-                props[VisilabsConstants.triggerEventKey] = VisilabsConstants.onEnter
-            } else {
-                props[VisilabsConstants.triggerEventKey] = VisilabsConstants.onExit
-            }
+            props[VisilabsConstants.triggerEventKey] = isEnter ? VisilabsConstants.onEnter : VisilabsConstants.onExit
         }
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
@@ -225,13 +218,14 @@ class VisilabsGeofence {
                props[key] = value
            }
         }
-        VisilabsLogger.info("Geofence Triggerred: actionId: \(actionId) geofenceid: \(geofenceId)")
+        VLogger.info("Geofence Triggerred: actionId: \(actId) geofenceid: \(geoId)")
         VisilabsRequest.sendGeofenceRequest(properties: props,
                                             headers: [String: String](),
                                             timeoutInterval: profile.requestTimeoutInterval) { (_, error) in
             if let error = error {
-                VisilabsLogger.error("Geofence Push Send Error: \(error)")
+                VLogger.error("Geofence Push Send Error: \(error)")
             }
+            completion(true)
         }
     }
 

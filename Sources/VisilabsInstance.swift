@@ -38,6 +38,7 @@ struct VisilabsProfile: Codable {
     var channel: String
     var requestTimeoutInSeconds: Int
     var geofenceEnabled: Bool
+    var askLocationPermmissionAtStart: Bool
     var inAppNotificationsEnabled: Bool
     var maxGeofenceCount: Int
     var isIDFAEnabled: Bool
@@ -118,6 +119,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          channel: String,
          requestTimeoutInSeconds: Int,
          geofenceEnabled: Bool,
+         askLocationPermmissionAtStart: Bool,
          maxGeofenceCount: Int,
          isIDFAEnabled: Bool = true,
          loggingEnabled: Bool = false) {
@@ -153,6 +155,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                           channel: channel,
                                           requestTimeoutInSeconds: requestTimeoutInSeconds,
                                           geofenceEnabled: geofenceEnabled,
+                                          askLocationPermmissionAtStart: askLocationPermmissionAtStart,
                                           inAppNotificationsEnabled: inAppNotificationsEnabled,
                                           maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount,
                                           isIDFAEnabled: isIDFAEnabled)
@@ -228,6 +231,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                       channel: visilabsProfile.channel,
                       requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
                       geofenceEnabled: visilabsProfile.geofenceEnabled,
+                      askLocationPermmissionAtStart: visilabsProfile.askLocationPermmissionAtStart,
                       maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                       isIDFAEnabled: visilabsProfile.isIDFAEnabled)
         } else {
@@ -769,6 +773,10 @@ extension VisilabsInstance {
     
     public func sendLocationPermission() {
         VisilabsLocationManager.sharedManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
+    }
+    
+    public func requestLocationPermissions() {
+        VisilabsGeofence.sharedManager?.requestLocationPermissions()
     }
 
     // swiftlint:disable file_length
