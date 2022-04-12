@@ -16,6 +16,7 @@ struct VisilabsProfile: Codable {
     var channel = "IOS"
     var requestTimeoutInSeconds = 30
     var geofenceEnabled: Bool = true
+    var askLocationPermmissionAtStart: Bool = false
     var maxGeofenceCount = 20
     var appAlias = "VisilabsIOSExample"
     var appToken = ""

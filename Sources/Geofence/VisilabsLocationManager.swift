@@ -18,7 +18,6 @@ class VisilabsLocationManager: NSObject {
 
     typealias VLogger = VisilabsLogger
     
-    static let sharedManager = VisilabsLocationManager()
     
     let options = VisilabsGeofenceOptions()
     var locMan: CLLocationManager
@@ -26,6 +25,7 @@ class VisilabsLocationManager: NSObject {
     var lastKnownCLAuthorizationStatus : CLAuthorizationStatus?
     var currentGeoLocationValue: CLLocationCoordinate2D?
     
+    var visilabsProfile: VisilabsProfile?
     var geofenceEnabled = false
     var askLocationPermmissionAtStart = false
     
@@ -34,6 +34,12 @@ class VisilabsLocationManager: NSObject {
     private var sending = false
     private var fetching = false
     private var timer: Timer?
+    
+    var activeGeofenceList = [VisilabsGeofenceEntity]()
+    var lastGeofenceFetchTime = Date(timeIntervalSince1970: 0)
+    var lastSuccessfulGeofenceFetchTime = Date(timeIntervalSince1970: 0)
+    var geofenceHistory: VisilabsGeofenceHistory
+    
     
     func getAuthorizationStatus() -> CLAuthorizationStatus {
         if #available(iOS 14.0, *) {
@@ -46,7 +52,9 @@ class VisilabsLocationManager: NSObject {
     override init() {
         locMan = CLLocationManager()
         lpLocMan = CLLocationManager()
+        geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
         super.init()
+        
         locMan.desiredAccuracy = options.desiredCLLocationAccuracy
         locMan.distanceFilter = kCLDistanceFilterNone
         locMan.allowsBackgroundLocationUpdates = options.locationBackgroundMode && getAuthorizationStatus() == .authorizedAlways
@@ -55,38 +63,41 @@ class VisilabsLocationManager: NSObject {
         lpLocMan.allowsBackgroundLocationUpdates = options.locationBackgroundMode
         locMan.delegate = self
         lpLocMan.delegate = self
+        
         updateTracking(location: nil, fromInit: true)
-        if let geofenceEnabled = VisilabsGeofence.sharedManager?.profile.geofenceEnabled, geofenceEnabled {
-            self.geofenceEnabled = geofenceEnabled
-            startGeofencing(fromInit: true)
+        
+        if let profile = VisilabsPersistence.readVisilabsProfile() {
+            self.visilabsProfile = profile
+            geofenceEnabled = profile.geofenceEnabled
+            if geofenceEnabled {
+                startGeofencing(fromInit: true)
+            }
+            askLocationPermmissionAtStart = profile.askLocationPermmissionAtStart
         }
-        if let askLocationPermmissionAtStart = VisilabsGeofence.sharedManager?.profile.askLocationPermmissionAtStart, askLocationPermmissionAtStart {
-            self.askLocationPermmissionAtStart = askLocationPermmissionAtStart
-        }
+        
     }
     
     deinit {
         locMan.delegate = nil
         lpLocMan.delegate = nil
-        NotificationCenter.default.removeObserver(self)// TO_DO: buna gerek var mı tekrar kontrol et.
+        NotificationCenter.default.removeObserver(self)
     }
     
-    
     func startGeofencing(fromInit: Bool) {
-        let authorizationStatus = GeofenceState.locationAuthorizationStatus()
+        let authorizationStatus = VisilabsGeofenceState.locationAuthorizationStatus
         if !(authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways) {
             return
         }
-        GeofenceState.setGeofenceEnabled(true)
+        VisilabsGeofenceState.setGeofenceEnabled(true)
         updateTracking(location: nil, fromInit: fromInit)
-        if let geoEntities = VisilabsGeofence.sharedManager?.geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
+        if let geoEntities = geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
             replaceSyncedGeofences(geoEntities)
         }
         fetchGeofences()
     }
     
     func stopGeofence() {
-        GeofenceState.setGeofenceEnabled(false)
+        VisilabsGeofenceState.setGeofenceEnabled(false)
         updateTracking(location: nil, fromInit: false)
     }
     
@@ -103,7 +114,7 @@ class VisilabsLocationManager: NSObject {
             started = true
             startedInterval = interval
         } else {
-            VLogger.info("Already started geofence timer")
+            //VLogger.info("Already started geofence timer")
         }
     }
     
@@ -116,7 +127,7 @@ class VisilabsLocationManager: NSObject {
         started = false
         startedInterval = 0
         if !sending {
-            let delay: TimeInterval = GeofenceState.getGeofenceEnabled() ? 10 : 0
+            let delay: TimeInterval = VisilabsGeofenceState.getGeofenceEnabled() ? 10 : 0
             VLogger.info("Scheduling geofence shutdown")
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                 self?.shutDown()
@@ -136,9 +147,9 @@ class VisilabsLocationManager: NSObject {
     
     func updateTracking(location: CLLocation?, fromInit: Bool) {
         DispatchQueue.main.async {
-            VLogger.info("Updating geofence tracking | options = \(self.options); location = \(String(describing: location))")
+            //VLogger.info("Updating geofence tracking | options = \(self.options); location = \(String(describing: location))")
             
-            if GeofenceState.getGeofenceEnabled() {
+            if VisilabsGeofenceState.getGeofenceEnabled() {
                 self.locMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode && self.getAuthorizationStatus() == .authorizedAlways
                 self.locMan.pausesLocationUpdatesAutomatically = false
                 
@@ -152,7 +163,7 @@ class VisilabsLocationManager: NSObject {
                 }
                 
                 let startUpdates = self.options.showBlueBar || self.getAuthorizationStatus() == .authorizedAlways
-                let stopped = GeofenceState.getStopped()
+                let stopped = VisilabsGeofenceState.getStopped()
                 if stopped {
                     
                     if self.options.desiredStoppedUpdateInterval == 0 {
@@ -201,7 +212,7 @@ class VisilabsLocationManager: NSObject {
     
     func replaceBubbleGeofence(_ location: CLLocation, radius: Int) {
         removeBubbleGeofence()
-        if !GeofenceState.getGeofenceEnabled() {
+        if !VisilabsGeofenceState.getGeofenceEnabled() {
             return
         }
         locMan.startMonitoring(for: CLCircularRegion(center: location.coordinate, radius: CLLocationDistance(radius), identifier: "\(kBubbleGeofenceIdentifierPrefix)\(UUID().uuidString)"))
@@ -217,7 +228,7 @@ class VisilabsLocationManager: NSObject {
     
     func replaceSyncedGeofences(_ geoEntities: [VisilabsGeofenceEntity]) {
         removeSyncedGeofences()
-        if !GeofenceState.getGeofenceEnabled() || !options.syncGeofences {
+        if !VisilabsGeofenceState.getGeofenceEnabled() || !options.syncGeofences {
             return
         }
         for geoEnt in geoEntities {
@@ -248,15 +259,15 @@ class VisilabsLocationManager: NSObject {
 extension VisilabsLocationManager {
     
     func handleLocation(_ location: CLLocation, source: LocationSource, region: CLRegion? = nil) {
-        VLogger.info("Handling location | source = \(source); location = \(String(describing: location))")
+        //VLogger.info("Handling location | source = \(source); location = \(String(describing: location))")
         
-        if !GeofenceState.validLocation(location) {
+        if !VisilabsGeofenceState.validLocation(location) {
             VLogger.info("Invalid location | source = \(source); location = \(String(describing: location))")
             return
         }
         
         let options = self.options
-        let wasStopped = GeofenceState.getStopped()
+        let wasStopped = VisilabsGeofenceState.getStopped()
         var stopped = false
         
         let force = source == .foregroundLocation || source == .manualLocation
@@ -267,7 +278,7 @@ extension VisilabsLocationManager {
             return
         }
         
-        if !force && !GeofenceState.getGeofenceEnabled() {
+        if !force && !VisilabsGeofenceState.getGeofenceEnabled() {
             VLogger.info("Skipping location: not tracking")
             return
         }
@@ -279,14 +290,14 @@ extension VisilabsLocationManager {
             var lastMovedLocation: CLLocation?
             var lastMovedAt: Date?
             
-            if GeofenceState.getLastMovedLocation() == nil {
+            if VisilabsGeofenceState.getLastMovedLocation() == nil {
                 lastMovedLocation = location
-                GeofenceState.setLastMovedLocation(location)
+                VisilabsGeofenceState.setLastMovedLocation(location)
             }
             
-            if GeofenceState.getLastMovedAt() == nil {
+            if VisilabsGeofenceState.getLastMovedAt() == nil {
                 lastMovedAt = location.timestamp
-                GeofenceState.setLastMovedAt(location.timestamp)
+                VisilabsGeofenceState.setLastMovedAt(location.timestamp)
             }
             
             if !force, let lastMovedAt = lastMovedAt, lastMovedAt.timeIntervalSince(location.timestamp) > 0 {
@@ -304,9 +315,9 @@ extension VisilabsLocationManager {
                 VLogger.info("Calculating stopped | stopped = \(stopped); distance = \(distance); duration = \(duration); location.timestamp = \(location.timestamp); lastMovedAt = \(lastMovedAt)")
                 
                 if Int(distance) > options.stopDistance {
-                    GeofenceState.setLastMovedLocation(location)
+                    VisilabsGeofenceState.setLastMovedLocation(location)
                     if !stopped {
-                        GeofenceState.setLastMovedAt(location.timestamp)
+                        VisilabsGeofenceState.setLastMovedAt(location.timestamp)
                     }
                 }
             }
@@ -315,8 +326,8 @@ extension VisilabsLocationManager {
         }
         
         let justStopped = stopped && !wasStopped
-        GeofenceState.setStopped(stopped)
-        GeofenceState.setLastLocation(location)
+        VisilabsGeofenceState.setStopped(stopped)
+        VisilabsGeofenceState.setLastLocation(location)
         
         if source != .manualLocation {
             updateTracking(location: location, fromInit: false)
@@ -324,7 +335,7 @@ extension VisilabsLocationManager {
         
         var sendLocation = location
         
-        let lastFailedStoppedLocation = GeofenceState.getLastFailedStoppedLocation()
+        let lastFailedStoppedLocation = VisilabsGeofenceState.getLastFailedStoppedLocation()
         var replayed = false
         if options.replay == .stops,
            let lastFailedStoppedLocation = lastFailedStoppedLocation,
@@ -332,10 +343,10 @@ extension VisilabsLocationManager {
             sendLocation = lastFailedStoppedLocation
             stopped = true
             replayed = true
-            GeofenceState.setLastFailedStoppedLocation(nil)
+            VisilabsGeofenceState.setLastFailedStoppedLocation(nil)
             VLogger.info("Replaying location | location = \(sendLocation); stopped = \(stopped)")
         }
-        let lastSentAt = GeofenceState.getLastSentAt()
+        let lastSentAt = VisilabsGeofenceState.getLastSentAt()
         let ignoreSync = lastSentAt == nil || justStopped || replayed
         let now = Date()
         var lastSyncInterval: TimeInterval?
@@ -346,23 +357,23 @@ extension VisilabsLocationManager {
         
         if !ignoreSync {
             if !force && stopped && wasStopped && Int(distance) <= options.stopDistance && (options.desiredStoppedUpdateInterval == 0 || options.syncLocations != .syncAll) {
-                VLogger.info("Skipping sync: already stopped | stopped = \(stopped); wasStopped = \(wasStopped)")
+                //VLogger.info("Skipping sync: already stopped | stopped = \(stopped); wasStopped = \(wasStopped)")
                 return
             }
             if Int(lastSyncInterval ?? 0) < options.desiredSyncInterval {
-                VLogger.info("Skipping sync: desired sync interval | desiredSyncInterval = \(options.desiredSyncInterval); lastSyncInterval = \(lastSyncInterval ?? 0)")
+                //VLogger.info("Skipping sync: desired sync interval | desiredSyncInterval = \(options.desiredSyncInterval); lastSyncInterval = \(lastSyncInterval ?? 0)")
             }
             if !force && !justStopped && Int(lastSyncInterval ?? 0) < 1 {
-                VLogger.info("Skipping sync: rate limit | justStopped = \(justStopped); lastSyncInterval = \(String(describing: lastSyncInterval))")
+                //VLogger.info("Skipping sync: rate limit | justStopped = \(justStopped); lastSyncInterval = \(String(describing: lastSyncInterval))")
                 return
             }
             if options.syncLocations == .syncNone {
-                VLogger.info("Skipping sync: sync mode | sync = \(options.syncLocations)")
+                //VLogger.info("Skipping sync: sync mode | sync = \(options.syncLocations)")
                 return
             }
         }
         
-        GeofenceState.setLastSentAt()
+        VisilabsGeofenceState.setLastSentAt()
         
         if source == .foregroundLocation {
             return
@@ -371,7 +382,7 @@ extension VisilabsLocationManager {
     }
     
     func sendLocation(_ location: CLLocation, stopped: Bool, source: LocationSource, replayed: Bool, region: CLRegion? = nil) {
-        VLogger.info("Sending location | source = \(source); location = \(location); stopped = \(stopped); replayed = \(replayed)")
+        //VLogger.info("Sending location | source = \(source); location = \(location); stopped = \(stopped); replayed = \(replayed)")
         sending = true
         
         if [LocationSource.geofenceEnter, LocationSource.geofenceExit].contains(source) {
@@ -412,14 +423,16 @@ extension VisilabsLocationManager {
                 isEnter = false
             }
             
-            VisilabsGeofence.sharedManager?.sendPushNotification(actId: actId,
-                                                                 geoId: geoId,
-                                                                 isDwell: isDwell,
-                                                                 isEnter: isEnter) { [weak self] response in
+            sendPushNotification(actId: actId,
+                                 geoId: geoId,
+                                 isDwell: isDwell,
+                                 isEnter: isEnter) { [weak self] response in
                 self?.sending = false
                 self?.updateTracking(location: location, fromInit: false)
             }
+            
         } else {
+            sending = false
             fetchGeofences()
         }
     }
@@ -431,8 +444,8 @@ extension VisilabsLocationManager {
         fetching = true
         let lat = locMan.location?.coordinate.latitude
         let lon = locMan.location?.coordinate.longitude
-        VisilabsGeofence.sharedManager?.getGeofenceList(lastKnownLatitude: lat,
-                                                        lastKnownLongitude: lon) { [weak self] (response, fetchedGeofences) in
+        getGeofenceList(lastKnownLatitude: lat,
+                        lastKnownLongitude: lon) { [weak self] (response, fetchedGeofences) in
             if response {
                 self?.replaceSyncedGeofences(fetchedGeofences)
             }
@@ -506,26 +519,8 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
 // MARK: - Permissions
 extension VisilabsLocationManager {
     
-    // notDetermined, restricted, denied, authorizedAlways, authorizedWhenInUse
-    static var locationServiceStateStatus: CLAuthorizationStatus {
-        if locationServicesEnabledForDevice {
-            var authorizationStatus: CLAuthorizationStatus = .denied
-            if #available(iOS 14.0, *) {
-                authorizationStatus = VisilabsLocationManager.sharedManager.locMan.authorizationStatus
-            } else {
-                authorizationStatus = CLLocationManager.authorizationStatus()
-            }
-            return authorizationStatus
-        }
-        return .notDetermined
-    }
-    
-    static var locationServicesEnabledForDevice: Bool {
-        return CLLocationManager.locationServicesEnabled()
-    }
-    
     func sendLocationPermission(status: CLAuthorizationStatus? = nil, geofenceEnabled: Bool = true) {
-        let authorizationStatus = status ?? VisilabsLocationManager.locationServiceStateStatus
+        let authorizationStatus = status ?? VisilabsGeofenceState.locationServiceStateStatus
         if authorizationStatus != lastKnownCLAuthorizationStatus {
             var properties = [String: String]()
             properties[VisilabsConstants.locationPermissionReqKey] = authorizationStatus.queryStringValue
@@ -536,5 +531,193 @@ extension VisilabsLocationManager {
             self.geofenceEnabled = false
             stopUpdates()
         }
+    }
+}
+
+// MARK: - Request
+extension VisilabsLocationManager {
+    
+    func sendPushNotification(actId: Int,
+                              geoId: Int,
+                              isDwell: Bool,
+                              isEnter: Bool,
+                              completion: @escaping ((_ response: Bool) -> Void)) {
+        
+        guard let profile = self.visilabsProfile else {
+            return
+        }
+        
+        let user = VisilabsPersistence.unarchiveUser()
+        var props = [String: String]()
+        props[VisilabsConstants.organizationIdKey] = profile.organizationId
+        props[VisilabsConstants.profileIdKey] = profile.profileId
+        props[VisilabsConstants.cookieIdKey] = user.cookieId
+        props[VisilabsConstants.exvisitorIdKey] = user.exVisitorId
+        props[VisilabsConstants.actKey] = VisilabsConstants.processV2
+        props[VisilabsConstants.actidKey] = "\(actId)"
+        props[VisilabsConstants.tokenIdKey] = user.tokenId
+        props[VisilabsConstants.appidKey] = user.appId
+        props[VisilabsConstants.geoIdKey] = "\(geoId)"
+        
+        props[VisilabsConstants.nrvKey] = String(user.nrv)
+        props[VisilabsConstants.pvivKey] = String(user.pviv)
+        props[VisilabsConstants.tvcKey] = String(user.tvc)
+        props[VisilabsConstants.lvtKey] = user.lvt
+
+        if isDwell {
+            props[VisilabsConstants.triggerEventKey] = isEnter ? VisilabsConstants.onEnter : VisilabsConstants.onExit
+        }
+
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+           if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+               props[key] = value
+           }
+        }
+        VLogger.info("Geofence Triggerred: actionId: \(actId) geofenceid: \(geoId)")
+        VisilabsRequest.sendGeofenceRequest(properties: props,
+                                            headers: [String: String](),
+                                            timeoutInterval: profile.requestTimeoutInterval) { (_, error) in
+            if let error = error {
+                VLogger.error("Geofence Push Send Error: \(error)")
+            }
+            completion(true)
+        }
+    }
+    
+    func getGeofenceList(lastKnownLatitude: Double?,
+                         lastKnownLongitude: Double?,
+                         completion: @escaping ((_ response: Bool, _ fetchedGeofences: [VisilabsGeofenceEntity]) -> Void)) {
+        
+        guard let profile = visilabsProfile else {
+            completion(false, [VisilabsGeofenceEntity]())
+            return
+        }
+        
+        if profile.geofenceEnabled, VisilabsGeofenceState.locationServicesEnabledForDevice, VisilabsGeofenceState.locationServiceEnabledForApplication {
+            let now = Date()
+            let timeInterval = now.timeIntervalSince1970 - self.lastGeofenceFetchTime.timeIntervalSince1970
+            if timeInterval < VisilabsConstants.geofenceFetchTimeInterval {
+                completion(false, [VisilabsGeofenceEntity]())
+                return
+            }
+
+            self.lastGeofenceFetchTime = now
+            let user = VisilabsPersistence.unarchiveUser()
+            let geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
+            var props = [String: String]()
+            props[VisilabsConstants.organizationIdKey] = profile.organizationId
+            props[VisilabsConstants.profileIdKey] = profile.profileId
+            props[VisilabsConstants.cookieIdKey] = user.cookieId
+            props[VisilabsConstants.exvisitorIdKey] = user.exVisitorId
+            props[VisilabsConstants.actKey] = VisilabsConstants.getList
+            props[VisilabsConstants.tokenIdKey] = user.tokenId
+            props[VisilabsConstants.appidKey] = user.appId
+            props[VisilabsConstants.channelKey] = profile.channel
+            if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
+                props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
+                props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
+            } else if let lat = geofenceHistory.lastKnownLatitude, let lon = geofenceHistory.lastKnownLongitude {
+                props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
+                props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)
+            }
+            
+            props[VisilabsConstants.nrvKey] = String(user.nrv)
+            props[VisilabsConstants.pvivKey] = String(user.pviv)
+            props[VisilabsConstants.tvcKey] = String(user.tvc)
+            props[VisilabsConstants.lvtKey] = user.lvt
+
+            for (key, value) in VisilabsPersistence.readTargetParameters() {
+               if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+                   props[key] = value
+               }
+            }
+
+            VisilabsRequest.sendGeofenceRequest(properties: props,
+                                                headers: [String: String](),
+                                            timeoutInterval: profile.requestTimeoutInterval) {
+                [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, error) in
+
+                if error != nil {
+                    self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
+                    self.geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
+                    if self.geofenceHistory.errorHistory.count > VisilabsConstants.geofenceHistoryErrorMaxCount {
+                        let ascendingKeys = Array(self.geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
+                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count
+                                            - VisilabsConstants.geofenceHistoryErrorMaxCount)]
+                        for key in keysToBeDeleted {
+                            self.geofenceHistory.errorHistory[key] = nil
+                        }
+                    }
+                    VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
+                    completion(false, [VisilabsGeofenceEntity]())
+                    return
+                }
+                (self.lastSuccessfulGeofenceFetchTime, self.geofenceHistory.lastFetchTime) = (now, now)
+                var fetchedGeofences = [VisilabsGeofenceEntity]()
+                if let res = result {
+                    for targetingAction in res {
+                        if let actionId = targetingAction["actid"] as? Int,
+                           let targetEvent = targetingAction["trgevt"] as? String,
+                           let durationInSeconds = targetingAction["dis"] as? Int,
+                           let geofences = targetingAction["geo"] as? [[String: Any]] {
+
+                            for geofence in geofences {
+                                if let geofenceId = geofence["id"] as? Int,
+                                   let latitude = geofence["lat"] as? Double,
+                                   let longitude = geofence["long"] as? Double,
+                                   let radius = geofence["rds"] as? Double {
+                                    var distanceFromCurrentLastKnownLocation: Double?
+                                    if let lastLat = lastKnownLatitude, let lastLong = lastKnownLongitude {
+                            distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat,
+                                                                            lng1: lastLong,
+                                                                            lat2: latitude,
+                                                                            lng2: longitude)
+                                    }
+                                    fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId,
+                                                                                   geofenceId: geofenceId,
+                                                                                   latitude: latitude,
+                                                                                   longitude: longitude,
+                                                                                   radius: radius,
+                                                                                   durationInSeconds: durationInSeconds,
+                                                                                   targetEvent: targetEvent,
+                                        distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
+                                }
+                            }
+                        }
+                    }
+                }
+                self.geofenceHistory.lastFetchTime = now
+                self.geofenceHistory.lastKnownLatitude = lastKnownLatitude
+                self.geofenceHistory.lastKnownLongitude = lastKnownLongitude
+                self.geofenceHistory.fetchHistory[now] = fetchedGeofences
+                if self.geofenceHistory.fetchHistory.count > VisilabsConstants.geofenceHistoryMaxCount {
+                    let ascendingKeys = Array(self.geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
+                    let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count
+                                                            - VisilabsConstants.geofenceHistoryMaxCount)]
+                    for key in keysToBeDeleted {
+                        self.geofenceHistory.fetchHistory[key] = nil
+                    }
+                }
+                VisilabsPersistence.saveVisilabsGeofenceHistory(self.geofenceHistory)
+                completion(true, fetchedGeofences)
+            }
+        }
+    }
+    
+    private func sortAndTakeVisilabsGeofenceEntitiesToMonitor(_ geofences: [VisilabsGeofenceEntity])
+                                                                    -> [VisilabsGeofenceEntity] {
+        let geofencesSortedAscending = geofences.sorted { (first, second) -> Bool in
+            let firstDistance = first.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
+            let secondDistance = second.distanceFromCurrentLastKnownLocation ?? Double.greatestFiniteMagnitude
+            return firstDistance < secondDistance
+        }
+        var geofencesToMonitor = [VisilabsGeofenceEntity]()
+        for geofence in geofencesSortedAscending {
+            if geofencesToMonitor.count == visilabsProfile?.maxGeofenceCount {
+                break
+            }
+            geofencesToMonitor.append(geofence)
+        }
+        return [VisilabsGeofenceEntity](geofencesToMonitor)
     }
 }

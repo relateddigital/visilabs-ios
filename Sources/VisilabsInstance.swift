@@ -768,18 +768,17 @@ extension VisilabsInstance {
     }
 
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
-        return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
+        return VisilabsGeofenceState.locationServiceStateStatusForApplication
     }
     
     public func sendLocationPermission() {
-        VisilabsLocationManager.sharedManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
+        VisilabsGeofence.sharedManager?.visilabsLocationManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
     }
     
     public func requestLocationPermissions() {
         VisilabsGeofence.sharedManager?.requestLocationPermissions()
     }
 
-    // swiftlint:disable file_length
 }
 
 // MARK: - SUBSCRIPTION MAIL
@@ -811,7 +810,6 @@ extension VisilabsInstance {
 
 // MARK: -REMOTE CONFIG
 
-
 extension VisilabsInstance {
 
     @objc private func applicationDidBecomeActive(_ notification: Notification) {
@@ -822,8 +820,6 @@ extension VisilabsInstance {
         visilabsRemoteConfigInstance.applicationWillResignActive()
     }
 }
-
-
 
 public protocol VisilabsInappButtonDelegate: AnyObject {
     func didTapButton(_ notification: VisilabsInAppNotification)
