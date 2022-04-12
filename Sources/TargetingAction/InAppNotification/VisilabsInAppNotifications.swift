@@ -234,6 +234,11 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
     
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
+        let spinToWinVC = SpinToWinViewController(model)
+        spinToWinVC.delegate = self
+        spinToWinVC.show(animated: true)
+        return true
+        /*
         let controller = SpinToWinViewController(model)
         controller.modalPresentationStyle = .fullScreen
         controller.delegate = self
@@ -242,6 +247,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             return true
         }
         return false
+         */
     }
     
     func markNotificationShown(notification: VisilabsInAppNotification) {
