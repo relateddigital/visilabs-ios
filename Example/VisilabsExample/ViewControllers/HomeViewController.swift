@@ -66,6 +66,7 @@ class HomeViewController: FormViewController {
             let channelRow: TextRow? = self.form.rowBy(tag: "channel")
             let requestTimeoutInSecondsRow: PickerInputRow<Int>? = self.form.rowBy(tag: "requestTimeoutInSeconds")
             let geofenceEnabledRow: SwitchRow? = self.form.rowBy(tag: "geofenceEnabled")
+            let askLocationPermmissionAtStartRow: SwitchRow? = self.form.rowBy(tag: "askLocationPermmissionAtStart")
             let idfaRow: SwitchRow? = self.form.rowBy(tag: "isIDFAEnabled")
             let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
             let appAliasRow: TextRow? = self.form.rowBy(tag: "appAlias")
@@ -73,6 +74,7 @@ class HomeViewController: FormViewController {
             visilabsProfile.profileId = profileIdRow!.value!
             visilabsProfile.dataSource = dataSourceRow!.value!
             visilabsProfile.geofenceEnabled = geofenceEnabledRow?.value ?? false
+            visilabsProfile.askLocationPermmissionAtStart = askLocationPermmissionAtStartRow?.value ?? false
             visilabsProfile.isIDFAEnabled = idfaRow?.value ?? false
             visilabsProfile.channel = channelRow!.value!
             visilabsProfile.requestTimeoutInSeconds = requestTimeoutInSecondsRow!.value!
@@ -87,6 +89,7 @@ class HomeViewController: FormViewController {
                                channel: visilabsProfile.channel,
                                requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
                                geofenceEnabled: visilabsProfile.geofenceEnabled,
+                               askLocationPermmissionAtStart: visilabsProfile.askLocationPermmissionAtStart,
                                maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                                isIDFAEnabled: visilabsProfile.isIDFAEnabled,
                                loggingEnabled: true,isTest: visilabsProfile.IsTest)
@@ -119,6 +122,13 @@ class HomeViewController: FormViewController {
         return SwitchRow("geofenceEnabled") {
             $0.title = "geofenceEnabled"
             $0.value = visilabsProfile.geofenceEnabled
+        }
+    }
+    
+    fileprivate func addAskLocationPermmissionAtStartSwitchRow() -> SwitchRow {
+        return SwitchRow("askLocationPermmissionAtStart") {
+            $0.title = "askLocationPermmissionAtStart"
+            $0.value = visilabsProfile.askLocationPermmissionAtStart
         }
     }
 
@@ -271,6 +281,7 @@ class HomeViewController: FormViewController {
             <<< addChannelTextRow()
             <<< addRequestTimeoutPickerInputRow()
             <<< addGeofenceSwitchRow()
+            <<< addAskLocationPermmissionAtStartSwitchRow()
             <<< addGeofencePickerInputRow()
             <<< addAppAliasTextRow()
             <<< addIDFASwitchRow()

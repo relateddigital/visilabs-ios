@@ -23,6 +23,7 @@ public class Visilabs {
                                 channel: String = "IOS",
                                 requestTimeoutInSeconds: Int = 30,
                                 geofenceEnabled: Bool = false,
+                                askLocationPermmissionAtStart: Bool = true,
                                 maxGeofenceCount: Int = 20,
                                 isIDFAEnabled: Bool = true,
                                 loggingEnabled: Bool = false,
@@ -36,6 +37,7 @@ public class Visilabs {
                                                   channel: channel,
                                                   requestTimeoutInSeconds: requestTimeoutInSeconds,
                                                   geofenceEnabled: geofenceEnabled,
+                                                  askLocationPermmissionAtStart: askLocationPermmissionAtStart,
                                                   maxGeofenceCount: maxGeofenceCount,
                                                   isIDFAEnabled: isIDFAEnabled,
                                                   loggingEnabled: loggingEnabled,
@@ -44,6 +46,10 @@ public class Visilabs {
     
     public class func createAPI() {
         VisilabsManager.sharedInstance.initialize()
+    }
+    
+    public class func initializeCalled() -> Bool {
+        return VisilabsManager.initializeCalled
     }
     
 }

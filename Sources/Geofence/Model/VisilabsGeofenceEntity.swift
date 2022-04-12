@@ -22,7 +22,7 @@ public class VisilabsGeofenceEntity: Codable {
         self.durationInSeconds = durationInSeconds
         self.targetEvent = targetEvent
         self.distanceFromCurrentLastKnownLocation = distanceFromCurrentLastKnownLocation
-        self.identifier = "visilabs_\(self.actId)_\(self.geofenceId)_\(self.targetEvent)"
+        self.identifier = "\(kSyncGeofenceIdentifierPrefix)\(self.actId)_\(self.geofenceId)_\(self.targetEvent)"
     }
     public var actId: Int
     public var geofenceId: Int

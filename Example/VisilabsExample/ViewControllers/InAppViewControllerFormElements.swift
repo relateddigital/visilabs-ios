@@ -366,11 +366,7 @@ extension InAppViewController {
                 return
             }
 
-            let frame = CGRect(x: 0, y: 0, width: 200, height: 24)
-            // let footerView = CounterView(frame: frame, currentIndex: 0, count: notification.carouselItems.count)
-
             let vc = VisilabsCarouselNotificationViewController(startIndex: 0, notification: notification)
-            // vc.footerView = footerView
 
             vc.launchedCompletion = { print("LAUNCHED") }
             vc.closedCompletion = { print("CLOSED") }
