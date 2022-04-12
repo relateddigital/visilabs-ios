@@ -54,7 +54,6 @@ class VisilabsLocationManager: NSObject {
         lpLocMan = CLLocationManager()
         geofenceHistory = VisilabsPersistence.readVisilabsGeofenceHistory()
         super.init()
-        
         locMan.desiredAccuracy = options.desiredCLLocationAccuracy
         locMan.distanceFilter = kCLDistanceFilterNone
         locMan.allowsBackgroundLocationUpdates = options.locationBackgroundMode && getAuthorizationStatus() == .authorizedAlways
@@ -63,18 +62,19 @@ class VisilabsLocationManager: NSObject {
         lpLocMan.allowsBackgroundLocationUpdates = options.locationBackgroundMode
         locMan.delegate = self
         lpLocMan.delegate = self
-        
         updateTracking(location: nil, fromInit: true)
-        
         if let profile = VisilabsPersistence.readVisilabsProfile() {
             self.visilabsProfile = profile
+            if !Visilabs.initializeCalled() {
+                Visilabs.createAPI()
+            }
+            VisilabsHelper.setEndpoints(dataSource: profile.dataSource)
             geofenceEnabled = profile.geofenceEnabled
             if geofenceEnabled {
                 startGeofencing(fromInit: true)
             }
             askLocationPermmissionAtStart = profile.askLocationPermmissionAtStart
         }
-        
     }
     
     deinit {

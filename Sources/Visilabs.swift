@@ -48,4 +48,8 @@ public class Visilabs {
         VisilabsManager.sharedInstance.initialize()
     }
     
+    public class func initializeCalled() -> Bool {
+        return VisilabsManager.initializeCalled
+    }
+    
 }

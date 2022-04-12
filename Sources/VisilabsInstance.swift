@@ -82,6 +82,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendation
     let visilabsRemoteConfigInstance: VisilabsRemoteConfig
+    let visilabsLocationManager: VisilabsLocationManager
 
     public var debugDescription: String {
         return "Visilabs(siteId : \(visilabsProfile.profileId)" +
@@ -173,9 +174,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                                                   visilabsProfile: visilabsProfile)
         visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
         visilabsRemoteConfigInstance = VisilabsRemoteConfig(profileId: visilabsProfile.profileId)
+        visilabsLocationManager = VisilabsLocationManager()
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
-
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
         
         if let appVersion = VisilabsHelper.getAppVersion() {
@@ -193,10 +194,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
             VisilabsPersistence.archiveUser(visilabsUser)
-        }
-
-        if visilabsProfile.geofenceEnabled {
-            startGeofencing()
         }
 
         VisilabsHelper.setEndpoints(dataSource: visilabsProfile.dataSource)
@@ -759,12 +756,9 @@ extension VisilabsInstance {
 // MARK: - GEOFENCE
 
 extension VisilabsInstance {
-    private func startGeofencing() {
-        VisilabsGeofence.sharedManager?.startGeofencing()
-    }
 
     public var locationServicesEnabledForDevice: Bool {
-        return VisilabsGeofence.sharedManager?.locationServicesEnabledForDevice ?? false
+        return VisilabsGeofenceState.locationServicesEnabledForDevice
     }
 
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
@@ -772,11 +766,11 @@ extension VisilabsInstance {
     }
     
     public func sendLocationPermission() {
-        VisilabsGeofence.sharedManager?.visilabsLocationManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
+        visilabsLocationManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
     }
     
     public func requestLocationPermissions() {
-        VisilabsGeofence.sharedManager?.requestLocationPermissions()
+        visilabsLocationManager.requestLocationPermissions()
     }
 
 }
