@@ -6,6 +6,8 @@
 //
 
 class VisilabsManager {
+    
+    static var initializeCalled = false;
     static let sharedInstance = VisilabsManager()
     private var instance: VisilabsInstance?
     
@@ -25,6 +27,7 @@ class VisilabsManager {
                     isIDFAEnabled: Bool,
                     loggingEnabled: Bool,
                     isTest: Bool) -> VisilabsInstance {
+        VisilabsManager.initializeCalled = true
         setTest(test: isTest)
         let instance = VisilabsInstance(organizationId: organizationId,
                                         profileId: profileId,
@@ -48,6 +51,7 @@ class VisilabsManager {
     }
     
     func initialize() {
+        VisilabsManager.initializeCalled = true
         if let instance = VisilabsInstance() {
             self.instance = instance
         }
