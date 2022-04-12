@@ -38,6 +38,7 @@ struct VisilabsProfile: Codable {
     var channel: String
     var requestTimeoutInSeconds: Int
     var geofenceEnabled: Bool
+    var askLocationPermmissionAtStart: Bool
     var inAppNotificationsEnabled: Bool
     var maxGeofenceCount: Int
     var isIDFAEnabled: Bool
@@ -81,6 +82,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsTargetingActionInstance: VisilabsTargetingAction
     let visilabsRecommendationInstance: VisilabsRecommendation
     let visilabsRemoteConfigInstance: VisilabsRemoteConfig
+    let visilabsLocationManager: VisilabsLocationManager
 
     public var debugDescription: String {
         return "Visilabs(siteId : \(visilabsProfile.profileId)" +
@@ -118,6 +120,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          channel: String,
          requestTimeoutInSeconds: Int,
          geofenceEnabled: Bool,
+         askLocationPermmissionAtStart: Bool,
          maxGeofenceCount: Int,
          isIDFAEnabled: Bool = true,
          loggingEnabled: Bool = false) {
@@ -153,6 +156,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                           channel: channel,
                                           requestTimeoutInSeconds: requestTimeoutInSeconds,
                                           geofenceEnabled: geofenceEnabled,
+                                          askLocationPermmissionAtStart: askLocationPermmissionAtStart,
                                           inAppNotificationsEnabled: inAppNotificationsEnabled,
                                           maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount,
                                           isIDFAEnabled: isIDFAEnabled)
@@ -170,9 +174,9 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                                                   visilabsProfile: visilabsProfile)
         visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
         visilabsRemoteConfigInstance = VisilabsRemoteConfig(profileId: visilabsProfile.profileId)
+        visilabsLocationManager = VisilabsLocationManager()
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
-
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
         
         if let appVersion = VisilabsHelper.getAppVersion() {
@@ -190,10 +194,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
             VisilabsPersistence.archiveUser(visilabsUser)
-        }
-
-        if visilabsProfile.geofenceEnabled {
-            startGeofencing()
         }
 
         VisilabsHelper.setEndpoints(dataSource: visilabsProfile.dataSource)
@@ -228,6 +228,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                       channel: visilabsProfile.channel,
                       requestTimeoutInSeconds: visilabsProfile.requestTimeoutInSeconds,
                       geofenceEnabled: visilabsProfile.geofenceEnabled,
+                      askLocationPermmissionAtStart: visilabsProfile.askLocationPermmissionAtStart,
                       maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                       isIDFAEnabled: visilabsProfile.isIDFAEnabled)
         } else {
@@ -755,23 +756,23 @@ extension VisilabsInstance {
 // MARK: - GEOFENCE
 
 extension VisilabsInstance {
-    private func startGeofencing() {
-        VisilabsGeofence.sharedManager?.startGeofencing()
-    }
 
     public var locationServicesEnabledForDevice: Bool {
-        return VisilabsGeofence.sharedManager?.locationServicesEnabledForDevice ?? false
+        return VisilabsGeofenceState.locationServicesEnabledForDevice
     }
 
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
-        return VisilabsGeofence.sharedManager?.locationServiceStateStatusForApplication ?? .none
+        return VisilabsGeofenceState.locationServiceStateStatusForApplication
     }
     
     public func sendLocationPermission() {
-        VisilabsLocationManager.sharedManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
+        visilabsLocationManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
+    }
+    
+    public func requestLocationPermissions() {
+        visilabsLocationManager.requestLocationPermissions()
     }
 
-    // swiftlint:disable file_length
 }
 
 // MARK: - SUBSCRIPTION MAIL
@@ -803,7 +804,6 @@ extension VisilabsInstance {
 
 // MARK: -REMOTE CONFIG
 
-
 extension VisilabsInstance {
 
     @objc private func applicationDidBecomeActive(_ notification: Notification) {
@@ -814,8 +814,6 @@ extension VisilabsInstance {
         visilabsRemoteConfigInstance.applicationWillResignActive()
     }
 }
-
-
 
 public protocol VisilabsInappButtonDelegate: AnyObject {
     func didTapButton(_ notification: VisilabsInAppNotification)

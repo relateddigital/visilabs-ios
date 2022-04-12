@@ -38,6 +38,12 @@ class GeofenceViewController: FormViewController {
 
     private func initializeForm() {
         refreshSection.append(ButtonRow {
+            $0.title = "Request Location Permissions"
+        }
+        .onCellSelection { _, _ in
+            Visilabs.callAPI().requestLocationPermissions()
+        })
+        refreshSection.append(ButtonRow {
             $0.title = "Clear History"
         }
         .onCellSelection { _, _ in
