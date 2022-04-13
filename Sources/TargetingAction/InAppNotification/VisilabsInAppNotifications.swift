@@ -113,8 +113,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
     }
     
     func showDrawer(model:SideBarServiceModel) ->Bool {
-        let sideBar = visilabsSideBarViewController(model:model)
-        sideBar.show(animated: true)
+        let sideBarViewController = visilabsSideBarViewController(model:model)
+        sideBarViewController.delegate = self
+        sideBarViewController.show(animated: true)
         return true
     }
     
