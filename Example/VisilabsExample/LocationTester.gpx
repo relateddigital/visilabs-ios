@@ -8,12 +8,22 @@
      -->
     <wpt lat="36.630541380565546" lon="29.12304213919024">
         <name>fethiye_kent_otel</name>
-        <time>2014-09-24T14:55:37Z</time>
+        <time>2020-09-24T14:55:27Z</time>
     </wpt>
     
     <wpt lat="36.62410967739248" lon="29.13169931362791">
         <name>fethiye_otogar</name>
-        <time>2014-09-24T14:56:37Z</time>
+        <time>2020-09-24T14:55:37Z</time>
+    </wpt>
+    
+    <wpt lat="36.6384632663816" lon="29.1220622809335">
+        <name>fethiye_gold_semaver</name>
+        <time>2020-09-24T14:55:47Z</time>
+    </wpt>
+    
+    <wpt lat="36.630541380565546" lon="29.12304213919024">
+        <name>fethiye_kent_otel</name>
+        <time>2020-09-24T14:55:57Z</time>
     </wpt>
     
 </gpx>
