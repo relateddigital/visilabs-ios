@@ -15,9 +15,9 @@ class VisilabsSpinToWinCodeBannerView: UIView {
     var horizontalStackView: UIStackView!
     var verticalStackViewLeft: UIStackView!
     var verticalStackViewRight: UIStackView!
-    var bannerTextLabel: UITextView!
-    var bannerButtonLabel: UITextView!
-    var bannerCodeLabel: UITextView!
+    var bannerTextLabel: UILabel!
+    var bannerButtonLabel: UILabel!
+    var bannerCodeLabel: UILabel!
     var closeButton: UIButton!
     
     init(frame: CGRect, spinToWin: SpinToWinViewModel) {
@@ -38,6 +38,7 @@ class VisilabsSpinToWinCodeBannerView: UIView {
         horizontalStackView = UIStackView()
         horizontalStackView.axis = .horizontal
         horizontalStackView.distribution = .fillEqually
+        horizontalStackView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         
         
         verticalStackViewLeft = UIStackView()
@@ -52,24 +53,19 @@ class VisilabsSpinToWinCodeBannerView: UIView {
         verticalStackViewRight.spacing = 10.0
         verticalStackViewRight.alignment = .center
         
-        bannerTextLabel = UITextView()
+        bannerTextLabel = UILabel()
         bannerTextLabel.text = spinToWinModel.promocodeBannerText
         bannerTextLabel.textAlignment = .center
         bannerTextLabel.contentMode = .center
-        bannerTextLabel.isScrollEnabled = false
-        bannerTextLabel.isEditable = false
+        bannerTextLabel.baselineAdjustment = .alignCenters
         
-        bannerButtonLabel = UITextView()
+        bannerButtonLabel = UILabel()
         bannerButtonLabel.text = spinToWinModel.promocodeBannerButtonLabel
         bannerButtonLabel.textAlignment = .center
-        bannerButtonLabel.isScrollEnabled = false
-        bannerButtonLabel.isEditable = false
         
-        bannerCodeLabel = UITextView()
+        bannerCodeLabel = UILabel()
         bannerCodeLabel.text = spinToWinModel.bannerCode
         bannerCodeLabel.textAlignment = .center
-        bannerCodeLabel.isScrollEnabled = false
-        bannerCodeLabel.isEditable = false
         
         verticalStackViewLeft.addArrangedSubview(bannerTextLabel)
         
