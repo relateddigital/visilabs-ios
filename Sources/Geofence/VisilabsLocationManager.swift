@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import CoreLocation
 import UIKit
+import CoreLocation
 
 let kIdentifierPrefix = "visilabs_"
 let kBubbleGeofenceIdentifierPrefix = "visilabs_bubble_"
@@ -15,15 +15,12 @@ let kSyncGeofenceIdentifierPrefix = "visilabs_geofence_"
 
 class VisilabsLocationManager: NSObject {
     
-
     typealias VLogger = VisilabsLogger
-    
     
     let options = VisilabsGeofenceOptions()
     var locMan: CLLocationManager
     var lpLocMan: CLLocationManager
     var lastKnownCLAuthorizationStatus : CLAuthorizationStatus?
-    var currentGeoLocationValue: CLLocationCoordinate2D?
     
     var visilabsProfile: VisilabsProfile?
     var geofenceEnabled = false
@@ -58,10 +55,11 @@ class VisilabsLocationManager: NSObject {
         locMan.distanceFilter = kCLDistanceFilterNone
         locMan.allowsBackgroundLocationUpdates = options.locationBackgroundMode && getAuthorizationStatus() == .authorizedAlways
         lpLocMan.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-        lpLocMan.distanceFilter = CLLocationDistance(3000)
+        lpLocMan.distanceFilter = 3000
         lpLocMan.allowsBackgroundLocationUpdates = options.locationBackgroundMode
         locMan.delegate = self
         lpLocMan.delegate = self
+        VisilabsGeofenceState.setStopped(false)
         updateTracking(location: nil, fromInit: true)
         if let profile = VisilabsPersistence.readVisilabsProfile() {
             self.visilabsProfile = profile
@@ -73,7 +71,6 @@ class VisilabsLocationManager: NSObject {
             askLocationPermmissionAtStart = profile.askLocationPermmissionAtStart
             if geofenceEnabled {
                 startGeofencing(fromInit: true)
-                
             }
             
         }
@@ -116,7 +113,7 @@ class VisilabsLocationManager: NSObject {
                 VLogger.info("Geofence timer fired")
                 self.requestLocation()
             }
-            locMan.startUpdatingLocation()
+            lpLocMan.startUpdatingLocation()
             started = true
             startedInterval = interval
         } else {
@@ -221,7 +218,9 @@ class VisilabsLocationManager: NSObject {
         if !VisilabsGeofenceState.getGeofenceEnabled() {
             return
         }
-        locMan.startMonitoring(for: CLCircularRegion(center: location.coordinate, radius: CLLocationDistance(radius), identifier: "\(kBubbleGeofenceIdentifierPrefix)\(UUID().uuidString)"))
+        locMan.startMonitoring(for: CLCircularRegion(center: location.coordinate,
+                                                     radius: CLLocationDistance(radius),
+                                                     identifier: "\(kBubbleGeofenceIdentifierPrefix)\(UUID().uuidString)"))
     }
     
     func removeBubbleGeofence() {
@@ -238,7 +237,10 @@ class VisilabsLocationManager: NSObject {
             return
         }
         for geoEnt in geoEntities {
-            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: geoEnt.latitude, longitude: geoEnt.longitude), radius: CLLocationDistance(geoEnt.radius), identifier: geoEnt.identifier)
+            let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: geoEnt.latitude,
+                                                                         longitude: geoEnt.longitude),
+                                          radius: CLLocationDistance(geoEnt.radius),
+                                          identifier: geoEnt.identifier)
             locMan.startMonitoring(for: region)
             VLogger.info("Synced geofence | lat = \(geoEnt.latitude); lon = \(geoEnt.longitude); rad = \(geoEnt.radius); id \(geoEnt.identifier)")
         }
@@ -480,48 +482,6 @@ extension VisilabsLocationManager {
     }
 }
 
-// MARK: - CLLocationManagerDelegate
-extension VisilabsLocationManager: CLLocationManagerDelegate {
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        VLogger.info("CLLocationManager didChangeAuthorization: status: \(status.string)")
-        sendLocationPermission(status: status)
-        startGeofencing(fromInit: true)
-    }
-    
-    @available(iOS 14.0, *)
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        VLogger.info("CLLocationManager didChangeAuthorization: status: \(manager.authorizationStatus.string)")
-        sendLocationPermission(status: manager.authorizationStatus)
-        startGeofencing(fromInit: true)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            handleLocation(location, source: .backgroundLocation)
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        VLogger.error("CLLocationManager didFailWithError : \(error.localizedDescription)")
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        guard let location = manager.location, region.identifier.hasPrefix(kIdentifierPrefix) else {
-            return
-        }
-        handleLocation(location, source: .geofenceEnter, region: region)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        guard let location = manager.location, region.identifier.hasPrefix(kIdentifierPrefix) else {
-            return
-        }
-        handleLocation(location, source: .geofenceExit, region: region)
-    }
-}
-
-
 // MARK: - Permissions
 extension VisilabsLocationManager {
     
@@ -726,4 +686,51 @@ extension VisilabsLocationManager {
         }
         return [VisilabsGeofenceEntity](geofencesToMonitor)
     }
+}
+
+
+
+// MARK: - CLLocationManagerDelegate
+extension VisilabsLocationManager: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            handleLocation(location, source: .backgroundLocation)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        guard let location = manager.location, region.identifier.hasPrefix(kIdentifierPrefix) else {
+            return
+        }
+        handleLocation(location, source: .geofenceEnter, region: region)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        guard let location = manager.location, region.identifier.hasPrefix(kIdentifierPrefix) else {
+            return
+        }
+        handleLocation(location, source: .geofenceExit, region: region)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        VLogger.info("CLLocationManager didChangeAuthorization: status: \(status.string)")
+        sendLocationPermission(status: status)
+        startGeofencing(fromInit: true)
+    }
+    
+    @available(iOS 14.0, *)
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        VLogger.info("CLLocationManager didChangeAuthorization: status: \(manager.authorizationStatus.string)")
+        sendLocationPermission(status: manager.authorizationStatus)
+        startGeofencing(fromInit: true)
+    }
+    
+    
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        VLogger.error("CLLocationManager didFailWithError : \(error.localizedDescription)")
+    }
+    
+    
 }
