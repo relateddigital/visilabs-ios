@@ -9,16 +9,16 @@ import Foundation
 import UIKit
 
 
-class visilabsSideBarViewController : UIViewController {
+class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
     
     
     var position: CGPoint?
     var model = SideBarViewModel()
-    var window: UIWindow?
     var globSidebarView : sideBarView?
     var sideBarOpen:Bool = false
     var sideBarFirstPosition:CGPoint?
     var titleLenght = 12
+    var shouldDismissed = false
     
     
     public init(model:SideBarServiceModel?) {
@@ -198,10 +198,9 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     @objc func imageClicked(_ sender: UITapGestureRecognizer? = nil) {
-        hide() {
-            if let url = URL(string: self.model.linkToGo ?? "") {
-                UIApplication.shared.open(url)
-            }
+        shouldDismissed = true
+        if let url = URL(string: self.model.linkToGo ?? "") {
+            delegate?.notificationShouldDismiss(controller: self, callToActionURL: url, shouldTrack: false, additionalTrackingProperties: nil)
         }
     }
 
@@ -233,7 +232,7 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     
-    func show(animated: Bool) {
+    override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return
         }
@@ -308,11 +307,13 @@ class visilabsSideBarViewController : UIViewController {
     }
     
     
-    func hide(completion: @escaping () -> Void) {
-        self.window?.isHidden = true
-        self.window?.removeFromSuperview()
-        self.window = nil
-        completion()
+    override func hide(animated: Bool, completion: @escaping () -> Void) {
+        if shouldDismissed {
+            self.window?.isHidden = true
+            self.window?.removeFromSuperview()
+            self.window = nil
+            completion()
+        }
     }
     
     func addTapGestureToSideBarMiniView() {
