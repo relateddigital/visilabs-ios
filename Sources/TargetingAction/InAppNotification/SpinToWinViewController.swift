@@ -177,6 +177,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
                 let bannerVC = VisilabsSpinToWinCodeBannerController(spinToWin)
                 bannerVC.delegate = self.delegate
                 bannerVC.show(animated: true)
+                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
             } else {
                 self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
             }

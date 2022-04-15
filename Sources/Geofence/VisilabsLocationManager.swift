@@ -70,10 +70,12 @@ class VisilabsLocationManager: NSObject {
             }
             VisilabsHelper.setEndpoints(dataSource: profile.dataSource)
             geofenceEnabled = profile.geofenceEnabled
+            askLocationPermmissionAtStart = profile.askLocationPermmissionAtStart
             if geofenceEnabled {
                 startGeofencing(fromInit: true)
+                
             }
-            askLocationPermmissionAtStart = profile.askLocationPermmissionAtStart
+            
         }
     }
     
@@ -84,6 +86,10 @@ class VisilabsLocationManager: NSObject {
     }
     
     func startGeofencing(fromInit: Bool) {
+        if askLocationPermmissionAtStart {
+            requestLocationPermissions()
+        }
+        
         let authorizationStatus = VisilabsGeofenceState.locationAuthorizationStatus
         if !(authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways) {
             return
