@@ -267,7 +267,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 self.sendPromotionCodeInfo(promo: promoCode, actId: "act-\(self.spinToWin!.actId)", promoTitle: self.spinToWin?.promocodeTitle ?? "", promoSlice: self.sliceText)
             }
         }
-        let promoCodeString = index > -1 ? "\(promoCode)" : "undefined"
+        let promoCodeString = index > -1 ? "'\(promoCode)'" : "undefined"
         
         DispatchQueue.main.async {
             self.webView.evaluateJavaScript("window.chooseSlice(\(index), \(promoCodeString));") { (_, err) in
