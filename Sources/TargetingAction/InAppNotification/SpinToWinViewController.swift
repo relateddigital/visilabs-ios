@@ -275,7 +275,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     VisilabsLogger.error(error)
                     VisilabsLogger.error(error.localizedDescription)
                 } else {
-                    self.spinToWin?.bannerCode = promoCodeString
+                    self.spinToWin?.bannerCode = promoCodeString.replacingOccurrences(of: "\'", with: "")
                 }
             }
         }
