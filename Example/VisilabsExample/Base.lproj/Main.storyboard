@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MG0-Qd-noS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="NoS-cA-dfA">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="sydney_signature.ttf">
+        <array key="sydneysignature.ttf">
             <string>SydneySignature</string>
         </array>
     </customFonts>
@@ -41,7 +41,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Rqc-JL-tQu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1kO-9e-nw0">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vRn-IO-o0U">
@@ -116,6 +116,54 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sPH-z7-f1k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-538" y="537"/>
+        </scene>
+        <!--Testo View Controller-->
+        <scene sceneID="czr-jT-mTZ">
+            <objects>
+                <viewController id="NoS-cA-dfA" customClass="testoViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5AQ-Vd-3fB"/>
+                        <viewControllerLayoutGuide type="bottom" id="PVR-r2-8AU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="X34-5D-oqm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Xs-wl-cqZ">
+                                <rect key="frame" x="154" y="291" width="67" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="but:" destination="NoS-cA-dfA" eventType="touchUpInside" id="7Ut-8u-Gin"/>
+                                    <segue destination="mdL-Fq-e14" kind="presentation" id="XK9-YI-6Yd"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9wP-kr-saJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="224.80000000000001" y="1365.9670164917543"/>
+        </scene>
+        <!--Testoo View Controller-->
+        <scene sceneID="1k9-LM-bUH">
+            <objects>
+                <viewController id="J82-Uf-zHz" customClass="testooViewController" customModule="VisilabsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LsT-0x-X2F"/>
+                        <viewControllerLayoutGuide type="bottom" id="t2t-kZ-VAD"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tK8-dy-aoj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fph-do-xMo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1081" y="1332"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="9Fx-GK-1bn">
@@ -242,6 +290,9 @@
             <point key="canvasLocation" x="2656.8000000000002" y="323.38830584707648"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="XK9-YI-6Yd"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Event" width="25" height="25"/>
         <image name="Favorite" width="25" height="25"/>

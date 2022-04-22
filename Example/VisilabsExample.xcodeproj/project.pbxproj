@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FD843F12812FE4100A720B6 /* testoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD843F02812FE4100A720B6 /* testoViewController.swift */; };
+		2FD843F32812FE5600A720B6 /* testooViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD843F22812FE5600A720B6 /* testooViewController.swift */; };
 		880F99B527992A70003BDD87 /* android101.otf in Resources */ = {isa = PBXBuildFile; fileRef = 880F99B427992A70003BDD87 /* android101.otf */; };
 		880F99B927992A8E003BDD87 /* sydneysignature.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 880F99B827992A8E003BDD87 /* sydneysignature.ttf */; };
 		88EC49BF2646FACD009C6DDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49BE2646FACD009C6DDB /* AppDelegate.swift */; };
@@ -46,6 +48,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2FD843F02812FE4100A720B6 /* testoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testoViewController.swift; sourceTree = "<group>"; };
+		2FD843F22812FE5600A720B6 /* testooViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testooViewController.swift; sourceTree = "<group>"; };
 		880F99B427992A70003BDD87 /* android101.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = android101.otf; sourceTree = "<group>"; };
 		880F99B827992A8E003BDD87 /* sydneysignature.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sydneysignature.ttf; sourceTree = "<group>"; };
 		88EC49BB2646FACD009C6DDB /* VisilabsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +159,8 @@
 				88EC49DE2647045E009C6DDB /* Helpers */,
 				88EC49D22647045E009C6DDB /* Models */,
 				88EC49D42647045E009C6DDB /* ViewControllers */,
+				2FD843F02812FE4100A720B6 /* testoViewController.swift */,
+				2FD843F22812FE5600A720B6 /* testooViewController.swift */,
 			);
 			path = VisilabsExample;
 			sourceTree = "<group>";
@@ -325,6 +331,8 @@
 				88EC49E62647045E009C6DDB /* ModalViewController.swift in Sources */,
 				88EC49F02647045E009C6DDB /* Extensions.swift in Sources */,
 				88EC49E72647045E009C6DDB /* HomeViewController.swift in Sources */,
+				2FD843F12812FE4100A720B6 /* testoViewController.swift in Sources */,
+				2FD843F32812FE5600A720B6 /* testooViewController.swift in Sources */,
 				88EC49EA2647045E009C6DDB /* GeofenceViewController.swift in Sources */,
 				88EC49ED2647045E009C6DDB /* DataManager.swift in Sources */,
 				88EC49E52647045E009C6DDB /* FavoriteViewController.swift in Sources */,
@@ -477,6 +485,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VisilabsExample/VisilabsExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -499,6 +508,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = VisilabsExample/VisilabsExampleRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 5M383PCDJZ;
 				INFOPLIST_FILE = VisilabsExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
