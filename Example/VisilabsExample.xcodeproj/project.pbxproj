@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6144E50228138E390035A171 /* testViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6144E50128138E390035A171 /* testViewController.swift */; };
 		880F99B527992A70003BDD87 /* android101.otf in Resources */ = {isa = PBXBuildFile; fileRef = 880F99B427992A70003BDD87 /* android101.otf */; };
 		880F99B927992A8E003BDD87 /* sydneysignature.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 880F99B827992A8E003BDD87 /* sydneysignature.ttf */; };
 		88EC49BF2646FACD009C6DDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC49BE2646FACD009C6DDB /* AppDelegate.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6144E50128138E390035A171 /* testViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testViewController.swift; sourceTree = "<group>"; };
 		880F99B427992A70003BDD87 /* android101.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = android101.otf; sourceTree = "<group>"; };
 		880F99B827992A8E003BDD87 /* sydneysignature.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sydneysignature.ttf; sourceTree = "<group>"; };
 		88EC49BB2646FACD009C6DDB /* VisilabsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisilabsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +146,7 @@
 			children = (
 				D2EE696627330D9000A44D88 /* VisilabsExampleRelease.entitlements */,
 				D2EE696527330D8200A44D88 /* VisilabsExample.entitlements */,
+				6144E50128138E390035A171 /* testViewController.swift */,
 				88EC49BE2646FACD009C6DDB /* AppDelegate.swift */,
 				88EC49C72646FACF009C6DDB /* Assets.xcassets */,
 				88EC49CC2646FACF009C6DDB /* Info.plist */,
@@ -326,6 +329,7 @@
 				88EC49F02647045E009C6DDB /* Extensions.swift in Sources */,
 				88EC49E72647045E009C6DDB /* HomeViewController.swift in Sources */,
 				88EC49EA2647045E009C6DDB /* GeofenceViewController.swift in Sources */,
+				6144E50228138E390035A171 /* testViewController.swift in Sources */,
 				88EC49ED2647045E009C6DDB /* DataManager.swift in Sources */,
 				88EC49E52647045E009C6DDB /* FavoriteViewController.swift in Sources */,
 			);
