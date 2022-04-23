@@ -198,12 +198,23 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         }
     }
     
+    func getTopViewController() -> UIViewController? {
+        var topViewController = UIApplication.shared.delegate!.window!!.rootViewController!
+        while (topViewController.presentedViewController != nil) {
+            topViewController = topViewController.presentedViewController!
+        }
+        return topViewController
+    }
+    
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let controller = VisilabsPopupNotificationViewController(notification: notification)
         controller.delegate = self
         controller.inappButtonDelegate = self.inappButtonDelegate
+
         
-        if let rootViewController = VisilabsHelper.getRootViewController() {
+        
+        
+        if let rootViewController = getTopViewController() {
             rootViewController.present(controller, animated: false, completion: nil)
             return true
         } else {
