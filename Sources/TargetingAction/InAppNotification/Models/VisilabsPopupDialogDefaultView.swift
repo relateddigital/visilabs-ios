@@ -473,7 +473,6 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     }
 
     @objc func expandSctw() {
-        self.delegate?.viewExpanded()
         let model = self.scratchToWin!
         sctwButton = VisilabsPopupDialogButton(title: model.copyButtonText ?? "",
                                                font: model.copyButtonTextFont ?? .systemFont(ofSize: 20),
