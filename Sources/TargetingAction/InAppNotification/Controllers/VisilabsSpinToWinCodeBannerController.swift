@@ -18,8 +18,6 @@ class VisilabsSpinToWinCodeBannerController: VisilabsBaseNotificationViewControl
     var halfScreenHeight = 0.0
     
     var isDismissing = false
-    var position: CGPoint!
-    
     
     init(_ spinToWin: SpinToWinViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -105,7 +103,6 @@ class VisilabsSpinToWinCodeBannerController: VisilabsBaseNotificationViewControl
             window.rootViewController = self
             window.isHidden = false
         }
-        self.position = self.window?.layer.position
     }
     
 

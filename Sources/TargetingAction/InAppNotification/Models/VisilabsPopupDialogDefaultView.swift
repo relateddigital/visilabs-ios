@@ -510,7 +510,6 @@ extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
 }
 
 protocol VisilabsPopupDialogDefaultViewDelegate: AnyObject {
-    func viewExpanded()
     func dismissSctw()
 }
 
