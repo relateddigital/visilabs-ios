@@ -15,7 +15,6 @@ internal enum AnimationDirection {
 internal extension UIView {
 
     var fadeKey: String { return "FadeAnimation" }
-    var shakeKey: String { return "ShakeAnimation" }
 
     func pv_fade(_ direction: AnimationDirection, _ value: Float, duration: CFTimeInterval = 0.08) {
         layer.removeAnimation(forKey: fadeKey)

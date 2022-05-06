@@ -17,7 +17,6 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
     var halfScreenHeight = 0.0
     
     var isDismissing = false
-    var position: CGPoint!
 
     init(notification: VisilabsInAppNotification) {
         super.init(nibName: nil, bundle: nil)
@@ -104,10 +103,7 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
             window.rootViewController = self
             window.isHidden = false
         }
-        self.position = self.window?.layer.position
     }
-    
-
     
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         if !isDismissing {

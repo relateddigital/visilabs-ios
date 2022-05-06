@@ -18,8 +18,6 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
     var halfScreenHeight = 0.0
     
     var isDismissing = false
-    var position: CGPoint!
-
     
     init(productStatNotifier: VisilabsProductStatNotifierViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -108,10 +106,7 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
             window.rootViewController = self
             window.isHidden = false
         }
-        self.position = self.window?.layer.position
     }
-    
-
     
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         if !isDismissing {
