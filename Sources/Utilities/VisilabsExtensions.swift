@@ -45,40 +45,6 @@ extension String {
     }
 }
 
-/**
-JSON convenient extensions on NSArray
-*/
-
-extension Array {
-
-    /**
-    Returns JSON data from the given array.
-    
-    - returns: returns a JSON data, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
-    */
-
-    func jsonData() -> Data? {
-        return try? JSONSerialization.data(withJSONObject: self, options: [])
-    }
-}
-
-/**
-JSON convenient extensions on Dictionary
-*/
-
-extension Dictionary {
-
-    /**
-    Returns JSON data from the given dictionary.
-    
-    - returns:returns a JSON data, or nil if an internal error occurs. The resulting data is an encoded in UTF-8.
-    */
-
-    func jsonData() -> Data? {
-        return try? JSONSerialization.data(withJSONObject: self, options: [])
-    }
-}
-
 extension Optional where Wrapped == String {
 
     var isNilOrWhiteSpace: Bool {

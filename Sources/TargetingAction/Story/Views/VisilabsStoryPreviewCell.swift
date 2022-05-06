@@ -788,9 +788,6 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
         // Video completed
     }
 
-    func didTrack(progress: Float) {
-
-    }
 }
 
 extension VisilabsStoryPreviewCell: UIGestureRecognizerDelegate {
