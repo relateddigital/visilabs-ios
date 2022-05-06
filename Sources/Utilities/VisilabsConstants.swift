@@ -426,9 +426,3 @@ struct VisilabsInAppNotificationsConstants {
     static let miniBottomPadding: CGFloat = 0 // 10 + (UIDevice.current.iPhoneX ? 34 : 0)
     static let miniSidePadding: CGFloat = 0 // 15
 }
-
-extension UIDevice {
-    var iPhoneX: Bool {
-        return UIScreen.main.nativeBounds.height == 2436
-    }
-}

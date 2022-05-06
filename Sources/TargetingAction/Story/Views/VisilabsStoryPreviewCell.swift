@@ -63,9 +63,6 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     private var previousSnapIndex: Int {
         return snapIndex - 1
     }
-    private var snapViewXPos: CGFloat {
-        return (snapIndex == 0) ? 0 : scrollview.subviews[previousSnapIndex].frame.maxX
-    }
     private var videoSnapIndex: Int = 0
     private var handpickedSnapIndex: Int = 0
     var retryBtn: VisilabsRetryLoaderButton!
@@ -792,7 +789,7 @@ extension VisilabsStoryPreviewCell: VisilabsPlayerObserver {
     }
 
     func didTrack(progress: Float) {
-        // Delegate already handled. If we just print progress, it will print the player current running time
+
     }
 }
 

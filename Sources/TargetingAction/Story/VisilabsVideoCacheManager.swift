@@ -59,31 +59,7 @@ class VisilabsVideoCacheManager {
             }
         }
     }
-    func clearCache(for urlString: String? = nil) {
-        guard let cacheURL =  mainDirectoryUrl else { return }
-        do {
-            // Get the directory contents urls (including subfolders urls)
-            let directoryContents = try FileManager.default.contentsOfDirectory(at: cacheURL,
-                                                        includingPropertiesForKeys: nil, options: [])
-            if let string = urlString, let url = URL(string: string) {
-                do {
-                    try fileManager.removeItem(at: url)
-                } catch let error as NSError {
-                    debugPrint("Unable to remove the item: \(error)")
-                }
-            } else {
-                for file in directoryContents {
-                    do {
-                        try fileManager.removeItem(at: file)
-                    } catch let error as NSError {
-                        debugPrint("Unable to remove the item: \(error)")
-                    }
-                }
-            }
-        } catch let error as NSError {
-            debugPrint(error.localizedDescription)
-        }
-    }
+
     private func directoryFor(stringUrl: String) -> URL? {
         guard let fileURL = URL(string: stringUrl)?.lastPathComponent,
               let mainDirURL = self.mainDirectoryUrl else {

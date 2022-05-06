@@ -156,7 +156,7 @@ class EventViewController: FormViewController {
         return [
             .mini: [VisilabsInAppNotificationType.mini.rawValue: 491],
             .full: [VisilabsInAppNotificationType.full.rawValue: 485],
-            .imageTextButton: [VisilabsInAppNotificationType.imageTextButton.rawValue: 490],
+            .imageTextButton: [VisilabsInAppNotificationType.imageTextButton.rawValue: 780],
             .fullImage: [VisilabsInAppNotificationType.fullImage.rawValue: 495],
             .nps: [VisilabsInAppNotificationType.nps.rawValue: 492],
             .imageButton: [VisilabsInAppNotificationType.imageButton.rawValue: 489],
@@ -167,10 +167,10 @@ class EventViewController: FormViewController {
             .halfScreenImage: [VisilabsInAppNotificationType.halfScreenImage.rawValue: 704],
             .scratchToWin: [VisilabsInAppNotificationType.scratchToWin.rawValue: 592],
             .secondNps: ["nps-image-text-button": 585,  "nps-image-text-button-image": 586, "nps-feedback": 587],
-            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 130],
+            .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 562],
             .productStatNotifier: [VisilabsInAppNotificationType.productStatNotifier.rawValue: 703],
             .inappcarousel: [VisilabsInAppNotificationType.inappcarousel.rawValue: 804],
-            .drawer : [VisilabsInAppNotificationType.drawer.rawValue: 203]
+            .drawer : [VisilabsInAppNotificationType.drawer.rawValue: 884]
         ]
     }
     

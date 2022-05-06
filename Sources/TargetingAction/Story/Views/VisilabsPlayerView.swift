@@ -13,14 +13,6 @@ struct VideoResource {
     let filePath: String
 }
 
-enum PlayerStatus {
-    case unknown
-    case playing
-    case failed
-    case paused
-    case readyToPlay
-}
-
 // Move Implementation on ViewController or cell which ever the UIElement
 // CALL BACK
 protocol VisilabsPlayerObserver: AnyObject {
@@ -28,14 +20,6 @@ protocol VisilabsPlayerObserver: AnyObject {
     func didCompletePlay()
     func didTrack(progress: Float)
     func didFailed(withError error: String, for url: URL?)
-}
-
-protocol PlayerControls: AnyObject {
-    func play(with resource: VideoResource)
-    func play()
-    func pause()
-    func stop()
-    var playerStatus: PlayerStatus { get }
 }
 
 class VisilabsPlayerView: UIView {
@@ -180,7 +164,7 @@ class VisilabsPlayerView: UIView {
 }
 
 // MARK: - Protocol | PlayerControls
-extension VisilabsPlayerView: PlayerControls {
+extension VisilabsPlayerView {
 
     func play(with resource: VideoResource) {
 
@@ -234,17 +218,5 @@ extension VisilabsPlayerView: PlayerControls {
         } else {
             // player was already deallocated
         }
-    }
-    var playerStatus: PlayerStatus {
-        if let plyr = player {
-            switch plyr.status {
-            case .unknown: return .unknown
-            case .readyToPlay: return .readyToPlay
-            case .failed: return .failed
-            @unknown default:
-                return .unknown
-            }
-        }
-        return .unknown
     }
 }
