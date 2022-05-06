@@ -30,19 +30,6 @@ internal class VisilabsHelper {
         return res
     }
     
-    // TO_DO: props un boş gelme ihtimalini de düşün
-    static func buildUrl(url: String, props: [String: String] = [:], additionalQueryString: String = "") -> String {
-        var qsKeyValues = [String]()
-        props.forEach { (key, value) in
-            qsKeyValues.append("\(key)=\(value)")
-        }
-        var queryString = qsKeyValues.joined(separator: "&")
-        if additionalQueryString.count > 0 {
-            queryString = "\(queryString)&\(additionalQueryString)"
-        }
-        return "\(url)?\(queryString)"
-    }
-    
     static func generateCookieId() -> String {
         return UUID().uuidString
     }
@@ -51,13 +38,6 @@ internal class VisilabsHelper {
         let cookieStorage = HTTPCookieStorage.shared
         let cookies = cookieStorage.cookies(for: url) ?? []
         return cookies
-    }
-    
-    static func deleteCookie(_ url: URL) {
-        let cookieStorage = HTTPCookieStorage.shared
-        for cookie in readCookie(url) {
-            cookieStorage.deleteCookie(cookie)
-        }
     }
     
     static func getIDFA(completion: @escaping (String?) -> Void) {
@@ -142,7 +122,7 @@ internal class VisilabsHelper {
         return emailPred.evaluate(with: email)
     }
     
-    static let DELAY_SHORT = 1.5
+    //static let DELAY_SHORT = 1.5
     static let DELAY_LONG = 3.0
     
     static func showToast(_ text: String, delay: TimeInterval = DELAY_LONG) {
@@ -234,13 +214,6 @@ internal class VisilabsHelper {
             return false
         }
         return true
-    }
-    
-    static func hasBackgroundLocationCabability() -> Bool {
-        guard let capabilities = Bundle.main.infoDictionary?["UIBackgroundModes"] as? [String] else {
-            return false
-        }
-        return capabilities.contains("location")
     }
     
     static private func getVisibleViewController(_ vc: UIViewController?) -> UIViewController? {
