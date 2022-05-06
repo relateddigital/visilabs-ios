@@ -11,23 +11,6 @@ import UIKit
 /// The main view of the popup dialog
 final public class VisilabsPopupDialogContainerView: UIView {
 
-    // MARK: - Appearance
-
-    /// The background color of the popup dialog
-    override public dynamic var backgroundColor: UIColor? {
-        get { return container.backgroundColor }
-        set { container.backgroundColor = newValue }
-    }
-
-    /// The corner radius of the popup view
-    @objc public dynamic var cornerRadius: Float {
-        get { return Float(shadowContainer.layer.cornerRadius) }
-        set {
-            let radius = CGFloat(newValue)
-            shadowContainer.layer.cornerRadius = radius
-            container.layer.cornerRadius = radius
-        }
-    }
 
     // MARK: Shadow related
 
