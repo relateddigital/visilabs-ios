@@ -9,9 +9,17 @@ import Foundation
 import UIKit
 
 class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewController {
+    
     override func hide(animated: Bool, completion: @escaping () -> Void) {
-        dismiss(animated: true)
-        completion()
+        let duration = animated ? 0.25 : 0
+        UIView.animate(withDuration: duration, animations: {
+            self.window?.alpha = 0
+            }, completion: { _ in
+                self.window?.isHidden = true
+                self.window?.removeFromSuperview()
+                self.window = nil
+                completion()
+        })
     }
 
     override func show(animated: Bool) {
