@@ -9,26 +9,11 @@ import Foundation
 import UIKit
 
 class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewController {
-    
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         dismiss(animated: true)
         completion()
     }
-    
-    /*
-    override func hide(animated: Bool, completion: @escaping () -> Void) {
-        let duration = animated ? 0.25 : 0
-        UIView.animate(withDuration: duration, animations: {
-            self.window?.alpha = 0
-            }, completion: { _ in
-                self.window?.isHidden = true
-                self.window?.removeFromSuperview()
-                self.window = nil
-                completion()
-        })
-    }
-     */
-    
+
     override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return
@@ -55,20 +40,9 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             window.isHidden = false
         }
 
-        
-        self.window?.alpha = 1
-        
-        /*
-        let duration = animated ? 0.25 : 0
-        UIView.animate(withDuration: duration, animations: {
-            self.window?.alpha = 1
-            }, completion: { _ in
-        })
-         */
+        window?.alpha = 1
     }
 
-    
-    
     /// First init flag
     fileprivate var initialized = false
     weak var visilabsInAppNotification: VisilabsInAppNotification?
@@ -105,8 +79,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public var viewController: VisilabsDefaultPopupNotificationViewController
 
     // MARK: - Initializers
-
-    
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
