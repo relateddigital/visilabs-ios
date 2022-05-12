@@ -205,38 +205,26 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
-        let controller = VisilabsPopupNotificationViewController(notification: notification)
-        controller.delegate = self
-        controller.inappButtonDelegate = inappButtonDelegate
-        if let rootViewController = getTopViewController() {
-            rootViewController.present(controller, animated: false, completion: nil)
-            return true
-        } else {
-            return false
-        }
+        let popUpVC = VisilabsPopupNotificationViewController(notification: notification)
+        popUpVC.delegate = self
+        popUpVC.inappButtonDelegate = self.inappButtonDelegate
+        popUpVC.show(animated: false)
+        return true
     }
 
     func showMailPopup(_ model: MailSubscriptionViewModel) -> Bool {
-        let controller = VisilabsPopupNotificationViewController(mailForm: model)
-        controller.delegate = self
-        if let rootViewController = VisilabsHelper.getRootViewController() {
-            rootViewController.present(controller, animated: false, completion: nil)
-            return true
-        } else {
-            return false
-        }
+        let popUpVC = VisilabsPopupNotificationViewController(mailForm: model)
+        popUpVC.delegate = self
+        popUpVC.show(animated: false)
+        return true
     }
 
     func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
-        let controller = VisilabsPopupNotificationViewController(scratchToWin: model)
-        controller.delegate = self
-        controller.inappButtonDelegate = inappButtonDelegate
-        if let rootViewController = getTopViewController() {
-            rootViewController.present(controller, animated: false, completion: nil)
-            return true
-        } else {
-            return false
-        }
+        let popUpVC = VisilabsPopupNotificationViewController(scratchToWin: model)
+        popUpVC.delegate = self
+        popUpVC.inappButtonDelegate = inappButtonDelegate
+        popUpVC.show(animated: false)
+        return true
     }
 
     func markNotificationShown(notification: VisilabsInAppNotification) {
