@@ -54,7 +54,8 @@ class VisilabsSpinToWinCodeBannerView: UIView {
         verticalStackViewRight.alignment = .center
         
         bannerTextLabel = UILabel()
-        bannerTextLabel.text = spinToWinModel.promocodeBannerText
+        bannerTextLabel.text = spinToWinModel.promocodeBannerText.removeEscapingCharacters()
+        bannerTextLabel.numberOfLines = 0
         bannerTextLabel.textAlignment = .center
         bannerTextLabel.contentMode = .center
         bannerTextLabel.baselineAdjustment = .alignCenters
