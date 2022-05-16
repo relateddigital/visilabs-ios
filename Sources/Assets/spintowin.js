@@ -6,9 +6,7 @@
 
 			params = params || { bubbles: false, cancelable: false, detail: undefined };
 
-			var evt = document.createEvent('CustomEvent');
-			evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-			return evt;
+			return new CustomEvent(event, {bubbles: params.bubbles, cancelable: params.cancelable, detail: params.detail });
 		};
 
 		window.CustomEvent.prototype = window.Event.prototype;
@@ -3534,7 +3532,7 @@ SpinToWin.prototype.spinHandler = function (result) {
 	if (vl_form_submit_btn !== null) vl_form_submit_btn[0].classList.add("disabled");
 	window.spinToWin.config.items[result].win = true;
 	window.easyWheel.items[result].win = true;
-	window.easyWheel.start()
+	window.easyWheel.start(); // TODO:
 };
 SpinToWin.prototype.resultHandler = function (res) {
 	this.spinCompleted = true;
