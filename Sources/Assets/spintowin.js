@@ -3298,6 +3298,7 @@ SpinToWin.prototype.handlePositions = function () {
 			if (this.config.copybuttonPosition == "bottom") {
 				this.copyButton.remove();
 				this.messageElement.parentNode.insertBefore(this.copyButton, this.messageElement.nextSibling);
+				this.copyButton.style.marginBottom = "60px";
 			}
 		} else {
 			this.submitButton.remove();
@@ -3305,6 +3306,7 @@ SpinToWin.prototype.handlePositions = function () {
 			if (this.config.copybuttonPosition == "bottom") {
 				this.copyButton.remove();
 				this.titleElement.parentNode.insertBefore(this.copyButton, this.titleElement.nextSibling);
+				this.copyButton.style.marginBottom = "60px";
 			}
 		}
 	} else if (this.config.textPosition == "bottom") {
@@ -3318,6 +3320,7 @@ SpinToWin.prototype.handlePositions = function () {
 		if (this.config.copybuttonPosition == "bottom") {
 			this.copyButton.remove();
 			this.messageElement.parentNode.insertBefore(this.copyButton, this.messageElement.nextSibling);
+			this.copyButton.style.marginBottom = "60px";
 		}
 	} else if (this.config.buttonPosition == "bottom") {
 		this.submitButton.remove();
@@ -3327,11 +3330,13 @@ SpinToWin.prototype.handlePositions = function () {
 			this.copyButton.remove();
 			this.submitButton.parentNode.insertBefore(this.copyButton, this.submitButton.nextSibling);
 			this.copyButton.style.marginTop = window.innerWidth * 0.88 + "px";
+			this.copyButton.style.marginBottom = "60px";
 		}
 	} else if (this.config.copybuttonPosition == "bottom") {
 		this.copyButton.remove();
 		this.wheelContainer.parentNode.insertBefore(this.copyButton, this.wheelContainer.nextSibling);
 		this.copyButton.style.marginTop = window.innerWidth * 0.88 + "px";
+		this.copyButton.style.marginBottom = "60px";
 	}
 };
 
