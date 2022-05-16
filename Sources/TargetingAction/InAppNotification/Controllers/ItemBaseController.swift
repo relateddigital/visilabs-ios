@@ -21,8 +21,6 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
     //STATE
     public let index: Int
     public var isInitialController = false
-    let itemCount: Int
-    //var swipingToDismiss: SwipeToDismiss?
     fileprivate var isAnimating = false
     fileprivate var fetchImageBlock: FetchImageBlock?
     
@@ -30,7 +28,6 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
     fileprivate var displacementDuration: TimeInterval = 0.0 // 0.55
     fileprivate var reverseDisplacementDuration: TimeInterval = 0.0 // 0.25
     fileprivate var itemFadeDuration: TimeInterval = 0.3
-    fileprivate var displacementTimingCurve: UIView.AnimationCurve = .linear
     fileprivate var displacementSpringBounce: CGFloat = 0.7
     fileprivate var displacementKeepOriginalInPlace = false
     fileprivate var displacementInsetMargin: CGFloat = 0
@@ -47,7 +44,6 @@ public class ItemBaseController: UIViewController, ItemController, UIGestureReco
         self.itemView = visilabsCarouselItemView
         
         self.index = index
-        self.itemCount = itemCount
         self.isInitialController = isInitialController
         self.fetchImageBlock = fetchImageBlock
         

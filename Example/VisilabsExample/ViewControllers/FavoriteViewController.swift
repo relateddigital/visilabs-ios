@@ -29,29 +29,8 @@ class FavoriteViewController: FormViewController {
             }
     }
 
-
-
     private func getFavoriteAttributeActions() {
         Visilabs.callAPI().getFavoriteAttributeActions { (response) in
-            if let error = response.error {
-                print(error)
-            } else {
-                if let favoriteBrands = response.favorites[.brand] {
-                    for brand in favoriteBrands {
-                        print(brand)
-                    }
-                }
-                if let favoriteCategories = response.favorites[.category] {
-                    for category in favoriteCategories {
-                        print(category)
-                    }
-                }
-            }
-        }
-    }
-
-    private func getFavoriteAttributeActions2() {
-        Visilabs.callAPI().getFavoriteAttributeActions(actionId: 188) { (response) in
             if let error = response.error {
                 print(error)
             } else {

@@ -22,30 +22,9 @@ extension UIApplication {
 extension UIView {
 
     public var boundsCenter: CGPoint {
-
         return CGPoint(x: self.bounds.width / 2, y: self.bounds.height / 2)
     }
 
-    func frame(inCoordinatesOfView parentView: UIView) -> CGRect {
-
-        let frameInWindow = UIApplication.applicationWindow.convert(self.bounds, from: self)
-        return parentView.convert(frameInWindow, from: UIApplication.applicationWindow)
-    }
-
-    func addSubviews(_ subviews: UIView...) {
-
-        for view in subviews { self.addSubview(view) }
-    }
-
-    static func animateWithDuration(_ duration: TimeInterval, delay: TimeInterval, animations: @escaping () -> Void) {
-
-        UIView.animate(withDuration: duration, delay: delay, options: UIView.AnimationOptions(), animations: animations, completion: nil)
-    }
-
-    static func animateWithDuration(_ duration: TimeInterval, delay: TimeInterval, animations: @escaping () -> Void, completion: ((Bool) -> Void)?) {
-
-        UIView.animate(withDuration: duration, delay: delay, options: UIView.AnimationOptions(), animations: animations, completion: completion)
-    }
 }
 
 extension UIColor {
@@ -64,130 +43,7 @@ extension UIColor {
     
 }
 
-extension CALayer {
-
-    func toImage() -> UIImage {
-
-        UIGraphicsBeginImageContextWithOptions(self.frame.size, false, 0)
-        let context = UIGraphicsGetCurrentContext()
-        self.render(in: context!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return image!
-    }
-}
-
-
-extension CAShapeLayer {
-
-    static func circle(_ fillColor: UIColor, diameter: CGFloat) -> CAShapeLayer {
-        let circle = CAShapeLayer()
-        let frame = CGRect(origin: CGPoint.zero, size: CGSize(width: diameter * 2, height: diameter * 2))
-        circle.frame = frame
-        circle.path = UIBezierPath(ovalIn: frame).cgPath
-        circle.fillColor = fillColor.cgColor
-        return circle
-    }
-
-    static func closeShape(edgeLength: CGFloat) -> CAShapeLayer {
-
-        let container = CAShapeLayer()
-        container.bounds.size = CGSize(width: edgeLength + 4, height: edgeLength + 4)
-        container.frame.origin = CGPoint.zero
-
-        let linePath = UIBezierPath()
-        linePath.move(to: CGPoint(x: 0, y: 0))
-        linePath.addLine(to: CGPoint(x: edgeLength, y: edgeLength))
-        linePath.move(to: CGPoint(x: 0, y: edgeLength))
-        linePath.addLine(to: CGPoint(x: edgeLength, y: 0))
-
-        let elementBorder = CAShapeLayer()
-        elementBorder.bounds.size = CGSize(width: edgeLength, height: edgeLength)
-        elementBorder.position = CGPoint(x: container.bounds.midX, y: container.bounds.midY)
-        elementBorder.lineCap = CAShapeLayerLineCap.round
-        elementBorder.path = linePath.cgPath
-        elementBorder.strokeColor = UIColor.darkGray.cgColor
-        elementBorder.lineWidth = 2.5
-
-        let elementFill = CAShapeLayer()
-        elementFill.bounds.size = CGSize(width: edgeLength, height: edgeLength)
-        elementFill.position = CGPoint(x: container.bounds.midX, y: container.bounds.midY)
-        elementFill.lineCap = CAShapeLayerLineCap.round
-        elementFill.path = linePath.cgPath
-        elementFill.strokeColor = UIColor.white.cgColor
-        elementFill.lineWidth = 2
-
-        container.addSublayer(elementBorder)
-        container.addSublayer(elementFill)
-
-        return container
-    }
-}
-
 import CoreGraphics
-
-extension CGPoint {
-
-    func inverted() -> CGPoint {
-
-        return CGPoint(x: self.y, y: self.x)
-    }
-}
-
-enum Direction {
-    case left, right, up, down, none
-}
-
-enum Orientation {
-    case vertical, horizontal, none
-}
-
-///Movement can be expressed as a vector in 2D coordinate space where the implied unit is 1 second and the vector point from 0,0 to an actual CGPoint value represents direction and speed. Then we can calculate convenient properties describing the nature of movement.
-extension CGPoint {
-
-    var direction: Direction {
-
-        guard !(self.x == 0 && self.y == 0) else { return .none }
-
-        if (abs(self.x) > abs(self.y) && self.x > 0) {
-
-            return .right
-        }
-        else if (abs(self.x) > abs(self.y) && self.x <= 0) {
-
-            return .left
-        }
-
-        else if (abs(self.x) <= abs(self.y) && self.y > 0) {
-
-            return .up
-        }
-
-        else if (abs(self.x) <= abs(self.y) && self.y <= 0) {
-
-            return .down
-        }
-
-        else {
-
-            return .none
-        }
-    }
-
-    var orientation: Orientation {
-
-        guard self.direction != .none else { return .none }
-
-        if self.direction == .left || self.direction == .right {
-            return .horizontal
-        }
-        else {
-            return .vertical
-        }
-    }
-}
-
 
 extension CGSize {
     func inverted() -> CGSize {
@@ -216,14 +72,6 @@ extension DisplaceableView {
 extension DisplaceableView {
     func frameInCoordinatesOfScreen() -> CGRect {
         return UIView().convert(self.bounds, to: UIScreen.main.coordinateSpace)
-    }
-}
-
-
-extension Bool {
-
-    mutating func flip() {
-        self = !self
     }
 }
 

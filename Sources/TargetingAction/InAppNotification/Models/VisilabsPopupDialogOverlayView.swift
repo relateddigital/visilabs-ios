@@ -51,12 +51,6 @@ class VisilabsBlurView: UIView {
     var colorPresentDuration: TimeInterval = 0.25
     var colorPresentDelay: TimeInterval = 0
 
-    var blurDismissDuration: TimeInterval = 0.1
-    var blurDismissDelay: TimeInterval = 0.4
-
-    var colorDismissDuration: TimeInterval = 0.45
-    var colorDismissDelay: TimeInterval = 0
-
     var blurTargetOpacity: CGFloat = 1
     var colorTargetOpacity: CGFloat = 1
 
@@ -112,18 +106,4 @@ class VisilabsBlurView: UIView {
             }, completion: nil)
     }
 
-    func dismiss() {
-
-        UIView.animate(withDuration: blurDismissDuration, delay: blurDismissDelay, options: .curveLinear, animations: { [weak self] in
-
-            self?.blurringViewContainer.alpha = 0
-
-            }, completion: nil)
-
-        UIView.animate(withDuration: colorDismissDuration, delay: colorDismissDelay, options: .curveLinear, animations: { [weak self] in
-
-            self?.colorView.alpha = 0
-
-            }, completion: nil)
-    }
 }

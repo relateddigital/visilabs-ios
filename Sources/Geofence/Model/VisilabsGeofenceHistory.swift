@@ -8,18 +8,6 @@
 import Foundation
 
 public class VisilabsGeofenceHistory: Codable {
-    internal init(lastKnownLatitude: Double? = nil,
-                  lastKnownLongitude: Double? = nil,
-                  lastFetchTime: Date? = nil,
-                  fetchHistory: [Date: [VisilabsGeofenceEntity]]? = nil,
-                  errorHistory: [Date: VisilabsError]? = nil) {
-        self.lastKnownLatitude = lastKnownLatitude
-        self.lastKnownLongitude = lastKnownLongitude
-        self.lastFetchTime = lastFetchTime
-        self.fetchHistory = fetchHistory ?? [Date: [VisilabsGeofenceEntity]]()
-        self.errorHistory = errorHistory ??  [Date: VisilabsError]()
-    }
-
     internal init() {
         self.fetchHistory = [Date: [VisilabsGeofenceEntity]]()
         self.errorHistory = [Date: VisilabsError]()

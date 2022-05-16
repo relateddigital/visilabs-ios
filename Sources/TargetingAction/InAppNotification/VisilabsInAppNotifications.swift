@@ -13,23 +13,19 @@ protocol VisilabsInAppNotificationsDelegate: AnyObject {
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String])
 }
 
-class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
+class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     let lock: VisilabsReadWriteLock
-    var checkForNotificationOnActive = true
-    var showNotificationOnActive = true
     var miniNotificationPresentationTime = 6.0
-    var shownNotifications = Set<Int>()
-    var inAppNotification: VisilabsInAppNotification?
     var currentlyShowingNotification: VisilabsInAppNotification?
     var currentlyShowingTargetingAction: TargetingActionViewModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
     weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     weak var currentViewController: UIViewController?
-    
+
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
     }
-    
+
     func showNotification(_ notification: VisilabsInAppNotification) {
         let notification = notification
         let delayTime = notification.waitingTime ?? 0
@@ -57,7 +53,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                     default:
                         shownNotification = self.showPopUp(notification)
                     }
-                    
+
                     if shownNotification {
                         self.markNotificationShown(notification: notification)
                         self.delegate?.notificationDidShow(notification)
@@ -66,7 +62,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             }
         })
     }
-    
+
     func showTargetingAction(_ model: TargetingActionViewModel) {
         DispatchQueue.main.async {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
@@ -88,37 +84,36 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
                     if self.showProductStatNotifier(psn) {
                         self.markTargetingActionShown(model: psn)
                     }
-                }
-                else if model.targetingActionType == .drawer, let drawer = model as? SideBarServiceModel {
+                } else if model.targetingActionType == .drawer, let drawer = model as? SideBarServiceModel {
                     if self.showDrawer(model: drawer) {
-                       self.markTargetingActionShown(model: drawer)
-                   }
-               }
+                        self.markTargetingActionShown(model: drawer)
+                    }
+                }
             }
         }
     }
-    
+
     func showProductStatNotifier(_ model: VisilabsProductStatNotifierViewModel) -> Bool {
         let productStatNotifierVC = VisilabsProductStatNotifierViewController(productStatNotifier: model)
         productStatNotifierVC.delegate = self
         productStatNotifierVC.show(animated: true)
         return true
     }
-    
+
     func showHalfScreenNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let halfScreenNotificationVC = VisilabsHalfScreenViewController(notification: notification)
         halfScreenNotificationVC.delegate = self
         halfScreenNotificationVC.show(animated: true)
         return true
     }
-    
-    func showDrawer(model:SideBarServiceModel) ->Bool {
-        let sideBarViewController = visilabsSideBarViewController(model:model)
+
+    func showDrawer(model: SideBarServiceModel) -> Bool {
+        let sideBarViewController = visilabsSideBarViewController(model: model)
         sideBarViewController.delegate = self
         sideBarViewController.show(animated: true)
         return true
     }
-    
+
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let miniNotificationVC = VisilabsMiniNotificationViewController(notification: notification)
         miniNotificationVC.delegate = self
@@ -129,20 +124,20 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         }
         return true
     }
-    
+
     func showFullNotification(_ notification: VisilabsInAppNotification) -> Bool {
         let fullNotificationVC = VisilabsFullNotificationViewController(notification: notification)
         fullNotificationVC.delegate = self
         fullNotificationVC.show(animated: true)
         return true
     }
-    
+
     func showAlert(_ notification: VisilabsInAppNotification) {
         let title = notification.messageTitle?.removeEscapingCharacters()
         let message = notification.messageBody?.removeEscapingCharacters()
         let style: UIAlertController.Style = notification.alertType?.lowercased() ?? "" == "actionsheet" ? .actionSheet : .alert
         let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
-        
+
         let buttonTxt = notification.buttonText
         let urlStr = notification.iosLink ?? ""
         let action = UIAlertAction(title: buttonTxt, style: .default) { _ in
@@ -152,15 +147,15 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
             self.inappButtonDelegate?.didTapButton(notification)
         }
-        
+
         let closeText = notification.closeButtonText ?? "Close"
         let close = UIAlertAction(title: closeText, style: .destructive) { _ in
             print("dismiss tapped")
         }
-        
+
         alertController.addAction(action)
         alertController.addAction(close)
-        
+
         if let root = VisilabsHelper.getRootViewController() {
             if UIDevice.current.userInterfaceIdiom == .pad, style == .actionSheet {
                 alertController.popoverPresentationController?.sourceView = root.view
@@ -169,9 +164,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             root.present(alertController, animated: true, completion: alertDismiss)
         }
     }
-    
+
     func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
-        
         if notification.carouselItems.count < 2 {
             VisilabsLogger.error("Carousel Item Count is less than 2.")
             return false
@@ -182,14 +176,11 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         vc.closedCompletion = {
             VisilabsLogger.info("Carousel Closed")
             vc.visilabsDelegate?.notificationShouldDismiss(controller: vc, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
-        }        
+        }
         vc.landedPageAtIndexCompletion = { index in
             print("LANDED AT INDEX: \(index)")
-            //footerView.count = notification.carouselItems.count
-            //footerView.currentIndex = index
         }
-        
-        
+
         if let rootViewController = VisilabsHelper.getRootViewController() {
             rootViewController.presentCarouselNotification(vc)
             return true
@@ -197,71 +188,45 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             return false
         }
     }
-    
-    func getTopViewController() -> UIViewController? {
-        var topViewController = UIApplication.shared.delegate!.window!!.rootViewController!
-        while (topViewController.presentedViewController != nil) {
-            topViewController = topViewController.presentedViewController!
-        }
-        return topViewController
-    }
-    
-    func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
-        let controller = VisilabsPopupNotificationViewController(notification: notification)
-        controller.delegate = self
-        controller.inappButtonDelegate = self.inappButtonDelegate
 
-        
-        
-        
-        if let rootViewController = getTopViewController() {
-            rootViewController.present(controller, animated: false, completion: nil)
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func showMailPopup(_ model: MailSubscriptionViewModel) -> Bool {
-        let controller = VisilabsPopupNotificationViewController(mailForm: model)
-        controller.delegate = self
-        
-        if let rootViewController = VisilabsHelper.getRootViewController() {
-            rootViewController.present(controller, animated: false, completion: nil)
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
-        let controller = VisilabsPopupNotificationViewController(scratchToWin: model)
-        controller.delegate = self
-        if let rootViewController = VisilabsHelper.getRootViewController() {
-            rootViewController.present(controller, animated: false, completion: nil)
-            return true
-        } else {
-            return false
-        }
-    }
-    
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
         let spinToWinVC = SpinToWinViewController(model)
         spinToWinVC.delegate = self
         spinToWinVC.show(animated: true)
         return true
-        /*
-        let controller = SpinToWinViewController(model)
-        controller.modalPresentationStyle = .fullScreen
-        controller.delegate = self
-        if let rootViewController = VisilabsHelper.getRootViewController() {
-            rootViewController.present(controller, animated: true, completion: nil)
-            return true
-        }
-        return false
-         */
     }
-    
+
+    func getTopViewController() -> UIViewController? {
+        var topViewController = UIApplication.shared.delegate!.window!!.rootViewController!
+        while topViewController.presentedViewController != nil {
+            topViewController = topViewController.presentedViewController!
+        }
+        return topViewController
+    }
+
+    func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
+        let popUpVC = VisilabsPopupNotificationViewController(notification: notification)
+        popUpVC.delegate = self
+        popUpVC.inappButtonDelegate = self.inappButtonDelegate
+        popUpVC.show(animated: false)
+        return true
+    }
+
+    func showMailPopup(_ model: MailSubscriptionViewModel) -> Bool {
+        let popUpVC = VisilabsPopupNotificationViewController(mailForm: model)
+        popUpVC.delegate = self
+        popUpVC.show(animated: false)
+        return true
+    }
+
+    func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
+        let popUpVC = VisilabsPopupNotificationViewController(scratchToWin: model)
+        popUpVC.delegate = self
+        popUpVC.inappButtonDelegate = inappButtonDelegate
+        popUpVC.show(animated: false)
+        return true
+    }
+
     func markNotificationShown(notification: VisilabsInAppNotification) {
         lock.write {
             VisilabsLogger.info("marking notification as seen: \(notification.actId)")
@@ -269,22 +234,21 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             // TO_DO: burada customEvent request'i atılmalı
         }
     }
-    
+
     func markTargetingActionShown(model: TargetingActionViewModel) {
         lock.write {
             self.currentlyShowingTargetingAction = model
         }
     }
-    
+
     @discardableResult
     func notificationShouldDismiss(controller: VisilabsBaseViewProtocol,
                                    callToActionURL: URL?, shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool {
-        
         if currentlyShowingNotification?.actId != controller.notification?.actId {
             return false
         }
-        
+
         let completionBlock = {
             if shouldTrack {
                 var properties = additionalTrackingProperties ?? [String: String]()
@@ -300,7 +264,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
             self.currentlyShowingNotification = nil
             self.currentlyShowingTargetingAction = nil
         }
-        
+
         if let callToActionURL = callToActionURL {
             controller.hide(animated: true) {
                 if callToActionURL.absoluteString == "redirect" {
@@ -317,17 +281,11 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate  {
         } else {
             controller.hide(animated: true, completion: completionBlock)
         }
-        
         return true
     }
-    
-    func mailFormShouldDismiss(controller: VisilabsBaseNotificationViewController, click: String) {
-        
-    }
-    
+
     func alertDismiss() {
         currentlyShowingNotification = nil
         currentlyShowingTargetingAction = nil
     }
-    
 }

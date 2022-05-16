@@ -203,27 +203,6 @@ extension InAppViewController {
         }
     }
 
-    func addMessageTitleBackgroundColorRow() -> TextRow {
-        return TextRow(VisilabsInAppNotification.PayloadKey.messageTitleBackgroundColor) {
-            $0.title = "Message Title Background Color"
-            $0.value = "#000000"
-            $0.disabled = true
-        }.onCellSelection { _, row in
-            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
-            guard let modalVC = viewController as? ModalViewController else {
-                return
-            }
-            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-            if let selectedColor = UIColor(hex: row.value) {
-                modalVC.selectedColor = selectedColor
-            }
-            modalVC.headerText = row.title!
-            modalVC.textRow = row
-            self.present(modalVC, animated: true, completion: nil)
-        }
-    }
-
     func addMessageBodyColorRow() -> TextRow {
         return TextRow(VisilabsInAppNotification.PayloadKey.messageBodyColor) {
             $0.title = "Message Body Color"
@@ -240,27 +219,6 @@ extension InAppViewController {
                 modalVC.selectedColor = selectedColor
             }
             modalVC.headerText = row.title ?? ""
-            modalVC.textRow = row
-            self.present(modalVC, animated: true, completion: nil)
-        }
-    }
-
-    func addMessageBodyBackgroundColorRow() -> TextRow {
-        return TextRow(VisilabsInAppNotification.PayloadKey.messageBodyBackgroundColor) {
-            $0.title = "Message Body Background Color"
-            $0.value = "#000000"
-            $0.disabled = true
-        }.onCellSelection { _, row in
-            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "modalview")
-            guard let modalVC = viewController as? ModalViewController else {
-                return
-            }
-            modalVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-            modalVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-            if let selectedColor = UIColor(hex: row.value) {
-                modalVC.selectedColor = selectedColor
-            }
-            modalVC.headerText = row.title!
             modalVC.textRow = row
             self.present(modalVC, animated: true, completion: nil)
         }
