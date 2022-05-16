@@ -38,9 +38,4 @@ class DataManager {
         return UserDefaults.standard.object(forKey: key)
     }
 
-    static func remove(_ key: String) {
-        UserDefaults.standard.removeObject(forKey: key)
-        UserDefaults.standard.synchronize()
-    }
-
 }

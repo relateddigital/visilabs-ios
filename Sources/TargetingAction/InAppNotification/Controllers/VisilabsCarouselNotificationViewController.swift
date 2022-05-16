@@ -53,7 +53,6 @@ public protocol ItemController: AnyObject {
 
 public protocol ItemControllerDelegate: AnyObject {
     
-    ///Represents a generic transitioning progress from 0 to 1 (or reversed) where 0 is no progress and 1 is fully finished transitioning. It's up to the implementing controller to make decisions about how this value is being calculated, based on the nature of transition.
     func itemController(_ controller: ItemController, didSwipeToDismissWithDistanceToEdge distance: CGFloat)
     func itemControllerWillAppear(_ controller: ItemController)
     func itemControllerWillDisappear(_ controller: ItemController)
@@ -97,13 +96,10 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     
     // CONFIGURATION
     fileprivate var spineDividerWidth:         Float = 30
-    fileprivate var footerLayout = FooterLayout.center(25)
     fileprivate var statusBarHidden = true
-    fileprivate var overlayAccelerationFactor: CGFloat = 1
     fileprivate var rotationDuration = 0.15
     fileprivate var rotationMode = GalleryRotationMode.always
     fileprivate let swipeToDismissFadeOutAccelerationFactor: CGFloat = 6
-    fileprivate var decorationViewsFadeDuration = 0.15
     
     /// COMPLETION BLOCKS
     /// If set, the block is executed right after the initial launch animations finish.
@@ -259,63 +255,8 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         }
         
         overlayView.frame = view.bounds.insetBy(dx: -UIScreen.main.bounds.width * 2, dy: -UIScreen.main.bounds.height * 2)
-        //layoutFooterView()
     }
-    
-    private var defaultInsets: UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return view.safeAreaInsets
-        } else {
-            return UIEdgeInsets(top: statusBarHidden ? 0.0 : 20.0, left: 0.0, bottom: 0.0, right: 0.0)
-        }
-    }
-    
-    fileprivate func layoutButton(_ button: UIButton?, layout: ButtonLayout) {
-        guard let button = button else { return }
-        switch layout {
-        case .pinRight(let marginTop, let marginRight):
-            button.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin]
-            button.frame.origin.x = self.view.bounds.size.width - marginRight - button.bounds.size.width
-            button.frame.origin.y = defaultInsets.top + marginTop
-        case .pinLeft(let marginTop, let marginLeft):
-            button.autoresizingMask = [.flexibleBottomMargin, .flexibleRightMargin]
-            button.frame.origin.x = marginLeft
-            button.frame.origin.y = defaultInsets.top + marginTop
-        }
-    }
-    
-    fileprivate func layoutFooterView() {
-        
-        guard let footer = footerView else { return }
-        
-        switch footerLayout {
-            
-        case .center(let marginBottom):
-            
-            footer.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin]
-            footer.center = self.view.boundsCenter
-            footer.frame.origin.y = self.view.bounds.height - footer.bounds.height - marginBottom - defaultInsets.bottom
-            
-        case .pinBoth(let marginBottom, let marginLeft,let marginRight):
-            
-            footer.autoresizingMask = [.flexibleTopMargin, .flexibleWidth]
-            footer.frame.size.width = self.view.bounds.width - marginLeft - marginRight
-            footer.sizeToFit()
-            footer.frame.origin = CGPoint(x: marginLeft, y: self.view.bounds.height - footer.bounds.height - marginBottom - defaultInsets.bottom)
-            
-        case .pinLeft(let marginBottom, let marginLeft):
-            
-            footer.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
-            footer.frame.origin = CGPoint(x: marginLeft, y: self.view.bounds.height - footer.bounds.height - marginBottom - defaultInsets.bottom)
-            
-        case .pinRight(let marginBottom, let marginRight):
-            
-            footer.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin]
-            footer.frame.origin = CGPoint(x: self.view.bounds.width - marginRight - footer.bounds.width, y: self.view.bounds.height - footer.bounds.height - marginBottom - defaultInsets.bottom)
-        }
-    }
-    
-    
+
     public func page(toIndex index: Int) {
         
         guard currentIndex != index && index >= 0 && index < self.itemCount() else { return }
@@ -339,20 +280,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
                 })
             })
         }
-    }
-    
-    func removePage(atIndex index: Int, completion: @escaping () -> Void) {
-        
-        // If removing last item, go back, otherwise, go forward
-        
-        let direction: UIPageViewController.NavigationDirection = index < self.itemCount() ? .forward : .reverse
-        
-        let newIndex = direction == .forward ? index : index - 1
-        
-        if newIndex < 0 { close(); return }
-        
-        let vc = self.pagingDataSource.createItemController(newIndex)
-        setViewControllers([vc], direction: direction, animated: true) { _ in completion() }
     }
     
     open func reload(atIndex index: Int) {
@@ -408,12 +335,6 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
     
     fileprivate func animateDecorationViews(visible: Bool) {
         
-        //let targetAlpha: CGFloat = (visible) ? 1 : 0
-        
-        //UIView.animate(withDuration: decorationViewsFadeDuration, animations: { [weak self] in
-        //    self?.footerView?.alpha = targetAlpha
-            
-        //})
     }
     
     public func itemControllerWillAppear(_ controller: ItemController) {

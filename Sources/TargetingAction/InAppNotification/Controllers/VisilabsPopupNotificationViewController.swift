@@ -9,6 +9,48 @@ import Foundation
 import UIKit
 
 class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewController {
+    
+    override func hide(animated: Bool, completion: @escaping () -> Void) {
+        let duration = animated ? 0.25 : 0
+        UIView.animate(withDuration: duration, animations: {
+            self.window?.alpha = 0
+            }, completion: { _ in
+                self.window?.isHidden = true
+                self.window?.removeFromSuperview()
+                self.window = nil
+                completion()
+        })
+    }
+
+    override func show(animated: Bool) {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
+            return
+        }
+        if #available(iOS 13.0, *) {
+            let windowScene = sharedUIApplication
+                .connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first
+            if let windowScene = windowScene as? UIWindowScene {
+                window = UIWindow(frame: windowScene.coordinateSpace.bounds)
+                window?.windowScene = windowScene
+            }
+        } else {
+            window = UIWindow(frame: CGRect(x: 0,
+                                            y: 0,
+                                            width: UIScreen.main.bounds.size.width,
+                                            height: UIScreen.main.bounds.size.height))
+        }
+        if let window = window {
+            window.alpha = 0
+            window.windowLevel = UIWindow.Level.alert
+            window.rootViewController = self
+            window.isHidden = false
+        }
+
+        window?.alpha = 1
+    }
+
     /// First init flag
     fileprivate var initialized = false
     weak var visilabsInAppNotification: VisilabsInAppNotification?
@@ -45,11 +87,6 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
     public var viewController: VisilabsDefaultPopupNotificationViewController
 
     // MARK: - Initializers
-
-    override func hide(animated: Bool, completion: @escaping () -> Void) {
-        dismiss(animated: true)
-        completion()
-    }
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {

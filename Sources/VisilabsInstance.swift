@@ -52,10 +52,7 @@ struct VisilabsProfile: Codable {
 class urlConstant {
     static var shared = urlConstant()
     var urlPrefix = "s.visilabs.net"
-    var securityTag = "https"
-    var organizationId = "676D325830564761676D453D"
-    var profileId = "356467332F6533766975593D"
-    
+    var securityTag = "https"    
     func setTest() {
         urlPrefix = "tests.visilabs.net"
         securityTag = "http"
@@ -445,9 +442,6 @@ extension VisilabsInstance {
 // MARK: - PERSISTENCE
 
 extension VisilabsInstance {
-    private func archive() {
-    }
-
     // TO_DO: kontrol et sıra doğru mu? gelen değerler null ise set'lemeli miyim?
     private func unarchive() -> VisilabsUser {
         return VisilabsPersistence.unarchiveUser()

@@ -10,68 +10,6 @@ import UIKit
 
 /// The main view of the popup dialog
 final public class VisilabsPopupDialogContainerView: UIView {
-
-    // MARK: - Appearance
-
-    /// The background color of the popup dialog
-    override public dynamic var backgroundColor: UIColor? {
-        get { return container.backgroundColor }
-        set { container.backgroundColor = newValue }
-    }
-
-    /// The corner radius of the popup view
-    @objc public dynamic var cornerRadius: Float {
-        get { return Float(shadowContainer.layer.cornerRadius) }
-        set {
-            let radius = CGFloat(newValue)
-            shadowContainer.layer.cornerRadius = radius
-            container.layer.cornerRadius = radius
-        }
-    }
-
-    // MARK: Shadow related
-
-    /// Enable / disable shadow rendering of the container
-    @objc public dynamic var shadowEnabled: Bool {
-        get { return shadowContainer.layer.shadowRadius > 0 }
-        set { shadowContainer.layer.shadowRadius = newValue ? shadowRadius : 0 }
-    }
-
-    /// Color of the container shadow
-    @objc public dynamic var shadowColor: UIColor? {
-        get {
-            guard let color = shadowContainer.layer.shadowColor else {
-                return nil
-            }
-            return UIColor(cgColor: color)
-        }
-        set { shadowContainer.layer.shadowColor = newValue?.cgColor }
-    }
-
-    /// Radius of the container shadow
-    @objc public dynamic var shadowRadius: CGFloat {
-        get { return shadowContainer.layer.shadowRadius }
-        set { shadowContainer.layer.shadowRadius = newValue }
-    }
-
-    /// Opacity of the the container shadow
-    @objc public dynamic var shadowOpacity: Float {
-        get { return shadowContainer.layer.shadowOpacity }
-        set { shadowContainer.layer.shadowOpacity = newValue }
-    }
-
-    /// Offset of the the container shadow
-    @objc public dynamic var shadowOffset: CGSize {
-        get { return shadowContainer.layer.shadowOffset }
-        set { shadowContainer.layer.shadowOffset = newValue }
-    }
-
-    /// Path of the the container shadow
-    @objc public dynamic var shadowPath: CGPath? {
-        get { return shadowContainer.layer.shadowPath}
-        set { shadowContainer.layer.shadowPath = newValue }
-    }
-
     // MARK: - Views
 
     /// The shadow container is the basic view of the PopupDialog
@@ -130,6 +68,7 @@ final public class VisilabsPopupDialogContainerView: UIView {
     internal init(frame: CGRect, preferredWidth: CGFloat) {
         self.preferredWidth = preferredWidth
         super.init(frame: frame)
+        self.backgroundColor = UIColor(white: 0.035, alpha: 0.5)
         setupViews()
     }
 

@@ -15,8 +15,6 @@ class VisilabsGeofenceOptions {
     var desiredAccuracy = DesiredAccuracy.medium
     var stopDuration = 140
     var stopDistance = 70
-    var startTrackingAfter: Date?
-    var stopTrackingAfter: Date?
     var replay = Replay.none
     var syncLocations = SyncLocations.syncAll
     var showBlueBar = false

@@ -11,12 +11,10 @@ class VisilabsStoryPreviewModel: NSObject {
 
     // MARK: - iVars
     let stories: [VisilabsStory]
-    let handPickedStoryIndex: Int // starts with(i)
 
     // MARK: - Init method
-    init(_ stories: [VisilabsStory], _ handPickedStoryIndex: Int) {
+    init(_ stories: [VisilabsStory]) {
         self.stories = stories
-        self.handPickedStoryIndex = handPickedStoryIndex
     }
 
     // MARK: - Functions

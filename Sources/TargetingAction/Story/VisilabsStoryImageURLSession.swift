@@ -11,15 +11,9 @@ class VisilabsStoryImageURLSession: URLSession {
     static let `default` = VisilabsStoryImageURLSession()
     private(set) var dataTasks: [URLSessionDataTask] = []
 }
-extension VisilabsStoryImageURLSession {
-    func cancelAllPendingTasks() {
-        dataTasks.forEach({
-            if $0.state != .completed {
-                $0.cancel()
-            }
-        })
-    }
 
+extension VisilabsStoryImageURLSession {
+    
     func downloadImage(using urlString: String, completionBlock: @escaping ImageResponse) {
         guard let url = URL(string: urlString) else {
             return completionBlock(.failure(VisilabsStoryImageError.invalidImageURL))
@@ -34,4 +28,5 @@ extension VisilabsStoryImageURLSession {
         }))
         dataTasks.last?.resume()
     }
+    
 }

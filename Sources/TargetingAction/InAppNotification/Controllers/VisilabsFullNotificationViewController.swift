@@ -30,7 +30,6 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBOutlet weak var buttonTopNormal: NSLayoutConstraint!
     @IBOutlet weak var bodyButtonNormal: NSLayoutConstraint!
 
-    var isCopyEnabled = true
     let pasteboard = UIPasteboard.general
 
     convenience init(notification: VisilabsInAppNotification) {

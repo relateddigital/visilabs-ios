@@ -7,15 +7,7 @@
 
 import Foundation
 
-protocol VisilabsSendDelegate: AnyObject {
-    func send(completion: (() -> Void)?)
-    func updateNetworkActivityIndicator(_ isOn: Bool)
-}
-
 class VisilabsSend {
-
-    // TO_DO: bu delegate kullanılmıyor. kaldır.
-    weak var delegate: VisilabsSendDelegate?
 
     // TO_DO: burada internet bağlantısı kontrolü yapmaya gerek var mı?
     func sendEventsQueue(_ eventsQueue: Queue, visilabsUser: VisilabsUser,

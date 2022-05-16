@@ -173,15 +173,6 @@ extension VisilabsCarouselItemView {
         return copyCodeImage
     }
 
-    private func getUIImage(named: String) -> UIImage? {
-        #if SWIFT_PACKAGE
-        let bundle = Bundle.module
-        #else
-        let bundle = Bundle(for: type(of: self))
-        #endif
-        return UIImage(named: named, in: bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
-    }
-
     internal func setup(_ carouselItem: VisilabsCarouselItem) {
 
         if let closeButtonColor = carouselItem.closeButtonColor {

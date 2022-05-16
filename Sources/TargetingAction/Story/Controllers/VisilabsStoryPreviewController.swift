@@ -28,7 +28,6 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
 
     // check whether device rotation is happening or not
     private(set) var isTransitioning = false
-    private(set) var currentIndexPath: IndexPath?
 
     private let dismissGesture: UISwipeGestureRecognizer = {
         let gesture = UISwipeGestureRecognizer()
@@ -36,21 +35,13 @@ final class VisilabsStoryPreviewController: UIViewController, UIGestureRecognize
         return gesture
     }()
 
-    private var currentCell: VisilabsStoryPreviewCell? {
-        guard let indexPath = self.currentIndexPath else {
-            debugPrint("Current IndexPath is nil")
-            return nil
-        }
-        return self._view.snapsCollectionView.cellForItem(at: indexPath) as? VisilabsStoryPreviewCell
-    }
-
     weak var storyUrlDelegate: VisilabsStoryURLDelegate?
 
     // MARK: - Overriden functions
     override func loadView() {
         super.loadView()
         view = VisilabsStoryPreviewView.init(layoutType: self.layoutType)
-        viewModel = VisilabsStoryPreviewModel.init(self.stories, self.handPickedStoryIndex)
+        viewModel = VisilabsStoryPreviewModel(self.stories)
         _view.snapsCollectionView.decelerationRate = .fast
         dismissGesture.delegate = self
         dismissGesture.addTarget(self, action: #selector(didSwipeDown(_:)))
@@ -132,7 +123,6 @@ extension VisilabsStoryPreviewController: UICollectionViewDataSource {
         cell.story = story
         cell.delegate = self
         cell.storyUrlDelegate = self.storyUrlDelegate
-        currentIndexPath = indexPath
         nStoryIndex = indexPath.item
         return cell
     }
