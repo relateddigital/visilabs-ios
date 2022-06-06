@@ -35,6 +35,7 @@ class VisilabsRecommendation {
         props[VisilabsConstants.tokenIdKey] = visilabsUser.tokenId
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
+        props[VisilabsConstants.channelKey] = VisilabsConstants.ios
         
         props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
         props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
@@ -109,7 +110,8 @@ class VisilabsRecommendation {
                 && !propKey.isEqual(VisilabsConstants.tokenIdKey)
                 && !propKey.isEqual(VisilabsConstants.appidKey)
                 && !propKey.isEqual(VisilabsConstants.apiverKey)
-                && !propKey.isEqual(VisilabsConstants.filterKey) {
+                && !propKey.isEqual(VisilabsConstants.filterKey)
+                && !propKey.isEqual(VisilabsConstants.channelKey) {
                 continue
             } else {
                 props.removeValue(forKey: propKey)
