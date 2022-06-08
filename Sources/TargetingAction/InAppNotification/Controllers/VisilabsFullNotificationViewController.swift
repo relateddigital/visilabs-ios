@@ -5,32 +5,33 @@
 //  Created by Egemen on 3.06.2020.
 //
 
+import AVFoundation
 import UIKit
 
 class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewController {
-
     var fullNotification: VisilabsInAppNotification! {
         return super.notification
     }
 
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var bodyLabel: UILabel!
-    @IBOutlet weak var inAppButton: UIButton!
-    @IBOutlet weak var closeButton: UIButton!
-    @IBOutlet weak var backgroundImageView: UIImageView!
-    @IBOutlet weak var viewMask: UIView!
-    @IBOutlet weak var fadingView: FadingView!
-    @IBOutlet weak var bottomImageSpacing: NSLayoutConstraint!
-    @IBOutlet weak var copyTextButton: UIButton!
-    @IBOutlet weak var copyImageButton: UIButton!
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var bodyLabel: UILabel!
+    @IBOutlet var inAppButton: UIButton!
+    @IBOutlet var closeButton: UIButton!
+    @IBOutlet var backgroundImageView: UIImageView!
+    @IBOutlet var viewMask: UIView!
+    @IBOutlet var fadingView: FadingView!
+    @IBOutlet var bottomImageSpacing: NSLayoutConstraint!
+    @IBOutlet var copyTextButton: UIButton!
+    @IBOutlet var copyImageButton: UIButton!
 
-    @IBOutlet weak var buttonTopCC: NSLayoutConstraint!
-    @IBOutlet weak var bodyButtonCC: NSLayoutConstraint!
-    @IBOutlet weak var buttonTopNormal: NSLayoutConstraint!
-    @IBOutlet weak var bodyButtonNormal: NSLayoutConstraint!
+    @IBOutlet var buttonTopCC: NSLayoutConstraint!
+    @IBOutlet var bodyButtonCC: NSLayoutConstraint!
+    @IBOutlet var buttonTopNormal: NSLayoutConstraint!
+    @IBOutlet var bodyButtonNormal: NSLayoutConstraint!
 
     let pasteboard = UIPasteboard.general
+    var player: AVPlayer?
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -54,10 +55,10 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
             } else {
                 imageView.image = image
             }
-            
+
             if let width = imageView.image?.size.width,
                width / UIScreen.main.bounds.width <= 0.6, let height = imageView.image?.size.height,
-                height / UIScreen.main.bounds.height <= 0.3 {
+               height / UIScreen.main.bounds.height <= 0.3 {
                 imageView.contentMode = UIView.ContentMode.center
             }
         } else {
@@ -108,43 +109,50 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         setupButtonView(buttonView: inAppButton)
 
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
-
             if let bgColor = fullNotification.backGroundColor {
-                self.view.backgroundColor = bgColor.withAlphaComponent(0.6)
+                view.backgroundColor = bgColor.withAlphaComponent(0.6)
             } else {
-                self.view.backgroundColor = UIColor(hex: "#000000", alpha: 0.6)
+                view.backgroundColor = UIColor(hex: "#000000", alpha: 0.6)
             }
 
             viewMask.clipsToBounds = true
             viewMask.layer.cornerRadius = 6
         }
-        if let promo = self.fullNotification.promotionCode,
-           let _ = self.fullNotification.promotionBackgroundColor,
-           let _ = self.fullNotification.promotionTextColor,
+        if let promo = fullNotification.promotionCode,
+           let _ = fullNotification.promotionBackgroundColor,
+           let _ = fullNotification.promotionTextColor,
            !promo.isEmptyOrWhitespace {
-            self.buttonTopCC.isActive = true
-            self.bodyButtonCC.isActive = true
-            self.buttonTopNormal.isActive = false
-            self.bodyButtonNormal.isActive = false
-            self.copyTextButton.isHidden = false
-            self.copyImageButton.isHidden = false
-            self.copyTextButton.setTitle(fullNotification.promotionCode, for: .normal)
+            buttonTopCC.isActive = true
+            bodyButtonCC.isActive = true
+            buttonTopNormal.isActive = false
+            bodyButtonNormal.isActive = false
+            copyTextButton.isHidden = false
+            copyImageButton.isHidden = false
+            copyTextButton.setTitle(fullNotification.promotionCode, for: .normal)
 
         } else {
-            self.buttonTopCC.isActive = false
-            self.bodyButtonCC.isActive = false
-            self.buttonTopNormal.isActive = true
-            self.bodyButtonNormal.isActive = true
-            self.copyTextButton.isHidden = true
-            self.copyImageButton.isHidden = true
+            buttonTopCC.isActive = false
+            bodyButtonCC.isActive = false
+            buttonTopNormal.isActive = true
+            bodyButtonNormal.isActive = true
+            copyTextButton.isHidden = true
+            copyImageButton.isHidden = true
         }
+    }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        player = imageView.addVideoPlayer(urlString: notification?.videourl ?? "")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        player?.pause()
     }
 
     @IBAction func promotionCodeCopied(_ sender: Any) {
         pasteboard.string = copyTextButton.currentTitle
         VisilabsHelper.showCopiedClipboardMessage()
-
     }
 
     func setupButtonView(buttonView: UIButton) {
@@ -201,7 +209,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.alpha = 1
-            }, completion: { _ in
+        }, completion: { _ in
         })
     }
 
@@ -209,11 +217,11 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.alpha = 0
-            }, completion: { _ in
-                self.window?.isHidden = true
-                self.window?.removeFromSuperview()
-                self.window = nil
-                completion()
+        }, completion: { _ in
+            self.window?.isHidden = true
+            self.window?.removeFromSuperview()
+            self.window = nil
+            completion()
         })
     }
 
@@ -227,21 +235,20 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
 
     @IBAction func tappedClose(_ sender: Any) {
         delegate?.notificationShouldDismiss(controller: self,
-        callToActionURL: nil,
-        shouldTrack: false,
-        additionalTrackingProperties: nil)
+                                            callToActionURL: nil,
+                                            shouldTrack: false,
+                                            additionalTrackingProperties: nil)
     }
 
     override var shouldAutorotate: Bool {
         return false
     }
-
 }
 
 class FadingView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.backgroundColor = UIColor.clear
+        backgroundColor = UIColor.clear
     }
 }
 

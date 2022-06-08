@@ -253,41 +253,34 @@ extension VisilabsPopupDialogDefaultView {
     internal func setupForImageTextButton(_ withFeedback: Bool = false) {
         addSubview(titleLabel)
         addSubview(messageLabel)
-        
-        
-        if visilabsInAppNotification?.messageTitle != "" {
-            titleLabel.topToBottom(of: imageView, offset: 0)
-            titleLabel.leading(to: self)
-            titleLabel.trailing(to: self)
+        imageView.allEdges(to: self, excluding: .bottom)
+        //firstPageOpened = true
+        titleLabel.topToBottom(of: imageView, offset: 0)
+        titleLabel.leading(to: self)
+        titleLabel.trailing(to: self)
+        if titleLabel.text != "" {
             titleLabel.height(32)
         } else {
-            titleLabel.isHidden = true
             titleLabel.height(0)
         }
         
-        
-        if visilabsInAppNotification?.messageBody != "" {
-            messageLabel.topToBottom(of: titleLabel, offset: 0)
-            messageLabel.leading(to: self)
-            messageLabel.trailing(to: self)
+        messageLabel.topToBottom(of: titleLabel, offset: 0)
+        messageLabel.leading(to: self)
+        messageLabel.trailing(to: self)
+        if messageLabel.text != "" {
             messageLabel.height(32)
         } else {
-            messageLabel.isHidden = true
             messageLabel.height(0)
         }
         
-        if messageLabel.isHidden && messageLabel.isHidden {
-            imageView.allEdges(to: self)
-        } else {
-            imageView.allEdges(to: self, excluding: .bottom)
-        }
-        
-        
+
+//        firstPageOpened = true
+
         if visilabsInAppNotification?.imageUrlString?.isEmpty == true {
             closeButton.layer.zPosition = 1
             closeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
         }
-        
+
         if let titleBackgroundColor = visilabsInAppNotification?.messageTitleBackgroundColor {
             titleLabel.backgroundColor = titleBackgroundColor
         }
@@ -332,7 +325,6 @@ extension VisilabsPopupDialogDefaultView {
 
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
-        
     }
 
     internal func setupForImageButtonImage() {
@@ -340,6 +332,8 @@ extension VisilabsPopupDialogDefaultView {
         addSubview(messageLabel)
         addSubview(imageButton)
         addSubview(secondImageView)
+
+//        firstPageOpened = true
 
         imageView.allEdges(to: self, excluding: .bottom)
         titleLabel.topToBottom(of: imageView, offset: 10.0)

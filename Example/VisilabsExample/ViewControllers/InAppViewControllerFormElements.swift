@@ -585,6 +585,18 @@ extension InAppViewController {
 
         tag = VisilabsInAppNotification.PayloadKey.secondPopupMinPoint
         let minPoint = (form.rowBy(tag: tag) as TextRow?)!.value! as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.videourl
+        let videourl = (form.rowBy(tag: VisilabsInAppNotification.PayloadKey.videourl)
+                        as TextRow?)!.value! as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupVideourl1
+        let secondPopupVideourl1 = (form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupVideourl1)
+                        as TextRow?)!.value! as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.secondPopupVideourl2
+        let secondPopupVideourl2 = (form.rowBy(tag: VisilabsInAppNotification.PayloadKey.secondPopupVideourl2)
+                        as TextRow?)!.value! as String
 
         return VisilabsInAppNotification(actId: 0,
                                          type: messageType,
@@ -625,7 +637,7 @@ extension InAppViewController {
                                          secondImageUrlString1: secondImg1,
                                          secondImageUrlString2: secondImg2,
                                          secondPopupMinPoint: minPoint,
-                                         position: .bottom)
+                                         position: .bottom, videourl: videourl, secondPopupVideourl1: secondPopupVideourl1, secondPopupVideourl2: secondPopupVideourl2)
     }
 
     // swiftlint:disable function_body_length
@@ -688,6 +700,9 @@ extension InAppViewController {
                                          secondImageUrlString2: nil,
                                          secondPopupMinPoint: nil,
                                          position: .bottom,
-                                         carouselItems: carouselItems)
+                                         carouselItems: carouselItems,
+                                         videourl: "videourl",
+                                         secondPopupVideourl1: "secondPopup_videourl1",
+                                         secondPopupVideourl2: "secondPopup_videourl2")
     }
 }

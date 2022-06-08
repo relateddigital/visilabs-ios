@@ -9,16 +9,15 @@ import Foundation
 import UIKit
 
 class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewController {
-    
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.alpha = 0
-            }, completion: { _ in
-                self.window?.isHidden = true
-                self.window?.removeFromSuperview()
-                self.window = nil
-                completion()
+        }, completion: { _ in
+            self.window?.isHidden = true
+            self.window?.removeFromSuperview()
+            self.window = nil
+            completion()
         })
     }
 
@@ -590,7 +589,8 @@ internal extension VisilabsPopupNotificationViewController {
             default:
                 type = .imageTextButton
             }
-            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, buttonFunction: not.buttonFunction, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageTitleBackgroundColor: not.messageTitleBackgroundColor?.toHexString(), messageTitleTextSize: not.secondPopupBodyTextSize, messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyBackgroundColor: not.messageBodyBackgroundColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, customFont: not.customFont, closePopupActionType: not.closePopupActionType, backGround: not.backGroundColor?.toHexString(), closeButtonColor: closeButtonColor, buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil, previousPopupPoint: point, position: .bottom)
+
+            return VisilabsInAppNotification(actId: not.actId, type: type, messageTitle: not.secondPopupTitle, messageBody: not.secondPopupBody, buttonText: not.secondPopupButtonText, iosLink: not.iosLink, buttonFunction: not.buttonFunction, imageUrlString: not.secondImageUrlString1, visitorData: not.visitorData, visitData: not.visitData, queryString: not.queryString, messageTitleColor: not.messageTitleColor?.toHexString(), messageTitleBackgroundColor: not.messageTitleBackgroundColor?.toHexString(), messageTitleTextSize: not.secondPopupBodyTextSize, messageBodyColor: not.messageBodyColor?.toHexString(), messageBodyBackgroundColor: not.messageBodyBackgroundColor?.toHexString(), messageBodyTextSize: not.secondPopupBodyTextSize, fontFamily: not.fontFamily, customFont: not.customFont, closePopupActionType: not.closePopupActionType, backGround: not.backGroundColor?.toHexString(), closeButtonColor: closeButtonColor, buttonTextColor: not.buttonTextColor?.toHexString(), buttonColor: not.buttonColor?.toHexString(), alertType: "", closeButtonText: not.closeButtonText, promotionCode: promo, promotionTextColor: not.promotionTextColor?.toHexString(), promotionBackgroundColor: not.promotionBackgroundColor?.toHexString(), numberColors: nil, waitingTime: 0, secondPopupType: nil, secondPopupTitle: nil, secondPopupBody: nil, secondPopupBodyTextSize: nil, secondPopupButtonText: nil, secondImageUrlString1: nil, secondImageUrlString2: not.secondImageUrlString2, secondPopupMinPoint: nil, previousPopupPoint: point, position: .bottom, videourl: not.videourl, secondPopupVideourl1: not.secondPopupVideourl1, secondPopupVideourl2: not.secondPopupVideourl2)
         }
         return nil
     }
