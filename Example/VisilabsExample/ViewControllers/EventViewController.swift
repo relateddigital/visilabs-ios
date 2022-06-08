@@ -170,7 +170,8 @@ class EventViewController: FormViewController {
             .spintowin: [VisilabsInAppNotificationType.spintowin.rawValue: 562],
             .productStatNotifier: [VisilabsInAppNotificationType.productStatNotifier.rawValue: 703],
             .inappcarousel: [VisilabsInAppNotificationType.inappcarousel.rawValue: 804],
-            .drawer : [VisilabsInAppNotificationType.drawer.rawValue: 884]
+            .drawer : [VisilabsInAppNotificationType.drawer.rawValue: 884],
+            .video : [VisilabsInAppNotificationType.video.rawValue: 73]
         ]
     }
     

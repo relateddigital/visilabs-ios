@@ -9,7 +9,6 @@ import UIKit
 
 // swiftlint:disable type_body_length
 public class VisilabsCarouselItem {
-    
     public enum PayloadKey {
         public static let imageUrlString = "image"
         public static let title = "title"
@@ -36,8 +35,9 @@ public class VisilabsCarouselItem {
         public static let background_color = "background_color"
         public static let ios_lnk = "ios_lnk"
         public static let close_button_color = "close_button_color"
+        public static let videourl = "videourl"
     }
-    
+
     public let imageUrlString: String?
     public let title: String?
     public let titleColor: UIColor?
@@ -63,14 +63,15 @@ public class VisilabsCarouselItem {
     public let backgroundColor: UIColor?
     public let linkString: String?
     public var closeButtonColor: UIColor?
-    
+    public var videourl: String?
+
     var titleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
     var bodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     var buttonFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
-    
-    var linkUrl: URL? = nil
-    
-    var imageUrl: URL? = nil
+
+    var linkUrl: URL?
+
+    var imageUrl: URL?
     public lazy var image: Data? = {
         var data: Data?
         if let iUrl = self.imageUrl {
@@ -82,9 +83,8 @@ public class VisilabsCarouselItem {
         }
         return data
     }()
-    
-    
-    var backgroundImageUrl: URL? = nil
+
+    var backgroundImageUrl: URL?
     public lazy var backgroundImage: Data? = {
         var data: Data?
         if let iUrl = self.backgroundImageUrl {
@@ -96,17 +96,15 @@ public class VisilabsCarouselItem {
         }
         return data
     }()
-    
-    
-    public var fetchImageBlock: FetchImageBlock? = nil
-    
-    
+
+    public var fetchImageBlock: FetchImageBlock?
+
     public init(imageUrlString: String?, title: String?, titleColor: String?, titleFontFamily: String?, titleCustomFontFamily: String?
-                ,titleTextsize: String?, body: String?, bodyColor: UIColor?, bodyFontFamily: String?, bodyCustomFontFamily: String?
-                ,bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
-                ,promocodeTextColor: UIColor?, buttonText: String?, buttonTextColor: UIColor?, buttonColor: UIColor?
-                ,buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImageString: String?
-                ,backgroundColor: UIColor?, linkString: String?, closeButtonColor: UIColor?) {
+                , titleTextsize: String?, body: String?, bodyColor: UIColor?, bodyFontFamily: String?, bodyCustomFontFamily: String?
+                , bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
+                , promocodeTextColor: UIColor?, buttonText: String?, buttonTextColor: UIColor?, buttonColor: UIColor?
+                , buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImageString: String?
+                , backgroundColor: UIColor?, linkString: String?, closeButtonColor: UIColor?, videourl: String?) {
         self.imageUrlString = imageUrlString
         self.title = title
         self.titleColor = UIColor(hex: titleColor)
@@ -131,120 +129,116 @@ public class VisilabsCarouselItem {
         self.backgroundImageString = backgroundImageString
         self.backgroundColor = backgroundColor
         self.linkString = linkString
-        
+        self.videourl = videourl
+
         if let linkString = linkString, !linkString.isEmptyOrWhitespace {
-            self.linkUrl = URL(string: linkString)
+            linkUrl = URL(string: linkString)
         }
-        
+
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
+            imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
-        
+
         if !backgroundImageString.isNilOrWhiteSpace {
-            self.backgroundImageUrl = VisilabsHelper.getImageUrl(backgroundImageString!, type: .inappcarousel)
+            backgroundImageUrl = VisilabsHelper.getImageUrl(backgroundImageString!, type: .inappcarousel)
         }
-        
+
         self.closeButtonColor = closeButtonColor
-        
-        self.setFonts()
-        
-        self.fetchImageBlock = { imageCompletion in
-            var image: UIImage? = nil
-            var backgroundImage: UIImage? = nil
-            
+
+        setFonts()
+
+        fetchImageBlock = { imageCompletion in
+            var image: UIImage?
+            var backgroundImage: UIImage?
+
             if let imageUrl = self.imageUrl, let imageData: Data = try? Data(contentsOf: imageUrl) {
                 image = UIImage(data: imageData as Data)
             }
             if let backgroundImageUrl = self.backgroundImageUrl, let imageData: Data = try? Data(contentsOf: backgroundImageUrl) {
                 backgroundImage = UIImage(data: imageData as Data)
             }
-            
+
             imageCompletion(image, backgroundImage, self)
         }
-        
     }
-    
+
     // swiftlint:disable function_body_length disable cyclomatic_complexity
     public init?(JSONObject: [String: Any]?) {
         guard let object = JSONObject else {
             VisilabsLogger.error("carouselitem json object should not be nil")
             return nil
         }
-        
-        self.imageUrlString = object[PayloadKey.imageUrlString] as? String
-        self.title = object[PayloadKey.title] as? String
-        self.titleColor = UIColor(hex: object[PayloadKey.titleColor] as? String)
-        self.titleFontFamily = object[PayloadKey.titleFontFamily] as? String
-        self.titleCustomFontFamily = object[PayloadKey.title_custom_font_family_ios] as? String
-        self.titleTextsize = object[PayloadKey.title_textsize] as? String
-        self.body = object[PayloadKey.body] as? String
-        self.bodyColor = UIColor(hex: object[PayloadKey.body_color] as? String)
-        self.bodyFontFamily = object[PayloadKey.body_font_family] as? String
-        self.bodyCustomFontFamily = object[PayloadKey.body_custom_font_family_ios] as? String
-        self.bodyTextsize = object[PayloadKey.body_textsize] as? String
-        self.promocodeType = object[PayloadKey.promocode_type] as? String
-        self.promotionCode = object[PayloadKey.promotion_code] as? String
-        self.promocodeBackgroundColor = UIColor(hex: object[PayloadKey.promocode_background_color] as? String)
-        self.promocodeTextColor = UIColor(hex: object[PayloadKey.promocode_text_color] as? String)
-        self.buttonText = object[PayloadKey.button_text] as? String
-        self.buttonTextColor = UIColor(hex: object[PayloadKey.button_text_color] as? String)
-        self.buttonColor = UIColor(hex: object[PayloadKey.button_color] as? String)
-        self.buttonFontFamily = object[PayloadKey.button_font_family] as? String
-        self.buttonCustomFontFamily = object[PayloadKey.button_custom_font_family_ios] as? String
-        self.buttonTextsize = object[PayloadKey.button_textsize] as? String
-        self.backgroundImageString = object[PayloadKey.background_image] as? String
-        self.backgroundColor = UIColor(hex: object[PayloadKey.background_color] as? String)
-        self.linkString = object[PayloadKey.ios_lnk] as? String
-        
+
+        imageUrlString = object[PayloadKey.imageUrlString] as? String
+        title = object[PayloadKey.title] as? String
+        titleColor = UIColor(hex: object[PayloadKey.titleColor] as? String)
+        titleFontFamily = object[PayloadKey.titleFontFamily] as? String
+        titleCustomFontFamily = object[PayloadKey.title_custom_font_family_ios] as? String
+        titleTextsize = object[PayloadKey.title_textsize] as? String
+        body = object[PayloadKey.body] as? String
+        bodyColor = UIColor(hex: object[PayloadKey.body_color] as? String)
+        bodyFontFamily = object[PayloadKey.body_font_family] as? String
+        bodyCustomFontFamily = object[PayloadKey.body_custom_font_family_ios] as? String
+        bodyTextsize = object[PayloadKey.body_textsize] as? String
+        promocodeType = object[PayloadKey.promocode_type] as? String
+        promotionCode = object[PayloadKey.promotion_code] as? String
+        promocodeBackgroundColor = UIColor(hex: object[PayloadKey.promocode_background_color] as? String)
+        promocodeTextColor = UIColor(hex: object[PayloadKey.promocode_text_color] as? String)
+        buttonText = object[PayloadKey.button_text] as? String
+        buttonTextColor = UIColor(hex: object[PayloadKey.button_text_color] as? String)
+        buttonColor = UIColor(hex: object[PayloadKey.button_color] as? String)
+        buttonFontFamily = object[PayloadKey.button_font_family] as? String
+        buttonCustomFontFamily = object[PayloadKey.button_custom_font_family_ios] as? String
+        buttonTextsize = object[PayloadKey.button_textsize] as? String
+        backgroundImageString = object[PayloadKey.background_image] as? String
+        backgroundColor = UIColor(hex: object[PayloadKey.background_color] as? String)
+        linkString = object[PayloadKey.ios_lnk] as? String
+        videourl = object[PayloadKey.videourl] as? String
+
         if let linkString = linkString, !linkString.isEmptyOrWhitespace {
-            self.linkUrl = URL(string: linkString)
+            linkUrl = URL(string: linkString)
         }
-        
+
         if !imageUrlString.isNilOrWhiteSpace {
-            self.imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
+            imageUrl = VisilabsHelper.getImageUrl(imageUrlString!, type: .inappcarousel)
         }
-        
+
         if !backgroundImageString.isNilOrWhiteSpace {
-            self.backgroundImageUrl = VisilabsHelper.getImageUrl(backgroundImageString!, type: .inappcarousel)
+            backgroundImageUrl = VisilabsHelper.getImageUrl(backgroundImageString!, type: .inappcarousel)
         }
-        
-        self.closeButtonColor = UIColor(hex: object[PayloadKey.close_button_color] as? String)
-        
-        self.titleFont = VisilabsHelper.getFont(fontFamily: self.titleFontFamily, fontSize: self.titleTextsize
-                                                , style: .title2, customFont: self.titleCustomFontFamily)
-        self.bodyFont = VisilabsHelper.getFont(fontFamily: self.bodyFontFamily, fontSize: self.bodyTextsize
-                                               , style: .body, customFont: self.bodyCustomFontFamily)
-        self.buttonFont = VisilabsHelper.getFont(fontFamily: self.buttonFontFamily, fontSize: self.buttonTextsize
-                                                 , style: .title2, customFont: self.buttonCustomFontFamily)
-        
-        self.setFonts()
-        
-        self.fetchImageBlock = { imageCompletion in
-            var image: UIImage? = nil
-            var backgroundImage: UIImage? = nil
-            
+
+        closeButtonColor = UIColor(hex: object[PayloadKey.close_button_color] as? String)
+
+        titleFont = VisilabsHelper.getFont(fontFamily: titleFontFamily, fontSize: titleTextsize
+                                           , style: .title2, customFont: titleCustomFontFamily)
+        bodyFont = VisilabsHelper.getFont(fontFamily: bodyFontFamily, fontSize: bodyTextsize
+                                          , style: .body, customFont: bodyCustomFontFamily)
+        buttonFont = VisilabsHelper.getFont(fontFamily: buttonFontFamily, fontSize: buttonTextsize
+                                            , style: .title2, customFont: buttonCustomFontFamily)
+
+        setFonts()
+
+        fetchImageBlock = { imageCompletion in
+            var image: UIImage?
+            var backgroundImage: UIImage?
+
             if let imageUrl = self.imageUrl, let imageData: Data = try? Data(contentsOf: imageUrl) {
                 image = UIImage(data: imageData as Data)
             }
             if let backgroundImageUrl = self.backgroundImageUrl, let imageData: Data = try? Data(contentsOf: backgroundImageUrl) {
                 backgroundImage = UIImage(data: imageData as Data)
             }
-            
+
             imageCompletion(image, backgroundImage, self)
         }
-        
     }
 
-    
     private func setFonts() {
-        self.titleFont = VisilabsHelper.getFont(fontFamily: self.titleFontFamily, fontSize: self.titleTextsize
-                                                , style: .title2, customFont: self.titleCustomFontFamily)
-        self.bodyFont = VisilabsHelper.getFont(fontFamily: self.bodyFontFamily, fontSize: self.bodyTextsize
-                                               , style: .body, customFont: self.bodyCustomFontFamily)
-        self.buttonFont = VisilabsHelper.getFont(fontFamily: self.buttonFontFamily, fontSize: self.buttonTextsize
-                                                 , style: .title2, customFont: self.buttonCustomFontFamily)
+        titleFont = VisilabsHelper.getFont(fontFamily: titleFontFamily, fontSize: titleTextsize
+                                           , style: .title2, customFont: titleCustomFontFamily)
+        bodyFont = VisilabsHelper.getFont(fontFamily: bodyFontFamily, fontSize: bodyTextsize
+                                          , style: .body, customFont: bodyCustomFontFamily)
+        buttonFont = VisilabsHelper.getFont(fontFamily: buttonFontFamily, fontSize: buttonTextsize
+                                            , style: .title2, customFont: buttonCustomFontFamily)
     }
-    
-    
 }
-

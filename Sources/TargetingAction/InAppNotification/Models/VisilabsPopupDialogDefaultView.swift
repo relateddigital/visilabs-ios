@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 public class VisilabsPopupDialogDefaultView: UIView {
-
     // MARK: - VARIABLES
 
     internal lazy var closeButton = setCloseButton()
@@ -66,7 +65,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
     @objc public dynamic var messageColor: UIColor? {
         get { return messageLabel.textColor }
-        set { messageLabel.textColor = newValue}
+        set { messageLabel.textColor = newValue }
     }
 
     @objc public dynamic var messageTextAlignment: NSTextAlignment {
@@ -89,13 +88,15 @@ public class VisilabsPopupDialogDefaultView: UIView {
     weak var imgButtonDelegate: ImageButtonImageDelegate?
     weak var delegate: VisilabsPopupDialogDefaultViewDelegate?
     weak var npsDelegate: NPSDelegate?
+
     // MARK: - CONSTRUCTOR
+
     init(frame: CGRect, visilabsInAppNotification: VisilabsInAppNotification?,
-                        emailForm: MailSubscriptionViewModel? = nil,
-                        scratchTW: ScratchToWinModel? = nil) {
+         emailForm: MailSubscriptionViewModel? = nil,
+         scratchTW: ScratchToWinModel? = nil) {
         self.visilabsInAppNotification = visilabsInAppNotification
         self.emailForm = emailForm
-        self.scratchToWin = scratchTW
+        scratchToWin = scratchTW
         super.init(frame: frame)
         if self.visilabsInAppNotification != nil {
             setupViews()
@@ -107,7 +108,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     }
 
     func setupInitialViewForEmailForm() {
-        guard let model = self.emailForm else { return }
+        guard let model = emailForm else { return }
         titleLabel.text = model.title.removeEscapingCharacters()
         titleLabel.font = model.titleFont
         titleLabel.textColor = model.titleColor
@@ -117,14 +118,14 @@ public class VisilabsPopupDialogDefaultView: UIView {
         messageLabel.textColor = model.textColor
 
         closeButton.setTitleColor(model.closeButtonColor, for: .normal)
-        self.backgroundColor = model.backgroundColor
+        backgroundColor = model.backgroundColor
 
-        self.addSubview(imageView)
-        self.addSubview(closeButton)
+        addSubview(imageView)
+        addSubview(closeButton)
 
         var constraints = [NSLayoutConstraint]()
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
-            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+                                                   attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
 
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
@@ -155,9 +156,9 @@ public class VisilabsPopupDialogDefaultView: UIView {
 
         let maskImg = maskView.asImage()
 
-        self.sctw = ScratchUIView(frame: frame, couponImage: couponImg, maskImage: maskImg, scratchWidth: 20.0)
+        sctw = ScratchUIView(frame: frame, couponImage: couponImg, maskImage: maskImg, scratchWidth: 20.0)
         sctw.delegate = self
-        self.addSubview(sctw)
+        addSubview(sctw)
     }
 
     fileprivate func addSctwMailForm(_ model: ScratchToWinModel) {
@@ -209,7 +210,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         let attrPermit = NSMutableAttributedString(string: parsedPermit.string)
         let attrCon = NSMutableAttributedString(string: parsedConsent.string)
         attrPermit.addAttribute(.link, value: model.permitUrl ?? "",
-                             range: NSRange(location: parsedPermit.location, length: parsedPermit.length))
+                                range: NSRange(location: parsedPermit.location, length: parsedPermit.length))
         attrCon.addAttribute(.link, value: model.consentUrl ?? "",
                              range: NSRange(location: parsedConsent.location, length: parsedConsent.length))
 
@@ -229,7 +230,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     }
 
     func setupInitialForScratchToWin() {
-        guard let model = self.scratchToWin else { return }
+        guard let model = scratchToWin else { return }
         var imageAdded = false
         if model.image != nil {
             addSubview(imageView)
@@ -245,22 +246,22 @@ public class VisilabsPopupDialogDefaultView: UIView {
         messageLabel.textColor = model.messageTextColor
 
         closeButton.setTitleColor(model.closeButtonColor, for: .normal)
-        self.backgroundColor = model.backgroundColor
+        backgroundColor = model.backgroundColor
 
-        self.addSubview(closeButton)
-        self.addSubview(titleLabel)
-        self.addSubview(messageLabel)
+        addSubview(closeButton)
+        addSubview(titleLabel)
+        addSubview(messageLabel)
 
         if imageAdded {
-            self.titleLabel.topToBottom(of: imageView, offset: 10)
+            titleLabel.topToBottom(of: imageView, offset: 10)
         } else {
-            self.titleLabel.top(to: self, offset: 50)
+            titleLabel.top(to: self, offset: 50)
         }
-        self.titleLabel.leading(to: self)
-        self.titleLabel.trailing(to: self)
-        self.messageLabel.topToBottom(of: titleLabel, offset: 10)
-        self.messageLabel.leading(to: self)
-        self.messageLabel.trailing(to: self)
+        titleLabel.leading(to: self)
+        titleLabel.trailing(to: self)
+        messageLabel.topToBottom(of: titleLabel, offset: 10)
+        messageLabel.leading(to: self)
+        messageLabel.trailing(to: self)
 
         createSctwAndAddSubview(model)
 
@@ -274,11 +275,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
             sctw.bottom(to: self, offset: -60)
         }
 
-        self.closeButton.trailing(to: self, offset: -10)
+        closeButton.trailing(to: self, offset: -10)
 
         var constraints = [NSLayoutConstraint]()
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
-            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+                                                   attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
 
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
@@ -287,12 +288,11 @@ public class VisilabsPopupDialogDefaultView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     internal func setupViews() {
-
         guard let notification = visilabsInAppNotification else {
             return
         }
@@ -326,7 +326,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
         }
 
         imageHeightConstraint = NSLayoutConstraint(item: imageView,
-            attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
+                                                   attribute: .height, relatedBy: .equal, toItem: imageView, attribute: .height, multiplier: 0, constant: 0)
 
         if let imageHeightConstraint = imageHeightConstraint {
             constraints.append(imageHeightConstraint)
@@ -340,13 +340,13 @@ public class VisilabsPopupDialogDefaultView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
 
-    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         emailTF.resignFirstResponder()
     }
-
 }
 
 // MARK: - SliderStepDelegate
+
 extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
     func didSelectedValue(sliderStep: VisilabsSliderStep, value: Float) {
         sliderStep.value = value
@@ -355,7 +355,6 @@ extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
 
 // Email form extension
 extension VisilabsPopupDialogDefaultView {
-
     @objc func termsButtonTapped(_ sender: UIButton) {
         if let url = scratchToWin?.permitUrl {
             VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
@@ -381,17 +380,14 @@ extension VisilabsPopupDialogDefaultView {
 }
 
 extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
-
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if self.visilabsInAppNotification?.type == .emailForm {
+        if visilabsInAppNotification?.type == .emailForm {
             return emailTF.resignFirstResponder()
         } else {
             return feedbackTF.resignFirstResponder()
@@ -400,13 +396,12 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
 
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
-                                as? NSValue)?.cgRectValue {
+            as? NSValue)?.cgRectValue {
             if let view = getTopView() {
                 if view.frame.origin.y == 0 {
                     view.frame.origin.y -= keyboardSize.height
                 }
             }
-
         }
     }
 
@@ -465,7 +460,7 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     }
 
     func hideResultLabel() {
-        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             self.resultLabel.removeFromSuperview()
             self.setNeedsLayout()
             self.setNeedsDisplay()
@@ -473,11 +468,11 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     }
 
     @objc func expandSctw() {
-        let model = self.scratchToWin!
+        let model = scratchToWin!
         sctwButton = VisilabsPopupDialogButton(title: model.copyButtonText ?? "",
                                                font: model.copyButtonTextFont ?? .systemFont(ofSize: 20),
-                                                            buttonTextColor: model.copyButtonTextColor,
-                                                            buttonColor: model.copyButtonColor, action: nil)
+                                               buttonTextColor: model.copyButtonTextColor,
+                                               buttonColor: model.copyButtonColor, action: nil)
         addSubview(sctwButton)
         sctwButton.addTarget(self, action: #selector(copyCodeAndDismiss), for: .touchDown)
         let actid = String(scratchToWin?.actId ?? 0)
@@ -485,22 +480,20 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
         Visilabs.callAPI().subscribeSpinToWinMail(actid: actid, auth: auth, mail: sctwMail)
         sctwButton.allEdges(to: self, excluding: .top)
         sctwButton.height(50)
-
     }
 
     @objc func dismissKeyboard() {
-        self.endEditing(true)
+        endEditing(true)
     }
 
     @objc func copyCodeAndDismiss() {
         UIPasteboard.general.string = scratchToWin?.promocode
         VisilabsHelper.showCopiedClipboardMessage()
-        self.delegate?.dismissSctw()
+        delegate?.dismissSctw()
     }
 }
 
 extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
-
     public func scratchMoved(_ view: ScratchUIView) {
         if !expanded && view.getScratchPercent() > 0.69 {
             expanded = true
@@ -520,4 +513,9 @@ protocol ImageButtonImageDelegate: AnyObject {
 protocol NPSDelegate: AnyObject {
     func ratingSelected()
     func ratingUnselected()
+}
+
+class inAppCurrentState {
+    static var shared = inAppCurrentState()
+    var isFirstPageOpened = false
 }

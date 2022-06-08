@@ -5,17 +5,18 @@
 //  Created by Egemen Gülkılık on 10.11.2021.
 //
 
+import AVFoundation
 import UIKit
 
 class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
-
     var halfScreenNotification: VisilabsInAppNotification! {
         return super.notification
     }
-    
+
+    var player: AVPlayer?
     var visilabsHalfScreenView: VisilabsHalfScreenView!
     var halfScreenHeight = 0.0
-    
+
     var isDismissing = false
 
     init(notification: VisilabsInAppNotification) {
@@ -23,24 +24,34 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
         self.notification = notification
         visilabsHalfScreenView = VisilabsHalfScreenView(frame: UIScreen.main.bounds, notification: halfScreenNotification)
         view = visilabsHalfScreenView
-        
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTap(gesture:)))
         tapGesture.numberOfTapsRequired = 1
         visilabsHalfScreenView.addGestureRecognizer(tapGesture)
-        
+
         let closeTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         visilabsHalfScreenView.closeButton.isUserInteractionEnabled = true
         visilabsHalfScreenView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        player = visilabsHalfScreenView.imageView.addVideoPlayer(urlString: notification?.videourl ?? "")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        player?.pause()
+    }
+
     @objc func didTap(gesture: UITapGestureRecognizer) {
         if !isDismissing && gesture.state == UIGestureRecognizer.State.ended {
             delegate?.notificationShouldDismiss(controller: self,
@@ -49,7 +60,7 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
                                                 additionalTrackingProperties: nil)
         }
     }
-    
+
     @objc func closeButtonTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         dismiss(animated: true) {
             self.delegate?.notificationShouldDismiss(controller: self,
@@ -66,24 +77,23 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
         var bounds: CGRect
         if #available(iOS 13.0, *) {
             let windowScene = sharedUIApplication
-                           .connectedScenes
-                           .filter { $0.activationState == .foregroundActive }
-                           .first
+                .connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first
             guard let scene = windowScene as? UIWindowScene else { return }
             bounds = scene.coordinateSpace.bounds
         } else {
             bounds = UIScreen.main.bounds
         }
-        
+
         let bottomInset = Double(VisilabsHelper.getSafeAreaInsets().bottom)
         let topInset = Double(VisilabsHelper.getSafeAreaInsets().top)
         halfScreenHeight = Double(visilabsHalfScreenView.imageView.frame.height) + Double(visilabsHalfScreenView.titleLabel.frame.height)
-        
+
         let frameY = halfScreenNotification.position == .bottom ? Double(bounds.size.height) - (halfScreenHeight + bottomInset) : topInset
-        
-        
+
         let frame = CGRect(origin: CGPoint(x: 0, y: CGFloat(frameY)), size: CGSize(width: bounds.size.width, height: CGFloat(halfScreenHeight)))
-        
+
         if #available(iOS 13.0, *) {
             let windowScene = sharedUIApplication
                 .connectedScenes
@@ -104,29 +114,27 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
             window.isHidden = false
         }
     }
-    
+
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         if !isDismissing {
             isDismissing = true
             let duration = animated ? 0.5 : 0
-            
+
             UIView.animate(withDuration: duration, animations: {
-                
                 var originY = 0.0
                 if self.halfScreenNotification.position == .bottom {
                     originY = self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().bottom)
                 } else {
                     originY = -(self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().top))
                 }
-                
+
                 self.window?.frame.origin.y += CGFloat(originY)
-                }, completion: { _ in
-                    self.window?.isHidden = true
-                    self.window?.removeFromSuperview()
-                    self.window = nil
-                    completion()
+            }, completion: { _ in
+                self.window?.isHidden = true
+                self.window?.removeFromSuperview()
+                self.window = nil
+                completion()
             })
         }
     }
-
 }

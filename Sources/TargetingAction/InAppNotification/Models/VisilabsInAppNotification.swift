@@ -51,6 +51,9 @@ public class VisilabsInAppNotification {
         public static let customFont = "custom_font_family_ios"
         public static let closePopupActionType = "close_event_trigger"
         public static let carouselItems = "carousel_items"
+        public static let videourl = "videourl"
+        public static let secondPopupVideourl1 = "secondPopup_videourl1"
+        public static let secondPopupVideourl2 = "secondPopup_videourl2"
     }
 
     let actId: Int
@@ -96,6 +99,9 @@ public class VisilabsInAppNotification {
     let position: VisilabsHalfScreenPosition?
     let closePopupActionType: String?
     public var carouselItems: [VisilabsCarouselItem] = [VisilabsCarouselItem]()
+    let videourl: String?
+    let secondPopupVideourl1: String?
+    let secondPopupVideourl2: String?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -187,7 +193,10 @@ public class VisilabsInAppNotification {
                 secondPopupMinPoint: String?,
                 previousPopupPoint: Double? = nil,
                 position: VisilabsHalfScreenPosition?,
-                carouselItems: [VisilabsCarouselItem]? = nil) {
+                carouselItems: [VisilabsCarouselItem]? = nil,
+                videourl: String?,
+                secondPopupVideourl1: String?,
+                secondPopupVideourl2: String?) {
         self.actId = actId
         messageType = type.rawValue
         self.type = type
@@ -269,6 +278,10 @@ public class VisilabsInAppNotification {
         if let carouselItems = carouselItems {
             self.carouselItems = carouselItems
         }
+
+        self.videourl = videourl
+        self.secondPopupVideourl1 = secondPopupVideourl1
+        self.secondPopupVideourl2 = secondPopupVideourl2
         setFonts()
     }
 
@@ -384,6 +397,9 @@ public class VisilabsInAppNotification {
         if !secondImageUrlString2.isNilOrWhiteSpace {
             secondImageUrl2 = VisilabsHelper.getImageUrl(imageUrlString!, type: self.type)
         }
+        videourl = actionData[PayloadKey.videourl] as? String
+        secondPopupVideourl1 = actionData[PayloadKey.secondPopupVideourl1] as? String
+        secondPopupVideourl2 = actionData[PayloadKey.secondPopupVideourl2] as? String
         secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
         previousPopupPoint = nil
 

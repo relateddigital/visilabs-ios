@@ -5,23 +5,23 @@
 //  Created by Egemen on 8.06.2020.
 //
 
+import AVFoundation
 import UIKit
 // swiftlint:disable type_name
-final public class VisilabsDefaultPopupNotificationViewController: UIViewController {
-
+public final class VisilabsDefaultPopupNotificationViewController: UIViewController {
     weak var visilabsInAppNotification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
     var scratchToWin: ScratchToWinModel?
+    var player: AVPlayer?
 
     convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
                      emailForm: MailSubscriptionViewModel? = nil,
                      scratchToWin: ScratchToWinModel? = nil) {
         self.init()
         self.visilabsInAppNotification = visilabsInAppNotification
-        self.mailForm = emailForm
+        mailForm = emailForm
         self.scratchToWin = scratchToWin
 
-        
         if let image = visilabsInAppNotification?.image {
             if let imageGif = UIImage.gif(data: image) {
                 self.image = imageGif
@@ -30,17 +30,13 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
             }
         }
 
-        if let img = scratchToWin?.image {
-            self.image = UIImage(data: img)
-        }
-
         if let secondImage = visilabsInAppNotification?.secondImage2 {
             self.secondImage = UIImage.gif(data: secondImage)
         }
     }
 
     public var standardView: VisilabsPopupDialogDefaultView {
-       return view as! VisilabsPopupDialogDefaultView // swiftlint:disable:this force_cast
+        return view as! VisilabsPopupDialogDefaultView // swiftlint:disable:this force_cast
     }
 
     override public func loadView() {
@@ -50,10 +46,30 @@ final public class VisilabsDefaultPopupNotificationViewController: UIViewControl
                                               emailForm: mailForm,
                                               scratchTW: scratchToWin)
     }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !inAppCurrentState.shared.isFirstPageOpened {
+            player = standardView.imageView.addVideoPlayer(urlString: visilabsInAppNotification?.videourl ?? "")
+        } else {
+            if visilabsInAppNotification?.secondPopupVideourl1?.count ?? 0 > 0 {
+                player = standardView.imageView.addVideoPlayer(urlString: visilabsInAppNotification?.secondPopupVideourl1 ?? "")
+            }
+
+            if visilabsInAppNotification?.secondPopupVideourl2?.count ?? 0 > 0 {
+                player = standardView.secondImageView.addVideoPlayer(urlString: visilabsInAppNotification?.secondPopupVideourl2 ?? "")
+            }
+            inAppCurrentState.shared.isFirstPageOpened = false
+        }
+    }
+
+    override public func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        player?.pause()
+    }
 }
 
 public extension VisilabsDefaultPopupNotificationViewController {
-
     // MARK: - Setter / Getter
 
     // MARK: Content
@@ -63,15 +79,24 @@ public extension VisilabsDefaultPopupNotificationViewController {
         get { return standardView.imageView.image }
         set {
             standardView.imageView.image = newValue
-            standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
+            if visilabsInAppNotification?.videourl?.count ?? 0 > 0 {
+                standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: true)
+            } else {
+                standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: false)
+            }
         }
     }
+
     /// Second Image View
     var secondImage: UIImage? {
         get { return standardView.secondImageView.image }
         set {
             standardView.secondImageView.image = newValue
-            standardView.secondImageHeight?.constant = standardView.imageView.pv_heightForImageView()
+            if visilabsInAppNotification?.videourl?.count ?? 0 > 0 {
+                standardView.secondImageHeight?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: true)
+            } else {
+                standardView.secondImageHeight?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: false)
+            }
         }
     }
 
@@ -84,12 +109,26 @@ public extension VisilabsDefaultPopupNotificationViewController {
         standardView.messageLabel.isHidden = true
     }
 
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView()
-        standardView.secondImageHeight?.constant = standardView.secondImageView.pv_heightForImageView()
-        if let _ = self.scratchToWin {
+        if visilabsInAppNotification?.videourl?.count ?? 0 > 0 {
+            standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: true)
+        } else {
+            standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: false)
+        }
+
+        if visilabsInAppNotification?.secondPopupVideourl1?.count ?? 0 > 0 && inAppCurrentState.shared.isFirstPageOpened {
+            standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: true)
+        } else if inAppCurrentState.shared.isFirstPageOpened {
+            standardView.imageHeightConstraint?.constant = standardView.imageView.pv_heightForImageView(isVideoExist: false)
+        }
+
+        if visilabsInAppNotification?.secondPopupVideourl2?.count ?? 0 > 0 && inAppCurrentState.shared.isFirstPageOpened {
+            standardView.secondImageHeight?.constant = standardView.secondImageView.pv_heightForImageView(isVideoExist: true)
+        } else if inAppCurrentState.shared.isFirstPageOpened {
+            standardView.secondImageHeight?.constant = standardView.secondImageView.pv_heightForImageView(isVideoExist: false)
+        }
+        if let _ = scratchToWin {
             standardView.sctw.centerX(to: standardView)
         }
     }
