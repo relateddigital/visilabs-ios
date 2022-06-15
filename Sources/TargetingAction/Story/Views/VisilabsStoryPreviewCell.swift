@@ -167,6 +167,16 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         contentView.addSubview(snapButton)
         scrollview.addGestureRecognizer(longpressGesture)
         scrollview.addGestureRecognizer(tapGesture)
+        let viewtemp = UIView()
+        viewtemp.translatesAutoresizingMaskIntoConstraints = false
+        viewtemp.backgroundColor = .red
+        contentView.addSubview(viewtemp)
+        NSLayoutConstraint.activate([viewtemp.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                     viewtemp.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                                     viewtemp.heightAnchor.constraint(equalToConstant: 200),
+                                     viewtemp.widthAnchor.constraint(equalToConstant: 200)
+                                    ])
+        
     }
     private func installLayoutConstraints() {
         // Setting constraints for scrollview
