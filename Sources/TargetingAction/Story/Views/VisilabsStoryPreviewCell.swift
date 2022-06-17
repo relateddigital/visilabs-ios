@@ -29,6 +29,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
 
     weak var storyUrlDelegate: VisilabsStoryURLDelegate?
+    let timerView : timerView = UIView.fromNib()
 
     // MARK: - Private iVars
     private lazy var storyHeaderView: VisilabsStoryPreviewHeaderView = {
@@ -167,15 +168,11 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         contentView.addSubview(snapButton)
         scrollview.addGestureRecognizer(longpressGesture)
         scrollview.addGestureRecognizer(tapGesture)
-        let viewtemp = UIView()
-        viewtemp.translatesAutoresizingMaskIntoConstraints = false
-        viewtemp.backgroundColor = .red
-        contentView.addSubview(viewtemp)
-        NSLayoutConstraint.activate([viewtemp.topAnchor.constraint(equalTo: contentView.topAnchor),
-                                     viewtemp.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                                     viewtemp.heightAnchor.constraint(equalToConstant: 200),
-                                     viewtemp.widthAnchor.constraint(equalToConstant: 200)
-                                    ])
+        
+        timerView.translatesAutoresizingMaskIntoConstraints = false
+        timerView.isUserInteractionEnabled = false
+        contentView.addSubview(timerView)
+
         
     }
     private func installLayoutConstraints() {
@@ -198,6 +195,12 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             snapButton.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor, constant: -50),
             snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor)
         ])
+        
+        NSLayoutConstraint.activate([timerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                                     timerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                                     timerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                                     timerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+                                    ])
     }
     private func createSnapView() -> UIImageView {
         let snapView = UIImageView()
@@ -442,6 +445,64 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             }
             delegate?.didTapCloseButton()
         }
+    }
+    
+    private func timerConfiguration() {
+        
+    }
+    
+    private func calculateRemainingTime() {
+        
+    }
+    
+    private func mapRemainingTime(wantToEndTime:Date) -> [String] {
+         
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let endDate = formatter.date(from: "2022/06/17 22:31")
+        let startDate = Date()
+
+        let differenceInSeconds = Int(endDate!.timeIntervalSince(startDate))
+        
+        let hourInSecond = 3600
+        let minuteInSecond = 60
+        
+        let hourCount = differenceInSeconds / hourInSecond
+        let minuteCount = (differenceInSeconds - (hourInSecond*hourCount)) / minuteInSecond
+        let secondCount = (differenceInSeconds - (hourInSecond*hourCount) - (minuteInSecond*minuteCount))
+        
+        
+        var hourCountStr = ""
+        var minuteCountStr = ""
+        var secondCountStr = ""
+        
+        if hourCount < 10 {
+            hourCountStr = "0\(hourCount)"
+        } else {
+            hourCountStr = String(hourCount)
+        }
+        
+        if minuteCount < 10 {
+            minuteCountStr = "0\(minuteCount)"
+        } else {
+            minuteCountStr = String(minuteCount)
+        }
+        
+        if secondCount < 10 {
+            secondCountStr = "0\(secondCount)"
+        } else {
+            secondCountStr = String(secondCount)
+        }
+        
+        var result = [String]()
+        result.append("\(hourCountStr.first ?? "0")")
+        result.append("\(hourCountStr.last ?? "0")")
+        result.append("\(minuteCountStr.first ?? "0")")
+        result.append("\(minuteCountStr.last ?? "0")")
+        result.append("\(secondCountStr.first ?? "0")")
+        result.append("\(secondCountStr.last ?? "0")")
+
+        return result
     }
 
     private func willMoveToPreviousOrNextSnap(index: Int) {
