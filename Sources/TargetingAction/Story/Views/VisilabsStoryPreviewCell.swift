@@ -29,7 +29,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
 
     weak var storyUrlDelegate: VisilabsStoryURLDelegate?
-    let timerView : timerView = UIView.fromNib()
+    //let timerView : timerView = UIView.fromNib()
 
     // MARK: - Private iVars
     private lazy var storyHeaderView: VisilabsStoryPreviewHeaderView = {
@@ -169,9 +169,9 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         scrollview.addGestureRecognizer(longpressGesture)
         scrollview.addGestureRecognizer(tapGesture)
         
-        timerView.translatesAutoresizingMaskIntoConstraints = false
-        timerView.isUserInteractionEnabled = false
-        contentView.addSubview(timerView)
+//        timerView.translatesAutoresizingMaskIntoConstraints = false
+//        timerView.isUserInteractionEnabled = false
+//        contentView.addSubview(timerView)
 
         
     }
@@ -196,11 +196,11 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor)
         ])
         
-        NSLayoutConstraint.activate([timerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                                     timerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                                     timerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                                     timerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-                                    ])
+//        NSLayoutConstraint.activate([timerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+//                                     timerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//                                     timerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//                                     timerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+//                                    ])
     }
     private func createSnapView() -> UIImageView {
         let snapView = UIImageView()
