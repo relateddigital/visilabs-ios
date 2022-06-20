@@ -185,7 +185,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBrownColor"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="5um-Lw-oLT" firstAttribute="centerY" secondItem="cxF-17-DV4" secondAttribute="centerY" id="1FI-gf-vbW"/>
                         <constraint firstItem="rQm-QY-o2B" firstAttribute="top" secondItem="DsI-NL-85h" secondAttribute="bottom" constant="3" id="2tf-x9-0bB"/>
@@ -224,7 +224,7 @@
                 </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="FIE-z0-Fen" secondAttribute="bottom" id="3bm-Ps-F39"/>
                 <constraint firstItem="FIE-z0-Fen" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="5" id="BtZ-uN-b3A"/>
@@ -238,15 +238,23 @@
                 <constraint firstItem="SHb-7T-Vga" firstAttribute="top" secondItem="0yl-hz-Hra" secondAttribute="bottom" constant="15" id="uYn-MR-qpH"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="downLabel" destination="FIE-z0-Fen" id="Bdl-no-glH"/>
+                <outlet property="hour1digitLabel" destination="oea-It-o2D" id="VDj-zD-ZkI"/>
+                <outlet property="hour2digitLabel" destination="jzP-M6-X4n" id="JYQ-Q1-YGm"/>
+                <outlet property="hourFirstdgLabel" destination="KSa-SO-L1m" id="kPN-du-GYm"/>
+                <outlet property="minute1digitLabel" destination="Cjw-Es-ouf" id="Y3Z-Jv-uaU"/>
+                <outlet property="minute2digitLabel" destination="bnn-lK-DXd" id="RWQ-vI-aKv"/>
+                <outlet property="second1digitLabel" destination="6bA-Up-qgL" id="aCB-wS-0pd"/>
+                <outlet property="second2digitLabel" destination="Ksn-Wa-8ie" id="Xhe-np-728"/>
+                <outlet property="upLabel" destination="0yl-hz-Hra" id="4aw-gy-Uq9"/>
+            </connections>
             <point key="canvasLocation" x="137.59999999999999" y="83.208395802098963"/>
         </view>
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

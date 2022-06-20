@@ -9,7 +9,15 @@ import UIKit
 
 class timerView: UIView {
 
-
+    @IBOutlet weak var upLabel: UILabel!
+    @IBOutlet weak var downLabel: UILabel!
+    @IBOutlet weak var hour1digitLabel: UIView!
+    @IBOutlet weak var hour2digitLabel: UIView!
+    @IBOutlet weak var minute1digitLabel: UIView!
+    @IBOutlet weak var minute2digitLabel: UIView!
+    @IBOutlet weak var second1digitLabel: UIView!
+    @IBOutlet weak var second2digitLabel: UIView!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
