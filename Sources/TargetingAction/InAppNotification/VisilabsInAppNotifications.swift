@@ -196,14 +196,6 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         return true
     }
 
-    func getTopViewController() -> UIViewController? {
-        var topViewController = UIApplication.shared.delegate!.window!!.rootViewController!
-        while topViewController.presentedViewController != nil {
-            topViewController = topViewController.presentedViewController!
-        }
-        return topViewController
-    }
-
     func showPopUp(_ notification: VisilabsInAppNotification) -> Bool {
         let popUpVC = VisilabsPopupNotificationViewController(notification: notification)
         popUpVC.delegate = self
