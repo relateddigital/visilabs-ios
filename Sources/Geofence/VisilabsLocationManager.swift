@@ -232,11 +232,16 @@ class VisilabsLocationManager: NSObject {
     }
     
     func replaceSyncedGeofences(_ geoEntities: [VisilabsGeofenceEntity]) {
+        
+        
         removeSyncedGeofences()
         if !VisilabsGeofenceState.getGeofenceEnabled() || !options.syncGeofences {
             return
         }
-        for geoEnt in geoEntities {
+        
+        let newGeoEntities = sortAndTakeVisilabsGeofenceEntitiesToMonitor(geoEntities)
+        
+        for geoEnt in newGeoEntities {
             let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: geoEnt.latitude,
                                                                          longitude: geoEnt.longitude),
                                           radius: CLLocationDistance(geoEnt.radius),
