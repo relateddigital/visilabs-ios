@@ -13,22 +13,22 @@ import UserNotifications
 
 typealias Queue = [[String: String]]
 
-struct VisilabsUser: Codable {
-    var cookieId: String?
-    var exVisitorId: String?
-    var tokenId: String?
-    var appId: String?
-    var visitData: String?
-    var visitorData: String?
-    var userAgent: String?
-    var identifierForAdvertising: String?
-    var sdkVersion: String?
-    var lastEventTime: String?
-    var nrv = 0
-    var pviv = 0
-    var tvc = 0
-    var lvt: String?
-    var appVersion: String?
+public struct VisilabsUser: Codable {
+    public var cookieId: String?
+    public var exVisitorId: String?
+    public var tokenId: String?
+    public var appId: String?
+    public var visitData: String?
+    public var visitorData: String?
+    public var userAgent: String?
+    public var identifierForAdvertising: String?
+    public var sdkVersion: String?
+    public var lastEventTime: String?
+    public var nrv = 0
+    public var pviv = 0
+    public var tvc = 0
+    public var lvt: String?
+    public var appVersion: String?
 }
 
 struct VisilabsProfile: Codable {
@@ -427,6 +427,10 @@ extension VisilabsInstance {
 
     public func getExVisitorId() -> String? {
         return visilabsUser.exVisitorId
+    }
+    
+    public func getUser() -> VisilabsUser {
+        return visilabsUser
     }
 
     public func logout() {
