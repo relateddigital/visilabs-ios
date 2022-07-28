@@ -192,16 +192,6 @@ internal class VisilabsHelper {
     }
     
     static func getSdkVersion() -> String {
-#if SWIFT_PACKAGE
-        let bundle = Bundle.module
-#else
-        let bundle = Bundle(for: Visilabs.self)
-#endif
-        if let infos = bundle.infoDictionary {
-            if let shortVersion = infos["CFBundleShortVersionString"] as? String {
-                return shortVersion
-            }
-        }
         return VisilabsConstants.sdkVersion
     }
     

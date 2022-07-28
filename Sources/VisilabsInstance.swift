@@ -31,22 +31,22 @@ public struct VisilabsUser: Codable {
     public var appVersion: String?
 }
 
-struct VisilabsProfile: Codable {
-    var organizationId: String
-    var profileId: String
-    var dataSource: String
-    var channel: String
-    var requestTimeoutInSeconds: Int
-    var geofenceEnabled: Bool
-    var askLocationPermmissionAtStart: Bool
-    var inAppNotificationsEnabled: Bool
-    var maxGeofenceCount: Int
-    var isIDFAEnabled: Bool
-    var requestTimeoutInterval: TimeInterval {
+public struct VisilabsProfile: Codable {
+    public var organizationId: String
+    public var profileId: String
+    public var dataSource: String
+    public var channel: String
+    public var requestTimeoutInSeconds: Int
+    public var geofenceEnabled: Bool
+    public var askLocationPermmissionAtStart: Bool
+    public var inAppNotificationsEnabled: Bool
+    public var maxGeofenceCount: Int
+    public var isIDFAEnabled: Bool
+    public var apiver: String? = "IOS"
+    public var requestTimeoutInterval: TimeInterval {
         return TimeInterval(requestTimeoutInSeconds)
     }
-
-    var useInsecureProtocol = false
+    public var useInsecureProtocol = false
 }
 
 class urlConstant {
@@ -156,7 +156,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                           askLocationPermmissionAtStart: askLocationPermmissionAtStart,
                                           inAppNotificationsEnabled: inAppNotificationsEnabled,
                                           maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount,
-                                          isIDFAEnabled: isIDFAEnabled)
+                                          isIDFAEnabled: isIDFAEnabled,
+                                          apiver: VisilabsConstants.apiverValue)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
 
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
@@ -431,6 +432,10 @@ extension VisilabsInstance {
     
     public func getUser() -> VisilabsUser {
         return visilabsUser
+    }
+    
+    public func getProfile() -> VisilabsProfile {
+        return visilabsProfile
     }
 
     public func logout() {
