@@ -833,13 +833,28 @@ class VisilabsTargetingAction {
                 }
             }
         }
+        
+        var countDownModel = VisilabsStoryCountDown()
+        if let countDown = item[VisilabsConstants.countDown] as? [String:String] {
+            countDownModel.pagePosition = countDown[VisilabsConstants.pagePosition]
+            countDownModel.messageText = countDown[VisilabsConstants.messageText]
+            countDownModel.messageTextSize = countDown[VisilabsConstants.messageTextSize]
+            countDownModel.messageTextColor = countDown[VisilabsConstants.messageTextColor]
+            countDownModel.displayType = countDown[VisilabsConstants.displayType]
+            countDownModel.endDateTime = countDown[VisilabsConstants.endDateTime]
+            countDownModel.endAction = countDown[VisilabsConstants.endAction]
+            countDownModel.endAnimationImageUrl = countDown[VisilabsConstants.endAnimationImageUrl]
+            countDownModel.gifImage = UIImage.gif(url: countDownModel.endAnimationImageUrl ?? "")
+        }
+        
         let visilabsStoryItem = VisilabsStoryItem(fileType: fileType,
                                                   displayTime: displayTime,
                                                   fileSrc: fileSrc,
                                                   targetUrl: targetUrl,
                                                   buttonText: buttonText,
                                                   buttonTextColor: buttonTextColor,
-                                                  buttonColor: buttonColor)
+                                                  buttonColor: buttonColor,
+                                                  countDown: countDownModel)
         return visilabsStoryItem
     }
 

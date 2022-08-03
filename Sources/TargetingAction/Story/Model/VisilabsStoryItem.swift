@@ -20,6 +20,8 @@ class VisilabsStoryItem {
     let buttonText: String
     let buttonTextColor: UIColor
     let buttonColor: UIColor
+    let countDown:VisilabsStoryCountDown?
+
     var kind: MimeType {
         switch mimeType {
         case MimeType.photo.rawValue:
@@ -33,7 +35,7 @@ class VisilabsStoryItem {
 
     init (fileType: String, displayTime: Int, fileSrc: String,
           targetUrl: String, buttonText: String, buttonTextColor: UIColor,
-          buttonColor: UIColor) {
+          buttonColor: UIColor,countDown:VisilabsStoryCountDown) {
         self.mimeType = fileType
         self.displayTime = displayTime // TO_DO:
         self.url = fileSrc // TO_DO:
@@ -41,5 +43,18 @@ class VisilabsStoryItem {
         self.buttonText = buttonText
         self.buttonTextColor = buttonTextColor
         self.buttonColor = buttonColor
+        self.countDown = countDown
     }
+}
+
+struct VisilabsStoryCountDown {
+    var pagePosition:String?
+    var messageText:String?
+    var messageTextSize:String?
+    var messageTextColor:String?
+    var displayType:String?
+    var endDateTime:String?
+    var endAction:String?
+    var endAnimationImageUrl:String?
+    var gifImage:UIImage?
 }

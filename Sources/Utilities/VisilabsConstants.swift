@@ -165,6 +165,15 @@ struct VisilabsConstants {
     static let storyzLabelColor = "storyz_label_color"
     static let fontFamily = "font_family"
     static let customFontFamilyIos = "custom_font_family_ios"
+    static let countDown = "countdown"
+    static let pagePosition = "pagePosition"
+    static let messageText = "messageText"
+    static let messageTextSize = "messageTextSize"
+    static let messageTextColor = "messageTextColor"
+    static let displayType = "displayType"
+    static let endDateTime = "endDateTime"
+    static let endAction = "endAction"
+    static let endAnimationImageUrl = "endAnimationImageUrl"
 
     
     // Email form constants
