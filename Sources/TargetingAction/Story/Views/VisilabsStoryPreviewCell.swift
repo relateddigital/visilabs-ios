@@ -17,6 +17,14 @@ enum SnapMovementDirectionState {
     case forward
     case backward
 }
+
+enum timeType:String{
+    case wdhms = "wdhms"
+    case dhms
+    case dhm
+    case d
+}
+
 // Identifiers
 private let snapViewTagIndicator: Int = 8
 
@@ -29,8 +37,10 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
     }
 
     weak var storyUrlDelegate: VisilabsStoryURLDelegate?
-    //let timerView : timerView = UIView.fromNib()
-
+    let timerView : timerView = UIView.fromNib()
+    var currentSnapCountDown:VisilabsStoryCountDown?
+    var countDownTimer:Timer?
+    
     // MARK: - Private iVars
     private lazy var storyHeaderView: VisilabsStoryPreviewHeaderView = {
         let headerView = VisilabsStoryPreviewHeaderView()
@@ -93,6 +103,14 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 if snapIndex < story?.items.count ?? 0 {
                     if let snap = story?.items[snapIndex] {
                         if snap.kind != MimeType.video {
+                            timerView.isHidden = true
+                            if let countDown = snap.countDown,let _ = countDown.endDateTime {
+                                timerView.isHidden = false
+                                timerView.gifImageView.image = UIImage()
+                                currentSnapCountDown = countDown
+                                initializeCountDownTimerForSnap(countDown: countDown)
+                            }
+                            
                             if let snapView = getSnapview() {
                                 startRequest(snapView: snapView, with: snap.url)
                             } else {
@@ -101,6 +119,7 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                                 startRequest(snapView: snapView, with: snap.url)
                             }
                         } else {
+                            timerView.isHidden = true
                             if let videoView = getVideoView(with: snapIndex) {
                                 startPlayer(videoView: videoView, with: snap.url)
                             } else {
@@ -114,10 +133,19 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                 if snapIndex < story?.items.count ?? 0 {
                     if let snap = story?.items[snapIndex] {
                         if snap.kind != MimeType.video {
+                            timerView.isHidden = true
+                            if let countDown = snap.countDown,let _ = countDown.endDateTime {
+                                timerView.isHidden = false
+                                timerView.gifImageView.image = UIImage()
+                                currentSnapCountDown = countDown
+                                initializeCountDownTimerForSnap(countDown: countDown)
+                            }
+                            
                             if let snapView = getSnapview() {
                                 self.startRequest(snapView: snapView, with: snap.url)
                             }
                         } else {
+                            timerView.isHidden = true
                             if let videoView = getVideoView(with: snapIndex) {
                                 startPlayer(videoView: videoView, with: snap.url)                            } else {
                                 let videoView = self.createVideoView()
@@ -129,6 +157,95 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             }
         }
     }
+    
+    
+    @objc func countDownTimerForSecondDown() {
+        initializeCountDownTimerForSnap(countDown: currentSnapCountDown)
+    }
+    
+    func initializeCountDownTimerForSnap(countDown:VisilabsStoryCountDown?) {
+
+        if countDown?.pagePosition == "bottom" {
+            timerView.upLabel.isHidden = true
+            timerView.downLabel.isHidden = false
+            timerView.downLabel.text = countDown?.messageText
+            timerView.downLabel.font = VisilabsHelper.getFont(fontFamily: "serif",fontSize: countDown?.messageTextSize,style: .title2)
+            timerView.downLabel.textColor = UIColor(hex: countDown?.messageTextColor)
+        } else {
+            timerView.upLabel.isHidden = false
+            timerView.downLabel.isHidden = true
+            timerView.upLabel.text = countDown?.messageText
+            timerView.upLabel.font = VisilabsHelper.getFont(fontFamily: "serif",fontSize: countDown?.messageTextSize,style: .title2)
+            timerView.upLabel.textColor = UIColor(hex: countDown?.messageTextColor)
+        }
+        
+        timerView.countDownTimerView.layer.cornerRadius = 10
+        timerView.week1digitLabelView.layer.cornerRadius = 5
+        timerView.week2digitLabelView.layer.cornerRadius = 5
+        timerView.day1digitLabelView.layer.cornerRadius = 5
+        timerView.day2digitLabelView.layer.cornerRadius = 5
+        timerView.hour1digitLabelView.layer.cornerRadius = 5
+        timerView.hour2digitLabelView.layer.cornerRadius = 5
+        timerView.minute1digitLabelView.layer.cornerRadius = 5
+        timerView.minute2digitLabelView.layer.cornerRadius = 5
+        timerView.second1digitLabelView.layer.cornerRadius = 5
+        timerView.second2digitLabelView.layer.cornerRadius = 5
+
+
+        var labelParamArray = [String]()
+        if countDown?.displayType == "wdhms" {
+            labelParamArray = mapRemainingTime(wantToEndTime: countDown?.endDateTime, timeType: .wdhms)
+            timerView.week1digitLabel.text = labelParamArray[0]
+            timerView.week2digitLabel.text = labelParamArray[1]
+            timerView.day1digitLabel.text = labelParamArray[2]
+            timerView.day2digitLabel.text = labelParamArray[3]
+            timerView.hour1digitLabel.text = labelParamArray[4]
+            timerView.hour2digitLabel.text = labelParamArray[5]
+            timerView.minute1digitLabel.text = labelParamArray[6]
+            timerView.minute2digitLabel.text = labelParamArray[7]
+            timerView.second1digitLabel.text = labelParamArray[8]
+            timerView.second2digitLabel.text = labelParamArray[9]
+            timerView.minutePointLabel.isHidden = false
+            timerView.dayPointLabel.isHidden = false
+
+        } else if countDown?.displayType == "dhms" {
+            labelParamArray = mapRemainingTime(wantToEndTime: countDown?.endDateTime, timeType: .dhms)
+            timerView.day1digitLabel.text = labelParamArray[0]
+            timerView.day2digitLabel.text = labelParamArray[1]
+            timerView.hour1digitLabel.text = labelParamArray[2]
+            timerView.hour2digitLabel.text = labelParamArray[3]
+            timerView.minute1digitLabel.text = labelParamArray[4]
+            timerView.minute2digitLabel.text = labelParamArray[5]
+            timerView.second1digitLabel.text = labelParamArray[6]
+            timerView.second2digitLabel.text = labelParamArray[7]
+            timerView.week1digitLabelView.superview?.isHidden = true
+            timerView.minutePointLabel.isHidden = false
+            timerView.dayPointLabel.isHidden = false
+        } else if countDown?.displayType == "dhm" {
+            labelParamArray = mapRemainingTime(wantToEndTime: countDown?.endDateTime, timeType: .dhm)
+            timerView.day1digitLabel.text = labelParamArray[0]
+            timerView.day2digitLabel.text = labelParamArray[1]
+            timerView.hour1digitLabel.text = labelParamArray[2]
+            timerView.hour2digitLabel.text = labelParamArray[3]
+            timerView.minute1digitLabel.text = labelParamArray[4]
+            timerView.minute2digitLabel.text = labelParamArray[5]
+            timerView.week1digitLabelView.superview?.isHidden = true
+            timerView.second1digitLabelView.superview?.isHidden = true
+            timerView.minutePointLabel.isHidden = true
+
+        } else if countDown?.displayType == "d" {
+            labelParamArray = mapRemainingTime(wantToEndTime: countDown?.endDateTime, timeType: .d)
+            timerView.day1digitLabel.text = labelParamArray[0]
+            timerView.day2digitLabel.text = labelParamArray[1]
+            timerView.week1digitLabelView.superview?.isHidden = true
+            timerView.hour1digitLabelView.superview?.isHidden = true
+            timerView.minute1digitLabelView.superview?.isHidden = true
+            timerView.second1digitLabelView.superview?.isHidden = true
+            timerView.dayPointLabel.isHidden = true
+        }
+        
+    }
+    
     public var story: VisilabsStory? {
         didSet {
             storyHeaderView.story = story
@@ -168,10 +285,11 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         contentView.addSubview(snapButton)
         scrollview.addGestureRecognizer(longpressGesture)
         scrollview.addGestureRecognizer(tapGesture)
-        
-//        timerView.translatesAutoresizingMaskIntoConstraints = false
-//        timerView.isUserInteractionEnabled = false
-//        contentView.addSubview(timerView)
+        timerView.translatesAutoresizingMaskIntoConstraints = false
+        timerView.isUserInteractionEnabled = false
+        contentView.addSubview(timerView)
+        countDownTimer?.invalidate()
+        countDownTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(countDownTimerForSecondDown), userInfo: nil, repeats: true)
 
         
     }
@@ -196,11 +314,11 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
             snapButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor)
         ])
         
-//        NSLayoutConstraint.activate([timerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-//                                     timerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//                                     timerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//                                     timerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-//                                    ])
+        NSLayoutConstraint.activate([timerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                     timerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                                     timerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                                     timerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+                                    ])
     }
     private func createSnapView() -> UIImageView {
         let snapView = UIImageView()
@@ -447,34 +565,68 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
     }
     
-    private func timerConfiguration() {
-        
-    }
-    
-    private func calculateRemainingTime() {
-        
-    }
-    
-    private func mapRemainingTime(wantToEndTime:Date) -> [String] {
-         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        let endDate = formatter.date(from: "2022/06/17 22:31")
-        let startDate = Date()
+    private func mapRemainingTime(wantToEndTime:String?,timeType:timeType) -> [String] {
 
-        let differenceInSeconds = Int(endDate!.timeIntervalSince(startDate))
+        let formattedEndTime = wantToEndTime?.replacingOccurrences(of: "T", with: " ", options: .literal, range: nil)
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let endDate = formatter.date(from: formattedEndTime ?? "21.07.2100 17:30")
+        let startDate = Date()
+        let differenceInSeconds = Int(endDate?.timeIntervalSince(startDate) ?? 0)
         
+        if startDate >= endDate ?? startDate {
+            DispatchQueue.global(qos: .userInteractive).async { [self] in
+                DispatchQueue.main.async { [self] in
+                    timerView.gifImageView.image = currentSnapCountDown?.gifImage
+                }
+            }
+            return ["0","0","0","0","0","0","0","0","0","0"]
+        }
+        
+        
+        let weekInsecond = 604800
+        let dayInSecond = 86400
         let hourInSecond = 3600
         let minuteInSecond = 60
         
-        let hourCount = differenceInSeconds / hourInSecond
-        let minuteCount = (differenceInSeconds - (hourInSecond*hourCount)) / minuteInSecond
-        let secondCount = (differenceInSeconds - (hourInSecond*hourCount) - (minuteInSecond*minuteCount))
+        var remainingSecond = differenceInSeconds
+        var weekCount = remainingSecond / weekInsecond
+        if timeType == .d || timeType == .dhm || timeType == .dhms {
+            weekCount = 0
+        }
+        remainingSecond = remainingSecond - weekCount*weekInsecond
+        let dayCount = remainingSecond / dayInSecond
+        remainingSecond = remainingSecond - dayCount*dayInSecond
+        var hourCount = remainingSecond / hourInSecond
+        if timeType == .d {
+            hourCount = 0
+        }
+        remainingSecond = remainingSecond - hourInSecond*hourCount
+        var minuteCount = remainingSecond / minuteInSecond
+        if timeType == .d {
+            minuteCount = 0
+        }
+        remainingSecond = remainingSecond - minuteInSecond*minuteCount
+        let secondCount = remainingSecond
         
-        
+        var weekCountStr = ""
+        var dayCountStr = ""
         var hourCountStr = ""
         var minuteCountStr = ""
         var secondCountStr = ""
+        
+        if weekCount < 10 {
+            weekCountStr = "0\(weekCount)"
+        } else {
+            weekCountStr = String(weekCount)
+        }
+        
+        if dayCount < 10 {
+            dayCountStr = "0\(dayCount)"
+        } else {
+            dayCountStr = String(dayCount)
+        }
         
         if hourCount < 10 {
             hourCountStr = "0\(hourCount)"
@@ -495,15 +647,29 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
         }
         
         var result = [String]()
-        result.append("\(hourCountStr.first ?? "0")")
-        result.append("\(hourCountStr.last ?? "0")")
-        result.append("\(minuteCountStr.first ?? "0")")
-        result.append("\(minuteCountStr.last ?? "0")")
-        result.append("\(secondCountStr.first ?? "0")")
-        result.append("\(secondCountStr.last ?? "0")")
+        if timeType == .wdhms {
+            result.append("\(weekCountStr.first ?? "0")")
+            result.append("\(weekCountStr.last ?? "0")")
+        }
+        result.append("\(dayCountStr.first ?? "0")")
+        result.append("\(dayCountStr.last ?? "0")")
+        if timeType != .d {
+            result.append("\(hourCountStr.first ?? "0")")
+            result.append("\(hourCountStr.last ?? "0")")
+        }
+        if timeType != .d {
+            result.append("\(minuteCountStr.first ?? "0")")
+            result.append("\(minuteCountStr.last ?? "0")")
+        }
+        
+        if timeType == .wdhms || timeType == .dhms {
+            result.append("\(secondCountStr.first ?? "0")")
+            result.append("\(secondCountStr.last ?? "0")")
+        }
 
         return result
     }
+    
 
     private func willMoveToPreviousOrNextSnap(index: Int) {
         if let count = story?.items.count {
