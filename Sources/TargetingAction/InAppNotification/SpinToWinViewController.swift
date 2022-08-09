@@ -13,11 +13,14 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     weak var webView: WKWebView!
     var subsEmail = ""
     var sliceText = ""
+    var sliceLink: String? = nil
     
     var pIndexCodes = [Int: String]()
     var pIndexDisplayNames = [Int: String]()
     var sIndexCodes = [Int: String]()
     var sIndexDisplayNames = [Int: String]()
+    
+    var sliceLinks = [Int: String]()
     
     init(_ spinToWin: SpinToWinViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -67,13 +70,13 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
 #endif
         let bundleHtmlPath = bundle.path(forResource: "spintowin", ofType: "html") ?? ""
         let bundleJsPath = bundle.path(forResource: "spintowin", ofType: "js") ?? ""
-
+        
         let bundleHtmlUrl = URL(fileURLWithPath: bundleHtmlPath)
         let bundleJsUrl = URL(fileURLWithPath: bundleJsPath)
         
         VisilabsHelper.registerFonts(fontNames: getCustomFontNames())
         let fontUrls = getSpinToWinFonts(fontNames: getCustomFontNames())
-
+        
         do {
             if manager.fileExists(atPath: htmlUrl.path) {
                 try manager.removeItem(atPath: htmlUrl.path)
@@ -165,7 +168,7 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
         if let htmlUrl = createSpinToWinFiles() {
             webView.loadFileURL(htmlUrl, allowingReadAccessTo: htmlUrl.deletingLastPathComponent())
             webView.backgroundColor = .clear
-            webView.translatesAutoresizingMaskIntoConstraints = false            
+            webView.translatesAutoresizingMaskIntoConstraints = false
         }
         
         return webView
@@ -173,6 +176,17 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
     
     private func close() {
         self.dismiss(animated: true) {
+            
+            if let sliceLink = self.sliceLink,
+               !sliceLink.isEmptyOrWhitespace,
+               let url = URL(string: sliceLink),
+               self.spinToWin?.copyButtonFunction == "copy_redirect" {
+                DispatchQueue.main.async {
+                    let app = VisilabsInstance.sharedUIApplication()
+                    app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: url, waitUntilDone: true)
+                }
+            }
+            
             if let spinToWin = self.spinToWin, spinToWin.showPromoCodeBanner {
                 let bannerVC = VisilabsSpinToWinCodeBannerController(spinToWin)
                 bannerVC.delegate = self.delegate
@@ -223,23 +237,23 @@ class SpinToWinViewController: VisilabsBaseNotificationViewController {
             window.rootViewController = self
             window.isHidden = false
         }
-
+        
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.alpha = 1
-            }, completion: { _ in
+        }, completion: { _ in
         })
     }
-
+    
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.alpha = 0
-            }, completion: { _ in
-                self.window?.isHidden = true
-                self.window?.removeFromSuperview()
-                self.window = nil
-                completion()
+        }, completion: { _ in
+            self.window?.isHidden = true
+            self.window?.removeFromSuperview()
+            self.window = nil
+            completion()
         })
     }
     
@@ -270,6 +284,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
         let promoCodeString = index > -1 ? "'\(promoCode)'" : "undefined"
         
         DispatchQueue.main.async {
+            self.sliceLink = self.sliceLinks[index]
             self.webView.evaluateJavaScript("window.chooseSlice(\(index), \(promoCodeString));") { (_, err) in
                 if let error = err {
                     VisilabsLogger.error(error)
@@ -318,6 +333,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                             sIndexCodes[index] = slice.code
                             sIndexDisplayNames[index] = slice.displayName
                         }
+                        sliceLinks[index] = slice.iosLink
                         index += 1
                     }
                     
@@ -367,6 +383,7 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                 
                 if method == "close" {
                     DispatchQueue.main.async {
+                        self.sliceLink = nil
                         self.close()
                     }
                 }
