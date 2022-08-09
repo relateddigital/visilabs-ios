@@ -76,4 +76,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Euromsg.handlePush(pushDictionary: response.notification.request.content.userInfo)
         completionHandler()
     }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        let sendingAppID = options[.sourceApplication]
+        print("source application = \(sendingAppID ?? "Unknown")")
+        print("url.absoluteString = \(url.absoluteString)")
+        
+        let storyVC = StoryViewController()
+        window?.rootViewController = storyVC
+        
+        return true
+    }
 }

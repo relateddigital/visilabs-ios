@@ -13,6 +13,7 @@ public struct SpinToWinSliceViewModel: Codable {
     var code: String
     var type: String
     var isAvailable: Bool
+    var iosLink: String
 }
 
 public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
@@ -40,6 +41,7 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var img: String
     var wheelSpinAction:String
     var promocodesSoldoutMessage: String
+    var copyButtonFunction: String
     
     // ExtendedProps
     var displaynameTextColor: String
