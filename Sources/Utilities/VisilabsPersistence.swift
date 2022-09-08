@@ -174,12 +174,13 @@ public class VisilabsPersistence {
                         }
                     } else if count > 1 {
                         let previousParameterValue = targetParameters[storeKey]
-                        var parameterValueToStore = (parameterValue.copy() as? String ?? "") + ("|")
-                        parameterValueToStore += (dateString)
+                        let parameterValueToStore = (parameterValue.copy() as? String ?? "")
+                        var parameterValueToStoreWithDate = parameterValueToStore + ("|") + (dateString)
                         if previousParameterValue != nil && previousParameterValue!.count > 0 {
                             let previousParameterValueParts = previousParameterValue!.components(separatedBy: "~")
+                            var paramCounter = 1
                             for counter in 0..<previousParameterValueParts.count {
-                                if counter == 9 {
+                                if paramCounter == 10 {
                                     break
                                 }
                                 let decodedPreviousParameterValuePart = previousParameterValueParts[counter] as String
@@ -187,12 +188,16 @@ public class VisilabsPersistence {
                                 let decodedPreviousParameterValuePartArray = decodedPreviousParameterValuePart
                                     .components(separatedBy: "|")
                                 if decodedPreviousParameterValuePartArray.count == 2 {
-                                    parameterValueToStore += ("~")
-                                    parameterValueToStore += (decodedPreviousParameterValuePart)
+                                    if decodedPreviousParameterValuePartArray[0] == parameterValueToStore {
+                                        continue
+                                    }
+                                    parameterValueToStoreWithDate += ("~")
+                                    parameterValueToStoreWithDate += (decodedPreviousParameterValuePart)
+                                    paramCounter = paramCounter + 1
                                 }
                             }
                         }
-                        targetParameters[storeKey] = parameterValueToStore
+                        targetParameters[storeKey] = parameterValueToStoreWithDate
                     }
                 }
             }
