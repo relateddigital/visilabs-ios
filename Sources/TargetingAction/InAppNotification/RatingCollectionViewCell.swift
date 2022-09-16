@@ -65,7 +65,12 @@ class RatingCollectionViewCell: UICollectionViewCell {
 extension UIView {
     
     class func fromNib<T: UIView>() -> T {
-        return Bundle(for: T.self).loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
+#if SWIFT_PACKAGE
+        let bundle = Bundle.module
+#else
+        let bundle = Bundle(for: VisilabsTargetingAction.self)
+#endif
+        return bundle.loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
     }
 
     func addGradientBackground(colors: [CGColor]) {
