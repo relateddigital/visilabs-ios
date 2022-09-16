@@ -31,6 +31,11 @@ class RecommendationViewController: FormViewController {
             properties["prop1"] = "prop2val"
             var filters = [VisilabsRecommendationFilter]()
             filters.append(VisilabsRecommendationFilter(attribute:.PRODUCTNAME , filterType: .like, value: "a"))
+            
+            filters.append(VisilabsRecommendationFilter(attribute:.PRODUCTCODE,
+                                                        filterType: .equals,
+                                                        value: "000000300079892,000000400206545,000000400210042"))
+            
             //filters.append(VisilabsRecommendationFilter(attribute: .PRODUCTNAME, filterType: .like, value: "laptop"))
             
             Visilabs.callAPI().recommend(zoneID: "1", productCode: "",

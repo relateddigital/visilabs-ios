@@ -628,6 +628,7 @@ Visilabs.callAPI().recommend(zoneID: "6", productCode: "pc", filters: filters){ 
 
 | case      | example |
 | ----------- | ----------- |
+| PRODUCTCODE      | ""       |
 | PRODUCTNAME      | ""       |
 | COLOR   | "blue"        |
 | AGEGROUP   | "18-40"        |

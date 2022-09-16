@@ -23,6 +23,7 @@ public enum VisilabsRecommendationFilterType: Int {
 
 @objc
 public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
+    case PRODUCTCODE
     case PRODUCTNAME
     case COLOR
     case AGEGROUP
@@ -43,6 +44,8 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
     
     public var rawValue: RawValue {
         switch self {
+        case .PRODUCTCODE:
+            return "PRODUCTCODE"
         case .PRODUCTNAME:
             return "PRODUCTNAME"
         case .COLOR:
@@ -79,6 +82,8 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
     // swiftlint:disable cyclomatic_complexity
     public init?(rawValue: RawValue) {
         switch rawValue {
+        case "PRODUCTCODE":
+            self = .PRODUCTCODE
         case "PRODUCTNAME":
             self = .PRODUCTNAME
         case "COLOR":
