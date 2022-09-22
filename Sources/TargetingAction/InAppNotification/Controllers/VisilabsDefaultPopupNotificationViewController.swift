@@ -15,25 +15,25 @@ public final class VisilabsDefaultPopupNotificationViewController: UIViewControl
     var player: AVPlayer?
 
     convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
-                     emailForm: MailSubscriptionViewModel? = nil,
-                     scratchToWin: ScratchToWinModel? = nil) {
-        self.init()
-        self.visilabsInAppNotification = visilabsInAppNotification
-        mailForm = emailForm
-        self.scratchToWin = scratchToWin
+                         emailForm: MailSubscriptionViewModel? = nil,
+                         scratchToWin: ScratchToWinModel? = nil) {
+            self.init()
+            self.visilabsInAppNotification = visilabsInAppNotification
+            mailForm = emailForm
+            self.scratchToWin = scratchToWin
 
-        if let image = visilabsInAppNotification?.image {
-            if let imageGif = UIImage.gif(data: image) {
-                self.image = imageGif
-            } else {
-                self.image = UIImage(data: image)
+            if let image = visilabsInAppNotification?.image ?? scratchToWin?.image {
+                if let imageGif = UIImage.gif(data: image) {
+                    self.image = imageGif
+                } else {
+                    self.image = UIImage(data: image)
+                }
+            }
+
+            if let secondImage = visilabsInAppNotification?.secondImage2 {
+                self.secondImage = UIImage.gif(data: secondImage)
             }
         }
-
-        if let secondImage = visilabsInAppNotification?.secondImage2 {
-            self.secondImage = UIImage.gif(data: secondImage)
-        }
-    }
 
     public var standardView: VisilabsPopupDialogDefaultView {
         return view as! VisilabsPopupDialogDefaultView // swiftlint:disable:this force_cast
