@@ -1113,10 +1113,9 @@ SpinToWin.prototype.convertStringsToNumber = function () {
 };
 
 SpinToWin.prototype.ARGBtoRGBA = function(colorString) {
-	if (colorString === undefined) return colorString;
-	if (colorString && colorString.length < 8) return colorString;
-	if (colorString.substr(0, 1) !== '#') return colorString.replace(/(..)(......)/, '$2$1');
-	return colorString.replace(/#(..)(......)/, '#$2$1');
+    if (!colorString || colorString.length < 8) return colorString;
+    if(colorString.substr(0,1) !=='#') return colorString.replace(/(..)(......)/, '$2$1');
+    return colorString.replace(/#(..)(......)/, '#$2$1');
 };
 
 SpinToWin.prototype.setContent = function () {
