@@ -93,9 +93,14 @@ class VisilabsLocationManager: NSObject {
         }
         VisilabsGeofenceState.setGeofenceEnabled(true)
         updateTracking(location: nil, fromInit: fromInit)
-        if let geoEntities = geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
-            replaceSyncedGeofences(geoEntities)
+        do {
+            if let geoEntities = try geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
+                replaceSyncedGeofences(geoEntities)
+            }
+        } catch {
+            print("Visilabs Location Manager Error")
         }
+        
         fetchGeofences()
     }
     

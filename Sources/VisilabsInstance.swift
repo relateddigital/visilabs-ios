@@ -317,11 +317,16 @@ extension VisilabsInstance {
             var eQueue = Queue()
             var vUser = VisilabsUser()
             var chan = ""
-            self.readWriteLock.read {
-                eQueue = self.eventsQueue
-                vUser = self.visilabsUser
-                chan = self.visilabsProfile.channel
+            do {
+                self.readWriteLock.read {
+                    eQueue = self.eventsQueue
+                    vUser = self.visilabsUser
+                    chan = self.visilabsProfile.channel
+                }
+            } catch {
+                print("error")
             }
+            
             let result = self.visilabsEventInstance.customEvent(pageName: pageName,
                                                                 properties: properties,
                                                                 eventsQueue: eQueue,
