@@ -53,7 +53,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <LocationScenarioReference
-         identifier = "../VisilabsExample/LocationTester.gpx"
+         identifier = "../VisilabsExample/gpxgenerator_path_3.gpx"
          referenceType = "0">
       </LocationScenarioReference>
    </LaunchAction>

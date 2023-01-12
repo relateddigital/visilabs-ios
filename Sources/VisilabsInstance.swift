@@ -10,7 +10,6 @@ import SystemConfiguration
 import UIKit
 import UserNotifications
 
-
 typealias Queue = [[String: String]]
 
 public struct VisilabsUser: Codable {
@@ -46,13 +45,14 @@ public struct VisilabsProfile: Codable {
     public var requestTimeoutInterval: TimeInterval {
         return TimeInterval(requestTimeoutInSeconds)
     }
+
     public var useInsecureProtocol = false
 }
 
 class urlConstant {
     static var shared = urlConstant()
     var urlPrefix = "s.visilabs.net"
-    var securityTag = "https"    
+    var securityTag = "https"
     func setTest() {
         urlPrefix = "tests.visilabs.net"
         securityTag = "http"
@@ -121,12 +121,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          maxGeofenceCount: Int,
          isIDFAEnabled: Bool = true,
          loggingEnabled: Bool = false) {
-        
         if loggingEnabled {
             VisilabsLogger.enableLevels([.debug, .info, .warning, .error])
             VisilabsLogger.info("Logging Enabled")
         }
-        
+
         // TO_DO: bu reachability doğru çalışıyor mu kontrol et
         if let reachability = VisilabsInstance.reachability {
             var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil,
@@ -176,11 +175,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
-        
+
         if let appVersion = VisilabsHelper.getAppVersion() {
             visilabsUser.appVersion = appVersion
         }
-        
+
         if isIDFAEnabled {
             VisilabsHelper.getIDFA { uuid in
                 if let idfa = uuid {
@@ -188,7 +187,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                 }
             }
         }
-        
+
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
             VisilabsPersistence.archiveUser(visilabsUser)
@@ -199,21 +198,21 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         VisilabsHelper.computeWebViewUserAgent { userAgentString in
             self.visilabsUser.userAgent = userAgentString
         }
-        
+
         let ncd = NotificationCenter.default
         observers = []
-        
+
         if !VisilabsHelper.isiOSAppExtension() {
             observers?.append(ncd.addObserver(
-                                forName: UIApplication.didBecomeActiveNotification,
-                                object: nil,
-                                queue: nil,
-                                using: self.applicationDidBecomeActive(_:)))
+                forName: UIApplication.didBecomeActiveNotification,
+                object: nil,
+                queue: nil,
+                using: self.applicationDidBecomeActive(_:)))
             observers?.append(ncd.addObserver(
-                                forName: UIApplication.willResignActiveNotification,
-                                object: nil,
-                                queue: nil,
-                                using: self.applicationWillResignActive(_:)))
+                forName: UIApplication.willResignActiveNotification,
+                object: nil,
+                queue: nil,
+                using: self.applicationWillResignActive(_:)))
         }
     }
 
@@ -233,7 +232,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             return nil
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self,
                                                   name: UIApplication.didBecomeActiveNotification,
@@ -255,14 +254,12 @@ public class VisilabsInstance: CustomDebugStringConvertible {
 // MARK: - IDFA
 
 extension VisilabsInstance {
-    
     public func requestIDFA() {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             return
         }
-        
+
         VisilabsHelper.getIDFA { uuid in
             if let idfa = uuid {
                 self.visilabsUser.identifierForAdvertising = idfa
@@ -270,36 +267,32 @@ extension VisilabsInstance {
             }
         }
     }
-    
 }
 
 // MARK: - EVENT
 
 extension VisilabsInstance {
-    
     private func checkPushPermission() {
-            let current = UNUserNotificationCenter.current()
-            current.getNotificationSettings(completionHandler: { permission in
-                switch permission.authorizationStatus {
-                case .authorized:
-                    VisilabsConstants.pushPermitStatus = "granted"
-                case .denied:
-                    VisilabsConstants.pushPermitStatus = "denied"
-                case .notDetermined:
-                    VisilabsConstants.pushPermitStatus = "denied"
-                case .provisional:
-                    VisilabsConstants.pushPermitStatus = "default"
-                case .ephemeral:
-                    VisilabsConstants.pushPermitStatus = "denied"
-                @unknown default:
-                    VisilabsConstants.pushPermitStatus = "denied"
-                }
-            })
-        }
-    
-    
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { permission in
+            switch permission.authorizationStatus {
+            case .authorized:
+                VisilabsConstants.pushPermitStatus = "granted"
+            case .denied:
+                VisilabsConstants.pushPermitStatus = "denied"
+            case .notDetermined:
+                VisilabsConstants.pushPermitStatus = "denied"
+            case .provisional:
+                VisilabsConstants.pushPermitStatus = "default"
+            case .ephemeral:
+                VisilabsConstants.pushPermitStatus = "denied"
+            @unknown default:
+                VisilabsConstants.pushPermitStatus = "denied"
+            }
+        })
+    }
+
     public func customEvent(_ pageName: String, properties: [String: String]) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             return
@@ -309,24 +302,25 @@ extension VisilabsInstance {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
-        
+
         checkPushPermission()
-        
+
         trackingQueue.async { [weak self, pageName, properties] in
             guard let self = self else { return }
             var eQueue = Queue()
             var vUser = VisilabsUser()
             var chan = ""
-            do {
-                self.readWriteLock.read {
+
+            self.readWriteLock.read {
+                do {
                     eQueue = self.eventsQueue
                     vUser = self.visilabsUser
                     chan = self.visilabsProfile.channel
+                } catch {
+                    print("error")
                 }
-            } catch {
-                print("error")
             }
-            
+
             let result = self.visilabsEventInstance.customEvent(pageName: pageName,
                                                                 properties: properties,
                                                                 eventsQueue: eQueue,
@@ -357,7 +351,6 @@ extension VisilabsInstance {
     }
 
     public func sendCampaignParameters(properties: [String: String]) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             return
@@ -396,12 +389,11 @@ extension VisilabsInstance {
     }
 
     public func login(exVisitorId: String, properties: [String: String] = [String: String]()) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             return
         }
-        
+
         if exVisitorId.isEmptyOrWhitespace {
             VisilabsLogger.error("login can not be called with empty exVisitorId.")
             return
@@ -414,12 +406,11 @@ extension VisilabsInstance {
     }
 
     public func signUp(exVisitorId: String, properties: [String: String] = [String: String]()) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             return
         }
-        
+
         if exVisitorId.isEmptyOrWhitespace {
             VisilabsLogger.error("signUp can not be called with empty exVisitorId.")
             return
@@ -434,11 +425,11 @@ extension VisilabsInstance {
     public func getExVisitorId() -> String? {
         return visilabsUser.exVisitorId
     }
-    
+
     public func getUser() -> VisilabsUser {
         return visilabsUser
     }
-    
+
     public func getProfile() -> VisilabsProfile {
         return visilabsProfile
     }
@@ -450,7 +441,6 @@ extension VisilabsInstance {
         visilabsUser.cookieId = VisilabsHelper.generateCookieId()
         VisilabsPersistence.archiveUser(visilabsUser)
     }
-    
 }
 
 // MARK: - PERSISTENCE
@@ -500,13 +490,12 @@ extension VisilabsInstance {
     public func getFavoriteAttributeActions(actionId: Int? = nil,
                                             completion: @escaping ((_ response: VisilabsFavoriteAttributeActionResponse)
                                                 -> Void)) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             completion(VisilabsFavoriteAttributeActionResponse(favorites: [VisilabsFavoriteAttribute: [String]](), error: .noData))
             return
         }
-        
+
         targetingActionQueue.async { [weak self] in
             self?.networkQueue.async { [weak self] in
                 guard let self = self else { return }
@@ -603,16 +592,14 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 // MARK: - Story
 
 extension VisilabsInstance {
-    
     public func getStoryViewAsync(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil
                                   , completion: @escaping ((_ storyHomeView: VisilabsStoryHomeView?) -> Void)) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             completion(nil)
             return
         }
-        
+
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
         let storyHomeViewController = VisilabsStoryHomeViewController()
@@ -622,7 +609,7 @@ extension VisilabsInstance {
         visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] = storyHomeView
         storyHomeView.setDelegates()
         storyHomeViewController.collectionView = storyHomeView.collectionView
-        
+
         trackingQueue.async { [weak self, actionId, guid] in
             guard let self = self else { return }
             self.networkQueue.async { [weak self, actionId, guid] in
@@ -631,36 +618,35 @@ extension VisilabsInstance {
                                                                 guid: guid,
                                                                 actionId: actionId,
                                                                 completion: { response in
-                    if let error = response.error {
-                        VisilabsLogger.error(error)
-                        completion(nil)
-                    } else {
-                        if let guid = response.guid, response.storyActions.count > 0,
-                           let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid],
-                           let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] {
-                            DispatchQueue.main.async {
-                                storyHomeViewController.loadStoryAction(response.storyActions.first!)
-                                storyHomeView.collectionView.reloadData()
-                                storyHomeView.setDelegates()
-                                storyHomeViewController.collectionView = storyHomeView.collectionView
-                                completion(storyHomeView)
-                            }
-                        } else {
-                            completion(nil)
-                        }
-                    }
-                })
+                                                                    if let error = response.error {
+                                                                        VisilabsLogger.error(error)
+                                                                        completion(nil)
+                                                                    } else {
+                                                                        if let guid = response.guid, response.storyActions.count > 0,
+                                                                           let storyHomeViewController = self.visilabsTargetingActionInstance.visilabsStoryHomeViewControllers[guid],
+                                                                           let storyHomeView = self.visilabsTargetingActionInstance.visilabsStoryHomeViews[guid] {
+                                                                            DispatchQueue.main.async {
+                                                                                storyHomeViewController.loadStoryAction(response.storyActions.first!)
+                                                                                storyHomeView.collectionView.reloadData()
+                                                                                storyHomeView.setDelegates()
+                                                                                storyHomeViewController.collectionView = storyHomeView.collectionView
+                                                                                completion(storyHomeView)
+                                                                            }
+                                                                        } else {
+                                                                            completion(nil)
+                                                                        }
+                                                                    }
+                                                                })
             }
         }
     }
-    
+
     public func getStoryView(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil) -> VisilabsStoryHomeView {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
             return VisilabsStoryHomeView()
         }
-        
+
         let guid = UUID().uuidString
         let storyHomeView = VisilabsStoryHomeView()
         let storyHomeViewController = VisilabsStoryHomeViewController()
@@ -709,12 +695,10 @@ extension VisilabsInstance {
                           filters: [VisilabsRecommendationFilter] = [],
                           properties: [String: String] = [:],
                           completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
         }
-        
-        
+
         recommendationQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
             self?.networkQueue.async { [weak self, zoneID, productCode, filters, properties, completion] in
                 guard let self = self else { return }
@@ -735,17 +719,16 @@ extension VisilabsInstance {
             }
         }
     }
-    
+
     public func trackRecommendationClick(qs: String) {
-        
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
         }
-        
+
         let qsArr = qs.components(separatedBy: "&")
         var properties = [String: String]()
         properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
-        if(qsArr.count > 1) {
+        if qsArr.count > 1 {
             for queryItem in qsArr {
                 let arrComponents = queryItem.components(separatedBy: "=")
                 if arrComponents.count == 2 {
@@ -758,13 +741,11 @@ extension VisilabsInstance {
         }
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
-    
 }
 
 // MARK: - GEOFENCE
 
 extension VisilabsInstance {
-
     public var locationServicesEnabledForDevice: Bool {
         return VisilabsGeofenceState.locationServicesEnabledForDevice
     }
@@ -772,15 +753,14 @@ extension VisilabsInstance {
     public var locationServiceStateStatusForApplication: VisilabsCLAuthorizationStatus {
         return VisilabsGeofenceState.locationServiceStateStatusForApplication
     }
-    
+
     public func sendLocationPermission() {
         visilabsLocationManager.sendLocationPermission(geofenceEnabled: visilabsProfile.geofenceEnabled)
     }
-    
+
     public func requestLocationPermissions() {
         visilabsLocationManager.requestLocationPermissions()
     }
-
 }
 
 // MARK: - SUBSCRIPTION MAIL
@@ -810,14 +790,13 @@ extension VisilabsInstance {
     }
 }
 
-// MARK: -REMOTE CONFIG
+// MARK: - REMOTE CONFIG
 
 extension VisilabsInstance {
-
     @objc private func applicationDidBecomeActive(_ notification: Notification) {
         visilabsRemoteConfigInstance.applicationDidBecomeActive()
     }
-    
+
     @objc private func applicationWillResignActive(_ notification: Notification) {
         visilabsRemoteConfigInstance.applicationWillResignActive()
     }
