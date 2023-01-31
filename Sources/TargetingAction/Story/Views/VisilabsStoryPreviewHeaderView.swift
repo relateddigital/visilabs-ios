@@ -135,6 +135,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
                 return
             }
        }
+        labelStory?.numberOfLines = 0
         labelStory?.font = finalFont
     }
     private func installLayoutConstraints() {
@@ -177,7 +178,7 @@ final class VisilabsStoryPreviewHeaderView: UIView {
         // Setting constraints for snapperNameLabel
         NSLayoutConstraint.activate([
             snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
-            snaperNameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 100),
+            snaperNameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
             snaperNameLabel.igCenterYAnchor.constraint(equalTo: detailView.igCenterYAnchor)
             ])
     }

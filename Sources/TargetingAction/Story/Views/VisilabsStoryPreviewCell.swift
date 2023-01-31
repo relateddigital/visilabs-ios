@@ -471,6 +471,18 @@ final class VisilabsStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate
                     }
                 }
             }
+            
+            if let story = self.story, story.items.count > self.snapIndex {
+                if story.items[self.snapIndex].buttonText.count > 0 {
+                    let snap = story.items[self.snapIndex]
+                    snapButton.isHidden = false
+                    snapButton.setTitle(snap.buttonText, for: .normal)
+                    snapButton.backgroundColor = snap.buttonColor
+                    snapButton.setTitleColor(snap.buttonTextColor, for: .normal)
+                } else {
+                    snapButton.isHidden = false
+                }
+            }
         }
     }
     @objc private func didLongPress(_ sender: UILongPressGestureRecognizer) {
