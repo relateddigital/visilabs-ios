@@ -259,7 +259,7 @@ extension VisilabsPopupDialogDefaultView {
         titleLabel.leading(to: self)
         titleLabel.trailing(to: self)
         if titleLabel.text != "" {
-            titleLabel.height(32)
+            NSLayoutConstraint.activate([titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 32)])
         } else {
             titleLabel.height(0)
         }
@@ -268,7 +268,7 @@ extension VisilabsPopupDialogDefaultView {
         messageLabel.leading(to: self)
         messageLabel.trailing(to: self)
         if messageLabel.text != "" {
-            messageLabel.height(32)
+            NSLayoutConstraint.activate([messageLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 32)])
         } else {
             messageLabel.height(0)
         }
