@@ -356,7 +356,9 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             not = createSecondPopup()
         }
         if let n = not {
-            Visilabs.callAPI().showNotification(n)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                Visilabs.callAPI().showNotification(n)
+            })
         }
     }
 
