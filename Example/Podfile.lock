@@ -3,7 +3,7 @@ PODS:
   - Colorful (3.0.0)
   - Eureka (5.3.6)
   - Euromsg (2.6.1)
-  - VisilabsIOS (3.8.0)
+  - VisilabsIOS (3.8.1)
 
 DEPENDENCIES:
   - CleanyModal
@@ -28,7 +28,7 @@ SPEC CHECKSUMS:
   Colorful: 9e093edacaa9fb73512ad9da157f0707b82d2542
   Eureka: 28ad9dec6286cd7cd601fdf8e8df39bb7356a8f4
   Euromsg: 2414b3b652a9b01da5f9a13380be9f01eb8b354b
-  VisilabsIOS: 0a77194a988c40eae6b18137c18d52a3018797ae
+  VisilabsIOS: bfb8b987037edf1f9b6a4ac18370ac8bef6f9177
 
 PODFILE CHECKSUM: 37eb5f3e9a2f3ac48e581d087a56e280a7f7889b
 
