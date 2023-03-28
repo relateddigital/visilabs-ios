@@ -96,7 +96,7 @@ extension UIColor {
         return (red, green, blue, alpha)
     }
 
-    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor) -> [[CGColor]] {
+    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ numberRange: String) -> [[CGColor]] {
 
         var colors: [[CGColor]] = []
         var oldColor = color1
@@ -132,10 +132,23 @@ extension UIColor {
 
         colors.append([oldColor.cgColor, color2.cgColor])
 
+        if numberRange == "0-10" {
+
+                let newR = c2R + ((c1R - c2R) / 10) * CGFloat(1)
+                let newG = c2G + ((c1G - c2G) / 10) * CGFloat(1)
+                let newB = c2B + ((c1B - c2B) / 10) * CGFloat(1)
+
+                let newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
+
+                colors.append([oldColor.cgColor, newColor.cgColor])
+
+                oldColor = newColor
+        }
+
         return colors
     }
 
-    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ color3: UIColor) -> [[CGColor]] {
+    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ color3: UIColor, _ numberRange: String) -> [[CGColor]] {
 
         var colors: [[CGColor]] = []
         var oldColor = color1
@@ -180,6 +193,18 @@ extension UIColor {
         }
 
         colors.append([oldColor.cgColor, color3.cgColor])
+
+        if numberRange == "0-10" {
+                let newR = c3R + ((c1R - c3R) / 5) * CGFloat(1)
+                let newG = c3G + ((c1G - c3G) / 5) * CGFloat(1)
+                let newB = c3B + ((c1B - c3B) / 5) * CGFloat(1)
+
+                let newColor = UIColor(red: newR/255, green: newG/255, blue: newB/255, alpha: 1.0)
+
+                colors.append([oldColor.cgColor, newColor.cgColor])
+
+                oldColor = newColor
+        }
 
         return colors
     }

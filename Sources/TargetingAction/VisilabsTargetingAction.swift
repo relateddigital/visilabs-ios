@@ -925,5 +925,33 @@ class VisilabsTargetingAction {
         }
         return props
     }
+    
+    // MARK: - NPS With Numbers
+
+    func getNpsWithNumbers(properties: [String: String], visilabsUser: VisilabsUser, guid: String, completion: @escaping ((_ response: VisilabsInAppNotification?) -> Void)) {
+        
+        VisilabsRequest.sendInAppNotificationRequest(properties: properties,
+                                                     headers: [String: String](),
+                                                     timeoutInterval: visilabsProfile.requestTimeoutInterval,
+                                                     completion: { inAppNotificationResult in
+            guard let result = inAppNotificationResult else {
+                completion(nil)
+                return
+            }
+            var notif: VisilabsInAppNotification? = nil
+
+            for rawNotif in result {
+                if let actionData = rawNotif["actiondata"] as? [String: Any] {
+                    if let typeString = actionData["msg_type"] as? String,
+                       VisilabsInAppNotificationType(rawValue: typeString) != nil,
+                       let notification = VisilabsInAppNotification(JSONObject: rawNotif), notification.displayType == VisilabsConstants.inline {
+                        notif = notification
+                    }
+                }
+            }
+            completion(notif)
+        })
+        
+    }
 
 }
