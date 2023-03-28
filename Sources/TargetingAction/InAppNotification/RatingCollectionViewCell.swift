@@ -96,7 +96,7 @@ extension UIColor {
         return (red, green, blue, alpha)
     }
 
-    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ numberRange: String) -> [[CGColor]] {
+    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ numberRange: String = "0-10") -> [[CGColor]] {
 
         var colors: [[CGColor]] = []
         var oldColor = color1
@@ -148,7 +148,7 @@ extension UIColor {
         return colors
     }
 
-    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ color3: UIColor, _ numberRange: String) -> [[CGColor]] {
+    static func getGradientColorArray(_ color1: UIColor, _ color2: UIColor, _ color3: UIColor, _ numberRange: String = "0-10") -> [[CGColor]] {
 
         var colors: [[CGColor]] = []
         var oldColor = color1

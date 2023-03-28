@@ -9,6 +9,7 @@ target 'VisilabsExample' do
   pod 'Colorful'
   pod 'CleanyModal'
   pod 'Euromsg'
+  pod 'ScrollingContentViewController'
 end
 
 

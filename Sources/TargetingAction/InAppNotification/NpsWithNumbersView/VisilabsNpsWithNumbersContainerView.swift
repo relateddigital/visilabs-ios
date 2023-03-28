@@ -17,7 +17,7 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
     
     fileprivate var button: VisilabsPopupDialogButton?
     public var collectionView: VisilabsNpsWithNumbersCollectionView!
-
+    
     internal lazy var shadowContainer: UIView = {
         let shadowContainer = UIView(frame: .zero)
         shadowContainer.isUserInteractionEnabled = true
@@ -26,7 +26,7 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         shadowContainer.clipsToBounds = false
         return shadowContainer
     }()
-
+    
     internal lazy var buttonStackView: UIStackView = {
         let buttonStackView = UIStackView()
         buttonStackView.isUserInteractionEnabled = true
@@ -38,7 +38,7 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         buttonStackView.spacing = 0
         return buttonStackView
     }()
-
+    
     internal lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [self.buttonStackView])
         stackView.isUserInteractionEnabled = true
@@ -49,25 +49,25 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         stackView.spacing = 0
         return stackView
     }()
-
-
+    
+    
     // MARK: - Constraints
-
+    
     /// The center constraint of the shadow container
     internal var centerYConstraint: NSLayoutConstraint?
-
+    
     // MARK: - Initializers
     
     internal init(frame: CGRect, notification: VisilabsInAppNotification) {
         super.init(frame: frame)
         self.notification = notification
-        self.backgroundColor = UIColor(white: 0.535, alpha: 0.5)
+        self.backgroundColor = .clear
         buttonStackView.accessibilityIdentifier = "buttonStack"
         if let backgroundColor = notification.backGroundColor {
             shadowContainer.backgroundColor = backgroundColor
         }
         buttonStackView.axis = .vertical
-                
+        
         button = VisilabsPopupDialogButton(
             title: notification.buttonText!,
             font: notification.buttonTextFont,
@@ -120,6 +120,9 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
     }
     
     public override func layoutSubviews() {
+        
+        
+        
         DispatchQueue.main.async { [self] in
             collectionView.npsDelegate = self
             collectionView.isUserInteractionEnabled = true
@@ -133,11 +136,13 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
                 //collectionView.imageHeightConstraint?.constant = a // standardView.imageView.pv_heightForImageView(isVideoExist: false)
                 //collectionView.imageHeightConstraint?.isActive = true
                 //collectionView.imageView.height(a)
+                self.superview?.layoutSubviews()
             }
             //self.setupViews()
         }
+        
     }
-
+    
     public override func removeFromSuperview() {
         super.removeFromSuperview()
         player?.pause()
@@ -156,27 +161,27 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         
     }
     
-
+    
     @objc fileprivate func buttonTapped(_ button: VisilabsPopupDialogButton) {
         button.buttonAction?()
     }
-
-
     
-
+    
+    
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - View setup
-
+    
     internal func setupViews() {
-
+        
         addSubview(shadowContainer)
         shadowContainer.addSubview(stackView)
-
+        
         var constraints = [NSLayoutConstraint]()
-
+        
         
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
             //shadowContainer.width(preferredWidth)
@@ -187,8 +192,8 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
             shadowContainer.leading(to: self, offset: 0, relation: .equal)
             shadowContainer.trailing(to: self, offset: 0, relation: .equal)
         }
-         
-
+        
+        
         constraints += [NSLayoutConstraint(item: shadowContainer,
                                            attribute: .centerX,
                                            relatedBy: .equal,
@@ -196,7 +201,7 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
                                            attribute: .centerX,
                                            multiplier: 1,
                                            constant: 0)]
-
+        
         centerYConstraint = NSLayoutConstraint(item: shadowContainer,
                                                attribute: .centerY,
                                                relatedBy: .equal,
@@ -204,13 +209,13 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
                                                attribute: .centerY,
                                                multiplier: 1,
                                                constant: 0)
-
+        
         if let centerYConstraint = centerYConstraint {
             constraints.append(centerYConstraint)
         }
-
+        
         stackView.allEdges(to: shadowContainer)
-
+        
         // Activate constraints
         NSLayoutConstraint.activate(constraints)
     }
