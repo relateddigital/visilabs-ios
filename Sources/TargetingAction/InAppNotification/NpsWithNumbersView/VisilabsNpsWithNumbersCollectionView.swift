@@ -35,7 +35,6 @@ public class VisilabsNpsWithNumbersCollectionView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = .brown
-        imageView.isUserInteractionEnabled = true
         //imageView.setImage(withUrl: notification.imageUrl)
         if let image = notification.image {
             imageView.image = UIImage(data: image)
@@ -77,7 +76,7 @@ public class VisilabsNpsWithNumbersCollectionView: UIView {
         numberRating.leading(to: self, offset: 0)
         numberRating.trailing(to: self, offset: 0)
         numberRating.bottom(to: self, offset: -10.0)
-        numberRating.backgroundColor = .magenta
+        numberRating.backgroundColor = .clear
         titleLabel.centerX(to: self)
         messageLabel.centerX(to: self)
         numberRating.delegate = self

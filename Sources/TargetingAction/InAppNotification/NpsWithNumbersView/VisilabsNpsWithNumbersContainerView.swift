@@ -14,24 +14,21 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
     var player : AVPlayer?
     
     var notification: VisilabsInAppNotification?
+    var delegate: VisilabsNpsWithNumbersDelegate?
     
     fileprivate var button: VisilabsPopupDialogButton?
     public var collectionView: VisilabsNpsWithNumbersCollectionView!
     
     internal lazy var shadowContainer: UIView = {
         let shadowContainer = UIView(frame: .zero)
-        shadowContainer.isUserInteractionEnabled = true
         shadowContainer.translatesAutoresizingMaskIntoConstraints = false
-        shadowContainer.backgroundColor = .yellow
+        shadowContainer.backgroundColor = .clear
         shadowContainer.clipsToBounds = false
         return shadowContainer
     }()
     
     internal lazy var buttonStackView: UIStackView = {
         let buttonStackView = UIStackView()
-        buttonStackView.isUserInteractionEnabled = true
-        buttonStackView.isAccessibilityElement = true
-        buttonStackView.layer.isAccessibilityElement = true
         buttonStackView.backgroundColor = .clear
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         buttonStackView.distribution = .fillEqually
@@ -58,9 +55,10 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
     
     // MARK: - Initializers
     
-    internal init(frame: CGRect, notification: VisilabsInAppNotification) {
+    internal init(frame: CGRect, notification: VisilabsInAppNotification, delegate: VisilabsNpsWithNumbersDelegate? = nil) {
         super.init(frame: frame)
         self.notification = notification
+        self.delegate = delegate
         self.backgroundColor = .clear
         buttonStackView.accessibilityIdentifier = "buttonStack"
         if let backgroundColor = notification.backGroundColor {
@@ -74,7 +72,6 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
             buttonTextColor: notification.buttonTextColor,
             buttonColor: notification.buttonColor, action: commonButtonAction)
         button!.isEnabled = false
-        button!.isUserInteractionEnabled = true
         
         collectionView = VisilabsNpsWithNumbersCollectionView(frame:.zero, inAppNotification: notification)
         stackView.insertArrangedSubview(collectionView, at: 0)
@@ -89,7 +86,6 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
     
     func commonButtonAction() {
         guard let notification = self.notification else { return }
-        var returnCallback = true
         var additionalTrackingProperties = [String: String]()
         
         if let num = collectionView.selectedNumber {
@@ -97,32 +93,12 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         }
         additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
         additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-        
-        // Check if second popup coming
-        var callToActionURL: URL? = notification.callToActionUrl
-        /*
-         self.delegate?.notificationShouldDismiss(controller: self,
-         callToActionURL: callToActionURL,
-         shouldTrack: true,
-         additionalTrackingProperties: additionalTrackingProperties)
-         */
-        
-        if returnCallback {
-            
-            if notification.buttonFunction == VisilabsConstants.copyRedirect {
-                if let promoCode = notification.promotionCode {
-                    UIPasteboard.general.string = promoCode
-                    VisilabsHelper.showCopiedClipboardMessage()
-                }
-            }
-            //self.inappButtonDelegate?.didTapButton(notification)
-        }
+
+        Visilabs.callAPI().trackNotification(notification, event: "event", properties: additionalTrackingProperties)
+        self.delegate?.npsItemClicked(npsLink: notification.iosLink)
     }
     
     public override func layoutSubviews() {
-        
-        
-        
         DispatchQueue.main.async { [self] in
             collectionView.npsDelegate = self
             collectionView.isUserInteractionEnabled = true
@@ -157,7 +133,6 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         button!.needsLeftSeparator = buttonStackView.axis == .horizontal
         buttonStackView.addArrangedSubview(button!)
         button!.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        button!.isUserInteractionEnabled = true
         
     }
     
@@ -166,9 +141,7 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         button.buttonAction?()
     }
     
-    
-    
-    
+
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
