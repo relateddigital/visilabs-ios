@@ -23,14 +23,6 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         return textField
     }()
     
-    var storyButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 10
-        button.setTitle("Show Story", for: .normal)
-        return button
-    }()
-    
     var storyAsyncButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemBlue
@@ -56,11 +48,9 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         view.backgroundColor = .white
         actionIdTextField.delegate = self
         actionIdTextField.addTarget(self, action: #selector(self.textFieldFilter), for: .editingChanged)
-        storyButton.addTarget(self, action: #selector(showStory), for: .touchUpInside)
         storyAsyncButton.addTarget(self, action: #selector(showStoryAsync), for: .touchUpInside)
         npsWithNumbersButton.addTarget(self, action: #selector(showNpsWithNumbersAsync), for: .touchUpInside)
         self.view.addSubview(actionIdTextField)
-        self.view.addSubview(storyButton)
         self.view.addSubview(storyAsyncButton)
         self.view.addSubview(npsWithNumbersButton)
         setupLayout()
@@ -75,16 +65,10 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         actionIdTextField.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,
                                                    constant: 0).isActive = true
         
-        storyButton.translatesAutoresizingMaskIntoConstraints = false
-        storyButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        storyButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        storyButton.topAnchor.constraint(equalTo: actionIdTextField.bottomAnchor, constant: 20).isActive = true
-        storyButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,constant: 0).isActive = true
-        
         storyAsyncButton.translatesAutoresizingMaskIntoConstraints = false
         storyAsyncButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         storyAsyncButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        storyAsyncButton.topAnchor.constraint(equalTo: storyButton.bottomAnchor, constant: 20).isActive = true
+        storyAsyncButton.topAnchor.constraint(equalTo: actionIdTextField.bottomAnchor, constant: 20).isActive = true
         storyAsyncButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,constant: 0).isActive = true
         
         npsWithNumbersButton.translatesAutoresizingMaskIntoConstraints = false
@@ -110,16 +94,6 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-    @objc func showStory(sender: UIButton) {
-        storyHomeView?.removeFromSuperview()
-        npsView?.removeFromSuperview()
-        storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""), urlDelegate: self)
-        self.view.addSubview(storyHomeView!)
-        storyHomeView!.translatesAutoresizingMaskIntoConstraints = false
-        storyHomeView!.topAnchor.constraint(equalTo: npsWithNumbersButton.bottomAnchor, constant: 20).isActive = true
-        storyHomeView!.widthAnchor.constraint(equalTo: view.saferAreaLayoutGuide.widthAnchor).isActive = true
-        storyHomeView!.heightAnchor.constraint(equalToConstant: 100).isActive = true
-    }
     
     @objc func showStoryAsync(sender: UIButton) {
         Visilabs.callAPI().getStoryViewAsync(actionId: Int(self.actionIdTextField.text ?? "")){ storyHomeView in
@@ -155,11 +129,11 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
                     self.npsView = npsView
                     self.view.addSubview(npsView)
                     npsView.translatesAutoresizingMaskIntoConstraints = false
-                    npsView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: 20).isActive = true
+                    var topConstraint = npsView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: 20)
+                    topConstraint.priority = .required
+                    topConstraint.isActive = true
                     npsView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
-                    npsView.heightAnchor.constraint(equalToConstant: 500).isActive = true
-                    
-                    
+                    npsView.heightAnchor.constraint(greaterThanOrEqualToConstant: 400).isActive = true
                     
                 } else {
                     print("There is no story action matching your criteria.")
@@ -167,10 +141,8 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
             }
             
         }
-        
-        
-        
     }
+    
     
 }
 
