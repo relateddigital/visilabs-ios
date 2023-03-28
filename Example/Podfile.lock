@@ -3,7 +3,6 @@ PODS:
   - Colorful (3.0.0)
   - Eureka (5.3.6)
   - Euromsg (2.6.1)
-  - ScrollingContentViewController (1.4.0)
   - VisilabsIOS (3.9.0)
 
 DEPENDENCIES:
@@ -11,7 +10,6 @@ DEPENDENCIES:
   - Colorful
   - Eureka
   - Euromsg
-  - ScrollingContentViewController
   - VisilabsIOS (from `../`)
 
 SPEC REPOS:
@@ -20,7 +18,6 @@ SPEC REPOS:
     - Colorful
     - Eureka
     - Euromsg
-    - ScrollingContentViewController
 
 EXTERNAL SOURCES:
   VisilabsIOS:
@@ -31,9 +28,8 @@ SPEC CHECKSUMS:
   Colorful: 9e093edacaa9fb73512ad9da157f0707b82d2542
   Eureka: 28ad9dec6286cd7cd601fdf8e8df39bb7356a8f4
   Euromsg: 2414b3b652a9b01da5f9a13380be9f01eb8b354b
-  ScrollingContentViewController: 1bff026d6f32c15489dcd22821911eda5fda3801
   VisilabsIOS: 19f9a9c72e58c54e30bd80abdbd31bc37d0dac40
 
-PODFILE CHECKSUM: 373464a4c616f702327b4e6ec469ad36f16a5df4
+PODFILE CHECKSUM: 37eb5f3e9a2f3ac48e581d087a56e280a7f7889b
 
 COCOAPODS: 1.12.0
