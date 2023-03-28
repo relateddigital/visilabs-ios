@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "3.8.1"
+    static let sdkVersion = "3.9.0"
 
     static let HTTP = "http"
     static let HTTPS = urlConstant.shared.securityTag

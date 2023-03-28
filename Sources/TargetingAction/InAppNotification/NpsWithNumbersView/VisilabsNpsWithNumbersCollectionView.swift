@@ -36,7 +36,11 @@ public class VisilabsNpsWithNumbersCollectionView: UIView {
         imageView.clipsToBounds = true
         imageView.backgroundColor = .brown
         imageView.isUserInteractionEnabled = true
-        imageView.setImage(withUrl: notification.imageUrl)
+        //imageView.setImage(withUrl: notification.imageUrl)
+        if let image = notification.image {
+            imageView.image = UIImage(data: image)
+        }
+        
         addSubview(imageView)
 
         titleLabel.text = notification.messageTitle?.removeEscapingCharacters()
@@ -168,6 +172,10 @@ public class VisilabsNpsWithNumbersCollectionView: UIView {
 
 
         NSLC.activate(constraints)
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
     }
 
 }

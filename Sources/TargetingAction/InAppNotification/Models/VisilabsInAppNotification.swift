@@ -188,7 +188,7 @@ public class VisilabsInAppNotification {
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
                 numberColors: [String]?,
-                numberRange: String?,
+                numberRange: String?  = "1-10",
                 waitingTime: Int?,
                 secondPopupType: VisilabsSecondPopupType?,
                 secondPopupTitle: String?,

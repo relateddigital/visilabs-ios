@@ -39,17 +39,30 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         return button
     }()
     
+    var npsWithNumbersButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.setTitle("Nps Numbers Async", for: .normal)
+        return button
+    }()
+    
+    var npsView: VisilabsNpsWithNumbersContainerView?
     var storyHomeView: VisilabsStoryHomeView?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         actionIdTextField.delegate = self
         actionIdTextField.addTarget(self, action: #selector(self.textFieldFilter), for: .editingChanged)
         storyButton.addTarget(self, action: #selector(showStory), for: .touchUpInside)
         storyAsyncButton.addTarget(self, action: #selector(showStoryAsync), for: .touchUpInside)
+        npsWithNumbersButton.addTarget(self, action: #selector(showNpsWithNumbersAsync), for: .touchUpInside)
         self.view.addSubview(actionIdTextField)
         self.view.addSubview(storyButton)
         self.view.addSubview(storyAsyncButton)
+        self.view.addSubview(npsWithNumbersButton)
         setupLayout()
     }
     
@@ -73,6 +86,12 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         storyAsyncButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         storyAsyncButton.topAnchor.constraint(equalTo: storyButton.bottomAnchor, constant: 20).isActive = true
         storyAsyncButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,constant: 0).isActive = true
+        
+        npsWithNumbersButton.translatesAutoresizingMaskIntoConstraints = false
+        npsWithNumbersButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        npsWithNumbersButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        npsWithNumbersButton.topAnchor.constraint(equalTo: storyAsyncButton.bottomAnchor, constant: 20).isActive = true
+        npsWithNumbersButton.centerXAnchor.constraint(equalTo: view.saferAreaLayoutGuide.centerXAnchor,constant: 0).isActive = true
     }
     
     @objc private func textFieldFilter(_ textField: UITextField) {
@@ -93,10 +112,11 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
     
     @objc func showStory(sender: UIButton) {
         storyHomeView?.removeFromSuperview()
+        npsView?.removeFromSuperview()
         storyHomeView = Visilabs.callAPI().getStoryView(actionId: Int(self.actionIdTextField.text ?? ""), urlDelegate: self)
         self.view.addSubview(storyHomeView!)
         storyHomeView!.translatesAutoresizingMaskIntoConstraints = false
-        storyHomeView!.topAnchor.constraint(equalTo: storyAsyncButton.bottomAnchor, constant: 20).isActive = true
+        storyHomeView!.topAnchor.constraint(equalTo: npsWithNumbersButton.bottomAnchor, constant: 20).isActive = true
         storyHomeView!.widthAnchor.constraint(equalTo: view.saferAreaLayoutGuide.widthAnchor).isActive = true
         storyHomeView!.heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
@@ -105,20 +125,53 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         Visilabs.callAPI().getStoryViewAsync(actionId: Int(self.actionIdTextField.text ?? "")){ storyHomeView in
             DispatchQueue.main.async {
                 self.storyHomeView?.removeFromSuperview()
+                self.npsView?.removeFromSuperview()
                 if let storyHomeView = storyHomeView {
                     self.storyHomeView = storyHomeView
                     self.view.addSubview(storyHomeView)
                     storyHomeView.translatesAutoresizingMaskIntoConstraints = false
-                    storyHomeView.topAnchor.constraint(equalTo: self.storyAsyncButton.bottomAnchor, constant: 20).isActive = true
+                    storyHomeView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: 20).isActive = true
                     storyHomeView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
                     storyHomeView.heightAnchor.constraint(equalToConstant: 100).isActive = true
                 } else {
                     print("There is no story action matching your criteria.")
                 }
             }
-
+            
         }
     }
+    
+    @objc func showNpsWithNumbersAsync(sender: UIButton) {
+        
+        var props = [String: String]()
+        props["OM.inapptype"] = "nps_with_numbers"
+        self.storyHomeView?.removeFromSuperview()
+        self.npsView?.removeFromSuperview()
+        
+        Visilabs.callAPI().getNpsWithNumbersView(properties: props){ npsView in
+            DispatchQueue.main.async {
+                
+                if let npsView = npsView {
+                    self.npsView = npsView
+                    self.view.addSubview(npsView)
+                    npsView.translatesAutoresizingMaskIntoConstraints = false
+                    npsView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: 20).isActive = true
+                    npsView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
+                    npsView.heightAnchor.constraint(equalToConstant: 500).isActive = true
+                    
+                    
+                    
+                } else {
+                    print("There is no story action matching your criteria.")
+                }
+            }
+            
+        }
+        
+        
+        
+    }
+    
 }
 
 extension UIView {

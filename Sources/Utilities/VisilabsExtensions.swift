@@ -96,6 +96,8 @@ extension UIImageView {
                             //viewPop.imageView.height(400, relation: .equalOrLess)
                             //viewPop.imageView.width(UIScreen.main.bounds.width, relation: .equalOrLess)
                             self.layoutIfNeeded()
+                            self.superview?.layoutSubviews()
+                            self.superview?.layoutIfNeeded()
                         }
                         
                     }
