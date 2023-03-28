@@ -38,6 +38,7 @@ public class VisilabsInAppNotification {
         public static let promotionTextColor = "promocode_text_color"
         public static let promotionBackgroundColor = "promocode_background_color"
         public static let numberColors = "number_colors"
+        public static let numberRange = "number_range"
         public static let waitingTime = "waiting_time"
         public static let secondPopupType = "secondPopup_type"
         public static let secondPopupMinPoint = "secondPopup_feedbackform_minpoint"
@@ -54,6 +55,8 @@ public class VisilabsInAppNotification {
         public static let videourl = "videourl"
         public static let secondPopupVideourl1 = "secondPopup_videourl1"
         public static let secondPopupVideourl2 = "secondPopup_videourl2"
+        
+        public static let displayType = "display_type"
     }
 
     let actId: Int
@@ -86,6 +89,7 @@ public class VisilabsInAppNotification {
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
     let numberColors: [UIColor]?
+    var numberRange = "1-10"
     let waitingTime: Int?
     let secondPopupType: VisilabsSecondPopupType?
     let secondPopupTitle: String?
@@ -152,6 +156,8 @@ public class VisilabsInAppNotification {
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
 
+    var displayType: String? = "popup"
+    
     public init(actId: Int,
                 type: VisilabsInAppNotificationType,
                 messageTitle: String?,
@@ -182,6 +188,7 @@ public class VisilabsInAppNotification {
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
                 numberColors: [String]?,
+                numberRange: String?,
                 waitingTime: Int?,
                 secondPopupType: VisilabsSecondPopupType?,
                 secondPopupTitle: String?,
@@ -196,7 +203,8 @@ public class VisilabsInAppNotification {
                 carouselItems: [VisilabsCarouselItem]? = nil,
                 videourl: String?,
                 secondPopupVideourl1: String?,
-                secondPopupVideourl2: String?) {
+                secondPopupVideourl2: String?,
+                displayType: String? = "popup") {
         self.actId = actId
         messageType = type.rawValue
         self.type = type
@@ -258,6 +266,7 @@ public class VisilabsInAppNotification {
         self.promotionTextColor = UIColor(hex: promotionTextColor)
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
         self.numberColors = VisilabsHelper.convertColorArray(numberColors)
+        self.numberRange = numberRange ?? "1-10"
         self.waitingTime = waitingTime
         self.secondPopupType = secondPopupType
         self.secondPopupTitle = secondPopupTitle
@@ -282,6 +291,8 @@ public class VisilabsInAppNotification {
         self.videourl = videourl
         self.secondPopupVideourl1 = secondPopupVideourl1
         self.secondPopupVideourl2 = secondPopupVideourl2
+        self.displayType = displayType
+        
         setFonts()
     }
 
@@ -333,6 +344,9 @@ public class VisilabsInAppNotification {
         promotionCode = actionData[PayloadKey.promotionCode] as? String
         promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
         promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
+        
+        displayType = actionData[PayloadKey.displayType] as? String
+        
         var closeButtonColor: UIColor?
         if let cBColor = actionData[PayloadKey.closeButtonColor] as? String {
             if cBColor.lowercased() == "white" {
@@ -377,6 +391,7 @@ public class VisilabsInAppNotification {
         } else {
             numberColors = nil
         }
+        numberRange = actionData[PayloadKey.numberRange] as? String ?? "1-10"
         waitingTime = actionData[PayloadKey.waitingTime] as? Int
 
         // Second Popup Variables

@@ -69,3 +69,39 @@ extension Int {
         return CGFloat(self)
     }
 }
+
+
+
+extension UIImageView {
+    
+    func setImage(withUrl urlString : URL?) {
+        if let url = urlString {
+            self.image = nil
+
+            // if not, download image from url
+            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    if let image = UIImage.gif(data: data!) {
+                        self.image = image
+                        if self.superview is VisilabsNpsWithNumbersCollectionView {
+                            let viewPop = self.superview as! VisilabsNpsWithNumbersCollectionView
+                            let height = viewPop.imageView.pv_heightForImageView(isVideoExist: false)
+                            viewPop.imageHeightConstraint?.constant = height
+                            //viewPop.imageView.height(height)
+                            //viewPop.imageView.height(400, relation: .equalOrLess)
+                            //viewPop.imageView.width(UIScreen.main.bounds.width, relation: .equalOrLess)
+                            self.layoutIfNeeded()
+                        }
+                        
+                    }
+                }
+
+            }).resume()
+        }
+    }
+}

@@ -129,6 +129,12 @@ struct VisilabsConstants {
     static let scratchToWin = "ScratchToWin"
     static let productStatNotifier = "ProductStatNotifier"
     static let drawer = "Drawer"
+    
+    
+    static let appBanners = "app_banners"
+    static let transitionAction = "transition_action"
+    
+    static let inline = "inline"
 
     
     static let actid = "actid"
@@ -241,6 +247,8 @@ struct VisilabsConstants {
     static let wheelSpinAction = "wheel_spin_action"
     static let promocodesSoldoutMessage = "promocodes_soldout_message"
     static let copyButtonFunction = "copybutton_function"
+    static let copyRedirect = "copy_redirect"
+    static let redirect = "redirect"
 
 
     // SpinToWin extended properties
