@@ -592,6 +592,7 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
 // MARK: - Story
 
 extension VisilabsInstance {
+    
     public func getStoryViewAsync(actionId: Int? = nil, urlDelegate: VisilabsStoryURLDelegate? = nil
                                   , completion: @escaping ((_ storyHomeView: VisilabsStoryHomeView?) -> Void)) {
         if VisilabsPersistence.isBlocked() {
@@ -686,7 +687,9 @@ extension VisilabsInstance {
         return storyHomeView
     }
     
-    public func getNpsWithNumbersView(properties:[String: String], completion: @escaping ((VisilabsNpsWithNumbersContainerView?) -> Void)) {
+    public func getNpsWithNumbersView(properties:[String: String],
+                                      delegate: VisilabsNpsWithNumbersDelegate? = nil,
+                                      completion: @escaping ((VisilabsNpsWithNumbersContainerView?) -> Void)) {
         let guid = UUID().uuidString
         
         var props = properties
@@ -716,7 +719,7 @@ extension VisilabsInstance {
             DispatchQueue.main.async {
                 var npsView: VisilabsNpsWithNumbersContainerView? = nil
                 if let notif = notif {
-                    npsView = VisilabsNpsWithNumbersContainerView(frame: .zero, notification: notif)
+                    npsView = VisilabsNpsWithNumbersContainerView(frame: .zero, notification: notif, delegate: delegate)
                     npsView?.layer.isOpaque = true
                 }
                 completion(npsView)

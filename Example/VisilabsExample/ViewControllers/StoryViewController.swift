@@ -122,18 +122,17 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
         self.storyHomeView?.removeFromSuperview()
         self.npsView?.removeFromSuperview()
         
-        Visilabs.callAPI().getNpsWithNumbersView(properties: props){ npsView in
+        Visilabs.callAPI().getNpsWithNumbersView(properties: props, delegate: self){ npsView in
             DispatchQueue.main.async {
                 
                 if let npsView = npsView {
                     self.npsView = npsView
+                    self.npsView = npsView
                     self.view.addSubview(npsView)
                     npsView.translatesAutoresizingMaskIntoConstraints = false
-                    var topConstraint = npsView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: 20)
-                    topConstraint.priority = .required
-                    topConstraint.isActive = true
+                    npsView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: -50).isActive = true
                     npsView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
-                    npsView.heightAnchor.constraint(greaterThanOrEqualToConstant: 400).isActive = true
+                    npsView.heightAnchor.constraint(equalToConstant: 550).isActive = true
                     
                 } else {
                     print("There is no story action matching your criteria.")
@@ -159,5 +158,19 @@ extension UIView {
 extension StoryViewController: VisilabsStoryURLDelegate {
     func urlClicked(_ url: URL) {
         print("You can handle url as you like!")
+    }
+}
+
+extension StoryViewController: VisilabsNpsWithNumbersDelegate {
+    func npsItemClicked(npsLink: String?) {
+        print(npsLink)
+        self.npsView?.removeFromSuperview()
+        
+        let alertController = UIAlertController(title: "Nps Clicked", message: npsLink, preferredStyle: .alert)
+        let close = UIAlertAction(title: "Close", style: .destructive) { _ in
+            print("dismiss tapped")
+        }
+        alertController.addAction(close)
+        self.present(alertController, animated: true)
     }
 }
