@@ -133,12 +133,10 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
                     npsView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: -50).isActive = true
                     npsView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
                     npsView.heightAnchor.constraint(equalToConstant: 550).isActive = true
-                    
                 } else {
-                    print("There is no story action matching your criteria.")
+                    print("There is no nps action matching your criteria.")
                 }
             }
-            
         }
     }
     
