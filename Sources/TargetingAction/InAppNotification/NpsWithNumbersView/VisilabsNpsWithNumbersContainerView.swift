@@ -210,10 +210,3 @@ extension VisilabsNpsWithNumbersContainerView: NPSDelegate {
     }
     
 }
-
-@objc
-public protocol RDNpsWithNumbersViewURLDelegate: NSObjectProtocol {
-    @objc
-    func urlClicked(_ url: URL)
-}
-
