@@ -329,6 +329,7 @@ struct VisilabsConstants {
     static let contentBodyCustomFontFamilyIos = "content_body_custom_font_family_ios"
     static let promocodeCustomFontFamilyIos = "promocode_custom_font_family_ios"
 
+    static let appBanner = "AppBanner"
     
     
     // ProductStatNotifier constants
