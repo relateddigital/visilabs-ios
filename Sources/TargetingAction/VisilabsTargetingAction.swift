@@ -862,6 +862,44 @@ class VisilabsTargetingAction {
         return visilabsStoryItem
     }
     
+    func getAppBanner(properties: [String:String], rdUser: VisilabsUser, guid: String, completion: @escaping ((_ response: AppBannerResponseModel) -> Void)) {
+
+        VisilabsRequest.sendMobileRequest(properties: properties, headers: [String:String](),timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: {(result: [String: Any]?, error: VisilabsError?, guid: String?) in
+            
+            completion(self.parseBannerApp(result, error, guid))
+        }, guid: guid)
+    }
+    
+    
+    private func parseBannerApp(_ result: [String: Any]?, _ error: VisilabsError?, _ guid: String?) -> AppBannerResponseModel {
+        var appBannerModelArray = [AppBannerModel]()
+        var errorResponse: VisilabsError?
+        var transition: String?
+        if let error = error {
+            errorResponse = error
+        } else if let res = result {
+            if let bannerAction = res[VisilabsConstants.appBanner] as? [[String: Any?]] {
+                for bannerAction in bannerAction {
+                    let actiondata = bannerAction[VisilabsConstants.actionData] as? [String: Any?]
+                    let appData = actiondata?[VisilabsConstants.appBanners] as? [[String: Any?]]
+                    transition = actiondata?[VisilabsConstants.transitionAction] as? String
+                    for element in appData! {
+                        let appBannerModel = AppBannerModel(img: element[VisilabsConstants.img] as? String, ios_lnk: element[VisilabsConstants.iosLnk] as? String)
+                        appBannerModelArray.append(appBannerModel)
+                    }
+                }
+            } else {
+                errorResponse = VisilabsError.noData
+            }
+        }
+
+        if appBannerModelArray.isEmpty {
+            errorResponse = VisilabsError.noData
+        }
+
+        return AppBannerResponseModel(app_banners: appBannerModelArray, error: errorResponse, transition: transition ?? "")
+    }
+    
     // swiftlint:disable cyclomatic_complexity
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()

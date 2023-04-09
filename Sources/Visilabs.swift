@@ -52,4 +52,10 @@ public class Visilabs {
         return VisilabsManager.initializeCalled
     }
     
+    public static func getBannerView(properties: [String:String],completion: @escaping (BannerView?) -> Void) {
+        VisilabsManager.sharedInstance.getBannerView(properties: properties) { bannerView in
+            completion(bannerView)
+        }
+    }
+    
 }
