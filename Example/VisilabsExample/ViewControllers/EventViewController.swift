@@ -33,7 +33,7 @@ enum VisilabsEventType: String, CaseIterable {
     case sendLocationPermission = "Send Location Permission"
 }
 
-class EventViewController: FormViewController {
+class EventViewController: FormViewController, BannerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -344,6 +344,7 @@ extension EventViewController: VisilabsInappButtonDelegate {
         
         Visilabs.getBannerView(properties: props) { banner in
             if let banner = banner {
+                banner.delegate = self
                 banner.translatesAutoresizingMaskIntoConstraints = false
                 bannerView.addSubview(banner)
                 
@@ -354,6 +355,10 @@ extension EventViewController: VisilabsInappButtonDelegate {
             }
 
         }
+    }
+    
+    func bannerItemClickListener(url: String) {
+        print(url)
     }
 
 }

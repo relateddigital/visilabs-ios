@@ -20,6 +20,7 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     var currentPage = 1
     var model: AppBannerResponseModel!
     var viewDidLoad = true
+    public var delegate:BannerDelegate?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -141,6 +142,7 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
             if let url = URL(string: selectedUrl ?? "") {
                 UIApplication.shared.open(url)
             }
+            delegate?.bannerItemClickListener(url: selectedUrl ?? "")
 
             print("you can do something with the cell or index path here")
         } else {
@@ -161,4 +163,9 @@ struct BannerViewModel {
 enum PassAction {
     case swipe
     case slide
+}
+
+
+public protocol BannerDelegate {
+    func bannerItemClickListener(url:String)
 }
