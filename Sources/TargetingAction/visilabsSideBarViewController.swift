@@ -198,9 +198,10 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
     }
     
     @objc func imageClicked(_ sender: UITapGestureRecognizer? = nil) {
-        shouldDismissed = true
         if let url = URL(string: self.model.linkToGo ?? "") {
-            delegate?.notificationShouldDismiss(controller: self, callToActionURL: url, shouldTrack: false, additionalTrackingProperties: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    UIApplication.shared.open(url)
+            }
         }
     }
 

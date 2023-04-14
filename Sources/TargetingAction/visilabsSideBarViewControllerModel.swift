@@ -59,6 +59,10 @@ class visilabsSideBarViewControllerModel {
         sideBarModel.miniSideBarBackgroundImage = UIImage(data: getDataOfImage(urlString: serviceModel?.contentMinimizedBackgroundImage ?? ""))
         sideBarModel.miniSideBarBackgroundColor = UIColor(hex: serviceModel?.contentMinimizedBackgroundColor)
         
+        if serviceModel?.contentMinimizedImage?.count != 0 { //contentImage remove
+            sideBarModel.miniSideBarBackgroundImage = UIImage(data: getDataOfImage(urlString: serviceModel?.contentMinimizedBackgroundImage ?? ""))
+        }
+        
         if serviceModel?.contentMinimizedArrowColor?.count == 0 {
             sideBarModel.arrowColor = .clear
         } else {
