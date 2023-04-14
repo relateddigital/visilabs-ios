@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,7 +21,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="40" height="340"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K3J-W6-HYf">
+                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K3J-W6-HYf">
                             <rect key="frame" x="5" y="15" width="30" height="310"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
@@ -61,7 +61,7 @@
                     <rect key="frame" x="40" y="0.0" width="546" height="400"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fwP-4H-Nil">
-                            <rect key="frame" x="15" y="15" width="516" height="370"/>
+                            <rect key="frame" x="5" y="5" width="536" height="390"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Nc-GW-iml">
@@ -73,12 +73,12 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="6Nc-GW-iml" secondAttribute="trailing" id="7Z2-Wz-o1q"/>
                         <constraint firstItem="6Nc-GW-iml" firstAttribute="leading" secondItem="Xfn-En-lFJ" secondAttribute="leading" id="AKp-LZ-EdH"/>
-                        <constraint firstAttribute="bottom" secondItem="fwP-4H-Nil" secondAttribute="bottom" constant="15" id="Ens-BP-TyR"/>
-                        <constraint firstItem="fwP-4H-Nil" firstAttribute="leading" secondItem="Xfn-En-lFJ" secondAttribute="leading" constant="15" id="PFG-Ob-0Eh"/>
+                        <constraint firstAttribute="bottom" secondItem="fwP-4H-Nil" secondAttribute="bottom" constant="5" id="Ens-BP-TyR"/>
+                        <constraint firstItem="fwP-4H-Nil" firstAttribute="leading" secondItem="Xfn-En-lFJ" secondAttribute="leading" constant="5" id="PFG-Ob-0Eh"/>
                         <constraint firstAttribute="bottom" secondItem="6Nc-GW-iml" secondAttribute="bottom" id="VQu-Ma-45o"/>
                         <constraint firstItem="6Nc-GW-iml" firstAttribute="top" secondItem="Xfn-En-lFJ" secondAttribute="top" id="bYX-2s-lqV"/>
-                        <constraint firstItem="fwP-4H-Nil" firstAttribute="top" secondItem="Xfn-En-lFJ" secondAttribute="top" constant="15" id="lhO-UD-woP"/>
-                        <constraint firstAttribute="trailing" secondItem="fwP-4H-Nil" secondAttribute="trailing" constant="15" id="tL0-ZW-qzK"/>
+                        <constraint firstItem="fwP-4H-Nil" firstAttribute="top" secondItem="Xfn-En-lFJ" secondAttribute="top" constant="5" id="lhO-UD-woP"/>
+                        <constraint firstAttribute="trailing" secondItem="fwP-4H-Nil" secondAttribute="trailing" constant="5" id="tL0-ZW-qzK"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ciF-NZ-IeA">
@@ -88,7 +88,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="40" height="340"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eh4-Yb-hyz">
+                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eh4-Yb-hyz">
                             <rect key="frame" x="5" y="15" width="30" height="310"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
