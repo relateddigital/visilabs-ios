@@ -21,6 +21,7 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     var model: AppBannerResponseModel!
     var viewDidLoad = true
     public var delegate:BannerDelegate?
+    var propertiesLocal : [String:String]?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -135,6 +136,28 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
         self.currentPageLabel.text = "\(Int(scrollView.contentOffset.x) / Int(scrollView.frame.width) + 1)/\(bannerViewModel?.pageCount ?? 10)"
     }
 
+    
+    func sendClickedUrl(clickedUrl:String) {
+        
+        let guid = UUID().uuidString
+        var properties = self.propertiesLocal
+        properties?[VisilabsConstants.clickedUrlKey] = clickedUrl
+        
+        for (key, value) in VisilabsPersistence.readTargetParameters() {
+            if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && properties?[key] == nil {
+                properties?[key] = value
+            }
+        }
+        
+        VisilabsRequest.sendMobileRequest(properties: properties ?? [String:String](), headers: [String:String](),timeoutInterval: TimeInterval() , completion: {(result: [String: Any]?, error: VisilabsError?, guid: String?) in
+            if error == nil {
+                print("Clicked Url sended")
+            } else {
+                print(error.debugDescription)
+            }
+        }, guid: guid)
+    }
+    
     @objc func tap(sender: UITapGestureRecognizer) {
 
         if let indexPath = self.collectionView?.indexPathForItem(at: sender.location(in: self.collectionView)) {
@@ -143,6 +166,9 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
                 UIApplication.shared.open(url)
             }
             delegate?.bannerItemClickListener(url: selectedUrl ?? "")
+            DispatchQueue.main.async {
+                self.sendClickedUrl(clickedUrl: selectedUrl ?? "")
+            }
 
             print("you can do something with the cell or index path here")
         } else {
