@@ -149,13 +149,7 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
             }
         }
         
-        VisilabsRequest.sendMobileRequest(properties: properties ?? [String:String](), headers: [String:String](),timeoutInterval: TimeInterval() , completion: {(result: [String: Any]?, error: VisilabsError?, guid: String?) in
-            if error == nil {
-                print("Clicked Url sended")
-            } else {
-                print(error.debugDescription)
-            }
-        }, guid: guid)
+        Visilabs.callAPI().customEvent("BannerClick", properties: properties ?? [String:String]())
     }
     
     @objc func tap(sender: UITapGestureRecognizer) {
