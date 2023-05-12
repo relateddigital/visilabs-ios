@@ -1466,15 +1466,26 @@ SpinToWin.prototype.spinHandler = function (result) {
 SpinToWin.prototype.resultHandler = function (res) {
     this.spinCompleted = true;
     if (this.won) {
-        this.promocodeTitleElement.innerHTML = this.promocodeTitleElement.innerHTML + "<br/>" + res.name;
+        this.promocodeTitleElement.innerHTML = this.promocodeTitleElement.innerHTML;
         this.couponCode.innerText = res.code;
         this.couponCode.value = res.code
     } else {
-        this.promocodeTitleElement.innerHTML = this.promocodeTitleElement.innerHTML + "<br/>" + res.name;
+        this.promocodeTitleElement.innerHTML = this.promocodeTitleElement.innerHTML;
         this.couponCode.innerText = res.name;
         this.couponCode.value = res.name
     }
     this.handleVisibility()
+    var circleLine = document.querySelector(".eWheel-bg-layer > svg > circle:nth-child(3)");
+        var svgPath = document.querySelector(".eWheel-bg-layer > svg");
+        var bigPath = document.querySelector(".ew-current");
+        svgPath.insertBefore(circleLine, svgPath.firstChild);
+        bigPath.style.transformOrigin = "center";
+        bigPath.style.transform = "scale(1.15) translateX(-1px) translateY(3px)";
+        bigPath.setAttribute("stroke", "#ffffff");
+        bigPath.setAttribute("stroke-width", "3");
+        document.querySelector("#Layer_1").setAttribute("style", "margin-top: -10px !important;transform: rotate(0deg);");
+        document.querySelector(".eWheel-bg-layer > svg > circle.centerCircle").setAttribute("r", "30");
+        document.querySelector(".eWheel-center > img").style.width = "23%";
 }; //Helper functions
 SpinToWin.prototype.breakString = function (str, limit) {
     let brokenString = "";
