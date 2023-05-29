@@ -257,6 +257,12 @@ class VisilabsTargetingAction {
         let promocodeBannerBackgroundColor = extendedProps[VisilabsConstants.promocode_banner_background_color] as? String ?? ""
         let promocodeBannerButtonLabel = extendedProps[VisilabsConstants.promocode_banner_button_label] as? String ?? ""
         
+        
+        let redirectbuttonLabel = actionData[VisilabsConstants.redirectbutton_label] as? String ?? ""
+        let displaynameTextAlign = extendedProps[VisilabsConstants.displayname_text_align] as? String ?? ""
+        let redirectbuttonColor = extendedProps[VisilabsConstants.redirectbutton_color] as? String ?? ""
+        let redirectbuttonTextColor = extendedProps[VisilabsConstants.redirectbutton_text_color] as? String ?? ""
+        
         var sliceArray = [SpinToWinSliceViewModel]()
         
         for slice in slices {
@@ -266,7 +272,8 @@ class VisilabsTargetingAction {
             let type = slice[VisilabsConstants.type] as? String ?? ""
             let isAvailable = slice[VisilabsConstants.isAvailable] as? Bool ?? true
             let iosLink = slice[VisilabsConstants.iosLink] as? String ?? ""
-            let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type, isAvailable: isAvailable, iosLink: iosLink)
+            let infotext = slice[VisilabsConstants.infotext] as? String ?? ""
+            let spinToWinSliceViewModel = SpinToWinSliceViewModel(displayName: displayName, color: color, code: code, type: type, isAvailable: isAvailable, iosLink: iosLink, infotext: infotext)
             sliceArray.append(spinToWinSliceViewModel)
         }
         

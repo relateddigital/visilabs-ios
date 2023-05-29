@@ -14,6 +14,7 @@ public struct SpinToWinSliceViewModel: Codable {
     var type: String
     var isAvailable: Bool
     var iosLink: String
+    var infotext: String
 }
 
 public struct SpinToWinViewModel: TargetingActionViewModel, Codable {

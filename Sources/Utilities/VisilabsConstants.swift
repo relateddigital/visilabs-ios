@@ -293,6 +293,12 @@ struct VisilabsConstants {
     static let promocode_banner_background_color = "promocode_banner_background_color"
     static let promocode_banner_button_label = "promocode_banner_button_label"
     
+    
+    static let redirectbutton_label = "redirectbutton_label"
+    static let displayname_text_align = "displayname_text_align"
+    static let redirectbutton_color = "redirectbutton_color"
+    static let redirectbutton_text_color = "redirectbutton_text_color"
+    
 
     // SpinToWin slices
     static let displayName = "displayName"
@@ -300,6 +306,7 @@ struct VisilabsConstants {
     static let code = "code"
     static let isAvailable = "is_available"
     static let iosLink = "ios_lnk"
+    static let infotext = "infotext"
     
     // SpinToWin information properties
     static let promoAction = "OM.promoaction"
