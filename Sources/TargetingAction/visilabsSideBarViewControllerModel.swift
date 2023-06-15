@@ -119,7 +119,15 @@ struct SideBarServiceModel: TargetingActionViewModel {
     var contentMinimizedBackgroundColor:String?
     var contentMinimizedArrowColor:String?
     var contentMaximizedBackgroundImage:String?
-    var contentMaximizedBackgroundColor:String? 
+    var contentMaximizedBackgroundColor:String?
+    
+    var report: DrawerReport?
+
+}
+
+public struct DrawerReport: Codable {
+    var impression: String
+    var click: String
 }
 
 struct SideBarViewModel {
@@ -142,7 +150,7 @@ struct SideBarViewModel {
     var screenXcoordinate : screenXcoordinate?
     //
     var miniSidebarContentImage : UIImage?
-    var titleString : String = "Label"
+    var titleString : String = ""
     var sideBarContentImage : UIImage?
     var waitTime : Int?
     var linkToGo : String?

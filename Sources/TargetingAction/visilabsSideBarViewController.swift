@@ -19,7 +19,8 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
     var sideBarFirstPosition:CGPoint?
     var titleLenght = 12
     var shouldDismissed = false
-    
+    var report: DrawerReport?
+
     
     public init(model:SideBarServiceModel?) {
         super.init(nibName: nil, bundle: nil)
@@ -33,6 +34,8 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
             self.globSidebarView!.isHidden = true
             self.model.miniSideBarWidth = self.model.miniSideBarWidthForCircle / 2
         }
+        
+        self.report = model?.report
         self.view = sidebarView
     }
     
@@ -198,6 +201,11 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
     }
     
     @objc func imageClicked(_ sender: UITapGestureRecognizer? = nil) {
+        
+        if let report = self.report {
+            Visilabs.callAPI().trackDrawerClick(drawerReport: report)
+        }
+        
         if let url = URL(string: self.model.linkToGo ?? "") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     UIApplication.shared.open(url)

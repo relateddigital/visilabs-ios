@@ -587,6 +587,14 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = spinToWinReport.click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
+    
+    func trackDrawerClick(drawerReport: DrawerReport) {
+        var properties = [String: String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        properties["OM.zn"] = drawerReport.click.parseClick().omZn
+        properties["OM.zpc"] = drawerReport.click.parseClick().omZpc
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
 }
 
 // MARK: - Story

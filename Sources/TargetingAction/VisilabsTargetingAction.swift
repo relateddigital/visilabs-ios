@@ -422,6 +422,14 @@ class VisilabsTargetingAction {
         sideBarServiceModel.contentMaximizedBackgroundColor = extendedProps[VisilabsConstants.contentMaximizedBackgroundColor] as? String ?? ""
         
         
+        let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
+        let impression = report[VisilabsConstants.impression] as? String ?? ""
+        let click = report[VisilabsConstants.click] as? String ?? ""
+        let drawerReport = DrawerReport(impression: impression, click: click)
+        
+        sideBarServiceModel.report = drawerReport
+        
+        
         return sideBarServiceModel
     }
     private func parseScratchToWin(_ scratchToWin: [String: Any?]) -> ScratchToWinModel? {
