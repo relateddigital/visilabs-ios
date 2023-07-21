@@ -14,11 +14,11 @@
     <script type="text/javascript">
         var config = {};
         var spinToWin = {};
-        window.initSpinToWin = function (responseConfig) {
+        window.initSpinToWin = function(responseConfig) {
             config = responseConfig;
             spinToWin = new SpinToWin(config);
         };
-        window.chooseSlice = function (sliceIndex, promotionCode) {
+        window.chooseSlice = function(sliceIndex, promotionCode) {
             window.spinToWin.spin(sliceIndex, promotionCode);
         };
         if (window.Android) {
@@ -28,7 +28,7 @@
             window.webkit.messageHandlers.eventHandler.postMessage({
                 method: "initSpinToWin"
             });
-            window.console.log = function (message) {
+            window.console.log = function(message) {
                 var stringMessage = message;
                 if (typeof message !== "string") {
                     stringMessage = JSON.stringify(message);
@@ -40,25 +40,21 @@
             };
         } else {
             window.BrowserTest = {
-                getPromotionCode: function () {
+                getPromotionCode: function() {
                     window.chooseSlice(2, 'asd');
                 },
-                sendReport: function () {
-    
+                sendReport: function() {
+
                 }
             };
-    
+
             const extendedProps = {
-                "displayname_text_align": "vertical", // "horizontal", "vertical",
-                "redirectbutton_color": "",
-                "redirectbutton_text_color": "",
-    
-    
                 "displayname_text_color": "#ffffff",
-                "displayname_font_family": "default",
+                "displayname_font_family": "custom",
                 "displayname_custom_font_family_ios": "android101",
                 "displayname_custom_font_family_android": "android101",
-                "displayname_text_size": "6",
+                "displayname_text_align": "vertical",
+                "displayname_text_size": "4",
                 "title_position": "bottom",
                 "title_text_color": "#ffffff",
                 "title_font_family": "default",
@@ -71,7 +67,7 @@
                 "text_custom_font_family_ios": "",
                 "text_custom_font_family_android": "",
                 "text_size": "2",
-                "button_position": "top",
+                "button_position": "bottom",
                 "button_color": "#ffa3bf",
                 "button_text_color": "#ffffff",
                 "button_font_family": "custom",
@@ -91,7 +87,9 @@
                 "copybutton_font_family": "custom",
                 "copybutton_custom_font_family_ios": "The Nautigal",
                 "copybutton_custom_font_family_android": "thenautigal_regular",
-                "copybutton_text_size": "1",
+                "copybutton_text_size": "3",
+                "redirectbutton_color": "#868686",
+                "redirectbutton_text_color": "#ffffff",
                 "emailpermit_text_size": "2",
                 "emailpermit_text_url": "https://github.com/",
                 "consent_text_size": "2",
@@ -104,80 +102,74 @@
                 "promocodes_soldout_message_custom_font_family_android": "sydneysignature",
                 "promocodes_soldout_message_text_size": "1",
                 "promocodes_soldout_message_background_color": "#ffffff",
-                "promocode_banner_text": "title1\\\\ntitle2",
+                "promocode_banner_text": "title1\\ntitle2",
                 "promocode_banner_text_color": "#ffffff",
                 "promocode_banner_background_color": "#d6c1c1",
                 "promocode_banner_button_label": "Kopyala"
             };
-    
-    
-    
-    
+
+
+
+
             let extendedPropsString = JSON.stringify(extendedProps);
             //console.log(extendedPropsString);
             extendedPropsString = encodeURI(extendedPropsString);
             //console.log(extendedPropsString);
-    
+
             config = {
                 "actid": 562,
                 "title": "Spin-To-Win-New-UI-Test actionID=562",
                 "actiontype": "SpinToWin",
                 "actiondata": {
-                    "slices": [
-                        {
-                            "displayName": "statik1",
-                            "color": "#55403a",
-                            "code": "123456",
-                            "type": "staticcode",
-                            "ios_lnk": "https://www.relateddigital.com/en/",
-                            "android_lnk": "https://www.relateddigital.com/en/",
-                            "infotext": "statik1 info text",
-                            "is_available": false
-                        },
-                        {
-                            "displayName": "pass1",
-                            "color": "#f2eccc",
-                            "code": "",
-                            "type": "pass",
-                            "ios_lnk": "https://www.google.com",
-                            "android_lnk": "https://www.google.com",
-                            "infotext": "pass1 info text",
-                            "is_available": false
-                        },
-                        {
-                            "displayName": "test6",
-                            "color": "#f58485",
-                            "code": "dgdg",
-                            "type": "staticcode",
-                            "ios_lnk": "https://www.facebook.com",
-                            "android_lnk": "https://www.facebook.com",
-                            "infotext": "test6 info text test6 info text test6 info text",
-                            "is_available": false
-                        },
-                        {
-                            "displayName": "statik2",
-                            "color": "#9dcec2",
-                            "code": "STATIC",
-                            "type": "staticcode",
-                            "ios_lnk": "https://www.twitter.com",
-                            "android_lnk": "https://www.twitter.com",
-                            "infotext": "statik2 info text",
-                            "is_available": false
-                        },
-                        {
-                            "displayName": "pass4",
-                            "color": "#f600d5",
-                            "code": "",
-                            "type": "pass",
-                            "ios_lnk": "https://www.instagram.com",
-                            "android_lnk": "https://www.instagram.com",
-                            "infotext": "pass4 info text",
-                            "is_available": false
-                        }
-                    ],
+                    "slices": [{
+                        "displayName": "statik1",
+                        "color": "#55403a",
+                        "code": "123456",
+                        "type": "staticcode",
+                        "ios_lnk": "https://www.relateddigital.com/en/",
+                        "android_lnk": "https://www.relateddigital.com/en/",
+                        "infotext": "BARIS STATIK1 TEXT",
+                        "is_available": false
+                    }, {
+                        "displayName": "pass1",
+                        "color": "#f2eccc",
+                        "code": "",
+                        "type": "pass",
+                        "ios_lnk": "https://www.google.com",
+                        "android_lnk": "https://www.google.com",
+                        "infotext": "BARIS PASS TEXT",
+                        "is_available": false
+                    }, {
+                        "displayName": "test6",
+                        "color": "#f58485",
+                        "code": "dgdg",
+                        "type": "staticcode",
+                        "ios_lnk": "https://www.facebook.com",
+                        "android_lnk": "https://www.facebook.com",
+                        "infotext": "BARIS Test6 TEXT",
+                        "is_available": false
+                    }, {
+                        "displayName": "statik2",
+                        "color": "#9dcec2",
+                        "code": "STATIC",
+                        "type": "staticcode",
+                        "ios_lnk": "https://www.twitter.com",
+                        "android_lnk": "https://www.twitter.com",
+                        "infotext": "BARIS STATIK2 TEXT",
+                        "is_available": false
+                    }, {
+                        "displayName": "pass4",
+                        "color": "#f600d5",
+                        "code": "",
+                        "type": "pass",
+                        "ios_lnk": "https://www.instagram.com",
+                        "android_lnk": "https://www.instagram.com",
+                        "infotext": "BARIS PASS4 TEXT",
+                        "is_available": false
+                    }],
                     "mail_subscription": true,
                     "spin_to_win_content": {
-                        "title": "15:00-24:00 Arası \\n Geçerli Fırsatı Kaçırma",
+                        "title": "15:00-24:00 Arası \n Geçerli Fırsatı Kaçırma",
                         "message": "Kazanılan kupon kodları, FLO Mobil uygulamasında sadece FLO satıcılı ürünlerde geçerlidir. Kupon kodları, mevcut indirimlere ve kampanyalara ek fayda sağlar. İndirim stoklarla sınırlıdır. Her müşteri yalnızca 1 katılım hakkına sahiptir. Kazanılan kupon kodları gün sonuna kadar kullanılabilir. FLO, kampanya koşullarında değişiklik yapma hakkını saklı tutar. Kuponunu hemen kopyala ya da ekran görüntüsünü al, alışverişin keyfini çıkar.",
                         "placeholder": "E- posta adresi",
                         "button_label": "Çevirme Butonu",
@@ -189,11 +181,9 @@
                     },
                     "font_size": 0,
                     "circle_R": 0,
-                    "auth": "9EE6757C1303044D1BAFDFF004DCCA17ADE0FE83F96C09446135D3D86346FF0E",
-                    "type": "spin_to_win_email",
                     "waiting_time": 0,
-                    "promoAuth": "B511CB2FBEBE0DF1D1BF42311E4667C0224794542AFB8E50A93C4949A10845EF",
-                    "slice_count": "3",
+                    "promoAuth": "C322AE9F1B3C50A778B11A049BD5B1503298B73F2DAAAF27B6A8857191B2412F",
+                    "slice_count": "7",
                     "sendemail": false,
                     "courseofaction": "GetPromoCode",
                     "ExtendedProps": extendedPropsString,
@@ -202,13 +192,13 @@
                         "click": "OM.zn=acttype-27&OM.zpc=act-562"
                     },
                     "img": "https://imgvisilabsnet.azureedge.net/spin_to_win/uploaded_images/163_1100_562_20210426155626806.png",
-                    "taTemplate": "half_spin",
-                    "promocode_title": "Kod Kazanma Başlık Metni\\n Lütfen Kodu Kopyalayınız.",
-                    "copybutton_label": "Kopyala",
+                    "taTemplate": "full_spin",
+                    "promocode_title": "Kod Kazanma Başlık Metni\n Lütfen Kodu Kopyalayınız.",
+                    "copybutton_label": "Kopyala Butonu",
                     "wheel_spin_action": "button",
                     "promocodes_soldout_message": "The campaign is ended.",
-                    "copybutton_function": "copy_redirect",
-                    "redirectbutton_label": "TODO:"
+                    "copybutton_function": "",
+                    "redirectbutton_label": "Kopyala"
                 },
                 "panelv2": false
             };
