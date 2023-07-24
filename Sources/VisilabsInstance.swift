@@ -176,7 +176,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
-        visilabsUser.sdkVersion = VisilabsHelper.getSdkType()
+        visilabsUser.sdkType = VisilabsHelper.getSdkType()
         
         if let appVersion = VisilabsHelper.getAppVersion() {
             visilabsUser.appVersion = appVersion
