@@ -414,6 +414,7 @@ class VisilabsRequest {
             props[VisilabsConstants.cookieIdKey] = vUser.cookieId
             props[VisilabsConstants.exvisitorIdKey] = vUser.exVisitorId
             props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
+            props[VisilabsConstants.mobileSdkType] = vUser.sdkType
             props[VisilabsConstants.mobileAppVersion] = vUser.appVersion
             props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
             props[VisilabsConstants.nrvKey] = String(vUser.nrv)
