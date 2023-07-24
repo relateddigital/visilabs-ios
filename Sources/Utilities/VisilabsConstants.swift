@@ -9,7 +9,8 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "3.9.8"
+    static let sdkVersion = "3.9.9"
+    static let sdkType = "native"
 
     static let HTTP = "http"
     static let HTTPS = urlConstant.shared.securityTag
@@ -66,6 +67,7 @@ struct VisilabsConstants {
     static let mobileIdKey = "OM.m_adid"
     static let mobileApplicationKey = "OM.mappl"
     static let mobileSdkVersion = "sdk_version"
+    static let mobileSdkType = "sdk_type"
     static let mobileAppVersion = "OM.appVersion"
 
     static let isTrue = "true"

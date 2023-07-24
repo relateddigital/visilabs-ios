@@ -85,6 +85,7 @@ class VisilabsEvent {
         props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
         props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
         props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
+        props[VisilabsConstants.mobileSdkType] = vUser.sdkType
         props[VisilabsConstants.mobileAppVersion] = vUser.appVersion
         
         props[VisilabsConstants.nrvKey] = String(vUser.nrv)

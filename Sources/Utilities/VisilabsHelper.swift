@@ -195,6 +195,10 @@ internal class VisilabsHelper {
         return VisilabsConstants.sdkVersion
     }
     
+    static func getSdkType() -> String {
+        return VisilabsConstants.sdkType
+    }
+    
     static func getAppVersion() -> String? {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
     }
