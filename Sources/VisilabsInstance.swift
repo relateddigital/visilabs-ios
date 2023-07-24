@@ -22,6 +22,7 @@ public struct VisilabsUser: Codable {
     public var userAgent: String?
     public var identifierForAdvertising: String?
     public var sdkVersion: String?
+    public var sdkType: String?
     public var lastEventTime: String?
     public var nrv = 0
     public var pviv = 0
@@ -175,6 +176,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
+        visilabsUser.sdkVersion = VisilabsHelper.getSdkType()
         
         if let appVersion = VisilabsHelper.getAppVersion() {
             visilabsUser.appVersion = appVersion
