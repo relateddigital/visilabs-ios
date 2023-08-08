@@ -2490,7 +2490,7 @@ SpinToWin.prototype.createEasyWheel = function() {
         fontSize: window.spinToWin.config.displaynameTextSize + 8,
         textOffset: 5,
         letterSpacing: 0,
-        textLine: (window.spinToWin.config.displayname_text_align && window.spinToWin.config.displayname_text_align.toLowerCase() === "horizontal") ? "h" : "v",
+        textLine: (window.spinToWin.config.displaynameTextAlign && window.spinToWin.config.displaynameTextAlign.toLowerCase() === "horizontal") ? "h" : "v",
         textArc: false,
         outerLineWidth: 5,
         centerImage: window.spinToWin.config.img,
@@ -2565,7 +2565,7 @@ SpinToWin.prototype.convertConfigJson = function() {
     //ExtendedProps
     var extendedProps = JSON.parse(decodeURIComponent(this.config.actiondata.ExtendedProps));
 
-    this.config.displayname_text_align = extendedProps.displayname_text_align;
+    this.config.displaynameTextAlign = extendedProps.displayname_text_align;
     this.config.redirectbutton_color = extendedProps.redirectbutton_color;
     this.config.redirectbutton_text_color = extendedProps.redirectbutton_text_color;
 
@@ -2934,7 +2934,7 @@ SpinToWin.prototype.handleVisibility = function() {
         this.consentContainer.style.display = "none";
         this.emailPermitContainer.style.display = "none";
         this.warning.style.display = "none";
-        
+
         if (this.won) {
             this.promocodeTitleElement.style.display = "";
             this.copyButtonContainer.style.display = "";
@@ -3128,7 +3128,7 @@ SpinToWin.prototype.resultHandler = function(res) {
         this.promocodeTitleElement.innerHTML = res.infotext;
     }
 
-    var nthChild = (this.config.displayname_text_align === "horizontal") ? 5 : 3;
+    var nthChild = (this.config.displaynameTextAlign === "horizontal") ? 5 : 3;
     var circleLine = document.querySelector(`.eWheel-bg-layer > svg > circle:nth-child(${nthChild})`);
     var svgPath = document.querySelector(".eWheel-bg-layer > svg");
     var bigPath = document.querySelector(".ew-current");
@@ -3148,12 +3148,12 @@ SpinToWin.prototype.resultHandler = function(res) {
 
 }; //Helper functions
 SpinToWin.prototype.breakString = function(str, limit) {
-    if (window.spinToWin.config.displayname_text_align === "vertical") {
+    if (window.spinToWin.config.displaynameTextAlign === "vertical") {
         let brokenString = "";
         for (let i = 0, count = 0; i < str.length; i++) {
             if (count >= limit && str[i] === " ") {
                 count = 0;
-                brokenString += "<br/>" //TODO: kontrol et
+                brokenString += "<br/>"
             } else {
                 count++;
                 brokenString += str[i]
@@ -3162,7 +3162,6 @@ SpinToWin.prototype.breakString = function(str, limit) {
 
         return brokenString
     } else {
-
         return str
     }
 };
