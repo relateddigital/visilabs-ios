@@ -100,6 +100,7 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var promocodeBannerTextColor: String
     var promocodeBannerBackgroundColor: String
     var promocodeBannerButtonLabel: String
+    var displaynameTextAlign: String
     
     var bannerCode: String?
     
