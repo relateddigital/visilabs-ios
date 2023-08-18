@@ -289,10 +289,7 @@ class EventViewController: FormViewController, BannerDelegate {
             properties["utm_source"] = "euromsg"
             properties["utm_medium"] = "push"
             properties["utm_campaign"] = "euromsg campaign"
-            properties["OM.csource"] = "euromsg"
-            properties["OM.cmedium"] = "push"
-            properties["OM.cname"] = "euromsg campaign"
-            Visilabs.callAPI().customEvent("Login Page", properties: properties)
+            Visilabs.callAPI().sendCampaignParameters(properties: properties)
             return
         case .pushMessage:
             properties["OM.sys.TokenID"] = visilabsProfile.appToken //"Token ID to use for push messages"
