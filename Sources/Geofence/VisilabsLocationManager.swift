@@ -534,6 +534,11 @@ extension VisilabsLocationManager {
         props[VisilabsConstants.tokenIdKey] = user.tokenId
         props[VisilabsConstants.appidKey] = user.appId
         props[VisilabsConstants.geoIdKey] = "\(geoId)"
+        props[VisilabsConstants.utmCampaignKey] = user.utmCampaign
+        props[VisilabsConstants.utmMediumKey] = user.utmMedium
+        props[VisilabsConstants.utmSourceKey] = user.utmSource
+        props[VisilabsConstants.utmContentKey] = user.utmContent
+        props[VisilabsConstants.utmTermKey] = user.utmTerm
         
         props[VisilabsConstants.nrvKey] = String(user.nrv)
         props[VisilabsConstants.pvivKey] = String(user.pviv)
@@ -589,6 +594,11 @@ extension VisilabsLocationManager {
                 props[VisilabsConstants.tokenIdKey] = user.tokenId
                 props[VisilabsConstants.appidKey] = user.appId
                 props[VisilabsConstants.channelKey] = profile.channel
+                props[VisilabsConstants.utmCampaignKey] = user.utmCampaign
+                props[VisilabsConstants.utmMediumKey] = user.utmMedium
+                props[VisilabsConstants.utmSourceKey] = user.utmSource
+                props[VisilabsConstants.utmContentKey] = user.utmContent
+                props[VisilabsConstants.utmTermKey] = user.utmTerm
                 if let lat = lastKnownLatitude, let lon = lastKnownLongitude {
                     props[VisilabsConstants.latitudeKey] = String(format: "%.013f", lat)
                     props[VisilabsConstants.longitudeKey] = String(format: "%.013f", lon)

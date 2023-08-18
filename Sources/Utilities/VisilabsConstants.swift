@@ -115,6 +115,7 @@ struct VisilabsConstants {
     static let utmCampaignKey = "utm_campaign"
     static let utmMediumKey = "utm_medium"
     static let utmContentKey = "utm_content"
+    static let utmTermKey = "utm_term"
 
     static let getList = "getlist"
     static let processV2 = "processV2"

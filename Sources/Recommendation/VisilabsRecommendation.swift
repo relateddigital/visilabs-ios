@@ -36,6 +36,11 @@ class VisilabsRecommendation {
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.channelKey] = VisilabsConstants.ios
+        props[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
+        props[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
+        props[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
+        props[VisilabsConstants.utmContentKey] = visilabsUser.utmContent
+        props[VisilabsConstants.utmTermKey] = visilabsUser.utmTerm
         
         props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
         props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)
@@ -111,7 +116,12 @@ class VisilabsRecommendation {
                 && !propKey.isEqual(VisilabsConstants.appidKey)
                 && !propKey.isEqual(VisilabsConstants.apiverKey)
                 && !propKey.isEqual(VisilabsConstants.filterKey)
-                && !propKey.isEqual(VisilabsConstants.channelKey) {
+                && !propKey.isEqual(VisilabsConstants.channelKey)
+                && !propKey.isEqual(VisilabsConstants.utmCampaignKey)
+                && !propKey.isEqual(VisilabsConstants.utmMediumKey)
+                && !propKey.isEqual(VisilabsConstants.utmSourceKey)
+                && !propKey.isEqual(VisilabsConstants.utmContentKey)
+                && !propKey.isEqual(VisilabsConstants.utmTermKey) {
                 continue
             } else {
                 props.removeValue(forKey: propKey)
