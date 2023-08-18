@@ -29,6 +29,11 @@ public struct VisilabsUser: Codable {
     public var tvc = 0
     public var lvt: String?
     public var appVersion: String?
+    public var utmCampaign: String?
+    public var utmMedium: String?
+    public var utmSource: String?
+    public var utmContent: String?
+    public var utmTerm: String?
 }
 
 public struct VisilabsProfile: Codable {
@@ -385,6 +390,11 @@ extension VisilabsInstance {
             }
             if let event = strongSelf.eventsQueue.last {
                 VisilabsPersistence.saveTargetParameters(event)
+                if VisilabsBasePath.endpoints[.action] != nil,
+                   self?.visilabsProfile.inAppNotificationsEnabled != nil {
+                    self?.checkInAppNotification(properties: event)
+                    self?.checkTargetingActions(properties: event)
+                }
             }
             strongSelf.send()
         }
@@ -440,6 +450,11 @@ extension VisilabsInstance {
         VisilabsPersistence.clearUserDefaults()
         visilabsUser.cookieId = nil
         visilabsUser.exVisitorId = nil
+        visilabsUser.utmCampaign = nil
+        visilabsUser.utmContent = nil
+        visilabsUser.utmMedium = nil
+        visilabsUser.utmSource = nil
+        visilabsUser.utmTerm = nil
         visilabsUser.cookieId = VisilabsHelper.generateCookieId()
         VisilabsPersistence.archiveUser(visilabsUser)
     }
@@ -711,6 +726,11 @@ extension VisilabsInstance {
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.channelKey] = visilabsProfile.channel
+        props[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
+        props[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
+        props[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
+        props[VisilabsConstants.utmContentKey] = visilabsUser.utmContent
+        props[VisilabsConstants.utmTermKey] = visilabsUser.utmTerm
         
         props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
         props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)

@@ -41,6 +41,11 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.mobileSdkVersion] = visilabsUser.sdkVersion
             userDic[VisilabsConstants.mobileSdkType] = visilabsUser.sdkType
             userDic[VisilabsConstants.mobileAppVersion] = visilabsUser.appVersion
+            userDic[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
+            userDic[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
+            userDic[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
+            userDic[VisilabsConstants.utmContentKey] = visilabsUser.utmContent
+            userDic[VisilabsConstants.utmTermKey] = visilabsUser.utmTerm
             
             userDic[VisilabsConstants.lastEventTimeKey] = visilabsUser.lastEventTime
             userDic[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
@@ -84,7 +89,6 @@ public class VisilabsPersistence {
            let userAgent = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
             visilabsUser.userAgent = userAgent
         }
-
         if let propsfp = filePath(filename: VisilabsConstants.userArchiveKey),
            let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String: String?] {
             if let cid = props[VisilabsConstants.cookieIdKey], !cid.isNilOrWhiteSpace {
@@ -121,6 +125,27 @@ public class VisilabsPersistence {
             if let appversion = props[VisilabsConstants.mobileAppVersion], !appversion.isNilOrWhiteSpace {
                 visilabsUser.appVersion = appversion
             }
+            
+            if let campaign = props[VisilabsConstants.utmCampaignKey], !campaign.isNilOrWhiteSpace {
+                visilabsUser.utmCampaign = campaign
+            }
+
+            if let medium = props[VisilabsConstants.utmMediumKey], !medium.isNilOrWhiteSpace {
+                visilabsUser.utmMedium = medium
+            }
+
+            if let source = props[VisilabsConstants.utmSourceKey], !source.isNilOrWhiteSpace {
+                visilabsUser.utmSource = source
+            }
+
+            if let content = props[VisilabsConstants.utmContentKey], !content.isNilOrWhiteSpace {
+                visilabsUser.utmContent = content
+            }
+
+            if let term = props[VisilabsConstants.utmTermKey], !term.isNilOrWhiteSpace {
+                visilabsUser.utmTerm = term
+            }
+
             if let lastEventTime = props[VisilabsConstants.lastEventTimeKey] as? String {
                 visilabsUser.lastEventTime = lastEventTime
             }
@@ -242,6 +267,11 @@ public class VisilabsPersistence {
         let ud = UserDefaults.standard
         ud.removeObject(forKey: VisilabsConstants.cookieIdKey)
         ud.removeObject(forKey: VisilabsConstants.exvisitorIdKey)
+        ud.removeObject(forKey: VisilabsConstants.utmCampaignKey)
+        ud.removeObject(forKey: VisilabsConstants.utmSourceKey)
+        ud.removeObject(forKey: VisilabsConstants.utmMediumKey)
+        ud.removeObject(forKey: VisilabsConstants.utmContentKey)
+        ud.removeObject(forKey: VisilabsConstants.utmTermKey)
         ud.synchronize()
     }
     

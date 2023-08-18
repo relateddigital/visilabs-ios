@@ -60,6 +60,31 @@ class VisilabsEvent {
             props.removeValue(forKey: VisilabsConstants.appidKey)
         }
         
+        if props.keys.contains(VisilabsConstants.utmCampaignKey) {
+            vUser.utmCampaign = props[VisilabsConstants.utmCampaignKey]
+            props.removeValue(forKey: VisilabsConstants.utmCampaignKey)
+        }
+
+        if props.keys.contains(VisilabsConstants.utmMediumKey) {
+            vUser.utmMedium = props[VisilabsConstants.utmMediumKey]
+            props.removeValue(forKey: VisilabsConstants.utmMediumKey)
+        }
+
+        if props.keys.contains(VisilabsConstants.utmSourceKey) {
+            vUser.utmSource = props[VisilabsConstants.utmSourceKey]
+            props.removeValue(forKey: VisilabsConstants.utmSourceKey)
+        }
+
+        if props.keys.contains(VisilabsConstants.utmContentKey) {
+            vUser.utmContent = props[VisilabsConstants.utmContentKey]
+            props.removeValue(forKey: VisilabsConstants.utmContentKey)
+        }
+
+        if props.keys.contains(VisilabsConstants.utmTermKey) {
+            vUser.utmTerm = props[VisilabsConstants.utmTermKey]
+            props.removeValue(forKey: VisilabsConstants.utmTermKey)
+        }
+        
         // TO_DO: Dışarıdan mobile ad id gelince neden siliyoruz?
         if props.keys.contains(VisilabsConstants.mobileIdKey) {
             props.removeValue(forKey: VisilabsConstants.mobileIdKey)
@@ -103,6 +128,26 @@ class VisilabsEvent {
         
         if !vUser.appId.isNilOrWhiteSpace {
             props[VisilabsConstants.appidKey] = vUser.appId
+        }
+        
+        if !vUser.utmCampaign.isNilOrWhiteSpace {
+            props[VisilabsConstants.utmCampaignKey] = vUser.utmCampaign
+        }
+
+        if !vUser.utmMedium.isNilOrWhiteSpace {
+            props[VisilabsConstants.utmMediumKey] = vUser.utmMedium
+        }
+
+        if !vUser.utmSource.isNilOrWhiteSpace {
+            props[VisilabsConstants.utmSourceKey] = vUser.utmSource
+        }
+
+        if !vUser.utmContent.isNilOrWhiteSpace {
+            props[VisilabsConstants.utmContentKey] = vUser.utmContent
+        }
+
+        if !vUser.utmTerm.isNilOrWhiteSpace {
+            props[VisilabsConstants.utmTermKey] = vUser.utmTerm
         }
         
         props[VisilabsConstants.datKey] = String(actualTimeOfevent)

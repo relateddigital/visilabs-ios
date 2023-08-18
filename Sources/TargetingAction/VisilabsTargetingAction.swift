@@ -640,6 +640,11 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.actionType] = VisilabsConstants.favoriteAttributeAction
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        props[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
+        props[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
+        props[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
+        props[VisilabsConstants.utmContentKey] = visilabsUser.utmContent
+        props[VisilabsConstants.utmTermKey] = visilabsUser.utmTerm
         
         
         props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
@@ -711,6 +716,11 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.actionType] = VisilabsConstants.story
         props[VisilabsConstants.channelKey] = self.visilabsProfile.channel
         props[VisilabsConstants.actionId] = actionId == nil ? nil : String(actionId!)
+        props[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
+        props[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
+        props[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
+        props[VisilabsConstants.utmContentKey] = visilabsUser.utmContent
+        props[VisilabsConstants.utmTermKey] = visilabsUser.utmTerm
         
         props[VisilabsConstants.nrvKey] = String(visilabsUser.nrv)
         props[VisilabsConstants.pvivKey] = String(visilabsUser.pviv)

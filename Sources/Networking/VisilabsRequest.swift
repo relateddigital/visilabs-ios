@@ -421,6 +421,11 @@ class VisilabsRequest {
             props[VisilabsConstants.pvivKey] = String(vUser.pviv)
             props[VisilabsConstants.tvcKey] = String(vUser.tvc)
             props[VisilabsConstants.lvtKey] = vUser.lvt
+            props[VisilabsConstants.utmCampaignKey] = vUser.utmCampaign
+            props[VisilabsConstants.utmMediumKey] = vUser.utmMedium
+            props[VisilabsConstants.utmSourceKey] = vUser.utmSource
+            props[VisilabsConstants.utmContentKey] = vUser.utmContent
+            props[VisilabsConstants.utmTermKey] = vUser.utmTerm
         }
         return props
     }
