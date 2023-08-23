@@ -3138,8 +3138,12 @@ SpinToWin.prototype.resultHandler = function(res) {
     bigPath.setAttribute("stroke", "#ffffff");
     bigPath.setAttribute("stroke-width", "3");
     document.querySelector("#Layer_1").setAttribute("style", "margin-top: -10px !important;transform: rotate(0deg);");
-    document.querySelector(".eWheel-bg-layer > svg > circle.centerCircle").setAttribute("r", "30");
-    document.querySelector(".eWheel-center > img").style.width = "23%";
+    /*document.querySelector(".eWheel-bg-layer > svg > circle.centerCircle").setAttribute("r", "30");*/
+    /*document.querySelector(".eWheel-center > img").style.width = "23%";*/
+    var pathElement = document.querySelector("#wheel-container-full > div > div.eWheel-inner > div.eWheel > div.eWheel-bg-layer > svg > g.ew-slicesGroup > path.ew-current");
+    if (pathElement) {
+        pathElement.parentNode.appendChild(pathElement);
+    }
     var smallCirclesGroup = document.getElementsByClassName("ew-smallCirclesGroup");
     if (smallCirclesGroup && smallCirclesGroup.length > 0) {
         smallCirclesGroup[0].style.display = "none";
