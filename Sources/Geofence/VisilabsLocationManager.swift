@@ -594,6 +594,7 @@ extension VisilabsLocationManager {
                 props[VisilabsConstants.tokenIdKey] = user.tokenId
                 props[VisilabsConstants.appidKey] = user.appId
                 props[VisilabsConstants.channelKey] = profile.channel
+                props[VisilabsConstants.sdkTypeKey] = profile.sdkType
                 props[VisilabsConstants.utmCampaignKey] = user.utmCampaign
                 props[VisilabsConstants.utmMediumKey] = user.utmMedium
                 props[VisilabsConstants.utmSourceKey] = user.utmSource
