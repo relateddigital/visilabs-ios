@@ -27,6 +27,7 @@ public class Visilabs {
                                 maxGeofenceCount: Int = 20,
                                 isIDFAEnabled: Bool = true,
                                 loggingEnabled: Bool = false,
+                                sdkType: String = "native",
                                 isTest:Bool = false) -> VisilabsInstance {
 
 
@@ -41,6 +42,7 @@ public class Visilabs {
                                                   maxGeofenceCount: maxGeofenceCount,
                                                   isIDFAEnabled: isIDFAEnabled,
                                                   loggingEnabled: loggingEnabled,
+                                                  sdkType: sdkType,
                                                   isTest: isTest)
     }
     

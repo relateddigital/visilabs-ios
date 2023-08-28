@@ -26,6 +26,7 @@ class VisilabsManager {
                     maxGeofenceCount: Int,
                     isIDFAEnabled: Bool,
                     loggingEnabled: Bool,
+                    sdkType: String,
                     isTest: Bool) -> VisilabsInstance {
         VisilabsManager.initializeCalled = true
         setTest(test: isTest)
@@ -39,7 +40,8 @@ class VisilabsManager {
                                         askLocationPermmissionAtStart: askLocationPermmissionAtStart,
                                         maxGeofenceCount: maxGeofenceCount,
                                         isIDFAEnabled: isIDFAEnabled,
-                                        loggingEnabled: loggingEnabled)
+                                        loggingEnabled: loggingEnabled,
+                                        sdkType: sdkType)
         self.instance = instance
         return instance
     }
@@ -74,6 +76,7 @@ class VisilabsManager {
         props[VisilabsConstants.apiverKey] = instance?.visilabsProfile.apiver
         props[VisilabsConstants.actionType] = VisilabsConstants.appBanner
         props[VisilabsConstants.channelKey] = instance?.visilabsProfile.channel
+        props[VisilabsConstants.sdkTypeKey] = instance?.visilabsProfile.sdkType
         
         props[VisilabsConstants.nrvKey] = String(instance?.visilabsUser.nrv ?? 0)
         props[VisilabsConstants.pvivKey] = String(instance?.visilabsUser.pviv ?? 0)
