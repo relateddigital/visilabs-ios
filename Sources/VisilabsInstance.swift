@@ -22,7 +22,6 @@ public struct VisilabsUser: Codable {
     public var userAgent: String?
     public var identifierForAdvertising: String?
     public var sdkVersion: String?
-    public var sdkType: String?
     public var lastEventTime: String?
     public var nrv = 0
     public var pviv = 0
@@ -47,6 +46,7 @@ public struct VisilabsProfile: Codable {
     public var inAppNotificationsEnabled: Bool
     public var maxGeofenceCount: Int
     public var isIDFAEnabled: Bool
+    public var sdkType: String? = "native"
     public var apiver: String? = "IOS"
     public var requestTimeoutInterval: TimeInterval {
         return TimeInterval(requestTimeoutInSeconds)
@@ -113,6 +113,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         }
     }
     
+    
     public weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     
     // swiftlint:disable function_body_length
@@ -126,7 +127,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          askLocationPermmissionAtStart: Bool,
          maxGeofenceCount: Int,
          isIDFAEnabled: Bool = true,
-         loggingEnabled: Bool = false) {
+         loggingEnabled: Bool = false,
+         sdkType: String) {
         if loggingEnabled {
             VisilabsLogger.enableLevels([.debug, .info, .warning, .error])
             VisilabsLogger.info("Logging Enabled")
@@ -162,6 +164,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                           inAppNotificationsEnabled: inAppNotificationsEnabled,
                                           maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount,
                                           isIDFAEnabled: isIDFAEnabled,
+                                          sdkType: sdkType,
                                           apiver: VisilabsConstants.apiverValue)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
         
@@ -181,7 +184,6 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
-        visilabsUser.sdkType = VisilabsHelper.getSdkType()
         
         if let appVersion = VisilabsHelper.getAppVersion() {
             visilabsUser.appVersion = appVersion
@@ -234,7 +236,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                       geofenceEnabled: visilabsProfile.geofenceEnabled,
                       askLocationPermmissionAtStart: visilabsProfile.askLocationPermmissionAtStart,
                       maxGeofenceCount: visilabsProfile.maxGeofenceCount,
-                      isIDFAEnabled: visilabsProfile.isIDFAEnabled)
+                      isIDFAEnabled: visilabsProfile.isIDFAEnabled,
+                      sdkType: visilabsProfile.sdkType ?? "native")
         } else {
             return nil
         }
@@ -317,12 +320,14 @@ extension VisilabsInstance {
             var eQueue = Queue()
             var vUser = VisilabsUser()
             var chan = ""
+            var sdkType = ""
             
             self.readWriteLock.read {
                 do {
                     eQueue = self.eventsQueue
                     vUser = self.visilabsUser
                     chan = self.visilabsProfile.channel
+                    sdkType = self.visilabsProfile.sdkType ?? "native"
                 } catch {
                     print("error")
                 }
@@ -332,11 +337,13 @@ extension VisilabsInstance {
                                                                 properties: properties,
                                                                 eventsQueue: eQueue,
                                                                 visilabsUser: vUser,
-                                                                channel: chan)
+                                                                channel: chan,
+                                                                sdkType: sdkType)
             self.readWriteLock.write {
                 self.eventsQueue = result.eventsQueque
                 self.visilabsUser = result.visilabsUser
                 self.visilabsProfile.channel = result.channel
+                self.visilabsProfile.sdkType = result.sdkType
             }
             self.readWriteLock.read {
                 VisilabsPersistence.archiveUser(self.visilabsUser)
@@ -368,19 +375,25 @@ extension VisilabsInstance {
             var eQueue = Queue()
             var vUser = VisilabsUser()
             var chan = ""
+            var sdkType = ""
+            
             strongSelf.readWriteLock.read {
                 eQueue = strongSelf.eventsQueue
                 vUser = strongSelf.visilabsUser
                 chan = strongSelf.visilabsProfile.channel
+                sdkType = strongSelf.visilabsProfile.sdkType ?? "native"
             }
             let result = strongSelf.visilabsEventInstance.customEvent(properties: properties,
                                                                       eventsQueue: eQueue,
                                                                       visilabsUser: vUser,
-                                                                      channel: chan)
+                                                                      channel: chan,
+                                                                      sdkType: sdkType)
             strongSelf.readWriteLock.write {
                 strongSelf.eventsQueue = result.eventsQueque
                 strongSelf.visilabsUser = result.visilabsUser
                 strongSelf.visilabsProfile.channel = result.channel
+                strongSelf.visilabsProfile.sdkType = result.sdkType
+            
             }
             strongSelf.readWriteLock.read {
                 VisilabsPersistence.archiveUser(strongSelf.visilabsUser)
@@ -726,6 +739,7 @@ extension VisilabsInstance {
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.channelKey] = visilabsProfile.channel
+        props[VisilabsConstants.sdkTypeKey] = visilabsProfile.sdkType
         props[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
         props[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
         props[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
@@ -781,14 +795,17 @@ extension VisilabsInstance {
                 guard let self = self else { return }
                 var vUser = VisilabsUser()
                 var channel = "IOS"
+                var sdkType = "native"
                 self.readWriteLock.read {
                     vUser = self.visilabsUser
                     channel = self.visilabsProfile.channel
+                    sdkType = self.visilabsProfile.sdkType ?? "native"
                 }
                 self.visilabsRecommendationInstance.recommend(zoneID: zoneID,
                                                               productCode: productCode,
                                                               visilabsUser: vUser,
                                                               channel: channel,
+                                                              sdkType: sdkType,
                                                               properties: properties,
                                                               filters: filters) { response in
                     completion(response)

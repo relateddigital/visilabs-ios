@@ -406,6 +406,7 @@ class VisilabsRequest {
             props[VisilabsConstants.organizationIdKey] = vProfile.organizationId
             props[VisilabsConstants.profileIdKey] = vProfile.profileId
             props[VisilabsConstants.channelKey] = vProfile.channel
+            props[VisilabsConstants.sdkTypeKey] = vProfile.sdkType
             props[VisilabsConstants.mobileApplicationKey] = VisilabsConstants.isTrue
             props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
         }
@@ -414,7 +415,6 @@ class VisilabsRequest {
             props[VisilabsConstants.cookieIdKey] = vUser.cookieId
             props[VisilabsConstants.exvisitorIdKey] = vUser.exVisitorId
             props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
-            props[VisilabsConstants.mobileSdkType] = vUser.sdkType
             props[VisilabsConstants.mobileAppVersion] = vUser.appVersion
             props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
             props[VisilabsConstants.nrvKey] = String(vUser.nrv)

@@ -92,7 +92,8 @@ class HomeViewController: FormViewController {
                                askLocationPermmissionAtStart: visilabsProfile.askLocationPermmissionAtStart,
                                maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                                isIDFAEnabled: visilabsProfile.isIDFAEnabled,
-                               loggingEnabled: true,isTest: visilabsProfile.IsTest)
+                               loggingEnabled: true,
+                               isTest: visilabsProfile.IsTest)
             Visilabs.callAPI().useInsecureProtocol = false
             self.configureEuromessage()
             self.goToTabBarController()

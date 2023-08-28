@@ -39,7 +39,6 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.visitorData] = visilabsUser.visitorData
             userDic[VisilabsConstants.mobileIdKey] = visilabsUser.identifierForAdvertising
             userDic[VisilabsConstants.mobileSdkVersion] = visilabsUser.sdkVersion
-            userDic[VisilabsConstants.mobileSdkType] = visilabsUser.sdkType
             userDic[VisilabsConstants.mobileAppVersion] = visilabsUser.appVersion
             userDic[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
             userDic[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
@@ -118,9 +117,6 @@ public class VisilabsPersistence {
             }
             if let sdkversion = props[VisilabsConstants.mobileSdkVersion], !sdkversion.isNilOrWhiteSpace {
                 visilabsUser.sdkVersion = sdkversion
-            }
-            if let sdktype = props[VisilabsConstants.mobileSdkType], !sdktype.isNilOrWhiteSpace {
-                visilabsUser.sdkType = sdktype
             }
             if let appversion = props[VisilabsConstants.mobileAppVersion], !appversion.isNilOrWhiteSpace {
                 visilabsUser.appVersion = appversion
