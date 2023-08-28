@@ -20,13 +20,16 @@ class VisilabsEvent {
                      properties: [String: String],
                      eventsQueue: Queue,
                      visilabsUser: VisilabsUser,
-                     channel: String) -> (eventsQueque: Queue,
+                     channel: String,
+                     sdkType: String) -> (eventsQueque: Queue,
                                           visilabsUser: VisilabsUser,
                                           clearUserParameters: Bool,
-                                          channel: String) {
+                                          channel: String,
+                                          sdkType: String) {
         var props = properties
         var vUser = updateSessionParameters(pageName: pageName, visilabsUser: visilabsUser)
         var chan = channel
+        var sdkType = sdkType
         var clearUserParameters = false
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
         
@@ -99,10 +102,16 @@ class VisilabsEvent {
             props.removeValue(forKey: VisilabsConstants.channelKey)
         }
         
+        if props.keys.contains(VisilabsConstants.sdkTypeKey) {
+            sdkType = props[VisilabsConstants.sdkTypeKey]!
+            props.removeValue(forKey: VisilabsConstants.sdkTypeKey)
+        }
+        
         props[VisilabsConstants.organizationIdKey] = self.visilabsProfile.organizationId
         props[VisilabsConstants.profileIdKey] = self.visilabsProfile.profileId
         props[VisilabsConstants.cookieIdKey] = vUser.cookieId ?? ""
         props[VisilabsConstants.channelKey] = chan
+        props[VisilabsConstants.sdkTypeKey] = sdkType
         if let pageNm = pageName {
             props[VisilabsConstants.uriKey] = pageNm
         }
@@ -110,7 +119,6 @@ class VisilabsEvent {
         props[VisilabsConstants.mobileIdKey] = vUser.identifierForAdvertising ?? ""
         props[VisilabsConstants.apiverKey] = VisilabsConstants.ios
         props[VisilabsConstants.mobileSdkVersion] = vUser.sdkVersion
-        props[VisilabsConstants.mobileSdkType] = vUser.sdkType
         props[VisilabsConstants.mobileAppVersion] = vUser.appVersion
         
         props[VisilabsConstants.nrvKey] = String(vUser.nrv)
@@ -159,8 +167,11 @@ class VisilabsEvent {
             eQueue.remove(at: 0)
         }
         
-        return (eQueue, vUser, clearUserParameters, chan)
+        return (eQueue, vUser, clearUserParameters, chan, sdkType)
     }
+    
+    
+    
     
     private func updateSessionParameters(pageName: String?, visilabsUser: VisilabsUser) -> VisilabsUser {
         var vUser = visilabsUser

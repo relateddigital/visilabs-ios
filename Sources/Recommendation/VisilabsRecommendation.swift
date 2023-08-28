@@ -18,6 +18,7 @@ class VisilabsRecommendation {
                    productCode: String?,
                    visilabsUser: VisilabsUser,
                    channel: String,
+                   sdkType: String,
                    properties: [String: String] = [:],
                    filters: [VisilabsRecommendationFilter] = [],
                    completion: @escaping ((_ response: VisilabsRecommendationResponse) -> Void)) {
@@ -36,6 +37,7 @@ class VisilabsRecommendation {
         props[VisilabsConstants.appidKey] = visilabsUser.appId
         props[VisilabsConstants.apiverKey] = VisilabsConstants.apiverValue
         props[VisilabsConstants.channelKey] = VisilabsConstants.ios
+        props[VisilabsConstants.sdkTypeKey] = VisilabsConstants.sdkType
         props[VisilabsConstants.utmCampaignKey] = visilabsUser.utmCampaign
         props[VisilabsConstants.utmMediumKey] = visilabsUser.utmMedium
         props[VisilabsConstants.utmSourceKey] = visilabsUser.utmSource
@@ -117,6 +119,7 @@ class VisilabsRecommendation {
                 && !propKey.isEqual(VisilabsConstants.apiverKey)
                 && !propKey.isEqual(VisilabsConstants.filterKey)
                 && !propKey.isEqual(VisilabsConstants.channelKey)
+                && !propKey.isEqual(VisilabsConstants.sdkTypeKey)
                 && !propKey.isEqual(VisilabsConstants.utmCampaignKey)
                 && !propKey.isEqual(VisilabsConstants.utmMediumKey)
                 && !propKey.isEqual(VisilabsConstants.utmSourceKey)
