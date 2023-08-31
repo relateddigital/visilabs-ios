@@ -11,7 +11,7 @@ public class Visilabs {
             return instance
         } else {
             assert(false, "You have to call createAPI before calling the callAPI.")
-            return Visilabs.createAPI(organizationId: "", profileId: "", dataSource: "")
+            return Visilabs.createAPI(organizationId: "", profileId: "", dataSource: "",geofenceEnabled: false,askLocationPermmissionAtStart: false)
         }
     }
 
