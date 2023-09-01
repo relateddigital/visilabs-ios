@@ -100,7 +100,7 @@ open class Checkbox: UIControl {
     @IBInspectable public var checkmarkColor: UIColor!
 
     /// **Default:** White.
-    @available(swift, obsoleted: 4.1, renamed: "checkboxFillColor", message: "Defaults to a clear color")
+    /// **Warning:** Only use Swift 4.1 and after.
     public var checkboxBackgroundColor: UIColor! = .white
 
     /// The checkboxes fill color.
