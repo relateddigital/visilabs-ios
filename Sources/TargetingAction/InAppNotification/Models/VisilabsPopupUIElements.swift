@@ -309,7 +309,7 @@ extension VisilabsPopupDialogDefaultView {
             copyCodeImageButton.trailing(to: self)
             copyCodeTextButton.trailingToLeading(of: copyCodeImageButton, offset: 20.0)
         } else if withFeedback == false {
-            messageLabel.bottom(to: self, offset: -10)
+            messageLabel.bottom(to: self, offset: 0)
         } else {
             addSubview(feedbackTF)
             feedbackTF.topToBottom(of: messageLabel, offset: 10)
