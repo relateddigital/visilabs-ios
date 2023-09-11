@@ -90,6 +90,7 @@ public class VisilabsStoryHomeViewController: NSObject,
             let story = self.storyAction.stories[indexPath.row]
             if let storyLink = story.link, let storyUrl = URL(string: storyLink) {
                 VisilabsLogger.info("opening CTA URL: \(storyUrl)")
+                urlDelegate?.urlClicked(storyUrl)
                 let app = VisilabsInstance.sharedUIApplication()
                 app?.performSelector(onMainThread: NSSelectorFromString("openURL:"),
                                      with: storyUrl, waitUntilDone: true)
