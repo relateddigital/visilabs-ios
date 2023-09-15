@@ -23,7 +23,7 @@ public class Visilabs {
                                 channel: String = "IOS",
                                 requestTimeoutInSeconds: Int = 30,
                                 geofenceEnabled: Bool = false,
-                                askLocationPermmissionAtStart: Bool = true,
+                                askLocationPermmissionAtStart: Bool = false,
                                 maxGeofenceCount: Int = 20,
                                 isIDFAEnabled: Bool = true,
                                 loggingEnabled: Bool = false,
