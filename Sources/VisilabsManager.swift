@@ -4,6 +4,8 @@
 //
 //  Created by Egemen on 14.07.2020.
 //
+import Foundation
+import UIKit
 
 class VisilabsManager {
     
