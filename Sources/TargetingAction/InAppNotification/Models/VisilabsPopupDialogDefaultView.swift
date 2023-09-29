@@ -16,6 +16,7 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var secondImageView = setSecondImageView()
     internal lazy var titleLabel = setTitleLabel()
     internal lazy var copyCodeTextButton = setCopyCodeText()
+    internal lazy var promoCodeFunction = getPromoCodeFunction()
     internal lazy var copyCodeImageButton = setCopyCodeImage()
     internal lazy var messageLabel = setMessageLabel()
     internal lazy var npsView = setNpsView()
@@ -367,6 +368,13 @@ extension VisilabsPopupDialogDefaultView {
     @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
         UIPasteboard.general.string = copyCodeTextButton.currentTitle
         VisilabsHelper.showCopiedClipboardMessage()
+        
+        if getPromoCodeFunction() == "copy_close" {
+            VisilabsHelper.showCopiedClipboardMessage()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self.delegate?.dismissPromo()
+            }
+        }
     }
 
     @objc func consentButtonTapped(_ sender: UIButton) {
@@ -504,6 +512,7 @@ extension VisilabsPopupDialogDefaultView: ScratchUIViewDelegate {
 
 protocol VisilabsPopupDialogDefaultViewDelegate: AnyObject {
     func dismissSctw()
+    func dismissPromo()
 }
 
 protocol ImageButtonImageDelegate: AnyObject {
