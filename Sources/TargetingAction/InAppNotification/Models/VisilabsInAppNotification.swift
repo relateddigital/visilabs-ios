@@ -37,6 +37,7 @@ public class VisilabsInAppNotification {
         public static let promotionCode = "promotion_code"
         public static let promotionTextColor = "promocode_text_color"
         public static let promotionBackgroundColor = "promocode_background_color"
+        public static let promocodeCopybuttonFunction = "promocode_copybutton_function"
         public static let numberColors = "number_colors"
         public static let numberRange = "number_range"
         public static let waitingTime = "waiting_time"
@@ -88,6 +89,7 @@ public class VisilabsInAppNotification {
     let promotionCode: String?
     let promotionTextColor: UIColor?
     let promotionBackgroundColor: UIColor?
+    let promocodeCopybuttonFunction: String?
     let numberColors: [UIColor]?
     var numberRange = "1-10"
     let waitingTime: Int?
@@ -187,6 +189,7 @@ public class VisilabsInAppNotification {
                 promotionCode: String?,
                 promotionTextColor: String?,
                 promotionBackgroundColor: String?,
+                promocodeCopybuttonFunction: String?,
                 numberColors: [String]?,
                 numberRange: String?  = "1-10",
                 waitingTime: Int?,
@@ -265,6 +268,7 @@ public class VisilabsInAppNotification {
         self.promotionCode = promotionCode
         self.promotionTextColor = UIColor(hex: promotionTextColor)
         self.promotionBackgroundColor = UIColor(hex: promotionBackgroundColor)
+        self.promocodeCopybuttonFunction = promocodeCopybuttonFunction
         self.numberColors = VisilabsHelper.convertColorArray(numberColors)
         self.numberRange = numberRange ?? "1-10"
         self.waitingTime = waitingTime
@@ -344,6 +348,7 @@ public class VisilabsInAppNotification {
         promotionCode = actionData[PayloadKey.promotionCode] as? String
         promotionTextColor = UIColor(hex: actionData[PayloadKey.promotionTextColor] as? String)
         promotionBackgroundColor = UIColor(hex: actionData[PayloadKey.promotionBackgroundColor] as? String)
+        promocodeCopybuttonFunction = actionData[PayloadKey.promocodeCopybuttonFunction] as? String
         
         displayType = actionData[PayloadKey.displayType] as? String
         
