@@ -57,6 +57,10 @@ extension VisilabsPopupDialogDefaultView {
 
         return copyCodeText
     }
+    
+    internal func getPromoCodeFunction() -> String {
+        return visilabsInAppNotification?.promocodeCopybuttonFunction ?? ""
+    }
 
     internal func setCopyCodeImage() -> UIButton {
         let copyCodeImage = UIButton(frame: .zero)

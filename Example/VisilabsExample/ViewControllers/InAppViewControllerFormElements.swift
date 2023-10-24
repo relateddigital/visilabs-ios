@@ -557,6 +557,9 @@ extension InAppViewController {
         tag = VisilabsInAppNotification.PayloadKey.promotionBackgroundColor
         let promotionBackgroundColor = (form.rowBy(tag: tag)
             as TextRow?)!.value! as String
+        
+        let promocodeCopybuttonFunction = (form.rowBy(tag: VisilabsInAppNotification.PayloadKey.promocodeCopybuttonFunction)
+            as TextRow?)!.value ?? ""
 
         tag = VisilabsInAppNotification.PayloadKey.numberColors
         let numberBgColor1 = (form.rowBy(tag: tag + "1") as TextRow?)!.value! as String
@@ -633,6 +636,7 @@ extension InAppViewController {
                                          promotionCode: promotionCode,
                                          promotionTextColor: promotionTextColor,
                                          promotionBackgroundColor: promotionBackgroundColor,
+                                         promocodeCopybuttonFunction: promocodeCopybuttonFunction,
                                          numberColors: numberColors,
                                          waitingTime: waitingTime,
                                          secondPopupType: secondPopupType,
@@ -695,6 +699,7 @@ extension InAppViewController {
                                          promotionCode: "promotionCode",
                                          promotionTextColor: "promotionTextColor",
                                          promotionBackgroundColor: "promotionBackgroundColor",
+                                         promocodeCopybuttonFunction: "promocodeCopybuttonFunction",
                                          numberColors: nil,
                                          waitingTime: 0,
                                          secondPopupType: nil,
