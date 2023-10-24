@@ -519,6 +519,12 @@ extension InAppViewController {
 
         tag = VisilabsInAppNotification.PayloadKey.closeButtonColor
         let closeButtonColor: String = ((form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.pos
+        let pos: String = ((form.rowBy(tag: tag) as? PickerInputRow<String>)?.value ?? "") as String
+        
+        tag = VisilabsInAppNotification.PayloadKey.duration
+        let duration: Int = ((form.rowBy(tag: tag) as? PickerInputRow<Int>)?.value ?? 6) as Int
 
         tag = VisilabsInAppNotification.PayloadKey.buttonTextColor
         let buttonTextColor = (form.rowBy(tag: tag) as TextRow?)!.value! as String
@@ -637,7 +643,7 @@ extension InAppViewController {
                                          secondImageUrlString1: secondImg1,
                                          secondImageUrlString2: secondImg2,
                                          secondPopupMinPoint: minPoint,
-                                         position: .bottom, videourl: videourl, secondPopupVideourl1: secondPopupVideourl1, secondPopupVideourl2: secondPopupVideourl2)
+                                         position: .bottom, videourl: videourl, secondPopupVideourl1: secondPopupVideourl1, secondPopupVideourl2: secondPopupVideourl2,duration: duration,pos: pos)
     }
 
     // swiftlint:disable function_body_length
@@ -703,6 +709,8 @@ extension InAppViewController {
                                          carouselItems: carouselItems,
                                          videourl: "videourl",
                                          secondPopupVideourl1: "secondPopup_videourl1",
-                                         secondPopupVideourl2: "secondPopup_videourl2")
+                                         secondPopupVideourl2: "secondPopup_videourl2",
+                                         duration: 0,
+                                         pos: "pos")
     }
 }
