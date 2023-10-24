@@ -11,7 +11,8 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
     var miniNotification: VisilabsInAppNotification! {
         return super.notification
     }
-
+    
+    @IBOutlet weak var closeButton: UILabel!
     @IBOutlet var circleLabel: UIView!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
@@ -19,6 +20,7 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
     var isDismissing = false
     var canPan = true
     var position: CGPoint!
+    var isTop = false
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -27,14 +29,21 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if notification?.pos != "bottom" {
+            isTop = true
+        }
 
-        titleLabel.text = notification!.messageTitle
+        closeButton.textColor = notification?.closeButtonColor
+        titleLabel.text = notification!.messageTitle?.replacingOccurrences(of: "\\n", with: "\n")
+        titleLabel.textColor = notification?.messageTitleColor
         titleLabel.font = notification!.messageTitleFont
+
         if let image = notification!.image {
             imageView.image = UIImage.gif(data: image)
         }
 
-        view.backgroundColor = UIColor(hex: "#000000", alpha: 0.8)
+        view.backgroundColor = notification?.backGroundColor
         titleLabel.textColor = UIColor.white
         imageView.tintColor = UIColor.white
 
@@ -69,8 +78,14 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
 
         let duration = animated ? 0.1 : 0
         UIView.animate(withDuration: duration, animations: {
-            self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
-                + VisilabsInAppNotificationsConstants.miniBottomPadding)
+            
+            if self.isTop {
+                self.window?.frame.origin.y += (VisilabsInAppNotificationsConstants.miniInAppHeight
+                    + VisilabsInAppNotificationsConstants.miniBottomPadding)
+            } else {
+                self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
+                    + VisilabsInAppNotificationsConstants.miniBottomPadding)
+            }
             self.canPan = true
         }, completion: { _ in
             self.position = self.window?.layer.position
@@ -96,10 +111,25 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
         let frame: CGRect
         if sharedUIApplication.statusBarOrientation.isPortrait
             && UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
-            frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
-                           y: bounds.size.height,
-                           width: bounds.size.width - (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
-                           height: VisilabsInAppNotificationsConstants.miniInAppHeight)
+            
+            if isTop == true {
+                
+                frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
+                               y: -VisilabsInAppNotificationsConstants.miniInAppHeight+35,
+                               width: bounds.size.width - (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
+                               height: VisilabsInAppNotificationsConstants.miniInAppHeight)
+                
+            } else {
+                
+                frame = CGRect(x: VisilabsInAppNotificationsConstants.miniSidePadding,
+                               y: bounds.size.height-15,
+                               width: bounds.size.width - (VisilabsInAppNotificationsConstants.miniSidePadding * 2),
+                               height: VisilabsInAppNotificationsConstants.miniInAppHeight)
+                
+
+            }
+            
+
         } else { // Is iPad or Landscape mode
             frame = CGRect(x: bounds.size.width / 4,
                            y: bounds.size.height,
@@ -128,8 +158,15 @@ class VisilabsMiniNotificationViewController: VisilabsBaseNotificationViewContro
             isDismissing = true
             let duration = animated ? 0.5 : 0
             UIView.animate(withDuration: duration, animations: {
-                self.window?.frame.origin.y += (VisilabsInAppNotificationsConstants.miniInAppHeight
-                    + VisilabsInAppNotificationsConstants.miniBottomPadding)
+                
+                if self.isTop {
+                    self.window?.frame.origin.y -= (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                                + VisilabsInAppNotificationsConstants.miniBottomPadding)
+                } else {
+                    self.window?.frame.origin.y += (VisilabsInAppNotificationsConstants.miniInAppHeight
+                                                + VisilabsInAppNotificationsConstants.miniBottomPadding)
+                }
+                
             }, completion: { _ in
                 self.window?.isHidden = true
                 self.window?.removeFromSuperview()

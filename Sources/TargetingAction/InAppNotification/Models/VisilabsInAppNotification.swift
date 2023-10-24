@@ -57,6 +57,8 @@ public class VisilabsInAppNotification {
         public static let secondPopupVideourl2 = "secondPopup_videourl2"
         
         public static let displayType = "display_type"
+        public static let duration = "duration"
+        public static let pos = "pos"
     }
 
     let actId: Int
@@ -106,6 +108,8 @@ public class VisilabsInAppNotification {
     let videourl: String?
     let secondPopupVideourl1: String?
     let secondPopupVideourl2: String?
+    var duration:Int?
+    var pos : String?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -204,7 +208,9 @@ public class VisilabsInAppNotification {
                 videourl: String?,
                 secondPopupVideourl1: String?,
                 secondPopupVideourl2: String?,
-                displayType: String? = "popup") {
+                displayType: String? = "popup",
+                duration:Int?,
+                pos:String?) {
         self.actId = actId
         messageType = type.rawValue
         self.type = type
@@ -227,6 +233,8 @@ public class VisilabsInAppNotification {
         self.customFont = customFont
         self.closePopupActionType = closePopupActionType
         backGroundColor = UIColor(hex: backGround)
+        self.pos = pos
+        self.duration = duration
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
                 self.closeButtonColor = UIColor.white
@@ -417,7 +425,9 @@ public class VisilabsInAppNotification {
         secondPopupVideourl2 = actionData[PayloadKey.secondPopupVideourl2] as? String
         secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
         previousPopupPoint = nil
-
+        duration = actionData[PayloadKey.duration] as? Int
+        pos = actionData[PayloadKey.pos] as? String
+        
         if let positionString = actionData[PayloadKey.position] as? String
             , let position = VisilabsHalfScreenPosition(rawValue: positionString) {
             self.position = position
