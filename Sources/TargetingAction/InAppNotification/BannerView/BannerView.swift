@@ -156,9 +156,6 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
 
         if let indexPath = self.collectionView?.indexPathForItem(at: sender.location(in: self.collectionView)) {
             let selectedUrl = bannerViewModel?.appBanners[indexPath.row].ios_lnk
-            if let url = URL(string: selectedUrl ?? "") {
-                UIApplication.shared.open(url)
-            }
             delegate?.bannerItemClickListener(url: selectedUrl ?? "")
             DispatchQueue.main.async {
                 self.sendClickedUrl(clickedUrl: selectedUrl ?? "")
