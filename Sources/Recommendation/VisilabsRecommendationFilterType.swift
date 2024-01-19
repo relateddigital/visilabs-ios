@@ -28,7 +28,7 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
     case COLOR
     case AGEGROUP
     case BRAND
-    case CATEGORY
+    case CATEGORYCODE
     case GENDER
     case MATERIAL
     case ATTRIBUTE1
@@ -54,8 +54,8 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
             return "AGEGROUP"
         case .BRAND:
             return "BRAND"
-        case .CATEGORY:
-            return "CATEGORY"
+        case .CATEGORYCODE:
+            return "CATEGORYCODE"
         case .GENDER:
             return "GENDER"
         case .MATERIAL:
@@ -92,8 +92,8 @@ public enum VisilabsProductFilterAttribute: Int, RawRepresentable {
             self = .AGEGROUP
         case "BRAND":
             self = .BRAND
-        case "CATEGORY":
-            self = .CATEGORY
+        case "CATEGORYCODE":
+            self = .CATEGORYCODE
         case "GENDER":
             self = .GENDER
         case "MATERIAL":
