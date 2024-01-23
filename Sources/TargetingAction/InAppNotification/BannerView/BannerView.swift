@@ -167,6 +167,9 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
         }
     }
 
+    public func reloadBannerViewData() {
+        collectionView.reloadData()
+    }
 }
 
 struct BannerViewModel {
