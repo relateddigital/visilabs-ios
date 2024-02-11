@@ -60,9 +60,7 @@ class VisilabsSearchRecommendation {
                 return
             }
             
-            completion(VisilabsSearchRecommendationResponse(responseDict: result))
-            print(result)
-            
+            completion(VisilabsSearchRecommendationResponse(responseDict: result))            
             
         }
         
