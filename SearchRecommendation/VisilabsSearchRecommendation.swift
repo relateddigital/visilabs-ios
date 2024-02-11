@@ -56,10 +56,11 @@ class VisilabsSearchRecommendation {
         
         VisilabsRequest.sendSearchRecommendationRequest(properties: props, headers: [String: String](), timeoutInterval: visilabsProfile.requestTimeoutInterval) { result in
             guard let result = result else {
-                completion(VisilabsSearchRecommendationResponse())
+                completion(VisilabsSearchRecommendationResponse(responseDict: [String : Any]()))
                 return
             }
             
+            completion(VisilabsSearchRecommendationResponse(responseDict: result))
             print(result)
             
             
