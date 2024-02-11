@@ -73,6 +73,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     var trackingQueue: DispatchQueue!
     var targetingActionQueue: DispatchQueue!
     var recommendationQueue: DispatchQueue!
+    var searchRecommendationQueue: DispatchQueue!
     var networkQueue: DispatchQueue!
     let readWriteLock: VisilabsReadWriteLock
     private var observers: [NSObjectProtocol]?
@@ -86,6 +87,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     let visilabsRecommendationInstance: VisilabsRecommendation
     let visilabsRemoteConfigInstance: VisilabsRemoteConfig
     let visilabsLocationManager: VisilabsLocationManager
+    let visilabsSearchRecommendationInstance: VisilabsSearchRecommendation
+
     
     public var debugDescription: String {
         return "Visilabs(siteId : \(visilabsProfile.profileId)" +
@@ -172,6 +175,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         let label = "com.relateddigital.\(visilabsProfile.profileId)"
         trackingQueue = DispatchQueue(label: "\(label).tracking)", qos: .utility)
         recommendationQueue = DispatchQueue(label: "\(label).recommendation)", qos: .utility)
+        searchRecommendationQueue = DispatchQueue(label: "\(label).searchRecommendation)", qos: .utility)
         targetingActionQueue = DispatchQueue(label: "\(label).targetingaction)", qos: .utility)
         networkQueue = DispatchQueue(label: "\(label).network)", qos: .utility)
         visilabsEventInstance = VisilabsEvent(visilabsProfile: visilabsProfile)
@@ -179,6 +183,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsTargetingActionInstance = VisilabsTargetingAction(lock: readWriteLock,
                                                                   visilabsProfile: visilabsProfile)
         visilabsRecommendationInstance = VisilabsRecommendation(visilabsProfile: visilabsProfile)
+        visilabsSearchRecommendationInstance = VisilabsSearchRecommendation(visilabsProfile: visilabsProfile)
         visilabsRemoteConfigInstance = VisilabsRemoteConfig(profileId: visilabsProfile.profileId)
         visilabsLocationManager = VisilabsLocationManager()
         visilabsUser = unarchive()
@@ -777,6 +782,40 @@ extension VisilabsInstance {
     
     
 }
+
+extension VisilabsInstance {
+    
+    public func searcRecommendation(keyword:String ,properties: [String: String] = [:],completion: @escaping ((_ response: VisilabsSearchRecommendationResponse) -> Void)) {
+                
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+        }
+        
+        searchRecommendationQueue.async { [weak self, keyword,properties, completion] in
+            self?.networkQueue.async { [weak self, keyword,properties, completion] in
+                guard let self = self else { return }
+                var vUser = VisilabsUser()
+
+                self.readWriteLock.read {
+                    vUser = self.visilabsUser
+                }
+                
+                self.visilabsSearchRecommendationInstance.searchRecommend(visilabsUser: vUser,
+                                                                          properties: properties,
+                                                                          keyword: keyword) { response in
+                    
+                    completion(response)
+                }
+            }
+        }
+    }
+    
+    
+    
+}
+
+
+
 
 // MARK: - RECOMMENDATION
 

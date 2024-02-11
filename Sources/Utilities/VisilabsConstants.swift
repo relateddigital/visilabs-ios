@@ -24,6 +24,7 @@ struct VisilabsConstants {
     static var loggerEndPoint = "lgr.visilabs.net"
     static var realtimeEndPoint = "rt.visilabs.net"
     static var recommendationEndPoint = "\(urlConstant.shared.urlPrefix)/json"
+    static var searchRecommendationEndPoint = "\(urlConstant.shared.urlPrefix)/search"
     static var actionEndPoint = "\(urlConstant.shared.urlPrefix)/actjson"
     static var geofenceEndPoint = "\(urlConstant.shared.urlPrefix)/geojson"
     static var mobileEndPoint = "\(urlConstant.shared.urlPrefix)/mobile"
@@ -110,6 +111,8 @@ struct VisilabsConstants {
     static let pvivKey = "OM.pviv"
     static let tvcKey = "OM.tvc"
     static let lvtKey = "OM.lvt"
+    static let keyword = "OM.se_word"
+
 
     static let utmSourceKey = "utm_source"
     static let utmCampaignKey = "utm_campaign"

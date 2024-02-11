@@ -40,6 +40,13 @@ class EventViewController: FormViewController, BannerDelegate {
         initializeForm()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Visilabs.callAPI().searcRecommendation(keyword: "sa") { response in
+            print("selam")
+        }
+    }
+    
     private func initializeForm() {
         form
         +++ getCommonEventsSection()
