@@ -54,27 +54,16 @@ class VisilabsSearchRecommendation {
             }
         }
         
-        
-        VisilabsRequest.sendSearchRecommendationRequest(properties: props,
-                                                  headers: [String: String](),
-                                                  timeoutInterval: visilabsProfile.requestTimeoutInterval,
-                                                  completion: { (results: [Any]?, error: VisilabsError?) in
-            if error != nil {
+        VisilabsRequest.sendSearchRecommendationRequest(properties: props, headers: [String: String](), timeoutInterval: visilabsProfile.requestTimeoutInterval) { result in
+            guard let result = result else {
                 completion(VisilabsSearchRecommendationResponse())
-            } else {
-                var widgetTitle = ""
-                var counter = 0
-                if let resultsAr = results {
-                    for result in resultsAr {
-                        print(result)
-
-                    }
-                }
-
-                completion(VisilabsSearchRecommendationResponse()) //burası dolacak
+                return
             }
-        })
-        
+            
+            print(result)
+            
+            
+        }
         
     }
     
