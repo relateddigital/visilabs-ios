@@ -120,6 +120,52 @@ class VisilabsRequest {
         })
     }
     
+    // MARK: - SEARCHRECOMMENDATION
+
+    
+    class func sendSearchRecommendationRequest(properties: [String: String],
+                                         headers: [String: String],
+                                         timeoutInterval: TimeInterval,
+                                         completion: @escaping ([Any]?, VisilabsError?) -> Void) {
+        
+        var queryItems = [URLQueryItem]()
+        for property in properties {
+            queryItems.append(URLQueryItem(name: property.key, value: property.value))
+        }
+        
+        let responseParser: (Data) -> [Any]? = { data in
+            var response: Any?
+            do {
+                response = try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                VisilabsLogger.error("exception decoding api data")
+            }
+            return response as? [Any]
+        }
+        
+        let resource = VisilabsNetwork.buildResource(endPoint: .search,
+                                                     method: .get,
+                                                     timeoutInterval: timeoutInterval,
+                                                     requestBody: nil,
+                                                     queryItems: queryItems,
+                                                     headers: headers,
+                                                     parse: responseParser)
+        
+        sendSearchRecommendationRequestHandler(resource: resource, completion: { result, error in completion(result, error) })
+        
+    }
+    
+    private class func sendSearchRecommendationRequestHandler(resource: VisilabsResource<[Any]>,
+                                                        completion: @escaping ([Any]?, VisilabsError?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource,
+                                   failure: { (error, _, _) in
+            VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+            completion(nil, error)
+        }, success: { (result, _) in
+            completion(result, nil)
+        })
+    }
+    
     // MARK: - TARGETING ACTIONS
     
     // MARK: - Geofence

@@ -87,6 +87,7 @@ internal class VisilabsHelper {
         VisilabsBasePath.endpoints[.realtime] =
         "\(httpProtocol)://\(VisilabsConstants.realtimeEndPoint)/\(dataSource)/\(VisilabsConstants.omGif)"
         VisilabsBasePath.endpoints[.target] = "\(httpProtocol)://\(VisilabsConstants.recommendationEndPoint)"
+        VisilabsBasePath.endpoints[.search] = "\(httpProtocol)://\(VisilabsConstants.searchRecommendationEndPoint)"
         VisilabsBasePath.endpoints[.action] = "\(httpProtocol)://\(VisilabsConstants.actionEndPoint)"
         VisilabsBasePath.endpoints[.geofence] = "\(httpProtocol)://\(VisilabsConstants.geofenceEndPoint)"
         VisilabsBasePath.endpoints[.mobile] = "\(httpProtocol)://\(VisilabsConstants.mobileEndPoint)"
