@@ -45,6 +45,7 @@ class EventViewController: FormViewController, BannerDelegate {
 //        Visilabs.callAPI().searcRecommendation(keyword: "sa") { response in
 //            print("test")
 //        }
+        
     }
     
     private func initializeForm() {

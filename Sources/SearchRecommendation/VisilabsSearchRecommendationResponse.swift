@@ -16,16 +16,15 @@ struct BrandContainer: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let title = responseDict["Title"] as? String,
-            let isActive = responseDict["IsActive"] as? Bool,
-            let popularBrandsDict = responseDict["PopularBrands"] as? [[String: Any]],
-            let reportDict = responseDict["report"] as? [String: String],
+            let title = responseDict[VisilabsConstants.Title] as? String,
+            let isActive = responseDict[VisilabsConstants.IsActive] as? Bool,
+            let popularBrandsDict = responseDict[VisilabsConstants.PopularBrands] as? [[String: Any]],
+            let reportDict = responseDict[VisilabsConstants.report] as? [String: String],
             let report = Report(responseDict: reportDict)
         else {
             return nil
         }
 
-        // PopularBrand tipini opsiyonel bir diziye çevir
         let popularBrands = popularBrandsDict.compactMap { PopularBrand(responseDict: $0) }
 
         self.title = title
@@ -41,13 +40,13 @@ struct PopularBrand: Codable {
     let url: String?
 
     init(responseDict: [String: Any]) {
-        self.name = responseDict["Name"] as? String ?? ""
-        self.url = responseDict["Url"] as? String
+        self.name = responseDict[VisilabsConstants.Name] as? String ?? ""
+        self.url = responseDict[VisilabsConstants.Url] as? String
     }
 }
 
 // MARK: - Report
-struct Report: Codable {
+public struct Report: Codable {
     let impression, click: String
 
     enum CodingKeys: String, CodingKey {
@@ -84,16 +83,15 @@ struct CategoryContainer: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let title = responseDict["Title"] as? String,
-            let isActive = responseDict["IsActive"] as? Bool,
-            let popularCategoriesDict = responseDict["PopularCategories"] as? [[String: Any]],
-            let reportDict = responseDict["report"] as? [String: String],
+            let title = responseDict[VisilabsConstants.Title] as? String,
+            let isActive = responseDict[VisilabsConstants.IsActive] as? Bool,
+            let popularCategoriesDict = responseDict[VisilabsConstants.PopularCategories] as? [[String: Any]],
+            let reportDict = responseDict[VisilabsConstants.report] as? [String: String],
             let report = Report(responseDict: reportDict)
         else {
             return nil
         }
         
-        // PopularCategory tipini opsiyonel bir diziye çevir
         let popularCategories = popularCategoriesDict.compactMap { PopularCategory(responseDict: $0) }
 
         self.title = title
@@ -111,13 +109,12 @@ struct PopularCategory: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let name = responseDict["Name"] as? String,
-            let productsDict = responseDict["Products"] as? [[String: Any]]
+            let name = responseDict[VisilabsConstants.Name] as? String,
+            let productsDict = responseDict[VisilabsConstants.Products] as? [[String: Any]]
         else {
             return nil
         }
         
-        // Product tipini oluştur
         let products = productsDict.compactMap { Product(responseDict: $0) }
 
         self.name = name
@@ -134,15 +131,15 @@ struct Product: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let name = responseDict["Name"] as? String,
-            let url = responseDict["Url"] as? String,
-            let imageUrl = responseDict["ImageUrl"] as? String,
-            let brandName = responseDict["BrandName"] as? String,
-            let price = responseDict["Price"] as? Double,
-            let discountPrice = responseDict["DiscountPrice"] as? Double,
-            let code = responseDict["Code"] as? String,
-            let currency = responseDict["Currency"] as? String,
-            let discountCurrency = responseDict["DiscountCurrency"] as? String
+            let name = responseDict[VisilabsConstants.Name] as? String,
+            let url = responseDict[VisilabsConstants.Url] as? String,
+            let imageUrl = responseDict[VisilabsConstants.ImageUrl] as? String,
+            let brandName = responseDict[VisilabsConstants.BrandName] as? String,
+            let price = responseDict[VisilabsConstants.Price] as? Double,
+            let discountPrice = responseDict[VisilabsConstants.DiscountPrice] as? Double,
+            let code = responseDict[VisilabsConstants.Code] as? String,
+            let currency = responseDict[VisilabsConstants.Currency] as? String,
+            let discountCurrency = responseDict[VisilabsConstants.DiscountCurrency] as? String
         else {
             return nil
         }
@@ -169,12 +166,12 @@ struct ProductAreaContainer: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let title = responseDict["Title"] as? String,
-            let preTitle = responseDict["PreTitle"] as? String,
-            let changeTitle = responseDict["ChangeTitle"] as? Bool,
-            let productsDict = responseDict["Products"] as? [[String: Any]],
-            let searchResultMessage = responseDict["SearchResultMessage"] as? String,
-            let reportDict = responseDict["report"] as? [String: String],
+            let title = responseDict[VisilabsConstants.Title] as? String,
+            let preTitle = responseDict[VisilabsConstants.PreTitle] as? String,
+            let changeTitle = responseDict[VisilabsConstants.ChangeTitle] as? Bool,
+            let productsDict = responseDict[VisilabsConstants.Products] as? [[String: Any]],
+            let searchResultMessage = responseDict[VisilabsConstants.SearchResultMessage] as? String,
+            let reportDict = responseDict[VisilabsConstants.report] as? [String: String],
             let report = Report(responseDict: reportDict)
         else {
             return nil
@@ -210,11 +207,11 @@ struct SearchContainer: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let title = responseDict["Title"] as? String,
-            let isActive = responseDict["IsActive"] as? Bool,
-            let searchUrlPrefix = responseDict["SearchUrlPrefix"] as? String,
-            let popularSearchesDict = responseDict["PopularSearches"] as? [[String: Any]],
-            let reportDict = responseDict["report"] as? [String: String],
+            let title = responseDict[VisilabsConstants.Title] as? String,
+            let isActive = responseDict[VisilabsConstants.IsActive] as? Bool,
+            let searchUrlPrefix = responseDict[VisilabsConstants.SearchUrlPrefix] as? String,
+            let popularSearchesDict = responseDict[VisilabsConstants.PopularSearches] as? [[String: Any]],
+            let reportDict = responseDict[VisilabsConstants.report] as? [String: String],
             let report = Report(responseDict: reportDict)
         else {
             return nil
@@ -258,17 +255,17 @@ struct SearchStyle: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let fontFamily = responseDict["FontFamily"] as? String,
-            let textColor = responseDict["TextColor"] as? String,
-            let themeColor = responseDict["ThemeColor"] as? String,
-            let titleColor = responseDict["TitleColor"] as? String,
-            let hoverColor = responseDict["HoverColor"] as? String,
-            let hoverTextColor = responseDict["HoverTextColor"] as? String,
-            let columnCount = responseDict["ColumnCount"] as? Int,
-            let rowCount = responseDict["RowCount"] as? Int,
-            let querySelectorCss = responseDict["QuerySelectorCss"] as? String,
-            let titleBorderRadius = responseDict["TitleBorderRadius"] as? String,
-            let backgroundColor = responseDict["BackgroundColor"] as? String
+            let fontFamily = responseDict[VisilabsConstants.FontFamily] as? String,
+            let textColor = responseDict[VisilabsConstants.TextColor] as? String,
+            let themeColor = responseDict[VisilabsConstants.ThemeColor] as? String,
+            let titleColor = responseDict[VisilabsConstants.TitleColor] as? String,
+            let hoverColor = responseDict[VisilabsConstants.HoverColor] as? String,
+            let hoverTextColor = responseDict[VisilabsConstants.HoverTextColor] as? String,
+            let columnCount = responseDict[VisilabsConstants.ColumnCount] as? Int,
+            let rowCount = responseDict[VisilabsConstants.RowCount] as? Int,
+            let querySelectorCss = responseDict[VisilabsConstants.QuerySelectorCss] as? String,
+            let titleBorderRadius = responseDict[VisilabsConstants.TitleBorderRadius] as? String,
+            let backgroundColor = responseDict[VisilabsConstants.BackgroundColor] as? String
         else {
             return nil
         }
@@ -294,13 +291,13 @@ struct SearchTemplate: Codable {
     
     init?(responseDict: [String: Any]) {
         guard
-            let mainLayout = responseDict["MainLayout"] as? String,
-            let popularSearches = responseDict["PopularSearches"] as? String,
-            let popularCategories = responseDict["PopularCategories"] as? String,
-            let popularBrands = responseDict["PopularBrands"] as? String,
-            let popularProducts = responseDict["PopularProducts"] as? String,
-            let searchItemLayout = responseDict["SearchItemLayout"] as? String,
-            let listItemLayout = responseDict["ListItemLayout"] as? String
+            let mainLayout = responseDict[VisilabsConstants.MainLayout] as? String,
+            let popularSearches = responseDict[VisilabsConstants.PopularSearches] as? String,
+            let popularCategories = responseDict[VisilabsConstants.PopularCategories] as? String,
+            let popularBrands = responseDict[VisilabsConstants.PopularBrands] as? String,
+            let popularProducts = responseDict[VisilabsConstants.PopularProducts] as? String,
+            let searchItemLayout = responseDict[VisilabsConstants.SearchItemLayout] as? String,
+            let listItemLayout = responseDict[VisilabsConstants.ListItemLayout] as? String
         else {
             return nil
         }
@@ -328,17 +325,17 @@ public struct VisilabsSearchRecommendationResponse {
     let searchTemplate: SearchTemplate?
     
     init(responseDict: [String: Any]) {
-        self.queryselector = responseDict["Queryselector"] as? String
-        self.customCss = responseDict["CustomCss"] as? String
-        self.customJs = responseDict["CustomJs"] as? String
-        self.hideSearchIfEmpty = responseDict["HideSearchIfEmpty"] as? Bool
+        self.queryselector = responseDict[VisilabsConstants.Queryselector] as? String
+        self.customCss = responseDict[VisilabsConstants.CustomCss] as? String
+        self.customJs = responseDict[VisilabsConstants.CustomJs] as? String
+        self.hideSearchIfEmpty = responseDict[VisilabsConstants.HideSearchIfEmpty] as? Bool
         
         
-        self.productAreaContainer = ProductAreaContainer(responseDict: responseDict["ProductAreaContainer"] as? [String: Any] ?? [:])
-        self.categoryContainer = CategoryContainer(responseDict: responseDict["CategoryContainer"] as? [String: Any] ?? [:])
-        self.brandContainer = BrandContainer(responseDict: responseDict["BrandContainer"] as? [String: Any] ?? [:])
-        self.searchContainer = SearchContainer(responseDict: responseDict["SearchContainer"] as? [String: Any] ?? [:])
-        self.searchStyle = SearchStyle(responseDict: responseDict["SearchStyle"] as? [String: Any] ?? [:])
-        self.searchTemplate = SearchTemplate(responseDict: responseDict["SearchTemplate"] as? [String: Any] ?? [:])
+        self.productAreaContainer = ProductAreaContainer(responseDict: responseDict[VisilabsConstants.ProductAreaContainer] as? [String: Any] ?? [:])
+        self.categoryContainer = CategoryContainer(responseDict: responseDict[VisilabsConstants.CategoryContainer] as? [String: Any] ?? [:])
+        self.brandContainer = BrandContainer(responseDict: responseDict[VisilabsConstants.BrandContainer] as? [String: Any] ?? [:])
+        self.searchContainer = SearchContainer(responseDict: responseDict[VisilabsConstants.SearchContainer] as? [String: Any] ?? [:])
+        self.searchStyle = SearchStyle(responseDict: responseDict[VisilabsConstants.SearchStyle] as? [String: Any] ?? [:])
+        self.searchTemplate = SearchTemplate(responseDict: responseDict[VisilabsConstants.SearchTemplate] as? [String: Any] ?? [:])
     }
 }

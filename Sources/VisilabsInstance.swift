@@ -623,6 +623,14 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
     
+    public func trackSearchRecomendationClick(searchReport:Report) {
+        var properties = [String: String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        properties["OM.zn"] = searchReport.click.parseClick().omZn
+        properties["OM.zpc"] = searchReport.click.parseClick().omZpc
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
+    
     func trackDrawerClick(drawerReport: DrawerReport) {
         var properties = [String: String]()
         properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
@@ -776,10 +784,6 @@ extension VisilabsInstance {
             
         }
     }
-    
-    
-    
-    
     
 }
 
