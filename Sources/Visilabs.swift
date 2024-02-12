@@ -56,6 +56,7 @@ public class Visilabs {
     
     public static func getBannerView(properties: [String:String],completion: @escaping (BannerView?) -> Void) {
         VisilabsManager.sharedInstance.getBannerView(properties: properties) { bannerView in
+            bannerView?.reloadBannerViewData()
             completion(bannerView)
         }
     }
