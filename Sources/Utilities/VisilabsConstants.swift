@@ -24,7 +24,7 @@ struct VisilabsConstants {
     static var loggerEndPoint = "lgr.visilabs.net"
     static var realtimeEndPoint = "rt.visilabs.net"
     static var recommendationEndPoint = "\(urlConstant.shared.urlPrefix)/json"
-    static var searchRecommendationEndPoint = "\(urlConstant.shared.urlPrefix)/englishhome/search"
+    static var searchRecommendationEndPoint = "\(urlConstant.shared.urlPrefix)/search"
     static var actionEndPoint = "\(urlConstant.shared.urlPrefix)/actjson"
     static var geofenceEndPoint = "\(urlConstant.shared.urlPrefix)/geojson"
     static var mobileEndPoint = "\(urlConstant.shared.urlPrefix)/mobile"
@@ -402,6 +402,75 @@ struct VisilabsConstants {
     private static let targetPrefVRDomainKey = "OM.rDomain"
     private static let targetPrefPPRKey = "OM.ppr"
     
+    
+    
+    static let Title = "Title"
+    static let IsActive = "IsActive"
+    static let PopularBrands = "PopularBrands"
+    static let Report = "report"
+
+    // PopularBrand
+    static let Name = "Name"
+    static let Url = "Url"
+
+    // Report
+    static let Impression = "impression"
+    static let Click = "click"
+
+    // CategoryContainer
+    static let PopularCategories = "PopularCategories"
+
+    // PopularCategory
+    static let Products = "Products"
+
+    // Product
+    static let ImageUrl = "ImageUrl"
+    static let BrandName = "BrandName"
+    static let Price = "Price"
+    static let DiscountPrice = "DiscountPrice"
+    static let Code = "Code"
+    static let Currency = "Currency"
+    static let DiscountCurrency = "DiscountCurrency"
+    // ProductAreaContainer
+    static let PreTitle = "PreTitle"
+    static let ChangeTitle = "ChangeTitle"
+    static let SearchResultMessage = "SearchResultMessage"
+
+    // SearchContainer
+    static let SearchUrlPrefix = "SearchUrlPrefix"
+    static let PopularSearches = "PopularSearches"
+
+    // SearchStyle
+    static let FontFamily = "FontFamily"
+    static let TextColor = "TextColor"
+    static let ThemeColor = "ThemeColor"
+    static let TitleColor = "TitleColor"
+    static let HoverColor = "HoverColor"
+    static let HoverTextColor = "HoverTextColor"
+    static let ColumnCount = "ColumnCount"
+    static let RowCount = "RowCount"
+    static let QuerySelectorCss = "QuerySelectorCss"
+    static let TitleBorderRadius = "TitleBorderRadius"
+    static let BackgroundColor = "BackgroundColor"
+
+    // SearchTemplate
+    static let MainLayout = "MainLayout"
+    static let PopularProducts = "PopularProducts"
+    static let SearchItemLayout = "SearchItemLayout"
+    static let ListItemLayout = "ListItemLayout"
+
+    // VisilabsSearchRecommendationResponse
+    static let Queryselector = "Queryselector"
+    static let CustomCss = "CustomCss"
+    static let CustomJs = "CustomJs"
+    static let HideSearchIfEmpty = "HideSearchIfEmpty"
+    static let ProductAreaContainer = "ProductAreaContainer"
+    static let CategoryContainer = "CategoryContainer"
+    static let BrandContainer = "BrandContainer"
+    static let SearchContainer = "SearchContainer"
+    static let SearchStyle = "SearchStyle"
+    static let SearchTemplate = "SearchTemplate"
+    
     //Location Status
     static let locationPermissionReqKey = "OM.locpermit"
     static let locationPermissionAlways = "always"
@@ -409,8 +478,8 @@ struct VisilabsConstants {
     static let locationPermissionNone = "none"
     
     //Push Permission Status
-        static let pushPermitPermissionReqKey = "OM.pushnotifystatus"
-        static var pushPermitStatus = "default"
+    static let pushPermitPermissionReqKey = "OM.pushnotifystatus"
+    static var pushPermitStatus = "default"
 
     private static var targetParameters = [VisilabsParameter]()
 
