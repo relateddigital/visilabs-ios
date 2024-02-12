@@ -46,7 +46,9 @@ class VisilabsSearchRecommendation {
         props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         props[VisilabsConstants.keyword] = keyword
+        props["OM.schannel"] = "web"
 
+        
 
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
