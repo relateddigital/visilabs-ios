@@ -46,7 +46,7 @@ class VisilabsSearchRecommendation {
         props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         props[VisilabsConstants.keyword] = keyword
-        props[VisilabsConstants.searchChannel] = VisilabsConstants.webKey
+        props[VisilabsConstants.searchChannel] = VisilabsConstants.webKey //VisilabsConstants.ios
 
         
 
