@@ -333,7 +333,7 @@ public struct VisilabsSearchRecommendationResponse {
         self.customJs = responseDict["CustomJs"] as? String
         self.hideSearchIfEmpty = responseDict["HideSearchIfEmpty"] as? Bool
         
-        // Diğer yapıları burada initialize edin
+        
         self.productAreaContainer = ProductAreaContainer(responseDict: responseDict["ProductAreaContainer"] as? [String: Any] ?? [:])
         self.categoryContainer = CategoryContainer(responseDict: responseDict["CategoryContainer"] as? [String: Any] ?? [:])
         self.brandContainer = BrandContainer(responseDict: responseDict["BrandContainer"] as? [String: Any] ?? [:])
