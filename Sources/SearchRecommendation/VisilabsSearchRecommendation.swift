@@ -20,6 +20,7 @@ class VisilabsSearchRecommendation {
     func searchRecommend(visilabsUser: VisilabsUser,
                          properties: [String: String] = [:],
                          keyword: String = "",
+                         searchType: String,
                          completion: @escaping ((_ response: VisilabsSearchRecommendationResponse) -> Void)) {
         
         
@@ -46,7 +47,7 @@ class VisilabsSearchRecommendation {
         props[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         props[VisilabsConstants.keyword] = keyword
-        props[VisilabsConstants.searchChannel] = VisilabsConstants.ios
+        props[VisilabsConstants.searchChannel] = searchType
 
         
 
