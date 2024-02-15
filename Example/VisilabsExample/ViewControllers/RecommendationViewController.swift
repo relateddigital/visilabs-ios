@@ -90,6 +90,19 @@ class RecommendationViewController: FormViewController {
             $0.title = "recommend"
             $0.disabled = true
         }
+        
+        <<< ButtonRow {
+            $0.title = "Searchrecommendation"
+            $0.disabled = false
+        }.onCellSelection { _, _ in
+            self.searchRecocemmendation()
+        }
+    }
+    
+    private func searchRecocemmendation() {
+        Visilabs.callAPI().searcRecommendation(keyword: "", searchType: "web") { response in
+            print(response)
+        }
     }
     
     private func addFilterSection() {

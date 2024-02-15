@@ -41,11 +41,7 @@ class EventViewController: FormViewController, BannerDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-//        Visilabs.callAPI().searcRecommendation(keyword: "", searchType: "") { response in
-//            print(response)
-//        }
-        
+        super.viewDidAppear(animated)        
     }
     
     private func initializeForm() {
