@@ -789,14 +789,14 @@ extension VisilabsInstance {
 
 extension VisilabsInstance {
     
-    public func searcRecommendation(keyword:String ,properties: [String: String] = [:],completion: @escaping ((_ response: VisilabsSearchRecommendationResponse) -> Void)) {
+    public func searcRecommendation(keyword:String,searchType:String,properties: [String: String] = [:],completion: @escaping ((_ response: VisilabsSearchRecommendationResponse) -> Void)) {
                 
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
         }
         
-        searchRecommendationQueue.async { [weak self, keyword,properties, completion] in
-            self?.networkQueue.async { [weak self, keyword,properties, completion] in
+        searchRecommendationQueue.async { [weak self, keyword,searchType,properties, completion] in
+            self?.networkQueue.async { [weak self, keyword,searchType,properties, completion] in
                 guard let self = self else { return }
                 var vUser = VisilabsUser()
 
@@ -805,8 +805,9 @@ extension VisilabsInstance {
                 }
                 
                 self.visilabsSearchRecommendationInstance.searchRecommend(visilabsUser: vUser,
-                                                                          properties: properties,
-                                                                          keyword: keyword) { response in
+                                    properties: properties,
+                                    keyword: keyword,
+                                    searchType: searchType) { response in
                     
                     completion(response)
                 }
