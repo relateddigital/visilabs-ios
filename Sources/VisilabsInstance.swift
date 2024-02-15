@@ -623,14 +623,14 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
     
-    public func trackSearchRecomendationClick(searchReport:Report) {
+    public func trackSearchRecommendationClick(searchReport:Report) {
         var properties = [String: String]()
         properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
         properties["OM.zn"] = searchReport.click.parseClick().omZn
         properties["OM.zpc"] = searchReport.click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
-    
+
     func trackDrawerClick(drawerReport: DrawerReport) {
         var properties = [String: String]()
         properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
@@ -809,14 +809,36 @@ extension VisilabsInstance {
                                     keyword: keyword,
                                     searchType: searchType) { response in
                     
+                    self.trackSearchRecommendationImpression(qs: response.productAreaContainer?.report.impression ?? "")
+
                     completion(response)
                 }
             }
         }
     }
     
-    
-    
+    private func trackSearchRecommendationImpression(qs: String) {
+        if VisilabsPersistence.isBlocked() {
+            VisilabsLogger.warn("Too much server load, ignoring the request!")
+        }
+        
+        let qsArr = qs.components(separatedBy: "&")
+        var properties = [String: String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        if qsArr.count > 1 {
+            for queryItem in qsArr {
+                let arrComponents = queryItem.components(separatedBy: "=")
+                if arrComponents.count == 2 {
+                    properties[arrComponents[0]] = arrComponents[1]
+                }
+            }
+        } else {
+            VisilabsLogger.info("qs length is less than 2")
+            return
+        }
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
+
 }
 
 
