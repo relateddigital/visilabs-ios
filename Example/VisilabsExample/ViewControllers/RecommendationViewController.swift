@@ -13,13 +13,15 @@ import VisilabsIOS
 
 class RecommendationViewController: FormViewController {
     
+    let searchRecommendationSection = Section("Search Recommendation".uppercased(with: Locale(identifier: "en_US")))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
     }
     
     private func initializeForm() {
-        form +++ Section("Recommendation".uppercased(with: Locale(identifier: "en_US")))
+        form +++ searchRecommendationSection
         <<< ButtonRow {
             $0.title = "Test"
         }.onCellSelection { _, _ in
@@ -102,11 +104,20 @@ class RecommendationViewController: FormViewController {
             
             Visilabs.callAPI().searcRecommendation(keyword: keyword, searchType: searchType) {
                 response in
+                
+                response
+                
                 print(response)
             }
             
         }
+        
     }
+    
+    private func displaySearchRecommendationResults() {
+        
+    }
+    
 }
 
 
