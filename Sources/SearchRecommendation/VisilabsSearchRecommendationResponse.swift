@@ -1,13 +1,13 @@
 import Foundation
 
 // MARK: - BrandContainer
-struct BrandContainer: Codable {
-    let title: String
-    let isActive: Bool
-    let popularBrands: [PopularBrand]
-    let report: Report
+public struct BrandContainer: Codable {
+    public let title: String
+    public let isActive: Bool
+    public let popularBrands: [PopularBrand]
+    public let report: Report
 
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case title = "Title"
         case isActive = "IsActive"
         case popularBrands = "PopularBrands"
@@ -35,9 +35,9 @@ struct BrandContainer: Codable {
 }
 
 // MARK: - PopularBrand
-struct PopularBrand: Codable {
-    let name: String
-    let url: String?
+public struct PopularBrand: Codable {
+    public let name: String
+    public let url: String?
 
     init(responseDict: [String: Any]) {
         self.name = responseDict[VisilabsConstants.Name] as? String ?? ""
@@ -47,7 +47,7 @@ struct PopularBrand: Codable {
 
 // MARK: - Report
 public struct Report: Codable {
-    let impression, click: String
+    public let impression, click: String
 
     enum CodingKeys: String, CodingKey {
         case impression = "impression"
@@ -68,13 +68,13 @@ public struct Report: Codable {
 }
 
 // MARK: - CategoryContainer
-struct CategoryContainer: Codable {
+public struct CategoryContainer: Codable {
     let title: String
     let isActive: Bool
     let popularCategories: [PopularCategory]
     let report: Report
 
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case title = "Title"
         case isActive = "IsActive"
         case popularCategories = "PopularCategories"
@@ -103,9 +103,9 @@ struct CategoryContainer: Codable {
 }
 
 // MARK: - PopularCategory
-struct PopularCategory: Codable {
-    let name: String
-    let products: [Product]
+public struct PopularCategory: Codable {
+    public let name: String
+    public let products: [Product]
     
     init?(responseDict: [String: Any]) {
         guard
@@ -124,10 +124,10 @@ struct PopularCategory: Codable {
 }
 
 // MARK: - Product
-struct Product: Codable {
-    let name, url, imageUrl, brandName: String
-    let price, discountPrice: Double
-    let code, currency, discountCurrency: String
+public struct Product: Codable {
+    public let name, url, imageUrl, brandName: String
+    public let price, discountPrice: Double
+    public let code, currency, discountCurrency: String
     
     init?(responseDict: [String: Any]) {
         guard
@@ -157,12 +157,12 @@ struct Product: Codable {
 }
 
 // MARK: - ProductAreaContainer
-struct ProductAreaContainer: Codable {
-    let title, preTitle: String
-    let changeTitle: Bool
-    let products: [Product]
-    let searchResultMessage: String
-    let report: Report
+public struct ProductAreaContainer: Codable {
+    public let title, preTitle: String
+    public let changeTitle: Bool
+    public let products: [Product]
+    public let searchResultMessage: String
+    public let report: Report
     
     init?(responseDict: [String: Any]) {
         guard
@@ -189,14 +189,14 @@ struct ProductAreaContainer: Codable {
 }
 
 // MARK: - SearchContainer
-struct SearchContainer: Codable {
+public struct SearchContainer: Codable {
     let title: String
     let isActive: Bool
     let searchUrlPrefix: String
     let popularSearches: [PopularSearch]
     let report: Report
 
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case title = "Title"
         case isActive = "IsActive"
         case searchUrlPrefix = "SearchUrlPrefix"
@@ -228,9 +228,9 @@ struct SearchContainer: Codable {
 }
 
 // MARK: - PopularSearch
-struct PopularSearch: Codable {
-    let name: String
-    let url: String?
+public struct PopularSearch: Codable {
+    public let name: String
+    public let url: String?
     
     init?(responseDict: [String: Any]) {
         guard
@@ -246,11 +246,11 @@ struct PopularSearch: Codable {
 }
 
 // MARK: - SearchStyle
-struct SearchStyle: Codable {
-    let fontFamily, textColor, themeColor, titleColor: String
-    let hoverColor, hoverTextColor: String
-    let columnCount, rowCount: Int
-    let querySelectorCss, titleBorderRadius, backgroundColor: String
+public struct SearchStyle: Codable {
+    public let fontFamily, textColor, themeColor, titleColor: String
+    public let hoverColor, hoverTextColor: String
+    public let columnCount, rowCount: Int
+    public let querySelectorCss, titleBorderRadius, backgroundColor: String
     
     
     init?(responseDict: [String: Any]) {
@@ -285,9 +285,9 @@ struct SearchStyle: Codable {
 }
 
 // MARK: - SearchTemplate
-struct SearchTemplate: Codable {
-    let mainLayout, popularSearches, popularCategories, popularBrands: String
-    let popularProducts, searchItemLayout, listItemLayout: String
+public struct SearchTemplate: Codable {
+    public let mainLayout, popularSearches, popularCategories, popularBrands: String
+    public let popularProducts, searchItemLayout, listItemLayout: String
     
     init?(responseDict: [String: Any]) {
         guard
@@ -313,16 +313,16 @@ struct SearchTemplate: Codable {
 }
 
 public struct VisilabsSearchRecommendationResponse {
-    let queryselector: String?
-    let customCss: String?
-    let customJs: String?
-    let hideSearchIfEmpty: Bool?
-    let productAreaContainer: ProductAreaContainer?
-    let categoryContainer: CategoryContainer?
-    let brandContainer: BrandContainer?
-    let searchContainer: SearchContainer?
-    let searchStyle: SearchStyle?
-    let searchTemplate: SearchTemplate?
+    public let queryselector: String?
+    public let customCss: String?
+    public let customJs: String?
+    public let hideSearchIfEmpty: Bool?
+    public let productAreaContainer: ProductAreaContainer?
+    public let categoryContainer: CategoryContainer?
+    public let brandContainer: BrandContainer?
+    public let searchContainer: SearchContainer?
+    public let searchStyle: SearchStyle?
+    public let searchTemplate: SearchTemplate?
     
     init(responseDict: [String: Any]) {
         self.queryselector = responseDict[VisilabsConstants.Queryselector] as? String
