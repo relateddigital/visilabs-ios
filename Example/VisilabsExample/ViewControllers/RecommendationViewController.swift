@@ -13,6 +13,14 @@ import VisilabsIOS
 
 class RecommendationViewController: FormViewController {
     
+    public enum Containers: String, CaseIterable {
+        case productAreaContainer = "ProductAreaContainer"
+        case categoryContainer = "CategoryContainer"
+        case brandContainer = "BrandContainer"
+        case searchContainer = "SearchContainer"
+    }
+    
+    var searchResults = [String: Report]()
     let searchRecommendationSection = Section("Search Recommendation".uppercased(with: Locale(identifier: "en_US")))
     
     override func viewDidLoad() {
@@ -21,7 +29,7 @@ class RecommendationViewController: FormViewController {
     }
     
     private func initializeForm() {
-        form +++ searchRecommendationSection
+        form +++ Section("Recommendation".uppercased(with: Locale(identifier: "en_US")))
         <<< ButtonRow {
             $0.title = "Test"
         }.onCellSelection { _, _ in
@@ -74,7 +82,7 @@ class RecommendationViewController: FormViewController {
             $0.value = "asd-123"
         }
         
-        form +++ Section("Search Recommendation".uppercased(with: Locale(identifier: "en_US")))
+        form +++ searchRecommendationSection
         <<< TextRow("keyword") {
             $0.title = "Keyword"
             $0.add(rule: RuleRequired(msg: "\($0.tag!) required"))
@@ -86,13 +94,22 @@ class RecommendationViewController: FormViewController {
             $0.placeholder = "Search Type"
             $0.value = "web"
         }
+        <<< PickerInputRow<String>("container") {
+            let containers = Containers.allCases.map { container in
+                container.rawValue
+            }
+            $0.title = "Container"
+            $0.options = containers
+            $0.value = containers.first
+        }
+        
+        
         <<< ButtonRow {
             $0.title = "Search"
         }.onCellSelection { _, _ in
-            
             var keyword: String = ""
             var searchType: String = ""
-            
+            var container: Containers = .productAreaContainer
             if let keywordTextRow = self.form.rowBy(tag: "keyword") as TextRow? {
                 keyword = (keywordTextRow.value ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
             }
@@ -102,11 +119,16 @@ class RecommendationViewController: FormViewController {
                     in: .whitespacesAndNewlines)
             }
             
+            if let containerPickerInputRow = self.form.rowBy(tag: "container") as? PickerInputRow<String> {
+                container = Containers(rawValue: containerPickerInputRow.value ?? "") ?? .productAreaContainer
+           }
+            
             Visilabs.callAPI().searcRecommendation(keyword: keyword, searchType: searchType) {
                 response in
                 
-                response
-                
+                DispatchQueue.main.async {
+                    self.displaySearchRecommendationResults(response: response, container: container)
+                }
                 print(response)
             }
             
@@ -114,7 +136,49 @@ class RecommendationViewController: FormViewController {
         
     }
     
-    private func displaySearchRecommendationResults() {
+    private func displaySearchRecommendationResults(response: VisilabsSearchRecommendationResponse, container: Containers) {
+        
+        searchRecommendationSection.removeAll(where: { row in row.tag?.hasPrefix("searchResult") ?? false })
+        searchResults = [:]
+        
+        switch container {
+        case .productAreaContainer:
+             response.productAreaContainer?.products.forEach({ product in
+                searchResults[product.name] = response.productAreaContainer?.report
+            })
+        case .categoryContainer:
+            response.categoryContainer?.popularCategories.forEach({ popularCategory in
+                searchResults[popularCategory.name] = response.categoryContainer?.report
+            })
+        case .brandContainer:
+            response.brandContainer?.popularBrands.forEach({ popularBrand in
+                searchResults[popularBrand.name] = response.brandContainer?.report
+            })
+        case .searchContainer:
+            response.searchContainer?.popularSearches.forEach({ popularSearch in
+                searchResults[popularSearch.name] = response.searchContainer?.report
+            })
+        }
+        
+        
+        searchResults.enumerated().forEach { index, searchResult in
+            searchRecommendationSection.append(ButtonRow("searchResult-\(index)") {
+                $0.tag = "searchResult-\(index)"
+                $0.title = searchResult.key
+                $0.value = searchResult.key
+                $0.cell.height = { CGFloat(30.0) }
+                $0.cell.textLabel?.font = .systemFont(ofSize: 10)
+            }.onCellSelection { _, labelRow in
+                
+                if let report = self.searchResults[labelRow.value ?? ""] {
+                    Visilabs.callAPI().trackSearchRecommendationClick(searchReport: report)
+
+                }
+
+                
+            })
+        }
+        
         
     }
     
