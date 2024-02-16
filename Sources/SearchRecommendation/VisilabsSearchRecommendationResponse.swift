@@ -69,10 +69,10 @@ public struct Report: Codable {
 
 // MARK: - CategoryContainer
 public struct CategoryContainer: Codable {
-    let title: String
-    let isActive: Bool
-    let popularCategories: [PopularCategory]
-    let report: Report
+    public let title: String
+    public let isActive: Bool
+    public let popularCategories: [PopularCategory]
+    public let report: Report
 
     public enum CodingKeys: String, CodingKey {
         case title = "Title"
@@ -190,11 +190,11 @@ public struct ProductAreaContainer: Codable {
 
 // MARK: - SearchContainer
 public struct SearchContainer: Codable {
-    let title: String
-    let isActive: Bool
-    let searchUrlPrefix: String
-    let popularSearches: [PopularSearch]
-    let report: Report
+    public let title: String
+    public let isActive: Bool
+    public let searchUrlPrefix: String
+    public let popularSearches: [PopularSearch]
+    public let report: Report
 
     public enum CodingKeys: String, CodingKey {
         case title = "Title"
