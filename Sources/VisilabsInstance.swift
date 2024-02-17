@@ -789,7 +789,7 @@ extension VisilabsInstance {
 
 extension VisilabsInstance {
     
-    public func searcRecommendation(keyword:String,searchType:String,properties: [String: String] = [:],completion: @escaping ((_ response: VisilabsSearchRecommendationResponse) -> Void)) {
+    public func searchRecommendation(keyword:String,searchType:String,properties: [String: String] = [:],completion: @escaping ((_ response: VisilabsSearchRecommendationResponse) -> Void)) {
                 
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")
