@@ -123,7 +123,7 @@ class RecommendationViewController: FormViewController {
                 container = Containers(rawValue: containerPickerInputRow.value ?? "") ?? .productAreaContainer
            }
             
-            Visilabs.callAPI().searcRecommendation(keyword: keyword, searchType: searchType) {
+            Visilabs.callAPI().searchRecommendation(keyword: keyword, searchType: searchType) {
                 response in
                 
                 DispatchQueue.main.async {
