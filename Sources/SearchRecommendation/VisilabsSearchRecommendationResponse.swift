@@ -312,7 +312,7 @@ public struct SearchTemplate: Codable {
     }
 }
 
-public struct VisilabsSearchRecommendationResponse {
+public struct VisilabsSearchRecommendationResponse: Codable {
     public let queryselector: String?
     public let customCss: String?
     public let customJs: String?
