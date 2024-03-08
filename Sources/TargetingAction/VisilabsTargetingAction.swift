@@ -104,7 +104,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         
         
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)"
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -140,7 +140,9 @@ class VisilabsTargetingAction {
             return parseScratchToWin(sctw)
         }  else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
             return parseDrawer(drw)
-        } else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
+        }  else if let inappRating = result[VisilabsConstants.apprating] as? [[String: Any?]], let inappRating = inappRating.first {
+            return parseInappRating(inappRating)
+        }  else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
             if let productStatNotifier = parseProductStatNotifier(psn) {
                 if productStatNotifier.attributedString == nil {
                     return nil
@@ -282,6 +284,14 @@ class VisilabsTargetingAction {
         return model
     }
     
+    private func parseInappRating(_ inappratingModel: [String: Any?]) -> InappReviewModel? {
+        guard let actionData = inappratingModel[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        var inappRating = InappReviewModel(targetingActionType: .apprating)
+        inappRating.actId = inappratingModel[VisilabsConstants.actid] as? Int ?? 0
+        inappRating.title = inappratingModel[VisilabsConstants.title] as? String ?? ""
+
+        return inappRating
+    }
     
     // MARK: ProductStatNotifier
     
