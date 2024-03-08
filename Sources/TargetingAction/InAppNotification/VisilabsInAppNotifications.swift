@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import StoreKit
 
 protocol VisilabsInAppNotificationsDelegate: AnyObject {
     func notificationDidShow(_ notification: VisilabsInAppNotification)
@@ -89,6 +90,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         self.markTargetingActionShown(model: drawer)
                     }
                 }
+                  else if model.targetingActionType == .apprating {
+                    self.showInappRating()
+               }
             }
         }
     }
@@ -112,6 +116,14 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         sideBarViewController.delegate = self
         sideBarViewController.show(animated: true)
         return true
+    }
+    
+    func showInappRating() {
+        DispatchQueue.main.async  {
+            if #available(iOS 10.3, *) {
+                SKStoreReviewController.requestReview()
+            }
+        }
     }
 
     func showMiniNotification(_ notification: VisilabsInAppNotification) -> Bool {

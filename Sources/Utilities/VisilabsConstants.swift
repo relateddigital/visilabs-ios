@@ -137,7 +137,8 @@ struct VisilabsConstants {
     static let scratchToWin = "ScratchToWin"
     static let productStatNotifier = "ProductStatNotifier"
     static let drawer = "Drawer"
-    
+    static let apprating = "MobileAppRating"
+
     
     static let appBanners = "app_banners"
     static let transitionAction = "transition_action"
