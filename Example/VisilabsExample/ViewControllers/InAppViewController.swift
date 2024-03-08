@@ -120,6 +120,8 @@ class InAppViewController: FormViewController {
             setFormRowsForEmail()
         case .bannerCarousel:
             break
+        case .apprating:
+            break
         }
         
         
