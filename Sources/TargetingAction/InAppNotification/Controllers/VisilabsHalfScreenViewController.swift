@@ -7,6 +7,7 @@
 
 import AVFoundation
 import UIKit
+import WebKit
 
 class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
     var halfScreenNotification: VisilabsInAppNotification! {
@@ -14,6 +15,7 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
     }
 
     var player: AVPlayer?
+    var webPlayer : WKWebView?
     var visilabsHalfScreenView: VisilabsHalfScreenView!
     var halfScreenHeight = 0.0
 
@@ -45,11 +47,13 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         player = visilabsHalfScreenView.imageView.addVideoPlayer(urlString: notification?.videourl ?? "")
+        webPlayer = visilabsHalfScreenView.imageView.addYoutubeVideoPlayer(urlString: notification?.videourl ?? "")
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         player?.pause()
+        webPlayer?.stopPlayer()
     }
 
     @objc func didTap(gesture: UITapGestureRecognizer) {
