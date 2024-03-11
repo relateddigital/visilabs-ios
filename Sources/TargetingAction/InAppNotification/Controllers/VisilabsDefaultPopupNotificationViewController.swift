@@ -7,12 +7,14 @@
 
 import AVFoundation
 import UIKit
+import WebKit
 // swiftlint:disable type_name
 public final class VisilabsDefaultPopupNotificationViewController: UIViewController {
     weak var visilabsInAppNotification: VisilabsInAppNotification?
     var mailForm: MailSubscriptionViewModel?
     var scratchToWin: ScratchToWinModel?
     var player: AVPlayer?
+    var webPlayer : WKWebView?
 
     convenience init(visilabsInAppNotification: VisilabsInAppNotification? = nil,
                          emailForm: MailSubscriptionViewModel? = nil,
@@ -51,16 +53,20 @@ public final class VisilabsDefaultPopupNotificationViewController: UIViewControl
         super.viewDidAppear(animated)
         if !inAppCurrentState.shared.isFirstPageOpened {
             player = standardView.imageView.addVideoPlayer(urlString: visilabsInAppNotification?.videourl ?? "")
+            webPlayer = standardView.imageView.addYoutubeVideoPlayer(urlString: visilabsInAppNotification?.videourl ?? "")
+
             if visilabsInAppNotification?.secondPopupVideourl1?.count ?? 0 > 0 || visilabsInAppNotification?.secondPopupVideourl2?.count ?? 0 > 0 || visilabsInAppNotification?.secondPopupTitle?.count ?? 0 > 0 {
                 inAppCurrentState.shared.isFirstPageOpened = true
             }
         } else {
             if visilabsInAppNotification?.secondPopupVideourl1?.count ?? 0 > 0 {
                 player = standardView.imageView.addVideoPlayer(urlString: visilabsInAppNotification?.secondPopupVideourl1 ?? "")
+                webPlayer = standardView.imageView.addYoutubeVideoPlayer(urlString: visilabsInAppNotification?.secondPopupVideourl1 ?? "")
             }
             
             if visilabsInAppNotification?.secondPopupVideourl2?.count ?? 0 > 0 {
                 player = standardView.secondImageView.addVideoPlayer(urlString: visilabsInAppNotification?.secondPopupVideourl2 ?? "")
+                webPlayer = standardView.secondImageView.addYoutubeVideoPlayer(urlString: visilabsInAppNotification?.secondPopupVideourl2 ?? "")
             }
             inAppCurrentState.shared.isFirstPageOpened = false
         }
@@ -69,6 +75,7 @@ public final class VisilabsDefaultPopupNotificationViewController: UIViewControl
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         player?.pause()
+        webPlayer?.stopPlayer()
     }
 }
 
