@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 import AVFoundation
+import WebKit
 
 final public class VisilabsNpsWithNumbersContainerView: UIView {
     
     var player : AVPlayer?
-    
+    var webPlayer : WKWebView?
+
     var notification: VisilabsInAppNotification?
     var delegate: VisilabsNpsWithNumbersDelegate?
     
@@ -79,7 +81,8 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
         
         appendButtons()
         player = collectionView.imageView.addVideoPlayer(urlString: notification.videourl ?? "")
-        
+        webPlayer = collectionView.imageView.addYoutubeVideoPlayer(urlString: notification.videourl ?? "")
+
         setupViews()
         super.layoutIfNeeded()
     }
@@ -122,6 +125,7 @@ final public class VisilabsNpsWithNumbersContainerView: UIView {
     public override func removeFromSuperview() {
         super.removeFromSuperview()
         player?.pause()
+        webPlayer?.stopPlayer()
     }
     
     

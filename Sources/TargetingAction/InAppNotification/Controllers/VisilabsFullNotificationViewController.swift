@@ -7,6 +7,7 @@
 
 import AVFoundation
 import UIKit
+import WebKit
 
 class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewController {
     var fullNotification: VisilabsInAppNotification! {
@@ -32,6 +33,8 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
 
     let pasteboard = UIPasteboard.general
     var player: AVPlayer?
+    var webPlayer : WKWebView?
+
 
     convenience init(notification: VisilabsInAppNotification) {
         self.init(notification: notification,
@@ -143,11 +146,14 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         player = imageView.addVideoPlayer(urlString: notification?.videourl ?? "")
+        webPlayer = imageView.addYoutubeVideoPlayer(urlString: notification?.videourl ?? "")
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         player?.pause()
+        webPlayer?.stopPlayer()
     }
 
     @IBAction func promotionCodeCopied(_ sender: Any) {
