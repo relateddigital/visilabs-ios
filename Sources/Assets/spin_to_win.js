@@ -1475,7 +1475,7 @@ function createAndAppendBodyContent() {
     emailInput.placeholder = "Email";
     emailInput.setAttribute("data-field-name", "email");
     emailInput.setAttribute("maxlength", "99");
-    emailInput.value = "egemen@visilabs.com";
+    emailInput.value = "";
     divCustomFieldsHolder.appendChild(emailInput);
 
     var divConsent = document.createElement('div');
