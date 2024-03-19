@@ -81,7 +81,7 @@ extension UIImageView {
                         player = new YT.Player('player', {
                             width: '100%',
                             videoId: '\(videoID)',
-                            playerVars: { 'autoplay': 1, 'playsinline': 1 },
+                            playerVars: { 'autoplay': 1, 'playsinline': 1, 'rel': 0 },
                             events: {
                                 'onReady': function(event) {
                                     
