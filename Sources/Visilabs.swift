@@ -60,6 +60,22 @@ public class Visilabs {
         center.removeAllDeliveredNotifications()
     }
     
+    public static func removeNotification(withPushID pushID: String) {
+        let center = UNUserNotificationCenter.current()
+        
+        center.getPendingNotificationRequests { requests in
+            for request in requests {
+                if let userInfo = request.content.userInfo as? [String: Any],
+                   let notificationPushID = userInfo["pushID"] as? String {
+                    if notificationPushID == pushID {
+                        center.removePendingNotificationRequests(withIdentifiers: [request.identifier])
+                        return
+                    }
+                }
+            }
+        }
+    }
+    
     public static func getBannerView(properties: [String:String],completion: @escaping (BannerView?) -> Void) {
         VisilabsManager.sharedInstance.getBannerView(properties: properties) { bannerView in
             bannerView?.reloadBannerViewData()
