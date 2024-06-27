@@ -116,13 +116,22 @@ public class VisilabsInAppNotification {
     var imageUrl: URL?
     lazy var image: Data? = {
         var data: Data?
+
         if let iUrl = self.imageUrl {
-            do {
-                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
-            } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            let task = URLSession.shared.dataTask(with: iUrl) { (responseData, _, error) in
+                if let error = error {
+                    VisilabsLogger.error("Image failed to load: \(error)")
+                } else {
+                    data = responseData
+                }
+                semaphore.signal()
             }
+            task.resume()
+            semaphore.wait()  // Wait for the async task to complete
         }
+
         return data
     }()
 
