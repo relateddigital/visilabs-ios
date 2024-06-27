@@ -93,14 +93,25 @@ struct VisilabsBasePath {
 
     // TO_DO: path parametresini kaldır
     static func buildURL(visilabsEndpoint: VisilabsEndpoint, queryItems: [URLQueryItem]?) -> URL? {
-        guard let endpoint = endpoints[visilabsEndpoint], let url = URL(string: endpoint) else {
+        guard let endpoint = endpoints[visilabsEndpoint], !endpoint.isEmpty else {
+            print("Endpoint not found or is empty for \(visilabsEndpoint)")
             return nil
         }
+        
+        guard let url = URL(string: endpoint) else {
+            print("Invalid URL string: \(endpoint)")
+            return nil
+        }
+        
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-        // components?.path = path
         components?.queryItems = queryItems
-        return components?.url
-
+        
+        guard let finalURL = components?.url else {
+            print("Failed to create final URL from components")
+            return nil
+        }
+        
+        return finalURL
     }
 
     static func getEndpoint(visilabsEndpoint: VisilabsEndpoint) -> String {
@@ -148,23 +159,29 @@ class VisilabsNetwork {
     }
 
     private class func buildURLRequest<A>(resource: VisilabsResource<A>) -> URLRequest? {
-        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint,
-                                                  queryItems: resource.queryItems) else {
+        guard let url = VisilabsBasePath.buildURL(visilabsEndpoint: resource.endPoint, queryItems: resource.queryItems) else {
+            VisilabsLogger.error("Failed to build URL for endpoint: \(resource.endPoint)")
             return nil
         }
 
-        VisilabsLogger.debug("Fetching URL")
-        VisilabsLogger.debug(url.absoluteURL)
+        VisilabsLogger.debug("Fetching URL: \(url.absoluteURL)")
+
         var request = URLRequest(url: url)
         request.httpMethod = resource.method.rawValue
-        request.httpBody = resource.requestBody
-        // TO_DO: timeoutInterval dışarıdan alınacak
+
+        if let body = resource.requestBody {
+            request.httpBody = body
+        } else {
+            VisilabsLogger.warn("Request body is nil for URL: \(url.absoluteURL)")
+        }
+
         request.timeoutInterval = 60
 
         for (key, value) in resource.headers {
             request.setValue(value, forHTTPHeaderField: key)
         }
-        return request as URLRequest
+
+        return request
     }
 
     class func buildResource<A>(endPoint: VisilabsEndpoint,
