@@ -128,7 +128,16 @@ class VisilabsGeofenceState {
     }
     
     static var locationServicesEnabledForDevice: Bool {
-        return CLLocationManager.locationServicesEnabled()
+        var enabled = false
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        DispatchQueue.global().async {
+            enabled = CLLocationManager.locationServicesEnabled()
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        return enabled
     }
     
     static var locationAuthorizationStatus: CLAuthorizationStatus {
