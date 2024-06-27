@@ -303,17 +303,21 @@ public class VisilabsPersistence {
                              withObject: encodedVisilabsGeofenceHistory)
         }
     }
-
+    
     public static func readVisilabsGeofenceHistory() -> VisilabsGeofenceHistory {
-        if let savedVisilabsGeofenceHistory =
-            readUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey) as? Data {
-            let decoder = JSONDecoder()
-            if let loadedVisilabsGeofenceHistory = try? decoder.decode(VisilabsGeofenceHistory.self,
-                                                                       from: savedVisilabsGeofenceHistory) {
-                return loadedVisilabsGeofenceHistory
-            }
+        guard let savedVisilabsGeofenceHistory = readUserDefaults(VisilabsConstants.userDefaultsGeofenceHistoryKey) as? Data else {
+            print("Geofence history data not found or invalid type.")
+            return VisilabsGeofenceHistory()
         }
-        return VisilabsGeofenceHistory()
+        
+        do {
+            let decoder = JSONDecoder()
+            let loadedVisilabsGeofenceHistory = try decoder.decode(VisilabsGeofenceHistory.self, from: savedVisilabsGeofenceHistory)
+            return loadedVisilabsGeofenceHistory
+        } catch {
+            print("Decoding error: \(error.localizedDescription)")
+            return VisilabsGeofenceHistory()
+        }
     }
 
     public static func clearVisilabsGeofenceHistory() {

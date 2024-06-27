@@ -614,23 +614,20 @@ extension VisilabsLocationManager {
                 props[VisilabsConstants.lvtKey] = user.lvt
 
                 for (key, value) in VisilabsPersistence.readTargetParameters() {
-                   if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
-                       props[key] = value
-                   }
+                    if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
+                        props[key] = value
+                    }
                 }
 
-                VisilabsRequest.sendGeofenceRequest(properties: props,
-                                                    headers: [String: String](),
-                                                timeoutInterval: profile.requestTimeoutInterval) {
+                VisilabsRequest.sendGeofenceRequest(properties: props, headers: [String: String](), timeoutInterval: profile.requestTimeoutInterval) {
                     [lastKnownLatitude, lastKnownLongitude, geofenceHistory, now] (result, error) in
 
-                    if error != nil {
+                    if let error = error {
                         self.geofenceHistory.lastKnownLatitude = lastKnownLatitude ?? geofenceHistory.lastKnownLatitude
                         self.geofenceHistory.lastKnownLongitude = lastKnownLongitude ?? geofenceHistory.lastKnownLongitude
                         if self.geofenceHistory.errorHistory.count > VisilabsConstants.geofenceHistoryErrorMaxCount {
                             let ascendingKeys = Array(self.geofenceHistory.errorHistory.keys).sorted(by: { $0 < $1 })
-                            let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count
-                                                - VisilabsConstants.geofenceHistoryErrorMaxCount)]
+                            let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.geofenceHistoryErrorMaxCount)]
                             for key in keysToBeDeleted {
                                 self.geofenceHistory.errorHistory[key] = nil
                             }
@@ -639,6 +636,7 @@ extension VisilabsLocationManager {
                         completion(false, [VisilabsGeofenceEntity]())
                         return
                     }
+
                     (self.lastSuccessfulGeofenceFetchTime, self.geofenceHistory.lastFetchTime) = (now, now)
                     var fetchedGeofences = [VisilabsGeofenceEntity]()
                     if let res = result {
@@ -655,10 +653,10 @@ extension VisilabsLocationManager {
                                        let radius = geofence["rds"] as? Double {
                                         var distanceFromCurrentLastKnownLocation: Double?
                                         if let lastLat = lastKnownLatitude, let lastLong = lastKnownLongitude {
-                                distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat,
-                                                                                lng1: lastLong,
-                                                                                lat2: latitude,
-                                                                                lng2: longitude)
+                                            distanceFromCurrentLastKnownLocation = VisilabsHelper.distanceSquared(lat1: lastLat,
+                                                                                                                 lng1: lastLong,
+                                                                                                                 lat2: latitude,
+                                                                                                                 lng2: longitude)
                                         }
                                         fetchedGeofences.append(VisilabsGeofenceEntity(actId: actionId,
                                                                                        geofenceId: geofenceId,
@@ -667,7 +665,7 @@ extension VisilabsLocationManager {
                                                                                        radius: radius,
                                                                                        durationInSeconds: durationInSeconds,
                                                                                        targetEvent: targetEvent,
-                                            distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
+                                                                                       distanceFromCurrentLastKnownLocation: distanceFromCurrentLastKnownLocation))
                                     }
                                 }
                             }
@@ -679,8 +677,7 @@ extension VisilabsLocationManager {
                     self.geofenceHistory.fetchHistory[now] = fetchedGeofences
                     if self.geofenceHistory.fetchHistory.count > VisilabsConstants.geofenceHistoryMaxCount {
                         let ascendingKeys = Array(self.geofenceHistory.fetchHistory.keys).sorted(by: { $0 < $1 })
-                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count
-                                                                - VisilabsConstants.geofenceHistoryMaxCount)]
+                        let keysToBeDeleted = ascendingKeys[0..<(ascendingKeys.count - VisilabsConstants.geofenceHistoryMaxCount)]
                         for key in keysToBeDeleted {
                             self.geofenceHistory.fetchHistory[key] = nil
                         }
@@ -689,8 +686,6 @@ extension VisilabsLocationManager {
                     completion(true, fetchedGeofences)
                 }
             }
-
-
         }
     }
     
