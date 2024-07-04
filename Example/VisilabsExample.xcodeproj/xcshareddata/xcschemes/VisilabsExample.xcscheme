@@ -53,8 +53,8 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <LocationScenarioReference
-         identifier = "../VisilabsExample/gpxgenerator_path_3.gpx"
-         referenceType = "0">
+         identifier = "Berlin, Germany"
+         referenceType = "1">
       </LocationScenarioReference>
    </LaunchAction>
    <ProfileAction
