@@ -305,15 +305,15 @@ extension VisilabsLocationManager {
         var duration: TimeInterval = 0
         if options.stopDistance > 0, options.stopDuration > 0 {
             
-            var lastMovedLocation: CLLocation?
-            var lastMovedAt: Date?
+            var lastMovedLocation: CLLocation? = VisilabsGeofenceState.getLastMovedLocation()
+            var lastMovedAt: Date? = VisilabsGeofenceState.getLastMovedAt()
             
-            if VisilabsGeofenceState.getLastMovedLocation() == nil {
+            if lastMovedLocation == nil {
                 lastMovedLocation = location
                 VisilabsGeofenceState.setLastMovedLocation(location)
             }
             
-            if VisilabsGeofenceState.getLastMovedAt() == nil {
+            if lastMovedAt == nil {
                 lastMovedAt = location.timestamp
                 VisilabsGeofenceState.setLastMovedAt(location.timestamp)
             }
@@ -322,7 +322,6 @@ extension VisilabsLocationManager {
                 VLogger.info("Skipping location: old | lastMovedAt = \(lastMovedAt); location.timestamp = \(location.timestamp)")
                 return
             }
-            
             if let lastMovedLocation = lastMovedLocation, let lastMovedAt = lastMovedAt {
                 distance = location.distance(from: lastMovedLocation)
                 duration = location.timestamp.timeIntervalSince(lastMovedAt)
@@ -380,6 +379,7 @@ extension VisilabsLocationManager {
             }
             if Int(lastSyncInterval ?? 0) < options.desiredSyncInterval {
                 //VLogger.info("Skipping sync: desired sync interval | desiredSyncInterval = \(options.desiredSyncInterval); lastSyncInterval = \(lastSyncInterval ?? 0)")
+                return
             }
             if !force && !justStopped && Int(lastSyncInterval ?? 0) < 1 {
                 //VLogger.info("Skipping sync: rate limit | justStopped = \(justStopped); lastSyncInterval = \(String(describing: lastSyncInterval))")
@@ -486,7 +486,9 @@ extension VisilabsLocationManager {
             } else if status == .authorizedWhenInUse {
                 locMan.requestAlwaysAuthorization()
             }
-        } else {
+        } else if status == .notDetermined {
+            locMan.requestWhenInUseAuthorization()
+        } else if status == .authorizedWhenInUse {
             locMan.requestAlwaysAuthorization()
         }
     }
@@ -520,6 +522,7 @@ extension VisilabsLocationManager {
                               completion: @escaping ((_ response: Bool) -> Void)) {
         
         guard let profile = self.visilabsProfile else {
+            completion(false)
             return
         }
         
@@ -560,6 +563,8 @@ extension VisilabsLocationManager {
                                             timeoutInterval: profile.requestTimeoutInterval) { (_, error) in
             if let error = error {
                 VLogger.error("Geofence Push Send Error: \(error)")
+                completion(false)
+                return
             }
             completion(true)
         }
@@ -748,7 +753,27 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        VLogger.error("CLLocationManager didFailWithError : \(error.localizedDescription)")
+        guard let clError = error as? CLError else {
+            VLogger.error("CLLocationManager didFailWithError: \(error.localizedDescription)")
+            return
+        }
+
+        switch clError.code {
+        case .locationUnknown:
+            VLogger.error("CLLocationManager didFailWithError: Location unknown (temporary error).")
+            // Geçici hata, bir süre sonra tekrar deneyebiliriz
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                manager.requestLocation()
+            }
+        case .denied:
+            VLogger.error("CLLocationManager didFailWithError: Access to location services denied.")
+            // Kullanıcı erişimi reddetti, gerekli işlemleri yap
+        case .network:
+            VLogger.error("CLLocationManager didFailWithError: Network error.")
+            // Ağ hatası, kullanıcıyı bilgilendirebilirsin
+        default:
+            VLogger.error("CLLocationManager didFailWithError: \(clError.localizedDescription) (error code: \(clError.code.rawValue)).")
+        }
     }
     
     
