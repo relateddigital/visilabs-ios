@@ -93,19 +93,29 @@ struct VisilabsBasePath {
 
     // TO_DO: path parametresini kaldır
     static func buildURL(visilabsEndpoint: VisilabsEndpoint, queryItems: [URLQueryItem]?) -> URL? {
+        // Endpoint kontrolü
         guard let endpoint = endpoints[visilabsEndpoint], !endpoint.isEmpty else {
             print("Endpoint not found or is empty for \(visilabsEndpoint)")
             return nil
         }
         
+        // Geçerli URL kontrolü
         guard let url = URL(string: endpoint) else {
             print("Invalid URL string: \(endpoint)")
             return nil
         }
         
+        // URLComponents oluşturma
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+        if components == nil {
+            print("Failed to create URL components from \(url)")
+            return nil
+        }
+        
+        // Sorgu parametrelerini ekleme
         components?.queryItems = queryItems
         
+        // Son URL oluşturma
         guard let finalURL = components?.url else {
             print("Failed to create final URL from components")
             return nil
@@ -113,9 +123,8 @@ struct VisilabsBasePath {
         
         return finalURL
     }
-
     static func getEndpoint(visilabsEndpoint: VisilabsEndpoint) -> String {
-        return endpoints[visilabsEndpoint] ?? ""
+            return endpoints[visilabsEndpoint] ?? ""
     }
 }
 
@@ -125,13 +134,12 @@ class VisilabsNetwork {
                              failure: @escaping (VisilabsError, Data?, URLResponse?) -> Void,
                              success: @escaping (A, URLResponse?) -> Void) {
         guard let request = buildURLRequest(resource: resource) else {
+            failure(.other(errorDescription: "Failed to build URL request"), nil, nil)
             return
         }
 
-        // TO_DO: burada cookie'leri düzgün handle edecek bir yöntem bul.
         URLSession.shared.dataTask(with: request) { (data, response, error) -> Void in
             guard let httpResponse = response as? HTTPURLResponse else {
-
                 if let hasError = error {
                     failure(.other(errorDescription: hasError.localizedDescription), data, response)
                 } else {
@@ -140,8 +148,7 @@ class VisilabsNetwork {
                 return
             }
 
-            // TO_DO: buraya 201'i de ekleyebiliriz, visilabs sunucuları 201(created) de dönebiliyor. 304(Not modified)
-            guard httpResponse.statusCode == 200/*OK*/ else {
+            guard httpResponse.statusCode == 200 else {
                 failure(.notOKStatusCode(statusCode: httpResponse.statusCode), data, response)
                 return
             }
@@ -175,7 +182,7 @@ class VisilabsNetwork {
             VisilabsLogger.warn("Request body is nil for URL: \(url.absoluteURL)")
         }
 
-        request.timeoutInterval = 60
+        request.timeoutInterval = resource.timeoutInterval
 
         for (key, value) in resource.headers {
             request.setValue(value, forHTTPHeaderField: key)
