@@ -202,9 +202,13 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
-        let spinToWinVC = SpinToWinViewController(model)
-        spinToWinVC.delegate = self
-        spinToWinVC.show(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+            
+            let spinToWinVC = SpinToWinViewController(model)
+            spinToWinVC.delegate = self
+            spinToWinVC.show(animated: true)
+        })
+        
         return true
     }
 
