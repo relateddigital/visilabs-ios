@@ -10,7 +10,6 @@ public class Visilabs {
         if let instance = VisilabsManager.sharedInstance.getInstance() {
             return instance
         } else {
-            print("")
             assert(false, "You have to call createAPI before calling the callAPI.")
             return Visilabs.createAPI(organizationId: "", profileId: "", dataSource: "",geofenceEnabled: false,askLocationPermmissionAtStart: false)
         }
