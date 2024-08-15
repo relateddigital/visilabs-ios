@@ -83,25 +83,27 @@ class VisilabsLocationManager: NSObject {
     }
     
     func startGeofencing(fromInit: Bool) {
-        if askLocationPermmissionAtStart {
-            requestLocationPermissions()
-        }
         
-        let authorizationStatus = VisilabsGeofenceState.locationAuthorizationStatus
-        if !(authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways) {
-            return
-        }
-        VisilabsGeofenceState.setGeofenceEnabled(true)
-        updateTracking(location: nil, fromInit: fromInit)
-        do {
-            if let geoEntities = try geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
-                replaceSyncedGeofences(geoEntities)
+        DispatchQueue.main.async { [self] in
+            if askLocationPermmissionAtStart {
+                requestLocationPermissions()
             }
-        } catch {
-            print("Visilabs Location Manager Error")
+            
+            let authorizationStatus = VisilabsGeofenceState.locationAuthorizationStatus
+            if !(authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways) {
+                return
+            }
+            VisilabsGeofenceState.setGeofenceEnabled(true)
+            updateTracking(location: nil, fromInit: fromInit)
+            do {
+                if let geoEntities = try geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
+                    replaceSyncedGeofences(geoEntities)
+                }
+            } catch {
+                print("Visilabs Location Manager Error")
+            }
+            fetchGeofences()
         }
-        
-        fetchGeofences()
     }
     
     func stopGeofence() {
