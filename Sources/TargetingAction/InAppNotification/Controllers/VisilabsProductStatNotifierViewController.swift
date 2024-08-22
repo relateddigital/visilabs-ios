@@ -42,6 +42,28 @@ class VisilabsProductStatNotifierViewController: VisilabsBaseNotificationViewCon
         super.viewDidLoad()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        hideController()
+    }
+    
+    func hideController() {
+        if productStatNotifier?.timeout == "0" {
+            return
+        } else {
+            if let timeOutTime = (Double(productStatNotifier?.timeout ?? "100000")) {
+                let needWaitTime = (timeOutTime / 1000)
+                DispatchQueue.main.asyncAfter(deadline: .now() + needWaitTime , execute: { [self] in
+                    if !isDismissing {
+                        delegate?.notificationShouldDismiss(controller: self,
+                                                            callToActionURL: nil,
+                                                            shouldTrack: false,                                                        additionalTrackingProperties: nil)
+                    }
+                })
+            }
+        }
+    }
+    
     @objc func didTap(gesture: UITapGestureRecognizer) {
         if !isDismissing && gesture.state == UIGestureRecognizer.State.ended {
             delegate?.notificationShouldDismiss(controller: self,
