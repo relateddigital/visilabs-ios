@@ -25,7 +25,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case imageButtonImage
     case spintowin
     case feedbackForm
-    case productStatNotifier = "product_stat_notifier"
+    case productStatNotifier = "socialproof"
     case drawer = "drawer"
     case video = "video"
     case bannerCarousel = "banner_carousel"
