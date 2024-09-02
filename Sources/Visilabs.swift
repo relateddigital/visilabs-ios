@@ -5,6 +5,8 @@
 //  Created by Egemen on 14.07.2020.
 //
 
+import UserNotifications
+
 public class Visilabs {
     public class func callAPI() -> VisilabsInstance {
         if let instance = VisilabsManager.sharedInstance.getInstance() {
