@@ -1,3 +1,10 @@
+//
+//  StarsViewController.swift
+//  RelatedDigitalExample
+//
+//  Created by Orhun Akmil on 9.09.2024.
+//
+
 import UIKit
 
 class StarsViewController: UIViewController {
@@ -5,16 +12,13 @@ class StarsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Arkaplan rengini ayarlıyoruz
         view.backgroundColor = .white
         
-        // Yıldızları ekleyeceğimiz stackView oluşturuyoruz
         let starsStackView = UIStackView()
         starsStackView.axis = .vertical
         starsStackView.alignment = .center
         starsStackView.spacing = 10
         
-        // 10 adet tıklanabilir yıldız ekliyoruz
         for i in 1...10 {
             let starButton = UIButton(type: .system)
             starButton.setTitle("⭐️", for: .normal)
@@ -24,10 +28,8 @@ class StarsViewController: UIViewController {
             starsStackView.addArrangedSubview(starButton)
         }
         
-        // StackView'i ana görünüme ekliyoruz
         view.addSubview(starsStackView)
         
-        // StackView için AutoLayout ayarları
         starsStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             starsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -35,14 +37,9 @@ class StarsViewController: UIViewController {
         ])
     }
 
-    // Yıldız butonuna tıklandığında çağrılan fonksiyon
     @objc func starTapped(_ sender: UIButton) {
         let starIndex = sender.tag
         print("Yıldız \(starIndex) tıklandı!")
-        // İstediğiniz işlemi burada yapabilirsiniz, örneğin bir animasyon veya başka bir aksiyon.
+
     }
 }
-
-// Kullanmak için AppDelegate veya SceneDelegate içinde çağırabilirsiniz
-let starsViewController = StarsViewController()
-// Örnek: window?.rootViewController = starsViewController
