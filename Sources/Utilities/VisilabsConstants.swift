@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "4.3.5"
+    static let sdkVersion = "4.3.6"
     static let sdkTypeKey = "sdk_type"
 
     static let HTTP = "http"
