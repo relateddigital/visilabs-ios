@@ -84,7 +84,9 @@ class VisilabsLocationManager: NSObject {
     
     func startGeofencing(fromInit: Bool) {
         
-        DispatchQueue.main.async { [self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
             if askLocationPermmissionAtStart {
                 requestLocationPermissions()
             }
