@@ -72,6 +72,7 @@ struct VisilabsConstants {
 
     static let isTrue = "true"
 
+    static let InAppLink = "InAppLink"
     static let sdkType = "native"
     static let ios = "IOS"
     static let datKey = "dat"
