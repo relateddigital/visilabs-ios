@@ -370,12 +370,15 @@ extension SpinToWinViewController: WKScriptMessageHandler {
                     Visilabs.callAPI().trackSpinToWinClick(spinToWinReport: self.spinToWin!.report)
                 }
                 
-                if method == "copyToClipboard", let couponCode = event["couponCode"] as? String {
+                if method == "copyToClipboard", let couponCode = event["couponCode"] as? String  {
                     DispatchQueue.main.async {
                         self.dismiss(animated: true) {
                             UIPasteboard.general.string = couponCode
                             VisilabsHelper.showCopiedClipboardMessage()
                         }
+                        let sliceLink = event["sliceLink"]
+                        NotificationCenter.default.post(name: Notification.Name(VisilabsConstants.InAppLink), object: nil, userInfo: ["link": sliceLink ?? ""])
+
                         self.close()
                     }
                     

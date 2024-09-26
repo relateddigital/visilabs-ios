@@ -18,6 +18,11 @@ class HomeViewController: FormViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(forName: Notification.Name("InAppLink"), object: nil, queue: .main) { notification in
+            if let userInfo = notification.userInfo, let link = userInfo["link"] as? String {
+                print("Received InAppLink: \(link)")
+            }
+        }
     }
     /*
     override func viewDidAppear(_ animated: Bool) {
