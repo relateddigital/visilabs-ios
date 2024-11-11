@@ -83,27 +83,29 @@ class VisilabsLocationManager: NSObject {
     }
     
     func startGeofencing(fromInit: Bool) {
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-
-            if askLocationPermmissionAtStart {
-                requestLocationPermissions()
+        // Ana iş parçacığını hemen bloklamadan asenkron bir işlem başlatın
+        DispatchQueue.global(qos: .background).async { [self] in
+            // Konum iznini kontrol etmek ana iş parçacığında yapılmalıdır
+            DispatchQueue.main.async {
+                if self.askLocationPermmissionAtStart {
+                    self.requestLocationPermissions()
+                }
+                
+                let authorizationStatus = VisilabsGeofenceState.locationAuthorizationStatus
+                if !(authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways) {
+                    return
+                }
+                VisilabsGeofenceState.setGeofenceEnabled(true)
             }
             
-            let authorizationStatus = VisilabsGeofenceState.locationAuthorizationStatus
-            if !(authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways) {
-                return
-            }
-            VisilabsGeofenceState.setGeofenceEnabled(true)
             updateTracking(location: nil, fromInit: fromInit)
-            do {
-                if let geoEntities = try geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
-                    replaceSyncedGeofences(geoEntities)
-                }
-            } catch {
-                print("Visilabs Location Manager Error")
-            }
+            
+            // `fetchHistory` işlemini arka planda çalıştırın
+            if let geoEntities = geofenceHistory.fetchHistory.sorted(by: { $0.key > $1.key }).first?.value {
+                        replaceSyncedGeofences(geoEntities)
+                    }
+            
+            // `fetchGeofences` işlemi arka planda çalışabilir
             fetchGeofences()
         }
     }
@@ -114,35 +116,58 @@ class VisilabsLocationManager: NSObject {
     }
     
     func startUpdates(_ interval: Int) {
-        if !started || interval != startedInterval {
-            VLogger.info("Starting geofence timer | interval = \(interval)")
-            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(shutDown), object: nil)
-            timer?.invalidate()
-            timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [self] _ in
-                VLogger.info("Geofence timer fired")
-                self.requestLocation()
-            }
-            lpLocMan.startUpdatingLocation()
-            started = true
-            startedInterval = interval
-        } else {
-            //VLogger.info("Already started geofence timer")
+        // Zamanlayıcı zaten başlatılmış ve aynı aralıkta ise işlemi durdur
+        guard !started || interval != startedInterval else {
+            VLogger.info("Geofence timer zaten başlatıldı, interval: \(interval)")
+            return
         }
+        
+        VLogger.info("Geofence zamanlayıcısı başlatılıyor | interval = \(interval)")
+
+        // Önceki zamanlayıcı ve `shutDown` isteklerini iptal et
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(shutDown), object: nil)
+        timer?.invalidate()
+
+        // Yeni zamanlayıcıyı başlat
+        timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [weak self] _ in
+            guard let self = self else {
+                VLogger.error("Geofence güncellemesi sırasında self referansına ulaşılamadı.")
+                return
+            }
+            VLogger.info("Geofence timer tetiklendi")
+            self.requestLocation()
+        }
+        
+        // Konum güncellemeyi başlat
+        lpLocMan.startUpdatingLocation()
+        started = true
+        startedInterval = interval
     }
     
     private func stopUpdates() {
+        // Zamanlayıcı mevcut değilse erken çık
         guard let timer = timer else {
+            VLogger.info("Geofence timer durdurulamadı, çünkü zaten mevcut değil")
             return
         }
-        VLogger.info("Stopping geofence timer")
+        
+        VLogger.info("Geofence zamanlayıcısı durduruluyor")
         timer.invalidate()
+        self.timer = nil
         started = false
         startedInterval = 0
+        
+        // Gönderim yapılmıyorsa kapanışı gecikmeli olarak planla
         if !sending {
             let delay: TimeInterval = VisilabsGeofenceState.getGeofenceEnabled() ? 10 : 0
-            VLogger.info("Scheduling geofence shutdown")
+            VLogger.info("Geofence kapanışı \(delay) saniye gecikmeli olarak planlanıyor")
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                self?.shutDown()
+                guard let self = self else {
+                    VLogger.error("Geofence kapanışı sırasında self referansına ulaşılamadı.")
+                    return
+                }
+                self.shutDown()
             }
         }
     }
@@ -158,26 +183,31 @@ class VisilabsLocationManager: NSObject {
     }
     
     func updateTracking(location: CLLocation?, fromInit: Bool) {
-        DispatchQueue.main.async {
-            //VLogger.info("Updating geofence tracking | options = \(self.options); location = \(String(describing: location))")
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else {
+                VLogger.error("updateTracking sırasında self referansına ulaşılamadı.")
+                return
+            }
             
+            // Geofence etkinleştirildi mi?
             if VisilabsGeofenceState.getGeofenceEnabled() {
-                self.locMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode && self.getAuthorizationStatus() == .authorizedAlways
-                self.locMan.pausesLocationUpdatesAutomatically = false
-                
-                self.lpLocMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode
-                self.lpLocMan.pausesLocationUpdatesAutomatically = false
-                
-                self.locMan.desiredAccuracy = self.options.desiredCLLocationAccuracy
-                
-                if #available(iOS 11, *) {
-                    self.lpLocMan.showsBackgroundLocationIndicator = self.options.showBlueBar
+                DispatchQueue.main.async {
+                    // Arka planda veya önemli konum değişiklikleri için ayarları yapılandırma
+                    self.locMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode && self.getAuthorizationStatus() == .authorizedAlways
+                    self.locMan.pausesLocationUpdatesAutomatically = false
+                    self.lpLocMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode
+                    self.lpLocMan.pausesLocationUpdatesAutomatically = false
+                    self.locMan.desiredAccuracy = self.options.desiredCLLocationAccuracy
+                    
+                    if #available(iOS 11, *) {
+                        self.lpLocMan.showsBackgroundLocationIndicator = self.options.showBlueBar
+                    }
                 }
                 
                 let startUpdates = self.options.showBlueBar || self.getAuthorizationStatus() == .authorizedAlways
                 let stopped = VisilabsGeofenceState.getStopped()
+                
                 if stopped {
-                    
                     if self.options.desiredStoppedUpdateInterval == 0 {
                         self.stopUpdates()
                     } else if startUpdates {
@@ -189,14 +219,13 @@ class VisilabsLocationManager: NSObject {
                     } else {
                         self.removeBubbleGeofence()
                     }
-                    
                 } else {
-                    
                     if self.options.desiredMovingUpdateInterval == 0 {
                         self.stopUpdates()
                     } else if startUpdates {
                         self.startUpdates(self.options.desiredMovingUpdateInterval)
                     }
+                    
                     if self.options.useMovingGeofence, let location = location {
                         self.replaceBubbleGeofence(location, radius: self.options.movingGeofenceRadius)
                     } else {
@@ -214,11 +243,11 @@ class VisilabsLocationManager: NSObject {
             } else {
                 self.stopUpdates()
                 self.removeAllRegions()
+                
                 if !fromInit {
                     self.locMan.stopMonitoringSignificantLocationChanges()
                 }
             }
-            
         }
     }
     
