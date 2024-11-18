@@ -122,7 +122,8 @@ struct SideBarServiceModel: TargetingActionViewModel {
     var contentMaximizedBackgroundColor:String?
     
     var report: DrawerReport?
-
+    public var jsContent: String?
+    public var jsonContent: String?
 }
 
 public struct DrawerReport: Codable {

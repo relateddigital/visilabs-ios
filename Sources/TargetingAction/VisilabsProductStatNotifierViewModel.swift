@@ -23,6 +23,8 @@ public struct VisilabsProductStatNotifierViewModel: TargetingActionViewModel {
     var closeButtonColor: String
     var contentCount = 0  // TODO: kullanmayalım
     var attributedString: NSAttributedString? = nil
+    public var jsContent: String?
+    public var jsonContent: String?
     
     func getContentFont() -> UIFont {
         return VisilabsHelper.getFont(fontFamily: content_font_family, fontSize: content_text_size, style: .title2)

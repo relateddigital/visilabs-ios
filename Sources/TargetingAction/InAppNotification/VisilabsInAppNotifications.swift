@@ -89,6 +89,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showDrawer(model: drawer) {
                         self.markTargetingActionShown(model: drawer)
                     }
+                } else if model.targetingActionType == .mobileCustomActions, let customWebview = model as? CustomWebViewModel {
+                    if self.showCustomWebview(model: customWebview) {
+                        self.markTargetingActionShown(model: customWebview)
+                    }
                 }
                   else if model.targetingActionType == .apprating {
                     self.showInappRating()
@@ -115,6 +119,17 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let sideBarViewController = visilabsSideBarViewController(model: model)
         sideBarViewController.delegate = self
         sideBarViewController.show(animated: true)
+        return true
+    }
+    
+    func showCustomWebview(model: CustomWebViewModel) -> Bool {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+
+        let customWebviewVC = CustomWebViewController(model)
+        customWebviewVC.delegate = self
+        customWebviewVC.show(animated: true)
+        
+        })
         return true
     }
     

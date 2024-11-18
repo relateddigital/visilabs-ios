@@ -76,7 +76,7 @@ class CustomWebViewController: VisilabsBaseNotificationViewController {
     }
 
     override func show(animated: Bool) {
-        guard let sharedUIApplication = RDInstance.sharedUIApplication() else {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
              return
          }
 
@@ -183,7 +183,7 @@ class CustomWebViewController: VisilabsBaseNotificationViewController {
         let htmlString = self.customWebViewModel?.htmlContent
 
         guard let docUrl = try? manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            RDLogger.error("DocumentDirectory oluşturulamadı")
+            VisilabsLogger.error("DocumentDirectory oluşturulamadı")
             return nil
         }
 
@@ -211,8 +211,8 @@ class CustomWebViewController: VisilabsBaseNotificationViewController {
             // Geri kalan font işlemleri...
 
         } catch let error {
-            RDLogger.error(error)
-            RDLogger.error(error.localizedDescription)
+            VisilabsLogger.error(error)
+            VisilabsLogger.error(error.localizedDescription)
             return nil
         }
 
@@ -243,7 +243,7 @@ class CustomWebViewController: VisilabsBaseNotificationViewController {
                     }
 
                     guard let url = Bundle.main.url(forResource: fontName, withExtension: fontExtension) else {
-                        RDLogger.error("UIFont+:  Failed to register font - path for resource not found.")
+                        VisilabsLogger.error("UIFont+:  Failed to register font - path for resource not found.")
                         continue
                     }
                     fontUrls[uiAppFont] = url
@@ -272,17 +272,17 @@ extension CustomWebViewController: WKScriptMessageHandler {
         if message.name == "eventHandler" {
             if let event = message.body as? [String: Any], let method = event["method"] as? String {
                 if method == "console.log", let message = event["message"] as? String {
-                    RDLogger.info("console.log: \(message)")
+                    VisilabsLogger.info("console.log: \(message)")
                 }
                 
                 if method == "initCustomweb" {
-                    RDLogger.info("initCustomweb")
+                    VisilabsLogger.info("initCustomweb")
                     
                     if let jsonString = customWebViewModel?.jsonContent {
                         self.webView.evaluateJavaScript("window.initCustomweb(\(jsonString));") { (_, err) in
                             if let error = err {
-                                RDLogger.error(error)
-                                RDLogger.error(error.localizedDescription)
+                                VisilabsLogger.error(error)
+                                VisilabsLogger.error(error.localizedDescription)
 
                             }
                         }
@@ -291,17 +291,17 @@ extension CustomWebViewController: WKScriptMessageHandler {
 
                 if method == "copyToClipboard", let couponCode = event["couponCode"] as? String {
                     UIPasteboard.general.string = couponCode
-                    RDHelper.showCopiedClipboardMessage()
+                    VisilabsHelper.showCopiedClipboardMessage()
                     self.close()
                 }
 
                 if method == "subscribeEmail", let email = event["email"] as? String {
-                    RelatedDigital.subscribeChooseFavoriteMail(actid: "\(self.customWebViewModel!.actId ?? 0)", auth: self.customWebViewModel!.auth, mail: email)
+                    Visilabs.callAPI().subscribeCustomWebViewMail(actid: "\(self.customWebViewModel!.actId ?? 0)", auth: self.customWebViewModel!.auth, mail: email)
                     subsEmail = email
                 }
 
                 if method == "sendReport" {
-                    RelatedDigital.trackCustomWebviewClick(customWebviewReport:(self.customWebViewModel?.report)!)
+                    Visilabs.callAPI().trackCustomWebviewClick(customWebviewReport:(self.customWebViewModel?.report)!)
                 }
 
                 if method == "linkClicked", let urlLnk = event["url"] as? String {
@@ -317,11 +317,12 @@ extension CustomWebViewController: WKScriptMessageHandler {
                     UIPasteboard.general.string = code
                     BannerCodeManager.shared.setCustomWebViewCode(code: code)
                     let actionID = self.customWebViewModel?.actId
-                    var properties = Properties()
-                    properties[RDConstants.promoActionID] = String(actionID ?? 0)
-                    properties[RDConstants.promoEmailKey] = mail
-                    properties[RDConstants.promoAction] = code
-                    RelatedDigital.customEvent(RDConstants.omEvtGif, properties: properties)
+                    var properties = [String:String]()
+                    properties[VisilabsConstants.promoActionID] = String(actionID ?? 0)
+                    properties[VisilabsConstants.promoEmailKey] = mail
+                    properties[VisilabsConstants.promoAction] = code
+                    Visilabs.callAPI().customEvent(VisilabsConstants.omEvtGif, properties: properties)
+                    
                 }
                 
 

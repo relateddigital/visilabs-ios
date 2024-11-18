@@ -53,6 +53,10 @@ public enum ButtonColor: String {
 }
 
 public struct MailSubscriptionViewModel: TargetingActionViewModel {
+    public var jsContent: String?
+    
+    public var jsonContent: String?
+    
     public var targetingActionType: TargetingActionType
     var auth: String
     var actId: Int
