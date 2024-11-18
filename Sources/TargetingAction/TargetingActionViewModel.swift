@@ -14,8 +14,11 @@ public enum TargetingActionType: String, Codable {
     case productStatNotifier = "ProductStatNotifier"
     case drawer = "Drawer"
     case apprating = "MobileAppRating"
+    case mobileCustomActions = "mobileCustomActions"
 }
 
 public protocol TargetingActionViewModel {
     var targetingActionType: TargetingActionType { get set }
+    var jsContent: String? { get set }
+    var jsonContent: String? { get set }
 }
