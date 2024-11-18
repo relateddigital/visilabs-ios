@@ -122,6 +122,8 @@ class InAppViewController: FormViewController {
             break
         case .apprating:
             break
+        case .mobileCustomActions:
+            break
         }
         
         

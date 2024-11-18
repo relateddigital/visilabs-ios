@@ -18,6 +18,8 @@ public struct SpinToWinSliceViewModel: Codable {
 }
 
 public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
+
+    
     public var targetingActionType: TargetingActionType
     var actId: Int
     var auth: String
@@ -44,7 +46,8 @@ public struct SpinToWinViewModel: TargetingActionViewModel, Codable {
     var promocodesSoldoutMessage: String
     var copyButtonFunction: String
     var waitingTime: Int
-    
+    public var jsContent: String?
+    public var jsonContent: String?
     // ExtendedProps
     var displaynameTextColor: String
     var displaynameFontFamily: String
