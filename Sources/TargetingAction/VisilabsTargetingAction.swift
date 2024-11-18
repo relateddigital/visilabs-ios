@@ -104,7 +104,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         
         
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)"
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -140,7 +140,9 @@ class VisilabsTargetingAction {
             return parseScratchToWin(sctw)
         }  else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
             return parseDrawer(drw)
-        }  else if let inappRating = result[VisilabsConstants.apprating] as? [[String: Any?]], let inappRating = inappRating.first {
+        } else if let customWeb = result[VisilabsConstants.mobileCustomActions] as? [[String: Any?]], let customWeb = customWeb.first {
+            return parseCustomWebview(customWeb)
+        } else if let inappRating = result[VisilabsConstants.apprating] as? [[String: Any?]], let inappRating = inappRating.first {
             return parseInappRating(inappRating)
         }  else if let psnArr = result[VisilabsConstants.productStatNotifier] as? [[String: Any?]], let psn = psnArr.first {
             if let productStatNotifier = parseProductStatNotifier(psn) {
@@ -284,6 +286,54 @@ class VisilabsTargetingAction {
         
         return model
     }
+        
+    private func parseCustomWebview(_ customWebView: [String: Any?]) -> CustomWebViewModel? {
+        guard let actionData = customWebView[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        var customWebviewModel = CustomWebViewModel(targetingActionType: .mobileCustomActions)
+        customWebviewModel.actId = customWebView[VisilabsConstants.actid] as? Int ?? 0
+        customWebviewModel.title = customWebView[VisilabsConstants.title] as? String ?? ""
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+
+        customWebviewModel.htmlContent = actionData[VisilabsConstants.content] as? String ?? ""
+        customWebviewModel.jsContent = actionData[VisilabsConstants.javascript] as? String ?? ""
+
+         //prome banner params
+        customWebviewModel.font_family = extendedProps[VisilabsConstants.fontFamily] as? String ?? ""
+        customWebviewModel.custom_font_family_ios = extendedProps[VisilabsConstants.customFontFamilyIos] as? String ?? ""
+        customWebviewModel.close_button_color = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? ""
+        customWebviewModel.copybutton_color = extendedProps[VisilabsConstants.copybuttonColor] as? String ?? ""
+        customWebviewModel.copybutton_text_color = extendedProps[VisilabsConstants.copybuttonTextColor] as? String ?? ""
+        customWebviewModel.copybutton_text_size = extendedProps[VisilabsConstants.copybuttonTextSize] as? String ?? ""
+        customWebviewModel.promocode_banner_text = extendedProps[VisilabsConstants.promocode_banner_text] as? String ?? ""
+        customWebviewModel.promocode_banner_text_color = extendedProps[VisilabsConstants.promocode_banner_text_color] as? String ?? ""
+        customWebviewModel.promocode_banner_background_color = extendedProps[VisilabsConstants.promocode_banner_background_color] as? String ?? ""
+        customWebviewModel.promocode_banner_button_label = extendedProps[VisilabsConstants.promocode_banner_button_label] as? String ?? ""
+        //
+
+        customWebviewModel.waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
+        customWebviewModel.position = extendedProps[VisilabsConstants.positionCustom] as? String ?? ""
+        customWebviewModel.width = extendedProps[VisilabsConstants.width] as? Float ?? 0.0
+        customWebviewModel.height = extendedProps[VisilabsConstants.height] as? Float ?? 0.0
+        customWebviewModel.closeButtonColor = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? ""
+        customWebviewModel.borderRadius = extendedProps[VisilabsConstants.borderRadius] as? Float ?? 0.0
+        
+        if let theJSONData = try? JSONSerialization.data(
+            withJSONObject: customWebView,
+            options: []) {
+            customWebviewModel.jsonContent = String(data: theJSONData, encoding: .utf8)
+        }
+
+        if customWebviewModel.promocode_banner_button_label.count > 0 && customWebviewModel.promocode_banner_text.count > 0 {
+            customWebviewModel.bannercodeShouldShow = true
+        } else {
+            customWebviewModel.bannercodeShouldShow = false
+        }
+
+        return customWebviewModel
+    }
+
+
     
     private func parseInappRating(_ inappratingModel: [String: Any?]) -> InappReviewModel? {
         guard let actionData = inappratingModel[VisilabsConstants.actionData] as? [String: Any] else { return nil }

@@ -10,7 +10,7 @@ import UIKit
 
 
 
-class RDCustomWebViewBannerController : RDBaseNotificationViewController {
+class RDCustomWebViewBannerController : VisilabsBaseNotificationViewController {
     
     var customWebCodeBannerView: RDCustomWebCodeBannerView!
     var halfScreenHeight = 0.0
@@ -45,7 +45,7 @@ class RDCustomWebViewBannerController : RDBaseNotificationViewController {
     @objc func didTap(gesture: UITapGestureRecognizer) {
         if !isDismissing && gesture.state == UIGestureRecognizer.State.ended {
             UIPasteboard.general.string = customWebViewModel?.promocode_banner_text.replacingOccurrences(of: "\'", with: "")
-            RDHelper.showCopiedClipboardMessage()
+            VisilabsHelper.showCopiedClipboardMessage()
         }
     }
     
@@ -59,7 +59,7 @@ class RDCustomWebViewBannerController : RDBaseNotificationViewController {
     }
 
     override func show(animated: Bool) {
-        guard let sharedUIApplication = RDInstance.sharedUIApplication() else {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else {
             return
         }
         var bounds: CGRect
@@ -74,7 +74,7 @@ class RDCustomWebViewBannerController : RDBaseNotificationViewController {
             bounds = UIScreen.main.bounds
         }
         
-        let topInset = Double(RDHelper.getSafeAreaInsets().top)
+        let topInset = Double(VisilabsHelper.getSafeAreaInsets().top)
         halfScreenHeight = Double(customWebCodeBannerView.horizontalStackView.frame.height)
         
         let frameY = topInset
@@ -112,7 +112,7 @@ class RDCustomWebViewBannerController : RDBaseNotificationViewController {
             
             UIView.animate(withDuration: duration, animations: {
                 
-                let originY  = -(self.halfScreenHeight + Double(RDHelper.getSafeAreaInsets().top))
+                let originY  = -(self.halfScreenHeight + Double(VisilabsHelper.getSafeAreaInsets().top))
 
                 
                 self.window?.frame.origin.y += CGFloat(originY)

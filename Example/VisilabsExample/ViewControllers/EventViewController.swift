@@ -183,7 +183,9 @@ class EventViewController: FormViewController, BannerDelegate {
             .drawer : [VisilabsInAppNotificationType.drawer.rawValue: 884],
             .video : [VisilabsInAppNotificationType.video.rawValue: 73],
             .bannerCarousel : [VisilabsInAppNotificationType.bannerCarousel.rawValue: 155],
-            .apprating : [VisilabsInAppNotificationType.apprating.rawValue: 1101]
+            .apprating : [VisilabsInAppNotificationType.apprating.rawValue: 1101],
+            .mobileCustomActions : [VisilabsInAppNotificationType.mobileCustomActions.rawValue: 3232]
+
         ]
     }
     

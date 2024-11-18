@@ -369,6 +369,18 @@ extension VisilabsInstance {
         }
     }
     
+    func trackCustomWebviewClick(customWebviewReport: CustomWebViewReport) {
+        var properties = [String:String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        properties["OM.zn"] = customWebviewReport.click?.parseClick().omZn
+        properties["OM.zpc"] = customWebviewReport.click?.parseClick().omZpc
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
+    
+    func subscribeCustomWebViewMail(actid: String, auth: String, mail: String) {
+        createSubsJsonRequest(actid: actid, auth: auth, mail: mail, type: "CustomWebView_email")
+    }
+    
     public func sendCampaignParameters(properties: [String: String]) {
         if VisilabsPersistence.isBlocked() {
             VisilabsLogger.warn("Too much server load, ignoring the request!")

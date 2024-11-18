@@ -139,7 +139,7 @@ struct VisilabsConstants {
     static let productStatNotifier = "ProductStatNotifier"
     static let drawer = "Drawer"
     static let apprating = "MobileAppRating"
-    static let mobileCustomActions = "mobileCustomActions"
+    static let mobileCustomActions = "MobileCustomActions"
 
     
     static let appBanners = "app_banners"
@@ -363,6 +363,12 @@ struct VisilabsConstants {
     static let contentcount_text_color = "contentcount_text_color"
     static let contentcount_text_size = "contentcount_text_size"
     
+    
+    static let javascript = "javascript"
+    static let positionCustom = "position"
+    static let width = "width"
+    static let height = "height"
+    static let borderRadius = "border_radius"
     
     
     static let backgroundClickCloseDisabledInAppNotificationTypes: [VisilabsInAppNotificationType] = [.full, .feedbackForm, .mini, .halfScreenImage]
