@@ -108,7 +108,7 @@ class RDCustomWebCodeBannerView: UIView {
     }
 
     private func setFonts() {
-        let font = RDHelper.getFont(fontFamily: customWebViewModel.font_family,
+        let font = VisilabsHelper.getFont(fontFamily: customWebViewModel.font_family,
                                     fontSize: customWebViewModel.copybutton_text_size,
                                     style: .title2, customFont: customWebViewModel.custom_font_family_ios)
         bannerTextLabel.font = font
