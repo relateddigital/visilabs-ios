@@ -121,7 +121,7 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
         cellTemp.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([cellTemp.topAnchor.constraint(equalTo: cell.topAnchor, constant: 0),
                                      cellTemp.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 0),
-                                     cellTemp.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -1),
+                                     cellTemp.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: 0),
                                      cellTemp.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: 0)])
 
         return cell
