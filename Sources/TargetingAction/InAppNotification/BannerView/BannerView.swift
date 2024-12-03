@@ -77,7 +77,13 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
         if bannerViewModel?.pageControlHidden == true {
             self.pageControlView.isHidden = true
             self.pageControlHeightConstraint.constant = 0.0
+        } else if bannerViewModel?.pageCount ?? 0 <= 1 {
+            self.pageControlView.isHidden = true
+            self.pageControlHeightConstraint.constant = 0.0
+            self.currentPageLabel.isHidden = true
+            self.currentPageView.isHidden = true
         }
+        
         self.pageControlView.numberOfPages = bannerViewModel?.pageCount ?? 0
     }
 
