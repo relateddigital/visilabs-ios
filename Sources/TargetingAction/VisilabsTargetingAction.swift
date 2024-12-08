@@ -962,6 +962,9 @@ class VisilabsTargetingAction {
         var appBannerModelArray = [AppBannerModel]()
         var errorResponse: VisilabsError?
         var transition: String?
+        var height : Int?
+        var width : Int?
+        
         if let error = error {
             errorResponse = error
         } else if let res = result {
@@ -974,6 +977,13 @@ class VisilabsTargetingAction {
                         let appBannerModel = AppBannerModel(img: element[VisilabsConstants.img] as? String, ios_lnk: element[VisilabsConstants.iosLnk] as? String)
                         appBannerModelArray.append(appBannerModel)
                     }
+                    if let extendProps = actiondata?[VisilabsConstants.extendedProps] as? String {
+                        if let extendedPropsDict = extendProps.urlDecode().convertJsonStringToDictionary() {
+                            height = extendedPropsDict[VisilabsConstants.height] as? Int
+                            width = extendedPropsDict[VisilabsConstants.width] as? Int
+                        }
+                    }
+
                 }
             } else {
                 errorResponse = VisilabsError.noData
@@ -984,7 +994,7 @@ class VisilabsTargetingAction {
             errorResponse = VisilabsError.noData
         }
 
-        return AppBannerResponseModel(app_banners: appBannerModelArray, error: errorResponse, transition: transition ?? "")
+        return AppBannerResponseModel(app_banners: appBannerModelArray, error: errorResponse, transition: transition ?? "",height: height,width: width)
     }
     
     // swiftlint:disable cyclomatic_complexity
