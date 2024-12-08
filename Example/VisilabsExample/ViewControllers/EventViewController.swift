@@ -337,7 +337,6 @@ extension EventViewController: VisilabsInappButtonDelegate {
         bannerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(bannerView)
         NSLayoutConstraint.activate([bannerView.topAnchor.constraint(equalTo: self.view.topAnchor,constant:  80),
-                                     bannerView.heightAnchor.constraint(equalToConstant: 80),
                                      bannerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                                      bannerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)])
         bannerView.backgroundColor = .black

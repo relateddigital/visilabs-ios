@@ -86,6 +86,16 @@ public class Visilabs {
     public static func getBannerView(properties: [String:String],completion: @escaping (BannerView?) -> Void) {
         VisilabsManager.sharedInstance.getBannerView(properties: properties) { bannerView in
             bannerView?.reloadBannerViewData()
+            if let banV = bannerView {
+                if let height = banV.model.height {
+                    NSLayoutConstraint.activate([bannerView!.heightAnchor.constraint(equalToConstant:CGFloat(height))])
+                }
+                
+                if let width = banV.model.width {
+                    NSLayoutConstraint.activate([bannerView!.heightAnchor.constraint(equalToConstant:CGFloat(width))])
+                }
+            }
+
             completion(bannerView)
         }
     }
