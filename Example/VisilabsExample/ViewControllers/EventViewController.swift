@@ -347,10 +347,12 @@ extension EventViewController: VisilabsInappButtonDelegate {
         
         Visilabs.getBannerView(properties: props) { banner in
             if let banner = banner {
+                
                 banner.delegate = self
                 banner.translatesAutoresizingMaskIntoConstraints = false
                 bannerView.addSubview(banner)
                 banner.reloadBannerViewData()
+                
                 
                 NSLayoutConstraint.activate([banner.topAnchor.constraint(equalTo: bannerView.topAnchor),
                                              banner.bottomAnchor.constraint(equalTo: bannerView.bottomAnchor),
