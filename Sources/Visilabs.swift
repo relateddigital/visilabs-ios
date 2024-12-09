@@ -94,6 +94,8 @@ public class Visilabs {
                 if let width = banV.model.width {
                     NSLayoutConstraint.activate([bannerView!.heightAnchor.constraint(equalToConstant:CGFloat(width))])
                 }
+                bannerView?.heightRD = banV.model.height
+                bannerView?.widthRD = banV.model.width
             }
 
             completion(bannerView)

@@ -22,6 +22,9 @@ public class BannerView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     var viewDidLoad = true
     public var delegate:BannerDelegate?
     var propertiesLocal : [String:String]?
+    public var heightRD: Int?
+    public var widthRD: Int?
+
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
