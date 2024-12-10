@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "4.3.15"
+    static let sdkVersion = "4.3.16"
     static let sdkTypeKey = "sdk_type"
 
     static let HTTP = "http"
@@ -122,6 +122,12 @@ struct VisilabsConstants {
     static let utmMediumKey = "utm_medium"
     static let utmContentKey = "utm_content"
     static let utmTermKey = "utm_term"
+    
+    static let deviceLanguage = "OM.deviceLanguage"
+        static let deviceRegion = "OM.deviceRegion"
+        static let systemVersion = "OM.OSVersion"
+        static let systemName = "OM.OSName"
+        static let screenSize = "OM.screenSize"
 
     static let getList = "getlist"
     static let processV2 = "processV2"
