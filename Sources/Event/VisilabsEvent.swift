@@ -32,6 +32,11 @@ class VisilabsEvent {
         var sdkType = sdkType
         var clearUserParameters = false
         let actualTimeOfevent = Int(Date().timeIntervalSince1970)
+        let deviceLanguage = Locale.preferredLanguages.first?.components(separatedBy: "-").first
+                let regionCode = Locale.current.regionCode
+                let system = UIDevice.current
+                let screenSize = UIScreen.main.bounds.size
+                let processUptime = ProcessInfo.processInfo.systemUptime
         
         if let cookieId = props[VisilabsConstants.cookieIdKey] {
             if vUser.cookieId != cookieId {
@@ -126,6 +131,28 @@ class VisilabsEvent {
         props[VisilabsConstants.tvcKey] = String(vUser.tvc)
         props[VisilabsConstants.lvtKey] = vUser.lvt
         
+        if !deviceLanguage.isNilOrWhiteSpace {
+                    props[VisilabsConstants.deviceLanguage] = deviceLanguage
+                }
+                
+                if !regionCode.isNilOrWhiteSpace && !deviceLanguage.isNilOrWhiteSpace {
+                    props[VisilabsConstants.deviceRegion] = "\(deviceLanguage!)_\(regionCode!)"
+                }
+                
+                if !system.systemVersion.isEmptyOrWhitespace {
+                    props[VisilabsConstants.systemVersion] = system.systemVersion
+                }
+                
+                if !system.systemName.isEmptyOrWhitespace {
+                    props[VisilabsConstants.systemName] = system.systemName
+                }
+                
+                if !screenSize.equalTo(CGSize.zero) {
+                    let screenWidth = Int(screenSize.width)
+                    let screenHeight = Int(screenSize.height)
+                    props[VisilabsConstants.screenSize] = "\(screenWidth)x\(screenHeight)"
+                }
+        
         if !vUser.exVisitorId.isNilOrWhiteSpace {
             props[VisilabsConstants.exvisitorIdKey] = vUser.exVisitorId
         }
@@ -184,6 +211,12 @@ class VisilabsEvent {
                     vUser.lastEventTime = dateNowString
                     vUser.lvt = dateNowString
                 }
+                
+                vUser.utmCampaign = nil
+                    vUser.utmContent = nil
+                    vUser.utmMedium = nil
+                    vUser.utmSource = nil
+                    vUser.utmTerm = nil
             } else {
                 if pageName != VisilabsConstants.omEvtGif {
                     vUser.pviv = vUser.pviv + 1
