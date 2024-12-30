@@ -265,6 +265,11 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                                                                action: #selector(closeButtonTapped(tapGestureRecognizer:)))
         viewController.standardView.closeButton.isUserInteractionEnabled = true
         viewController.standardView.closeButton.addGestureRecognizer(closeTapGestureRecognizer)
+        if let closeButtonType = visilabsInAppNotification?.closePopupActionType {
+            if closeButtonType == "backgroundclick" {
+                viewController.standardView.closeButton.isHidden = true
+            }
+        }
         viewController.standardView.imgButtonDelegate = self
         viewController.standardView.npsDelegate = self
     }
