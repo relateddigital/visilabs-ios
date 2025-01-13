@@ -38,46 +38,59 @@ class VisilabsSpinToWinCodeBannerView: UIView {
         horizontalStackView = UIStackView()
         horizontalStackView.axis = .horizontal
         horizontalStackView.distribution = .fillEqually
-        horizontalStackView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        
-        
+        horizontalStackView.layoutMargins = UIEdgeInsets(top: 20, left: 8, bottom: 20, right: 0)
+
         verticalStackViewLeft = UIStackView()
         verticalStackViewLeft.axis = .vertical
         verticalStackViewLeft.distribution = .equalSpacing
-        verticalStackViewLeft.spacing = 10.0
+        verticalStackViewLeft.spacing = 5.0
         verticalStackViewLeft.alignment = .center
-        
+
         verticalStackViewRight = UIStackView()
         verticalStackViewRight.axis = .vertical
         verticalStackViewRight.distribution = .equalSpacing
-        verticalStackViewRight.spacing = 10.0
+        verticalStackViewRight.spacing = 0.0
         verticalStackViewRight.alignment = .center
         
+        let invisibleViewTop = UIView()
+        invisibleViewTop.backgroundColor = .clear // Transparan görünüm
+        invisibleViewTop.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            invisibleViewTop.heightAnchor.constraint(equalToConstant: 5)
+         ])
+
+        let invisibleViewBottom = UIView()
+        invisibleViewBottom.backgroundColor = .clear // Transparan görünüm
+        invisibleViewBottom.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            invisibleViewBottom.heightAnchor.constraint(equalToConstant: 5)
+         ])
+
         bannerTextLabel = UILabel()
         bannerTextLabel.text = spinToWinModel.promocodeBannerText.removeEscapingCharacters()
         bannerTextLabel.numberOfLines = 0
         bannerTextLabel.textAlignment = .center
         bannerTextLabel.contentMode = .center
         bannerTextLabel.baselineAdjustment = .alignCenters
-        
+
         bannerButtonLabel = UILabel()
         bannerButtonLabel.text = spinToWinModel.promocodeBannerButtonLabel
         bannerButtonLabel.textAlignment = .center
-        
+
         bannerCodeLabel = UILabel()
         bannerCodeLabel.text = spinToWinModel.bannerCode
         bannerCodeLabel.textAlignment = .center
-        
+
         verticalStackViewLeft.addArrangedSubview(bannerTextLabel)
-        
+
+        verticalStackViewRight.addArrangedSubview(invisibleViewTop)
         verticalStackViewRight.addArrangedSubview(bannerButtonLabel)
         verticalStackViewRight.addArrangedSubview(bannerCodeLabel)
-        
-        horizontalStackView.addArrangedSubview(verticalStackViewLeft)
-        horizontalStackView.addArrangedSubview(verticalStackViewRight)
+        verticalStackViewRight.addArrangedSubview(invisibleViewBottom)
 
-        
-        
+        horizontalStackView.addArrangedSubview(verticalStackViewRight)
+        horizontalStackView.addArrangedSubview(verticalStackViewLeft)
+
         addSubview(horizontalStackView)
     }
     
@@ -109,6 +122,7 @@ class VisilabsSpinToWinCodeBannerView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        verticalStackViewRight.setDashedBorderView()
     }
     
     private func setFonts() {
