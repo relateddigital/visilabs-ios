@@ -528,6 +528,8 @@ class VisilabsTargetingAction {
             checkConsentMsg = mailForm[VisilabsConstants.checkConsentMessage] as? String
         }
         
+        let iosLink = actionData[VisilabsConstants.iosLnk] as? String ?? ""
+        
         // extended props
         let titleTextColor = extendedProps[VisilabsConstants.contentTitleTextColor] as? String
         let titleFontFamily = extendedProps[VisilabsConstants.contentTitleFontFamily] as? String
@@ -615,7 +617,8 @@ class VisilabsTargetingAction {
                                  contentBodyCustomFontFamilyIos:contentBodyCustomFontFamilyIos,
                                  buttonCustomFontFamilyIos:buttonCustomFontFamilyIos,
                                  promocodeCustomFontFamilyIos:promocodeCustomFontFamilyIos,
-                                 copybuttonCustomFontFamilyIos:copybuttonCustomFontFamilyIos)
+                                 copybuttonCustomFontFamilyIos:copybuttonCustomFontFamilyIos,
+                                 iosLink: iosLink)
     }
     
     private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {
