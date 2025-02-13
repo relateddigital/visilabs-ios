@@ -52,7 +52,8 @@ public class ScratchToWinModel: TargetingActionViewModel {
     let buttonCustomFontFamilyIos : String?
     let promocodeCustomFontFamilyIos : String?
     let copybuttonCustomFontFamilyIos : String?
-    
+    let iosLink : String?
+
     public var jsContent: String?
     public var jsonContent: String?
     
@@ -123,7 +124,8 @@ public class ScratchToWinModel: TargetingActionViewModel {
                 contentBodyCustomFontFamilyIos:String?,
                 buttonCustomFontFamilyIos : String?,
                 promocodeCustomFontFamilyIos : String?,
-                copybuttonCustomFontFamilyIos : String?) {
+                copybuttonCustomFontFamilyIos : String?,
+                iosLink : String?) {
 
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
@@ -171,6 +173,7 @@ public class ScratchToWinModel: TargetingActionViewModel {
         self.buttonCustomFontFamilyIos = buttonCustomFontFamilyIos
         self.promocodeCustomFontFamilyIos = promocodeCustomFontFamilyIos
         self.copybuttonCustomFontFamilyIos = copybuttonCustomFontFamilyIos
+        self.iosLink = iosLink
 
         titleFont = VisilabsHelper.getFont(fontFamily: titleFontFamily,
                                                                   fontSize: titleTextSize,
