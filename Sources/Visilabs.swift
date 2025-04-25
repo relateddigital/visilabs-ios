@@ -6,6 +6,7 @@
 //
 
 import UserNotifications
+import UIKit
 
 public class Visilabs {
     public class func callAPI() -> VisilabsInstance {
