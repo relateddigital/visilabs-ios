@@ -243,10 +243,14 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
-        let popUpVC = VisilabsPopupNotificationViewController(scratchToWin: model)
-        popUpVC.delegate = self
-        popUpVC.inappButtonDelegate = inappButtonDelegate
-        popUpVC.show(animated: false)
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+            
+            let popUpVC = VisilabsPopupNotificationViewController(scratchToWin: model)
+            popUpVC.delegate = self
+            popUpVC.inappButtonDelegate = self.inappButtonDelegate
+            popUpVC.show(animated: false)
+        })
+
         return true
     }
 
