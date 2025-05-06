@@ -300,8 +300,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         completionBlock()
                     }
                 } else {
-                    let app = VisilabsInstance.sharedUIApplication()
-                    app?.performSelector(onMainThread: NSSelectorFromString("openURL:"), with: callToActionURL, waitUntilDone: true)
+                    UIApplication.shared.open(callToActionURL as URL, options: [:],completionHandler: nil)
                     completionBlock()
                 }
             }
