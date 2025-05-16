@@ -519,16 +519,16 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
         let nWidth = (numberRating.frame.width - 100) / 10
         return CGSize(width: nWidth, height: nWidth)
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
-
+    
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RatingCollectionViewCell
         cell.rating = indexPath.row + 1
         cell.borderColor = numberBorderColor
-        if colors.count == 10 {
+        if colors.count == 10 ||  colors.count == 11 {
             cell.setGradient(colors: colors[indexPath.row])
         } else {
             cell.setBackgroundColor(numberBgColor)
@@ -536,18 +536,6 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
         return cell
     }
 
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RatingCollectionViewCell else {
-            return
-        }
-        if cell.isSelected {
-            selectedNumber = indexPath.row + 1
-            npsDelegate?.ratingSelected()
-        } else {
-            selectedNumber = 10
-            npsDelegate?.ratingUnselected()
-        }
-    }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
