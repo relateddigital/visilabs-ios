@@ -123,8 +123,9 @@
                         <constraint firstAttribute="bottom" secondItem="Szh-wH-ZNq" secondAttribute="bottom" id="nDS-id-eFN"/>
                     </constraints>
                 </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="VisilabsCloseButtonBlack.png" translatesAutoresizingMaskIntoConstraints="NO" id="qYA-un-OND">
-                    <rect key="frame" x="303" y="415" width="20" height="20"/>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="closeButtonDD.png" translatesAutoresizingMaskIntoConstraints="NO" id="qYA-un-OND">
+                    <rect key="frame" x="303" y="405" width="20" height="20"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Aiq-FX-zwH"/>
                         <constraint firstAttribute="width" constant="20" id="fxf-9R-4cs"/>
@@ -140,10 +141,10 @@
                 <constraint firstItem="hso-HS-9H6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="H0X-kg-Bt2"/>
                 <constraint firstAttribute="bottom" secondItem="hso-HS-9H6" secondAttribute="bottom" constant="80" id="Kim-yu-MXc"/>
                 <constraint firstItem="ciF-NZ-IeA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="MyM-pt-0c0"/>
-                <constraint firstItem="qYA-un-OND" firstAttribute="top" secondItem="Xfn-En-lFJ" secondAttribute="bottom" constant="15" id="TDm-3B-hSD"/>
+                <constraint firstItem="qYA-un-OND" firstAttribute="top" secondItem="Xfn-En-lFJ" secondAttribute="bottom" constant="5" id="TDm-3B-hSD"/>
                 <constraint firstItem="hso-HS-9H6" firstAttribute="centerY" secondItem="fwP-4H-Nil" secondAttribute="centerY" id="XPo-4k-BX6"/>
                 <constraint firstItem="hso-HS-9H6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="Xr5-DI-LeI"/>
-                <constraint firstAttribute="bottom" secondItem="qYA-un-OND" secondAttribute="bottom" constant="15" id="Y3c-14-nfi"/>
+                <constraint firstAttribute="bottom" secondItem="qYA-un-OND" secondAttribute="bottom" constant="25" id="Y3c-14-nfi"/>
                 <constraint firstItem="ciF-NZ-IeA" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="ZQ9-6h-j1q"/>
                 <constraint firstItem="Xfn-En-lFJ" firstAttribute="leading" secondItem="hso-HS-9H6" secondAttribute="trailing" id="c8v-QR-8z9"/>
                 <constraint firstAttribute="bottom" secondItem="Xfn-En-lFJ" secondAttribute="bottom" constant="50" id="cVW-hI-bLJ"/>
@@ -190,6 +191,6 @@
         </view>
     </objects>
     <resources>
-        <image name="VisilabsCloseButtonBlack.png" width="25" height="25"/>
+        <image name="closeButtonDD.png" width="225" height="225"/>
     </resources>
 </document>
