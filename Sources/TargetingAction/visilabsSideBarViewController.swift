@@ -30,6 +30,7 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
         globSidebarView = sidebarView
         addTapGestureToSideBarMiniView()
         addTapGestureToImageOfGranSideBar()
+        addTapGestureToCloseButton()
         if self.model.isCircle {
             self.globSidebarView!.isHidden = true
             self.model.miniSideBarWidth = self.model.miniSideBarWidthForCircle / 2
@@ -212,6 +213,14 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
             }
         }
     }
+    
+    @objc func closeClicked(_ sender: UITapGestureRecognizer? = nil) {
+        
+        
+        self.window?.isHidden = true
+        self.window?.removeFromSuperview()
+        self.window = nil
+    }
 
     @objc func viewClicked(_ sender: UITapGestureRecognizer? = nil) {
         
@@ -339,6 +348,16 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
         globSidebarView?.sideBarGrandContentImageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageClicked(_:)))
         globSidebarView?.sideBarGrandContentImageView.addGestureRecognizer(tap)
+        
+    }
+    
+    
+    func addTapGestureToCloseButton() {
+        
+        
+        globSidebarView?.closeButton.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.closeClicked(_:)))
+        globSidebarView?.closeButton.addGestureRecognizer(tap)
         
     }
 }

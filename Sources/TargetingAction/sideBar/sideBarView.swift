@@ -46,6 +46,8 @@ class sideBarView: UIView {
     @IBOutlet weak var rightSideBarTitleLabelCenterXConstraint: NSLayoutConstraint!
     @IBOutlet weak var rightSideBarContentImageCenterXConstraint: NSLayoutConstraint!
 
+
+    @IBOutlet weak var closeButton: UIImageView!
     
     var sideBarModel : SideBarViewModel?
     

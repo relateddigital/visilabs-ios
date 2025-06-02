@@ -87,7 +87,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     }
                 } else if model.targetingActionType == .drawer, let drawer = model as? SideBarServiceModel {
                     if self.showDrawer(model: drawer) {
-                        self.markTargetingActionShown(model: drawer)
+                        //self.markTargetingActionShown(model: drawer)
                     }
                 } else if model.targetingActionType == .mobileCustomActions, let customWebview = model as? CustomWebViewModel {
                     if self.showCustomWebview(model: customWebview) {
