@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="sideBarView" customModule="VisilabsIOS">
-            <rect key="frame" x="0.0" y="0.0" width="626" height="400"/>
+            <rect key="frame" x="0.0" y="0.0" width="626" height="450"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hso-HS-9H6">
@@ -123,25 +123,36 @@
                         <constraint firstAttribute="bottom" secondItem="Szh-wH-ZNq" secondAttribute="bottom" id="nDS-id-eFN"/>
                     </constraints>
                 </view>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="VisilabsCloseButtonBlack.png" translatesAutoresizingMaskIntoConstraints="NO" id="qYA-un-OND">
+                    <rect key="frame" x="300.5" y="412" width="25" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="26" id="Aiq-FX-zwH"/>
+                        <constraint firstAttribute="width" constant="25" id="fxf-9R-4cs"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="qYA-un-OND" firstAttribute="top" secondItem="Xfn-En-lFJ" secondAttribute="bottom" constant="12" id="CFs-Ag-BFx"/>
                 <constraint firstItem="ciF-NZ-IeA" firstAttribute="leading" secondItem="Xfn-En-lFJ" secondAttribute="trailing" id="DKs-eJ-yI2"/>
                 <constraint firstItem="ciF-NZ-IeA" firstAttribute="centerY" secondItem="fwP-4H-Nil" secondAttribute="centerY" id="EWG-f6-16a"/>
                 <constraint firstItem="hso-HS-9H6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="H0X-kg-Bt2"/>
-                <constraint firstAttribute="bottom" secondItem="hso-HS-9H6" secondAttribute="bottom" constant="30" id="Kim-yu-MXc"/>
+                <constraint firstAttribute="bottom" secondItem="hso-HS-9H6" secondAttribute="bottom" constant="80" id="Kim-yu-MXc"/>
                 <constraint firstItem="ciF-NZ-IeA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="MyM-pt-0c0"/>
                 <constraint firstItem="hso-HS-9H6" firstAttribute="centerY" secondItem="fwP-4H-Nil" secondAttribute="centerY" id="XPo-4k-BX6"/>
                 <constraint firstItem="hso-HS-9H6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="Xr5-DI-LeI"/>
                 <constraint firstItem="ciF-NZ-IeA" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="ZQ9-6h-j1q"/>
+                <constraint firstAttribute="bottom" secondItem="qYA-un-OND" secondAttribute="bottom" constant="12" id="bQf-9G-RnR"/>
                 <constraint firstItem="Xfn-En-lFJ" firstAttribute="leading" secondItem="hso-HS-9H6" secondAttribute="trailing" id="c8v-QR-8z9"/>
-                <constraint firstAttribute="bottom" secondItem="Xfn-En-lFJ" secondAttribute="bottom" id="cVW-hI-bLJ"/>
+                <constraint firstAttribute="bottom" secondItem="Xfn-En-lFJ" secondAttribute="bottom" constant="50" id="cVW-hI-bLJ"/>
                 <constraint firstItem="Xfn-En-lFJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="clX-BT-UM4"/>
+                <constraint firstItem="qYA-un-OND" firstAttribute="centerX" secondItem="Xfn-En-lFJ" secondAttribute="centerX" id="fbA-Vz-ymP"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="closeButton" destination="qYA-un-OND" id="oNL-Mr-JB2"/>
                 <outlet property="leftSideBarContentImageCenterXConstraint" destination="DZl-mD-sBH" id="uSq-VD-SIF"/>
                 <outlet property="leftSideBarMiniArrow" destination="169-03-SeD" id="xeq-We-MNQ"/>
                 <outlet property="leftSideBarMiniContentImageBottomConstraint" destination="QCc-yF-Bzh" id="igV-Ul-0MI"/>
@@ -178,4 +189,7 @@
             <point key="canvasLocation" x="108.69565217391305" y="127.90178571428571"/>
         </view>
     </objects>
+    <resources>
+        <image name="VisilabsCloseButtonBlack.png" width="25" height="25"/>
+    </resources>
 </document>
