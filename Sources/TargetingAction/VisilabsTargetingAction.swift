@@ -469,7 +469,8 @@ class VisilabsTargetingAction {
         sideBarServiceModel.contentMaximizedImage = actionData[VisilabsConstants.contentMaximizedImage] as? String ?? ""
         sideBarServiceModel.waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
         sideBarServiceModel.iosLnk = actionData[VisilabsConstants.iosLnk] as? String ?? ""
-        
+        sideBarServiceModel.staticcode = actionData[VisilabsConstants.staticcode] as? String ?? ""
+
         //extended Props
         sideBarServiceModel.contentMinimizedTextSize = extendedProps[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""
         sideBarServiceModel.contentMinimizedTextColor = extendedProps[VisilabsConstants.contentMinimizedTextColor] as? String ?? ""

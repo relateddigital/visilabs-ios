@@ -18,6 +18,8 @@ class visilabsSideBarViewControllerModel {
         sideBarModel.actId = serviceModel?.actId
         sideBarModel.title = serviceModel?.title
         
+        sideBarModel.staticcode = serviceModel?.staticcode
+
         if serviceModel?.shape?.lowercased() == "circle" {
             sideBarModel.isCircle = true
         } else if serviceModel?.shape?.lowercased() == "roundedcorners" {
@@ -108,7 +110,8 @@ struct SideBarServiceModel: TargetingActionViewModel {
     var contentMaximizedImage:String?
     var waitingTime:Int?
     var iosLnk:String?
-    
+    var staticcode: String?
+
     //extended Props
     var contentMinimizedTextSize:String?
     var contentMinimizedTextColor:String?
@@ -143,7 +146,8 @@ struct SideBarViewModel {
     var actId:Int?
     var title:String?
     var actiontype:String?
-    
+    var staticcode: String?
+
     //params
     var isCircle : Bool = false
     //pos

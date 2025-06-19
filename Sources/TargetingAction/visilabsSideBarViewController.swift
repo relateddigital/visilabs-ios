@@ -207,6 +207,13 @@ class visilabsSideBarViewController : VisilabsBaseNotificationViewController {
             Visilabs.callAPI().trackDrawerClick(drawerReport: report)
         }
         
+        if model.staticcode?.count ?? 0 > 0 {
+            UIPasteboard.general.string = model.staticcode
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                VisilabsHelper.showCopiedClipboardMessage()
+            }
+        }
+        
         if let url = URL(string: self.model.linkToGo ?? "") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     UIApplication.shared.open(url)
