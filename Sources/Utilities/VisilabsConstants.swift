@@ -236,6 +236,7 @@ struct VisilabsConstants {
     static let contentMinimizedText = "content_minimized_text"
     static let contentMaximizedImage = "content_maximized_image"
     static let iosLnk = "ios_lnk"
+    static let staticcode = "staticcode"
     // extended properties
     static let contentMinimizedTextSize = "content_minimized_text_size"
     static let contentMinimizedTextColor = "content_minimized_text_color"
