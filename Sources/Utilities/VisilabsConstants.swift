@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "4.3.29"
+    static let sdkVersion = "4.3.30"
     static let sdkTypeKey = "sdk_type"
 
     static let HTTP = "http"
@@ -236,6 +236,7 @@ struct VisilabsConstants {
     static let contentMinimizedText = "content_minimized_text"
     static let contentMaximizedImage = "content_maximized_image"
     static let iosLnk = "ios_lnk"
+    static let staticcode = "staticcode"
     // extended properties
     static let contentMinimizedTextSize = "content_minimized_text_size"
     static let contentMinimizedTextColor = "content_minimized_text_color"
