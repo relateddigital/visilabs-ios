@@ -124,6 +124,8 @@ class InAppViewController: FormViewController {
             break
         case .mobileCustomActions:
             break
+        case .MultipleChoiceSurvey:
+            break
         }
         
         
