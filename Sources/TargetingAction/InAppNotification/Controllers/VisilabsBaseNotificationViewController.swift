@@ -39,6 +39,7 @@ public class VisilabsBaseNotificationViewController: UIViewController, VisilabsB
     var spinToWin: SpinToWinViewModel?
     var productStatNotifier: VisilabsProductStatNotifierViewModel?
     var customWebViewModel: CustomWebViewModel?
+    var poll: PollModel?
 
     
     weak var delegate: VisilabsNotificationViewControllerDelegate?
