@@ -634,6 +634,13 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = spinToWinReport.click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
+    func trackPollClick(pollReport: PollReport) {
+        var properties = [String: String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        properties["OM.zn"] = pollReport.click?.parseClick().omZn
+        properties["OM.zpc"] = pollReport.click?.parseClick().omZpc
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
     
     public func trackSearchRecommendationClick(searchReport:Report) {
         var properties = [String: String]()
