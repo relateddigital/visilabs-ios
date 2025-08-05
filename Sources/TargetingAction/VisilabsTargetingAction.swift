@@ -155,7 +155,7 @@ class VisilabsTargetingAction {
         } else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
             return parseDrawer(drw)
         } else if let poll = result[VisilabsConstants.MultipleChoiceSurvey] as? [[String: Any?]], let drw = poll.first {
-            return parseDrawer(drw)
+            return parsePoll(drw)
         } else if let customWeb = result[VisilabsConstants.mobileCustomActions] as? [[String: Any?]], let customWeb = customWeb.first {
             return parseCustomWebview(customWeb)
         } else if let inappRating = result[VisilabsConstants.apprating] as? [[String: Any?]], let inappRating = inappRating.first {
