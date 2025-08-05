@@ -138,7 +138,9 @@ class VisilabsTargetingAction {
             return parseSpinToWin(spinToWin)
         } else if let sctwArr = result[VisilabsConstants.scratchToWin] as? [[String: Any?]], let sctw = sctwArr.first {
             return parseScratchToWin(sctw)
-        }  else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
+        } else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
+            return parseDrawer(drw)
+        } else if let poll = result[VisilabsConstants.MultipleChoiceSurvey] as? [[String: Any?]], let drw = poll.first {
             return parseDrawer(drw)
         } else if let customWeb = result[VisilabsConstants.mobileCustomActions] as? [[String: Any?]], let customWeb = customWeb.first {
             return parseCustomWebview(customWeb)
@@ -494,6 +496,49 @@ class VisilabsTargetingAction {
         
         return sideBarServiceModel
     }
+    
+    
+    
+    
+    private func parsePoll(_ poll: [String: Any?]) -> PollModel? {
+        guard let actionData = poll[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        var pollModel = PollModel(targetingActionType: .MultipleChoiceSurvey)
+        pollModel.actId = poll[VisilabsConstants.actid] as? Int ?? 0
+        pollModel.title = poll[VisilabsConstants.title] as? String ?? ""
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+
+        // prome banner params
+        pollModel.font_family = extendedProps[VisilabsConstants.fontFamily] as? String ?? ""
+        pollModel.custom_font_family_ios = extendedProps[VisilabsConstants.customFontFamilyIos] as? String ?? ""
+        pollModel.close_button_color = extendedProps[VisilabsConstants.closeButtonColor] as? String ?? ""
+        pollModel.copybutton_color = extendedProps[VisilabsConstants.copybuttonColor] as? String ?? ""
+        pollModel.copybutton_text_color = extendedProps[VisilabsConstants.copybuttonTextColor] as? String ?? ""
+        pollModel.copybutton_text_size = extendedProps[VisilabsConstants.copybuttonTextSize] as? String ?? ""
+        pollModel.promocode_banner_text = extendedProps[VisilabsConstants.promocode_banner_text] as? String ?? ""
+        pollModel.promocode_banner_text_color = extendedProps[VisilabsConstants.promocode_banner_text_color] as? String ?? ""
+        pollModel.promocode_banner_background_color = extendedProps[VisilabsConstants.promocode_banner_background_color] as? String ?? ""
+        pollModel.promocode_banner_button_label = extendedProps[VisilabsConstants.promocode_banner_button_label] as? String ?? ""
+        //
+        pollModel.waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
+
+        if let theJSONData = try? JSONSerialization.data(
+            withJSONObject: poll,
+            options: []) {
+            pollModel.jsonContent = String(data: theJSONData, encoding: .utf8)
+        }
+
+        if pollModel.promocode_banner_button_label.count > 0 && pollModel.promocode_banner_text.count > 0 {
+            pollModel.bannercodeShouldShow = true
+        } else {
+            pollModel.bannercodeShouldShow = false
+        }
+
+        return pollModel
+    }
+    
+    
+    
     private func parseScratchToWin(_ scratchToWin: [String: Any?]) -> ScratchToWinModel? {
         guard let actionData = scratchToWin[VisilabsConstants.actionData] as? [String: Any] else { return nil }
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""

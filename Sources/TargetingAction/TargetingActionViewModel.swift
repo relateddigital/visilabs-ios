@@ -15,6 +15,8 @@ public enum TargetingActionType: String, Codable {
     case drawer = "Drawer"
     case apprating = "MobileAppRating"
     case mobileCustomActions = "mobileCustomActions"
+    case MultipleChoiceSurvey = "MultipleChoiceSurvey"
+
 }
 
 public protocol TargetingActionViewModel {
