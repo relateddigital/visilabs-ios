@@ -89,6 +89,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showDrawer(model: drawer) {
                         //self.markTargetingActionShown(model: drawer)
                     }
+                } else if model.targetingActionType == .MultipleChoiceSurvey, let poll = model as? PollModel {
+                    if self.showPoll(model: poll) {
+                        self.markTargetingActionShown(model: poll)
+                    }
                 } else if model.targetingActionType == .mobileCustomActions, let customWebview = model as? CustomWebViewModel {
                     if self.showCustomWebview(model: customWebview) {
                         self.markTargetingActionShown(model: customWebview)
@@ -119,6 +123,18 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let sideBarViewController = visilabsSideBarViewController(model: model)
         sideBarViewController.delegate = self
         sideBarViewController.show(animated: true)
+        return true
+    }
+    
+    
+    func showPoll(model: PollModel) -> Bool {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+
+        let pollVC = PollViewController(model)
+            pollVC.delegate = self
+            pollVC.show(animated: true)
+        
+        })
         return true
     }
     

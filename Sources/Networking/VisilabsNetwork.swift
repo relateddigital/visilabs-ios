@@ -23,6 +23,8 @@ enum VisilabsEndpoint {
     case promotion
     case remote
     case search
+    case pollJs
+
 }
 
 struct VisilabsResource<A> {
