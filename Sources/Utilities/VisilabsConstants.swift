@@ -31,6 +31,7 @@ struct VisilabsConstants {
     static var subsjsonEndpoint = "\(urlConstant.shared.urlPrefix)/subsjson"
     static var promotionEndpoint = "\(urlConstant.shared.urlPrefix)/promotion"
     static var remoteConfigEndpoint = "mbls.visilabs.net/rc.json"
+    static let pollUrl = "https://mbls.visilabs.net/survey.js"
 
     // MARK: - UserDefaults Keys
 

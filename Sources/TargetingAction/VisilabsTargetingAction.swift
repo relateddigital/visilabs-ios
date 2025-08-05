@@ -104,7 +104,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         
         
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)~\(VisilabsConstants.MultipleChoiceSurvey)"
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -124,7 +124,21 @@ class VisilabsTargetingAction {
                 return
             }
             targetingActionViewModel = self.parseTargetingAction(result)
-            semaphore.signal()
+            
+            if targetingActionViewModel?.targetingActionType == .MultipleChoiceSurvey {
+                VisilabsRequest.sendPollScriptRequest(timeoutInterval: self.visilabsProfile.requestTimeoutInterval, completion: { (result: String?, _: VisilabsError?) in
+                  if let result = result {
+                      targetingActionViewModel?.jsContent = result
+                  } else {
+                      targetingActionViewModel = nil
+                  }
+                  semaphore.signal()
+              })
+          }
+            else
+            {
+                semaphore.signal()
+            }          
         })
         _ = semaphore.wait(timeout: DispatchTime.distantFuture)
         completion(targetingActionViewModel)

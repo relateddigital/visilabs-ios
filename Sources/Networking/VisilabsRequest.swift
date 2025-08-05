@@ -109,6 +109,24 @@ class VisilabsRequest {
         
     }
     
+    
+    class func sendPollScriptRequest(timeoutInterval: TimeInterval,completion: @escaping (String?, VisilabsError?) -> Void) {
+        let responseParser: (Data) -> String? = { data in
+            String(data: data, encoding: .utf8)
+        }
+        let resource = VisilabsNetwork.buildResource(endPoint: .pollJs, method: .get, timeoutInterval: timeoutInterval, queryItems: [], headers: [:], parse: responseParser, guid: nil)
+        sendPollRequestHandler(resource: resource, completion: { result, error in completion(result, error) })
+    }
+
+    private class func sendPollRequestHandler(resource: VisilabsResource<String>, completion: @escaping (String?, VisilabsError?) -> Void) {
+        VisilabsNetwork.apiRequest(resource: resource, failure: { error, _, _ in
+            VisilabsLogger.error("API request to \(resource.endPoint) has failed with error \(error)")
+            completion(nil, error)
+        }, success: { result, _ in
+            completion(result, nil)
+        })
+    }
+    
     private class func sendRecommendationRequestHandler(resource: VisilabsResource<[Any]>,
                                                         completion: @escaping ([Any]?, VisilabsError?) -> Void) {
         VisilabsNetwork.apiRequest(resource: resource,

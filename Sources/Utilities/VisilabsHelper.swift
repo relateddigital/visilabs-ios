@@ -94,6 +94,7 @@ internal class VisilabsHelper {
         VisilabsBasePath.endpoints[.subsjson] = "\(httpProtocol)://\(VisilabsConstants.subsjsonEndpoint)"
         VisilabsBasePath.endpoints[.promotion] = "\(httpProtocol)://\(VisilabsConstants.promotionEndpoint)"
         VisilabsBasePath.endpoints[.remote] = "https://\(VisilabsConstants.remoteConfigEndpoint)"
+        VisilabsBasePath.endpoints[.pollJs] = VisilabsConstants.pollUrl
     }
     
     static private let dateFormatter = DateFormatter()

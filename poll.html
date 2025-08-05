@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Anket</title>
+</head>
+<body>
+    <script src="survey.js"></script>
+    <script type="text/javascript">
+        var survey;
+
+        // Native tarafın veya test ortamının çağıracağı ana başlangıç fonksiyonu
+        function initSurvey(config) {
+            survey = new Survey(config);
+        }
+
+        // --- NATIVE KÖPRÜSÜ ---
+        if (window.Android) {
+            try {
+                var config = JSON.parse(Android.getResponse());
+                initSurvey(config);
+            } catch (e) {
+                console.error("Android'den gelen veri parse edilemedi:", e);
+            }
+        } else if (window.webkit && window.webkit.messageHandlers.eventHandler) {
+            window.webkit.messageHandlers.eventHandler.postMessage({
+                method: "initSurvey"
+            });
+        } else {
+            console.log("Native ortam bulunamadı. Test verileri kullanılıyor.");
+
+            // DÜZELTME 1: spin_to_win.html'deki gibi, önce ExtendedProps nesnesi oluşturuluyor.
+            const extendedPropsObject = {
+                "background_color": "#c1baba",
+                "font_family": "Monospace",
+                "title_text_color": "#444040",
+                "title_text_size": "8",
+                "navigationbar_color": ""
+            };
+
+            // DÜZELTME 2: Bu nesne string'e çevrilip encode ediliyor.
+            let extendedPropsString = JSON.stringify(extendedPropsObject);
+            extendedPropsString = encodeURIComponent(extendedPropsString);
+            
+            // DÜZELTME 3: Ana config nesnesi, bu encode edilmiş string ile oluşturuluyor.
+            const testConfig = {
+                "actid": 1287,
+                "title": "RMC-1377 için tayfun",
+                "actiontype": "MultipleChoiceSurvey",
+                "actiondata": {
+                    "title": "TitleTitleTitleTitleTitle",
+                    "survey_questions": [{
+                        "question_text": "Soru2",
+                        "options": [{ "option_text": "Cevap21" }, { "option_text": "Cevap22" }, { "option_text": "Cevap23" }]
+                    }, {
+                        "question_text": "Soru1",
+                        "options": [{ "option_text": "Cevap11" }, { "option_text": "Cevap12" }, { "option_text": "Cevap13" }, { "option_text": "Cevap14" }]
+                    }],
+                    "ExtendedProps": extendedPropsString, // Encode edilmiş string kullanılıyor
+                    "report": {
+                        "impression": "",
+                        "click": "OM.zn=acttype-45&OM.zpc=act-1287"
+                    }
+                }
+            };
+            initSurvey(testConfig);
+        }
+    </script>
+</body>
+</html>
