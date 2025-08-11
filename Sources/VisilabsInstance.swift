@@ -359,8 +359,7 @@ extension VisilabsInstance {
             if let event = self.eventsQueue.last {
                 VisilabsPersistence.saveTargetParameters(event)
                 if VisilabsBasePath.endpoints[.action] != nil,
-                   self.visilabsProfile.inAppNotificationsEnabled,
-                   pageName != VisilabsConstants.omEvtGif {
+                   self.visilabsProfile.inAppNotificationsEnabled {
                     self.checkInAppNotification(properties: event)
                     self.checkTargetingActions(properties: event)
                 }
