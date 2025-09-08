@@ -23,7 +23,7 @@ struct NotificationBellModel : TargetingActionViewModel
     var waitingTime: Int = 0
 
     
-    var bellElems : [bellElement]?
+    var bellElems : [bellElement]? = [bellElement]()
     var bellIcon : String?
     var bellAnimation : String?
 
