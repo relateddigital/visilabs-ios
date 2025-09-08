@@ -258,7 +258,13 @@ struct VisilabsConstants {
     static let contentMaximizedBackgroundImage = "content_maximized_background_image"
     static let contentMaximizedBackgroundColor = "content_maximized_background_color"
 
-    
+    static let background_color = "background_color"
+    static let font_family = "font_family"
+    static let title_text_color = "title_text_color"
+    static let title_text_size = "title_text_size"
+    static let text_text_color = "text_text_color"
+    static let text_text_size = "text_text_size"
+
     
     
     

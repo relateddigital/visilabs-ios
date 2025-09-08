@@ -178,10 +178,12 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         }
 
         panel.titleLabel.text = model.notifTitle ?? ""
+        panel.titleLabel.font = .boldSystemFont(ofSize: CGFloat(Double(model.title_text_size ?? "18") ?? 18) * 3)
+        panel.titleLabel.textColor = UIColor(hex: model.title_text_color)
 
         panel.contentStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for el in (model.bellElems ?? []) {
-            let row = BellRowView(text: el.text ?? "", link: el.ios_lnk)
+            let row = BellRowView(text: el.text ?? "", link: el.ios_lnk,model: model)
             row.backgroundColor = .clear
             panel.contentStack.addArrangedSubview(row)
         }
@@ -250,7 +252,7 @@ final class BellRowView: UIControl {
     private let label = UILabel()
     private var link: String?
 
-    init(text: String, link: String?) {
+    init(text: String, link: String?,model: NotificationBellModel) {
         super.init(frame: .zero)
         self.link = link
 
@@ -265,7 +267,8 @@ final class BellRowView: UIControl {
 
         label.text = text
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15)
+        label.font = .systemFont(ofSize: CGFloat(Double(model.text_text_size ?? "15") ?? 15) * 3)
+        label.textColor = UIColor(hex: model.text_text_color)
 
         let stack = UIStackView(arrangedSubviews: [iconView, label])
         stack.axis = .horizontal
