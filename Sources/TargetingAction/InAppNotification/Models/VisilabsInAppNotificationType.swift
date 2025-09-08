@@ -32,6 +32,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case apprating = "MobileAppRating"
     case mobileCustomActions = "mobileCustomActions"
     case MultipleChoiceSurvey = "MultipleChoiceSurvey"
+    case NotificationBell = "NotificationBell"
 
 }
 

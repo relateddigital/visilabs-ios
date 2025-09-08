@@ -185,8 +185,8 @@ class EventViewController: FormViewController, BannerDelegate {
             .bannerCarousel : [VisilabsInAppNotificationType.bannerCarousel.rawValue: 155],
             .apprating : [VisilabsInAppNotificationType.apprating.rawValue: 1101],
             .MultipleChoiceSurvey : [VisilabsInAppNotificationType.MultipleChoiceSurvey.rawValue: 1444],
-            .mobileCustomActions : [VisilabsInAppNotificationType.mobileCustomActions.rawValue: 3232]
-
+            .mobileCustomActions : [VisilabsInAppNotificationType.mobileCustomActions.rawValue: 3232],
+            .NotificationBell : [VisilabsInAppNotificationType.NotificationBell.rawValue: 3244]
         ]
     }
     

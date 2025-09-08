@@ -138,6 +138,19 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         return true
     }
     
+    
+    func showNotificationBell(model: NotificationBellModel) -> Bool {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+
+            let notifBell = NotificationBellViewController(model: model)
+            notifBell.delegate = self
+            notifBell.show(animated: true)
+        
+        })
+        return true
+    }
+    
     func showCustomWebview(model: CustomWebViewModel) -> Bool {
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
 
