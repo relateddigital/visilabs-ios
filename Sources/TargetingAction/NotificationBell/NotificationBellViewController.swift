@@ -124,7 +124,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
                 bellButton.widthAnchor.constraint(equalToConstant: 52),
                 bellButton.heightAnchor.constraint(equalToConstant: 52),
                 bellButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-                bellButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+                bellButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -86),
 
                 bellImageView.centerXAnchor.constraint(equalTo: bellButton.centerXAnchor),
                 bellImageView.centerYAnchor.constraint(equalTo: bellButton.centerYAnchor),
@@ -138,6 +138,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
 
     private func setupPanel() {
         view.addSubview(panel)
+        panel.backgroundColor = UIColor(hex: model.background_color)
         panel.translatesAutoresizingMaskIntoConstraints = false
 
         panelBottomToBellTop = panel.bottomAnchor.constraint(equalTo: bellButton.topAnchor, constant: -12)
