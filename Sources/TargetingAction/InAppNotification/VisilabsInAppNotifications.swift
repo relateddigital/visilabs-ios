@@ -97,6 +97,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showCustomWebview(model: customWebview) {
                         self.markTargetingActionShown(model: customWebview)
                     }
+                }else if model.targetingActionType == .notificationBell, let notifBell = model as? NotificationBellModel {
+                    if self.showNotificationBell(model: notifBell) {
+                        self.markTargetingActionShown(model: notifBell)
+                    }
                 }
                   else if model.targetingActionType == .apprating {
                     self.showInappRating()
