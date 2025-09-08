@@ -30,17 +30,14 @@ struct NotificationBellModel : TargetingActionViewModel
     var bellAnimation : String?
 
     //extended Props
-    var contentMinimizedTextSize:String?
-    var contentMinimizedTextColor:String?
-    var contentMinimizedFontFamily:String?
-    var contentMinimizedCustomFontFamilyIos:String?
-    var contentMinimizedTextOrientation:String?
-    var contentMinimizedBackgroundImage:String?
-    var contentMinimizedBackgroundColor:String?
-    var contentMinimizedArrowColor:String?
-    var contentMaximizedBackgroundImage:String?
-    var contentMaximizedBackgroundColor:String?
+    var background_color:String?
+    var font_family:String?
+    var title_text_color:String?
+    var title_text_size:String?
     
+    var text_text_color:String?
+    var text_text_size:String?
+
     
 }
 

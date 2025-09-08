@@ -581,20 +581,13 @@ class VisilabsTargetingAction {
         notificationBellModel.notifTitle = actionData[VisilabsConstants.title] as? String ?? ""
         
         //extended Props
-        notificationBellModel.contentMinimizedTextSize = extendedProps[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""
-        notificationBellModel.contentMinimizedTextColor = extendedProps[VisilabsConstants.contentMinimizedTextColor] as? String ?? ""
-        notificationBellModel.contentMinimizedFontFamily = extendedProps[VisilabsConstants.contentMinimizedFontFamily] as? String ?? ""
-        notificationBellModel.contentMinimizedCustomFontFamilyIos = extendedProps[VisilabsConstants.contentMinimizedCustomFontFamilyIos] as? String ?? ""
-        notificationBellModel.contentMinimizedTextOrientation = extendedProps[VisilabsConstants.contentMinimizedTextOrientation] as? String ?? ""
-        notificationBellModel.contentMinimizedBackgroundImage = extendedProps[VisilabsConstants.contentMinimizedBackgroundImage] as? String ?? ""
-        notificationBellModel.contentMinimizedBackgroundColor = extendedProps[VisilabsConstants.contentMinimizedBackgroundColor] as? String ?? ""
-        notificationBellModel.contentMinimizedArrowColor = extendedProps[VisilabsConstants.contentMinimizedArrowColor] as? String ?? ""
-        notificationBellModel.contentMaximizedBackgroundImage = extendedProps[VisilabsConstants.contentMaximizedBackgroundImage] as? String ?? ""
-        notificationBellModel.contentMaximizedBackgroundColor = extendedProps[VisilabsConstants.contentMaximizedBackgroundColor] as? String ?? ""
-
-
+        notificationBellModel.background_color = extendedProps[VisilabsConstants.background_color] as? String ?? ""
+        notificationBellModel.font_family = extendedProps[VisilabsConstants.font_family] as? String ?? ""
+        notificationBellModel.title_text_color = extendedProps[VisilabsConstants.title_text_color] as? String ?? ""
+        notificationBellModel.title_text_size = extendedProps[VisilabsConstants.title_text_size] as? String ?? "15"
+        notificationBellModel.text_text_color = extendedProps[VisilabsConstants.text_text_color] as? String ?? ""
+        notificationBellModel.text_text_size = extendedProps[VisilabsConstants.text_text_size] as? String ?? "15"
         
-
         return notificationBellModel
     }
     
