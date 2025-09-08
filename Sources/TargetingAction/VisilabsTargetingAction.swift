@@ -578,7 +578,7 @@ class VisilabsTargetingAction {
             
         }
         
-        
+        notificationBellModel.notifTitle = actionData[VisilabsConstants.title] as? String ?? ""
         
         //extended Props
         notificationBellModel.contentMinimizedTextSize = extendedProps[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""
