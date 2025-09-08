@@ -580,6 +580,10 @@ class VisilabsTargetingAction {
         
         notificationBellModel.notifTitle = actionData[VisilabsConstants.title] as? String ?? ""
         
+        
+        notificationBellModel.bellIcon = actionData[VisilabsConstants.bell_icon] as? String ?? ""
+        
+        notificationBellModel.bellAnimation = actionData[VisilabsConstants.bell_animation] as? String ?? ""
         //extended Props
         notificationBellModel.background_color = extendedProps[VisilabsConstants.background_color] as? String ?? ""
         notificationBellModel.font_family = extendedProps[VisilabsConstants.font_family] as? String ?? ""
