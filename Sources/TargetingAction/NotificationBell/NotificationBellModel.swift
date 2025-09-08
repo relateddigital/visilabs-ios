@@ -18,6 +18,8 @@ struct NotificationBellModel : TargetingActionViewModel
     var jsContent: String?
     var jsonContent: String?
     
+    var notifTitle:String?
+
     var report: NotificationBellReport?
     
     var waitingTime: Int = 0

@@ -8,13 +8,25 @@
 import Foundation
 import UIKit
 
+// MARK: - Passthrough Window: panel kapalıyken yalnızca zil alanında hit-test al
+final class PassthroughWindow: UIWindow {
+    var shouldReceiveTouchAtPoint: ((CGPoint) -> Bool)?
+
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if let decide = shouldReceiveTouchAtPoint {
+            return decide(point)
+        }
+        return super.point(inside: point, with: event)
+    }
+}
+
 // MARK: - Main VC (Bell button + panel)
 final class NotificationBellViewController: VisilabsBaseNotificationViewController, UIGestureRecognizerDelegate {
 
     private let bellButton = UIButton(type: .custom)
     private let bellImageView = UIImageView()
     private let panel = NotificationBellPanelView()
-    private var panelBottomToBellTop: NSLayoutConstraint!   // panel, zilin üstünde konumlanacak
+    private var panelBottomToBellTop: NSLayoutConstraint!
     private var isPanelVisible = false
 
     private let model: NotificationBellModel
@@ -35,35 +47,42 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         applyModel()
     }
 
-    // MARK: - Visilabs show/hide (window management)
+    // MARK: - Visilabs show/hide (window management) + PASSTHROUGH
     override func show(animated: Bool) {
         guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else { return }
         if #available(iOS 13.0, *) {
-            let windowScene = sharedUIApplication
-                .connectedScenes
-                .filter { $0.activationState == .foregroundActive }
-                .first as? UIWindowScene
-            if let windowScene = windowScene {
-                window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-                window?.windowScene = windowScene
+            let scene = sharedUIApplication.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene
+            if let ws = scene {
+                // PassthroughWindow kullan
+                window = PassthroughWindow(frame: ws.coordinateSpace.bounds)
+                window?.windowScene = ws
             }
         } else {
-            window = UIWindow(frame: CGRect(x: 0,
-                                            y: 0,
-                                            width: UIScreen.main.bounds.size.width,
-                                            height: UIScreen.main.bounds.size.height))
+            window = PassthroughWindow(frame: UIScreen.main.bounds)
         }
-        if let window = window {
+
+        if let window = window as? PassthroughWindow {
             window.alpha = 0
-            window.windowLevel = UIWindow.Level.alert
+            window.windowLevel = .alert
             window.rootViewController = self
             window.isHidden = false
+
+            // Passthrough kuralı:
+            // - Panel AÇIKSA: tüm dokunuşlar bu window'a (arka plan dokunuşu paneli kapatsın)
+            // - Panel KAPALIYSA: sadece zil butonu bölgesi bu window'a; diğer her yer alttaki app'e geçsin
+            window.shouldReceiveTouchAtPoint = { [weak self] p in
+                guard let self = self else { return false }
+                if self.isPanelVisible {
+                    return true
+                } else {
+                    let bellFrameInWindow = self.bellButton.convert(self.bellButton.bounds, to: self.view)
+                    return bellFrameInWindow.contains(p)
+                }
+            }
         }
 
         let duration = animated ? 0.25 : 0
-        UIView.animate(withDuration: duration) {
-            self.window?.alpha = 1
-        }
+        UIView.animate(withDuration: duration) { self.window?.alpha = 1 }
     }
 
     override func hide(animated: Bool, completion: @escaping () -> Void) {
@@ -80,7 +99,12 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
 
     private func close() {
         dismiss(animated: true) {
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+            self.delegate?.notificationShouldDismiss(
+                controller: self,
+                callToActionURL: nil,
+                shouldTrack: false,
+                additionalTrackingProperties: nil
+            )
         }
     }
 
@@ -91,9 +115,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         bellImageView.contentMode = .scaleAspectFit
         bellButton.addSubview(bellImageView)
 
-        if #available(iOS 13.0, *) {
-            bellButton.backgroundColor = .secondarySystemBackground
-        }
+        if #available(iOS 13.0, *) { bellButton.backgroundColor = .secondarySystemBackground }
         bellButton.layer.cornerRadius = 26
         bellButton.layer.shadowColor = UIColor.black.cgColor
         bellButton.layer.shadowOpacity = 0.12
@@ -123,7 +145,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         view.addSubview(panel)
         panel.translatesAutoresizingMaskIntoConstraints = false
 
-        // Panel, ZİLİN ÜSTÜNDE açılacak
+        // Panel, zilin ÜSTÜNDE açılır
         panelBottomToBellTop = panel.bottomAnchor.constraint(equalTo: bellButton.topAnchor, constant: -12)
 
         NSLayoutConstraint.activate([
@@ -133,16 +155,15 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
             panel.heightAnchor.constraint(greaterThanOrEqualToConstant: 280)
         ])
 
-        // İlk durumda gizli, ama window/VC İPTAL EDİLMİYOR -> zil hep kalır
+        // Başlangıçta gizli (window kapanmıyor -> zil hep görünür)
         panel.alpha = 0
         panel.isHidden = true
-        panel.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-            .concatenating(CGAffineTransform(translationX: 0, y: 8))
+        panel.transform = CGAffineTransform(scaleX: 0.98, y: 0.98).concatenating(.init(translationX: 0, y: 8))
 
         // Çarpı ile kapat
         panel.closeButton.addTarget(self, action: #selector(hidePanel), for: .touchUpInside)
 
-        // Arka plana dokununca YALNIZCA panel kapansın
+        // Arka plan tık: sadece paneli kapat (zil kalır)
         let bgTap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped))
         bgTap.cancelsTouchesInView = false
         bgTap.delegate = self
@@ -150,32 +171,26 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
     }
 
     private func applyModel() {
-        // Bell icon
         if let url = model.bellIcon {
             ImageLoader.load(from: url, into: bellImageView)
         } else {
-            if #available(iOS 13.0, *) {
-                bellImageView.image = UIImage(systemName: "bell.fill")
-            }
+            if #available(iOS 13.0, *) { bellImageView.image = UIImage(systemName: "bell.fill") }
         }
 
-        // Title
-        panel.titleLabel.text = model.title ?? ""
+        panel.titleLabel.text = model.notifTitle ?? ""
 
-        // Dynamic rows
         panel.contentStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
-        let elems = model.bellElems ?? []
-        for el in elems {
+        for el in (model.bellElems ?? []) {
             let row = BellRowView(text: el.text ?? "", link: el.ios_lnk)
             row.backgroundColor = .clear
             panel.contentStack.addArrangedSubview(row)
         }
     }
 
-    // MARK: Animations (sadece paneli animle)
+    // MARK: Animations (sadece panel)
     @objc private func togglePanel() {
         isPanelVisible ? hidePanel() : showPanel()
+        // PassthroughWindow kuralı, isPanelVisible değişince otomatik uygulanacak
     }
 
     private func showPanel() {
@@ -195,20 +210,20 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseInOut]) {
             self.view.backgroundColor = .clear
             self.panel.alpha = 0
-            self.panel.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-                .concatenating(CGAffineTransform(translationX: 0, y: 8))
+            self.panel.transform = CGAffineTransform(scaleX: 0.98, y: 0.98).concatenating(.init(translationX: 0, y: 8))
         } completion: { _ in
             self.panel.isHidden = true
         }
     }
 
-    // MARK: - Background tap handling (zil/panel üzerine tıklamayı ignore et)
+    // MARK: - Background tap: zil/panel üstü hariç dokunuşu yakalayıp paneli kapat
     @objc private func backgroundTapped(_ g: UITapGestureRecognizer) {
         let p = g.location(in: view)
         if panel.frame.contains(p) || bellButton.frame.contains(p) { return }
         hidePanel()
     }
 
+    // bgTap’ın zil/panel altındaki dokunuşları almamasını sağla
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let v = touch.view
         if v?.isDescendant(of: panel) == true { return false }
@@ -217,7 +232,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
     }
 }
 
-// MARK: - Helper: async image loader (simple)
+// MARK: - Helper: async image loader
 final class ImageLoader {
     static func load(from urlString: String?, into imageView: UIImageView) {
         guard let s = urlString, let url = URL(string: s) else { return }
@@ -277,8 +292,8 @@ final class BellRowView: UIControl {
     @objc private func openLink() {
         guard
             let link = link,
-            let url = URL(string: link),
-            !link.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            !link.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+            let url = URL(string: link)
         else { return }
         UIApplication.shared.open(url)
     }
@@ -286,7 +301,7 @@ final class BellRowView: UIControl {
     required init?(coder: NSCoder) { fatalError() }
 }
 
-// MARK: - Bottom Sheet-like Panel (ama zilde üstte duruyor)
+// MARK: - Panel (zilin üstünde duran kart)
 final class NotificationBellPanelView: UIView {
     let titleLabel = UILabel()
     let closeButton = UIButton(type: .system)
@@ -308,7 +323,6 @@ final class NotificationBellPanelView: UIView {
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        // Header
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.numberOfLines = 0
 
@@ -326,7 +340,6 @@ final class NotificationBellPanelView: UIView {
         header.addSubview(titleLabel)
         header.addSubview(closeButton)
 
-        // Scroll + content
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         container.translatesAutoresizingMaskIntoConstraints = false
         contentStack.axis = .vertical
