@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-// MARK: - Passthrough Window: panel kapalıyken yalnızca zil alanında hit-test al
 final class PassthroughWindow: UIWindow {
     var shouldReceiveTouchAtPoint: ((CGPoint) -> Bool)?
 
@@ -53,7 +52,6 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         if #available(iOS 13.0, *) {
             let scene = sharedUIApplication.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene
             if let ws = scene {
-                // PassthroughWindow kullan
                 window = PassthroughWindow(frame: ws.coordinateSpace.bounds)
                 window?.windowScene = ws
             }
@@ -67,9 +65,6 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
             window.rootViewController = self
             window.isHidden = false
 
-            // Passthrough kuralı:
-            // - Panel AÇIKSA: tüm dokunuşlar bu window'a (arka plan dokunuşu paneli kapatsın)
-            // - Panel KAPALIYSA: sadece zil butonu bölgesi bu window'a; diğer her yer alttaki app'e geçsin
             window.shouldReceiveTouchAtPoint = { [weak self] p in
                 guard let self = self else { return false }
                 if self.isPanelVisible {
@@ -145,7 +140,6 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         view.addSubview(panel)
         panel.translatesAutoresizingMaskIntoConstraints = false
 
-        // Panel, zilin ÜSTÜNDE açılır
         panelBottomToBellTop = panel.bottomAnchor.constraint(equalTo: bellButton.topAnchor, constant: -12)
 
         NSLayoutConstraint.activate([
@@ -155,7 +149,6 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
             panel.heightAnchor.constraint(greaterThanOrEqualToConstant: 280)
         ])
 
-        // Başlangıçta gizli (window kapanmıyor -> zil hep görünür)
         panel.alpha = 0
         panel.isHidden = true
         panel.transform = CGAffineTransform(scaleX: 0.98, y: 0.98).concatenating(.init(translationX: 0, y: 8))
@@ -189,10 +182,8 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         }
     }
 
-    // MARK: Animations (sadece panel)
     @objc private func togglePanel() {
         isPanelVisible ? hidePanel() : showPanel()
-        // PassthroughWindow kuralı, isPanelVisible değişince otomatik uygulanacak
     }
 
     private func showPanel() {
@@ -218,14 +209,12 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         }
     }
 
-    // MARK: - Background tap: zil/panel üstü hariç dokunuşu yakalayıp paneli kapat
     @objc private func backgroundTapped(_ g: UITapGestureRecognizer) {
         let p = g.location(in: view)
         if panel.frame.contains(p) || bellButton.frame.contains(p) { return }
         hidePanel()
     }
 
-    // bgTap’ın zil/panel altındaki dokunuşları almamasını sağla
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let v = touch.view
         if v?.isDescendant(of: panel) == true { return false }
