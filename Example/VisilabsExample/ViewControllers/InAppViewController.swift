@@ -126,6 +126,8 @@ class InAppViewController: FormViewController {
             break
         case .MultipleChoiceSurvey:
             break
+        case .NotificationBell:
+            break
         }
         
         

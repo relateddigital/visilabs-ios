@@ -16,6 +16,7 @@ public enum TargetingActionType: String, Codable {
     case apprating = "MobileAppRating"
     case mobileCustomActions = "mobileCustomActions"
     case MultipleChoiceSurvey = "MultipleChoiceSurvey"
+    case notificationBell = "NotificationBell"
 
 }
 

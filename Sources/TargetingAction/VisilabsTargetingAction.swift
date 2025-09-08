@@ -104,7 +104,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         
         
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)~\(VisilabsConstants.MultipleChoiceSurvey)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)~\(VisilabsConstants.MultipleChoiceSurvey)~\(VisilabsConstants.NotificationBell)"
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -156,6 +156,8 @@ class VisilabsTargetingAction {
             return parseDrawer(drw)
         } else if let poll = result[VisilabsConstants.MultipleChoiceSurvey] as? [[String: Any?]], let drw = poll.first {
             return parsePoll(drw)
+        } else if let notificationBell = result[VisilabsConstants.NotificationBell] as? [[String: Any?]], let ntfBell = notificationBell.first {
+            return parseNotificationBell(ntfBell)
         } else if let customWeb = result[VisilabsConstants.mobileCustomActions] as? [[String: Any?]], let customWeb = customWeb.first {
             return parseCustomWebview(customWeb)
         } else if let inappRating = result[VisilabsConstants.apprating] as? [[String: Any?]], let inappRating = inappRating.first {
@@ -551,7 +553,50 @@ class VisilabsTargetingAction {
         return pollModel
     }
     
-    
+    private func parseNotificationBell(_ notificationBell: [String: Any?]) -> NotificationBellModel? {
+        guard let actionData = notificationBell[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        var notificationBellModel = NotificationBellModel(targetingActionType: .notificationBell)
+        notificationBellModel.actId = notificationBell[VisilabsConstants.actid] as? Int ?? 0
+        notificationBellModel.title = notificationBell[VisilabsConstants.title] as? String ?? ""
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+        
+        
+        if let texts = actionData[VisilabsConstants.notification_texts] as? [[String: Any]] {
+            
+            for elem in texts {
+                if let text = elem[VisilabsConstants.text] as? String,
+                   let iosLink = elem[VisilabsConstants.iosLnk] as? String {
+                    
+                    var ballElem = bellElement()
+                    ballElem.ios_lnk = iosLink
+                    ballElem.text = text
+                    notificationBellModel.bellElems?.append(ballElem)
+
+                }
+            }
+            
+        }
+        
+        
+        
+        //extended Props
+        notificationBellModel.contentMinimizedTextSize = extendedProps[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""
+        notificationBellModel.contentMinimizedTextColor = extendedProps[VisilabsConstants.contentMinimizedTextColor] as? String ?? ""
+        notificationBellModel.contentMinimizedFontFamily = extendedProps[VisilabsConstants.contentMinimizedFontFamily] as? String ?? ""
+        notificationBellModel.contentMinimizedCustomFontFamilyIos = extendedProps[VisilabsConstants.contentMinimizedCustomFontFamilyIos] as? String ?? ""
+        notificationBellModel.contentMinimizedTextOrientation = extendedProps[VisilabsConstants.contentMinimizedTextOrientation] as? String ?? ""
+        notificationBellModel.contentMinimizedBackgroundImage = extendedProps[VisilabsConstants.contentMinimizedBackgroundImage] as? String ?? ""
+        notificationBellModel.contentMinimizedBackgroundColor = extendedProps[VisilabsConstants.contentMinimizedBackgroundColor] as? String ?? ""
+        notificationBellModel.contentMinimizedArrowColor = extendedProps[VisilabsConstants.contentMinimizedArrowColor] as? String ?? ""
+        notificationBellModel.contentMaximizedBackgroundImage = extendedProps[VisilabsConstants.contentMaximizedBackgroundImage] as? String ?? ""
+        notificationBellModel.contentMaximizedBackgroundColor = extendedProps[VisilabsConstants.contentMaximizedBackgroundColor] as? String ?? ""
+
+
+        
+
+        return notificationBellModel
+    }
     
     private func parseScratchToWin(_ scratchToWin: [String: Any?]) -> ScratchToWinModel? {
         guard let actionData = scratchToWin[VisilabsConstants.actionData] as? [String: Any] else { return nil }

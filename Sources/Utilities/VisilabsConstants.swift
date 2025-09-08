@@ -146,6 +146,7 @@ struct VisilabsConstants {
     static let productStatNotifier = "ProductStatNotifier"
     static let drawer = "Drawer"
     static let MultipleChoiceSurvey = "MultipleChoiceSurvey"
+    static let NotificationBell = "NotificationBell"
 
     static let apprating = "MobileAppRating"
     static let mobileCustomActions = "MobileCustomActions"
@@ -179,6 +180,11 @@ struct VisilabsConstants {
     static let impression = "impression"
     static let click = "click"
     static let extendedProps = "ExtendedProps"
+    static let notification_texts = "notification_texts"
+    static let text = "text"
+    static let bell_icon = "bell_icon"
+    static let bell_animation = "bell_animation"
+    
     static let storylbImgBorderWidth = "storylb_img_borderWidth"
     static let storylbImgBorderColor = "storylb_img_borderColor"
     static let storylbImgBorderRadius = "storylb_img_borderRadius"
