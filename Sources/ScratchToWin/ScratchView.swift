@@ -17,7 +17,7 @@ var firstTouch: Bool!
 // var scratchable: CGImage!
 var scratched: CGImage!
 var alphaPixels: CGContext!
-var provider: CGDataProvider!
+var maskProvider: CGDataProvider!
 var pixelBuffer: UnsafeMutablePointer<UInt8>!
 var couponImage: String!
 var couponUIImage: UIImage?
@@ -98,7 +98,7 @@ open class ScratchView: UIView {
             }
             byteIndex += 1
         }
-        provider = CGDataProvider(data: pixels)
+        maskProvider = CGDataProvider(data: pixels)
 
         maskLayer = CAShapeLayer()
         maskLayer.frame =  CGRect(x: 0, y: 0, width: width, height: height)
