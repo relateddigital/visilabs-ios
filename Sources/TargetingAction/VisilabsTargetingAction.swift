@@ -469,10 +469,10 @@ class VisilabsTargetingAction {
         return convertJsonToEmailViewModel(emailForm: mailModel)
     }
     
-    private func parseDrawer(_ drawer: [String: Any?]) -> SideBarServiceModel? {
+    private func parseDrawer(_ drawer: [String: Any?]) -> DrawerServiceModel? {
         
         guard let actionData = drawer[VisilabsConstants.actionData] as? [String: Any] else { return nil }
-        var sideBarServiceModel = SideBarServiceModel(targetingActionType: .drawer)
+        var sideBarServiceModel = DrawerServiceModel(targetingActionType: .drawer)
         sideBarServiceModel.actId = drawer[VisilabsConstants.actid] as? Int ?? 0
         sideBarServiceModel.title = drawer[VisilabsConstants.title] as? String ?? ""
         let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
