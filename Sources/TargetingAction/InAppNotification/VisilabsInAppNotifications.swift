@@ -85,7 +85,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showProductStatNotifier(psn) {
                         self.markTargetingActionShown(model: psn)
                     }
-                } else if model.targetingActionType == .drawer, let drawer = model as? SideBarServiceModel {
+                } else if model.targetingActionType == .drawer, let drawer = model as? DrawerServiceModel {
                     if self.showDrawer(model: drawer) {
                         //self.markTargetingActionShown(model: drawer)
                     }
@@ -123,8 +123,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         return true
     }
 
-    func showDrawer(model: SideBarServiceModel) -> Bool {
-        let sideBarViewController = visilabsSideBarViewController(model: model)
+    func showDrawer(model: DrawerServiceModel) -> Bool {
+        let sideBarViewController = RDDrawerViewController(model: model)
         sideBarViewController.delegate = self
         sideBarViewController.show(animated: true)
         return true
