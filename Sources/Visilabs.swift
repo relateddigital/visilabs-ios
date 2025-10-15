@@ -33,7 +33,7 @@ public class Visilabs {
                                 sdkType: String = "native",
                                 isTest:Bool = false) -> VisilabsInstance {
 
-
+        
         VisilabsManager.sharedInstance.initialize(organizationId: organizationId,
                                                   profileId: profileId,
                                                   dataSource: dataSource,

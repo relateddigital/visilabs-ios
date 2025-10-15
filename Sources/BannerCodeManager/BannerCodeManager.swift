@@ -17,6 +17,7 @@ public class BannerCodeManager {
     private let giftBoxCode = "giftBoxCode"
     private let ChooseFavoriteGameCode = "ChooseFavoriteGameCode"
     private let CustomWebViewCode = "CustomWebViewCode"
+    public var sdkTypeForBanner = "native"
 
     
 
