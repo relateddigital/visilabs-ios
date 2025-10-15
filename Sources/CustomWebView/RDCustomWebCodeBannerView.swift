@@ -35,10 +35,18 @@ class RDCustomWebCodeBannerView: UIView {
     }
 
     private func setupLabels() {
+        
         horizontalStackView = UIStackView()
         horizontalStackView.axis = .horizontal
         horizontalStackView.distribution = .fillProportionally
-        horizontalStackView.layoutMargins = UIEdgeInsets(top: 20, left: 8, bottom: 20, right: 0)
+        
+        var topEdge = 20.0
+        if BannerCodeManager.shared.sdkTypeForBanner == "reactnative"
+        {
+            topEdge = -20.0
+        }
+        
+        horizontalStackView.layoutMargins = UIEdgeInsets(top: topEdge, left: 8, bottom: 20, right: 0)
 
         verticalStackViewLeft = UIStackView()
         verticalStackViewLeft.axis = .vertical

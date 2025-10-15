@@ -32,6 +32,9 @@ class VisilabsManager {
                     isTest: Bool) -> VisilabsInstance {
         VisilabsManager.initializeCalled = true
         setTest(test: isTest)
+        
+        BannerCodeManager.shared.sdkTypeForBanner = sdkType
+
         let instance = VisilabsInstance(organizationId: organizationId,
                                         profileId: profileId,
                                         dataSource: dataSource,
