@@ -107,9 +107,10 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
     private func setupBellButton() {
         bellButton.translatesAutoresizingMaskIntoConstraints = false
         bellImageView.translatesAutoresizingMaskIntoConstraints = false
-        bellImageView.contentMode = .scaleAspectFit
+        bellImageView.contentMode = .scaleToFill
         bellButton.addSubview(bellImageView)
-
+        bellButton.layer.masksToBounds = true
+        
         if #available(iOS 13.0, *) { bellButton.backgroundColor = .secondarySystemBackground }
         bellButton.layer.cornerRadius = 26
         bellButton.layer.shadowColor = UIColor.black.cgColor
@@ -128,8 +129,8 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
 
                 bellImageView.centerXAnchor.constraint(equalTo: bellButton.centerXAnchor),
                 bellImageView.centerYAnchor.constraint(equalTo: bellButton.centerYAnchor),
-                bellImageView.widthAnchor.constraint(equalToConstant: 28),
-                bellImageView.heightAnchor.constraint(equalToConstant: 28),
+                bellImageView.widthAnchor.constraint(equalToConstant: 52),
+                bellImageView.heightAnchor.constraint(equalToConstant: 52),
             ])
         }
 
@@ -155,7 +156,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         panel.transform = CGAffineTransform(scaleX: 0.98, y: 0.98).concatenating(.init(translationX: 0, y: 8))
 
         // Çarpı ile kapat
-        panel.closeButton.addTarget(self, action: #selector(hidePanel), for: .touchUpInside)
+        panel.closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
 
         // Arka plan tık: sadece paneli kapat (zil kalır)
         let bgTap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped))
@@ -172,9 +173,10 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         }
 
         panel.titleLabel.text = model.notifTitle ?? ""
-        panel.titleLabel.font = .boldSystemFont(ofSize: CGFloat(Double(model.title_text_size ?? "18") ?? 18) * 3)
+        panel.titleLabel.font = VisilabsHelper.getFont(fontFamily: model.font_family, fontSize: model.title_text_size ?? "15", style: .title2, customFont: model.font_family)
         panel.titleLabel.textColor = UIColor(hex: model.title_text_color)
 
+        
         panel.contentStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for el in (model.bellElems ?? []) {
             let row = BellRowView(text: el.text ?? "", link: el.ios_lnk,model: model)
@@ -191,6 +193,13 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         guard !isPanelVisible else { return }
         isPanelVisible = true
         panel.isHidden = false
+        
+        if let url = model.bellAnimation {
+            ImageLoader.load(from: url, into: bellImageView)
+        } else {
+            if #available(iOS 13.0, *) { bellImageView.image = UIImage(systemName: "bell.fill") }
+        }
+        
         UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
             self.view.backgroundColor = UIColor.black.withAlphaComponent(0.25)
             self.panel.alpha = 1
@@ -198,9 +207,24 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         }
     }
 
+    
+    @objc private func closeAction() {
+        self.window?.isHidden = true
+        self.window?.removeFromSuperview()
+        self.window = nil
+    }
+    
+    
     @objc private func hidePanel() {
         guard isPanelVisible else { return }
         isPanelVisible = false
+        
+        if let url = model.bellIcon {
+            ImageLoader.load(from: url, into: bellImageView)
+        } else {
+            if #available(iOS 13.0, *) { bellImageView.image = UIImage(systemName: "bell.fill") }
+        }
+        
         UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseInOut]) {
             self.view.backgroundColor = .clear
             self.panel.alpha = 0
@@ -257,7 +281,9 @@ final class BellRowView: UIControl {
 
         label.text = text
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: CGFloat(Double(model.text_text_size ?? "15") ?? 15) * 3)
+        
+        label.font = VisilabsHelper.getFont(fontFamily: model.font_family, fontSize: model.text_text_size ?? "15", style: .title2, customFont: model.font_family)
+        //label.font = .systemFont(ofSize: CGFloat(Double(model.text_text_size ?? "15") ?? 15) * 3)
         label.textColor = UIColor(hex: model.text_text_color)
 
         let stack = UIStackView(arrangedSubviews: [iconView, label])
