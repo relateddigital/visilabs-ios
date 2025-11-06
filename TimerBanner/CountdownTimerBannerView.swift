@@ -134,8 +134,7 @@ final class CountdownTimerBannerView: UIControl {
 
         // Arka accent (koyu sarımsı blob hissi istersen alpha ile)
         accentBlob.translatesAutoresizingMaskIntoConstraints = false
-        accentBlob.backgroundColor = UIColor.black.withAlphaComponent(0.0) // istersen .withAlphaComponent(0.12)
-        accentBlob.layer.cornerRadius = 18
+        accentBlob.backgroundColor = UIColor.black.withAlphaComponent(0.0) 
         addSubview(accentBlob)
 
         pill.translatesAutoresizingMaskIntoConstraints = false
@@ -219,6 +218,7 @@ final class CountdownTimerBannerView: UIControl {
     func setBodyTextColor(_ c: UIColor) { textLabel.textColor = c }
     func setCloseColor(_ c: UIColor) { closeButton.tintColor = c }
     func setAccentColor(_ c: UIColor) { accentBlob.backgroundColor = c }
+    func setPillColor(_ c: UIColor) { pill.backgroundColor = c }
     func setCounterColors(bg: UIColor, tile: UIColor, text: UIColor) { counter.setColors(background: bg, tile: tile, text: text) }
 
     func updateSegments(days: Int, hours: Int, minutes: Int, seconds: Int) {

@@ -127,20 +127,22 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
 
     private func applyModel() {
         // Colors
-        bannerView.backgroundColor = UIColor(hex: model.background_color) ?? UIColor(white: 0.12, alpha: 1)
+        bannerView.backgroundColor = UIColor.clear
+        
+        bannerView.setPillColor(UIColor(hex: model.background_color) ?? UIColor(white: 0.12, alpha: 1))
+    
         bannerView.setBodyTextColor(UIColor(hex: model.content_body_text_color) ?? .white)
-        if #available(iOS 13.0, *) {
-            bannerView.setCounterColors(
-                bg: UIColor(hex: model.counter_color)?.withAlphaComponent(0.25) ?? UIColor.systemIndigo.withAlphaComponent(0.25),
-                tile: UIColor(hex: model.counter_color) ?? UIColor.systemIndigo,
-                text: .white
-            )
-        } else {
-            // Fallback on earlier versions
-        }
+        
+        bannerView.setCounterColors(
+            bg: UIColor(hex: model.counter_color)?.withAlphaComponent(0.25) ?? UIColor.black.withAlphaComponent(0.25),
+            tile: UIColor(hex: model.counter_color) ?? UIColor.black,
+            text: .white)
+        
         bannerView.setCloseColor(UIColor(hex: model.close_button_color) ?? .white)
         bannerView.setAccentColor(UIColor(hex: model.scratch_color) ?? UIColor.black.withAlphaComponent(0.25))
 
+
+        
         // Content
         bannerView.setBody(model.content_body ?? "")
         if let url = model.img { ImageLoader.load(from: url, into: bannerView.iconView) }
