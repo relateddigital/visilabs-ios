@@ -43,7 +43,6 @@ final class CounterTileView: UIView {
     }
 }
 
-// Sayaç kapsülü (mor kutu)
 final class CounterBadgeView: UIView {
     private let container = UIStackView()
     let day = CounterTileView()
@@ -78,7 +77,6 @@ final class CounterBadgeView: UIView {
             widthAnchor.constraint(greaterThanOrEqualToConstant: 160)
         ])
 
-        // Varsayılan etiketler (TR)
         day.configure(value: "00", unit: "Gün")
         hour.configure(value: "00", unit: "Saat")
         min.configure(value: "00", unit: "Dk")
@@ -106,14 +104,12 @@ final class CounterBadgeView: UIView {
     }
 }
 
-// Banner (siyah oval + sol logo + orta metin + sağ sayaç + X)
 final class CountdownTimerBannerView: UIControl {
 
     // Callbacks
     var onClose: (() -> Void)?
     var onTap: (() -> Void)?
 
-    // Public parts (ikon yüklemek için)
     let iconView = UIImageView()
 
     // Private UI
@@ -132,7 +128,6 @@ final class CountdownTimerBannerView: UIControl {
     private func buildUI() {
         translatesAutoresizingMaskIntoConstraints = false
 
-        // Arka accent (koyu sarımsı blob hissi istersen alpha ile)
         accentBlob.translatesAutoresizingMaskIntoConstraints = false
         accentBlob.backgroundColor = UIColor.black.withAlphaComponent(0.0) 
         addSubview(accentBlob)
