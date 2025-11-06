@@ -104,7 +104,7 @@ class VisilabsTargetingAction {
         props[VisilabsConstants.lvtKey] = visilabsUser.lvt
         
         
-        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)~\(VisilabsConstants.MultipleChoiceSurvey)~\(VisilabsConstants.NotificationBell)"
+        props[VisilabsConstants.actionType] = "\(VisilabsConstants.mailSubscriptionForm)~\(VisilabsConstants.spinToWin)~\(VisilabsConstants.scratchToWin)~\(VisilabsConstants.productStatNotifier)~\(VisilabsConstants.drawer)~\(VisilabsConstants.apprating)~\(VisilabsConstants.mobileCustomActions)~\(VisilabsConstants.MultipleChoiceSurvey)~\(VisilabsConstants.NotificationBell)~\(VisilabsConstants.CountdownTimerBanner)"
         
         for (key, value) in VisilabsPersistence.readTargetParameters() {
             if !key.isEmptyOrWhitespace && !value.isEmptyOrWhitespace && props[key] == nil {
@@ -154,6 +154,8 @@ class VisilabsTargetingAction {
             return parseScratchToWin(sctw)
         } else if let drawerArr = result[VisilabsConstants.drawer] as? [[String: Any?]], let drw = drawerArr.first {
             return parseDrawer(drw)
+        } else if let timerBanner = result[VisilabsConstants.CountdownTimerBanner] as? [[String: Any?]], let tmrbnnr = timerBanner.first {
+            return parseTimerBanner(tmrbnnr)
         } else if let poll = result[VisilabsConstants.MultipleChoiceSurvey] as? [[String: Any?]], let drw = poll.first {
             return parsePoll(drw)
         } else if let notificationBell = result[VisilabsConstants.NotificationBell] as? [[String: Any?]], let ntfBell = notificationBell.first {
@@ -514,6 +516,46 @@ class VisilabsTargetingAction {
     }
     
     
+    private func parseTimerBanner(_ drawer: [String: Any?]) -> CountdownTimerBannerModel? {
+        
+        guard let actionData = drawer[VisilabsConstants.actionData] as? [String: Any] else { return nil }
+        var timerBannerModel = CountdownTimerBannerModel(targetingActionType: .CountdownTimerBanner)
+        timerBannerModel.actId = drawer[VisilabsConstants.actid] as? Int ?? 0
+        timerBannerModel.title = drawer[VisilabsConstants.title] as? String ?? ""
+        let encodedStr = actionData[VisilabsConstants.extendedProps] as? String ?? ""
+        guard let extendedProps = encodedStr.urlDecode().convertJsonStringToDictionary() else { return nil }
+        
+        
+        //actionData
+        timerBannerModel.scratch_color = actionData[VisilabsConstants.shape] as? String ?? ""
+        timerBannerModel.ios_lnk = actionData[VisilabsConstants.ios_lnk] as? String ?? ""
+        timerBannerModel.img  = actionData[VisilabsConstants.img] as? String ?? ""
+        timerBannerModel.content_body = actionData[VisilabsConstants.content_body] as? String ?? ""
+        timerBannerModel.counter_Date = actionData[VisilabsConstants.counter_Date] as? String ?? ""
+        timerBannerModel.waitingTime = actionData[VisilabsConstants.waitingTime] as? Int ?? 0
+        timerBannerModel.counter_Time = actionData[VisilabsConstants.counter_Time] as? String ?? ""
+
+        //extended Props
+        timerBannerModel.background_color = extendedProps[VisilabsConstants.background_color] as? String ?? ""
+        timerBannerModel.counter_color = extendedProps[VisilabsConstants.counter_color] as? String ?? ""
+        timerBannerModel.close_button_color = extendedProps[VisilabsConstants.close_button_color] as? String ?? ""
+        timerBannerModel.content_body_text_color = extendedProps[VisilabsConstants.content_body_text_color] as? String ?? ""
+        timerBannerModel.position_on_page = extendedProps[VisilabsConstants.position_on_page] as? String ?? ""
+        timerBannerModel.content_body_font_family = extendedProps[VisilabsConstants.content_body_font_family] as? String ?? ""
+        timerBannerModel.txtStartDate = extendedProps[VisilabsConstants.txtStartDate] as? String ?? ""
+
+        
+        
+        let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
+        let impression = report[VisilabsConstants.impression] as? String ?? ""
+        let click = report[VisilabsConstants.click] as? String ?? ""
+        let drawerReport = CountdownTimerReport(impression: impression, click: click)
+        
+        timerBannerModel.report = drawerReport
+        
+        
+        return timerBannerModel
+    }
     
     
     private func parsePoll(_ poll: [String: Any?]) -> PollModel? {

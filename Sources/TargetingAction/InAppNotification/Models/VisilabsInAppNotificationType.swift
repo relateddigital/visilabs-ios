@@ -33,6 +33,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case mobileCustomActions = "mobileCustomActions"
     case MultipleChoiceSurvey = "MultipleChoiceSurvey"
     case NotificationBell = "NotificationBell"
+    case CountdownTimerBanner = "CountdownTimerBanner"
 
 }
 

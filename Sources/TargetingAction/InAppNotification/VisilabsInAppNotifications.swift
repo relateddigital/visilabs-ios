@@ -93,6 +93,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     if self.showPoll(model: poll) {
                         self.markTargetingActionShown(model: poll)
                     }
+                } else if model.targetingActionType == .CountdownTimerBanner, let timerBanner = model as? CountdownTimerBannerModel {
+                    if self.showTimerBanner(model: timerBanner) {
+                        self.markTargetingActionShown(model: timerBanner)
+                    }
                 } else if model.targetingActionType == .mobileCustomActions, let customWebview = model as? CustomWebViewModel {
                     if self.showCustomWebview(model: customWebview) {
                         self.markTargetingActionShown(model: customWebview)
@@ -142,6 +146,17 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         return true
     }
     
+    
+    func showTimerBanner(model: CountdownTimerBannerModel) -> Bool {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+
+            let tBannerVC = CountdownTimerBannerViewController(model: model)
+            tBannerVC.delegate = self
+            tBannerVC.show(animated: true)
+        
+        })
+        return true
+    }
     
     func showNotificationBell(model: NotificationBellModel) -> Bool {
         
