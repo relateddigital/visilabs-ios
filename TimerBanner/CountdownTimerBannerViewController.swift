@@ -2,7 +2,6 @@ import UIKit
 
 final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewController {
 
-    // MARK: - Passthrough Window (sadece banner tıklansın)
     final class PassthroughWindow: UIWindow {
         var passRectProvider: (() -> CGRect)?
         override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -116,8 +115,8 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
             tap.numberOfTapsRequired = 1
-            tap.cancelsTouchesInView = false // alttaki kontroller tıklamayı da alsın istiyorsan
-            bannerView.pill.isUserInteractionEnabled = true // UIImageView/UILabel ise şart
+            tap.cancelsTouchesInView = false
+            bannerView.pill.isUserInteractionEnabled = true
             bannerView.pill.addGestureRecognizer(tap)
             
         } else {
