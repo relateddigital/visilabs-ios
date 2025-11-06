@@ -527,7 +527,7 @@ class VisilabsTargetingAction {
         
         
         //actionData
-        timerBannerModel.scratch_color = actionData[VisilabsConstants.shape] as? String ?? ""
+        timerBannerModel.scratch_color = actionData[VisilabsConstants.scratch_color] as? String ?? ""
         timerBannerModel.ios_lnk = actionData[VisilabsConstants.ios_lnk] as? String ?? ""
         timerBannerModel.img  = actionData[VisilabsConstants.img] as? String ?? ""
         timerBannerModel.content_body = actionData[VisilabsConstants.content_body] as? String ?? ""
