@@ -111,7 +111,7 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
             topC.isActive = top
             bottomC.isActive = !top
 
-            bannerView.onClose = { [weak self] in self?.hide(animated: true) {} }
+            bannerView.onClose = {             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil) }
             
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
@@ -184,7 +184,7 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
         let remain = max(0, Int(target.timeIntervalSinceNow))
         if remain <= 0 {
             bannerView.updateSegments(days: 0, hours: 0, minutes: 0, seconds: 0)
-            hide(animated: true) {}
+            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
             return
         }
         let d = remain / 86_400
