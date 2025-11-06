@@ -128,6 +128,8 @@ class InAppViewController: FormViewController {
             break
         case .NotificationBell:
             break
+        case .CountdownTimerBanner:
+            break
         }
         
         

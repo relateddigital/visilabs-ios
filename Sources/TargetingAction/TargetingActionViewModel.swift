@@ -17,7 +17,8 @@ public enum TargetingActionType: String, Codable {
     case mobileCustomActions = "mobileCustomActions"
     case MultipleChoiceSurvey = "MultipleChoiceSurvey"
     case notificationBell = "NotificationBell"
-
+    case CountdownTimerBanner = "CountdownTimerBanner"
+    
 }
 
 public protocol TargetingActionViewModel {

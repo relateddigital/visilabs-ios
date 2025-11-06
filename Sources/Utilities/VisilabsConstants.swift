@@ -147,6 +147,7 @@ struct VisilabsConstants {
     static let drawer = "Drawer"
     static let MultipleChoiceSurvey = "MultipleChoiceSurvey"
     static let NotificationBell = "NotificationBell"
+    static let CountdownTimerBanner = "CountdownTimerBanner"
 
     static let apprating = "MobileAppRating"
     static let mobileCustomActions = "MobileCustomActions"
@@ -237,7 +238,21 @@ struct VisilabsConstants {
     static let wheelBorderColor = "wheel_borderColor"
     static let sliceDisplaynameFontFamily = "slice_displayname_font_family"
 
+    
+    //timer banner
+    static let scratch_color = "scratch_color"
+    static let ios_lnk = "ios_lnk"
+    static let content_body = "content_body"
+    static let counter_Date = "counter_Date"
+    static let counter_Time = "counter_Time"
+    static let position_on_page = "position_on_page"
+    static let close_button_color = "close_button_color"
+    static let counter_color = "counter_color"
+    static let content_body_font_family = "content_body_font_family"
+    static let txtStartDate = "txtStartDate"
+    static let content_body_text_color = "content_body_text_color"
 
+    
     //Drawer
     static let shape = "shape"
     static let position = "pos"
