@@ -117,11 +117,11 @@ final class CountdownTimerBannerView: UIControl {
     let iconView = UIImageView()
 
     // Private UI
-    private let pill = UIView()
-    private let textLabel = UILabel()
-    private let counter = CounterBadgeView()
-    private let closeButton = UIButton(type: .system)
-    private let accentBlob = UIView() // alttaki “yırtık” hissi için basit accent (opsiyonel)
+    public let pill = UIView()
+    public let textLabel = UILabel()
+    public let counter = CounterBadgeView()
+    public let closeButton = UIButton(type: .system)
+    public let accentBlob = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

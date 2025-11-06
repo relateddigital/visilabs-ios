@@ -112,17 +112,26 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
             bottomC.isActive = !top
 
             bannerView.onClose = { [weak self] in self?.hide(animated: true) {} }
-            bannerView.onTap = { [weak self] in
-                guard let s = self?.model.ios_lnk,
-                      let url = URL(string: s),
-                      !s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-                UIApplication.shared.open(url)
-            }
+            
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
+            tap.numberOfTapsRequired = 1
+            tap.cancelsTouchesInView = false // alttaki kontroller tıklamayı da alsın istiyorsan
+            bannerView.pill.isUserInteractionEnabled = true // UIImageView/UILabel ise şart
+            bannerView.pill.addGestureRecognizer(tap)
             
         } else {
             // Fallback on earlier versions
         }
 
+    }
+    
+    
+    @objc private func didTapView(_ g: UITapGestureRecognizer) {
+        guard let s = self.model.ios_lnk,
+              let url = URL(string: s),
+              !s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        UIApplication.shared.open(url)
     }
 
     private func applyModel() {
@@ -138,7 +147,12 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
             tile: UIColor(hex: model.counter_color) ?? UIColor.black,
             text: .white)
         
-        bannerView.setCloseColor(UIColor(hex: model.close_button_color) ?? .white)
+        if model.close_button_color == "black" {
+            bannerView.setCloseColor(UIColor.black)
+        } else {
+            bannerView.setCloseColor(UIColor.white)
+        }
+        
         bannerView.setAccentColor(UIColor(hex: model.scratch_color) ?? UIColor.black.withAlphaComponent(0.25))
 
 
