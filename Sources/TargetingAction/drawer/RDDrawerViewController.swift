@@ -106,7 +106,7 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             
             self.globDrawerView?.leftDrawerMiniView.layer.zPosition = -1
             self.globDrawerView?.leftDrawerWidthConstraint.constant = self.model.miniDrawerWidthForCircle
-            self.globDrawerView?.leftDrawerMiniView.layer.cornerRadius = self.model.miniDrawerWidthForCircle / 2
+            self.globDrawerView?.leftDrawerMiniView.layer.cornerRadius = self.model.miniDrawerWidthForCircle / 3
             self.globDrawerView?.leftDrawerTrailingConstraint.constant = -((self.globDrawerView?.leftDrawerWidthConstraint.constant)! / 2)
             self.globDrawerView?.leftDrawerTitleLabelCenterXConstraint.constant =  self.model.xCoordPaddingConstant
             self.globDrawerView?.leftDrawerContentImageCenterXConstraint.constant =  2
@@ -130,7 +130,7 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             
             self.globDrawerView?.rightDrawerMiniView.layer.zPosition = -1
             self.globDrawerView?.rightDrawerWidthConstraint.constant = self.model.miniDrawerWidthForCircle
-            self.globDrawerView?.rightDrawerMiniView.layer.cornerRadius = self.model.miniDrawerWidthForCircle / 2
+            self.globDrawerView?.rightDrawerMiniView.layer.cornerRadius = self.model.miniDrawerWidthForCircle / 3
             self.globDrawerView?.rightDrawerTrailingConstraint.constant = -((self.globDrawerView?.rightDrawerWidthConstraint.constant)! / 2)
             self.globDrawerView?.rightDrawerTitleLabelCenterXConstraint.constant =  -(self.model.xCoordPaddingConstant)
             self.globDrawerView?.rightDrawerContentImageCenterXConstraint.constant = -2
