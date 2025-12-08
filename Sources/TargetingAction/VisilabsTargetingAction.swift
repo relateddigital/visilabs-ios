@@ -1166,6 +1166,9 @@ class VisilabsTargetingAction {
             props.fontFamily = fontFamily
             storyCustomVariables.shared.fontFamily = fontFamily
             
+            let shape = extendedProps[VisilabsConstants.shape] as? String ?? ""
+            
+            props.shape = shape
             
             let customFontFamilyIos = extendedProps[VisilabsConstants.customFontFamilyIos] as? String ?? ""
             props.customFontFamilyIos = customFontFamilyIos
@@ -1206,6 +1209,9 @@ class VisilabsTargetingAction {
                 props.moveShownToEnd = true
             }
         }
+        
+        StoryProps.shared.properties = props
+        
         return props
     }
     
