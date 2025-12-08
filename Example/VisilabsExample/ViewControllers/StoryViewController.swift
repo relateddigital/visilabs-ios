@@ -106,7 +106,7 @@ class StoryViewController: UIViewController, UITextFieldDelegate {
                     storyHomeView.translatesAutoresizingMaskIntoConstraints = false
                     storyHomeView.topAnchor.constraint(equalTo: self.npsWithNumbersButton.bottomAnchor, constant: 20).isActive = true
                     storyHomeView.widthAnchor.constraint(equalTo: self.view.saferAreaLayoutGuide.widthAnchor).isActive = true
-                    storyHomeView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                    storyHomeView.heightAnchor.constraint(equalToConstant: 400).isActive = true
                 } else {
                     print("There is no story action matching your criteria.")
                 }

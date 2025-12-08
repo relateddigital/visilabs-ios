@@ -700,6 +700,7 @@ extension VisilabsInstance {
                                 storyHomeView.collectionView.reloadData()
                                 storyHomeView.setDelegates()
                                 storyHomeViewController.collectionView = storyHomeView.collectionView
+                                storyHomeView.updateCollectionHeight()
                                 completion(storyHomeView)
                             }
                         } else {
@@ -753,6 +754,8 @@ extension VisilabsInstance {
             }
         }
         
+        storyHomeView.updateCollectionHeight()
+
         return storyHomeView
     }
     

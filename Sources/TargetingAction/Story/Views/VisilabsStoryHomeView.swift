@@ -9,6 +9,9 @@ import UIKit
 
 public class VisilabsStoryHomeView: UIView {
 
+    
+    private var collectionHeightConstraint: NSLayoutConstraint!
+
     // MARK: - iVars
     lazy var layout: UICollectionViewFlowLayout = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -51,10 +54,22 @@ public class VisilabsStoryHomeView: UIView {
         addSubview(collectionView)
     }
     private func installLayoutConstraints() {
+        
+        collectionHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 100)
+
         NSLayoutConstraint.activate([
             igLeftAnchor.constraint(equalTo: collectionView.igLeftAnchor),
             igTopAnchor.constraint(equalTo: collectionView.igTopAnchor),
             collectionView.igRightAnchor.constraint(equalTo: igRightAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 100)])
+            collectionHeightConstraint])
+    }
+    
+    public func updateCollectionHeight() {
+        if StoryProps.shared.properties.shape == "Rectangle" {
+            collectionHeightConstraint.constant = 300
+        } else {
+            collectionHeightConstraint.constant = 100
+        }
+        layoutIfNeeded()
     }
 }

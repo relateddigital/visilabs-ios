@@ -46,5 +46,6 @@ class VisilabsStoryActionExtendedProperties {
     var storyzLabelColor : String = ""
     var fontFamily : String = ""
     var customFontFamilyIos :String = ""
+    var shape : String = ""
 
 }

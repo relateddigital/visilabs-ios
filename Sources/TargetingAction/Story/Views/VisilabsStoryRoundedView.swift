@@ -14,6 +14,7 @@ struct Attributes {
     let backgroundColor = UIColor.clear // UIColor.red // IGTheme.redOrange
     let size = CGSize(width: 68, height: 68)
     var borderRadius: Double = 0.0
+    let rectangleSize = CGSize(width: 120, height: 170)
 }
 
 class VisilabsStoryRoundedView: UIView {
@@ -41,9 +42,17 @@ class VisilabsStoryRoundedView: UIView {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = frame.height * CGFloat(attributes.borderRadius)
-        imageView.frame = CGRect(x: 1, y: 1, width: (attributes.size.width)-2, height: attributes.size.height-2)
-        imageView.layer.cornerRadius = imageView.frame.height * CGFloat(attributes.borderRadius)
+        if StoryProps.shared.properties.shape == "Rectangle" {
+            layer.cornerRadius = frame.height * CGFloat(attributes.borderRadius)
+            imageView.frame = CGRect(x: 1, y: 1, width: (attributes.rectangleSize.width)-2, height: attributes.rectangleSize.height-2)
+            imageView.layer.cornerRadius = imageView.frame.height * CGFloat(attributes.borderRadius)
+        }
+        else {
+            layer.cornerRadius = frame.height * CGFloat(attributes.borderRadius)
+            imageView.frame = CGRect(x: 1, y: 1, width: (attributes.size.width)-2, height: attributes.size.height-2)
+            imageView.layer.cornerRadius = imageView.frame.height * CGFloat(attributes.borderRadius)
+            
+        }
     }
 }
 
