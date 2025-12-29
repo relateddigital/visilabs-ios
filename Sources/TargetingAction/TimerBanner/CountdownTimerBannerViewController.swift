@@ -1,7 +1,8 @@
+
 import UIKit
 
 final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewController {
-
+    
     final class PassthroughWindow: UIWindow {
         var passRectProvider: (() -> CGRect)?
         override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -9,206 +10,236 @@ final class CountdownTimerBannerViewController: VisilabsBaseNotificationViewCont
             return r.contains(point)
         }
     }
-
+    
     private let model: CountdownTimerBannerModel
     private let bannerView = CountdownTimerBannerView()
-    private var topC: NSLayoutConstraint!
-    private var bottomC: NSLayoutConstraint!
     private var timer: Timer?
-    private var targetDate: Date?
-
+    
     init(model: CountdownTimerBannerModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
-        modalTransitionStyle = .crossDissolve
     }
+    
     required init?(coder: NSCoder) { fatalError() }
-
-    deinit { timer?.invalidate() }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
-        buildUI()
-        applyModel()
-        resolveTargetDate()
+        setupUI()
+        startTimer()
     }
-
-    // MARK: - Window show/hide
-    override func show(animated: Bool) {
-        makeWindow()
-        let delay = TimeInterval(model.waitingTime)
-        let work = { [weak self] in
-            self?.animateIn(animated: animated)
-            self?.startTimer()
-        }
-        if delay > 0 { DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work) } else { work() }
-    }
-
-    override func hide(animated: Bool, completion: @escaping () -> Void) {
+    
+    deinit {
         timer?.invalidate()
-        let dur = animated ? 0.22 : 0
-        UIView.animate(withDuration: dur, animations: {
-            self.bannerView.transform = CGAffineTransform(translationX: 0, y: self.topC.isActive ? -14 : 14)
-            self.bannerView.alpha = 0
-            self.window?.alpha = 0
-        }, completion: { _ in
-            self.window?.isHidden = true
-            self.window?.removeFromSuperview()
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .clear 
+        
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        
+        // Position based on model.position (top/bottom)
+        let isTop = model.position == "top"
+        
+        NSLayoutConstraint.activate([
+            bannerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bannerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        
+        if isTop {
+            if #available(iOS 11.0, *) {
+                bannerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+            } else {
+                bannerView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 0).isActive = true
+            }
+        } else {
+            if #available(iOS 11.0, *) {
+                bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+            } else {
+                bannerView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor, constant: 0).isActive = true
+            }
+        }
+        
+        let targetDate = resolveTargetDate()
+        bannerView.configure(model: model, targetDate: targetDate)
+        
+        if let iconUrlStr = model.iconUrl, let url = URL(string: iconUrlStr) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url), let img = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.bannerView.iconImageView.image = img
+                        self.bannerView.iconImageView.isHidden = false
+                    }
+                }
+            }
+        }
+        
+        bannerView.onClose = { [weak self] in
+            guard let self = self else { return }
+            // Notify delegate to dismiss. This ensures 'currentlyShowingTargetingAction' is cleared in VisilabsInAppNotifications.
+            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
+        }
+        
+        bannerView.onBannerClick = { [weak self] in
+            guard let self = self else { return }
+            print("Visilabs: Banner Clicked. ios_lnk: \(String(describing: self.model.ios_lnk))")
+            
+            if let iosLink = self.model.ios_lnk, let url = URL(string: iosLink) {
+                print("Visilabs: Opening URL \(url)")
+                // Call delegate to dismiss AND open URL
+                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: url, shouldTrack: true, additionalTrackingProperties: nil)
+            } else {
+                print("Visilabs: Invalid or missing URL")
+                self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: true, additionalTrackingProperties: nil)
+            }
+        }
+        
+        // Add Swipe
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        bannerView.addGestureRecognizer(gesture)
+    }
+    
+    private func resolveTargetDate() -> Date {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        // Default to current time as base
+        
+        var dateStr = model.counter_Date ?? ""
+        var timeStr = model.counter_Time ?? "00:00:00"
+        
+        // Sanitize
+        dateStr = dateStr.trimmingCharacters(in: .whitespacesAndNewlines)
+        timeStr = timeStr.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !dateStr.isEmpty {
+            // Attempt 1: Combined Date + Time (Most accurate)
+            let combinedStr = "\(dateStr) \(timeStr)"
+            
+            let combinedFormats = [
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm",
+                "dd.MM.yyyy HH:mm:ss",
+                "dd.MM.yyyy HH:mm",
+                "MM/dd/yyyy HH:mm:ss",
+                "MM/dd/yyyy HH:mm"
+            ]
+            
+            for format in combinedFormats {
+                formatter.dateFormat = format
+                if let date = formatter.date(from: combinedStr) {
+                    return date
+                }
+            }
+            
+            // Attempt 2: Date String Only (If combined failed, maybe dateStr has it all or we ignore time)
+            let dateFormats = [
+                "yyyy-MM-dd HH:mm:ss", // In case dateStr has time
+                "yyyy-MM-dd",
+                "dd.MM.yyyy",
+                "MM/dd/yyyy"
+            ]
+            
+            for format in dateFormats {
+                formatter.dateFormat = format
+                if let date = formatter.date(from: dateStr) {
+                    return date
+                }
+            }
+        }
+        
+        // Scenario 2: waitingTime (seconds)
+        if model.waitingTime > 0 {
+             return Date().addingTimeInterval(TimeInterval(model.waitingTime))
+        }
+        
+        return Date()
+    }
+    
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        if gesture.state == .ended {
+            if model.position == "top" && translation.y < -50 {
+                dismiss(animated: true)
+            } else if model.position == "bottom" && translation.y > 50 {
+                dismiss(animated: true)
+            }
+        }
+    }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+    }
+    
+    @objc private func tick() {
+        let targetDate = resolveTargetDate()
+        bannerView.updateTimer(targetDate: targetDate)
+        
+        if Date() >= targetDate {
+            timer?.invalidate()
+        }
+    }
+    
+    override func show(animated: Bool) {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication() else { return }
+        
+        var bounds: CGRect
+        if #available(iOS 13.0, *) {
+            let windowScene = sharedUIApplication.connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first as? UIWindowScene
+            bounds = windowScene?.coordinateSpace.bounds ?? UIScreen.main.bounds
+        } else {
+            bounds = UIScreen.main.bounds
+        }
+        
+        let h: CGFloat = 75 + 20 // Height + Padding
+        let y: CGFloat = (model.position == "top") ? 0 : bounds.height - h
+        
+        let frame = CGRect(x: 0, y: y, width: bounds.width, height: h)
+        
+        if #available(iOS 13.0, *) {
+            let windowScene = sharedUIApplication.connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first as? UIWindowScene
+            
+            if let ws = windowScene {
+                window = PassthroughWindow(frame: frame)
+                window?.windowScene = ws
+            } else {
+                window = PassthroughWindow(frame: frame)
+            }
+        } else {
+            window = PassthroughWindow(frame: frame)
+        }
+        
+        window?.windowLevel = .alert
+        window?.rootViewController = self
+        window?.isHidden = false
+        
+        (window as? PassthroughWindow)?.passRectProvider = { [weak self] in
+            guard let self = self else { return .zero }
+            return self.bannerView.frame
+        }
+        
+        // Animation
+        let startY = (model.position == "top") ? -h : bounds.height
+        let endY = (model.position == "top") ? 0 : bounds.height - h
+        
+        window?.frame.origin.y = startY
+        UIView.animate(withDuration: 0.5) {
+            self.window?.frame.origin.y = endY
+        }
+    }
+    
+    override func hide(animated: Bool, completion: @escaping () -> Void) {
+        let h: CGFloat = 75 + 20
+        let endY = (model.position == "top") ? -h : UIScreen.main.bounds.height
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.window?.frame.origin.y = endY
+        }) { _ in
             self.window = nil
             completion()
-        })
-    }
-
-    private func makeWindow() {
-        if #available(iOS 13.0, *),
-           let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene })
-               .first(where: { $0.activationState == .foregroundActive }) {
-            let w = PassthroughWindow(frame: scene.coordinateSpace.bounds)
-            w.windowScene = scene
-            window = w
-        } else {
-            window = PassthroughWindow(frame: UIScreen.main.bounds)
         }
-
-        guard let w = window as? PassthroughWindow else { return }
-        w.rootViewController = self
-        w.windowLevel = .alert
-        w.alpha = 0
-        w.isHidden = false
-        w.passRectProvider = { [weak self] in
-            guard let self = self else { return .zero }
-            return self.bannerView.convert(self.bannerView.bounds, to: self.view)
-        }
-    }
-
-    private func animateIn(animated: Bool) {
-        bannerView.alpha = 0
-        bannerView.transform = CGAffineTransform(translationX: 0, y: topC.isActive ? -16 : 16)
-        UIView.animate(withDuration: animated ? 0.25 : 0) {
-            self.window?.alpha = 1
-            self.bannerView.alpha = 1
-            self.bannerView.transform = .identity
-        }
-    }
-
-    // MARK: - UI & Model
-    private func buildUI() {
-        view.addSubview(bannerView)
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-
-        if #available(iOS 11.0, *) {
-            let safe = view.safeAreaLayoutGuide
-            NSLayoutConstraint.activate([
-                bannerView.leadingAnchor.constraint(equalTo: safe.leadingAnchor, constant: 12),
-                bannerView.trailingAnchor.constraint(equalTo: safe.trailingAnchor, constant: -12)
-            ])
-            let top = (model.position_on_page?.lowercased() ?? "topposition") == "topposition"
-            topC = bannerView.topAnchor.constraint(equalTo: safe.topAnchor, constant: 8)
-            bottomC = bannerView.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -8)
-            topC.isActive = top
-            bottomC.isActive = !top
-
-            bannerView.onClose = {             self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil) }
-            
-            
-            let tap = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
-            tap.numberOfTapsRequired = 1
-            tap.cancelsTouchesInView = false
-            bannerView.pill.isUserInteractionEnabled = true
-            bannerView.pill.addGestureRecognizer(tap)
-            
-        } else {
-            // Fallback on earlier versions
-        }
-
-    }
-    
-    
-    @objc private func didTapView(_ g: UITapGestureRecognizer) {
-        guard let s = self.model.ios_lnk,
-              let url = URL(string: s),
-              !s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-        UIApplication.shared.open(url)
-    }
-
-    private func applyModel() {
-        // Colors
-        bannerView.backgroundColor = UIColor.clear
-        
-        bannerView.setPillColor(UIColor(hex: model.background_color) ?? UIColor(white: 0.12, alpha: 1))
-    
-        bannerView.setBodyTextColor(UIColor(hex: model.content_body_text_color) ?? .white)
-        
-        bannerView.setCounterColors(
-            bg: UIColor(hex: model.counter_color)?.withAlphaComponent(0.25) ?? UIColor.black.withAlphaComponent(0.25),
-            tile: UIColor(hex: model.counter_color) ?? UIColor.black,
-            text: .white)
-        
-        if model.close_button_color == "black" {
-            bannerView.setCloseColor(UIColor.black)
-        } else {
-            bannerView.setCloseColor(UIColor.white)
-        }
-        
-        bannerView.setAccentColor(UIColor(hex: model.scratch_color) ?? UIColor.black.withAlphaComponent(0.25))
-
-
-        
-        // Content
-        bannerView.setBody(model.content_body ?? "")
-        if let url = model.img { ImageLoader.load(from: url, into: bannerView.iconView) }
-    }
-
-    private func resolveTargetDate() {
-        // txtStartDate öncelikli (“dd.MM.yyyy HH:mm” veya “dd.MM.yyyy”)
-        if let s = model.txtStartDate, let d = Self.parseDate(s) { targetDate = d; return }
-        if let d = model.counter_Date, let t = model.counter_Time, let date = Self.parseDate("\(d) \(t)") { targetDate = date; return }
-        if let d = model.counter_Date, let date = Self.parseDate(d) { targetDate = date }
-    }
-
-    // MARK: - Countdown
-    private func startTimer() {
-        guard let target = targetDate else { bannerView.updateSegments(days: 0, hours: 0, minutes: 0, seconds: 0); return }
-        tick(to: target)
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
-            guard let self = self else { return }
-            self.tick(to: target)
-        })
-    }
-
-    private func tick(to target: Date) {
-        let remain = max(0, Int(target.timeIntervalSinceNow))
-        if remain <= 0 {
-            bannerView.updateSegments(days: 0, hours: 0, minutes: 0, seconds: 0)
-            self.delegate?.notificationShouldDismiss(controller: self, callToActionURL: nil, shouldTrack: false, additionalTrackingProperties: nil)
-            return
-        }
-        let d = remain / 86_400
-        let h = (remain % 86_400) / 3_600
-        let m = (remain % 3_600) / 60
-        let s = remain % 60
-        bannerView.updateSegments(days: d, hours: h, minutes: m, seconds: s)
-    }
-
-    // MARK: - Date parse helpers
-    private static func parseDate(_ raw: String) -> Date? {
-        let cal = Calendar(identifier: .gregorian)
-        let tz = TimeZone(identifier: "Europe/Istanbul")
-        let loc = Locale(identifier: "tr_TR")
-
-        let f1 = DateFormatter()
-        f1.calendar = cal; f1.timeZone = tz; f1.locale = loc
-        f1.dateFormat = "dd.MM.yyyy HH:mm"
-        if let d = f1.date(from: raw) { return d }
-
-        let f2 = DateFormatter()
-        f2.calendar = cal; f2.timeZone = tz; f2.locale = loc
-        f2.dateFormat = "dd.MM.yyyy"
-        if let d = f2.date(from: raw) { return d }
-
-        return nil
     }
 }

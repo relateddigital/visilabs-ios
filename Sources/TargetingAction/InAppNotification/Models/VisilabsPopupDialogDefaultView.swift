@@ -38,11 +38,20 @@ public class VisilabsPopupDialogDefaultView: UIView {
     internal lazy var imageButton = setImageButton()
 
     var colors: [[CGColor]] = []
+    
+    internal lazy var downContentBodyLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
+    
     var numberBgColor: UIColor = .black
     var numberBorderColor: UIColor = .white
     var selectedNumber: Int?
     var expanded = false
     var sctwMail: String = ""
+    var downContentBodyBottomConstraint: NSLayoutConstraint?
 
     @objc public dynamic var titleFont: UIFont {
         get { return titleLabel.font }
@@ -273,7 +282,18 @@ public class VisilabsPopupDialogDefaultView: UIView {
         if model.hasMailForm {
             addSctwMailForm(model)
         } else {
-            sctw.bottom(to: self, offset: -60)
+            if let dcb = model.downContentBody, !dcb.isEmpty {
+                 downContentBodyLabel.text = dcb
+                 downContentBodyLabel.textColor = model.downContentBodyTextColor
+                 downContentBodyLabel.font = model.downContentBodyFont
+                 addSubview(downContentBodyLabel)
+                 downContentBodyLabel.topToBottom(of: sctw, offset: 10)
+                 downContentBodyLabel.leading(to: self, offset: 10)
+                 downContentBodyLabel.trailing(to: self, offset: -10)
+                 downContentBodyBottomConstraint = downContentBodyLabel.bottom(to: self, offset: -30)
+            } else {
+                 sctw.bottom(to: self, offset: -60)
+            }
         }
 
         closeButton.trailing(to: self, offset: -10)
@@ -481,6 +501,10 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
                                                buttonTextColor: model.copyButtonTextColor,
                                                buttonColor: model.copyButtonColor, action: nil)
         addSubview(sctwButton)
+        if downContentBodyBottomConstraint != nil {
+            downContentBodyBottomConstraint?.constant = -60
+            layoutIfNeeded()
+        }
         sctwButton.addTarget(self, action: #selector(copyCodeAndDismiss), for: .touchDown)
         let actid = String(scratchToWin?.actId ?? 0)
         let auth = scratchToWin?.auth ?? ""

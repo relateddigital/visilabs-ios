@@ -706,6 +706,11 @@ class VisilabsTargetingAction {
         let copybuttonCustomFontFamilyIos = extendedProps[VisilabsConstants.copybuttonCustomFontFamilyIos] as? String
         
         
+        let downContentBody = actionData["down_content_body"] as? String
+        let downContentBodyTextColor = extendedProps["down_content_body_text_color"] as? String
+        let downContentBodyTextSize = extendedProps["down_content_body_text_size"] as? String
+        let downContentBodyFontFamily = extendedProps["down_content_body_font_family"] as? String
+        
         var click = ""
         var impression = ""
         if let report = actionData[VisilabsConstants.report] as? [String: Any] {
@@ -762,7 +767,11 @@ class VisilabsTargetingAction {
                                  buttonCustomFontFamilyIos:buttonCustomFontFamilyIos,
                                  promocodeCustomFontFamilyIos:promocodeCustomFontFamilyIos,
                                  copybuttonCustomFontFamilyIos:copybuttonCustomFontFamilyIos,
-                                 iosLink: iosLink)
+                                 iosLink: iosLink,
+                                 downContentBody: downContentBody,
+                                 downContentBodyTextColor: downContentBodyTextColor,
+                                 downContentBodyFontFamily: downContentBodyFontFamily,
+                                 downContentBodyTextSize: downContentBodyTextSize)
     }
     
     private func convertJsonToEmailViewModel(emailForm: MailSubscriptionModel) -> MailSubscriptionViewModel {
