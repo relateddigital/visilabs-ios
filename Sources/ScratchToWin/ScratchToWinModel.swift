@@ -53,6 +53,11 @@ public class ScratchToWinModel: TargetingActionViewModel {
     let promocodeCustomFontFamilyIos : String?
     let copybuttonCustomFontFamilyIos : String?
     let iosLink : String?
+    
+    // NEW PROPERTIES
+    let downContentBody: String?
+    let downContentBodyTextColor: UIColor?
+    let downContentBodyFont: UIFont?
 
     public var jsContent: String?
     public var jsonContent: String?
@@ -125,7 +130,13 @@ public class ScratchToWinModel: TargetingActionViewModel {
                 buttonCustomFontFamilyIos : String?,
                 promocodeCustomFontFamilyIos : String?,
                 copybuttonCustomFontFamilyIos : String?,
-                iosLink : String?) {
+                iosLink : String?,
+                
+                // New Arguments with default nil
+                downContentBody: String? = nil,
+                downContentBodyTextColor: String? = nil,
+                downContentBodyFontFamily: String? = nil,
+                downContentBodyTextSize: String? = nil) {
 
         if let cBColor = closeButtonColor {
             if cBColor.lowercased() == "white" {
@@ -174,6 +185,15 @@ public class ScratchToWinModel: TargetingActionViewModel {
         self.promocodeCustomFontFamilyIos = promocodeCustomFontFamilyIos
         self.copybuttonCustomFontFamilyIos = copybuttonCustomFontFamilyIos
         self.iosLink = iosLink
+        
+        // Initialize New Properties
+        self.downContentBody = downContentBody
+        self.downContentBodyTextColor = UIColor(hex: downContentBodyTextColor)
+        self.downContentBodyFont = VisilabsHelper.getFont(fontFamily: downContentBodyFontFamily,
+                                                        fontSize: downContentBodyTextSize,
+                                                        style: .body, customFont: nil) // Using nil for customFont as it's not provided yet, or should we assume a param?
+                                                        // Android code used ExtendedProps.
+                                                        // For now, standard getFont is safe.
 
         titleFont = VisilabsHelper.getFont(fontFamily: titleFontFamily,
                                                                   fontSize: titleTextSize,

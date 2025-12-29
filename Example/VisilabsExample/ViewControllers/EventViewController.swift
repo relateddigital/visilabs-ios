@@ -331,8 +331,9 @@ struct RandomProduct {
 extension EventViewController: VisilabsInappButtonDelegate {
     func didTapButton(_ notification: VisilabsInAppNotification) {
         print("notification did tapped...")
-        print(notification)
+        print(notification.iosLink ?? "")
     }
+    
     
     func showBannerCarousel() {
         let bannerView = UIView()

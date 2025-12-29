@@ -1,226 +1,278 @@
+
 import UIKit
 
-final class CounterTileView: UIView {
-    private let valueLabel = UILabel()
-    private let unitLabel  = UILabel()
-
-    init() {
-        super.init(frame: .zero)
-        translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 6
-
-        valueLabel.font = .monospacedDigitSystemFont(ofSize: 16, weight: .bold)
-        valueLabel.textAlignment = .center
-        valueLabel.textColor = .white
-
-        unitLabel.font = .systemFont(ofSize: 10, weight: .semibold)
-        unitLabel.textAlignment = .center
-        unitLabel.textColor = .white.withAlphaComponent(0.9)
-
-        let stack = UIStackView(arrangedSubviews: [valueLabel, unitLabel])
-        stack.axis = .vertical; stack.spacing = 2
+final class CountdownTimerBannerView: UIView {
+    
+    // MARK: - Subviews
+    private let containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        return view
+    }()
+    
+    private let contentStack: UIStackView = {
+        let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        stack.axis = .horizontal
+        stack.spacing = 12
+        stack.alignment = .center
+        stack.distribution = .fill
+        return stack
+    }()
+    
+    // Icon view
+    let iconImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
+        iv.clipsToBounds = true
+        iv.isHidden = true
+        return iv
+    }()
+    
+    // Close button (X)
+    private let closeButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        // Large X icon
+        btn.setTitle("✕", for: .normal)
+        // Larger font for "vertically centered" look if it's large
+        btn.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold) 
+        return btn
+    }()
+    
+    private let messageLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.font = .systemFont(ofSize: 14, weight: .medium)
+        lbl.numberOfLines = 2
+        return lbl
+    }()
+    
+    // MARK: - Unified Timer Components
+    
+    private let timerContainer: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = 8
+        v.layer.borderWidth = 2
+        v.layer.borderColor = UIColor.white.cgColor
+        v.clipsToBounds = true
+        return v
+    }()
+    
+    private let timerNumbersStack: UIStackView = {
+        let s = UIStackView()
+        s.axis = .horizontal
+        s.spacing = 8
+        s.alignment = .center
+        s.distribution = .fillProportionally
+        s.translatesAutoresizingMaskIntoConstraints = false
+        return s
+    }()
+    
+    private let timerLabelsStack: UIStackView = {
+        let s = UIStackView()
+        s.axis = .horizontal
+        s.spacing = 8
+        s.alignment = .center
+        s.distribution = .fillProportionally
+        s.translatesAutoresizingMaskIntoConstraints = false
+        return s
+    }()
 
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 6),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 6),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6)
-        ])
-    }
-    required init?(coder: NSCoder) { fatalError() }
-
-    func configure(value: String, unit: String) {
-        valueLabel.text = value
-        unitLabel.text  = unit
-    }
-    func setColors(bg: UIColor, text: UIColor) {
-        backgroundColor = bg
-        valueLabel.textColor = text
-        unitLabel.textColor  = text.withAlphaComponent(0.95)
-    }
-}
-
-final class CounterBadgeView: UIView {
-    private let container = UIStackView()
-    let day = CounterTileView()
-    let hour = CounterTileView()
-    let min = CounterTileView()
-    let sec = CounterTileView()
-
-    private var tileBG = UIColor.white
-    private var textColor = UIColor.white
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 10
-        clipsToBounds = true
-
-        container.axis = .horizontal
-        container.spacing = 6
-        container.alignment = .center
-        container.distribution = .fillEqually
-        container.translatesAutoresizingMaskIntoConstraints = false
-
-        [day, hour, min, sec].forEach { container.addArrangedSubview($0) }
-        addSubview(container)
-
-        NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            container.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            container.topAnchor.constraint(equalTo: topAnchor, constant: 6),
-            container.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
-            heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
-            widthAnchor.constraint(greaterThanOrEqualToConstant: 160)
-        ])
-
-        day.configure(value: "00", unit: "Gün")
-        hour.configure(value: "00", unit: "Saat")
-        min.configure(value: "00", unit: "Dk")
-        sec.configure(value: "00", unit: "Sn")
-        applyTileColors()
-    }
-    required init?(coder: NSCoder) { fatalError() }
-
-    private func applyTileColors() {
-        [day, hour, min, sec].forEach { $0.setColors(bg: tileBG, text: textColor) }
-    }
-
-    func setColors(background: UIColor, tile: UIColor, text: UIColor) {
-        self.backgroundColor = background
-        self.tileBG = tile
-        self.textColor = text
-        applyTileColors()
-    }
-
-    func setValues(days: Int, hours: Int, minutes: Int, seconds: Int) {
-        day.configure(value: String(format: "%02d", days), unit: "Gün")
-        hour.configure(value: String(format: "%02d", hours), unit: "Saat")
-        min.configure(value: String(format: "%02d", minutes), unit: "Dk")
-        sec.configure(value: String(format: "%02d", seconds), unit: "Sn")
-    }
-}
-
-final class CountdownTimerBannerView: UIControl {
-
-    // Callbacks
+    // Labels for numbers
+    private let daysVal = UILabel()
+    private let hoursVal = UILabel()
+    private let minsVal = UILabel()
+    
+    // Labels for texts
+    private let daysKey = UILabel()
+    private let hoursKey = UILabel()
+    private let minsKey = UILabel()
+    
     var onClose: (() -> Void)?
-    var onTap: (() -> Void)?
-
-    let iconView = UIImageView()
-
-    // Private UI
-    public let pill = UIView()
-    public let textLabel = UILabel()
-    public let counter = CounterBadgeView()
-    public let closeButton = UIButton(type: .system)
-    public let accentBlob = UIView()
-
+    var onBannerClick: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        buildUI()
+        setupUI()
+        setupGestures()
     }
+    
     required init?(coder: NSCoder) { fatalError() }
-
-    private func buildUI() {
-        translatesAutoresizingMaskIntoConstraints = false
-
-        accentBlob.translatesAutoresizingMaskIntoConstraints = false
-        accentBlob.backgroundColor = UIColor.black.withAlphaComponent(0.0) 
-        addSubview(accentBlob)
-
-        pill.translatesAutoresizingMaskIntoConstraints = false
-        pill.backgroundColor = UIColor(white: 0.12, alpha: 1)
-        pill.layer.cornerRadius = 16
-        pill.layer.shadowColor = UIColor.black.cgColor
-        pill.layer.shadowOpacity = 0.12
-        pill.layer.shadowRadius = 10
-        pill.layer.shadowOffset = CGSize(width: 0, height: 2)
-        addSubview(pill)
-
-        // icon
-        iconView.layer.cornerRadius = 6
-        iconView.layer.masksToBounds = true
-        iconView.contentMode = .scaleAspectFill
-        iconView.translatesAutoresizingMaskIntoConstraints = false
-
-        // text
-        textLabel.textColor = .white
-        textLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        textLabel.numberOfLines = 2
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
+    
+    private func setupUI() {
+        addSubview(containerView)
+        // Hierarchy
+        containerView.addSubview(contentStack)
+        containerView.addSubview(closeButton)
         
-        // close
-        if #available(iOS 13.0, *) {
-            closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        } else {
-            // Fallback on earlier versions
+        // Timer Labels Setup
+        [daysVal, hoursVal, minsVal].forEach {
+            $0.font = .monospacedDigitSystemFont(ofSize: 16, weight: .bold)
+            $0.textColor = .white
+            $0.textAlignment = .center
         }
-        closeButton.tintColor = .white
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        [daysKey, hoursKey, minsKey].forEach {
+            $0.font = .systemFont(ofSize: 10, weight: .medium)
+            $0.textColor = .white
+            $0.textAlignment = .center
+        }
 
-        // İç layout
-        pill.addSubview(iconView)
-        pill.addSubview(textLabel)
-        pill.addSubview(counter)
-        pill.addSubview(closeButton)
-
-        // Constraints
+        // Timer Layout:
+        // Inside timerContainer -> Vertical Stack (Numbers / Labels)
+        let vStack = UIStackView(arrangedSubviews: [timerNumbersStack, timerLabelsStack])
+        vStack.axis = .vertical
+        vStack.spacing = 2
+        vStack.alignment = .center
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        timerContainer.addSubview(vStack)
+        
+        // Fill container
         NSLayoutConstraint.activate([
-            // dış
-            accentBlob.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            accentBlob.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-            accentBlob.bottomAnchor.constraint(equalTo: bottomAnchor),
-            accentBlob.heightAnchor.constraint(equalToConstant: 14),
-
-            pill.leadingAnchor.constraint(equalTo: leadingAnchor),
-            pill.trailingAnchor.constraint(equalTo: trailingAnchor),
-            pill.topAnchor.constraint(equalTo: topAnchor),
-            pill.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            // içerik
-            iconView.leadingAnchor.constraint(equalTo: pill.leadingAnchor, constant: 12),
-            iconView.centerYAnchor.constraint(equalTo: pill.centerYAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: 28),
-            iconView.heightAnchor.constraint(equalToConstant: 28),
-
-            closeButton.trailingAnchor.constraint(equalTo: pill.trailingAnchor, constant: -10),
-            closeButton.centerYAnchor.constraint(equalTo: pill.centerYAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 24),
-            closeButton.heightAnchor.constraint(equalToConstant: 24),
-
-            counter.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -8),
-            counter.centerYAnchor.constraint(equalTo: pill.centerYAnchor),
-
-            textLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 10),
-            textLabel.trailingAnchor.constraint(lessThanOrEqualTo: counter.leadingAnchor, constant: -10),
-            textLabel.topAnchor.constraint(equalTo: pill.topAnchor, constant: 10),
-            textLabel.bottomAnchor.constraint(equalTo: pill.bottomAnchor, constant: -10),
-
-            heightAnchor.constraint(greaterThanOrEqualToConstant: 56)
+            vStack.topAnchor.constraint(equalTo: timerContainer.topAnchor, constant: 4),
+            vStack.bottomAnchor.constraint(equalTo: timerContainer.bottomAnchor, constant: -4),
+            vStack.leadingAnchor.constraint(equalTo: timerContainer.leadingAnchor, constant: 8),
+            vStack.trailingAnchor.constraint(equalTo: timerContainer.trailingAnchor, constant: -8)
         ])
-
-        // Tap to open
-        addTarget(self, action: #selector(bannerTapped), for: .touchUpInside)
+        
+        // Add items to horizontal stacks
+        timerNumbersStack.addArrangedSubview(daysVal)
+        timerNumbersStack.addArrangedSubview(hoursVal)
+        timerNumbersStack.addArrangedSubview(minsVal)
+        
+        timerLabelsStack.addArrangedSubview(daysKey)
+        timerLabelsStack.addArrangedSubview(hoursKey)
+        timerLabelsStack.addArrangedSubview(minsKey)
+        
+        // Add content to main stack
+        contentStack.addArrangedSubview(iconImageView)
+        contentStack.addArrangedSubview(messageLabel)
+        contentStack.addArrangedSubview(timerContainer)
+        
+        // View Layout
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 75),
+            
+            // Timer Container Width Constraint (Prevent stretching)
+            timerContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 120),
+            
+            // Close Button: Vertically Centered on the Right
+            closeButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            iconImageView.widthAnchor.constraint(equalToConstant: 32),
+            iconImageView.heightAnchor.constraint(equalToConstant: 32),
+            
+            // StackView
+            contentStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            contentStack.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -8),
+            contentStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        ])
+        
+        // Timer Container Content Hugging - Keep it compact
+        timerContainer.setContentHuggingPriority(.required, for: .horizontal)
+        timerContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        
+        // Message Label should expand to fill space
+        messageLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        messageLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
+        closeButton.addTarget(self, action: #selector(handleClose), for: .touchUpInside)
     }
-
-    // Public API
-    func setBody(_ text: String) { textLabel.text = text }
-    func setBodyTextColor(_ c: UIColor) { textLabel.textColor = c }
-    func setCloseColor(_ c: UIColor) { closeButton.tintColor = c }
-    func setAccentColor(_ c: UIColor) { accentBlob.backgroundColor = c }
-    func setPillColor(_ c: UIColor) { pill.backgroundColor = c }
-    func setCounterColors(bg: UIColor, tile: UIColor, text: UIColor) { counter.setColors(background: bg, tile: tile, text: text) }
-
-    func updateSegments(days: Int, hours: Int, minutes: Int, seconds: Int) {
-        counter.setValues(days: days, hours: hours, minutes: minutes, seconds: seconds)
+    
+    private func setupGestures() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleBannerClick))
+        tap.delegate = self
+        tap.cancelsTouchesInView = false // Allow button to receive touches
+        containerView.addGestureRecognizer(tap)
+        
+        // Important: Ensure close button doesn't trigger banner click
+        closeButton.isUserInteractionEnabled = true
+        containerView.isUserInteractionEnabled = true
     }
+    
+    @objc private func handleClose() {
+        onClose?()
+    }
+    
+    @objc private func handleBannerClick() {
+        onBannerClick?()
+    }
+    
+    func configure(model: CountdownTimerBannerModel, targetDate: Date) {
+        // Background Color
+        if let bgHex = model.background {
+            containerView.backgroundColor = UIColor(hex: bgHex)
+        } else {
+            containerView.backgroundColor = .black
+        }
+        
+        // Text Color
+        if let textHex = model.textColor {
+            messageLabel.textColor = UIColor(hex: textHex)
+            closeButton.setTitleColor(UIColor(hex: textHex), for: .normal)
+        } else {
+            messageLabel.textColor = .white
+            closeButton.setTitleColor(.white, for: .normal)
+        }
+        
+        messageLabel.text = model.message ?? model.title
+        
+        // Timer Colors
+        let tileBgColor = UIColor(hex: model.scratchColor) ?? .orange
+        let tileTxtColor = UIColor(hex: model.counterColor) ?? .white
+        
+        timerContainer.backgroundColor = tileBgColor
+        
+        daysVal.textColor = tileTxtColor
+        hoursVal.textColor = tileTxtColor
+        minsVal.textColor = tileTxtColor
+        
+        daysKey.textColor = tileTxtColor
+        hoursKey.textColor = tileTxtColor
+        minsKey.textColor = tileTxtColor
 
-    // Actions
-    @objc private func closeTapped() { onClose?() }
-    @objc private func bannerTapped() { onTap?() }
+        
+        updateTimer(targetDate: targetDate)
+    }
+    
+    func updateTimer(targetDate: Date) {
+        let now = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day, .hour, .minute], from: now, to: targetDate) // No Second
+        
+        let d = max(0, components.day ?? 0)
+        let h = max(0, components.hour ?? 0)
+        let m = max(0, components.minute ?? 0)
+        
+        daysVal.text = String(format: "%02d", d)
+        hoursVal.text = String(format: "%02d", h)
+        minsVal.text = String(format: "%02d", m)
+        
+        daysKey.text = "Gün"
+        hoursKey.text = "Saat"
+        minsKey.text = "Dk" // Shortened for space
+    }
+}
+
+extension CountdownTimerBannerView: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // If the touch is on the close button, the banner gesture should NOT receive it.
+        if touch.view == closeButton {
+            return false
+        }
+        return true
+    }
 }
