@@ -1162,10 +1162,13 @@ class VisilabsTargetingAction {
                 props.imageBorderWidth = imageBorderWidth
             }
             if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylbImgBorderRadius] as? String
-                ?? extendedProps[VisilabsConstants.storyzImgBorderRadius] as? String,
-               let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in:
-                                                                                            CharacterSet(charactersIn: "%"))) {
-                props.imageBorderRadius = imageBorderRadius / 100.0
+                ?? extendedProps[VisilabsConstants.storyzImgBorderRadius] as? String {
+                if imageBorderRadiusString.isEmpty {
+                    props.imageBorderRadius = 0.0
+                } else if let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in:
+                                                                                                CharacterSet(charactersIn: "%"))) {
+                    props.imageBorderRadius = imageBorderRadius / 100.0
+                }
             }
             let storyzLabelColor = extendedProps[VisilabsConstants.storyzLabelColor] as? String ?? ""
             props.storyzLabelColor = storyzLabelColor
