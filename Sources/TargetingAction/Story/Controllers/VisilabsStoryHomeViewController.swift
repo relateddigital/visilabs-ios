@@ -102,12 +102,14 @@ public class VisilabsStoryHomeViewController: NSObject,
     public func collectionView(_ collectionView: UICollectionView,
                                layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if self.storyAction.extendedProperties.shape == "Rectangle" {
-            return CGSize(width: 130, height: 220)
-        }
-        else {
-            return CGSize(width: 80, height: 100)
-        }
+        guard let storyAction = self.storyAction, self.storiesLoaded else {
+                return CGSize(width: 80, height: 100)
+            }
+            if storyAction.extendedProperties.shape == "Rectangle" {
+                 return CGSize(width: 130, height: 220)
+            } else {
+                return CGSize(width: 80, height: 100)
+            }
     }
     
     // First not shown stories
