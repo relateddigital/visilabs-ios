@@ -9,48 +9,46 @@ import Foundation
 
 
 
-struct NotificationBellModel : TargetingActionViewModel 
+public struct NotificationBellModel : TargetingActionViewModel
 {
     
     public var targetingActionType: TargetingActionType = .notificationBell
-    var actId:Int?
-    var title:String?
-    var jsContent: String?
-    var jsonContent: String?
+    public var actId:Int?
+    public var title:String?
+    public var jsContent: String?
+    public var jsonContent: String?
     
-    var notifTitle:String?
+    public var notifTitle:String?
 
-    var report: NotificationBellReport?
+    public var report: NotificationBellReport?
     
-    var waitingTime: Int = 0
+    public var waitingTime: Int = 0
 
     
-    var bellElems : [bellElement]? = [bellElement]()
-    var bellIcon : String?
-    var bellAnimation : String?
+    public var bellElems : [bellElement]? = [bellElement]()
+    public var bellIcon : String?
+    public var bellAnimation : String?
 
     //extended Props
-    var background_color:String?
-    var font_family:String?
-    var title_text_color:String?
-    var title_text_size:String?
+    public var background_color:String?
+    public var font_family:String?
+    public var title_text_color:String?
+    public var title_text_size:String?
     
-    var text_text_color:String?
-    var text_text_size:String?
-
+    public var text_text_color:String?
+    public var text_text_size:String?
     
+    public var iosLink: String?
 }
 
 
 public struct NotificationBellReport: Codable {
-    var impression: String
-    var click: String
+    public var impression: String
+    public var click: String
 }
 
 
 public struct bellElement {
-    
-    var text: String?
-    var ios_lnk : String?
-    
+    public var text: String?
+    public var ios_lnk : String?
 }
