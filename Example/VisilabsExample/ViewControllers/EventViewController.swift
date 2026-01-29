@@ -35,9 +35,13 @@ enum VisilabsEventType: String, CaseIterable {
 
 class EventViewController: FormViewController, BannerDelegate {
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeForm()
+        Visilabs.callAPI().notificationBellDelegate = self
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -328,7 +332,12 @@ struct RandomProduct {
     let randomGender: String
 }
 
-extension EventViewController: VisilabsInappButtonDelegate {
+extension EventViewController: VisilabsInappButtonDelegate, VisilabsNotificationBellDelegate {
+    func didTapNotificationBell(_ notification: NotificationBellModel) {
+        print("Notification Bell Tapped")
+        print(notification.iosLink ?? "") // Tıklanan link burada
+    }
+    
     func didTapButton(_ notification: VisilabsInAppNotification) {
         print("notification did tapped...")
         print(notification.iosLink ?? "")

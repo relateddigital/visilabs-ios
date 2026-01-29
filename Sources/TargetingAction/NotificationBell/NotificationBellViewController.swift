@@ -26,7 +26,12 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
     private let bellImageView = UIImageView()
     private let panel = NotificationBellPanelView()
     private var panelBottomToBellTop: NSLayoutConstraint!
+    private var panelTopToBellBottom: NSLayoutConstraint!
     private var isPanelVisible = false
+    
+    // Constraints for dragging
+    private var bellTrailingConstraint: NSLayoutConstraint!
+    private var bellBottomConstraint: NSLayoutConstraint!
 
     private let model: NotificationBellModel
 
@@ -121,20 +126,87 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         view.addSubview(bellButton)
 
         if #available(iOS 11.0, *) {
+            bellTrailingConstraint = bellButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            bellBottomConstraint = bellButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -86)
+            
             NSLayoutConstraint.activate([
                 bellButton.widthAnchor.constraint(equalToConstant: 52),
                 bellButton.heightAnchor.constraint(equalToConstant: 52),
-                bellButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-                bellButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -86),
-
+                bellTrailingConstraint,
+                bellBottomConstraint,
+                
                 bellImageView.centerXAnchor.constraint(equalTo: bellButton.centerXAnchor),
                 bellImageView.centerYAnchor.constraint(equalTo: bellButton.centerYAnchor),
                 bellImageView.widthAnchor.constraint(equalToConstant: 52),
                 bellImageView.heightAnchor.constraint(equalToConstant: 52),
             ])
         }
-
+        
         bellButton.addTarget(self, action: #selector(togglePanel), for: .touchUpInside)
+        
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        bellButton.addGestureRecognizer(pan)
+    }
+    
+    @objc private func handlePan(_ g: UIPanGestureRecognizer) {
+        let translation = g.translation(in: view)
+        guard let gestureView = g.view else { return }
+        
+        switch g.state {
+        case .changed:
+            // Update constraints (inverted logic because Trailing/Bottom usually negative)
+            // Trailing: view.trailing = safeArea.trailing + constant
+            // Dragging right -> x increases -> constant increases (closer to 0 or positive)
+            // But wait, constant is usually negative (-16).
+            // If I move right, translation.x is positive.
+            // If I want to move right, I should INCREASE the constant?
+            // view.trailing = anchor - 16.
+            // If newTrailing = anchor - 10 (moved right by 6).
+            // constant changes from -16 to -10.
+            // So constant += translation.x
+            
+            bellTrailingConstraint.constant += translation.x
+            bellBottomConstraint.constant += translation.y
+            g.setTranslation(.zero, in: view)
+            
+        case .ended, .cancelled:
+            // Snap logic
+            let screenWidth = view.bounds.width
+            let buttonWidth = gestureView.frame.width
+            let currentX = gestureView.frame.origin.x
+            let centerX = currentX + (buttonWidth / 2)
+            
+            let safePadding: CGFloat = 16
+            
+            // Snap Left or Right
+            let targetConstant: CGFloat
+            if centerX < screenWidth / 2 {
+                // Snap Left
+                // We are using trailing anchor.
+                // bell.trailing = view.safeArea.trailing + constant
+                // We want bell.leading = view.safeArea.leading + 16
+                // bell.trailing = bell.leading + 52
+                // bell.trailing = view.safeArea.leading + 16 + 52
+                // view.safeArea.trailing + constant = view.safeArea.leading + 68
+                // constant = (view.safeArea.leading - view.safeArea.trailing) + 68
+                // constant = -safeAreaWidth + 68
+                
+                let safeWidth = view.safeAreaLayoutGuide.layoutFrame.width
+                targetConstant = 68 - safeWidth // e.g. -300
+            } else {
+                // Snap Right
+                targetConstant = -16
+            }
+            
+            bellTrailingConstraint.constant = targetConstant
+            
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            
+        default:
+            break
+        }
     }
 
     private func setupPanel() {
@@ -143,6 +215,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         panel.translatesAutoresizingMaskIntoConstraints = false
 
         panelBottomToBellTop = panel.bottomAnchor.constraint(equalTo: bellButton.topAnchor, constant: -12)
+        panelTopToBellBottom = panel.topAnchor.constraint(equalTo: bellButton.bottomAnchor, constant: 12)
 
         NSLayoutConstraint.activate([
             panel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -191,8 +264,24 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
 
     private func showPanel() {
         guard !isPanelVisible else { return }
+        
+        // Smart positioning: check bell Y position
+        let screenHeight = view.bounds.height
+        let bellMidY = bellButton.frame.midY
+        
+        // If bell is in top 45%, open open DOWN (using topToBellBottom)
+        if bellMidY < (screenHeight * 0.45) {
+            panelBottomToBellTop.isActive = false
+            panelTopToBellBottom.isActive = true
+        } else {
+            panelTopToBellBottom.isActive = false
+            panelBottomToBellTop.isActive = true
+        }
+        
         isPanelVisible = true
         panel.isHidden = false
+        view.layoutIfNeeded() // Apply constraints change
+        
         
         if let url = model.bellAnimation {
             ImageLoader.load(from: url, into: bellImageView)
@@ -265,10 +354,12 @@ final class BellRowView: UIControl {
     private let iconView = UIImageView()
     private let label = UILabel()
     private var link: String?
+    private var model: NotificationBellModel
 
     init(text: String, link: String?,model: NotificationBellModel) {
-        super.init(frame: .zero)
         self.link = link
+        self.model = model
+        super.init(frame: .zero)
 
         iconView.translatesAutoresizingMaskIntoConstraints = false
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -304,6 +395,10 @@ final class BellRowView: UIControl {
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
+        
+        stack.isUserInteractionEnabled = false
+        iconView.isUserInteractionEnabled = false
+        label.isUserInteractionEnabled = false
 
         addTarget(self, action: #selector(openLink), for: .touchUpInside)
     }
@@ -311,10 +406,21 @@ final class BellRowView: UIControl {
     @objc private func openLink() {
         guard
             let link = link,
-            !link.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-            let url = URL(string: link)
+            !link.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }
-        UIApplication.shared.open(url)
+        
+        // Use delegate calling Visilabs.callAPI()
+        // Pass the model but update its iosLink first (so delegate can access it)
+        
+        if let delegate = Visilabs.callAPI().notificationBellDelegate {
+            var clickModel = model
+            clickModel.iosLink = link
+            delegate.didTapNotificationBell(clickModel)
+        } else {
+            if let url = URL(string: link) {
+                UIApplication.shared.open(url)
+            }
+        }
     }
 
     required init?(coder: NSCoder) { fatalError() }

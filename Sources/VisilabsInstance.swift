@@ -118,6 +118,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     
     
     public weak var inappButtonDelegate: VisilabsInappButtonDelegate?
+    public weak var notificationBellDelegate: VisilabsNotificationBellDelegate?
     
     // swiftlint:disable function_body_length
     init(organizationId: String,
@@ -985,4 +986,8 @@ extension VisilabsInstance {
 
 public protocol VisilabsInappButtonDelegate: AnyObject {
     func didTapButton(_ notification: VisilabsInAppNotification)
+}
+
+public protocol VisilabsNotificationBellDelegate: AnyObject {
+    func didTapNotificationBell(_ notification: NotificationBellModel)
 }
