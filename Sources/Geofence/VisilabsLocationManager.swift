@@ -757,17 +757,23 @@ extension VisilabsLocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        guard let location = manager.location, region.identifier.hasPrefix(kIdentifierPrefix) else {
+        guard region.identifier.hasPrefix(kIdentifierPrefix) else {
             return
         }
-        handleLocation(location, source: .geofenceEnter, region: region)
+        // Use current location or fallback to region center
+        let triggerLocation = manager.location ?? CLLocation(latitude: (region as? CLCircularRegion)?.center.latitude ?? 0.0,
+                                                             longitude: (region as? CLCircularRegion)?.center.longitude ?? 0.0)
+        handleLocation(triggerLocation, source: .geofenceEnter, region: region)
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        guard let location = manager.location, region.identifier.hasPrefix(kIdentifierPrefix) else {
+        guard region.identifier.hasPrefix(kIdentifierPrefix) else {
             return
         }
-        handleLocation(location, source: .geofenceExit, region: region)
+        // Use current location or fallback to region center
+        let triggerLocation = manager.location ?? CLLocation(latitude: (region as? CLCircularRegion)?.center.latitude ?? 0.0,
+                                                             longitude: (region as? CLCircularRegion)?.center.longitude ?? 0.0)
+        handleLocation(triggerLocation, source: .geofenceExit, region: region)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

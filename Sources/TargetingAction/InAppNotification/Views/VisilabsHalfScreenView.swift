@@ -48,10 +48,15 @@ class VisilabsHalfScreenView: UIView {
     private func setupImageView(image: UIImage) {
         imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.image = image
         addSubview(imageView)
+        
+        if image.size.width > 0 {
+            let ratio = image.size.height / image.size.width
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: ratio).isActive = true
+        }
     }
     
     private func setCloseButton() {
