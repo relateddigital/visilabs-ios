@@ -163,9 +163,11 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
         
         // ekranın sağında mı solunda mı
         if self.model.screenXcoordinate == .right {
+            globDrawerView?.leftDrawerMiniWidthConstraint.constant = self.model.miniDrawerWidth
             globDrawerView?.rightDrawerMiniWidthConstraint.constant = 0
             globDrawerView?.rightDrawerMiniView.isHidden = true
         } else if self.model.screenXcoordinate == .left {
+            globDrawerView?.rightDrawerMiniWidthConstraint.constant = self.model.miniDrawerWidth
             globDrawerView?.leftDrawerMiniWidthConstraint.constant = 0
             globDrawerView?.leftDrawerMiniView.isHidden = true
         }
