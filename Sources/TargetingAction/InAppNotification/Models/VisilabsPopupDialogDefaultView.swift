@@ -386,10 +386,11 @@ extension VisilabsPopupDialogDefaultView {
 
     @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
         UIPasteboard.general.string = copyCodeTextButton.currentTitle
-        VisilabsHelper.showCopiedClipboardMessage()
+         VisilabsHelper.showCopiedClipboardMessage()
+        VisilabsHelper.setCopyButtonFeedback(button: copyCodeImageButton)
         
         if getPromoCodeFunction() == "copy_close" {
-            VisilabsHelper.showCopiedClipboardMessage()
+             VisilabsHelper.showCopiedClipboardMessage()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 self.delegate?.dismissPromo()
             }

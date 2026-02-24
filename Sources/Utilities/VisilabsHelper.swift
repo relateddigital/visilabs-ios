@@ -340,6 +340,28 @@ internal class VisilabsHelper {
         }
     }
     
+    static func setCopyButtonFeedback(button: UIButton) {
+        let originalImage = button.image(for: .normal)
+        let originalTitle = button.title(for: .normal)
+        let originalBGC = button.backgroundColor
+        
+        if var checkedImage = VisilabsHelper.getUIImage(named: "checked") {
+            if let img = originalImage {
+                checkedImage = checkedImage.resized(to: img.size) ?? checkedImage
+            }
+            button.setImage(checkedImage.withRenderingMode(.alwaysTemplate), for: .normal)
+            button.tintColor = .black
+            button.setTitle(nil, for: .normal)
+            button.backgroundColor = originalBGC
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            button.setImage(originalImage, for: .normal)
+            button.setTitle(originalTitle, for: .normal)
+            button.backgroundColor = originalBGC
+        }
+    }
+    
 }
 
 class ToastLabel: UILabel {

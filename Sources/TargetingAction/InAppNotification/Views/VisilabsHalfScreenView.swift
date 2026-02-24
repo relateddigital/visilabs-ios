@@ -15,6 +15,10 @@ class VisilabsHalfScreenView: UIView {
     var imageView: UIImageView!
     var closeButton: UIButton!
     
+    var promotionContainer: UIView?
+    var promotionCodeLabel: UILabel?
+    var copyButton: UIButton?
+    
     init(frame: CGRect, notification: VisilabsInAppNotification) {
         self.notification = notification
         super.init(frame: frame)
@@ -25,6 +29,7 @@ class VisilabsHalfScreenView: UIView {
             }
             setupImageView(image: image)
         }
+        setupPromotionCode()
         setCloseButton()
         layoutContent()
     }
@@ -59,6 +64,30 @@ class VisilabsHalfScreenView: UIView {
         }
     }
     
+    private func setupPromotionCode() {
+        guard let promoCode = notification.promotionCode, !promoCode.isEmpty else { return }
+        
+        promotionContainer = UIView()
+        promotionContainer?.translatesAutoresizingMaskIntoConstraints = false
+        promotionContainer?.backgroundColor = .clear
+        addSubview(promotionContainer!)
+        
+        promotionCodeLabel = UILabel()
+        promotionCodeLabel?.text = promoCode
+        promotionCodeLabel?.font = notification.messageTitleFont
+        promotionCodeLabel?.textColor = notification.promotionTextColor ?? notification.messageTitleColor
+        promotionCodeLabel?.textAlignment = .center
+        promotionCodeLabel?.translatesAutoresizingMaskIntoConstraints = false
+        promotionContainer?.addSubview(promotionCodeLabel!)
+        
+        copyButton = UIButton()
+        copyButton?.translatesAutoresizingMaskIntoConstraints = false
+        let copyIcon = VisilabsHelper.getUIImage(named: "RelatedCopyButton")
+        copyButton?.setImage(copyIcon, for: .normal)
+        copyButton?.addTarget(self, action: #selector(copyButtonTapped), for: .touchUpInside)
+        promotionContainer?.addSubview(copyButton!)
+    }
+    
     private func setCloseButton() {
         closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -83,12 +112,33 @@ class VisilabsHalfScreenView: UIView {
         imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
         imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
         
+        if let promotionContainer = promotionContainer {
+            promotionContainer.topToBottom(of: imageView, offset: 0)
+            promotionContainer.leading(to: self, offset: 0, relation: .equal, priority: .required)
+            promotionContainer.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+            
+            promotionCodeLabel?.center(in: promotionContainer)
+            
+            copyButton?.centerY(to: promotionContainer)
+            copyButton?.trailing(to: promotionContainer, offset: -20)
+            copyButton?.width(30)
+            copyButton?.height(30)
+        }
+        
         closeButton.top(to: self, offset: -5.0)
         closeButton.trailing(to: self, offset: -10.0)
         
         self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
         self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true
         self.layoutIfNeeded()
+    }
+    
+    @objc func copyButtonTapped(_ sender: UIButton) {
+        if let code = promotionCodeLabel?.text {
+            UIPasteboard.general.string = code
+            VisilabsHelper.showCopiedClipboardMessage()
+            VisilabsHelper.setCopyButtonFeedback(button: sender)
+        }
     }
     
     override func layoutSubviews() {
@@ -98,6 +148,17 @@ class VisilabsHalfScreenView: UIView {
         } else {
             titleLabel.height(titleLabel.intrinsicContentSize.height + 20 )
         }
+        
+        if let promotionContainer = promotionContainer, let promotionCodeLabel = promotionCodeLabel {
+            if promotionCodeLabel.text.isNilOrWhiteSpace {
+                promotionContainer.height(0)
+                promotionContainer.isHidden = true
+            } else {
+                let promoHeight = promotionCodeLabel.intrinsicContentSize.height + 20
+                promotionContainer.height(promoHeight)
+            }
+        }
+        
         super.layoutSubviews()
     }
     

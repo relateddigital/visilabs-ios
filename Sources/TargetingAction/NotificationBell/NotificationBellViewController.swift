@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import ImageIO
 
 final class PassthroughWindow: UIWindow {
     var shouldReceiveTouchAtPoint: ((CGPoint) -> Bool)?
@@ -342,11 +343,54 @@ final class ImageLoader {
     static func load(from urlString: String?, into imageView: UIImageView) {
         guard let s = urlString, let url = URL(string: s) else { return }
         let task = URLSession.shared.dataTask(with: url) { data, _, _ in
-            guard let d = data, let img = UIImage(data: d) else { return }
-            DispatchQueue.main.async { imageView.image = img }
+            guard let d = data else { return }
+                        
+                        // Try to create animated image if it's a GIF
+                        let img = ImageLoader.animatedImage(with: d) ?? UIImage(data: d)
+                        
+                        DispatchQueue.main.async {
+                            imageView.image = img
+                        }
         }
         task.resume()
     }
+    
+    static func animatedImage(with data: Data) -> UIImage? {
+            guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+            let count = CGImageSourceGetCount(source)
+            
+            if count <= 1 {
+                return UIImage(data: data)
+            }
+            
+            var images = [UIImage]()
+            var duration: TimeInterval = 0
+            
+            for i in 0..<count {
+                if let cgImage = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                    images.append(UIImage(cgImage: cgImage))
+                    
+                    var frameDuration: TimeInterval = 0.1
+                    if let properties = CGImageSourceCopyPropertiesAtIndex(source, i, nil) as? [String: Any],
+                       let gifInfo = properties[kCGImagePropertyGIFDictionary as String] as? [String: Any] {
+                        
+                        if let delayTime = gifInfo[kCGImagePropertyGIFUnclampedDelayTime as String] as? NSNumber {
+                            frameDuration = delayTime.doubleValue
+                        } else if let delayTime = gifInfo[kCGImagePropertyGIFDelayTime as String] as? NSNumber {
+                            frameDuration = delayTime.doubleValue
+                        }
+                    }
+                    
+                    if frameDuration < 0.011 {
+                        frameDuration = 0.1
+                    }
+                    
+                    duration += frameDuration
+                }
+            }
+            
+            return UIImage.animatedImage(with: images, duration: duration)
+        }
 }
 
 // MARK: - Row (check + text + tap)
