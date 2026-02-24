@@ -159,6 +159,7 @@ class VisilabsFullNotificationViewController: VisilabsBaseNotificationViewContro
     @IBAction func promotionCodeCopied(_ sender: Any) {
         pasteboard.string = copyTextButton.currentTitle
         VisilabsHelper.showCopiedClipboardMessage()
+        VisilabsHelper.setCopyButtonFeedback(button: copyImageButton)
     }
 
     func setupButtonView(buttonView: UIButton) {

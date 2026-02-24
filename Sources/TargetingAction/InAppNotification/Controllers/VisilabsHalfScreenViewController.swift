@@ -92,7 +92,19 @@ class VisilabsHalfScreenViewController: VisilabsBaseNotificationViewController {
 
         let bottomInset = Double(VisilabsHelper.getSafeAreaInsets().bottom)
         let topInset = Double(VisilabsHelper.getSafeAreaInsets().top)
-        halfScreenHeight = Double(visilabsHalfScreenView.imageView.frame.height) + Double(visilabsHalfScreenView.titleLabel.frame.height)
+        
+        var promoHeight: Double = 0.0
+        if let promoContainer = visilabsHalfScreenView.promotionContainer, !promoContainer.isHidden {
+            promoHeight = Double(promoContainer.frame.height)
+            if promoHeight == 0.0, let promoLabel = visilabsHalfScreenView.promotionCodeLabel {
+                let labelHeight = promoLabel.intrinsicContentSize.height
+                if labelHeight > 0 {
+                    promoHeight = Double(labelHeight) + 20.0
+                }
+            }
+        }
+        
+        halfScreenHeight = Double(visilabsHalfScreenView.imageView.frame.height) + Double(visilabsHalfScreenView.titleLabel.frame.height) + promoHeight
 
         let frameY = halfScreenNotification.position == .bottom ? Double(bounds.size.height) - (halfScreenHeight + bottomInset) : topInset
 

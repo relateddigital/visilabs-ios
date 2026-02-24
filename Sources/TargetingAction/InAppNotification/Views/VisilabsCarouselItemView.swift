@@ -98,6 +98,7 @@ extension VisilabsCarouselItemView {
     @objc func copyCodeTextButtonTapped(_ sender: UIButton) {
         UIPasteboard.general.string = copyCodeTextButton.currentTitle
         VisilabsHelper.showCopiedClipboardMessage()
+        VisilabsHelper.setCopyButtonFeedback(button: copyCodeImageButton)
     }
 }
 
