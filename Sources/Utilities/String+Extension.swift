@@ -65,6 +65,32 @@ extension String {
         return click
     }
 
+    func parseImpression() -> ParsedImpression {
+        var impression = ParsedImpression(omZcp: "", omZdn: "")
+        let strArr = self.split(separator: "&")
+        
+        if strArr.count > 1 {
+            let firstParameterParts = String(strArr[0]).split(separator: "=")
+            if firstParameterParts.count > 1 {
+                if firstParameterParts[0].compare("OM.zdn", options: .caseInsensitive) == .orderedSame {
+                    impression.omZdn = String(firstParameterParts[1])
+                } else if firstParameterParts[0].compare("OM.zcp", options: .caseInsensitive) == .orderedSame {
+                    impression.omZcp = String(firstParameterParts[1])
+                }
+            }
+            let secondParameterParts = String(strArr[1]).split(separator: "=")
+            if secondParameterParts.count > 1 {
+                if secondParameterParts[0].compare("OM.zdn", options: .caseInsensitive) == .orderedSame {
+                    impression.omZdn = String(secondParameterParts[1])
+                } else if secondParameterParts[0].compare("OM.zcp", options: .caseInsensitive) == .orderedSame {
+                    impression.omZcp = String(secondParameterParts[1])
+                }
+                
+            }
+        }
+        return impression
+    }
+
     func removeEscapingCharacters() -> String {
         return self.replacingOccurrences(of: "\\n", with: "\n")
     }
@@ -80,4 +106,9 @@ struct ParsedPermissionString {
 struct ParsedClick {
     var omZpc: String
     var omZn: String
+}
+
+struct ParsedImpression {
+    var omZcp: String
+    var omZdn: String
 }
