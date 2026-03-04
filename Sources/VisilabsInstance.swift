@@ -634,6 +634,17 @@ extension VisilabsInstance: VisilabsInAppNotificationsDelegate {
         properties["OM.zpc"] = spinToWinReport.click.parseClick().omZpc
         customEvent(VisilabsConstants.omEvtGif, properties: properties)
     }
+    
+    func trackScratchToWinImpression(report: TargetingActionReport?) {
+        guard let report = report, !report.impression.isEmptyOrWhitespace else { return }
+        var properties = [String: String]()
+        properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"
+        let parsedImpression = report.impression.parseImpression()
+        properties["OM.zdn"] = parsedImpression.omZdn
+        properties["OM.zcp"] = parsedImpression.omZcp
+        customEvent(VisilabsConstants.omEvtGif, properties: properties)
+    }
+
     func trackPollClick(pollReport: PollReport) {
         var properties = [String: String]()
         properties[VisilabsConstants.domainkey] = "\(visilabsProfile.dataSource)_IOS"

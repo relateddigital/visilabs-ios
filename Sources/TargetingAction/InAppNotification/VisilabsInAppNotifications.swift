@@ -297,6 +297,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             popUpVC.delegate = self
             popUpVC.inappButtonDelegate = self.inappButtonDelegate
             popUpVC.show(animated: false)
+            Visilabs.callAPI().trackScratchToWinImpression(report: model.report)
         })
 
         return true
