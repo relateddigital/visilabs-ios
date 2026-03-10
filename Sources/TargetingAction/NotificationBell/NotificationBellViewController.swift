@@ -221,8 +221,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
         NSLayoutConstraint.activate([
             panel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             panel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            panelBottomToBellTop,
-            panel.heightAnchor.constraint(greaterThanOrEqualToConstant: 280)
+            panelBottomToBellTop
         ])
 
         panel.alpha = 0
@@ -483,7 +482,7 @@ final class NotificationBellPanelView: UIView {
         if #available(iOS 13.0, *) { backgroundColor = .secondarySystemBackground }
         layer.cornerRadius = 16
         if #available(iOS 11.0, *) {
-            layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.1
@@ -495,11 +494,11 @@ final class NotificationBellPanelView: UIView {
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.numberOfLines = 0
 
-        if #available(iOS 13.0, *) {
-            closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-            closeButton.tintColor = .label
-        }
+        closeButton.setImage(VisilabsHelper.getUIImage(named: "VisilabsCloseButtonBlack"), for: .normal)
         closeButton.accessibilityLabel = "Kapat"
+        closeButton.tintColor = .black
+
+        
 
         let header = UIView()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -509,16 +508,12 @@ final class NotificationBellPanelView: UIView {
         header.addSubview(titleLabel)
         header.addSubview(closeButton)
 
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        container.translatesAutoresizingMaskIntoConstraints = false
         contentStack.axis = .vertical
         contentStack.spacing = 8
         contentStack.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(header)
-        addSubview(scrollView)
-        scrollView.addSubview(container)
-        container.addSubview(contentStack)
+        addSubview(contentStack)
 
         if #available(iOS 11.0, *) {
             NSLayoutConstraint.activate([
@@ -528,29 +523,18 @@ final class NotificationBellPanelView: UIView {
 
                 closeButton.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -16),
                 closeButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-                closeButton.widthAnchor.constraint(equalToConstant: 24),
-                closeButton.heightAnchor.constraint(equalToConstant: 24),
+                closeButton.widthAnchor.constraint(equalToConstant: 18),
+                closeButton.heightAnchor.constraint(equalToConstant: 18),
 
                 titleLabel.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
                 titleLabel.topAnchor.constraint(equalTo: header.topAnchor, constant: 16),
                 titleLabel.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
                 titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -12),
 
-                scrollView.topAnchor.constraint(equalTo: header.bottomAnchor),
-                scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-
-                container.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-                container.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-                container.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-                container.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-                container.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-
-                contentStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
-                contentStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
-                contentStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
-                contentStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16),
+                contentStack.topAnchor.constraint(equalTo: header.bottomAnchor),
+                contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+                contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+                contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             ])
         }
     }

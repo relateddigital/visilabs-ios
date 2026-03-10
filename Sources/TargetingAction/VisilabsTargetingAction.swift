@@ -607,14 +607,13 @@ class VisilabsTargetingAction {
         if let texts = actionData[VisilabsConstants.notification_texts] as? [[String: Any]] {
             
             for elem in texts {
-                if let text = elem[VisilabsConstants.text] as? String,
-                   let iosLink = elem[VisilabsConstants.iosLnk] as? String {
+                if let text = elem[VisilabsConstants.text] as? String {
+                    let iosLink = elem[VisilabsConstants.iosLnk] as? String
                     
                     var ballElem = bellElement()
                     ballElem.ios_lnk = iosLink
                     ballElem.text = text
                     notificationBellModel.bellElems?.append(ballElem)
-
                 }
             }
             
