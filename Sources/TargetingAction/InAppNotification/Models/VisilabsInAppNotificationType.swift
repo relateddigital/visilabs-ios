@@ -18,6 +18,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case emailForm = "subscription_email"
     case alert
     case npsWithNumbers = "nps_with_numbers"
+    case npsWithMultiplePopup = "nps_with_multiple_popup"
     case halfScreenImage = "half_screen_image"
     case scratchToWin = "scratch-to-win"
     case secondNps = "nps_with_secondpopup"

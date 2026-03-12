@@ -84,12 +84,14 @@ extension VisilabsPopupDialogDefaultView {
 
     internal func setNpsView() -> CosmosView {
         var settings = CosmosSettings()
-        settings.filledColor = UIColor.systemYellow
-        settings.emptyColor = UIColor.white
-        settings.filledBorderColor = UIColor.white
-        settings.emptyBorderColor = UIColor.systemYellow
+        settings.filledColor = UIColor(hex: "#FF0000") ?? .red
+        settings.emptyColor = UIColor(white: 0.98, alpha: 1.0)
+        settings.filledBorderColor = UIColor(hex: "#FF0000") ?? .red
+        settings.emptyBorderColor = UIColor(white: 0.8, alpha: 1.0)
+        settings.emptyBorderWidth = 1.0
         settings.fillMode = .half
-        settings.starSize = 40.0
+        settings.starSize = 35.0
+        settings.starMargin = 10.0
         settings.disablePanGestures = true
         let npsView = CosmosView(settings: settings)
         npsView.translatesAutoresizingMaskIntoConstraints = false
@@ -543,5 +545,134 @@ extension VisilabsPopupDialogDefaultView: UICollectionViewDelegate, UICollection
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 10
+    }
+}
+
+extension VisilabsPopupDialogDefaultView {
+    internal func setupForNpsWithMultiplePopup() {
+        imageView.removeFromSuperview()
+        titleLabel.removeFromSuperview()
+        messageLabel.removeFromSuperview()
+        npsView.removeFromSuperview()
+        feedbackTF.removeFromSuperview()
+        
+        let existingScaleLabel = self.viewWithTag(999) as? UILabel
+        existingScaleLabel?.removeFromSuperview()
+        
+        addSubview(titleLabel)
+        addSubview(npsView)
+
+        titleLabel.top(to: self, offset: 30.0)
+        titleLabel.leading(to: self, offset: 20.0)
+        titleLabel.trailing(to: self, offset: -20.0)
+        
+        npsView.topToBottom(of: titleLabel, offset: 30.0)
+        npsView.centerX(to: self)
+
+        // Min/Max Scale label
+        let scaleLabel = UILabel()
+        scaleLabel.tag = 999
+        scaleLabel.numberOfLines = 0
+        scaleLabel.textAlignment = .center
+        scaleLabel.textColor = UIColor(white: 0.2, alpha: 1)
+        scaleLabel.font = .systemFont(ofSize: 11)
+        if let popupBody = visilabsInAppNotification?.messageBody {
+            scaleLabel.text = popupBody.removeEscapingCharacters()
+        }
+        addSubview(scaleLabel)
+        
+        scaleLabel.topToBottom(of: npsView, offset: 15.0)
+        scaleLabel.leading(to: self, offset: 20.0)
+        scaleLabel.trailing(to: self, offset: -20.0)
+        scaleLabel.bottom(to: self, offset: -25.0)
+    }
+
+    internal func setupPage2ForNpsWithMultiplePopup() {
+        imageView.removeFromSuperview()
+        titleLabel.removeFromSuperview()
+        messageLabel.removeFromSuperview()
+        npsView.removeFromSuperview()
+        feedbackTF.removeFromSuperview()
+        let existingScaleLabel = self.viewWithTag(999) as? UILabel
+        existingScaleLabel?.removeFromSuperview()
+        
+        addSubview(titleLabel)
+        addSubview(messageLabel)
+        addSubview(feedbackTF)
+
+        if let popupTitle = visilabsInAppNotification?.multiplePopupTitle {
+            titleLabel.text = popupTitle.removeEscapingCharacters()
+        }
+        if let popupBody = visilabsInAppNotification?.multiplePopupBody {
+            messageLabel.text = popupBody.removeEscapingCharacters()
+        }
+
+        titleLabel.top(to: self, offset: 30.0)
+        titleLabel.leading(to: self, offset: 20.0)
+        titleLabel.trailing(to: self, offset: -20.0)
+        
+        messageLabel.topToBottom(of: titleLabel, offset: 25.0)
+        messageLabel.leading(to: self, offset: 20.0)
+        messageLabel.trailing(to: self, offset: -20.0)
+
+        feedbackTF.topToBottom(of: messageLabel, offset: 25.0)
+        feedbackTF.leading(to: self, offset: 20)
+        feedbackTF.trailing(to: self, offset: -20)
+        feedbackTF.bottom(to: self, offset: -30)
+        feedbackTF.height(45)
+
+        feedbackTF.borderStyle = .none
+        feedbackTF.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
+        feedbackTF.layer.borderWidth = 1.0
+        feedbackTF.layer.cornerRadius = 8.0
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 45))
+        feedbackTF.leftView = paddingView
+        feedbackTF.leftViewMode = .always
+        feedbackTF.placeholder = "Düşüncelerinizi paylaşabilirsiniz."
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
+    }
+
+    internal func setupPage3ForNpsWithMultiplePopup() {
+        imageView.removeFromSuperview()
+        titleLabel.removeFromSuperview()
+        messageLabel.removeFromSuperview()
+        npsView.removeFromSuperview()
+        feedbackTF.removeFromSuperview()
+        let existingScaleLabel = self.viewWithTag(999) as? UILabel
+        existingScaleLabel?.removeFromSuperview()
+        
+        addSubview(imageView)
+        addSubview(titleLabel)
+
+        if let popupTitle3 = visilabsInAppNotification?.multiplePopupTitle3 {
+            titleLabel.text = popupTitle3.removeEscapingCharacters()
+        }
+        
+        if let imgUrl = visilabsInAppNotification?.multiplePopupImage3Url {
+            imageView.setImage(withUrl: imgUrl)
+            imageView.contentMode = .scaleAspectFit
+        } else {
+            imageView.image = nil
+        }
+        
+        imageView.top(to: self, offset: 30)
+        imageView.leading(to: self, offset: 30)
+        imageView.trailing(to: self, offset: -30)
+        imageView.height(100)
+        
+        titleLabel.topToBottom(of: imageView, offset: 25)
+        titleLabel.leading(to: self, offset: 20)
+        titleLabel.trailing(to: self, offset: -20)
+        titleLabel.bottom(to: self, offset: -30)
+
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
 }

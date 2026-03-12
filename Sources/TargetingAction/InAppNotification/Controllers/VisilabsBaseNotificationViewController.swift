@@ -13,7 +13,9 @@ public protocol VisilabsNotificationViewControllerDelegate: AnyObject {
                                    callToActionURL: URL?,
                                    shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool
-    
+    func trackNotification(controller: VisilabsBaseViewProtocol,
+                           event: String,
+                           properties: [String: String]?)
 }
 
 
