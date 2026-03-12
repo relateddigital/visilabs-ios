@@ -56,6 +56,21 @@ public class VisilabsInAppNotification {
         public static let videourl = "videourl"
         public static let secondPopupVideourl1 = "secondPopup_videourl1"
         public static let secondPopupVideourl2 = "secondPopup_videourl2"
+        public static let multiplePopupTitle = "multiple_popup_msg_title"
+        public static let multiplePopupBody = "multiple_popup_msg_body"
+        public static let multiplePopupButtonText2 = "multiple_popup_button_text2"
+        public static let multiplePopupButtonTextColor2 = "multiple_popup_button_text_color2"
+        public static let multiplePopupButtonColor2 = "multiple_popup_button_color2"
+        public static let multiplePopupButtonText3 = "multiple_popup_button_text3"
+        public static let multiplePopupButtonTextColor3 = "multiple_popup_button_text_color3"
+        public static let multiplePopupButtonColor3 = "multiple_popup_button_color3"
+        public static let multiplePopupTitle3 = "multiple_popup_msg_title3"
+        public static let multiplePopupButtonText4 = "multiple_popup_button_text4"
+        public static let multiplePopupButtonTextColor4 = "multiple_popup_button_text_color4"
+        public static let multiplePopupButtonColor4 = "multiple_popup_button_color4"
+        public static let multiplePopupImage3 = "multiple_popup_image3"
+        public static let multiplePopupBodyTextSize2 = "multiple_popup_msg_body_textsize2"
+        public static let multiplePopupFeedbackMinPoint = "multiple_popup_feedbackform_minpoint"
         
         public static let displayType = "display_type"
         public static let duration = "duration"
@@ -110,6 +125,24 @@ public class VisilabsInAppNotification {
     let videourl: String?
     let secondPopupVideourl1: String?
     let secondPopupVideourl2: String?
+    
+    let multiplePopupTitle: String?
+    let multiplePopupBody: String?
+    let multiplePopupButtonText2: String?
+    let multiplePopupButtonTextColor2: UIColor?
+    let multiplePopupButtonColor2: UIColor?
+    let multiplePopupButtonText3: String?
+    let multiplePopupButtonTextColor3: UIColor?
+    let multiplePopupButtonColor3: UIColor?
+    let multiplePopupTitle3: String?
+    let multiplePopupButtonText4: String?
+    let multiplePopupButtonTextColor4: UIColor?
+    let multiplePopupButtonColor4: UIColor?
+    let multiplePopupImage3String: String?
+    let multiplePopupBodyTextSize2: String?
+    let multiplePopupFeedbackMinPoint: String?
+    var multiplePopupImage3Url: URL?
+
     var duration:Int?
     var pos : String?
 
@@ -220,6 +253,21 @@ public class VisilabsInAppNotification {
                 videourl: String?,
                 secondPopupVideourl1: String?,
                 secondPopupVideourl2: String?,
+                multiplePopupTitle: String? = nil,
+                multiplePopupBody: String? = nil,
+                multiplePopupButtonText2: String? = nil,
+                multiplePopupButtonTextColor2: String? = nil,
+                multiplePopupButtonColor2: String? = nil,
+                multiplePopupButtonText3: String? = nil,
+                multiplePopupButtonTextColor3: String? = nil,
+                multiplePopupButtonColor3: String? = nil,
+                multiplePopupTitle3: String? = nil,
+                multiplePopupButtonText4: String? = nil,
+                multiplePopupButtonTextColor4: String? = nil,
+                multiplePopupButtonColor4: String? = nil,
+                multiplePopupImage3String: String? = nil,
+                multiplePopupBodyTextSize2: String? = nil,
+                multiplePopupFeedbackMinPoint: String? = nil,
                 displayType: String? = "popup",
                 duration:Int?,
                 pos:String?) {
@@ -312,6 +360,26 @@ public class VisilabsInAppNotification {
         self.videourl = videourl
         self.secondPopupVideourl1 = secondPopupVideourl1
         self.secondPopupVideourl2 = secondPopupVideourl2
+        
+        self.multiplePopupTitle = multiplePopupTitle
+        self.multiplePopupBody = multiplePopupBody
+        self.multiplePopupButtonText2 = multiplePopupButtonText2
+        self.multiplePopupButtonTextColor2 = UIColor(hex: multiplePopupButtonTextColor2)
+        self.multiplePopupButtonColor2 = UIColor(hex: multiplePopupButtonColor2)
+        self.multiplePopupButtonText3 = multiplePopupButtonText3
+        self.multiplePopupButtonTextColor3 = UIColor(hex: multiplePopupButtonTextColor3)
+        self.multiplePopupButtonColor3 = UIColor(hex: multiplePopupButtonColor3)
+        self.multiplePopupTitle3 = multiplePopupTitle3
+        self.multiplePopupButtonText4 = multiplePopupButtonText4
+        self.multiplePopupButtonTextColor4 = UIColor(hex: multiplePopupButtonTextColor4)
+        self.multiplePopupButtonColor4 = UIColor(hex: multiplePopupButtonColor4)
+        self.multiplePopupImage3String = multiplePopupImage3String
+        self.multiplePopupBodyTextSize2 = multiplePopupBodyTextSize2
+        self.multiplePopupFeedbackMinPoint = multiplePopupFeedbackMinPoint
+        if !multiplePopupImage3String.isNilOrWhiteSpace {
+            self.multiplePopupImage3Url = VisilabsHelper.getImageUrl(multiplePopupImage3String!, type: self.type)
+        }
+        
         self.displayType = displayType
         
         setFonts()
@@ -438,6 +506,27 @@ public class VisilabsInAppNotification {
         secondPopupVideourl1 = actionData[PayloadKey.secondPopupVideourl1] as? String
         secondPopupVideourl2 = actionData[PayloadKey.secondPopupVideourl2] as? String
         secondPopupMinPoint = actionData[PayloadKey.secondPopupMinPoint] as? String
+        
+        multiplePopupTitle = actionData[PayloadKey.multiplePopupTitle] as? String
+        multiplePopupBody = actionData[PayloadKey.multiplePopupBody] as? String
+        multiplePopupButtonText2 = actionData[PayloadKey.multiplePopupButtonText2] as? String
+        multiplePopupButtonTextColor2 = UIColor(hex: actionData[PayloadKey.multiplePopupButtonTextColor2] as? String)
+        multiplePopupButtonColor2 = UIColor(hex: actionData[PayloadKey.multiplePopupButtonColor2] as? String)
+        multiplePopupButtonText3 = actionData[PayloadKey.multiplePopupButtonText3] as? String
+        multiplePopupButtonTextColor3 = UIColor(hex: actionData[PayloadKey.multiplePopupButtonTextColor3] as? String)
+        multiplePopupButtonColor3 = UIColor(hex: actionData[PayloadKey.multiplePopupButtonColor3] as? String)
+        multiplePopupTitle3 = actionData[PayloadKey.multiplePopupTitle3] as? String
+        multiplePopupButtonText4 = actionData[PayloadKey.multiplePopupButtonText4] as? String
+        multiplePopupButtonTextColor4 = UIColor(hex: actionData[PayloadKey.multiplePopupButtonTextColor4] as? String)
+        multiplePopupButtonColor4 = UIColor(hex: actionData[PayloadKey.multiplePopupButtonColor4] as? String)
+        multiplePopupImage3String = actionData[PayloadKey.multiplePopupImage3] as? String
+        multiplePopupBodyTextSize2 = actionData[PayloadKey.multiplePopupBodyTextSize2] as? String
+        multiplePopupFeedbackMinPoint = actionData[PayloadKey.multiplePopupFeedbackMinPoint] as? String
+        
+        if !multiplePopupImage3String.isNilOrWhiteSpace {
+            multiplePopupImage3Url = VisilabsHelper.getImageUrl(multiplePopupImage3String!, type: self.type)
+        }
+        
         previousPopupPoint = nil
         duration = actionData[PayloadKey.duration] as? Int
         pos = actionData[PayloadKey.pos] as? String

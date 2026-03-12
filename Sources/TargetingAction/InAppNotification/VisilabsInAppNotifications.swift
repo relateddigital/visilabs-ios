@@ -337,6 +337,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                     self.delegate?.trackNotification(controller.notification!, event: "event", properties: properties)
                 }
             }
+
             self.currentlyShowingNotification = nil
             self.currentlyShowingTargetingAction = nil
         }
@@ -357,6 +358,15 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             controller.hide(animated: true, completion: completionBlock)
         }
         return true
+    }
+
+    func trackNotification(controller: VisilabsBaseViewProtocol, event: String, properties: [String: String]?) {
+        if let notification = controller.notification {
+            var finalProperties = properties ?? [String: String]()
+            let actId = notification.actId
+            finalProperties["OM.s_page"] = "act-\(actId)"
+            self.delegate?.trackNotification(notification, event: event, properties: finalProperties)
+        }
     }
 
     func alertDismiss() {

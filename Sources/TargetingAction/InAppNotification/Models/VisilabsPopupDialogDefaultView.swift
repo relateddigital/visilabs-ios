@@ -335,6 +335,8 @@ public class VisilabsPopupDialogDefaultView: UIView {
             setupForEmailForm()
         case .npsWithNumbers:
             setupForNpsWithNumbers()
+        case .npsWithMultiplePopup:
+            setupForNpsWithMultiplePopup()
         case .secondNps:
             setupForNps()
         case .feedbackForm:

@@ -130,6 +130,8 @@ class InAppViewController: FormViewController {
             break
         case .CountdownTimerBanner:
             break
+        case .npsWithMultiplePopup:
+            break
         }
         
         

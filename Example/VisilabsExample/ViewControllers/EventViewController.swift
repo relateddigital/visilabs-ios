@@ -191,7 +191,8 @@ class EventViewController: FormViewController, BannerDelegate {
             .MultipleChoiceSurvey : [VisilabsInAppNotificationType.MultipleChoiceSurvey.rawValue: 1444],
             .mobileCustomActions : [VisilabsInAppNotificationType.mobileCustomActions.rawValue: 3232],
             .NotificationBell : [VisilabsInAppNotificationType.NotificationBell.rawValue: 3244],
-            .CountdownTimerBanner : [VisilabsInAppNotificationType.CountdownTimerBanner.rawValue: 4341]
+            .CountdownTimerBanner : [VisilabsInAppNotificationType.CountdownTimerBanner.rawValue: 4341],
+            .npsWithMultiplePopup : [VisilabsInAppNotificationType.npsWithMultiplePopup.rawValue: 1348]
         ]
     }
     
