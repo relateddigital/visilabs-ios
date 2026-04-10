@@ -997,6 +997,27 @@ extension VisilabsInstance {
 
 public protocol VisilabsInappButtonDelegate: AnyObject {
     func didTapButton(_ notification: VisilabsInAppNotification)
+    func didTapSecondButton(_ notification: VisilabsInAppNotification)
+
+    /// ``carousel_fullscreen`` aksiyon butonları. ``didTapButton`` gibi protokolde tanımlı olmalı; yalnızca extension’da bırakılırsa ``VisilabsInappButtonDelegate`` tipinde saklanan delegate üzerinden çağrıda somut sınıfın implementasyonu çalışmaz.
+    func didTapCarouselFullscreenButton(_ notification: VisilabsInAppNotification,
+                                        link: String?,
+                                        button: VisilabsCarouselFullscreenButton,
+                                        carouselItemIndex: Int)
+}
+
+/// Fullscreen carousel primary (filled) vs secondary (outlined) action button.
+public enum VisilabsCarouselFullscreenButton: Int {
+    case primary = 0
+    case secondary = 1
+}
+
+public extension VisilabsInappButtonDelegate {
+    func didTapSecondButton(_ notification: VisilabsInAppNotification) { }
+    func didTapCarouselFullscreenButton(_ notification: VisilabsInAppNotification,
+                                        link: String?,
+                                        button: VisilabsCarouselFullscreenButton,
+                                        carouselItemIndex: Int) { }
 }
 
 public protocol VisilabsNotificationBellDelegate: AnyObject {

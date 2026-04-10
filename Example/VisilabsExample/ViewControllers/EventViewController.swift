@@ -41,6 +41,7 @@ class EventViewController: FormViewController, BannerDelegate {
         super.viewDidLoad()
         initializeForm()
         Visilabs.callAPI().notificationBellDelegate = self
+        Visilabs.callAPI().inappButtonDelegate = self
         
     }
     
@@ -117,7 +118,7 @@ class EventViewController: FormViewController, BannerDelegate {
                 properties["OM.pv"] = "CV7933-837-837"
             }
             Visilabs.callAPI().customEvent("InAppTest", properties: properties)
-            Visilabs.callAPI().inappButtonDelegate = self
+            
         }
 
     }
@@ -192,7 +193,8 @@ class EventViewController: FormViewController, BannerDelegate {
             .mobileCustomActions : [VisilabsInAppNotificationType.mobileCustomActions.rawValue: 3232],
             .NotificationBell : [VisilabsInAppNotificationType.NotificationBell.rawValue: 3244],
             .CountdownTimerBanner : [VisilabsInAppNotificationType.CountdownTimerBanner.rawValue: 4341],
-            .npsWithMultiplePopup : [VisilabsInAppNotificationType.npsWithMultiplePopup.rawValue: 1348]
+            .npsWithMultiplePopup : [VisilabsInAppNotificationType.npsWithMultiplePopup.rawValue: 1348],
+            .carouselFullscreen : ["fullscreen_carousel": 1349]
         ]
     }
     
@@ -342,6 +344,15 @@ extension EventViewController: VisilabsInappButtonDelegate, VisilabsNotification
     func didTapButton(_ notification: VisilabsInAppNotification) {
         print("notification did tapped...")
         print(notification.iosLink ?? "")
+    }
+    
+    func didTapCarouselFullscreenButton(
+        _ notification: VisilabsInAppNotification,
+        link: String?,
+        button: VisilabsCarouselFullscreenButton, // .primary veya .secondary
+        carouselItemIndex: Int
+    ) {
+            print("\(link!) açıldı")
     }
     
     

@@ -72,9 +72,17 @@ public class VisilabsInAppNotification {
         public static let multiplePopupBodyTextSize2 = "multiple_popup_msg_body_textsize2"
         public static let multiplePopupFeedbackMinPoint = "multiple_popup_feedbackform_minpoint"
         
+        public static let secondButtonFunction = "second_button_function"
+        public static let secondButtonText = "second_button_text"
+        public static let secondButtonTextColor = "second_button_text_color"
+        public static let secondButtonColor = "second_button_color"
+        public static let secondButtonIosLnk = "second_button_ios_lnk"
+        public static let secondButtonFontFamily = "second_button_font_family"
+        public static let secondButtonCustomFont = "second_button_custom_font_family_ios"
         public static let displayType = "display_type"
         public static let duration = "duration"
         public static let pos = "pos"
+        public static let buttonBorderRadius = "button_border_radius"
     }
 
     let actId: Int
@@ -125,7 +133,14 @@ public class VisilabsInAppNotification {
     let videourl: String?
     let secondPopupVideourl1: String?
     let secondPopupVideourl2: String?
-    
+    let secondButtonFunction: String?
+    let secondButtonText: String?
+    let secondButtonTextColor: UIColor?
+    let secondButtonColor: UIColor?
+    let secondButtonIosLnk: String?
+    let secondButtonFontFamily: String?
+    let secondButtonCustomFont: String?
+
     let multiplePopupTitle: String?
     let multiplePopupBody: String?
     let multiplePopupButtonText2: String?
@@ -145,6 +160,9 @@ public class VisilabsInAppNotification {
 
     var duration:Int?
     var pos : String?
+
+    /// Corner radius for fullscreen carousel action buttons (points). Parsed from `button_border_radius` when set.
+    public let buttonBorderRadius: CGFloat?
 
     var imageUrl: URL?
     lazy var image: Data? = {
@@ -197,12 +215,15 @@ public class VisilabsInAppNotification {
     }()
 
     let callToActionUrl: URL?
+    let callToSecondActionUrl: URL?
     var messageTitleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2),
                                           size: CGFloat(12))
     var messageBodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                          size: CGFloat(8))
     var buttonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
                                         size: CGFloat(8))
+    var secondButtonTextFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body),
+                                              size: CGFloat(8))
 
     var displayType: String? = "popup"
     
@@ -253,6 +274,13 @@ public class VisilabsInAppNotification {
                 videourl: String?,
                 secondPopupVideourl1: String?,
                 secondPopupVideourl2: String?,
+                secondButtonFunction: String? = nil,
+                secondButtonText: String? = nil,
+                secondButtonTextColor: String? = nil,
+                secondButtonColor: String? = nil,
+                secondButtonIosLnk: String? = nil,
+                secondButtonFontFamily: String? = nil,
+                secondButtonCustomFont: String? = nil,
                 multiplePopupTitle: String? = nil,
                 multiplePopupBody: String? = nil,
                 multiplePopupButtonText2: String? = nil,
@@ -270,7 +298,8 @@ public class VisilabsInAppNotification {
                 multiplePopupFeedbackMinPoint: String? = nil,
                 displayType: String? = "popup",
                 duration:Int?,
-                pos:String?) {
+                pos:String?,
+                buttonBorderRadius: CGFloat? = nil) {
         self.actId = actId
         messageType = type.rawValue
         self.type = type
@@ -328,6 +357,31 @@ public class VisilabsInAppNotification {
         }
 
         self.callToActionUrl = callToActionUrl
+
+        self.secondButtonFunction = secondButtonFunction
+        self.secondButtonText = secondButtonText
+        self.secondButtonTextColor = UIColor(hex: secondButtonTextColor)
+        self.secondButtonColor = UIColor(hex: secondButtonColor)
+        self.secondButtonIosLnk = secondButtonIosLnk
+        self.secondButtonFontFamily = secondButtonFontFamily
+        self.secondButtonCustomFont = secondButtonCustomFont
+
+        var callToSecondActionUrl: URL?
+        if let sbFunction = secondButtonFunction {
+            if sbFunction == "link" || sbFunction == "" {
+                if let urlString = secondButtonIosLnk {
+                    callToSecondActionUrl = URL(string: urlString)
+                }
+            } else if sbFunction == "redirect" {
+                callToSecondActionUrl = URL(string: "redirect")
+            }
+        } else {
+            if let urlString = secondButtonIosLnk {
+                callToSecondActionUrl = URL(string: urlString)
+            }
+        }
+        self.callToSecondActionUrl = callToSecondActionUrl
+
         self.alertType = alertType
         self.closeButtonText = closeButtonText
         self.promotionCode = promotionCode
@@ -381,6 +435,8 @@ public class VisilabsInAppNotification {
         }
         
         self.displayType = displayType
+
+        self.buttonBorderRadius = buttonBorderRadius
         
         setFonts()
     }
@@ -474,6 +530,31 @@ public class VisilabsInAppNotification {
         }
 
         self.callToActionUrl = callToActionUrl
+
+        secondButtonFunction = actionData[PayloadKey.secondButtonFunction] as? String
+        secondButtonText = actionData[PayloadKey.secondButtonText] as? String
+        secondButtonTextColor = UIColor(hex: actionData[PayloadKey.secondButtonTextColor] as? String)
+        secondButtonColor = UIColor(hex: actionData[PayloadKey.secondButtonColor] as? String)
+        secondButtonIosLnk = actionData[PayloadKey.secondButtonIosLnk] as? String
+        secondButtonFontFamily = actionData[PayloadKey.secondButtonFontFamily] as? String
+        secondButtonCustomFont = actionData[PayloadKey.secondButtonCustomFont] as? String
+
+        var callToSecondActionUrl: URL?
+        if let sbFunction = secondButtonFunction {
+            if sbFunction == "link" || sbFunction == "" {
+                if let urlString = secondButtonIosLnk {
+                    callToSecondActionUrl = URL(string: urlString)
+                }
+            } else if sbFunction == "redirect" {
+                callToSecondActionUrl = URL(string: "redirect")
+            }
+        } else {
+            if let urlString = secondButtonIosLnk {
+                callToSecondActionUrl = URL(string: urlString)
+            }
+        }
+        self.callToSecondActionUrl = callToSecondActionUrl
+
         alertType = actionData[PayloadKey.alertType] as? String
         closeButtonText = actionData[PayloadKey.closeButtonText] as? String
         if let numColors = actionData[PayloadKey.numberColors] as? [String]? {
@@ -530,7 +611,9 @@ public class VisilabsInAppNotification {
         previousPopupPoint = nil
         duration = actionData[PayloadKey.duration] as? Int
         pos = actionData[PayloadKey.pos] as? String
-        
+
+        buttonBorderRadius = VisilabsInAppNotification.parsePositiveCGFloat(actionData[PayloadKey.buttonBorderRadius] ?? nil)
+
         if let positionString = actionData[PayloadKey.position] as? String
             , let position = VisilabsHalfScreenPosition(rawValue: positionString) {
             self.position = position
@@ -566,5 +649,20 @@ public class VisilabsInAppNotification {
         buttonTextFont = VisilabsHelper.getFont(fontFamily: fontFamily,
                                                 fontSize: messageBodyTextSize,
                                                 style: .title2, customFont: customFont)
+        let sbFontFamily = secondButtonFontFamily ?? fontFamily
+        let sbCustomFont = secondButtonCustomFont ?? customFont
+        secondButtonTextFont = VisilabsHelper.getFont(fontFamily: sbFontFamily,
+                                                      fontSize: messageBodyTextSize,
+                                                      style: .title2, customFont: sbCustomFont)
+    }
+
+    private static func parsePositiveCGFloat(_ value: Any?) -> CGFloat? {
+        if let s = value as? String, !s.isEmpty, let d = Double(s), d > 0 {
+            return CGFloat(d)
+        }
+        if let n = value as? NSNumber, n.doubleValue > 0 {
+            return CGFloat(truncating: n)
+        }
+        return nil
     }
 }

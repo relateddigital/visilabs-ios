@@ -150,6 +150,15 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                 addButton(button)
             }
 
+            if !notification.secondButtonText.isNilOrWhiteSpace {
+                let secondButton = VisilabsPopupDialogButton(title: notification.secondButtonText!,
+                                                             font: notification.secondButtonTextFont,
+                                                             buttonTextColor: notification.secondButtonTextColor,
+                                                             buttonColor: notification.secondButtonColor,
+                                                             action: secondButtonAction)
+                addButton(secondButton)
+            }
+
             if notification.messageTitle.isNilOrWhiteSpace {
                 viewController.hideTitle()
             }
@@ -254,6 +263,7 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
                 additionalTrackingProperties["OM.s_point"] = String(userRating).replacingOccurrences(of: ",", with: ".")
                 additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
                 additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
+                additionalTrackingProperties["OM.s_feed"] = "Feedback Sayfası Görüntülenmedi"
             }
         }
         // Check if second popup coming
@@ -279,6 +289,19 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
             }
             inappButtonDelegate?.didTapButton(notification)
         }
+    }
+
+    func secondButtonAction() {
+        guard let notification = self.notification else { return }
+        let additionalTrackingProperties = [String: String]()
+        let callToActionURL: URL? = notification.callToSecondActionUrl
+
+        delegate?.notificationShouldDismiss(controller: self,
+                                            callToActionURL: callToActionURL,
+                                            shouldTrack: true,
+                                            additionalTrackingProperties: additionalTrackingProperties)
+
+        inappButtonDelegate?.didTapButton(notification)
     }
 
     func multiplePopupPage2BackAction() {
@@ -325,7 +348,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         additionalTrackingProperties["OM.s_point"] = String(userRating).replacingOccurrences(of: ",", with: ".")
         additionalTrackingProperties["OM.s_cat"] = notification.type.rawValue
         additionalTrackingProperties["OM.s_page"] = "act-\(notification.actId)"
-        additionalTrackingProperties["OM.s_feed"] = viewController.standardView.feedbackTF.text ?? ""
+        if (viewController.standardView.feedbackTF.text! != "" || !viewController.standardView.feedbackTF.text!.isEmpty) {
+            additionalTrackingProperties["OM.s_feed"] = viewController.standardView.feedbackTF.text ?? ""
+        } else {
+            additionalTrackingProperties["OM.s_feed"] = "Kullanıcı feedback alanını boş bıraktı"
+        }
+        
         
         self.delegate?.trackNotification(controller: self,
                                          event: "event",
@@ -474,7 +502,12 @@ class VisilabsPopupNotificationViewController: VisilabsBaseNotificationViewContr
         // Add our custom view to the container
         addChild(viewController)
         popupContainerView.stackView.insertArrangedSubview(viewController.view, at: 0)
-        popupContainerView.buttonStackView.axis = buttonAlignment
+        if !(notification?.secondButtonText.isNilOrWhiteSpace ?? true) {
+            popupContainerView.buttonStackView.axis = .horizontal
+            popupContainerView.buttonStackView.spacing = 5
+        } else {
+            popupContainerView.buttonStackView.axis = buttonAlignment
+        }
         viewController.didMove(toParent: self)
 
         // Allow for dialog dismissal on background tap

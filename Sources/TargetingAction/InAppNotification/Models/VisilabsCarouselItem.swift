@@ -36,6 +36,15 @@ public class VisilabsCarouselItem {
         public static let ios_lnk = "ios_lnk"
         public static let close_button_color = "close_button_color"
         public static let videourl = "videourl"
+        public static let button_function = "button_function"
+        public static let second_button_text = "second_button_text"
+        public static let second_button_text_color = "second_button_text_color"
+        public static let second_button_color = "second_button_color"
+        public static let second_button_font_family = "second_button_font_family"
+        public static let second_button_custom_font_family_ios = "second_button_custom_font_family_ios"
+        public static let second_button_textsize = "second_button_textsize"
+        public static let second_ios_lnk = "second_button_ios_lnk"
+        public static let second_button_function = "second_button_function"
     }
 
     public let imageUrlString: String?
@@ -68,8 +77,20 @@ public class VisilabsCarouselItem {
     var titleFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .title2), size: CGFloat(12))
     var bodyFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
     var buttonFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
+    var secondButtonFont: UIFont = UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body), size: CGFloat(8))
+
+    public let buttonFunction: String?
+    public let secondButtonText: String?
+    public let secondButtonTextColor: UIColor?
+    public let secondButtonColor: UIColor?
+    public let secondButtonFontFamily: String?
+    public let secondButtonCustomFontFamily: String?
+    public let secondButtonTextsize: String?
+    public let secondLinkString: String?
+    public let secondButtonFunction: String?
 
     var linkUrl: URL?
+    var secondLinkUrl: URL?
 
     var imageUrl: URL?
     public lazy var image: Data? = {
@@ -104,7 +125,11 @@ public class VisilabsCarouselItem {
                 , bodyTextsize: String?, promocodeType: String?, promotionCode: String?, promocodeBackgroundColor: UIColor?
                 , promocodeTextColor: UIColor?, buttonText: String?, buttonTextColor: UIColor?, buttonColor: UIColor?
                 , buttonFontFamily: String?, buttonCustomFontFamily: String?, buttonTextsize: String?, backgroundImageString: String?
-                , backgroundColor: UIColor?, linkString: String?, closeButtonColor: UIColor?, videourl: String?) {
+                , backgroundColor: UIColor?, linkString: String?, closeButtonColor: UIColor?, videourl: String?
+                , buttonFunction: String? = nil
+                , secondButtonText: String? = nil, secondButtonTextColor: UIColor? = nil, secondButtonColor: UIColor? = nil
+                , secondButtonFontFamily: String? = nil, secondButtonCustomFontFamily: String? = nil, secondButtonTextsize: String? = nil
+                , secondLinkString: String? = nil, secondButtonFunction: String? = nil) {
         self.imageUrlString = imageUrlString
         self.title = title
         self.titleColor = UIColor(hex: titleColor)
@@ -130,9 +155,21 @@ public class VisilabsCarouselItem {
         self.backgroundColor = backgroundColor
         self.linkString = linkString
         self.videourl = videourl
+        self.buttonFunction = buttonFunction
+        self.secondButtonText = secondButtonText
+        self.secondButtonTextColor = secondButtonTextColor
+        self.secondButtonColor = secondButtonColor
+        self.secondButtonFontFamily = secondButtonFontFamily
+        self.secondButtonCustomFontFamily = secondButtonCustomFontFamily
+        self.secondButtonTextsize = secondButtonTextsize
+        self.secondLinkString = secondLinkString
+        self.secondButtonFunction = secondButtonFunction
 
         if let linkString = linkString, !linkString.isEmptyOrWhitespace {
             linkUrl = URL(string: linkString)
+        }
+        if let secondLinkString = secondLinkString, !secondLinkString.isEmptyOrWhitespace {
+            secondLinkUrl = URL(string: secondLinkString)
         }
 
         if !imageUrlString.isNilOrWhiteSpace {
@@ -194,9 +231,21 @@ public class VisilabsCarouselItem {
         backgroundColor = UIColor(hex: object[PayloadKey.background_color] as? String)
         linkString = object[PayloadKey.ios_lnk] as? String
         videourl = object[PayloadKey.videourl] as? String
+        buttonFunction = object[PayloadKey.button_function] as? String
+        secondButtonText = object[PayloadKey.second_button_text] as? String
+        secondButtonTextColor = UIColor(hex: object[PayloadKey.second_button_text_color] as? String)
+        secondButtonColor = UIColor(hex: object[PayloadKey.second_button_color] as? String)
+        secondButtonFontFamily = object[PayloadKey.second_button_font_family] as? String
+        secondButtonCustomFontFamily = object[PayloadKey.second_button_custom_font_family_ios] as? String
+        secondButtonTextsize = object[PayloadKey.second_button_textsize] as? String
+        secondLinkString = object[PayloadKey.second_ios_lnk] as? String
+        secondButtonFunction = object[PayloadKey.second_button_function] as? String
 
         if let linkString = linkString, !linkString.isEmptyOrWhitespace {
             linkUrl = URL(string: linkString)
+        }
+        if let secondLinkString = secondLinkString, !secondLinkString.isEmptyOrWhitespace {
+            secondLinkUrl = URL(string: secondLinkString)
         }
 
         if !imageUrlString.isNilOrWhiteSpace {
@@ -215,6 +264,8 @@ public class VisilabsCarouselItem {
                                           , style: .body, customFont: bodyCustomFontFamily)
         buttonFont = VisilabsHelper.getFont(fontFamily: buttonFontFamily, fontSize: buttonTextsize
                                             , style: .title2, customFont: buttonCustomFontFamily)
+        secondButtonFont = VisilabsHelper.getFont(fontFamily: secondButtonFontFamily, fontSize: secondButtonTextsize
+                                                  , style: .title2, customFont: secondButtonCustomFontFamily)
 
         setFonts()
 
@@ -240,5 +291,7 @@ public class VisilabsCarouselItem {
                                           , style: .body, customFont: bodyCustomFontFamily)
         buttonFont = VisilabsHelper.getFont(fontFamily: buttonFontFamily, fontSize: buttonTextsize
                                             , style: .title2, customFont: buttonCustomFontFamily)
+        secondButtonFont = VisilabsHelper.getFont(fontFamily: secondButtonFontFamily, fontSize: buttonTextsize
+                                                  , style: .title2, customFont: secondButtonCustomFontFamily)
     }
 }
