@@ -23,6 +23,7 @@ public enum VisilabsInAppNotificationType: String, CaseIterable {
     case scratchToWin = "scratch-to-win"
     case secondNps = "nps_with_secondpopup"
     case inappcarousel = "inappcarousel"
+    case carouselFullscreen = "carousel_fullscreen"
     case imageButtonImage
     case spintowin
     case feedbackForm

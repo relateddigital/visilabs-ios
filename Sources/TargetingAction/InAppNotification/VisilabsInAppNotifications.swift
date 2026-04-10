@@ -48,6 +48,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         shownNotification = self.showHalfScreenNotification(notification)
                     case .inappcarousel:
                         shownNotification = self.showCarousel(notification)
+                    case .carouselFullscreen:
+                        shownNotification = self.showCarouselFullscreen(notification)
                     case .alert:
                         shownNotification = true
                         self.showAlert(notification)
@@ -238,6 +240,21 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             }
             root.present(alertController, animated: true, completion: alertDismiss)
         }
+    }
+
+    func showCarouselFullscreen(_ notification: VisilabsInAppNotification) -> Bool {
+        let items = Array(notification.carouselItems.prefix(5))
+        guard !items.isEmpty else {
+            VisilabsLogger.error("carousel_fullscreen requires at least one carousel item.")
+            return false
+        }
+        let vc = VisilabsCarouselFullscreenViewController(notification: notification, carouselItems: items)
+        vc.delegate = self
+        vc.onButtonTap = { [weak self] notif, link, button, index in
+            self?.inappButtonDelegate?.didTapCarouselFullscreenButton(notif, link: link, button: button, carouselItemIndex: index)
+        }
+        vc.show(animated: true)
+        return true
     }
 
     func showCarousel(_ notification: VisilabsInAppNotification) -> Bool {
