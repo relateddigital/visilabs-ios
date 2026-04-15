@@ -35,6 +35,8 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
     private var bellBottomConstraint: NSLayoutConstraint!
 
     private let model: NotificationBellModel
+    private weak var initialTopViewController: UIViewController?
+    private var pageChangeTimer: Timer?
 
     init(model: NotificationBellModel) {
         self.model = model
@@ -84,9 +86,11 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
 
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration) { self.window?.alpha = 1 }
+        startPageChangeObserving()
     }
 
     override func hide(animated: Bool, completion: @escaping () -> Void) {
+        stopPageChangeObserving()
         let duration = animated ? 0.25 : 0
         UIView.animate(withDuration: duration, animations: {
             self.window?.alpha = 0
@@ -99,6 +103,7 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
     }
 
     private func close() {
+        stopPageChangeObserving()
         dismiss(animated: true) {
             self.delegate?.notificationShouldDismiss(
                 controller: self,
@@ -298,9 +303,60 @@ final class NotificationBellViewController: VisilabsBaseNotificationViewControll
 
     
     @objc private func closeAction() {
+        stopPageChangeObserving()
         self.window?.isHidden = true
         self.window?.removeFromSuperview()
         self.window = nil
+    }
+
+    // MARK: - Page Change Detection
+    private func startPageChangeObserving() {
+        initialTopViewController = NotificationBellViewController.topViewController()
+        pageChangeTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            let currentTop = NotificationBellViewController.topViewController()
+            if let initial = self.initialTopViewController,
+               let current = currentTop,
+               initial !== current {
+                DispatchQueue.main.async {
+                    self.closeAction()
+                }
+            }
+        }
+    }
+
+    private func stopPageChangeObserving() {
+        pageChangeTimer?.invalidate()
+        pageChangeTimer = nil
+    }
+
+    private static func topViewController() -> UIViewController? {
+        guard let app = VisilabsInstance.sharedUIApplication() else { return nil }
+        var mainWindow: UIWindow?
+        if #available(iOS 13.0, *) {
+            let scene = app.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene
+            mainWindow = scene?.windows.first { !($0 is PassthroughWindow) }
+        } else {
+            mainWindow = app.windows.first { !($0 is PassthroughWindow) }
+        }
+        guard let root = mainWindow?.rootViewController else { return nil }
+        return topMost(of: root)
+    }
+
+    private static func topMost(of vc: UIViewController) -> UIViewController {
+        if let nav = vc as? UINavigationController, let visible = nav.visibleViewController {
+            return topMost(of: visible)
+        }
+        if let tab = vc as? UITabBarController, let selected = tab.selectedViewController {
+            return topMost(of: selected)
+        }
+        if let presented = vc.presentedViewController {
+            return topMost(of: presented)
+        }
+        return vc
     }
     
     

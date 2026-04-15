@@ -11,6 +11,8 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
 
     var shouldDismissed = false
     var report: DrawerReport?
+    private weak var initialTopViewController: UIViewController?
+    private var pageChangeTimer: Timer?
     
     init(model: DrawerServiceModel?) {
         super.init(nibName: nil, bundle: nil)
@@ -73,8 +75,7 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     }
     
     @objc func closeClicked(_ sender: UITapGestureRecognizer? = nil) {
-            
-            
+            stopPageChangeObserving()
             self.window?.isHidden = true
             self.window?.removeFromSuperview()
             self.window = nil
@@ -308,6 +309,7 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
         }
         self.position = self.window?.layer.position
         configureStandartView(drawer: view as! drawerView)
+        startPageChangeObserving()
     }
     
     fileprivate func setWindowAndAddAnimation(_ animated: Bool) {
@@ -327,8 +329,8 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     }
     
     override func hide(animated: Bool, completion: @escaping () -> Void) {
-        
         if shouldDismissed {
+            stopPageChangeObserving()
             self.window?.isHidden = true
             self.window?.removeFromSuperview()
             self.window = nil
@@ -349,6 +351,55 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
         globDrawerView?.drawerGrandContentImageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.imageClicked(_:)))
         globDrawerView?.drawerGrandContentImageView.addGestureRecognizer(tap)
+    }
 
+    // MARK: - Page Change Detection
+    private func startPageChangeObserving() {
+        initialTopViewController = RDDrawerViewController.topViewController(excluding: self.window)
+        let timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            let currentTop = RDDrawerViewController.topViewController(excluding: self.window)
+            if let initial = self.initialTopViewController,
+               let current = currentTop,
+               initial !== current {
+                self.closeClicked()
+            }
+        }
+        RunLoop.current.add(timer, forMode: .common)
+        pageChangeTimer = timer
+    }
+
+    private func stopPageChangeObserving() {
+        pageChangeTimer?.invalidate()
+        pageChangeTimer = nil
+    }
+
+    private static func topViewController(excluding excludedWindow: UIWindow?) -> UIViewController? {
+        guard let app = VisilabsInstance.sharedUIApplication() else { return nil }
+        var mainWindow: UIWindow?
+        if #available(iOS 13.0, *) {
+            let scene = app.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene
+            mainWindow = scene?.windows.first { $0 !== excludedWindow && $0.windowLevel == .normal }
+        } else {
+            mainWindow = app.windows.first { $0 !== excludedWindow && $0.windowLevel == .normal }
+        }
+        guard let root = mainWindow?.rootViewController else { return nil }
+        return topMost(of: root)
+    }
+
+    private static func topMost(of vc: UIViewController) -> UIViewController {
+        if let nav = vc as? UINavigationController, let visible = nav.visibleViewController {
+            return topMost(of: visible)
+        }
+        if let tab = vc as? UITabBarController, let selected = tab.selectedViewController {
+            return topMost(of: selected)
+        }
+        if let presented = vc.presentedViewController {
+            return topMost(of: presented)
+        }
+        return vc
     }
 }
