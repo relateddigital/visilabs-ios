@@ -12,6 +12,8 @@ import UserNotifications
 
 typealias Queue = [[String: String]]
 
+public typealias VisilabsInAppURLHandler = (_ url: URL, _ notification: VisilabsInAppNotification?) -> Bool
+
 public struct VisilabsUser: Codable {
     public var cookieId: String?
     public var exVisitorId: String?
@@ -119,6 +121,15 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     
     public weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     public weak var notificationBellDelegate: VisilabsNotificationBellDelegate?
+    public var inAppURLHandler: VisilabsInAppURLHandler?
+    
+    func shouldOpenInAppURLInSDK(_ url: URL, notification: VisilabsInAppNotification?) -> Bool {
+        guard let handler = inAppURLHandler else {
+            return true
+        }
+        
+        return !handler(url, notification)
+    }
     
     // swiftlint:disable function_body_length
     init(organizationId: String,

@@ -221,7 +221,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
             guard let url = URL(string: urlStr) else {
                 return
             }
-            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: notification) {
+                VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            }
             self.inappButtonDelegate?.didTapButton(notification)
         }
 
@@ -367,7 +369,9 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         completionBlock()
                     }
                 } else {
-                    UIApplication.shared.open(callToActionURL as URL, options: [:],completionHandler: nil)
+                    if Visilabs.callAPI().shouldOpenInAppURLInSDK(callToActionURL, notification: controller.notification) {
+                        UIApplication.shared.open(callToActionURL as URL, options: [:],completionHandler: nil)
+                    }
                     completionBlock()
                 }
             }

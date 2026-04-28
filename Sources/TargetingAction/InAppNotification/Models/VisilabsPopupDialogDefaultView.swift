@@ -379,10 +379,14 @@ extension VisilabsPopupDialogDefaultView: SliderStepDelegate {
 extension VisilabsPopupDialogDefaultView {
     @objc func termsButtonTapped(_ sender: UIButton) {
         if let url = scratchToWin?.permitUrl {
-            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: visilabsInAppNotification) {
+                VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            }
         }
         if let url = emailForm?.emailPermitUrl {
-            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: visilabsInAppNotification) {
+                VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            }
         }
     }
 
@@ -401,10 +405,14 @@ extension VisilabsPopupDialogDefaultView {
 
     @objc func consentButtonTapped(_ sender: UIButton) {
         if let url = scratchToWin?.consentUrl {
-            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: visilabsInAppNotification) {
+                VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            }
         }
         if let url = emailForm?.consentUrl {
-            VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: visilabsInAppNotification) {
+                VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
+            }
         }
     }
 }
@@ -525,7 +533,9 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
         VisilabsHelper.showCopiedClipboardMessage()
         DispatchQueue.main.async {
             if let url = URL(string: self.scratchToWin?.iosLink ?? "") {
-                UIApplication.shared.open(url)
+                if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: self.visilabsInAppNotification) {
+                    UIApplication.shared.open(url)
+                }
             }
         }
         delegate?.dismissSctw()
