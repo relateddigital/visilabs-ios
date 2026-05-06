@@ -194,7 +194,8 @@ class EventViewController: FormViewController, BannerDelegate {
             .NotificationBell : [VisilabsInAppNotificationType.NotificationBell.rawValue: 3244],
             .CountdownTimerBanner : [VisilabsInAppNotificationType.CountdownTimerBanner.rawValue: 4341],
             .npsWithMultiplePopup : [VisilabsInAppNotificationType.npsWithMultiplePopup.rawValue: 1348],
-            .carouselFullscreen : ["fullscreen_carousel": 1349]
+            .carouselFullscreen : ["fullscreen_carousel": 1349],
+            .fullscreenPopup : ["fullscreen_popup": 1457]
         ]
     }
     

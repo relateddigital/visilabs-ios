@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "4.3.58"
+    static let sdkVersion = "4.3.59"
     static let sdkTypeKey = "sdk_type"
 
     static let HTTP = "http"
@@ -408,7 +408,7 @@ struct VisilabsConstants {
     static let borderRadius = "border_radius"
     
     
-    static let backgroundClickCloseDisabledInAppNotificationTypes: [VisilabsInAppNotificationType] = [.full, .feedbackForm, .mini, .halfScreenImage, .carouselFullscreen]
+    static let backgroundClickCloseDisabledInAppNotificationTypes: [VisilabsInAppNotificationType] = [.full, .feedbackForm, .mini, .halfScreenImage, .carouselFullscreen, .fullscreenPopup]
     
 
     private static let targetPrefVossStoreKey = "OM.voss"
