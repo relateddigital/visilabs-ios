@@ -132,6 +132,8 @@ class InAppViewController: FormViewController {
             break
         case .npsWithMultiplePopup:
             break
+        case .fullscreenPopup:
+            break
         }
         
         

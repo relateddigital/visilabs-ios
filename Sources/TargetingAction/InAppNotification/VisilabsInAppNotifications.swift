@@ -50,6 +50,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                         shownNotification = self.showCarousel(notification)
                     case .carouselFullscreen:
                         shownNotification = self.showCarouselFullscreen(notification)
+                    case .fullscreenPopup:
+                        shownNotification = self.showFullscreenPopup(notification)
                     case .alert:
                         shownNotification = true
                         self.showAlert(notification)
@@ -255,6 +257,14 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         vc.onButtonTap = { [weak self] notif, link, button, index in
             self?.inappButtonDelegate?.didTapCarouselFullscreenButton(notif, link: link, button: button, carouselItemIndex: index)
         }
+        vc.show(animated: true)
+        return true
+    }
+
+    func showFullscreenPopup(_ notification: VisilabsInAppNotification) -> Bool {
+        let vc = VisilabsFullscreenPopupViewController(notification: notification)
+        vc.delegate = self
+        vc.inappButtonDelegate = self.inappButtonDelegate
         vc.show(animated: true)
         return true
     }
