@@ -192,15 +192,25 @@ final class CountdownTimerBannerView: UIView {
         closeButton.addTarget(self, action: #selector(handleClose), for: .touchUpInside)
     }
     
-    private func setupGestures() {
+    private lazy var bannerTapGesture: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleBannerClick))
         tap.delegate = self
         tap.cancelsTouchesInView = false // Allow button to receive touches
-        containerView.addGestureRecognizer(tap)
+        return tap
+    }()
+
+    private func setupGestures() {
+        containerView.addGestureRecognizer(bannerTapGesture)
         
         // Important: Ensure close button doesn't trigger banner click
         closeButton.isUserInteractionEnabled = true
         containerView.isUserInteractionEnabled = true
+    }
+
+    /// Sürükleme (pan) hareketi başladığında banner'a tıklama (dismiss) tetiklenmesin diye
+    /// tap gesture'ın pan gesture'ın başarısız olmasını beklemesini sağlar.
+    func requirePanToFail(_ pan: UIPanGestureRecognizer) {
+        bannerTapGesture.require(toFail: pan)
     }
     
     @objc private func handleClose() {
