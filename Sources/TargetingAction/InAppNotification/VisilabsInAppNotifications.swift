@@ -152,12 +152,19 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
     
     func showTimerBanner(model: CountdownTimerBannerModel) -> Bool {
+        // Geri sayım süresi dolmuşsa banner hiç gösterilmez.
+        if CountdownTimerBannerViewController.isExpired(model: model) {
+            return false
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
-
+            // Bekleme süresi içinde süre dolmuş olabilir; tekrar kontrol et.
+            if CountdownTimerBannerViewController.isExpired(model: model) {
+                return
+            }
             let tBannerVC = CountdownTimerBannerViewController(model: model)
             tBannerVC.delegate = self
             tBannerVC.show(animated: true)
-        
+
         })
         return true
     }

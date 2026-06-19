@@ -32,7 +32,17 @@ public class CountdownTimerBannerModel: TargetingActionViewModel {
     // Standard getters for View (public)
     public var title: String?
     public var message: String? { return content_body }
-    public var position: String { return position_on_page ?? "bottom" }
+    public var position: String {
+        let raw = position_on_page?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
+        switch raw {
+        case "downposition", "bottom":
+            return "bottom"
+        case "upposition", "top":
+            return "top"
+        default:
+            return "top"
+        }
+    }
     public var background: String? { return background_color }
     public var closeButtonColor: String? { return close_button_color }
     public var textColor: String? { return content_body_text_color }
