@@ -502,17 +502,40 @@ class VisilabsTargetingAction {
         sideBarServiceModel.contentMinimizedArrowColor = extendedProps[VisilabsConstants.contentMinimizedArrowColor] as? String ?? ""
         sideBarServiceModel.contentMaximizedBackgroundImage = extendedProps[VisilabsConstants.contentMaximizedBackgroundImage] as? String ?? ""
         sideBarServiceModel.contentMaximizedBackgroundColor = extendedProps[VisilabsConstants.contentMaximizedBackgroundColor] as? String ?? ""
-        
-        
+
+        if let items = extendedProps[VisilabsConstants.contentMinimizedItems] as? [[String: Any?]] {
+            sideBarServiceModel.items = items.map { parseDrawerItem($0) }
+        }
+
         let report = actionData[VisilabsConstants.report] as? [String: Any] ?? [String: Any]()
         let impression = report[VisilabsConstants.impression] as? String ?? ""
         let click = report[VisilabsConstants.click] as? String ?? ""
         let drawerReport = DrawerReport(impression: impression, click: click)
-        
+
         sideBarServiceModel.report = drawerReport
-        
-        
+
+
         return sideBarServiceModel
+    }
+
+    private func parseDrawerItem(_ item: [String: Any?]) -> DrawerItemServiceModel {
+        var itemModel = DrawerItemServiceModel()
+
+        itemModel.contentMinimizedImage = item[VisilabsConstants.contentMinimizedImage] as? String ?? ""
+        itemModel.contentMinimizedText = item[VisilabsConstants.contentMinimizedText] as? String ?? ""
+        itemModel.contentMinimizedTextSize = item[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""
+        itemModel.contentMinimizedTextColor = item[VisilabsConstants.contentMinimizedTextColor] as? String ?? ""
+        itemModel.contentMinimizedFontFamily = item[VisilabsConstants.contentMinimizedFontFamily] as? String ?? ""
+        itemModel.contentMinimizedCustomFontFamilyIos = item[VisilabsConstants.contentMinimizedCustomFontFamilyIos] as? String ?? ""
+        itemModel.contentMinimizedTextOrientation = item[VisilabsConstants.contentMinimizedTextOrientation] as? String ?? ""
+        itemModel.contentMinimizedBackgroundImage = item[VisilabsConstants.contentMinimizedBackgroundImage] as? String ?? ""
+        itemModel.contentMinimizedBackgroundColor = item[VisilabsConstants.contentMinimizedBackgroundColor] as? String ?? ""
+        itemModel.contentMinimizedArrowColor = item[VisilabsConstants.contentMinimizedArrowColor] as? String ?? ""
+        itemModel.contentMaximizedImage = item[VisilabsConstants.contentMaximizedImage] as? String ?? ""
+        itemModel.contentMaximizedBackgroundImage = item[VisilabsConstants.contentMaximizedBackgroundImage] as? String ?? ""
+        itemModel.contentMaximizedBackgroundColor = item[VisilabsConstants.contentMaximizedBackgroundColor] as? String ?? ""
+
+        return itemModel
     }
     
     
@@ -1152,6 +1175,27 @@ class VisilabsTargetingAction {
         return AppBannerResponseModel(app_banners: appBannerModelArray, error: errorResponse, transition: transition ?? "",height: height,width: width)
     }
     
+    /// Story gorseli icin panelden gelen kose yuvarlama degeri "50%", "10%", "0%", "25%", bos string
+    /// ya da sayisal (10, 0) olarak gelebiliyor. Degeri 0...0.5 araligindaki bir orana cevirir.
+    /// Okunamayan degerlerde `nil` doner, boylece mevcut varsayilan korunur.
+    private func parseStoryImageBorderRadius(_ rawValue: Any?) -> Double? {
+        var percentage: Double?
+        if let stringValue = rawValue as? String {
+            let trimmed = stringValue.replacingOccurrences(of: "%", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty {
+                return 0.0
+            }
+            percentage = Double(trimmed)
+        } else if let numberValue = rawValue as? NSNumber {
+            percentage = numberValue.doubleValue
+        }
+        guard let percentage = percentage else {
+            return nil
+        }
+        return min(max(percentage / 100.0, 0.0), 0.5)
+    }
+
     // swiftlint:disable cyclomatic_complexity
     private func parseStoryExtendedProps(_ extendedPropsString: String?) -> VisilabsStoryActionExtendedProperties {
         let props = VisilabsStoryActionExtendedProperties()
@@ -1160,14 +1204,10 @@ class VisilabsTargetingAction {
                let imageBorderWidth = Int(imageBorderWidthString) {
                 props.imageBorderWidth = imageBorderWidth
             }
-            if let imageBorderRadiusString = extendedProps[VisilabsConstants.storylbImgBorderRadius] as? String
-                ?? extendedProps[VisilabsConstants.storyzImgBorderRadius] as? String {
-                if imageBorderRadiusString.isEmpty {
-                    props.imageBorderRadius = 0.0
-                } else if let imageBorderRadius = Double(imageBorderRadiusString.trimmingCharacters(in:
-                                                                                                CharacterSet(charactersIn: "%"))) {
-                    props.imageBorderRadius = imageBorderRadius / 100.0
-                }
+            let rawImageBorderRadius = extendedProps[VisilabsConstants.storylbImgBorderRadius]
+                ?? extendedProps[VisilabsConstants.storyzImgBorderRadius]
+            if let imageBorderRadius = parseStoryImageBorderRadius(rawImageBorderRadius) {
+                props.imageBorderRadius = imageBorderRadius
             }
             let storyzLabelColor = extendedProps[VisilabsConstants.storyzLabelColor] as? String ?? ""
             props.storyzLabelColor = storyzLabelColor

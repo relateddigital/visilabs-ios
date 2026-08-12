@@ -13,6 +13,30 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     var report: DrawerReport?
     private weak var initialTopViewController: UIViewController?
     private var pageChangeTimer: Timer?
+
+    private var currentItemIndex = 0
+    /// Incremented on every item change so that a late image response cannot overwrite a newer item.
+    private var itemGeneration = 0
+    private var autoScrollTimer: Timer?
+    private var minimizedPageIndicator: DrawerPageIndicatorView?
+    private var maximizedPageIndicator: DrawerPageIndicatorView?
+    private var didConfigureItems = false
+
+    private var hasMultipleItems: Bool {
+        model.items.count > 1
+    }
+
+    private var minimizedContainerView: UIView? {
+        model.screenXcoordinate == .right ? globDrawerView?.leftDrawerMiniView : globDrawerView?.rightDrawerMiniView
+    }
+
+    private let minimizedDotSpacing: CGFloat = 4.0
+    private let minimizedDotHorizontalPadding: CGFloat = 4.0
+
+    /// Vertical space the minimized dots occupy at the bottom of the strip.
+    private var minimizedIndicatorReservedHeight: CGFloat {
+        hasMultipleItems ? DrawerPageIndicatorView.height() : 0
+    }
     
     init(model: DrawerServiceModel?) {
         super.init(nibName: nil, bundle: nil)
@@ -50,32 +74,253 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     }
     
     func initializeData() {
-        
-        if model.screenXcoordinate == .right {
-            globDrawerView?.leftDrawerMiniContentImageView.setImage(withUrl: model.miniDrawerContentImage ?? "")
-            globDrawerView?.leftTitleLabel.text = model.titleString
-            globDrawerView?.leftTitleLabel.font = model.miniDrawerTextFont
-            globDrawerView?.leftTitleLabel.textColor = model.miniDrawerTextColor
-            globDrawerView?.leftDrawerMiniImageView.setImage(withUrl: model.miniDrawerBackgroundImage ?? "")
-            globDrawerView?.leftDrawerMiniImageView.backgroundColor = model.miniDrawerBackgroundColor
-            globDrawerView?.leftDrawerMiniArrow.textColor = model.arrowColor
-        } else {
-            globDrawerView?.rightDrawerMiniContentImageView.setImage(withUrl: model.miniDrawerContentImage ?? "")
-            globDrawerView?.rightTitleLabel.text = model.titleString
-            globDrawerView?.rightTitleLabel.font = model.miniDrawerTextFont
-            globDrawerView?.rightTitleLabel.textColor = model.miniDrawerTextColor
-            globDrawerView?.rightDrawerMiniImageView.setImage(withUrl: model.miniDrawerBackgroundImage ?? "")
-            globDrawerView?.rightDrawerMiniImageView.backgroundColor = model.miniDrawerBackgroundColor
-            globDrawerView?.rightDrawerMiniArrow.textColor = model.arrowColor
+
+        if !didConfigureItems {
+            didConfigureItems = true
+            prefetchItemImages()
+            setupPageIndicators()
+            addSwipeGestures()
         }
-        globDrawerView?.drawerGrandImageView.setImage(withUrl: model.drawerBackgroundImage ?? "")
-        globDrawerView?.drawerGrandImageView.backgroundColor = model.drawerBackgroundColor
-        globDrawerView?.drawerGrandContentImageView.setImage(withUrl: model.drawerContentImage ?? "")
-        
+
+        applyItem(at: currentItemIndex, animated: false)
+        startAutoScrollIfNeeded()
+    }
+
+    // MARK: - Items
+
+    private func applyItem(at index: Int, animated: Bool) {
+        guard !model.items.isEmpty else { return }
+
+        let itemCount = model.items.count
+        let boundedIndex = ((index % itemCount) + itemCount) % itemCount
+        currentItemIndex = boundedIndex
+        itemGeneration += 1
+
+        let item = model.items[boundedIndex]
+        let applyContent = { [weak self] in
+            self?.applyMinimizedContent(item)
+            self?.applyMaximizedContent(item)
+        }
+
+        if animated, let view = self.view {
+            UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: applyContent, completion: nil)
+        } else {
+            applyContent()
+        }
+
+        minimizedPageIndicator?.setCurrentIndex(boundedIndex)
+        maximizedPageIndicator?.setCurrentIndex(boundedIndex)
+    }
+
+    private func applyMinimizedContent(_ item: DrawerItemViewModel) {
+        if model.screenXcoordinate == .right {
+            setImage(globDrawerView?.leftDrawerMiniContentImageView, urlString: item.miniDrawerContentImage)
+            globDrawerView?.leftTitleLabel.text = item.titleString
+            globDrawerView?.leftTitleLabel.font = item.miniDrawerTextFont
+            globDrawerView?.leftTitleLabel.textColor = item.miniDrawerTextColor
+            globDrawerView?.leftTitleLabel.transform = labelTransform(for: item.labelType)
+            setImage(globDrawerView?.leftDrawerMiniImageView, urlString: item.miniDrawerBackgroundImage)
+            globDrawerView?.leftDrawerMiniImageView.backgroundColor = item.miniDrawerBackgroundColor
+            globDrawerView?.leftDrawerMiniArrow.textColor = item.arrowColor
+        } else {
+            setImage(globDrawerView?.rightDrawerMiniContentImageView, urlString: item.miniDrawerContentImage)
+            globDrawerView?.rightTitleLabel.text = item.titleString
+            globDrawerView?.rightTitleLabel.font = item.miniDrawerTextFont
+            globDrawerView?.rightTitleLabel.textColor = item.miniDrawerTextColor
+            globDrawerView?.rightTitleLabel.transform = labelTransform(for: item.labelType)
+            setImage(globDrawerView?.rightDrawerMiniImageView, urlString: item.miniDrawerBackgroundImage)
+            globDrawerView?.rightDrawerMiniImageView.backgroundColor = item.miniDrawerBackgroundColor
+            globDrawerView?.rightDrawerMiniArrow.textColor = item.arrowColor
+        }
+    }
+
+    private func applyMaximizedContent(_ item: DrawerItemViewModel) {
+        setImage(globDrawerView?.drawerGrandImageView, urlString: item.drawerBackgroundImage)
+        globDrawerView?.drawerGrandImageView.backgroundColor = item.drawerBackgroundColor
+        setImage(globDrawerView?.drawerGrandContentImageView, urlString: item.drawerContentImage)
+    }
+
+    private func labelTransform(for type: labelType) -> CGAffineTransform {
+        let angle = type == .upToDown ? CGFloat.pi / 2 : -CGFloat.pi / 2
+        let rotation = CGAffineTransform(rotationAngle: angle)
+
+        let reserved = minimizedIndicatorReservedHeight
+        guard reserved > 0 else { return rotation }
+
+        // The label is centered in the strip; shifting it up by half of the reserved height
+        // re-centers it within the area that is left above the dots.
+        return rotation.concatenating(CGAffineTransform(translationX: 0, y: -reserved / 2))
+    }
+
+    private func selectItem(at index: Int) {
+        guard hasMultipleItems else { return }
+        applyItem(at: index, animated: true)
+        // Restart the countdown so a manual change is not followed by an immediate automatic one.
+        startAutoScrollIfNeeded()
+    }
+
+    // MARK: - Images
+
+    private func setImage(_ imageView: UIImageView?, urlString: String) {
+        guard let imageView = imageView else { return }
+
+        if let cachedImage = imageCache.object(forKey: urlString as NSString) as? UIImage {
+            imageView.image = cachedImage
+            return
+        }
+
+        imageView.image = nil
+        guard !urlString.isEmpty, let url = URL(string: urlString) else { return }
+
+        let generation = itemGeneration
+        URLSession.shared.dataTask(with: url) { [weak self, weak imageView] data, _, _ in
+            guard let data = data, let image = UIImage.gif(data: data) else { return }
+            imageCache.setObject(image, forKey: urlString as NSString)
+            DispatchQueue.main.async {
+                guard let self = self, let imageView = imageView, self.itemGeneration == generation else { return }
+                imageView.image = image
+            }
+        }.resume()
+    }
+
+    /// Warms up the cache so switching between items does not flicker.
+    private func prefetchItemImages() {
+        let urlStrings = model.items.flatMap {
+            [$0.miniDrawerContentImage, $0.miniDrawerBackgroundImage, $0.drawerContentImage, $0.drawerBackgroundImage]
+        }
+
+        for urlString in urlStrings where !urlString.isEmpty {
+            guard imageCache.object(forKey: urlString as NSString) == nil, let url = URL(string: urlString) else { continue }
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                guard let data = data, let image = UIImage.gif(data: data) else { return }
+                imageCache.setObject(image, forKey: urlString as NSString)
+            }.resume()
+        }
+    }
+
+    // MARK: - Auto scroll
+
+    private func startAutoScrollIfNeeded() {
+        stopAutoScroll()
+        guard hasMultipleItems, !drawerOpen else { return }
+
+        let timer = Timer(timeInterval: model.autoScrollInterval, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            guard !self.drawerOpen else { return }
+            self.applyItem(at: self.currentItemIndex + 1, animated: true)
+        }
+        RunLoop.current.add(timer, forMode: .common)
+        autoScrollTimer = timer
+    }
+
+    private func stopAutoScroll() {
+        autoScrollTimer?.invalidate()
+        autoScrollTimer = nil
+    }
+
+    // MARK: - Item navigation setup
+
+    private func setupPageIndicators() {
+        guard hasMultipleItems else { return }
+
+        if let containerView = minimizedContainerView {
+            // The strip is narrow, so the dots are laid out horizontally with tighter
+            // spacing than in the maximized panel to stay inside its width.
+            let indicator = makePageIndicator(axis: .horizontal,
+                                              dotSpacing: minimizedDotSpacing,
+                                              horizontalPadding: minimizedDotHorizontalPadding)
+            containerView.addSubview(indicator)
+
+            var centerXOffset = 0.0
+            if model.isCircle {
+                // In circle mode the outer half of the strip sits off screen, so the dots follow the label.
+                centerXOffset = model.screenXcoordinate == .right ? model.xCoordPaddingConstant : -model.xCoordPaddingConstant
+            }
+
+            NSLayoutConstraint.activate([
+                indicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: centerXOffset),
+                indicator.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            ])
+            minimizedPageIndicator = indicator
+            reserveSpaceForMinimizedIndicator()
+        }
+
+        if let grandView = globDrawerView?.drawerGrandView {
+            let indicator = makePageIndicator(axis: .horizontal)
+            grandView.addSubview(indicator)
+            NSLayoutConstraint.activate([
+                indicator.centerXAnchor.constraint(equalTo: grandView.centerXAnchor),
+                indicator.bottomAnchor.constraint(equalTo: grandView.bottomAnchor)
+            ])
+            maximizedPageIndicator = indicator
+        }
+    }
+
+    /// Pushes the minimized content up so that it sits above the dots instead of behind them.
+    private func reserveSpaceForMinimizedIndicator() {
+        let reserved = minimizedIndicatorReservedHeight
+        guard reserved > 0 else { return }
+
+        // The label is centered in the strip and is re-centered above the dots by labelTransform.
+        if model.screenXcoordinate == .right {
+            globDrawerView?.leftDrawerMiniContentImageBottomConstraint.constant += reserved
+        } else {
+            globDrawerView?.rightDrawerMiniContentImageBottomConstraint.constant += reserved
+        }
+    }
+
+    private func makePageIndicator(axis: NSLayoutConstraint.Axis,
+                                   dotSpacing: CGFloat = 5.0,
+                                   horizontalPadding: CGFloat = 7.0) -> DrawerPageIndicatorView {
+        let indicator = DrawerPageIndicatorView(numberOfPages: model.items.count,
+                                                axis: axis,
+                                                dotSpacing: dotSpacing,
+                                                horizontalPadding: horizontalPadding)
+        // The content image view of the maximized part sits on zPosition 1.
+        indicator.layer.zPosition = 2
+        indicator.onIndexSelected = { [weak self] index in
+            self?.selectItem(at: index)
+        }
+        return indicator
+    }
+
+    private func addSwipeGestures() {
+        guard hasMultipleItems else { return }
+
+        // The minimized strip changes items on horizontal swipes; opening and closing stays on tap.
+        if let containerView = minimizedContainerView {
+            addSwipeGestures(to: containerView, directions: [.left, .right])
+        }
+        if let grandView = globDrawerView?.drawerGrandView {
+            addSwipeGestures(to: grandView, directions: [.up, .down, .left, .right])
+        }
+    }
+
+    private func addSwipeGestures(to view: UIView, directions: [UISwipeGestureRecognizer.Direction]) {
+        view.isUserInteractionEnabled = true
+        for direction in directions {
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+            swipe.direction = direction
+            view.addGestureRecognizer(swipe)
+        }
+    }
+
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        guard hasMultipleItems else { return }
+        switch gesture.direction {
+        case .up, .left:
+            selectItem(at: currentItemIndex + 1)
+        default:
+            selectItem(at: currentItemIndex - 1)
+        }
     }
     
     @objc func closeClicked(_ sender: UITapGestureRecognizer? = nil) {
             stopPageChangeObserving()
+            stopAutoScroll()
             self.window?.isHidden = true
             self.window?.removeFromSuperview()
             self.window = nil
@@ -173,26 +418,8 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             globDrawerView?.leftDrawerMiniView.isHidden = true
         }
         
-        // label tipi
-        if self.model.labelType == .downToUp  && self.model.screenXcoordinate == .right {
-            globDrawerView!.leftTitleLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-        } else if self.model.labelType == .upToDown  && self.model.screenXcoordinate == .right {
-            globDrawerView!.leftTitleLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-        } else if self.model.labelType == .downToUp  && self.model.screenXcoordinate == .left {
-            globDrawerView!.rightTitleLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-        } else if self.model.labelType == .upToDown  && self.model.screenXcoordinate == .left {
-            globDrawerView!.rightTitleLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-        }
-        
-        if self.model.screenXcoordinate == .right {
+        // The label text, font, colour and orientation are per item and applied by applyItem(at:animated:).
 
-            globDrawerView!.leftTitleLabel.text = model.titleString
-            // modele göre diğer elementlerin assign edilmesi gerek left mini viewa
-        } else if self.model.screenXcoordinate == .left {
-
-            globDrawerView!.rightTitleLabel.text = model.titleString
-            // modele göre diğer elementlerin assign edilmesi gerek right mini viewa
-        }
         if !self.model.isCircle {
             globDrawerView?.rightDrawerMiniContentImageView.isHidden = true
             globDrawerView?.leftDrawerMiniContentImageView.isHidden = true
@@ -207,7 +434,13 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     }
     
     @objc func imageClicked(_ sender: UITapGestureRecognizer? = nil) {
-        
+
+        // Taps that land on the dots switch the item instead of following the link.
+        if let indicator = maximizedPageIndicator, let sender = sender,
+           indicator.bounds.contains(sender.location(in: indicator)) {
+            return
+        }
+
         if let report = self.report {
             Visilabs.callAPI().trackDrawerClick(drawerReport: report)
         }
@@ -228,7 +461,13 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     }
     
     @objc func viewClicked(_ sender: UITapGestureRecognizer? = nil) {
-        
+
+        // Taps that land on the dots switch the item instead of opening or closing the drawer.
+        if let indicator = minimizedPageIndicator, let sender = sender,
+           indicator.bounds.contains(sender.location(in: indicator)) {
+            return
+        }
+
         UIView.animate(withDuration: 0.5, animations: { [self] in
             if drawerOpen {
                 self.window?.layer.position = drawerFirstPosition!
@@ -252,6 +491,12 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             }
         })
         drawerOpen = !drawerOpen
+
+        if drawerOpen {
+            stopAutoScroll()
+        } else {
+            startAutoScrollIfNeeded()
+        }
     }
     
     override func show(animated: Bool) {
@@ -331,6 +576,7 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
     override func hide(animated: Bool, completion: @escaping () -> Void) {
         if shouldDismissed {
             stopPageChangeObserving()
+            stopAutoScroll()
             self.window?.isHidden = true
             self.window?.removeFromSuperview()
             self.window = nil
