@@ -42,38 +42,78 @@ class RDDrawerViewControllerModel {
             drawerModel.screenXcoordinate = .left
         }
 
-        drawerModel.miniDrawerContentImage = serviceModel?.contentMinimizedImage ?? ""
-        drawerModel.titleString = serviceModel?.contentMinimizedText ?? ""
-        drawerModel.drawerContentImage = serviceModel?.contentMaximizedImage ?? ""
         drawerModel.waitTime = serviceModel?.waitingTime
         drawerModel.linkToGo = serviceModel?.iosLnk
 
-        drawerModel.miniDrawerTextFont = VisilabsHelper.getFont(fontFamily: serviceModel?.contentMinimizedFontFamily, fontSize: serviceModel?.contentMinimizedTextSize, style: .title2, customFont: serviceModel?.contentMinimizedCustomFontFamilyIos)
-        drawerModel.miniDrawerTextColor = UIColor(hex: serviceModel?.contentMinimizedTextColor)
+        drawerModel.items = mapItems(serviceModel: serviceModel)
 
-        if serviceModel?.contentMinimizedTextOrientation?.lowercased() == "toptobottom" {
-            drawerModel.labelType = .upToDown
-        } else {
-            drawerModel.labelType = .downToUp
+        // The flat properties describe the first item and are kept so that the
+        // one-time layout configuration keeps working for both single and multi item setups.
+        if let firstItem = drawerModel.items.first {
+            drawerModel.miniDrawerContentImage = firstItem.miniDrawerContentImage
+            drawerModel.titleString = firstItem.titleString
+            drawerModel.drawerContentImage = firstItem.drawerContentImage
+            drawerModel.miniDrawerTextFont = firstItem.miniDrawerTextFont
+            drawerModel.miniDrawerTextColor = firstItem.miniDrawerTextColor
+            drawerModel.labelType = firstItem.labelType
+            drawerModel.miniDrawerBackgroundImage = firstItem.miniDrawerBackgroundImage
+            drawerModel.miniDrawerBackgroundColor = firstItem.miniDrawerBackgroundColor
+            drawerModel.arrowColor = firstItem.arrowColor
+            drawerModel.drawerBackgroundImage = firstItem.drawerBackgroundImage
+            drawerModel.drawerBackgroundColor = firstItem.drawerBackgroundColor
         }
-
-        drawerModel.miniDrawerBackgroundImage = serviceModel?.contentMinimizedBackgroundImage ?? ""
-        drawerModel.miniDrawerBackgroundColor = UIColor(hex: serviceModel?.contentMinimizedBackgroundColor)
-
-        if drawerModel.miniDrawerContentImage?.count != 0 { //contentImage remove
-            drawerModel.miniDrawerBackgroundImage = serviceModel?.contentMinimizedImage ?? ""
-        }
-        
-        if serviceModel?.contentMinimizedArrowColor?.count == 0 {
-            drawerModel.arrowColor = .clear
-        } else {
-            drawerModel.arrowColor = UIColor(hex: serviceModel?.contentMinimizedArrowColor)
-        }
-
-        drawerModel.drawerBackgroundImage = serviceModel?.contentMaximizedBackgroundImage ?? ""
-        drawerModel.drawerBackgroundColor = UIColor(hex: serviceModel?.contentMaximizedBackgroundColor)
 
         return drawerModel
+    }
+
+    /// Builds the item list from `content_minimized_items`. When the panel sends no item
+    /// array the legacy single item fields are used to synthesize one item.
+    private func mapItems(serviceModel: DrawerServiceModel?) -> [DrawerItemViewModel] {
+        guard let serviceModel = serviceModel else { return [DrawerItemViewModel()] }
+
+        let itemServiceModels: [DrawerItemServiceModel]
+        if serviceModel.items.isEmpty {
+            itemServiceModels = [DrawerItemServiceModel(legacy: serviceModel)]
+        } else {
+            itemServiceModels = serviceModel.items
+        }
+
+        return itemServiceModels.map { mapItem($0) }
+    }
+
+    private func mapItem(_ item: DrawerItemServiceModel) -> DrawerItemViewModel {
+        var itemModel = DrawerItemViewModel()
+
+        itemModel.miniDrawerContentImage = item.contentMinimizedImage ?? ""
+        itemModel.titleString = item.contentMinimizedText ?? ""
+        itemModel.drawerContentImage = item.contentMaximizedImage ?? ""
+
+        itemModel.miniDrawerTextFont = VisilabsHelper.getFont(fontFamily: item.contentMinimizedFontFamily, fontSize: item.contentMinimizedTextSize, style: .title2, customFont: item.contentMinimizedCustomFontFamilyIos)
+        itemModel.miniDrawerTextColor = UIColor(hex: item.contentMinimizedTextColor)
+
+        if item.contentMinimizedTextOrientation?.lowercased() == "toptobottom" {
+            itemModel.labelType = .upToDown
+        } else {
+            itemModel.labelType = .downToUp
+        }
+
+        itemModel.miniDrawerBackgroundImage = item.contentMinimizedBackgroundImage ?? ""
+        itemModel.miniDrawerBackgroundColor = UIColor(hex: item.contentMinimizedBackgroundColor)
+
+        if !itemModel.miniDrawerContentImage.isEmpty { //contentImage remove
+            itemModel.miniDrawerBackgroundImage = item.contentMinimizedImage ?? ""
+        }
+
+        if item.contentMinimizedArrowColor?.isEmpty ?? true {
+            itemModel.arrowColor = .clear
+        } else {
+            itemModel.arrowColor = UIColor(hex: item.contentMinimizedArrowColor)
+        }
+
+        itemModel.drawerBackgroundImage = item.contentMaximizedBackgroundImage ?? ""
+        itemModel.drawerBackgroundColor = UIColor(hex: item.contentMaximizedBackgroundColor)
+
+        return itemModel
     }
 }
 
@@ -105,10 +145,49 @@ struct DrawerServiceModel: TargetingActionViewModel {
     var contentMaximizedBackgroundImage: String?
     var contentMaximizedBackgroundColor: String?
 
+    /// `content_minimized_items` of the extended props. Empty when the panel sends the legacy single item payload.
+    var items: [DrawerItemServiceModel] = []
+
     public var jsContent: String?
     public var jsonContent: String?
     
     var report: DrawerReport?
+}
+
+struct DrawerItemServiceModel {
+
+    var contentMinimizedImage: String?
+    var contentMinimizedText: String?
+    var contentMinimizedTextSize: String?
+    var contentMinimizedTextColor: String?
+    var contentMinimizedFontFamily: String?
+    var contentMinimizedCustomFontFamilyIos: String?
+    var contentMinimizedTextOrientation: String?
+    var contentMinimizedBackgroundImage: String?
+    var contentMinimizedBackgroundColor: String?
+    var contentMinimizedArrowColor: String?
+    var contentMaximizedImage: String?
+    var contentMaximizedBackgroundImage: String?
+    var contentMaximizedBackgroundColor: String?
+
+    init() { }
+
+    /// Mirrors the legacy single item payload, where the item fields live directly on the action data and extended props.
+    init(legacy serviceModel: DrawerServiceModel) {
+        contentMinimizedImage = serviceModel.contentMinimizedImage
+        contentMinimizedText = serviceModel.contentMinimizedText
+        contentMinimizedTextSize = serviceModel.contentMinimizedTextSize
+        contentMinimizedTextColor = serviceModel.contentMinimizedTextColor
+        contentMinimizedFontFamily = serviceModel.contentMinimizedFontFamily
+        contentMinimizedCustomFontFamilyIos = serviceModel.contentMinimizedCustomFontFamilyIos
+        contentMinimizedTextOrientation = serviceModel.contentMinimizedTextOrientation
+        contentMinimizedBackgroundImage = serviceModel.contentMinimizedBackgroundImage
+        contentMinimizedBackgroundColor = serviceModel.contentMinimizedBackgroundColor
+        contentMinimizedArrowColor = serviceModel.contentMinimizedArrowColor
+        contentMaximizedImage = serviceModel.contentMaximizedImage
+        contentMaximizedBackgroundImage = serviceModel.contentMaximizedBackgroundImage
+        contentMaximizedBackgroundColor = serviceModel.contentMaximizedBackgroundColor
+    }
 }
 
 public struct DrawerReport: Codable {
@@ -124,6 +203,7 @@ struct DrawerViewModel {
     var miniDrawerWidthForCircle = 140.0
     var xCoordPaddingConstant = -25.0
     var cornerRadius = 10.0
+    var autoScrollInterval = 5.0
 
     var actId: Int?
     var title: String?
@@ -151,6 +231,26 @@ struct DrawerViewModel {
     var miniDrawerBackgroundColor: UIColor?
     var arrowColor: UIColor?
     var drawerBackgroundImage: String?
+    var drawerBackgroundColor: UIColor?
+
+    /// Always holds at least one item. Legacy payloads produce a single item list.
+    var items: [DrawerItemViewModel] = []
+
+}
+
+struct DrawerItemViewModel {
+
+    var miniDrawerContentImage: String = ""
+    var titleString: String = ""
+    var drawerContentImage: String = ""
+
+    var miniDrawerTextFont: UIFont?
+    var miniDrawerTextColor: UIColor?
+    var labelType: labelType = .downToUp
+    var miniDrawerBackgroundImage: String = ""
+    var miniDrawerBackgroundColor: UIColor?
+    var arrowColor: UIColor?
+    var drawerBackgroundImage: String = ""
     var drawerBackgroundColor: UIColor?
 
 }
