@@ -67,8 +67,12 @@ public class ShakeToWinViewController: UIViewController {
     }
     
     func getUIImage(named: String) -> UIImage? {
-        let bundle = Bundle(identifier: "com.relateddigital.visilabs")
-        return UIImage(named: named, in: bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
+#if SWIFT_PACKAGE
+        let bundle = Bundle.module
+#else
+        let bundle = Bundle(for: type(of: self))
+#endif
+        return UIImage(named: named, in: bundle, compatibleWith: nil)?.resized(withPercentage: CGFloat(0.75))
     }
     
     func deviceDidntShake() {
@@ -207,11 +211,7 @@ public class ShakeToWinViewController: UIViewController {
 extension ShakeToWinViewController {
     
     func createDummyModel() -> ShakeToWinViewModel? {
-        var img: UIImage? = nil
-        if let data = getImageDataOfUrl(URL(string: "https://placekitten.com/300/500")) {
-            img = UIImage(data: data)
-        }
-        return ShakeToWinViewModel(firstPage: ShakeToWinFirstPage(image: img, title: "shtw first page", titleFont: .boldSystemFont(ofSize: 16), titleColor: .yellow, message: "shtw message \n message can be plural", messageColor: .white, messageFont: .systemFont(ofSize: 12), buttonText: "hit me for next", buttonTextColor: .blue, buttonFont: .boldSystemFont(ofSize: 16), buttonBgColor: .white, backgroundColor: .green, closeButtonColor: .white),
+        return ShakeToWinViewModel(firstPage: ShakeToWinFirstPage(image: nil, title: "shtw first page", titleFont: .boldSystemFont(ofSize: 16), titleColor: .yellow, message: "shtw message \n message can be plural", messageColor: .white, messageFont: .systemFont(ofSize: 12), buttonText: "hit me for next", buttonTextColor: .blue, buttonFont: .boldSystemFont(ofSize: 16), buttonBgColor: .white, backgroundColor: .green, closeButtonColor: .white),
                                    secondPage: ShakeToWinSecondPage(waitSeconds: 8, videoURL: URL(string: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4"), closeButtonColor: .white),
                                    thirdPage: ShakeToWinThirdPage(image: nil, title: "third page", titleFont: .boldSystemFont(ofSize: 16), titleColor: .darkGray, message: "shtw message \n message can be plural", messageColor: .blue, messageFont: .italicSystemFont(ofSize: 12), buttonText: "finish", buttonTextColor: .white, buttonFont: .boldSystemFont(ofSize: 16), buttonBgColor: .black, backgroundColor: .systemPink, closeButtonColor: .white))
     }
@@ -232,17 +232,5 @@ extension ShakeToWinViewController {
             button.setImage(getUIImage(named: "VisilabsCloseButtonBlack"), for: .normal)
         }
         return button
-    }
-    
-    func getImageDataOfUrl(_ url: URL?) -> Data? {
-        var data: Data? = nil
-        if let iUrl = url {
-            do {
-                data = try Data(contentsOf: iUrl, options: [.mappedIfSafe])
-            } catch {
-                VisilabsLogger.error("image failed to load from url \(iUrl)")
-            }
-        }
-        return data
     }
 }

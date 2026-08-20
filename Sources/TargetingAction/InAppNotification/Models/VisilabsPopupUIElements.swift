@@ -185,12 +185,10 @@ extension VisilabsPopupDialogDefaultView {
     internal func setSliderStepRating() -> VisilabsSliderStep {
         let sliderStepRating = VisilabsSliderStep()
 
-        sliderStepRating.stepImages = [getUIImage(named: "terrible")!, getUIImage(named: "bad")!,
-                                       getUIImage(named: "okay")!, getUIImage(named: "good")!,
-                                       getUIImage(named: "great")!]
-        sliderStepRating.tickImages = [getUIImage(named: "unTerrible")!, getUIImage(named: "unBad")!,
-                                       getUIImage(named: "unOkay")!, getUIImage(named: "unGood")!,
-                                       getUIImage(named: "unGreat")!]
+        sliderStepRating.stepImages = ["terrible", "bad", "okay", "good", "great"]
+            .compactMap { getUIImage(named: $0) }
+        sliderStepRating.tickImages = ["unTerrible", "unBad", "unOkay", "unGood", "unGreat"]
+            .compactMap { getUIImage(named: $0) }
 
         sliderStepRating.tickTitles = ["Berbat", "Kötü", "Normal", "İyi", "Harika"]
 
@@ -227,7 +225,7 @@ extension VisilabsPopupDialogDefaultView {
         #else
             let bundle = Bundle(for: type(of: self))
         #endif
-        return UIImage(named: named, in: bundle, compatibleWith: nil)!.resized(withPercentage: CGFloat(0.75))
+        return UIImage(named: named, in: bundle, compatibleWith: nil)?.resized(withPercentage: CGFloat(0.75))
     }
 
     internal func baseSetup(_ notification: VisilabsInAppNotification) {
