@@ -115,7 +115,7 @@ internal class VisilabsHelper {
 #else
         let bundle = Bundle(for: self as AnyClass)
 #endif
-        return UIImage(named: named, in: bundle, compatibleWith: nil)!
+        return UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
     static func checkEmail(email: String) -> Bool {

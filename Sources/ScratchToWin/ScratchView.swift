@@ -63,16 +63,13 @@ open class ScratchView: UIView {
 
     fileprivate func Init() {
         var image: UIImage?
+        let namedImage = (couponImage as String?).flatMap { UIImage(named: $0) }
         if let img = couponUIImage {
             image = processPixels(image: img)
-        } else {
-            image = processPixels(image: UIImage(named: couponImage)!)
+        } else if let namedImage = namedImage {
+            image = processPixels(image: namedImage)
         }
-        if image != nil {
-            scratched = image?.cgImage
-        } else {
-            scratched = UIImage(named: couponImage)?.cgImage
-        }
+        scratched = image?.cgImage ?? namedImage?.cgImage
         let width = Int(self.frame.width)
         let height = Int(self.frame.height)
 
