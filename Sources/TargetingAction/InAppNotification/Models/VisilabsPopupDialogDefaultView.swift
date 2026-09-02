@@ -433,37 +433,34 @@ extension VisilabsPopupDialogDefaultView: UITextFieldDelegate {
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
-            as? NSValue)?.cgRectValue {
-            if let view = getTopView() {
-                if view.frame.origin.y == 0 {
-                    view.frame.origin.y -= keyboardSize.height
-                }
-            }
-        }
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey]
+                                    as? NSValue)?.cgRectValue else { return }
+        applyKeyboardOffset(VisilabsPopupKeyboardAvoidance.offset(forKeyboardFrame: keyboardFrame,
+                                                                  container: keyboardAvoidingContainer),
+                            userInfo: userInfo)
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let view = getTopView() {
-            if view.frame.origin.y != 0 {
-                view.frame.origin.y = 0
-            }
-        }
+        applyKeyboardOffset(0, userInfo: notification.userInfo)
     }
 
-    func getTopView() -> UIView? {
-        var topView: UIView?
-        let window = UIApplication.shared.keyWindow
-        if window != nil {
-            for subview in window?.subviews ?? [] {
-                if !subview.isHidden && subview.alpha > 0
-                    && subview.frame.size.width > 0
-                    && subview.frame.size.height > 0 {
-                    topView = subview
-                }
-            }
+    private var keyboardAvoidingContainer: VisilabsPopupKeyboardAvoidingContainer? {
+        var candidate: UIView? = self
+        while let view = candidate {
+            if let container = view as? VisilabsPopupKeyboardAvoidingContainer { return container }
+            candidate = view.superview
         }
-        return topView
+        return nil
+    }
+
+    private func applyKeyboardOffset(_ offset: CGFloat, userInfo: [AnyHashable: Any]?) {
+        guard let container = keyboardAvoidingContainer,
+              let centerYConstraint = container.centerYConstraint,
+              abs(centerYConstraint.constant - offset) > 0.5 else { return }
+
+        centerYConstraint.constant = offset
+        VisilabsPopupKeyboardAvoidance.animate(container.containerView, userInfo: userInfo)
     }
 
     @objc func collapseSctw() {
