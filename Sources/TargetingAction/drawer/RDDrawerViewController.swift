@@ -1,10 +1,24 @@
 import Foundation
 import UIKit
 
+/// Receives drawer item clicks so that the host app can handle the link itself. Register it
+/// through `Visilabs.callAPI().drawerUrlDelegate`. While a delegate is set the SDK does not
+/// open the link, which lets the app route deep links on its own.
+@objc
+public protocol RDDrawerURLDelegate: NSObjectProtocol {
+    /// - Parameters:
+    ///   - link: the link of the clicked item, exactly as it arrives from the panel
+    ///   - itemIndex: index of the clicked item, 0 for a single item drawer
+    ///   - staticCode: promo code of the clicked item, empty when it has none
+    @objc
+    func drawerLinkClicked(_ link: String, itemIndex: Int, staticCode: String)
+}
+
 class RDDrawerViewController: VisilabsBaseNotificationViewController {
     
     var position: CGPoint?
     var model = DrawerViewModel()
+    weak var urlDelegate: RDDrawerURLDelegate?
     var globDrawerView: drawerView?
     var drawerOpen: Bool = false
     var drawerFirstPosition: CGPoint?
@@ -28,6 +42,11 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
 
     private var minimizedContainerView: UIView? {
         model.screenXcoordinate == .right ? globDrawerView?.leftDrawerMiniView : globDrawerView?.rightDrawerMiniView
+    }
+
+    private var currentItem: DrawerItemViewModel? {
+        guard currentItemIndex >= 0, currentItemIndex < model.items.count else { return nil }
+        return model.items[currentItemIndex]
     }
 
     private let minimizedDotSpacing: CGFloat = 4.0
@@ -445,15 +464,27 @@ class RDDrawerViewController: VisilabsBaseNotificationViewController {
             Visilabs.callAPI().trackDrawerClick(drawerReport: report)
         }
         
-        if model.staticcode?.count ?? 0 > 0 {
-            UIPasteboard.general.string = model.staticcode
+        // The link and the promo code belong to the item that is currently shown.
+        guard let item = currentItem else { return }
+
+        if !item.staticcode.isEmpty {
+            UIPasteboard.general.string = item.staticcode
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
                 VisilabsHelper.showCopiedClipboardMessage()
             }
         }
-        
-        if let url = URL(string: self.model.linkToGo ?? "") {
-            
+
+        guard !item.linkToGo.isEmpty else { return }
+
+        // A registered delegate takes over the navigation, so that the app can route deep
+        // links itself. Opening the link here as well would navigate twice.
+        if let urlDelegate = urlDelegate {
+            urlDelegate.drawerLinkClicked(item.linkToGo, itemIndex: currentItemIndex, staticCode: item.staticcode)
+            return
+        }
+
+        if let url = URL(string: item.linkToGo) {
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 UIApplication.shared.open(url)
             }

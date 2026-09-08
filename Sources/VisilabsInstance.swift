@@ -122,6 +122,14 @@ public class VisilabsInstance: CustomDebugStringConvertible {
     public weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     public weak var notificationBellDelegate: VisilabsNotificationBellDelegate?
     public var inAppURLHandler: VisilabsInAppURLHandler?
+
+    /// Set this to handle drawer links in the app, for example to route deep links.
+    /// While it is set the SDK does not open drawer links itself.
+    public weak var drawerUrlDelegate: RDDrawerURLDelegate? {
+        didSet {
+            visilabsTargetingActionInstance.notificationsInstance.drawerUrlDelegate = drawerUrlDelegate
+        }
+    }
     
     func shouldOpenInAppURLInSDK(_ url: URL, notification: VisilabsInAppNotification?) -> Bool {
         guard let handler = inAppURLHandler else {

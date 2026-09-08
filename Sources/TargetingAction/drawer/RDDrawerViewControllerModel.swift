@@ -78,11 +78,18 @@ class RDDrawerViewControllerModel {
             itemServiceModels = serviceModel.items
         }
 
-        return itemServiceModels.map { mapItem($0) }
+        return itemServiceModels.map { mapItem($0, fallback: serviceModel) }
     }
 
-    private func mapItem(_ item: DrawerItemServiceModel) -> DrawerItemViewModel {
+    private func mapItem(_ item: DrawerItemServiceModel, fallback serviceModel: DrawerServiceModel) -> DrawerItemViewModel {
         var itemModel = DrawerItemViewModel()
+
+        // Older payloads only carry one link and promo code on the action data, so an item
+        // without its own values keeps using those.
+        let itemLink = item.iosLnk ?? ""
+        itemModel.linkToGo = itemLink.isEmpty ? (serviceModel.iosLnk ?? "") : itemLink
+        let itemStaticcode = item.staticcode ?? ""
+        itemModel.staticcode = itemStaticcode.isEmpty ? (serviceModel.staticcode ?? "") : itemStaticcode
 
         itemModel.miniDrawerContentImage = item.contentMinimizedImage ?? ""
         itemModel.titleString = item.contentMinimizedText ?? ""
@@ -156,6 +163,8 @@ struct DrawerServiceModel: TargetingActionViewModel {
 
 struct DrawerItemServiceModel {
 
+    var iosLnk: String?
+    var staticcode: String?
     var contentMinimizedImage: String?
     var contentMinimizedText: String?
     var contentMinimizedTextSize: String?
@@ -174,6 +183,8 @@ struct DrawerItemServiceModel {
 
     /// Mirrors the legacy single item payload, where the item fields live directly on the action data and extended props.
     init(legacy serviceModel: DrawerServiceModel) {
+        iosLnk = serviceModel.iosLnk
+        staticcode = serviceModel.staticcode
         contentMinimizedImage = serviceModel.contentMinimizedImage
         contentMinimizedText = serviceModel.contentMinimizedText
         contentMinimizedTextSize = serviceModel.contentMinimizedTextSize
@@ -239,6 +250,11 @@ struct DrawerViewModel {
 }
 
 struct DrawerItemViewModel {
+
+    /// Link and promo code of this item. Falls back to the action data values when the
+    /// panel does not send them per item.
+    var linkToGo: String = ""
+    var staticcode: String = ""
 
     var miniDrawerContentImage: String = ""
     var titleString: String = ""

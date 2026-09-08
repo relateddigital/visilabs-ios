@@ -21,6 +21,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     var currentlyShowingTargetingAction: TargetingActionViewModel?
     weak var delegate: VisilabsInAppNotificationsDelegate?
     weak var inappButtonDelegate: VisilabsInappButtonDelegate?
+    weak var drawerUrlDelegate: RDDrawerURLDelegate?
     weak var currentViewController: UIViewController?
 
     init(lock: VisilabsReadWriteLock) {
@@ -134,6 +135,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     func showDrawer(model: DrawerServiceModel) -> Bool {
         let sideBarViewController = RDDrawerViewController(model: model)
         sideBarViewController.delegate = self
+        sideBarViewController.urlDelegate = self.drawerUrlDelegate
         sideBarViewController.show(animated: true)
         return true
     }
