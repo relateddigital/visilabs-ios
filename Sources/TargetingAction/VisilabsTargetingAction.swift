@@ -521,6 +521,8 @@ class VisilabsTargetingAction {
     private func parseDrawerItem(_ item: [String: Any?]) -> DrawerItemServiceModel {
         var itemModel = DrawerItemServiceModel()
 
+        itemModel.iosLnk = item[VisilabsConstants.iosLnk] as? String ?? ""
+        itemModel.staticcode = item[VisilabsConstants.staticcode] as? String ?? ""
         itemModel.contentMinimizedImage = item[VisilabsConstants.contentMinimizedImage] as? String ?? ""
         itemModel.contentMinimizedText = item[VisilabsConstants.contentMinimizedText] as? String ?? ""
         itemModel.contentMinimizedTextSize = item[VisilabsConstants.contentMinimizedTextSize] as? String ?? ""

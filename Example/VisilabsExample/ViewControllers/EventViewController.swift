@@ -33,7 +33,7 @@ enum VisilabsEventType: String, CaseIterable {
     case sendLocationPermission = "Send Location Permission"
 }
 
-class EventViewController: FormViewController, BannerDelegate {
+class EventViewController: FormViewController, BannerDelegate, RDDrawerURLDelegate {
     
     
     
@@ -42,8 +42,13 @@ class EventViewController: FormViewController, BannerDelegate {
         initializeForm()
         Visilabs.callAPI().notificationBellDelegate = self
         Visilabs.callAPI().inappButtonDelegate = self
+        Visilabs.callAPI().drawerUrlDelegate = self
         
     }
+    
+    func drawerLinkClicked(_ link: String, itemIndex: Int, staticCode: String) {
+            print("DrawerLink: \(link) - Index: \(itemIndex) - StaticCode: \(staticCode)")
+        }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)        
