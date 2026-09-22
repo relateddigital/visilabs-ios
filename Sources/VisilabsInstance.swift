@@ -68,7 +68,26 @@ class urlConstant {
 }
 
 public class VisilabsInstance: CustomDebugStringConvertible {
-    var visilabsUser: VisilabsUser!
+    /// `visilabsUser` trackingQueue, networkQueue, main thread ve IDFA / user-agent
+    /// callback'lerinden es zamanli olarak okunup yaziliyordu. VisilabsUser bir struct ve
+    /// icinde String alanlar var; kilitsiz erisimde struct kopyalanirken yarim yazilmis bir
+    /// referans retain edilip EXC_BAD_ACCESS (objc_retain) olusuyor.
+    /// Bu yuzden tum erisimler asagidaki kilit uzerinden yapiliyor.
+    private var _visilabsUser: VisilabsUser!
+    private let visilabsUserLock = NSRecursiveLock()
+    
+    var visilabsUser: VisilabsUser! {
+        get {
+            visilabsUserLock.lock()
+            defer { visilabsUserLock.unlock() }
+            return _visilabsUser
+        }
+        set {
+            visilabsUserLock.lock()
+            defer { visilabsUserLock.unlock() }
+            _visilabsUser = newValue
+        }
+    }
     var visilabsProfile: VisilabsProfile!
     var visilabsCookie = VisilabsCookie()
     var eventsQueue = Queue()
@@ -206,7 +225,7 @@ public class VisilabsInstance: CustomDebugStringConvertible {
         visilabsSearchRecommendationInstance = VisilabsSearchRecommendation(visilabsProfile: visilabsProfile)
         visilabsRemoteConfigInstance = VisilabsRemoteConfig(profileId: visilabsProfile.profileId)
         visilabsLocationManager = VisilabsLocationManager()
-        visilabsUser = unarchive()
+        _visilabsUser = unarchive()
         visilabsTargetingActionInstance.inAppDelegate = self
         visilabsUser.sdkVersion = VisilabsHelper.getSdkVersion()
         
