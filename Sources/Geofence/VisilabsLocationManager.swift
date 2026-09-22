@@ -46,6 +46,18 @@ class VisilabsLocationManager: NSObject {
         }
     }
     
+    /// Timer, CLLocationManager ve `timer` / `started` / `startedInterval` gibi paylasilan durum
+    /// yalnizca main thread uzerinden kullanilmali. Aksi halde `timer` referansi iki thread'den
+    /// ayni anda okunup yazildiginda yarim kalmis bir referans retain edilip
+    /// EXC_BAD_ACCESS (objc_retain) olusuyor.
+    private func runOnMain(_ block: @escaping () -> Void) {
+        if Thread.isMainThread {
+            block()
+        } else {
+            DispatchQueue.main.async(execute: block)
+        }
+    }
+    
     override init() {
         locMan = CLLocationManager()
         lpLocMan = CLLocationManager()
@@ -116,74 +128,91 @@ class VisilabsLocationManager: NSObject {
     }
     
     func startUpdates(_ interval: Int) {
-        // Zamanlayıcı zaten başlatılmış ve aynı aralıkta ise işlemi durdur
-        guard !started || interval != startedInterval else {
-            VLogger.info("Geofence timer zaten başlatıldı, interval: \(interval)")
-            return
-        }
-        
-        VLogger.info("Geofence zamanlayıcısı başlatılıyor | interval = \(interval)")
-
-        // Önceki zamanlayıcı ve `shutDown` isteklerini iptal et
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(shutDown), object: nil)
-        timer?.invalidate()
-
-        // Yeni zamanlayıcıyı başlat
-        timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [weak self] _ in
-            guard let self = self else {
-                VLogger.error("Geofence güncellemesi sırasında self referansına ulaşılamadı.")
+        runOnMain { [weak self] in
+            guard let self = self else { return }
+            
+            // Zamanlayıcı zaten başlatılmış ve aynı aralıkta ise işlemi durdur
+            guard !self.started || interval != self.startedInterval else {
+                VLogger.info("Geofence timer zaten başlatıldı, interval: \(interval)")
                 return
             }
-            VLogger.info("Geofence timer tetiklendi")
-            self.requestLocation()
+            
+            VLogger.info("Geofence zamanlayıcısı başlatılıyor | interval = \(interval)")
+            
+            // Önceki zamanlayıcı ve `shutDown` isteklerini iptal et
+            NSObject.cancelPreviousPerformRequests(withTarget: self,
+                                                   selector: #selector(VisilabsLocationManager.shutDown),
+                                                   object: nil)
+            self.timer?.invalidate()
+            
+            // Yeni zamanlayıcıyı başlat
+            self.timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [weak self] _ in
+                guard let self = self else {
+                    VLogger.error("Geofence güncellemesi sırasında self referansına ulaşılamadı.")
+                    return
+                }
+                VLogger.info("Geofence timer tetiklendi")
+                self.requestLocation()
+            }
+            
+            // Konum güncellemeyi başlat
+            self.lpLocMan.startUpdatingLocation()
+            self.started = true
+            self.startedInterval = interval
         }
-        
-        // Konum güncellemeyi başlat
-        lpLocMan.startUpdatingLocation()
-        started = true
-        startedInterval = interval
     }
     
     private func stopUpdates() {
-        // Zamanlayıcı mevcut değilse erken çık
-        guard let timer = timer else {
-            VLogger.info("Geofence timer durdurulamadı, çünkü zaten mevcut değil")
-            return
-        }
-        
-        VLogger.info("Geofence zamanlayıcısı durduruluyor")
-        timer.invalidate()
-        self.timer = nil
-        started = false
-        startedInterval = 0
-        
-        // Gönderim yapılmıyorsa kapanışı gecikmeli olarak planla
-        if !sending {
-            let delay: TimeInterval = VisilabsGeofenceState.getGeofenceEnabled() ? 10 : 0
-            VLogger.info("Geofence kapanışı \(delay) saniye gecikmeli olarak planlanıyor")
+        runOnMain { [weak self] in
+            guard let self = self else { return }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                guard let self = self else {
-                    VLogger.error("Geofence kapanışı sırasında self referansına ulaşılamadı.")
-                    return
+            // Zamanlayıcı mevcut değilse erken çık
+            guard let timer = self.timer else {
+                VLogger.info("Geofence timer durdurulamadı, çünkü zaten mevcut değil")
+                return
+            }
+            
+            VLogger.info("Geofence zamanlayıcısı durduruluyor")
+            timer.invalidate()
+            self.timer = nil
+            self.started = false
+            self.startedInterval = 0
+            
+            // Gönderim yapılmıyorsa kapanışı gecikmeli olarak planla
+            if !self.sending {
+                let delay: TimeInterval = VisilabsGeofenceState.getGeofenceEnabled() ? 10 : 0
+                VLogger.info("Geofence kapanışı \(delay) saniye gecikmeli olarak planlanıyor")
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                    guard let self = self else {
+                        VLogger.error("Geofence kapanışı sırasında self referansına ulaşılamadı.")
+                        return
+                    }
+                    self.shutDown()
                 }
-                self.shutDown()
             }
         }
     }
     
     @objc func shutDown() {
-        VLogger.info("Shutting geofence down")
-        lpLocMan.stopUpdatingLocation()
+        runOnMain { [weak self] in
+            guard let self = self else { return }
+            VLogger.info("Shutting geofence down")
+            self.lpLocMan.stopUpdatingLocation()
+        }
     }
     
     func requestLocation() {
-        VLogger.info("Requesting location")
-        locMan.requestLocation()
+        runOnMain { [weak self] in
+            guard let self = self else { return }
+            VLogger.info("Requesting location")
+            self.locMan.requestLocation()
+        }
     }
     
     func updateTracking(location: CLLocation?, fromInit: Bool) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        // Bu metodun tamami CLLocationManager ve Timer'a dokunuyor; hepsi main thread'de calismali.
+        runOnMain { [weak self] in
             guard let self = self else {
                 VLogger.error("updateTracking sırasında self referansına ulaşılamadı.")
                 return
@@ -191,17 +220,15 @@ class VisilabsLocationManager: NSObject {
             
             // Geofence etkinleştirildi mi?
             if VisilabsGeofenceState.getGeofenceEnabled() {
-                DispatchQueue.main.async {
-                    // Arka planda veya önemli konum değişiklikleri için ayarları yapılandırma
-                    self.locMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode && self.getAuthorizationStatus() == .authorizedAlways
-                    self.locMan.pausesLocationUpdatesAutomatically = false
-                    self.lpLocMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode
-                    self.lpLocMan.pausesLocationUpdatesAutomatically = false
-                    self.locMan.desiredAccuracy = self.options.desiredCLLocationAccuracy
-                    
-                    if #available(iOS 11, *) {
-                        self.lpLocMan.showsBackgroundLocationIndicator = self.options.showBlueBar
-                    }
+                // Arka planda veya önemli konum değişiklikleri için ayarları yapılandırma
+                self.locMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode && self.getAuthorizationStatus() == .authorizedAlways
+                self.locMan.pausesLocationUpdatesAutomatically = false
+                self.lpLocMan.allowsBackgroundLocationUpdates = self.options.locationBackgroundMode
+                self.lpLocMan.pausesLocationUpdatesAutomatically = false
+                self.locMan.desiredAccuracy = self.options.desiredCLLocationAccuracy
+                
+                if #available(iOS 11, *) {
+                    self.lpLocMan.showsBackgroundLocationIndicator = self.options.showBlueBar
                 }
                 
                 let startUpdates = self.options.showBlueBar || self.getAuthorizationStatus() == .authorizedAlways
