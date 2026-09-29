@@ -145,7 +145,7 @@ public class VisilabsCarouselNotificationViewController: VisilabsBasePageViewCon
         self.modalPresentationStyle = .overFullScreen
         self.dataSource = pagingDataSource
         
-        UIApplication.applicationWindow.windowLevel = (statusBarHidden) ? UIWindow.Level.statusBar + 1 : UIWindow.Level.normal
+        UIApplication.applicationWindow?.windowLevel = (statusBarHidden) ? UIWindow.Level.statusBar + 1 : UIWindow.Level.normal
         
         NotificationCenter.default.addObserver(self, selector: #selector(VisilabsCarouselNotificationViewController.rotate), name: UIDevice.orientationDidChangeNotification, object: nil)
         

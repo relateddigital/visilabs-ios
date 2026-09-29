@@ -9,8 +9,13 @@ import UIKit
 
 extension UIApplication {
 
-    static var applicationWindow: UIWindow {
-        return UIApplication.shared.keyWindow!
+    /// Eskiden `UIApplication.shared.keyWindow!` idi. Sahne gecislerinde veya uygulama
+    /// arka plandayken key window bulunmayabiliyor ve force-unwrap crash'e yol aciyordu.
+    /// Artik scene tabanli aranip optional donuluyor.
+    static var applicationWindow: UIWindow? {
+        let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let scene = windowScenes.first { $0.activationState == .foregroundActive } ?? windowScenes.first
+        return scene?.windows.first { $0.isKeyWindow } ?? scene?.windows.first
     }
 
     static var isPortraitOnly: Bool {
@@ -29,7 +34,7 @@ extension UIView {
 
 extension UIColor {
     
-    open func shadeDarker() -> UIColor {
+    public func shadeDarker() -> UIColor {
         var r: CGFloat = 0.0, g: CGFloat = 0.0, b: CGFloat = 0.0, a: CGFloat = 0.0
         self.getRed(&r, green: &g, blue: &b, alpha: &a)
         

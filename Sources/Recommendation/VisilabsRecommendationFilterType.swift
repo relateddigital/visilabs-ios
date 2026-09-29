@@ -135,6 +135,121 @@ public class VisilabsRecommendationFilter: NSObject {
     }
 }
 
+public class VisilabsProductVariant2Color: Codable {
+    public var size: String?
+    public var productId: Int?
+    public var cartId: String?
+    public var stock: Int?
+
+    public var product_id: Int? { return productId }
+    public var cart_id: String? { return cartId }
+
+    public enum CodingKeys: String, CodingKey {
+        case size
+        case productId = "product_id"
+        case cartId = "cart_id"
+        case stock
+    }
+
+    public init(size: String? = nil, productId: Int? = nil, cartId: String? = nil, stock: Int? = nil) {
+        self.size = size
+        self.productId = productId
+        self.cartId = cartId
+        self.stock = stock
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.size = try container.decodeIfPresent(String.self, forKey: .size)
+
+        if let pId = try? container.decodeIfPresent(Int.self, forKey: .productId) {
+            self.productId = pId
+        } else if let pIdStr = try? container.decodeIfPresent(String.self, forKey: .productId) {
+            self.productId = Int(pIdStr)
+        }
+
+        if let cId = try? container.decodeIfPresent(String.self, forKey: .cartId) {
+            self.cartId = cId
+        } else if let cIdNum = try? container.decodeIfPresent(Int.self, forKey: .cartId) {
+            self.cartId = String(cIdNum)
+        }
+
+        if let st = try? container.decodeIfPresent(Int.self, forKey: .stock) {
+            self.stock = st
+        } else if let stStr = try? container.decodeIfPresent(String.self, forKey: .stock) {
+            self.stock = Int(stStr)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(size, forKey: .size)
+        try container.encodeIfPresent(productId, forKey: .productId)
+        try container.encodeIfPresent(cartId, forKey: .cartId)
+        try container.encodeIfPresent(stock, forKey: .stock)
+    }
+
+    public init?(JSONObject: [String: Any?]?) {
+        guard let object = JSONObject else { return nil }
+        self.size = object["size"] as? String
+
+        if let pId = object["product_id"] as? Int {
+            self.productId = pId
+        } else if let pIdStr = object["product_id"] as? String {
+            self.productId = Int(pIdStr)
+        }
+
+        if let cId = object["cart_id"] as? String {
+            self.cartId = cId
+        } else if let cIdNum = object["cart_id"] as? Int {
+            self.cartId = String(cIdNum)
+        }
+
+        if let st = object["stock"] as? Int {
+            self.stock = st
+        } else if let stStr = object["stock"] as? String {
+            self.stock = Int(stStr)
+        }
+    }
+}
+
+public class VisilabsProductVariant2: Codable {
+    public var color: String?
+    public var colors: [VisilabsProductVariant2Color]?
+
+    public enum CodingKeys: String, CodingKey {
+        case color
+        case colors
+    }
+
+    public init(color: String? = nil, colors: [VisilabsProductVariant2Color]? = nil) {
+        self.color = color
+        self.colors = colors
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.color = try container.decodeIfPresent(String.self, forKey: .color)
+        self.colors = try container.decodeIfPresent([VisilabsProductVariant2Color].self, forKey: .colors)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(color, forKey: .color)
+        try container.encodeIfPresent(colors, forKey: .colors)
+    }
+
+    public init?(JSONObject: [String: Any?]?) {
+        guard let object = JSONObject else { return nil }
+        self.color = object["color"] as? String
+        if let colorsArray = object["colors"] as? [[String: Any]] {
+            self.colors = colorsArray.compactMap { VisilabsProductVariant2Color(JSONObject: $0) }
+        } else if let colorsArray = object["colors"] as? [[String: Any?]] {
+            self.colors = colorsArray.compactMap { VisilabsProductVariant2Color(JSONObject: $0) }
+        }
+    }
+}
+
 public class VisilabsProduct: Encodable {
     
     public enum PayloadKey {
@@ -163,6 +278,7 @@ public class VisilabsProduct: Encodable {
         public static let attr9 = "attr9"
         public static let attr10 = "attr10"
         public static let qs = "qs"
+        public static let variants2 = "variants2"
     }
     public var code: String
     public var title: String
@@ -189,6 +305,8 @@ public class VisilabsProduct: Encodable {
     public var attr9: String
     public var attr10: String
     public var qs: String = ""
+    public var variants2: [VisilabsProductVariant2]?
+
     internal init(code: String,
                   title: String,
                   img: String,
@@ -213,7 +331,8 @@ public class VisilabsProduct: Encodable {
                   attr8: String,
                   attr9: String,
                   attr10: String,
-                  qs:String) {
+                  qs:String,
+                  variants2: [VisilabsProductVariant2]? = nil) {
         self.code = code
         self.title = title
         self.img = img
@@ -239,6 +358,7 @@ public class VisilabsProduct: Encodable {
         self.attr9 = attr9
         self.attr10 = attr10
         self.qs = qs
+        self.variants2 = variants2
     }
     
     internal init?(JSONObject: [String: Any?]?) {
@@ -277,6 +397,11 @@ public class VisilabsProduct: Encodable {
         self.attr8 = object[PayloadKey.attr8] as? String ?? ""
         self.attr9 = object[PayloadKey.attr9] as? String ?? ""
         self.attr10 = object[PayloadKey.attr10] as? String ?? ""
+        if let variants2Raw = object[PayloadKey.variants2] as? [[String: Any]] {
+            self.variants2 = variants2Raw.compactMap { VisilabsProductVariant2(JSONObject: $0) }
+        } else if let variants2RawAny = object[PayloadKey.variants2] as? [[String: Any?]] {
+            self.variants2 = variants2RawAny.compactMap { VisilabsProductVariant2(JSONObject: $0) }
+        }
         self.qs = self.getQueryString()
     }
     

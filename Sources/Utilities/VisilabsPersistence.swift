@@ -22,6 +22,40 @@ public class VisilabsPersistence {
         return urlUnwrapped
     }
 
+    /// iOS 12'de deprecate edilen `NSKeyedArchiver.archiveRootObject(_:toFile:)` yerine.
+    /// Disk formati ayni keyed-archive oldugu icin eski SDK surumlerinin yazdigi
+    /// dosyalarla ileri/geri uyumlu; migration gerektirmez.
+    @discardableResult
+    private class func archive(_ object: Any, toFile path: String) -> Bool {
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: object, requiringSecureCoding: false)
+            try data.write(to: URL(fileURLWithPath: path), options: .atomic)
+            return true
+        } catch {
+            VisilabsLogger.error("failed to archive to \(path): \(error)")
+            return false
+        }
+    }
+
+    /// iOS 12'de deprecate edilen `NSKeyedUnarchiver.unarchiveObject(withFile:)` yerine.
+    /// `requiresSecureCoding = false`, secure coding olmadan yazilmis eski arsivlerin
+    /// okunabilmesi icin gerekli.
+    private class func unarchiveObject(fromFile path: String) -> Any? {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
+            return nil
+        }
+        do {
+            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
+            unarchiver.requiresSecureCoding = false
+            let object = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
+            unarchiver.finishDecoding()
+            return object
+        } catch {
+            VisilabsLogger.error("failed to unarchive \(path): \(error)")
+            return nil
+        }
+    }
+
     class func archiveUser(_ visilabsUser: VisilabsUser) {
         archiveQueueUtility.sync { [visilabsUser] in
             let propertiesFilePath = filePath(filename: VisilabsConstants.userArchiveKey)
@@ -52,7 +86,7 @@ public class VisilabsPersistence {
             userDic[VisilabsConstants.tvcKey] = String(visilabsUser.tvc)
             userDic[VisilabsConstants.lvtKey] = visilabsUser.lvt
             
-            if !NSKeyedArchiver.archiveRootObject(userDic, toFile: path) {
+            if !archive(userDic, toFile: path) {
                 VisilabsLogger.error("failed to archive user")
             }
         }
@@ -65,31 +99,31 @@ public class VisilabsPersistence {
         // Before Visilabs.identity is used as archive key, to retrieve Visilabs.cookieID set by objective-c library
         // we added this control.
         if let cidfp = filePath(filename: VisilabsConstants.identityArchiveKey),
-           let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
+           let cid = unarchiveObject(fromFile: cidfp) as? String {
             visilabsUser.cookieId = cid
         }
         if let cidfp = filePath(filename: VisilabsConstants.cookieidArchiveKey),
-           let cid = NSKeyedUnarchiver.unarchiveObject(withFile: cidfp) as? String {
+           let cid = unarchiveObject(fromFile: cidfp) as? String {
             visilabsUser.cookieId = cid
         }
         if let exvidfp = filePath(filename: VisilabsConstants.exvisitorIdArchiveKey),
-           let exvid = NSKeyedUnarchiver.unarchiveObject(withFile: exvidfp) as? String {
+           let exvid = unarchiveObject(fromFile: exvidfp) as? String {
             visilabsUser.exVisitorId = exvid
         }
         if let appidfp = filePath(filename: VisilabsConstants.appidArchiveKey),
-           let aid = NSKeyedUnarchiver.unarchiveObject(withFile: appidfp) as? String {
+           let aid = unarchiveObject(fromFile: appidfp) as? String {
             visilabsUser.appId = aid
         }
         if let tidfp = filePath(filename: VisilabsConstants.tokenidArchiveKey),
-           let tid = NSKeyedUnarchiver.unarchiveObject(withFile: tidfp) as? String {
+           let tid = unarchiveObject(fromFile: tidfp) as? String {
             visilabsUser.tokenId = tid
         }
         if let uafp = filePath(filename: VisilabsConstants.useragentArchiveKey),
-           let userAgent = NSKeyedUnarchiver.unarchiveObject(withFile: uafp) as? String {
+           let userAgent = unarchiveObject(fromFile: uafp) as? String {
             visilabsUser.userAgent = userAgent
         }
         if let propsfp = filePath(filename: VisilabsConstants.userArchiveKey),
-           let props = NSKeyedUnarchiver.unarchiveObject(withFile: propsfp) as? [String: String?] {
+           let props = unarchiveObject(fromFile: propsfp) as? [String: String?] {
             if let cid = props[VisilabsConstants.cookieIdKey], !cid.isNilOrWhiteSpace {
                 visilabsUser.cookieId = cid
             }

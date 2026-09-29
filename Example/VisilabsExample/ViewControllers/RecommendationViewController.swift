@@ -61,6 +61,12 @@ class RecommendationViewController: FormViewController {
                     for product in response.products {
                         print("Product Title: \(product.title)")
                         print("Product qs: \(product.qs)")
+                        if let variants2 = product.variants2 {
+                            print("Product variants2 count: \(variants2.count)")
+                            for v in variants2 {
+                                print("  Variant color: \(v.color ?? "nil"), colors count: \(v.colors?.count ?? 0)")
+                            }
+                        }
                         if counter == 0 {
                             Visilabs.callAPI().trackRecommendationClick(qs: product.qs)
                         }

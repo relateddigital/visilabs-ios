@@ -10,7 +10,10 @@ import UIKit
 
 class VisilabsHalfScreenView: UIView {
     
+    static let closeButtonExtraSpace: CGFloat = 40.0
+    
     var notification: VisilabsInAppNotification
+    var containerView: UIView!
     var titleLabel: UILabel!
     var imageView: UIImageView!
     var closeButton: UIButton!
@@ -22,6 +25,7 @@ class VisilabsHalfScreenView: UIView {
     init(frame: CGRect, notification: VisilabsInAppNotification) {
         self.notification = notification
         super.init(frame: frame)
+        setupContainer()
         setupTitle()
         if let imageData = notification.image, var image = UIImage(data: imageData, scale: 1) {
             if let imageGif = UIImage.gif(data: imageData) {
@@ -34,9 +38,15 @@ class VisilabsHalfScreenView: UIView {
         layoutContent()
     }
     
-    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupContainer() {
+        containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.clipsToBounds = false
+        addSubview(containerView)
     }
     
     private func setupTitle() {
@@ -47,7 +57,7 @@ class VisilabsHalfScreenView: UIView {
         titleLabel.textAlignment = .center
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 0
-        addSubview(titleLabel)
+        containerView.addSubview(titleLabel)
     }
     
     private func setupImageView(image: UIImage) {
@@ -56,7 +66,7 @@ class VisilabsHalfScreenView: UIView {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.image = image
-        addSubview(imageView)
+        containerView.addSubview(imageView)
         
         if image.size.width > 0 {
             let ratio = image.size.height / image.size.width
@@ -70,7 +80,7 @@ class VisilabsHalfScreenView: UIView {
         promotionContainer = UIView()
         promotionContainer?.translatesAutoresizingMaskIntoConstraints = false
         promotionContainer?.backgroundColor = .clear
-        addSubview(promotionContainer!)
+        containerView.addSubview(promotionContainer!)
         
         promotionCodeLabel = UILabel()
         promotionCodeLabel?.text = promoCode
@@ -89,33 +99,91 @@ class VisilabsHalfScreenView: UIView {
     }
     
     private func setCloseButton() {
-        closeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        closeButton = UIButton(type: .custom)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.contentHorizontalAlignment = .right
-        closeButton.clipsToBounds = false
-        closeButton.setTitleColor(UIColor.white, for: .normal)
+        closeButton.clipsToBounds = true
+        closeButton.layer.cornerRadius = 15.0
+        closeButton.layer.borderWidth = 0.5
         closeButton.setTitle("×", for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 35.0, weight: .regular)
-        closeButton.contentEdgeInsets = UIEdgeInsets(top: 2.5, left: 2.5, bottom: 2.5, right: 2.5)
-        if let closeButtonColor = notification.closeButtonColor {
-            closeButton.setTitleColor(closeButtonColor, for: .normal)
-        }
+        closeButton.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .bold)
+        closeButton.contentHorizontalAlignment = .center
+        closeButton.contentVerticalAlignment = .center
+        closeButton.titleEdgeInsets = UIEdgeInsets(top: -1, left: 0, bottom: 1, right: 0)
+        
+        setupCloseButtonColors()
         addSubview(closeButton)
     }
     
+    private func setupCloseButtonColors() {
+        let isWhite = isWhiteColor(notification.closeButtonColor)
+        if isWhite {
+            closeButton.backgroundColor = .black
+            closeButton.setTitleColor(.white, for: .normal)
+            closeButton.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        } else {
+            closeButton.backgroundColor = .white
+            closeButton.setTitleColor(notification.closeButtonColor ?? .black, for: .normal)
+            closeButton.layer.borderColor = UIColor.black.withAlphaComponent(0.15).cgColor
+        }
+    }
+    
+    private func isWhiteColor(_ color: UIColor?) -> Bool {
+        guard let color = color else { return false }
+        var white: CGFloat = 0
+        var alpha: CGFloat = 0
+        if color.getWhite(&white, alpha: &alpha) {
+            return white >= 0.95
+        }
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
+        if color.getRed(&r, green: &g, blue: &b, alpha: &alpha) {
+            return r >= 0.95 && g >= 0.95 && b >= 0.95
+        }
+        return false
+    }
+    
     private func layoutContent() {
-        self.backgroundColor = notification.backGroundColor
-        titleLabel.leading(to: self, offset: 0, relation: .equal, priority: .required)
-        titleLabel.trailing(to: self, offset: 0, relation: .equal, priority: .required)
-        titleLabel.centerX(to: self,priority: .required)
-        imageView?.topToBottom(of: self.titleLabel, offset: 0)
-        imageView?.leading(to: self, offset: 0, relation: .equal, priority: .required)
-        imageView?.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+        self.backgroundColor = .clear
+        containerView.backgroundColor = notification.backGroundColor
+        
+        containerView.leading(to: self, offset: 0, relation: .equal, priority: .required)
+        containerView.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+        
+        if notification.position == .top {
+            containerView.top(to: self, offset: 0, relation: .equal, priority: .required)
+            containerView.bottom(to: self, offset: -VisilabsHalfScreenView.closeButtonExtraSpace, relation: .equal, priority: .required)
+            
+            closeButton.top(to: containerView, containerView.bottomAnchor, offset: 6.0)
+            closeButton.trailing(to: self, offset: -16.0)
+        } else {
+            containerView.bottom(to: self, offset: 0, relation: .equal, priority: .required)
+            containerView.top(to: self, offset: VisilabsHalfScreenView.closeButtonExtraSpace, relation: .equal, priority: .required)
+            
+            closeButton.bottom(to: containerView, containerView.topAnchor, offset: -6.0)
+            closeButton.trailing(to: self, offset: -16.0)
+        }
+        
+        closeButton.width(30.0)
+        closeButton.height(30.0)
+        
+        titleLabel.top(to: containerView, offset: 0)
+        titleLabel.leading(to: containerView, offset: 0, relation: .equal, priority: .required)
+        titleLabel.trailing(to: containerView, offset: 0, relation: .equal, priority: .required)
+        titleLabel.centerX(to: containerView, priority: .required)
+        
+        if let imageView = imageView {
+            imageView.topToBottom(of: self.titleLabel, offset: 0)
+            imageView.leading(to: containerView, offset: 0, relation: .equal, priority: .required)
+            imageView.trailing(to: containerView, offset: 0, relation: .equal, priority: .required)
+        }
         
         if let promotionContainer = promotionContainer {
-            promotionContainer.topToBottom(of: imageView, offset: 0)
-            promotionContainer.leading(to: self, offset: 0, relation: .equal, priority: .required)
-            promotionContainer.trailing(to: self, offset: 0, relation: .equal, priority: .required)
+            if let imageView = imageView {
+                promotionContainer.topToBottom(of: imageView, offset: 0)
+            } else {
+                promotionContainer.topToBottom(of: titleLabel, offset: 0)
+            }
+            promotionContainer.leading(to: containerView, offset: 0, relation: .equal, priority: .required)
+            promotionContainer.trailing(to: containerView, offset: 0, relation: .equal, priority: .required)
             
             promotionCodeLabel?.center(in: promotionContainer)
             
@@ -125,11 +193,6 @@ class VisilabsHalfScreenView: UIView {
             copyButton?.height(30)
         }
         
-        closeButton.top(to: self, offset: -5.0)
-        closeButton.trailing(to: self, offset: -10.0)
-        
-        self.window?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0).isActive = true
-        self.window?.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0).isActive = true
         self.layoutIfNeeded()
     }
     
@@ -146,7 +209,7 @@ class VisilabsHalfScreenView: UIView {
             titleLabel.height(0)
             titleLabel.isHidden = true
         } else {
-            titleLabel.height(titleLabel.intrinsicContentSize.height + 20 )
+            titleLabel.height(titleLabel.intrinsicContentSize.height + 20)
         }
         
         if let promotionContainer = promotionContainer, let promotionCodeLabel = promotionCodeLabel {
@@ -162,4 +225,16 @@ class VisilabsHalfScreenView: UIView {
         super.layoutSubviews()
     }
     
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let pointInContainer = containerView.convert(point, from: self)
+        if containerView.point(inside: pointInContainer, with: event) {
+            return true
+        }
+        let pointInClose = closeButton.convert(point, from: self)
+        let closeTouchBounds = closeButton.bounds.insetBy(dx: -10, dy: -10)
+        if closeTouchBounds.contains(pointInClose) {
+            return true
+        }
+        return false
+    }
 }
