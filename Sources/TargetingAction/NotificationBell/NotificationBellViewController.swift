@@ -550,7 +550,7 @@ final class NotificationBellPanelView: UIView {
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.numberOfLines = 0
 
-        closeButton.setImage(VisilabsHelper.getUIImage(named: "VisilabsCloseButtonBlack"), for: .normal)
+        closeButton.setImage(VisilabsHelper.getUIImage(named: "vl-close-button-black"), for: .normal)
         closeButton.accessibilityLabel = "Kapat"
         closeButton.tintColor = .black
 

@@ -29,7 +29,8 @@ class VisilabsManager {
                     isIDFAEnabled: Bool,
                     loggingEnabled: Bool,
                     sdkType: String,
-                    isTest: Bool) -> VisilabsInstance {
+                    isTest: Bool,
+                    captureApiKey: String?) -> VisilabsInstance {
         VisilabsManager.initializeCalled = true
         setTest(test: isTest)
         
@@ -46,7 +47,8 @@ class VisilabsManager {
                                         maxGeofenceCount: maxGeofenceCount,
                                         isIDFAEnabled: isIDFAEnabled,
                                         loggingEnabled: loggingEnabled,
-                                        sdkType: sdkType)
+                                        sdkType: sdkType,
+                                        captureApiKey: captureApiKey)
         self.instance = instance
         return instance
     }

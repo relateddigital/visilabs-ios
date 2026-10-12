@@ -33,6 +33,18 @@ enum VisilabsEventType: String, CaseIterable {
     case sendLocationPermission = "Send Location Permission"
 }
 
+enum CaptureTestType: String, CaseIterable {
+    case viewItem = "capture: rmc_view_item"
+    case addToCart = "capture: rmc_add_to_cart"
+    case purchase = "capture: rmc_purchase (nested items)"
+    case loginAndCapture = "login + capture: rmc_login"
+    case allPropertyTypes = "capture: all property types"
+    case setPersonProperties = "setPersonProperties (email)"
+    case batch = "capture: 25 events (batch)"
+    case flush = "flushCapture"
+    case logout = "logout (new anonymous id)"
+}
+
 class EventViewController: FormViewController, BannerDelegate, RDDrawerURLDelegate {
     
     
@@ -51,12 +63,14 @@ class EventViewController: FormViewController, BannerDelegate, RDDrawerURLDelega
         }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)        
+        super.viewDidAppear(animated)
+        refreshCaptureInfo()
     }
-    
+
     private func initializeForm() {
         form
         +++ getCommonEventsSection()
+        +++ getCaptureSection()
         +++ getInAppSection()
     }
     
@@ -90,9 +104,125 @@ class EventViewController: FormViewController, BannerDelegate, RDDrawerURLDelega
                 } else {
                     self.customEvent(eventType)
                 }
+                // login / signUp / logout capture kimliğini de değiştirir.
+                self.refreshCaptureInfo()
             })
         }
         return section
+    }
+
+    // MARK: - Capture
+
+    private func getCaptureSection() -> Section {
+        let section = Section("Capture".uppercased(with: Locale(identifier: "en_US"))) {
+            $0.tag = "captureSection"
+        }
+        for testType in CaptureTestType.allCases {
+            section.append(ButtonRow {
+                $0.title = testType.rawValue
+            }.onCellSelection { _, _ in
+                self.captureTest(testType)
+                self.refreshCaptureInfo()
+            })
+        }
+        return section
+    }
+
+    /// Bölüm altında güncel distinct_id / anonim id gösterilir; login ve logout sonrası değişimi izlemek için.
+    private func refreshCaptureInfo() {
+        guard let section = form.sectionBy(tag: "captureSection") else { return }
+        let distinctId = Visilabs.callAPI().getDistinctId()
+        let anonymousId = Visilabs.callAPI().getAnonymousId()
+        let mode = distinctId == anonymousId ? "anonymous" : "identified"
+        section.footer = HeaderFooterView(title: "distinct_id (\(mode)): \(distinctId)\nanonymous_id: \(anonymousId)\nRequest bodies are printed to the console (loggingEnabled).")
+        section.reload()
+    }
+
+    private func captureTest(_ testType: CaptureTestType) {
+        let exVisitorId: String = ((self.form.rowBy(tag: "exVisitorId") as TextRow?)?.value
+                                   ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let email: String = ((self.form.rowBy(tag: "email") as TextRow?)?.value
+                             ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+
+        switch testType {
+        case .viewItem:
+            Visilabs.callAPI().capture("rmc_view_item", properties: [
+                "item_id": 1001,
+                "item_name": "Shoei NXR2",
+                "item_brand": "Shoei",
+                "item_category": "Motor Kaskları",
+                "item_variant": "Mat Siyah / L",
+                "original_price": 2000,
+                "discounted_price": 1500,
+                "discount_rate": 20,
+                "currency": "TRY",
+                "cart_price": 1000,
+                "product_rating": 4.8,
+                "review_count": 126,
+                "stock_quantity": 3,
+                "stock_status": "low_stock",
+                "list_source": "search",
+                "search_term": "kask",
+                "product_campaign": "Summer Sale"
+            ])
+        case .addToCart:
+            Visilabs.callAPI().capture("rmc_add_to_cart", properties: [
+                "item_id": 1001,
+                "item_name": "Shoei NXR2",
+                "quantity": 1,
+                "price": 1500,
+                "currency": "TRY",
+                "cart_total": 2500
+            ])
+        case .purchase:
+            Visilabs.callAPI().capture("rmc_purchase", properties: [
+                "order_id": "ORD-\(Int.random(min: 1000, max: 9999))",
+                "revenue": 2750.5,
+                "currency": "TRY",
+                "items": [
+                    ["item_id": 1001, "quantity": 1, "price": 1500],
+                    ["item_id": 2002, "quantity": 2, "price": 625.25]
+                ] as [[String: Any]]
+            ])
+        case .loginAndCapture:
+            if exVisitorId.isEmpty {
+                showModal(title: "Warning", message: "exVisitorId can not be empty")
+                return
+            }
+            // login, capture tarafında $identify gönderir (anonim id + exVisitorId birleşir);
+            // ardından gelen rmc_login exVisitorId ile gider.
+            Visilabs.callAPI().login(exVisitorId: exVisitorId)
+            Visilabs.callAPI().capture("rmc_login", properties: ["method": "email"])
+        case .allPropertyTypes:
+            Visilabs.callAPI().capture("rmc_property_types", properties: [
+                "string": "text",
+                "int": 42,
+                "double": 3.14,
+                "bool": true,
+                "date": Date(),
+                "url": URL(string: "https://www.relateddigital.com")!,
+                "array": [1, "two", 3.0] as [Any],
+                "dictionary": ["nested": true],
+                "nan": Double.nan // gönderilmez, konsola uyarı düşer
+            ])
+        case .setPersonProperties:
+            if email.isEmpty {
+                showModal(title: "Warning", message: "email can not be empty")
+                return
+            }
+            Visilabs.callAPI().setPersonProperties(["email": email],
+                                                   setOnce: ["first_seen_app": "VisilabsExample"])
+        case .batch:
+            // 20. event'te kuyruk beklemeden gönderilir, kalan 5'i en geç 10 sn içinde gider.
+            for index in 1...25 {
+                Visilabs.callAPI().capture("rmc_batch_test", properties: ["index": index])
+            }
+        case .flush:
+            Visilabs.callAPI().flushCapture()
+        case .logout:
+            Visilabs.callAPI().logout()
+        }
+        print("capture test: \(testType.rawValue) -> distinct_id: \(Visilabs.callAPI().getDistinctId())")
     }
     
     private func  getInAppSection() -> Section {

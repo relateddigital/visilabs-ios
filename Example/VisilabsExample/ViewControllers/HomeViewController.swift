@@ -75,6 +75,7 @@ class HomeViewController: FormViewController {
             let idfaRow: SwitchRow? = self.form.rowBy(tag: "isIDFAEnabled")
             let maxGeofenceCountRow: PickerInputRow<Int>? = self.form.rowBy(tag: "maxGeofenceCount")
             let appAliasRow: TextRow? = self.form.rowBy(tag: "appAlias")
+            let captureApiKeyRow: TextRow? = self.form.rowBy(tag: "captureApiKey")
             visilabsProfile.organizationId = orgIdRow!.value!
             visilabsProfile.profileId = profileIdRow!.value!
             visilabsProfile.dataSource = dataSourceRow!.value!
@@ -87,6 +88,7 @@ class HomeViewController: FormViewController {
             visilabsProfile.IsTest = isTestRow?.value ?? false
             visilabsProfile.maxGeofenceCount = maxGeofenceCountRow?.value ?? 20
             visilabsProfile.appAlias = appAliasRow?.value ?? "VisilabsIOSExample"
+            visilabsProfile.captureApiKey = captureApiKeyRow?.value ?? ""
             DataManager.saveVisilabsProfile(visilabsProfile)
             Visilabs.createAPI(organizationId: visilabsProfile.organizationId, profileId: visilabsProfile.profileId,
                                dataSource: visilabsProfile.dataSource,
@@ -98,7 +100,8 @@ class HomeViewController: FormViewController {
                                maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                                isIDFAEnabled: visilabsProfile.isIDFAEnabled,
                                loggingEnabled: true,
-                               isTest: visilabsProfile.IsTest)
+                               isTest: visilabsProfile.IsTest,
+                               captureApiKey: visilabsProfile.captureApiKey)
             Visilabs.callAPI().useInsecureProtocol = false
             self.configureEuromessage()
             self.goToTabBarController()
@@ -110,6 +113,16 @@ class HomeViewController: FormViewController {
             $0.title = "appAlias"
             $0.placeholder = "appAlias"
             $0.value = visilabsProfile.appAlias
+        }
+    }
+
+    fileprivate func addCaptureApiKeyTextRow() -> TextRow {
+        return TextRow("captureApiKey") {
+            $0.title = "captureApiKey"
+            $0.placeholder = "empty = capture disabled"
+            $0.value = visilabsProfile.captureApiKey ?? VisilabsProfile.defaultCaptureApiKey
+            $0.cell.textField.autocapitalizationType = .none
+            $0.cell.textField.autocorrectionType = .no
         }
     }
 
@@ -291,6 +304,7 @@ class HomeViewController: FormViewController {
             <<< addGeofencePickerInputRow()
             <<< addAppAliasTextRow()
             <<< addIDFASwitchRow()
+            <<< addCaptureApiKeyTextRow()
             +++ Section()
             <<< addCreateApiButtonRow()
 

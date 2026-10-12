@@ -55,6 +55,8 @@ public struct VisilabsProfile: Codable {
     }
     
     public var useInsecureProtocol = false
+    /// `capture` event'lerinde gönderilen `api_key`. nil ise capture kapalıdır.
+    public var captureApiKey: String? = nil
 }
 
 class urlConstant {
@@ -170,7 +172,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
          maxGeofenceCount: Int,
          isIDFAEnabled: Bool = true,
          loggingEnabled: Bool = false,
-         sdkType: String) {
+         sdkType: String,
+         captureApiKey: String? = nil) {
         if loggingEnabled {
             VisilabsLogger.enableLevels([.debug, .info, .warning, .error])
             VisilabsLogger.info("Logging Enabled")
@@ -207,7 +210,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                                           maxGeofenceCount: (maxGeofenceCount < 0 && maxGeofenceCount > 20) ? 20 : maxGeofenceCount,
                                           isIDFAEnabled: isIDFAEnabled,
                                           sdkType: sdkType,
-                                          apiver: VisilabsConstants.apiverValue)
+                                          apiver: VisilabsConstants.apiverValue,
+                                          captureApiKey: captureApiKey)
         VisilabsPersistence.saveVisilabsProfile(visilabsProfile)
         
         readWriteLock = VisilabsReadWriteLock(label: "VisilabsInstanceLock")
@@ -241,11 +245,17 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
         
+        // cookieId önceki bir açılıştan kaldıysa SDK bu cihazda daha önce çalışmış demektir.
+        let isExistingInstall = !visilabsUser.cookieId.isNilOrWhiteSpace
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
             VisilabsPersistence.archiveUser(visilabsUser)
         }
-        
+
+        VisilabsCapture.shared.configure(apiKey: captureApiKey,
+                                         exVisitorId: visilabsUser.exVisitorId,
+                                         isExistingInstall: isExistingInstall)
+
         VisilabsHelper.setEndpoints(dataSource: visilabsProfile.dataSource)
         
         VisilabsHelper.computeWebViewUserAgent { userAgentString in
@@ -281,7 +291,8 @@ public class VisilabsInstance: CustomDebugStringConvertible {
                       askLocationPermmissionAtStart: visilabsProfile.askLocationPermmissionAtStart,
                       maxGeofenceCount: visilabsProfile.maxGeofenceCount,
                       isIDFAEnabled: visilabsProfile.isIDFAEnabled,
-                      sdkType: visilabsProfile.sdkType ?? "native")
+                      sdkType: visilabsProfile.sdkType ?? "native",
+                      captureApiKey: visilabsProfile.captureApiKey)
         } else {
             return nil
         }
@@ -356,7 +367,13 @@ extension VisilabsInstance {
             VisilabsLogger.error("customEvent can not be called with empty page name.")
             return
         }
-        
+
+        // login / signUp / OM.exVisitorID ile gelen kullanıcı capture tarafında da tanıtılır.
+        // Sonrasında çağrılan capture'lardan önce sıraya girmesi için burada, senkron çağrılıyor.
+        if let exVisitorId = properties[VisilabsConstants.exvisitorIdKey], !exVisitorId.isEmptyOrWhitespace {
+            VisilabsCapture.shared.identify(exVisitorId)
+        }
+
         checkPushPermission()
         
         trackingQueue.async { [weak self, pageName, properties] in
@@ -525,6 +542,47 @@ extension VisilabsInstance {
         visilabsUser.utmTerm = nil
         visilabsUser.cookieId = VisilabsHelper.generateCookieId()
         VisilabsPersistence.archiveUser(visilabsUser)
+        VisilabsCapture.shared.reset()
+    }
+}
+
+// MARK: - CAPTURE
+
+extension VisilabsInstance {
+    /// PostHog uyumlu event gönderir. Cihaz, uygulama, session ve kimlik bilgileri otomatik eklenir.
+    /// `createAPI`'ye `captureApiKey` verilmediyse hiçbir şey göndermez.
+    ///
+    /// Kullanıcı eşleştirme otomatiktir: `login` / `signUp` çağrıldığında exVisitorId `distinct_id`
+    /// olur ve önceki anonim event'ler bu kullanıcıya bağlanır; `logout` yeni anonim kimlik başlatır.
+    ///
+    /// - Parameters:
+    ///   - event: Event adı, ör. `"rmc_view_item"`.
+    ///   - properties: String, sayı, Bool, Date, URL, dizi ve sözlük değerleri desteklenir.
+    public func capture(_ event: String, properties: [String: Any] = [:]) {
+        VisilabsCapture.shared.capture(event, properties: properties)
+    }
+
+    /// Mevcut kullanıcının kişi profiline property yazar (`$set` event'i).
+    /// - Parameters:
+    ///   - properties: Her çağrıda üzerine yazılır.
+    ///   - setOnce: Sadece daha önce yazılmamışsa yazılır.
+    public func setPersonProperties(_ properties: [String: Any], setOnce: [String: Any] = [:]) {
+        VisilabsCapture.shared.setPersonProperties(properties, setOnce: setOnce)
+    }
+
+    /// Kuyrukta bekleyen capture event'lerini hemen gönderir.
+    public func flushCapture() {
+        VisilabsCapture.shared.flush()
+    }
+
+    /// Capture event'lerinin `distinct_id`'si: login öncesi anonim id, sonrası exVisitorId.
+    public func getDistinctId() -> String {
+        return VisilabsCapture.shared.distinctId
+    }
+
+    /// Bu kurulum için üretilen anonim id. `logout` ile yenilenir.
+    public func getAnonymousId() -> String {
+        return VisilabsCapture.shared.anonymousId
     }
 }
 

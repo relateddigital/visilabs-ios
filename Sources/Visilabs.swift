@@ -33,7 +33,8 @@ public class Visilabs {
                                 isIDFAEnabled: Bool = true,
                                 loggingEnabled: Bool = false,
                                 sdkType: String = "native",
-                                isTest:Bool = false) -> VisilabsInstance {
+                                isTest:Bool = false,
+                                captureApiKey: String? = nil) -> VisilabsInstance {
 
         
         VisilabsManager.sharedInstance.initialize(organizationId: organizationId,
@@ -48,7 +49,8 @@ public class Visilabs {
                                                   isIDFAEnabled: isIDFAEnabled,
                                                   loggingEnabled: loggingEnabled,
                                                   sdkType: sdkType,
-                                                  isTest: isTest)
+                                                  isTest: isTest,
+                                                  captureApiKey: captureApiKey)
     }
     
     public class func createAPI() {
