@@ -102,7 +102,20 @@ final class VisilabsCapture {
             VisilabsLogger.error("capture: event adı boş olamaz.")
             return
         }
-        let sanitized = VisilabsCaptureUtils.sanitize(properties)
+        var props = properties ?? [:]
+        if props["is_first_install"] == nil {
+            props["is_first_install"] = VisilabsInstallTracker.shared.isFirstInstall
+        }
+        if props["is_reinstall"] == nil {
+            props["is_reinstall"] = VisilabsInstallTracker.shared.isReinstall
+        }
+        if props[VisilabsConstants.isFirstInstallKey] == nil {
+            props[VisilabsConstants.isFirstInstallKey] = VisilabsInstallTracker.shared.isFirstInstallString
+        }
+        if props[VisilabsConstants.isReinstallKey] == nil {
+            props[VisilabsConstants.isReinstallKey] = VisilabsInstallTracker.shared.isReinstallString
+        }
+        let sanitized = VisilabsCaptureUtils.sanitize(props)
         queue.async { [weak self] in
             guard let self = self else { return }
             guard self.isEnabled else {
@@ -255,6 +268,10 @@ final class VisilabsCapture {
             if isExistingInstall {
                 return nil
             }
+            properties["is_first_install"] = VisilabsInstallTracker.shared.isFirstInstall
+            properties["is_reinstall"] = VisilabsInstallTracker.shared.isReinstall
+            properties[VisilabsConstants.isFirstInstallKey] = VisilabsInstallTracker.shared.isFirstInstallString
+            properties[VisilabsConstants.isReinstallKey] = VisilabsInstallTracker.shared.isReinstallString
             return ("Application Installed", properties)
         }
         if previousVersion == version && previousBuild == build {

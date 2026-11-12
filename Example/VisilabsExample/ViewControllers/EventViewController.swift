@@ -31,6 +31,8 @@ enum VisilabsEventType: String, CaseIterable {
     case logout = "Logout"
     case requestIDFA = "Request IDFA"
     case sendLocationPermission = "Send Location Permission"
+    case checkInstallStatus = "Check Install Status"
+    case resetInstallState = "Reset Install State (Test)"
 }
 
 enum CaptureTestType: String, CaseIterable {
@@ -101,6 +103,14 @@ class EventViewController: FormViewController, BannerDelegate, RDDrawerURLDelega
                     Visilabs.callAPI().requestIDFA()
                 } else if row.title == VisilabsEventType.sendLocationPermission.rawValue {
                     Visilabs.callAPI().sendLocationPermission()
+                } else if row.title == VisilabsEventType.checkInstallStatus.rawValue {
+                    let isFirst = Visilabs.callAPI().isFirstInstall
+                    let isRe = Visilabs.callAPI().isReinstall
+                    let type = Visilabs.callAPI().installType.rawValue
+                    self.showModal(title: "Install Status", message: "isFirstInstall: \(isFirst)\nisReinstall: \(isRe)\ninstallType: \(type)")
+                } else if row.title == VisilabsEventType.resetInstallState.rawValue {
+                    VisilabsInstallTracker.shared.resetForTesting()
+                    self.showModal(title: "Reset", message: "Install state reset for testing.")
                 } else {
                     self.customEvent(eventType)
                 }

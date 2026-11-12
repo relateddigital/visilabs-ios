@@ -315,8 +315,21 @@ class HomeViewController: FormViewController {
     }
 
     func goToTabBarController() {
-        if let tabBarVC = storyboard?.instantiateViewController(withIdentifier: "tabbarcontroller") {
-           self.view.window?.rootViewController = tabBarVC
+        let sb = self.storyboard ?? UIStoryboard(name: "Main", bundle: nil)
+        if let tabBarVC = sb.instantiateViewController(withIdentifier: "tabbarcontroller") as? UITabBarController {
+            let targetWindow = self.view.window ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }
+            if let window = targetWindow {
+                window.rootViewController = tabBarVC
+                window.makeKeyAndVisible()
+            } else {
+                tabBarVC.modalPresentationStyle = .fullScreen
+                self.present(tabBarVC, animated: true, completion: nil)
+            }
+        } else {
+            print("Could not instantiate tabbarcontroller from storyboard")
         }
     }
 }

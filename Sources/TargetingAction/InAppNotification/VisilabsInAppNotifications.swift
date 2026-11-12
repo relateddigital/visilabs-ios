@@ -14,6 +14,20 @@ protocol VisilabsInAppNotificationsDelegate: AnyObject {
     func trackNotification(_ notification: VisilabsInAppNotification, event: String, properties: [String: String])
 }
 
+private class ScheduledNotificationItem {
+    let notification: VisilabsInAppNotification
+    var workItem: DispatchWorkItem?
+    let scheduledDate: Date
+    let delayTime: TimeInterval
+
+    init(notification: VisilabsInAppNotification, workItem: DispatchWorkItem? = nil, scheduledDate: Date = Date(), delayTime: TimeInterval) {
+        self.notification = notification
+        self.workItem = workItem
+        self.scheduledDate = scheduledDate
+        self.delayTime = delayTime
+    }
+}
+
 class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     let lock: VisilabsReadWriteLock
     var miniNotificationPresentationTime = 6.0
@@ -22,57 +36,354 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     weak var delegate: VisilabsInAppNotificationsDelegate?
     weak var inappButtonDelegate: VisilabsInappButtonDelegate?
     weak var drawerUrlDelegate: RDDrawerURLDelegate?
-    weak var currentViewController: UIViewController?
+    private var pendingNotifications: [VisilabsInAppNotification] = []
+    private var scheduledNotificationIds: Set<Int> = []
+    private var scheduledNotifications: [Int: ScheduledNotificationItem] = [:]
+    private var recentlyShownNotificationIds: [Int: Date] = [:]
+    private let deduplicationTimeInterval: TimeInterval = 30.0
+    private let maxNotificationRetries = 10
+    private var lastDismissedTime: Date?
+    private let chainedDismissThreshold: TimeInterval = 5.0
+    private let fastTrackTransitionDelay: TimeInterval = 0.3
 
     init(lock: VisilabsReadWriteLock) {
         self.lock = lock
     }
 
     func showNotification(_ notification: VisilabsInAppNotification) {
-        let notification = notification
-        let delayTime = notification.waitingTime ?? 0
-        DispatchQueue.main.async {
-            self.currentViewController = VisilabsHelper.getRootViewController()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: {
-            if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
-                VisilabsLogger.warn("already showing an in-app notification")
-            } else {
-                if notification.waitingTime ?? 0 == 0 || self.currentViewController == VisilabsHelper.getRootViewController() {
-                    var shownNotification = false
-                    switch notification.type {
-                    case .mini:
-                        shownNotification = self.showMiniNotification(notification)
-                    case .full:
-                        shownNotification = self.showFullNotification(notification)
-                    case .halfScreenImage:
-                        shownNotification = self.showHalfScreenNotification(notification)
-                    case .inappcarousel:
-                        shownNotification = self.showCarousel(notification)
-                    case .carouselFullscreen:
-                        shownNotification = self.showCarouselFullscreen(notification)
-                    case .fullscreenPopup:
-                        shownNotification = self.showFullscreenPopup(notification)
-                    case .alert:
-                        shownNotification = true
-                        self.showAlert(notification)
-                    default:
-                        shownNotification = self.showPopUp(notification)
-                    }
+        let actId = notification.actId
 
-                    if shownNotification {
-                        self.markNotificationShown(notification: notification)
-                        self.delegate?.notificationDidShow(notification)
-                    }
+        var isAlreadyShowing = false
+        var isAlreadyPending = false
+        var isAlreadyScheduled = false
+        var isRecentlyShown = false
+
+        lock.write {
+            let now = Date()
+            self.recentlyShownNotificationIds = self.recentlyShownNotificationIds.filter { now.timeIntervalSince($0.value) < self.deduplicationTimeInterval }
+
+            if self.currentlyShowingNotification?.actId == actId || self.currentlyShowingTargetingAction?.actIdValue == actId {
+                isAlreadyShowing = true
+            }
+            if self.pendingNotifications.contains(where: { $0.actId == actId }) {
+                isAlreadyPending = true
+            }
+            if self.scheduledNotificationIds.contains(actId) {
+                isAlreadyScheduled = true
+            }
+            if self.recentlyShownNotificationIds[actId] != nil {
+                isRecentlyShown = true
+            }
+
+            if !isAlreadyShowing && !isAlreadyPending && !isAlreadyScheduled && !isRecentlyShown {
+                self.scheduledNotificationIds.insert(actId)
+            }
+        }
+
+        if isAlreadyShowing {
+            VisilabsLogger.info("Notification \(actId) is already currently showing. Dropping duplicate.")
+            return
+        }
+        if isAlreadyPending {
+            VisilabsLogger.info("Notification \(actId) is already in pending queue. Dropping duplicate.")
+            return
+        }
+        if isAlreadyScheduled {
+            VisilabsLogger.info("Notification \(actId) is already scheduled to show. Dropping duplicate.")
+            return
+        }
+        if isRecentlyShown {
+            VisilabsLogger.info("Notification \(actId) was shown recently (< \(deduplicationTimeInterval)s ago). Dropping duplicate.")
+            return
+        }
+
+        let delayTime = notification.waitingTime ?? 0
+
+        // Check if this notification arrived as part of a chained flow right after a previous dismissal
+        var shouldFastTrack = false
+        lock.read {
+            if let lastDismiss = self.lastDismissedTime, Date().timeIntervalSince(lastDismiss) < self.chainedDismissThreshold {
+                shouldFastTrack = true
+            }
+        }
+
+        if shouldFastTrack {
+            VisilabsLogger.info("Notification \(actId) arrived shortly after previous dismiss (< \(chainedDismissThreshold)s). Fast-tracking display (in \(fastTrackTransitionDelay)s) instead of waiting \(delayTime)s.")
+            lock.write {
+                self.lastDismissedTime = nil
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + fastTrackTransitionDelay) { [weak self] in
+                self?.lock.write {
+                    self?.scheduledNotificationIds.remove(actId)
+                    self?.scheduledNotifications.removeValue(forKey: actId)
+                }
+                self?.attemptToShowNotification(notification, retryCount: 0)
+            }
+            return
+        }
+
+        VisilabsLogger.info("showNotification scheduled with waitingTime: \(delayTime)s for actId: \(actId)")
+
+        if delayTime > 0 {
+            let scheduledItem = ScheduledNotificationItem(notification: notification, delayTime: TimeInterval(delayTime))
+
+            let workItem = DispatchWorkItem { [weak self] in
+                self?.lock.write {
+                    self?.scheduledNotifications.removeValue(forKey: actId)
+                    self?.scheduledNotificationIds.remove(actId)
+                }
+                self?.attemptToShowNotification(notification, retryCount: 0)
+            }
+            scheduledItem.workItem = workItem
+
+            lock.write {
+                self.scheduledNotifications[actId] = scheduledItem
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(delayTime), execute: workItem)
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.lock.write {
+                    self?.scheduledNotificationIds.remove(actId)
+                    self?.scheduledNotifications.removeValue(forKey: actId)
+                }
+                self?.attemptToShowNotification(notification, retryCount: 0)
+            }
+        }
+    }
+
+    private func attemptToShowNotification(_ notification: VisilabsInAppNotification, retryCount: Int = 0) {
+        guard let sharedUIApplication = VisilabsInstance.sharedUIApplication(),
+              sharedUIApplication.applicationState != .background else {
+            VisilabsLogger.warn("Application is in background, adding notification \(notification.actId) to pending queue.")
+            queuePendingNotification(notification)
+            return
+        }
+
+        var isBusy = false
+        var isAlreadyShowingThis = false
+        lock.read {
+            if self.currentlyShowingNotification?.actId == notification.actId || self.currentlyShowingTargetingAction?.actIdValue == notification.actId {
+                isAlreadyShowingThis = true
+            }
+            isBusy = (self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil)
+        }
+
+        if isAlreadyShowingThis {
+            VisilabsLogger.info("Notification \(notification.actId) is already on screen. Dropping duplicate.")
+            return
+        }
+
+        if isBusy {
+            if retryCount < maxNotificationRetries {
+                VisilabsLogger.info("Another in-app or action is currently showing. Retrying in 0.5s... (attempt \(retryCount + 1)/\(maxNotificationRetries))")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    self?.attemptToShowNotification(notification, retryCount: retryCount + 1)
+                }
+            } else {
+                VisilabsLogger.info("Max retries reached while waiting. Adding notification \(notification.actId) to pending queue.")
+                queuePendingNotification(notification)
+            }
+            return
+        }
+
+        guard let rootViewController = VisilabsHelper.getRootViewController() else {
+            VisilabsLogger.warn("No active visible view controller found to present notification \(notification.actId). Retrying in 0.5s...")
+            if retryCount < maxNotificationRetries {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    self?.attemptToShowNotification(notification, retryCount: retryCount + 1)
                 }
             }
-        })
+            return
+        }
+
+        if rootViewController.isBeingDismissed {
+            VisilabsLogger.info("Current view controller is being dismissed, waiting 0.3s before presenting notification \(notification.actId).")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.attemptToShowNotification(notification, retryCount: retryCount + 1)
+            }
+            return
+        }
+
+        presentNotification(notification)
+    }
+
+    private func presentNotification(_ notification: VisilabsInAppNotification) {
+        var shownNotification = false
+        switch notification.type {
+        case .mini:
+            shownNotification = self.showMiniNotification(notification)
+        case .full:
+            shownNotification = self.showFullNotification(notification)
+        case .halfScreenImage:
+            shownNotification = self.showHalfScreenNotification(notification)
+        case .inappcarousel:
+            shownNotification = self.showCarousel(notification)
+        case .carouselFullscreen:
+            shownNotification = self.showCarouselFullscreen(notification)
+        case .fullscreenPopup:
+            shownNotification = self.showFullscreenPopup(notification)
+        case .alert:
+            shownNotification = true
+            self.showAlert(notification)
+        default:
+            shownNotification = self.showPopUp(notification)
+        }
+
+        if shownNotification {
+            self.markNotificationShown(notification: notification)
+            self.delegate?.notificationDidShow(notification)
+            self.lock.write {
+                self.recentlyShownNotificationIds[notification.actId] = Date()
+            }
+        } else {
+            VisilabsLogger.error("Failed to present notification \(notification.actId).")
+        }
+    }
+
+    private func queuePendingNotification(_ notification: VisilabsInAppNotification) {
+        lock.write {
+            if self.currentlyShowingNotification?.actId == notification.actId {
+                VisilabsLogger.info("Notification \(notification.actId) is already currently showing. Not queuing duplicate.")
+                return
+            }
+            if !self.pendingNotifications.contains(where: { $0.actId == notification.actId }) {
+                self.pendingNotifications.append(notification)
+                VisilabsLogger.info("Notification \(notification.actId) added to pending queue (size: \(self.pendingNotifications.count)).")
+            }
+        }
+    }
+
+    private func getEffectiveDelay(for delaySeconds: Int) -> Double {
+        var shouldFastTrack = false
+        lock.read {
+            if let lastDismiss = self.lastDismissedTime, Date().timeIntervalSince(lastDismiss) < self.chainedDismissThreshold {
+                shouldFastTrack = true
+            }
+        }
+        if shouldFastTrack {
+            lock.write {
+                self.lastDismissedTime = nil
+            }
+            VisilabsLogger.info("Action arrived shortly after previous dismiss (< \(chainedDismissThreshold)s). Fast-tracking (\(fastTrackTransitionDelay)s) instead of waiting \(delaySeconds)s.")
+            return fastTrackTransitionDelay
+        }
+        return Double(delaySeconds)
+    }
+
+    private func showNextPendingNotificationIfAny() {
+        var scheduledToFastTrack: VisilabsInAppNotification?
+
+        lock.write {
+            let now = Date()
+            self.pendingNotifications.removeAll { notif in
+                if let lastShown = self.recentlyShownNotificationIds[notif.actId], now.timeIntervalSince(lastShown) < self.deduplicationTimeInterval {
+                    VisilabsLogger.info("Removing recently shown notification \(notif.actId) from pending queue.")
+                    return true
+                }
+                return false
+            }
+
+            // If there is any notification waiting on a waitingTime timer, fast-track the earliest scheduled one
+            // because the previous popup/action has been dismissed.
+            if let firstScheduled = self.scheduledNotifications.values.sorted(by: { $0.scheduledDate < $1.scheduledDate }).first {
+                firstScheduled.workItem?.cancel()
+                self.scheduledNotifications.removeValue(forKey: firstScheduled.notification.actId)
+                self.scheduledNotificationIds.remove(firstScheduled.notification.actId)
+                scheduledToFastTrack = firstScheduled.notification
+            }
+        }
+
+        if let fastTrackNotif = scheduledToFastTrack {
+            var isRecentlyShown = false
+            lock.read {
+                if let lastShown = self.recentlyShownNotificationIds[fastTrackNotif.actId],
+                   Date().timeIntervalSince(lastShown) < self.deduplicationTimeInterval {
+                    isRecentlyShown = true
+                }
+            }
+            if isRecentlyShown {
+                VisilabsLogger.info("Fast-tracked notification \(fastTrackNotif.actId) was shown recently. Dropping duplicate.")
+                showNextPendingNotificationIfAny()
+                return
+            }
+
+            VisilabsLogger.info("Previous popup dismissed. Fast-tracking scheduled notification \(fastTrackNotif.actId) in \(fastTrackTransitionDelay)s.")
+            DispatchQueue.main.asyncAfter(deadline: .now() + fastTrackTransitionDelay) { [weak self] in
+                self?.attemptToShowNotification(fastTrackNotif, retryCount: 0)
+            }
+            return
+        }
+
+        var nextNotif: VisilabsInAppNotification?
+        lock.write {
+            if !self.pendingNotifications.isEmpty {
+                nextNotif = self.pendingNotifications.removeFirst()
+            }
+        }
+        if let next = nextNotif {
+            VisilabsLogger.info("Triggering next pending notification: \(next.actId)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.attemptToShowNotification(next, retryCount: 0)
+            }
+        }
     }
 
     func showTargetingAction(_ model: TargetingActionViewModel) {
+        if let actId = model.actIdValue {
+            var isAlreadyShowing = false
+            var isAlreadyPending = false
+            var isAlreadyScheduled = false
+            var isRecentlyShown = false
+
+            lock.write {
+                let now = Date()
+                self.recentlyShownNotificationIds = self.recentlyShownNotificationIds.filter { now.timeIntervalSince($0.value) < self.deduplicationTimeInterval }
+
+                if self.currentlyShowingNotification?.actId == actId || self.currentlyShowingTargetingAction?.actIdValue == actId {
+                    isAlreadyShowing = true
+                }
+                if self.pendingNotifications.contains(where: { $0.actId == actId }) {
+                    isAlreadyPending = true
+                }
+                if self.scheduledNotificationIds.contains(actId) {
+                    isAlreadyScheduled = true
+                }
+                if self.recentlyShownNotificationIds[actId] != nil {
+                    isRecentlyShown = true
+                }
+
+                if !isAlreadyShowing && !isAlreadyPending && !isAlreadyScheduled && !isRecentlyShown {
+                    self.scheduledNotificationIds.insert(actId)
+                }
+            }
+
+            if isAlreadyShowing {
+                VisilabsLogger.info("Targeting action \(actId) is already currently showing. Dropping duplicate.")
+                return
+            }
+            if isAlreadyPending {
+                VisilabsLogger.info("Targeting action \(actId) is already in pending queue. Dropping duplicate.")
+                return
+            }
+            if isAlreadyScheduled {
+                VisilabsLogger.info("Targeting action \(actId) is already scheduled to show. Dropping duplicate.")
+                return
+            }
+            if isRecentlyShown {
+                VisilabsLogger.info("Targeting action \(actId) was shown recently (< \(deduplicationTimeInterval)s ago). Dropping duplicate.")
+                return
+            }
+        }
+
         DispatchQueue.main.async {
             if self.currentlyShowingNotification != nil || self.currentlyShowingTargetingAction != nil {
                 VisilabsLogger.warn("already showing an notification")
+                if let actId = model.actIdValue {
+                    self.lock.write {
+                        self.scheduledNotificationIds.remove(actId)
+                    }
+                }
             } else {
                 if model.targetingActionType == .mailSubscriptionForm, let mailSubscriptionForm = model as? MailSubscriptionViewModel {
                     if self.showMailPopup(mailSubscriptionForm) {
@@ -142,12 +453,11 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     
     
     func showPoll(model: PollModel) -> Bool {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
-
-        let pollVC = PollViewController(model)
+        let delay = getEffectiveDelay(for: model.waitingTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+            let pollVC = PollViewController(model)
             pollVC.delegate = self
             pollVC.show(animated: true)
-        
         })
         return true
     }
@@ -158,7 +468,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         if CountdownTimerBannerViewController.isExpired(model: model) {
             return false
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
+        let delay = getEffectiveDelay(for: model.waitingTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
             // Bekleme süresi içinde süre dolmuş olabilir; tekrar kontrol et.
             if CountdownTimerBannerViewController.isExpired(model: model) {
                 return
@@ -172,24 +483,21 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
     
     func showNotificationBell(model: NotificationBellModel) -> Bool {
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
-
+        let delay = getEffectiveDelay(for: model.waitingTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
             let notifBell = NotificationBellViewController(model: model)
             notifBell.delegate = self
             notifBell.show(animated: true)
-        
         })
         return true
     }
     
     func showCustomWebview(model: CustomWebViewModel) -> Bool {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
-
-        let customWebviewVC = CustomWebViewController(model)
-        customWebviewVC.delegate = self
-        customWebviewVC.show(animated: true)
-        
+        let delay = getEffectiveDelay(for: model.waitingTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+            let customWebviewVC = CustomWebViewController(model)
+            customWebviewVC.delegate = self
+            customWebviewVC.show(animated: true)
         })
         return true
     }
@@ -230,17 +538,20 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         let urlStr = notification.iosLink ?? ""
         let action = UIAlertAction(title: buttonTxt, style: .default) { _ in
             guard let url = URL(string: urlStr) else {
+                self.alertDismiss()
                 return
             }
             if Visilabs.callAPI().shouldOpenInAppURLInSDK(url, notification: notification) {
                 VisilabsInstance.sharedUIApplication()?.open(url, options: [:], completionHandler: nil)
             }
             self.inappButtonDelegate?.didTapButton(notification)
+            self.alertDismiss()
         }
 
         let closeText = notification.closeButtonText ?? "Close"
         let close = UIAlertAction(title: closeText, style: .destructive) { _ in
             print("dismiss tapped")
+            self.alertDismiss()
         }
 
         alertController.addAction(action)
@@ -251,7 +562,7 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                 alertController.popoverPresentationController?.sourceView = root.view
                 alertController.popoverPresentationController?.sourceRect = CGRect(x: root.view.bounds.midX, y: root.view.bounds.maxY, width: 0, height: 0)
             }
-            root.present(alertController, animated: true, completion: alertDismiss)
+            root.present(alertController, animated: true, completion: nil)
         }
     }
 
@@ -303,8 +614,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     func showSpinToWin(_ model: SpinToWinViewModel) -> Bool {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
-            
+        let delay = getEffectiveDelay(for: model.waitingTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
             let spinToWinVC = SpinToWinViewController(model)
             spinToWinVC.delegate = self
             spinToWinVC.show(animated: true)
@@ -329,8 +640,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     func showScratchToWin(_ model: ScratchToWinModel) -> Bool {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(model.waitingTime), execute: {
-            
+        let delay = getEffectiveDelay(for: model.waitingTime)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
             let popUpVC = VisilabsPopupNotificationViewController(scratchToWin: model)
             popUpVC.delegate = self
             popUpVC.inappButtonDelegate = self.inappButtonDelegate
@@ -345,6 +656,8 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
         lock.write {
             VisilabsLogger.info("marking notification as seen: \(notification.actId)")
             currentlyShowingNotification = notification
+            self.scheduledNotificationIds.remove(notification.actId)
+            self.scheduledNotifications.removeValue(forKey: notification.actId)
             // TO_DO: burada customEvent request'i atılmalı
         }
     }
@@ -352,6 +665,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     func markTargetingActionShown(model: TargetingActionViewModel) {
         lock.write {
             self.currentlyShowingTargetingAction = model
+            if let actId = model.actIdValue {
+                self.scheduledNotificationIds.remove(actId)
+                self.scheduledNotifications.removeValue(forKey: actId)
+                self.recentlyShownNotificationIds[actId] = Date()
+                VisilabsLogger.info("marking targeting action as seen: \(actId)")
+            }
         }
     }
 
@@ -359,8 +678,10 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     func notificationShouldDismiss(controller: VisilabsBaseViewProtocol,
                                    callToActionURL: URL?, shouldTrack: Bool,
                                    additionalTrackingProperties: [String: String]?) -> Bool {
-        if currentlyShowingNotification?.actId != controller.notification?.actId {
-            return false
+        if let currentNotif = currentlyShowingNotification, let controllerNotif = controller.notification {
+            if currentNotif.actId != controllerNotif.actId {
+                return false
+            }
         }
 
         let completionBlock = {
@@ -376,8 +697,12 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
                 }
             }
 
-            self.currentlyShowingNotification = nil
-            self.currentlyShowingTargetingAction = nil
+            self.lock.write {
+                self.currentlyShowingNotification = nil
+                self.currentlyShowingTargetingAction = nil
+                self.lastDismissedTime = Date()
+            }
+            self.showNextPendingNotificationIfAny()
         }
 
         if let callToActionURL = callToActionURL {
@@ -410,7 +735,26 @@ class VisilabsInAppNotifications: VisilabsNotificationViewControllerDelegate {
     }
 
     func alertDismiss() {
-        currentlyShowingNotification = nil
-        currentlyShowingTargetingAction = nil
+        lock.write {
+            currentlyShowingNotification = nil
+            currentlyShowingTargetingAction = nil
+            lastDismissedTime = Date()
+        }
+        showNextPendingNotificationIfAny()
+    }
+}
+
+extension TargetingActionViewModel {
+    var actIdValue: Int? {
+        if let m = self as? SpinToWinViewModel { return m.actId }
+        if let m = self as? ScratchToWinModel { return m.actId }
+        if let m = self as? MailSubscriptionViewModel { return m.actId }
+        if let m = self as? PollModel { return m.actId }
+        if let m = self as? CountdownTimerBannerModel { return m.actId }
+        if let m = self as? DrawerServiceModel { return m.actId }
+        if let m = self as? CustomWebViewModel { return m.actId }
+        if let m = self as? NotificationBellModel { return m.actId }
+        if let m = self as? InappReviewModel { return m.actId }
+        return nil
     }
 }

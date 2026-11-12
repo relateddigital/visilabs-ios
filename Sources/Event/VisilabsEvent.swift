@@ -131,6 +131,13 @@ class VisilabsEvent {
         props[VisilabsConstants.pvivKey] = String(vUser.pviv)
         props[VisilabsConstants.tvcKey] = String(vUser.tvc)
         props[VisilabsConstants.lvtKey] = vUser.lvt
+
+        if props[VisilabsConstants.isFirstInstallKey] == nil {
+            props[VisilabsConstants.isFirstInstallKey] = VisilabsInstallTracker.shared.isFirstInstallValue(tvc: vUser.tvc)
+        }
+        if props[VisilabsConstants.isReinstallKey] == nil {
+            props[VisilabsConstants.isReinstallKey] = VisilabsInstallTracker.shared.isReinstallValue(tvc: vUser.tvc)
+        }
         
         if !deviceLanguage.isNilOrWhiteSpace {
                     props[VisilabsConstants.deviceLanguage] = deviceLanguage

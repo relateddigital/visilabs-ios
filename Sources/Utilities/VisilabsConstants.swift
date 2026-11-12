@@ -9,7 +9,7 @@ import UIKit
 
 struct VisilabsConstants {
     
-    static let sdkVersion = "4.5.6"
+    static let sdkVersion = "4.5.7"
     static let sdkTypeKey = "sdk_type"
 
     static let HTTP = "http"
@@ -40,6 +40,14 @@ struct VisilabsConstants {
     static let userDefaultsGeofenceHistoryKey = "Visilabs.geofenceHistory"
     static let userDefaultsTargetKey = "Visilabs.target"
     static let userDefaultsBlockKey = "Visilabs.block"
+    static let userDefaultsInstalledKey = "Visilabs.installed"
+    static let userDefaultsInstallDateKey = "Visilabs.installDate"
+    static let userDefaultsInstallTypeKey = "Visilabs.installType"
+
+    // MARK: - Keychain Keys
+
+    static let keychainInstalledKey = "Visilabs.installed"
+    static let keychainInstallDateKey = "Visilabs.installDate"
 
     // MARK: - Archive Keys
 
@@ -129,6 +137,8 @@ struct VisilabsConstants {
         static let systemVersion = "OM.OSVersion"
         static let systemName = "OM.OSName"
         static let screenSize = "OM.screenSize"
+    static let isFirstInstallKey = "OM.is_first_install"
+    static let isReinstallKey = "OM.is_reinstall"
 
     static let getList = "getlist"
     static let processV2 = "processV2"

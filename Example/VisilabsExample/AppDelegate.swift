@@ -27,10 +27,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             visilabsProfile = vlp
         }
 
+        
+        // iOS 13 öncesi için geriye dönük uyumluluk (iOS 13 ve üzerinde bu işi SceneDelegate yapar)
         if #available(iOS 13, *) {
-            // handle push for iOS 13 and later in sceneDelegate
-        } else if let userInfo = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any] {
-            Euromsg.handlePush(pushDictionary: userInfo)
+            // SceneDelegate handles window & push
+        } else {
+            if let userInfo = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any] {
+                Euromsg.handlePush(pushDictionary: userInfo)
+            }
+            let window = UIWindow(frame: UIScreen.main.bounds)
+            window.backgroundColor = UIColor.white
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let initialVC = storyboard.instantiateInitialViewController() ?? HomeViewController()
+            window.rootViewController = initialVC
+            window.makeKeyAndVisible()
+            self.window = window
         }
         return true
     }
@@ -87,5 +98,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         window?.rootViewController = storyVC
         
         return true
+    }
+    
+    // MARK: - UISceneSession Lifecycle
+
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
     }
 }

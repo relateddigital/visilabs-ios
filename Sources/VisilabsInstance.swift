@@ -245,8 +245,11 @@ public class VisilabsInstance: CustomDebugStringConvertible {
             }
         }
         
-        // cookieId önceki bir açılıştan kaldıysa SDK bu cihazda daha önce çalışmış demektir.
-        let isExistingInstall = !visilabsUser.cookieId.isNilOrWhiteSpace
+        // Install tracker initialization (Keychain, UserDefaults and StoreKit 2)
+        _ = VisilabsInstallTracker.shared
+
+        // cookieId önceki bir açılıştan kaldıysa veya reinstall ise bu cihazda daha önce çalışmış demektir.
+        let isExistingInstall = !visilabsUser.cookieId.isNilOrWhiteSpace || VisilabsInstallTracker.shared.isReinstall
         if visilabsUser.cookieId.isNilOrWhiteSpace {
             visilabsUser.cookieId = VisilabsHelper.generateCookieId()
             VisilabsPersistence.archiveUser(visilabsUser)
@@ -529,6 +532,18 @@ extension VisilabsInstance {
     
     public func getProfile() -> VisilabsProfile {
         return visilabsProfile
+    }
+
+    public var isFirstInstall: Bool {
+        return VisilabsInstallTracker.shared.isFirstInstall
+    }
+
+    public var isReinstall: Bool {
+        return VisilabsInstallTracker.shared.isReinstall
+    }
+
+    public var installType: VisilabsInstallType {
+        return VisilabsInstallTracker.shared.initialInstallType
     }
     
     public func logout() {
